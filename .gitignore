@@ -6,3 +6,4 @@
 *.iws
 run/
 out/
+.idea/
