@@ -1,0 +1,22 @@
+[
+{
+  "modid": "steamnsteel",
+  "name": "SteamNSteel",
+  "description": "Lets you <redacted>.",
+  "version": "${mod_version}",
+  "mcversion": "${minecraft_version}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": [
+  	"Rorax",
+    "Scott Killen"
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
