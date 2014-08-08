@@ -1,7 +1,7 @@
-SteamNSteel
-===========
+Steam and Steel
+===============
 
-A modification to Mojang's Minecraft that &lt;redacted&gt;.
+A Minecraft mod about steampunk tech and adventure..
 
 * * *
 

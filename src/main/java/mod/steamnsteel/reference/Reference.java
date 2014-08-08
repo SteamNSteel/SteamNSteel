@@ -19,8 +19,8 @@ package mod.steamnsteel.reference;
 @SuppressWarnings("UtilityClass")
 public final class Reference
 {
-    public static final String MOD_ID = "enormabuild";
-    public static final String MOD_NAME = "EnormaBuild";
+    public static final String MOD_ID = "steamnsteel";
+    public static final String MOD_NAME = "Steam and Steel";
     public static final String MOD_VERSION = "@MOD_VERSION@";
     public static final String MOD_GUI_FACTORY = "mod.steamnsteel.configuration.client.ModGuiFactory";
     public static final String CLIENT_PROXY_CLASS = "mod.steamnsteel.proxy.ClientProxy";

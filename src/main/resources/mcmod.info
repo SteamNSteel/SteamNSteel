@@ -1,15 +1,15 @@
 [
 {
   "modid": "steamnsteel",
-  "name": "SteamNSteel",
-  "description": "Lets you <redacted>.",
+  "name": "Steam and Steel",
+  "description": "A Minecraft mod about steampunk tech and adventure.",
   "version": "${mod_version}",
   "mcversion": "${minecraft_version}",
   "url": "",
   "updateUrl": "",
   "authorList": [
   	"Rorax",
-    "Scott Killen"
+    "ScottKillen"
   ],
   "credits": "",
   "logoFile": "",
