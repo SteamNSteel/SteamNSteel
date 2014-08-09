@@ -17,7 +17,12 @@
 package mod.steamnsteel.item.artifact;
 
 import mod.steamnsteel.item.SteamNSteelItem;
+import mod.steamnsteel.library.Names;
 
 public class VoxBox extends SteamNSteelItem
 {
+    public VoxBox()
+    {
+        setUnlocalizedName(Names.Artifacts.VOX_BOX);
+    }
 }

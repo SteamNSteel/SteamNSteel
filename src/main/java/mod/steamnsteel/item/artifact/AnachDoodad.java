@@ -17,7 +17,12 @@
 package mod.steamnsteel.item.artifact;
 
 import mod.steamnsteel.item.SteamNSteelItem;
+import mod.steamnsteel.library.Names;
 
 public class AnachDoodad extends SteamNSteelItem
 {
+    public AnachDoodad()
+    {
+        setUnlocalizedName(Names.Artifacts.ANACH_DOODAD);
+    }
 }

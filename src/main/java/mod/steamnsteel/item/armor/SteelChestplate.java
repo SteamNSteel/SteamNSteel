@@ -17,7 +17,12 @@
 package mod.steamnsteel.item.armor;
 
 import mod.steamnsteel.item.SteamNSteelItem;
+import mod.steamnsteel.library.Names;
 
 public class SteelChestplate extends SteamNSteelItem
 {
+    public SteelChestplate()
+    {
+        setUnlocalizedName(Names.Armor.STEEL_CHESTPLATE);
+    }
 }

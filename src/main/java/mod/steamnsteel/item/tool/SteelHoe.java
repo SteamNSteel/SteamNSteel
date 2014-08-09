@@ -17,7 +17,13 @@
 package mod.steamnsteel.item.tool;
 
 import mod.steamnsteel.item.SteamNSteelItem;
+import mod.steamnsteel.library.Names;
 
 public class SteelHoe extends SteamNSteelItem
+
 {
+    public SteelHoe()
+    {
+        setUnlocalizedName(Names.Tools.STEEL_HOE);
+    }
 }
