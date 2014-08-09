@@ -24,6 +24,8 @@ import mod.steamnsteel.item.resource.Niter;
 import mod.steamnsteel.item.resource.Sulfur;
 import mod.steamnsteel.item.resource.ingot.*;
 import mod.steamnsteel.item.tool.*;
+import mod.steamnsteel.item.weapon.BronzeSword;
+import mod.steamnsteel.item.weapon.SteelSword;
 
 public enum ModItems
 {

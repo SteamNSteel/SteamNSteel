@@ -14,7 +14,7 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.tool;
+package mod.steamnsteel.item.weapon;
 
 import mod.steamnsteel.item.SteamNSteelItem;
 import mod.steamnsteel.library.Names;
