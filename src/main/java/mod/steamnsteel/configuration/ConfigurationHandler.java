@@ -17,30 +17,40 @@
 package mod.steamnsteel.configuration;
 
 import com.google.common.base.Optional;
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.utility.Logger;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.google.common.base.Preconditions.*;
+
 public enum ConfigurationHandler
 {
     INSTANCE;
-
     private File fileRef;
     private Configuration config;
     private Optional<Configuration> configOld = Optional.absent();
+
+    public static void init(File configFile)
+    {
+        INSTANCE.setConfig(configFile);
+        FMLCommonHandler.instance().bus().register(INSTANCE);
+    }
 
     public Configuration getConfig()
     {
         return config;
     }
 
-    public void setConfig(File configFile)
+    private void setConfig(File configFile)
     {
+        checkState(config == null, "ConfigurationHandler has been initialized more than once.");
+
         fileRef = configFile;
 
         config = new Configuration(configFile, Reference.CONFIG_VERSION);

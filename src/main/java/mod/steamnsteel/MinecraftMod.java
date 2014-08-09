@@ -41,8 +41,7 @@ public class MinecraftMod
     @Mod.EventHandler
     public void onFMLPreInitialization(FMLPreInitializationEvent event)
     {
-        ConfigurationHandler.INSTANCE.setConfig(event.getSuggestedConfigurationFile());
-
+        ConfigurationHandler.init(event.getSuggestedConfigurationFile());
         ModItems.init();
     }
 
