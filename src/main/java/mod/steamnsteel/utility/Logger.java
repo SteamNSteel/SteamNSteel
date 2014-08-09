@@ -16,7 +16,7 @@
 
 package mod.steamnsteel.utility;
 
-import mod.steamnsteel.reference.Reference;
+import mod.steamnsteel.library.Reference;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 

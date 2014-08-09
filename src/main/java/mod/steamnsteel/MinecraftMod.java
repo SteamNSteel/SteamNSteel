@@ -18,7 +18,7 @@ package mod.steamnsteel;
 
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.proxy.IProxy;
-import mod.steamnsteel.reference.Reference;
+import mod.steamnsteel.library.Reference;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;

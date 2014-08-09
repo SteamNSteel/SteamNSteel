@@ -17,7 +17,7 @@
 package mod.steamnsteel.configuration.client;
 
 import mod.steamnsteel.configuration.ConfigurationHandler;
-import mod.steamnsteel.reference.Reference;
+import mod.steamnsteel.library.Reference;
 import cpw.mods.fml.client.config.GuiConfig;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;

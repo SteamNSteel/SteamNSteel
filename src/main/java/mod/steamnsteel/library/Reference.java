@@ -14,7 +14,7 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.reference;
+package mod.steamnsteel.library;
 
 @SuppressWarnings("UtilityClass")
 public final class Reference

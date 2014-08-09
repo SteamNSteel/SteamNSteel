@@ -17,7 +17,7 @@
 package mod.steamnsteel.configuration;
 
 import com.google.common.base.Optional;
-import mod.steamnsteel.reference.Reference;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.utility.Logger;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
