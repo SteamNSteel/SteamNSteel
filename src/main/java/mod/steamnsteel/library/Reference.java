@@ -16,9 +16,9 @@
 
 package mod.steamnsteel.library;
 
-@SuppressWarnings("UtilityClass")
-public final class Reference
+public enum Reference
 {
+    INSTANCE;
     public static final String MOD_ID = "steamnsteel";
     public static final String MOD_NAME = "Steam and Steel";
     public static final String MOD_VERSION = "@MOD_VERSION@";
@@ -27,17 +27,4 @@ public final class Reference
     public static final String SERVER_PROXY_CLASS = "mod.steamnsteel.proxy.ServerProxy";
 
     public static final String CONFIG_VERSION = "1";
-
-    // PRIVATE //
-
-    /**
-     The caller references the constants using <tt>Reference.EMPTY_STRING</tt>,
-     and so on. Thus, the caller should be prevented from constructing objects of
-     this class, by declaring this private constructor.
-     */
-    private Reference(){
-        //this prevents even the native class from
-        //calling this ctor as well :
-        throw new AssertionError();
-    }
 }

@@ -25,9 +25,9 @@ import mod.steamnsteel.item.resource.Sulfur;
 import mod.steamnsteel.item.resource.ingot.*;
 import mod.steamnsteel.item.tool.*;
 
-@SuppressWarnings("UtilityClass")
-public final class ModItems
+public enum ModItems
 {
+    INSTANCE;
     public static final SteamNSteelItem BRONZE_BOOTS = new BronzeBoots();
     public static final SteamNSteelItem BRONZE_CHESTPLATE = new BronzeChestplate();
     public static final SteamNSteelItem BRONZE_HELMET = new BronzeHelmet();
@@ -106,19 +106,4 @@ public final class ModItems
         GameRegistry.registerItem(STEEL_SHOVEL, "shovelSteel");
         GameRegistry.registerItem(STEEL_SWORD, "swordSteel");
     }
-
-    // PRIVATE //
-
-    /**
-     * The caller references the constants using <tt>Reference.EMPTY_STRING</tt>,
-     * and so on. Thus, the caller should be prevented from constructing objects of
-     * this class, by declaring this private constructor.
-     */
-    private ModItems()
-    {
-        //this prevents even the native class from
-        //calling this ctor as well :
-        throw new AssertionError();
-    }
-
 }
