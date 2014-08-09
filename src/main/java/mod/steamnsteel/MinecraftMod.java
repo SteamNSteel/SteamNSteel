@@ -17,6 +17,7 @@
 package mod.steamnsteel;
 
 import mod.steamnsteel.configuration.ConfigurationHandler;
+import mod.steamnsteel.library.ModItems;
 import mod.steamnsteel.proxy.IProxy;
 import mod.steamnsteel.library.Reference;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -42,7 +43,7 @@ public class MinecraftMod
     {
         ConfigurationHandler.INSTANCE.setConfig(event.getSuggestedConfigurationFile());
 
-        // TODO: Create blocks, items, etc, and register them with the GameRegistry.
+        ModItems.init();
     }
 
     @Mod.EventHandler
