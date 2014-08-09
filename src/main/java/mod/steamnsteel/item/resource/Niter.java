@@ -23,6 +23,6 @@ public class Niter extends SteamNSteelItem
 {
     public Niter()
     {
-        setUnlocalizedName(Names.Resources.NITER);
+        setUnlocalizedName(Names.Items.NITER);
     }
 }

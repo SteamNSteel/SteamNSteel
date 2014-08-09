@@ -86,8 +86,8 @@ public enum ModItems
         GameRegistry.registerItem(PLOTONIUM_SCRAP, Names.Artifacts.PLOTONIUM_SCRAP);
         GameRegistry.registerItem(VOX_BOX, Names.Artifacts.VOX_BOX);
 
-        GameRegistry.registerItem(NITER, Names.Resources.NITER);
-        GameRegistry.registerItem(SULFUR, Names.Resources.SULFUR);
+        GameRegistry.registerItem(NITER, Names.Items.NITER);
+        GameRegistry.registerItem(SULFUR, Names.Items.SULFUR);
 
         GameRegistry.registerItem(BRASS_INGOT, Names.Ingots.BRASS_INGOT);
         GameRegistry.registerItem(BRONZE_INGOT, Names.Ingots.BRONZE_INGOT);

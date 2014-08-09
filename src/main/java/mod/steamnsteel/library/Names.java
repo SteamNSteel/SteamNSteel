@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.library;
 
+@SuppressWarnings("InnerClassFieldHidesOuterClassField")
 public enum Names
 {
     INSTANCE;
@@ -53,7 +54,7 @@ public enum Names
         public static final String TIN_INGOT = "ingotTin";
     }
 
-    public enum Resources
+    public enum Items
     {
         INSTANCE;
         public static final String NITER = "niter";
