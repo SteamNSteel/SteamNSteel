@@ -18,6 +18,6 @@ package mod.steamnsteel.item.artifact;
 
 import mod.steamnsteel.item.SteamNSteelItem;
 
-public class PlotScrap extends SteamNSteelItem
+public class PlotoniumScrap extends SteamNSteelItem
 {
 }
