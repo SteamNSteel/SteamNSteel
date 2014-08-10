@@ -17,7 +17,7 @@
 package mod.steamnsteel;
 
 import mod.steamnsteel.configuration.ConfigurationHandler;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.Items;
 import mod.steamnsteel.proxy.IProxy;
 import mod.steamnsteel.library.Reference;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -42,7 +42,7 @@ public class MinecraftMod
     public void onFMLPreInitialization(FMLPreInitializationEvent event)
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
-        ModItems.init();
+        Items.init();
     }
 
     @Mod.EventHandler
