@@ -17,6 +17,7 @@
 package mod.steamnsteel;
 
 import mod.steamnsteel.configuration.ConfigurationHandler;
+import mod.steamnsteel.library.Blocks;
 import mod.steamnsteel.library.Items;
 import mod.steamnsteel.proxy.IProxy;
 import mod.steamnsteel.library.Reference;
@@ -43,6 +44,7 @@ public class MinecraftMod
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
         Items.init();
+        Blocks.init();
     }
 
     @Mod.EventHandler
