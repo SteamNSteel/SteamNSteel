@@ -14,6 +14,23 @@
 # this program; if not, see <http://www.gnu.org/licenses>.
 #
 
+#Blocks
+tile.steamnsteel:blockBrass.name=Brass Block
+tile.steamnsteel:blockBronze.name=Bronze Block
+tile.steamnsteel:blockCopper.name=Copper Block
+tile.steamnsteel:blockPlotonium.name=Plotonium Block
+tile.steamnsteel:blockSteel.name=Steel Block
+tile.steamnsteel:blockTin.name=Tin Block
+tile.steamnsteel:chestPlotonium.name=Plotonium Chest
+tile.steamnsteel:cupola.name=Cupola
+tile.steamnsteel:oreCopper.name=Copper Ore
+tile.steamnsteel:oreNiter.name=Niter Ore
+tile.steamnsteel:oreSulfur.name=Sulfur Ore
+tile.steamnsteel:oreTin.name=Tin Ore
+tile.steamnsteel:ruinFloorPlotonium.name=Ruined Plotonium Floor
+tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
+tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
+
 # Items
 item.steamnsteel:anachDoodad.name=Anachronistic Doodad
 item.steamnsteel:axeBronze.name=Bronze Axe
@@ -46,4 +63,3 @@ item.steamnsteel:swordBronze.name=Bronze Sword
 item.steamnsteel:swordSteel.name=Steel Sword
 item.steamnsteel:sulfur.name=Sulfur
 item.steamnsteel:voxBox.name=Vox Box
-
