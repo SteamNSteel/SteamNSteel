@@ -43,6 +43,26 @@ public enum Names
         public static final String VOX_BOX = "voxBox";
     }
 
+    public enum Blocks
+    {
+        INSTANCE;
+        public static final String BRASS_BLOCK = "blockBrass";
+        public static final String BRONZE_BLOCK = "blockBronze";
+        public static final String COPPER_BLOCK = "blockCopper";
+        public static final String COPPER_ORE = "oreCopper";
+        public static final String CUPOLA = "cupola";
+        public static final String NITER_ORE = "oreNiter";
+        public static final String PLOTONIUM_BLOCK = "blockPlotonium";
+        public static final String PLOTONIUM_CHEST = "chestPlotonium";
+        public static final String PLOTONIUM_RUIN_FLOOR = "ruinFloorPlotonium";
+        public static final String PLOTONIUM_RUIN_PILLAR = "ruinPillarPlotonium";
+        public static final String PLOTONIUM_RUIN_WALL = "ruinWallPlotonium";
+        public static final String STEEL_BLOCK = "blockSteel";
+        public static final String SULFUR_ORE = "oreSulfur";
+        public static final String TIN_BLOCK = "blockTin";
+        public static final String TIN_ORE = "oreTin";
+    }
+
     public enum Ingots
     {
         INSTANCE;
