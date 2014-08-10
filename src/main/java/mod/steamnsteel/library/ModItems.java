@@ -27,6 +27,7 @@ import mod.steamnsteel.item.tool.*;
 import mod.steamnsteel.item.weapon.BronzeSword;
 import mod.steamnsteel.item.weapon.SteelSword;
 
+@GameRegistry.ObjectHolder(Reference.MOD_ID)
 public enum ModItems
 {
     INSTANCE;
