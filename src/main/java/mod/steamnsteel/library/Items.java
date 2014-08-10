@@ -27,6 +27,7 @@ import mod.steamnsteel.item.tool.*;
 import mod.steamnsteel.item.weapon.BronzeSword;
 import mod.steamnsteel.item.weapon.SteelSword;
 
+@SuppressWarnings("WeakerAccess")
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
 public enum Items
 {
@@ -71,42 +72,72 @@ public enum Items
 
     public static void init()
     {
-        GameRegistry.registerItem(BRONZE_BOOTS, Names.Armor.BRONZE_BOOTS);
-        GameRegistry.registerItem(BRONZE_CHESTPLATE, Names.Armor.BRONZE_CHESTPLATE);
-        GameRegistry.registerItem(BRONZE_HELMET, Names.Armor.BRONZE_HELMET);
-        GameRegistry.registerItem(BRONZE_LEGGINGS, Names.Armor.BRONZE_LEGGINGS);
-
-        GameRegistry.registerItem(STEEL_BOOTS, Names.Armor.STEEL_BOOTS);
-        GameRegistry.registerItem(STEEL_CHESTPLATE, Names.Armor.STEEL_CHESTPLATE);
-        GameRegistry.registerItem(STEEL_HELMET, Names.Armor.STEEL_HELMET);
-        GameRegistry.registerItem(STEEL_LEGGINGS, Names.Armor.STEEL_LEGGINGS);
-
-        GameRegistry.registerItem(ANACH_DOODAD, Names.Artifacts.ANACH_DOODAD);
-        GameRegistry.registerItem(MUSTY_JOURNAL, Names.Artifacts.MUSTY_JOURNAL);
-        GameRegistry.registerItem(PER_GUI_VOX, Names.Artifacts.PER_GUI_VOX);
-        GameRegistry.registerItem(PLOTONIUM_SCRAP, Names.Artifacts.PLOTONIUM_SCRAP);
-        GameRegistry.registerItem(VOX_BOX, Names.Artifacts.VOX_BOX);
+        initArtifacts();
+        initBronzeArmor();
+        initBronzeTools();
+        initIngots();
+        initSteelArmor();
+        initSteelTools();
+        initWeapons();
 
         GameRegistry.registerItem(NITER, Names.Items.NITER);
         GameRegistry.registerItem(SULFUR, Names.Items.SULFUR);
+    }
 
+    private static void initWeapons()
+    {
+        GameRegistry.registerItem(BRONZE_SWORD, Names.Weapons.BRONZE_SWORD);
+        GameRegistry.registerItem(STEEL_SWORD, Names.Weapons.STEEL_SWORD);
+    }
+
+    private static void initSteelTools()
+    {
+        GameRegistry.registerItem(STEEL_AXE, Names.Tools.STEEL_AXE);
+        GameRegistry.registerItem(STEEL_HOE, Names.Tools.STEEL_HOE);
+        GameRegistry.registerItem(STEEL_PICKAXE, Names.Tools.STEEL_PICKAXE);
+        GameRegistry.registerItem(STEEL_SHOVEL, Names.Tools.STEEL_SHOVEL);
+    }
+
+    private static void initBronzeTools()
+    {
+        GameRegistry.registerItem(BRONZE_AXE, Names.Tools.BRONZE_AXE);
+        GameRegistry.registerItem(BRONZE_HOE, Names.Tools.BRONZE_HOE);
+        GameRegistry.registerItem(BRONZE_PICKAXE, Names.Tools.BRONZE_PICKAXE);
+        GameRegistry.registerItem(BRONZE_SHOVEL, Names.Tools.BRONZE_SHOVEL);
+    }
+
+    private static void initIngots()
+    {
         GameRegistry.registerItem(BRASS_INGOT, Names.Ingots.BRASS_INGOT);
         GameRegistry.registerItem(BRONZE_INGOT, Names.Ingots.BRONZE_INGOT);
         GameRegistry.registerItem(COPPER_INGOT, Names.Ingots.COPPER_INGOT);
         GameRegistry.registerItem(PLOTONIUM_INGOT, Names.Ingots.PLOTONIUM_INGOT);
         GameRegistry.registerItem(STEEL_INGOT, Names.Ingots.STEEL_INGOT);
         GameRegistry.registerItem(TIN_INGOT, Names.Ingots.TIN_INGOT);
+    }
 
-        GameRegistry.registerItem(BRONZE_AXE, Names.Tools.BRONZE_AXE);
-        GameRegistry.registerItem(BRONZE_HOE, Names.Tools.BRONZE_HOE);
-        GameRegistry.registerItem(BRONZE_PICKAXE, Names.Tools.BRONZE_PICKAXE);
-        GameRegistry.registerItem(BRONZE_SHOVEL, Names.Tools.BRONZE_SHOVEL);
-        GameRegistry.registerItem(BRONZE_SWORD, Names.Weapons.BRONZE_SWORD);
+    private static void initArtifacts()
+    {
+        GameRegistry.registerItem(ANACH_DOODAD, Names.Artifacts.ANACH_DOODAD);
+        GameRegistry.registerItem(MUSTY_JOURNAL, Names.Artifacts.MUSTY_JOURNAL);
+        GameRegistry.registerItem(PER_GUI_VOX, Names.Artifacts.PER_GUI_VOX);
+        GameRegistry.registerItem(PLOTONIUM_SCRAP, Names.Artifacts.PLOTONIUM_SCRAP);
+        GameRegistry.registerItem(VOX_BOX, Names.Artifacts.VOX_BOX);
+    }
 
-        GameRegistry.registerItem(STEEL_AXE, Names.Tools.STEEL_AXE);
-        GameRegistry.registerItem(STEEL_HOE, Names.Tools.STEEL_HOE);
-        GameRegistry.registerItem(STEEL_PICKAXE, Names.Tools.STEEL_PICKAXE);
-        GameRegistry.registerItem(STEEL_SHOVEL, Names.Tools.STEEL_SHOVEL);
-        GameRegistry.registerItem(STEEL_SWORD, Names.Weapons.STEEL_SWORD);
+    private static void initSteelArmor()
+    {
+        GameRegistry.registerItem(STEEL_BOOTS, Names.Armor.STEEL_BOOTS);
+        GameRegistry.registerItem(STEEL_CHESTPLATE, Names.Armor.STEEL_CHESTPLATE);
+        GameRegistry.registerItem(STEEL_HELMET, Names.Armor.STEEL_HELMET);
+        GameRegistry.registerItem(STEEL_LEGGINGS, Names.Armor.STEEL_LEGGINGS);
+    }
+
+    private static void initBronzeArmor()
+    {
+        GameRegistry.registerItem(BRONZE_BOOTS, Names.Armor.BRONZE_BOOTS);
+        GameRegistry.registerItem(BRONZE_CHESTPLATE, Names.Armor.BRONZE_CHESTPLATE);
+        GameRegistry.registerItem(BRONZE_HELMET, Names.Armor.BRONZE_HELMET);
+        GameRegistry.registerItem(BRONZE_LEGGINGS, Names.Armor.BRONZE_LEGGINGS);
     }
 }
