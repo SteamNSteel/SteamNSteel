@@ -23,6 +23,6 @@ public class Sulfur extends SteamNSteelItem
 {
     public Sulfur()
     {
-        setUnlocalizedName(Names.Resources.SULFUR);
+        setUnlocalizedName(Names.Items.SULFUR);
     }
 }

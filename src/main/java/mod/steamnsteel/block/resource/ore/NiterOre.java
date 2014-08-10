@@ -14,16 +14,17 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.tool;
+package mod.steamnsteel.block.resource.ore;
 
-import mod.steamnsteel.item.SteamNSteelItem;
+import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.library.Names;
+import net.minecraft.block.material.Material;
 
-public class BronzeSword extends SteamNSteelItem
-
+public class NiterOre extends SteamNSteelBlock
 {
-    public BronzeSword()
+    public NiterOre()
     {
-        setUnlocalizedName(Names.Weapons.BRONZE_SWORD);
+        super(Material.rock);
+        setBlockName(Names.Blocks.NITER_ORE);
     }
 }

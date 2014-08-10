@@ -14,15 +14,16 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.resource;
+package mod.steamnsteel.item.weapon;
 
 import mod.steamnsteel.item.SteamNSteelItem;
 import mod.steamnsteel.library.Names;
 
-public class Niter extends SteamNSteelItem
+public class BronzeSword extends SteamNSteelItem
+
 {
-    public Niter()
+    public BronzeSword()
     {
-        setUnlocalizedName(Names.Items.NITER);
+        setUnlocalizedName(Names.Weapons.BRONZE_SWORD);
     }
 }

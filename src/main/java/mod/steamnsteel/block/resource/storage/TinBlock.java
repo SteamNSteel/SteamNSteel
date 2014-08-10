@@ -14,15 +14,17 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.resource;
+package mod.steamnsteel.block.resource.storage;
 
-import mod.steamnsteel.item.SteamNSteelItem;
+import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.library.Names;
+import net.minecraft.block.material.Material;
 
-public class Niter extends SteamNSteelItem
+public class TinBlock extends SteamNSteelBlock
 {
-    public Niter()
+    public TinBlock()
     {
-        setUnlocalizedName(Names.Items.NITER);
+        super(Material.rock);
+        setBlockName(Names.Blocks.TIN_BLOCK);
     }
 }
