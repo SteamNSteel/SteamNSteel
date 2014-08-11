@@ -31,6 +31,9 @@ tile.steamnsteel:ruinFloorPlotonium.name=Ruined Plotonium Floor
 tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
 tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
 
+# Creative Tabs
+itemGroup.steamnsteel=Steam and Steel
+
 # Items
 item.steamnsteel:anachDoodad.name=Anachronistic Doodad
 item.steamnsteel:axeBronze.name=Bronze Axe

@@ -29,8 +29,9 @@ import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
 
+@SuppressWarnings("UtilityClass")
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
-public class Blocks
+public final class Blocks
 {
     public static final SteamNSteelBlock BRASS_BLOCK = new BrassBlock();
     public static final SteamNSteelBlock BRONZE_BLOCK = new BronzeBlock();
@@ -47,6 +48,11 @@ public class Blocks
     public static final SteamNSteelBlock SULFUR_ORE = new SulfurOre();
     public static final SteamNSteelBlock TIN_BLOCK = new TinBlock();
     public static final SteamNSteelBlock TIN_ORE = new TinOre();
+
+    private Blocks()
+    {
+        throw new AssertionError();
+    }
 
     public static void init()
     {

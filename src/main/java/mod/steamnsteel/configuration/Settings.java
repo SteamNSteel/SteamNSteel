@@ -18,11 +18,15 @@ package mod.steamnsteel.configuration;
 
 import net.minecraftforge.common.config.Configuration;
 
-public enum Settings
+@SuppressWarnings("UtilityClass")
+public final class Settings
 {
-    INSTANCE;
+    private Settings()
+    {
+        throw new AssertionError();
+    }
 
-    public void syncConfig(Configuration config)
+    public static void syncConfig(Configuration config)
     {
         // TODO: Load settings
     }
