@@ -31,6 +31,7 @@ public enum Reference
 
     public static final String CONFIG_VERSION = "1";
 
+    @SuppressWarnings("AnonymousInnerClass")
     public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID.toLowerCase())
     {
         @Override

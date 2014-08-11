@@ -16,7 +16,7 @@
 
 package mod.steamnsteel.library;
 
-@SuppressWarnings("InnerClassFieldHidesOuterClassField")
+@SuppressWarnings({"InnerClassFieldHidesOuterClassField", "UtilityClass"})
 public final class Names
 {
     private Names()
@@ -42,6 +42,7 @@ public final class Names
         }
     }
 
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Artifacts
     {
         public static final String ANACH_DOODAD = "anachDoodad";
@@ -56,6 +57,7 @@ public final class Names
         }
     }
 
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Blocks
     {
         public static final String BRASS_BLOCK = "blockBrass";
@@ -80,6 +82,7 @@ public final class Names
         }
     }
 
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Ingots
     {
         public static final String BRASS_INGOT = "ingotBrass";
@@ -95,6 +98,7 @@ public final class Names
         }
     }
 
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Items
     {
         public static final String NITER = "niter";
@@ -106,6 +110,7 @@ public final class Names
         }
     }
 
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Tools
     {
         public static final String BRONZE_AXE = "axeBronze";
@@ -123,6 +128,7 @@ public final class Names
         }
     }
 
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Weapons
     {
         public static final String BRONZE_SWORD = "swordBronze";

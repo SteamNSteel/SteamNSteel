@@ -51,6 +51,7 @@ public class SteamNSteelItem extends Item
         itemIcon = iconRegister.registerIcon(unlocalizedName.substring(unlocalizedName.indexOf('.') + 1));
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected String getUnwrappedUnlocalizedName(String unlocalizedName)
     {
         return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);

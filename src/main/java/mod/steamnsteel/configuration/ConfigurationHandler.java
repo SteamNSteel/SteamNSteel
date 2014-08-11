@@ -29,11 +29,12 @@ import java.util.Date;
 
 import static com.google.common.base.Preconditions.*;
 
+@SuppressWarnings("NonSerializableFieldInSerializableClass")
 public enum ConfigurationHandler
 {
     INSTANCE;
-    private File fileRef;
-    private Configuration config;
+    private File fileRef = null;
+    private Configuration config = null;
     private Optional<Configuration> configOld = Optional.absent();
 
     public static void init(File configFile)
@@ -62,7 +63,7 @@ public enum ConfigurationHandler
                     Reference.MOD_NAME, fileBak.getName());
             Logger.warning("%s will attempt to copy your old settings, but custom mod/tree settings will have to be migrated manually.", Reference.MOD_NAME);
 
-            boolean success = fileRef.renameTo(fileBak);
+            final boolean success = fileRef.renameTo(fileBak);
             Logger.warning("Rename %s successful.", success ? "was" : "was not");
             configOld = Optional.of(config);
             config = new Configuration(fileRef, Reference.CONFIG_VERSION);
@@ -80,6 +81,7 @@ public enum ConfigurationHandler
     {
         if (!skipLoad)
         {
+            //noinspection OverlyBroadCatchBlock
             try
             {
                 config.load();
@@ -89,14 +91,14 @@ public enum ConfigurationHandler
                 Logger.severe("An exception occurred while loading your config file. This file will be renamed to %s and a new config file will be generated.", fileBak.getName());
                 Logger.severe("Exception encountered: %s", e.getLocalizedMessage());
 
-                boolean success = fileRef.renameTo(fileBak);
+                final boolean success = fileRef.renameTo(fileBak);
                 Logger.warning("Rename %s successful.", success ? "was" : "was not");
 
                 config = new Configuration(fileRef, Reference.CONFIG_VERSION);
             }
         }
 
-        Settings.INSTANCE.syncConfig(config);
+        Settings.syncConfig(config);
 
         convertOldConfig();
         saveConfig();
@@ -116,7 +118,7 @@ public enum ConfigurationHandler
         {
             // Handle old config versions (none yet)
 
-            Settings.INSTANCE.syncConfig(config);
+            Settings.syncConfig(config);
             configOld = Optional.absent();
         }
     }

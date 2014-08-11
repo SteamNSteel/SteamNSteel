@@ -32,6 +32,7 @@ public class SteamNSteelBlock extends Block
         setCreativeTab(Reference.CREATIVE_TAB);
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected static String getUnwrappedUnlocalizedName(String unlocalizedName)
     {
         return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);

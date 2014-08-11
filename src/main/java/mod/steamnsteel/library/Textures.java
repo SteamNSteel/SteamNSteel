@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.library;
 
+@SuppressWarnings("UtilityClass")
 public final class Textures
 {
     public static final String RESOURCE_PREFIX = Reference.MOD_ID.toLowerCase() + ':';
@@ -25,6 +26,7 @@ public final class Textures
         throw new AssertionError();
     }
 
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Armor
     {
         private static final String SHEET_LOCATION = "textures/armor/";
@@ -35,6 +37,7 @@ public final class Textures
         }
     }
 
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Model
     {
         private static final String TEXTURE_LOCATION = "textures/models/";
@@ -45,6 +48,7 @@ public final class Textures
         }
     }
 
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Gui
     {
         private static final String SHEET_LOCATION = "textures/gui/";
@@ -55,6 +59,7 @@ public final class Textures
         }
     }
 
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Effect
     {
         private static final String EFFECTS_LOCATION = "textures/effects/";

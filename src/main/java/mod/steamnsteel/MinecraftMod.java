@@ -31,11 +31,11 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, useMetadata = true, guiFactory = Reference.MOD_GUI_FACTORY)
 public class MinecraftMod
 {
-    @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField"})
+    @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
     @Mod.Instance
     public static MinecraftMod instance;
 
-    @SuppressWarnings("StaticNonFinalField")
+    @SuppressWarnings({"StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
 

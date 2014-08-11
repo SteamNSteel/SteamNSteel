@@ -29,6 +29,7 @@ import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
 
+@SuppressWarnings("UtilityClass")
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
 public final class Blocks
 {
