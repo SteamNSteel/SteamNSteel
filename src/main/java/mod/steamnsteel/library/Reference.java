@@ -16,6 +16,9 @@
 
 package mod.steamnsteel.library;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+
 public enum Reference
 {
     INSTANCE;
@@ -27,4 +30,13 @@ public enum Reference
     public static final String SERVER_PROXY_CLASS = "mod.steamnsteel.proxy.ServerProxy";
 
     public static final String CONFIG_VERSION = "1";
+
+    public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID.toLowerCase())
+    {
+        @Override
+        public Item getTabIconItem()
+        {
+            return Items.MUSTY_JOURNAL;
+        }
+    };
 }

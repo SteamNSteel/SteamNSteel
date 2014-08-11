@@ -18,6 +18,7 @@ package mod.steamnsteel.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.library.Textures;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -28,6 +29,12 @@ public class SteamNSteelBlock extends Block
     public SteamNSteelBlock(Material material)
     {
         super(material);
+        setCreativeTab(Reference.CREATIVE_TAB);
+    }
+
+    protected static String getUnwrappedUnlocalizedName(String unlocalizedName)
+    {
+        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
     }
 
     @Override
@@ -41,10 +48,5 @@ public class SteamNSteelBlock extends Block
     public void registerBlockIcons(IIconRegister iconRegister)
     {
         blockIcon = iconRegister.registerIcon(String.format("%s", getUnwrappedUnlocalizedName(getUnlocalizedName())));
-    }
-
-    protected static String getUnwrappedUnlocalizedName(String unlocalizedName)
-    {
-        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
     }
 }

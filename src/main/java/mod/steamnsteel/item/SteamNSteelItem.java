@@ -18,6 +18,7 @@ package mod.steamnsteel.item;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.library.Textures;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
@@ -25,6 +26,11 @@ import net.minecraft.item.ItemStack;
 
 public class SteamNSteelItem extends Item
 {
+    public SteamNSteelItem()
+    {
+        setCreativeTab(Reference.CREATIVE_TAB);
+    }
+
     @Override
     public String getUnlocalizedName()
     {
