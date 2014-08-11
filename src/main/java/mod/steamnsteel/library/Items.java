@@ -29,9 +29,8 @@ import mod.steamnsteel.item.weapon.SteelSword;
 
 @SuppressWarnings("WeakerAccess")
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
-public enum Items
+public final class Items
 {
-    INSTANCE;
     public static final SteamNSteelItem BRONZE_BOOTS = new BronzeBoots();
     public static final SteamNSteelItem BRONZE_CHESTPLATE = new BronzeChestplate();
     public static final SteamNSteelItem BRONZE_HELMET = new BronzeHelmet();
@@ -69,6 +68,11 @@ public enum Items
     public static final SteamNSteelItem STEEL_PICKAXE = new SteelPickaxe();
     public static final SteamNSteelItem STEEL_SHOVEL = new SteelShovel();
     public static final SteamNSteelItem STEEL_SWORD = new SteelSword();
+
+    private Items()
+    {
+        throw new AssertionError();
+    }
 
     public static void init()
     {
@@ -123,7 +127,6 @@ public enum Items
         GameRegistry.registerItem(SULFUR, Names.Items.SULFUR);
     }
 
-
     private static void initSteelArmor()
     {
         GameRegistry.registerItem(STEEL_BOOTS, Names.Armor.STEEL_BOOTS);
@@ -131,6 +134,7 @@ public enum Items
         GameRegistry.registerItem(STEEL_HELMET, Names.Armor.STEEL_HELMET);
         GameRegistry.registerItem(STEEL_LEGGINGS, Names.Armor.STEEL_LEGGINGS);
     }
+
     private static void initSteelTools()
     {
         GameRegistry.registerItem(STEEL_AXE, Names.Tools.STEEL_AXE);

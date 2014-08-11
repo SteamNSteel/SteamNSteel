@@ -17,12 +17,16 @@
 package mod.steamnsteel.library;
 
 @SuppressWarnings("InnerClassFieldHidesOuterClassField")
-public enum Names
+public final class Names
 {
-    INSTANCE;
-    public enum Armor
+    private Names()
     {
-        INSTANCE;
+        throw new AssertionError();
+    }
+
+    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
+    public final class Armor
+    {
         public static final String BRONZE_BOOTS = "bootsBronze";
         public static final String BRONZE_CHESTPLATE = "chestplateBronze";
         public static final String BRONZE_HELMET = "helmetBronze";
@@ -31,21 +35,29 @@ public enum Names
         public static final String STEEL_CHESTPLATE = "chestplateSteel";
         public static final String STEEL_HELMET = "helmetSteel";
         public static final String STEEL_LEGGINGS = "leggingsSteel";
+
+        private Armor()
+        {
+            throw new AssertionError();
+        }
     }
 
-    public enum Artifacts
+    public final class Artifacts
     {
-        INSTANCE;
         public static final String ANACH_DOODAD = "anachDoodad";
         public static final String MUSTY_JOURNAL = "mustyJournal";
         public static final String PER_GUI_VOX = "perGuiVox";
         public static final String PLOTONIUM_SCRAP = "plotoniumScrap";
         public static final String VOX_BOX = "voxBox";
+
+        private Artifacts()
+        {
+            throw new AssertionError();
+        }
     }
 
-    public enum Blocks
+    public final class Blocks
     {
-        INSTANCE;
         public static final String BRASS_BLOCK = "blockBrass";
         public static final String BRONZE_BLOCK = "blockBronze";
         public static final String COPPER_BLOCK = "blockCopper";
@@ -61,29 +73,41 @@ public enum Names
         public static final String SULFUR_ORE = "oreSulfur";
         public static final String TIN_BLOCK = "blockTin";
         public static final String TIN_ORE = "oreTin";
+
+        private Blocks()
+        {
+            throw new AssertionError();
+        }
     }
 
-    public enum Ingots
+    public final class Ingots
     {
-        INSTANCE;
         public static final String BRASS_INGOT = "ingotBrass";
         public static final String BRONZE_INGOT = "ingotBronze";
         public static final String COPPER_INGOT = "ingotCopper";
         public static final String PLOTONIUM_INGOT = "ingotPlotonium";
         public static final String STEEL_INGOT = "ingotSteel";
         public static final String TIN_INGOT = "ingotTin";
+
+        private Ingots()
+        {
+            throw new AssertionError();
+        }
     }
 
-    public enum Items
+    public final class Items
     {
-        INSTANCE;
         public static final String NITER = "niter";
         public static final String SULFUR = "sulfur";
+
+        private Items()
+        {
+            throw new AssertionError();
+        }
     }
 
-    public enum Tools
+    public final class Tools
     {
-        INSTANCE;
         public static final String BRONZE_AXE = "axeBronze";
         public static final String BRONZE_HOE = "hoeBronze";
         public static final String BRONZE_PICKAXE = "pickBronze";
@@ -92,12 +116,21 @@ public enum Names
         public static final String STEEL_HOE = "hoeSteel";
         public static final String STEEL_PICKAXE = "pickSteel";
         public static final String STEEL_SHOVEL = "shovelSteel";
+
+        private Tools()
+        {
+            throw new AssertionError();
+        }
     }
 
-    public enum Weapons
+    public final class Weapons
     {
-        INSTANCE;
         public static final String BRONZE_SWORD = "swordBronze";
         public static final String STEEL_SWORD = "swordSteel";
+
+        private Weapons()
+        {
+            throw new AssertionError();
+        }
     }
 }

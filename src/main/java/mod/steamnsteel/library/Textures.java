@@ -16,32 +16,52 @@
 
 package mod.steamnsteel.library;
 
-public enum Textures
+public final class Textures
 {
-    INSTANCE;
     public static final String RESOURCE_PREFIX = Reference.MOD_ID.toLowerCase() + ':';
 
-    public enum Armor
+    private Textures()
     {
-        INSTANCE;
+        throw new AssertionError();
+    }
+
+    public final class Armor
+    {
         private static final String SHEET_LOCATION = "textures/armor/";
+
+        private Armor()
+        {
+            throw new AssertionError();
+        }
     }
 
-    public enum Model
+    public final class Model
     {
-        INSTANCE;
         private static final String TEXTURE_LOCATION = "textures/models/";
+
+        private Model()
+        {
+            throw new AssertionError();
+        }
     }
 
-    public enum Gui
+    public final class Gui
     {
-        INSTANCE;
         private static final String SHEET_LOCATION = "textures/gui/";
+
+        private Gui()
+        {
+            throw new AssertionError();
+        }
     }
 
-    public enum Effect
+    public final class Effect
     {
-        INSTANCE;
         private static final String EFFECTS_LOCATION = "textures/effects/";
+
+        private Effect()
+        {
+            throw new AssertionError();
+        }
     }
 }
