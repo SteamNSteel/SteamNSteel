@@ -75,6 +75,8 @@ public final class Names
         public static final String SULFUR_ORE = "oreSulfur";
         public static final String TIN_BLOCK = "blockTin";
         public static final String TIN_ORE = "oreTin";
+        public static final String ZINC_BLOCK = "blockZinc";
+        public static final String ZINC_ORE = "oreZinc";
 
         private Blocks()
         {
@@ -91,6 +93,7 @@ public final class Names
         public static final String PLOTONIUM_INGOT = "ingotPlotonium";
         public static final String STEEL_INGOT = "ingotSteel";
         public static final String TIN_INGOT = "ingotTin";
+        public static final String ZINC_INGOT = "ingotZinc";
 
         private Ingots()
         {

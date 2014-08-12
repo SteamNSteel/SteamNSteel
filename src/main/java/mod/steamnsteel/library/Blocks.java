@@ -20,10 +20,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.Cupola;
-import mod.steamnsteel.block.resource.ore.CopperOre;
-import mod.steamnsteel.block.resource.ore.NiterOre;
-import mod.steamnsteel.block.resource.ore.SulfurOre;
-import mod.steamnsteel.block.resource.ore.TinOre;
+import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.storage.*;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
@@ -48,6 +45,8 @@ public final class Blocks
     public static final SteamNSteelBlock SULFUR_ORE = new SulfurOre();
     public static final SteamNSteelBlock TIN_BLOCK = new TinBlock();
     public static final SteamNSteelBlock TIN_ORE = new TinOre();
+    public static final SteamNSteelBlock ZINC_BLOCK = new ZincBlock();
+    public static final SteamNSteelBlock ZINC_ORE = new ZincOre();
 
     private Blocks()
     {
@@ -79,6 +78,7 @@ public final class Blocks
         GameRegistry.registerBlock(NITER_ORE, Names.Blocks.NITER_ORE);
         GameRegistry.registerBlock(SULFUR_ORE, Names.Blocks.SULFUR_ORE);
         GameRegistry.registerBlock(TIN_ORE, Names.Blocks.TIN_ORE);
+        GameRegistry.registerBlock(ZINC_ORE, Names.Blocks.ZINC_ORE);
     }
 
     private static void initStorageBlocks()
@@ -89,6 +89,7 @@ public final class Blocks
         GameRegistry.registerBlock(PLOTONIUM_BLOCK, Names.Blocks.PLOTONIUM_BLOCK);
         GameRegistry.registerBlock(STEEL_BLOCK, Names.Blocks.STEEL_BLOCK);
         GameRegistry.registerBlock(TIN_BLOCK, Names.Blocks.TIN_BLOCK);
+        GameRegistry.registerBlock(ZINC_BLOCK, Names.Blocks.ZINC_BLOCK);
     }
 
     private static void initStructureBlocks()

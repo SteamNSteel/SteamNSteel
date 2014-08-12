@@ -56,6 +56,7 @@ public final class Items
     public static final SteamNSteelItem PLOTONIUM_INGOT = new PlotoniumIngot();
     public static final SteamNSteelItem STEEL_INGOT = new SteelIngot();
     public static final SteamNSteelItem TIN_INGOT = new TinIngot();
+    public static final SteamNSteelItem ZINC_INGOT = new ZincIngot();
 
     public static final SteamNSteelItem BRONZE_AXE = new BronzeAxe();
     public static final SteamNSteelItem BRONZE_HOE = new BronzeHoe();
@@ -119,6 +120,7 @@ public final class Items
         GameRegistry.registerItem(PLOTONIUM_INGOT, Names.Ingots.PLOTONIUM_INGOT);
         GameRegistry.registerItem(STEEL_INGOT, Names.Ingots.STEEL_INGOT);
         GameRegistry.registerItem(TIN_INGOT, Names.Ingots.TIN_INGOT);
+        GameRegistry.registerItem(ZINC_INGOT, Names.Ingots.ZINC_INGOT);
     }
 
     private static void initResources()
