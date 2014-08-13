@@ -55,34 +55,16 @@ public final class Blocks
 
     public static void init()
     {
-        initContainers();
-        initMachines();
-        initOres();
-        initStorageBlocks();
-        initStructureBlocks();
-    }
-
-    private static void initContainers()
-    {
         GameRegistry.registerBlock(PLOTONIUM_CHEST, Names.Blocks.PLOTONIUM_CHEST);
-    }
 
-    private static void initMachines()
-    {
         GameRegistry.registerBlock(CUPOLA, Names.Blocks.CUPOLA);
-    }
 
-    private static void initOres()
-    {
         GameRegistry.registerBlock(COPPER_ORE, Names.Blocks.COPPER_ORE);
         GameRegistry.registerBlock(NITER_ORE, Names.Blocks.NITER_ORE);
         GameRegistry.registerBlock(SULFUR_ORE, Names.Blocks.SULFUR_ORE);
         GameRegistry.registerBlock(TIN_ORE, Names.Blocks.TIN_ORE);
         GameRegistry.registerBlock(ZINC_ORE, Names.Blocks.ZINC_ORE);
-    }
 
-    private static void initStorageBlocks()
-    {
         GameRegistry.registerBlock(BRASS_BLOCK, Names.Blocks.BRASS_BLOCK);
         GameRegistry.registerBlock(BRONZE_BLOCK, Names.Blocks.BRONZE_BLOCK);
         GameRegistry.registerBlock(COPPER_BLOCK, Names.Blocks.COPPER_BLOCK);
@@ -90,12 +72,10 @@ public final class Blocks
         GameRegistry.registerBlock(STEEL_BLOCK, Names.Blocks.STEEL_BLOCK);
         GameRegistry.registerBlock(TIN_BLOCK, Names.Blocks.TIN_BLOCK);
         GameRegistry.registerBlock(ZINC_BLOCK, Names.Blocks.ZINC_BLOCK);
-    }
 
-    private static void initStructureBlocks()
-    {
         GameRegistry.registerBlock(PLOTONIUM_RUIN_FLOOR, Names.Blocks.PLOTONIUM_RUIN_FLOOR);
         GameRegistry.registerBlock(PLOTONIUM_RUIN_PILLAR, Names.Blocks.PLOTONIUM_RUIN_PILLAR);
         GameRegistry.registerBlock(PLOTONIUM_RUIN_WALL, Names.Blocks.PLOTONIUM_RUIN_WALL);
     }
+
 }
