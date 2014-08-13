@@ -22,6 +22,7 @@ import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.Cupola;
 import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.storage.*;
+import mod.steamnsteel.block.resource.structure.Concrete;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
@@ -34,6 +35,7 @@ public final class Blocks
 {
     public static final SteamNSteelBlock BRASS_BLOCK = new BrassBlock();
     public static final SteamNSteelBlock BRONZE_BLOCK = new BronzeBlock();
+    public static final SteamNSteelBlock CONCRETE_BLOCK = new Concrete();
     public static final SteamNSteelBlock COPPER_BLOCK = new CopperBlock();
     public static final SteamNSteelBlock COPPER_ORE = new CopperOre();
     public static final SteamNSteelBlock CUPOLA = new Cupola();
@@ -75,6 +77,7 @@ public final class Blocks
         registerBlockAndOre(TIN_BLOCK, Names.Blocks.TIN_BLOCK);
         registerBlockAndOre(ZINC_BLOCK, Names.Blocks.ZINC_BLOCK);
 
+        GameRegistry.registerBlock(CONCRETE_BLOCK, Names.Blocks.CONCRETE_BLOCK);
         GameRegistry.registerBlock(PLOTONIUM_RUIN_FLOOR, Names.Blocks.PLOTONIUM_RUIN_FLOOR);
         GameRegistry.registerBlock(PLOTONIUM_RUIN_PILLAR, Names.Blocks.PLOTONIUM_RUIN_PILLAR);
         GameRegistry.registerBlock(PLOTONIUM_RUIN_WALL, Names.Blocks.PLOTONIUM_RUIN_WALL);

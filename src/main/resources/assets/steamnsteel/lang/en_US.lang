@@ -30,6 +30,7 @@ tile.steamnsteel:oreTin.name=Tin Ore
 tile.steamnsteel:ruinFloorPlotonium.name=Ruined Plotonium Floor
 tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
 tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
+tile.steamnsteel:blockConcrete.name=Concrete
 
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel
