@@ -25,6 +25,8 @@ import mod.steamnsteel.block.resource.storage.*;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
+import net.minecraft.block.Block;
+import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings("UtilityClass")
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
@@ -59,23 +61,28 @@ public final class Blocks
 
         GameRegistry.registerBlock(CUPOLA, Names.Blocks.CUPOLA);
 
-        GameRegistry.registerBlock(COPPER_ORE, Names.Blocks.COPPER_ORE);
-        GameRegistry.registerBlock(NITER_ORE, Names.Blocks.NITER_ORE);
-        GameRegistry.registerBlock(SULFUR_ORE, Names.Blocks.SULFUR_ORE);
-        GameRegistry.registerBlock(TIN_ORE, Names.Blocks.TIN_ORE);
-        GameRegistry.registerBlock(ZINC_ORE, Names.Blocks.ZINC_ORE);
+        registerBlockAndOre(COPPER_ORE, Names.Blocks.COPPER_ORE);
+        registerBlockAndOre(NITER_ORE, Names.Blocks.NITER_ORE);
+        registerBlockAndOre(SULFUR_ORE, Names.Blocks.SULFUR_ORE);
+        registerBlockAndOre(TIN_ORE, Names.Blocks.TIN_ORE);
+        registerBlockAndOre(ZINC_ORE, Names.Blocks.ZINC_ORE);
 
-        GameRegistry.registerBlock(BRASS_BLOCK, Names.Blocks.BRASS_BLOCK);
-        GameRegistry.registerBlock(BRONZE_BLOCK, Names.Blocks.BRONZE_BLOCK);
-        GameRegistry.registerBlock(COPPER_BLOCK, Names.Blocks.COPPER_BLOCK);
-        GameRegistry.registerBlock(PLOTONIUM_BLOCK, Names.Blocks.PLOTONIUM_BLOCK);
-        GameRegistry.registerBlock(STEEL_BLOCK, Names.Blocks.STEEL_BLOCK);
-        GameRegistry.registerBlock(TIN_BLOCK, Names.Blocks.TIN_BLOCK);
-        GameRegistry.registerBlock(ZINC_BLOCK, Names.Blocks.ZINC_BLOCK);
+        registerBlockAndOre(BRASS_BLOCK, Names.Blocks.BRASS_BLOCK);
+        registerBlockAndOre(BRONZE_BLOCK, Names.Blocks.BRONZE_BLOCK);
+        registerBlockAndOre(COPPER_BLOCK, Names.Blocks.COPPER_BLOCK);
+        registerBlockAndOre(PLOTONIUM_BLOCK, Names.Blocks.PLOTONIUM_BLOCK);
+        registerBlockAndOre(STEEL_BLOCK, Names.Blocks.STEEL_BLOCK);
+        registerBlockAndOre(TIN_BLOCK, Names.Blocks.TIN_BLOCK);
+        registerBlockAndOre(ZINC_BLOCK, Names.Blocks.ZINC_BLOCK);
 
         GameRegistry.registerBlock(PLOTONIUM_RUIN_FLOOR, Names.Blocks.PLOTONIUM_RUIN_FLOOR);
         GameRegistry.registerBlock(PLOTONIUM_RUIN_PILLAR, Names.Blocks.PLOTONIUM_RUIN_PILLAR);
         GameRegistry.registerBlock(PLOTONIUM_RUIN_WALL, Names.Blocks.PLOTONIUM_RUIN_WALL);
     }
 
+    private static void registerBlockAndOre(Block block, String name)
+    {
+        GameRegistry.registerBlock(block, name);
+        OreDictionary.registerOre(name, block);
+    }
 }

@@ -26,6 +26,8 @@ import mod.steamnsteel.item.resource.ingot.*;
 import mod.steamnsteel.item.tool.*;
 import mod.steamnsteel.item.weapon.BronzeSword;
 import mod.steamnsteel.item.weapon.SteelSword;
+import net.minecraft.item.Item;
+import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings("UtilityClass")
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
@@ -93,16 +95,16 @@ public final class Items
         GameRegistry.registerItem(BRONZE_PICKAXE, Names.Tools.BRONZE_PICKAXE);
         GameRegistry.registerItem(BRONZE_SHOVEL, Names.Tools.BRONZE_SHOVEL);
 
-        GameRegistry.registerItem(BRASS_INGOT, Names.Ingots.BRASS_INGOT);
-        GameRegistry.registerItem(BRONZE_INGOT, Names.Ingots.BRONZE_INGOT);
-        GameRegistry.registerItem(COPPER_INGOT, Names.Ingots.COPPER_INGOT);
-        GameRegistry.registerItem(PLOTONIUM_INGOT, Names.Ingots.PLOTONIUM_INGOT);
-        GameRegistry.registerItem(STEEL_INGOT, Names.Ingots.STEEL_INGOT);
-        GameRegistry.registerItem(TIN_INGOT, Names.Ingots.TIN_INGOT);
-        GameRegistry.registerItem(ZINC_INGOT, Names.Ingots.ZINC_INGOT);
+        registerItemAndOre(BRASS_INGOT, Names.Ingots.BRASS_INGOT);
+        registerItemAndOre(BRONZE_INGOT, Names.Ingots.BRONZE_INGOT);
+        registerItemAndOre(COPPER_INGOT, Names.Ingots.COPPER_INGOT);
+        registerItemAndOre(PLOTONIUM_INGOT, Names.Ingots.PLOTONIUM_INGOT);
+        registerItemAndOre(STEEL_INGOT, Names.Ingots.STEEL_INGOT);
+        registerItemAndOre(TIN_INGOT, Names.Ingots.TIN_INGOT);
+        registerItemAndOre(ZINC_INGOT, Names.Ingots.ZINC_INGOT);
 
-        GameRegistry.registerItem(NITER, Names.Items.NITER);
-        GameRegistry.registerItem(SULFUR, Names.Items.SULFUR);
+        registerItemAndOre(NITER, Names.Items.NITER);
+        registerItemAndOre(SULFUR, Names.Items.SULFUR);
 
         GameRegistry.registerItem(STEEL_BOOTS, Names.Armor.STEEL_BOOTS);
         GameRegistry.registerItem(STEEL_CHESTPLATE, Names.Armor.STEEL_CHESTPLATE);
@@ -118,4 +120,9 @@ public final class Items
         GameRegistry.registerItem(STEEL_SWORD, Names.Weapons.STEEL_SWORD);
     }
 
+    private static void registerItemAndOre(Item item, String name)
+    {
+        GameRegistry.registerItem(item, name);
+        OreDictionary.registerOre(name, item);
+    }
 }
