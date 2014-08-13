@@ -104,8 +104,8 @@ public final class Names
     @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
     public final class Items
     {
-        public static final String NITER = "niter";
-        public static final String SULFUR = "sulfur";
+        public static final String NITER = "dustNiter";
+        public static final String SULFUR = "dustSulfur";
 
         private Items()
         {
