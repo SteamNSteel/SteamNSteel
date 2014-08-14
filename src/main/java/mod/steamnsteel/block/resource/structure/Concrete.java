@@ -5,11 +5,18 @@ import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.library.Names;
 import mod.steamnsteel.utility.Logger;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.Random;
 
 public class Concrete extends SteamNSteelBlock{
@@ -35,10 +42,21 @@ public class Concrete extends SteamNSteelBlock{
         }
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
         return textures[meta];
+    }
+
+    @Override
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int p_149673_5_) {
+        return textures[world.getBlockMetadata(x, y, z)];
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack is) {
+        world.setBlockMetadataWithNotify(x, y, z, is.getItemDamage(), 2);
+        world.getBlock(x, y, z).setResistance(is.getItemDamage() * 2.0F);
+        world.getBlock(x, y, z).setHardness(is.getItemDamage() * 1.8F + 1.5F);
     }
 
     //Will return the hardened concrete if it is done drying, otherwise the starting to dry stuff
@@ -96,6 +114,14 @@ public class Concrete extends SteamNSteelBlock{
         num1 /= 1.34;
         if(num1 <= 9 + random.nextInt(3)){
             world.setBlockMetadataWithNotify(x, y, z, ++currentMeta, 2);
+            world.getBlock(x, y, z).setResistance(currentMeta * 2.0F);
+            world.getBlock(x, y, z).setHardness(1.8F * currentMeta + 1.5F);
         }
+    }
+
+    @Override
+    public void getSubBlocks(Item item, CreativeTabs creativeTab, List list) {
+        list.add(new ItemStack(this, 1, 0));
+        list.add(new ItemStack(this, 1, 4));
     }
 }

@@ -9,3 +9,5 @@ out/
 .idea/
 *.patch
 *.dll
+build/tmp/makeStart/GradleStart.java
+build/tmp/makeStart/GradleStartServer.java
