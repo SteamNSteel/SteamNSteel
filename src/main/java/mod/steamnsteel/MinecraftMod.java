@@ -60,7 +60,12 @@ public class MinecraftMod
     @Mod.EventHandler
     public void onFMLPostInitialization(FMLPostInitializationEvent event)
     {
-        
+        VersionChecker versionChecker = new VersionChecker();
+        versionChecker.run();
+        Object[] versions = versionChecker.getAllVersions();
+        for(Object s: versions){
+            Logger.info("%s", s);
+        }
         // TODO: Handle interaction with other mods, complete your setup based on this.
     }
 }
