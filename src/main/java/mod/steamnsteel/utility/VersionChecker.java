@@ -43,9 +43,9 @@ public class VersionChecker implements Runnable{
     public String getLatestRelease(){
         StringBuilder latestVersion = new StringBuilder();
 
-        String[] mcVersions = (String[])cachedVersions.keySet().toArray();
+        Object[] mcVersions = cachedVersions.keySet().toArray();
         Arrays.sort(mcVersions);
-        String[] modVersions = (String[])cachedVersions.get(mcVersions[mcVersions.length - 1]).toArray();
+        Object[] modVersions = cachedVersions.get(mcVersions[mcVersions.length - 1]).toArray();
 
         latestVersion.append("The latest version of Steam N' Steel is ");
         latestVersion.append(modVersions[modVersions.length - 1]);
@@ -59,7 +59,7 @@ public class VersionChecker implements Runnable{
     public String getLatestReleaseForMCVersion(String version){
         StringBuilder latestVersion = new StringBuilder();
 
-        String[] modVersions = (String[])cachedVersions.get(version).toArray();
+        Object[] modVersions = cachedVersions.get(version).toArray();
 
         latestVersion.append("The latest release for you MC version is ");
         latestVersion.append(modVersions[modVersions.length - 1]);
@@ -99,7 +99,7 @@ public class VersionChecker implements Runnable{
         }
     }
 
-    public static void versionCheck(){
+    public void versionCheck(){
         try{
             BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(FILE_LOC).openStream()));
 
@@ -134,7 +134,12 @@ public class VersionChecker implements Runnable{
                 }
                 sortVersionInfo();
             }
+
             reader.close();
+
+            if(versionState != VERSION.CONN_ERROR && !getLatestRelease().equals(MC_VERSION + ":" + Reference.MOD_VERSION)){
+                versionState = VERSION.OUTDATED;
+            }
         }catch (Exception ex){
             ex.printStackTrace();
         }
