@@ -27,6 +27,8 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import mod.steamnsteel.utility.Logger;
+import mod.steamnsteel.utility.VersionChecker;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, useMetadata = true, guiFactory = Reference.MOD_GUI_FACTORY)
 public class MinecraftMod
@@ -58,6 +60,7 @@ public class MinecraftMod
     @Mod.EventHandler
     public void onFMLPostInitialization(FMLPostInitializationEvent event)
     {
+        
         // TODO: Handle interaction with other mods, complete your setup based on this.
     }
 }
