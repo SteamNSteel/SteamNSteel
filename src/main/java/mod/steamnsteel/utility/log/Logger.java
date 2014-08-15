@@ -14,7 +14,7 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.utility;
+package mod.steamnsteel.utility.log;
 
 import mod.steamnsteel.library.Reference;
 import org.apache.logging.log4j.Level;
