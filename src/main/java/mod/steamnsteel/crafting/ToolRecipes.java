@@ -16,48 +16,53 @@
 
 package mod.steamnsteel.crafting;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.Table;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.Names;
 import mod.steamnsteel.utility.crafting.RecipePattern;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import java.util.List;
 
+@SuppressWarnings("MethodMayBeStatic")
 class ToolRecipes
 {
-    private final Table<String, RecipePattern, ItemStack> productTable = getToolProductTable();
-
-    private static Table<String, RecipePattern, ItemStack> getToolProductTable()
+    private static List<IRecipe> getRecipes()
     {
         final RecipePattern pick = RecipePattern.of("XXX", " # ", " # ");
         final RecipePattern shovel = RecipePattern.of("X", "#", "#");
         final RecipePattern axe = RecipePattern.of("XX", "X#", " #");
         final RecipePattern hoe = RecipePattern.of("XX", " #", " #");
 
-        final Table<String, RecipePattern, ItemStack> productTable = HashBasedTable.create();
+        final List<IRecipe> recipes = Lists.newArrayList();
 
-        productTable.put("bronzeIngot", pick, new ItemStack(Items.BRONZE_PICKAXE));
-        productTable.put("bronzeIngot", shovel, new ItemStack(Items.BRONZE_SHOVEL));
-        productTable.put("bronzeIngot", axe, new ItemStack(Items.BRONZE_AXE));
-        productTable.put("bronzeIngot", hoe, new ItemStack(Items.BRONZE_HOE));
+        recipes.add(assembleRecipe(Items.BRONZE_PICKAXE, pick, Names.Ingots.BRONZE_INGOT));
+        recipes.add(assembleRecipe(Items.BRONZE_SHOVEL, shovel, Names.Ingots.BRONZE_INGOT));
+        recipes.add(assembleRecipe(Items.BRONZE_AXE, axe, Names.Ingots.BRONZE_INGOT));
+        recipes.add(assembleRecipe(Items.BRONZE_HOE, hoe, Names.Ingots.BRONZE_INGOT));
 
-        productTable.put("steelIngot", pick, new ItemStack(Items.STEEL_PICKAXE));
-        productTable.put("steelIngot", shovel, new ItemStack(Items.STEEL_SHOVEL));
-        productTable.put("steelIngot", axe, new ItemStack(Items.STEEL_AXE));
-        productTable.put("steelIngot", hoe, new ItemStack(Items.STEEL_HOE));
+        recipes.add(assembleRecipe(Items.STEEL_PICKAXE, pick, Names.Ingots.STEEL_INGOT));
+        recipes.add(assembleRecipe(Items.STEEL_SHOVEL, shovel, Names.Ingots.STEEL_INGOT));
+        recipes.add(assembleRecipe(Items.STEEL_AXE, axe, Names.Ingots.STEEL_INGOT));
+        recipes.add(assembleRecipe(Items.STEEL_HOE, hoe, Names.Ingots.STEEL_INGOT));
 
-        return ImmutableTable.copyOf(productTable);
+        return ImmutableList.copyOf(recipes);
+    }
+
+    private static IRecipe assembleRecipe(Item result, RecipePattern pattern, String ingot)
+    {
+        return new ShapedOreRecipe(result, pattern.get(), '#', "stickWood", 'X', ingot);
     }
 
     void init()
     {
-        for (final Table.Cell<String, RecipePattern, ItemStack> cell : productTable.cellSet())
+        final List<IRecipe> recipes = getRecipes();
+        for (final IRecipe recipe : recipes)
         {
-            final ItemStack product = cell.getValue();
-            final RecipePattern recipe = cell.getColumnKey();
-            final String ingot = cell.getRowKey();
-            GameRegistry.addRecipe(product, recipe.pattern(), '#', "stickWood", 'X', ingot);
+            GameRegistry.addRecipe(recipe);
         }
     }
 }

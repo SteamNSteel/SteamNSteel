@@ -43,7 +43,7 @@ public final class RecipePattern
         return new RecipePattern(firstRow, "", "");
     }
 
-    public String[] pattern()
+    public String[] get()
     {
         return pattern.toArray(new String[3]);
     }
