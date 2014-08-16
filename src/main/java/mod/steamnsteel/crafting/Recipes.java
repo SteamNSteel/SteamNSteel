@@ -28,9 +28,6 @@ import net.minecraft.item.ItemStack;
 @SuppressWarnings("UtilityClass")
 public final class Recipes
 {
-
-    public static final float SMELTING_XP = 0.5F;
-
     private Recipes()
     {
         throw new AssertionError();
@@ -38,7 +35,7 @@ public final class Recipes
 
     public static void init()
     {
-        initFurnaceRecipes();
+        new Smelting().init();
         initToolRecipes();
     }
 
@@ -73,12 +70,5 @@ public final class Recipes
         productTable.put("steelIngot", hoe, new ItemStack(Items.STEEL_HOE));
 
         return ImmutableTable.copyOf(productTable);
-    }
-
-    private static void initFurnaceRecipes()
-    {
-        GameRegistry.addSmelting(Blocks.COPPER_ORE, new ItemStack(Items.COPPER_INGOT), SMELTING_XP);
-        GameRegistry.addSmelting(Blocks.TIN_ORE, new ItemStack(Items.TIN_INGOT), SMELTING_XP);
-        GameRegistry.addSmelting(Blocks.ZINC_ORE, new ItemStack(Items.ZINC_INGOT), SMELTING_XP);
     }
 }
