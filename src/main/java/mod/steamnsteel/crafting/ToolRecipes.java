@@ -36,6 +36,7 @@ class ToolRecipes
         final RecipePattern shovel = RecipePattern.of("X", "#", "#");
         final RecipePattern axe = RecipePattern.of("XX", "X#", " #");
         final RecipePattern hoe = RecipePattern.of("XX", " #", " #");
+        final RecipePattern sword = RecipePattern.of("X", "X", "#");
 
         final List<IRecipe> recipes = Lists.newArrayList();
 
@@ -43,11 +44,13 @@ class ToolRecipes
         recipes.add(assembleRecipe(Items.BRONZE_SHOVEL, shovel, Names.Ingots.BRONZE_INGOT));
         recipes.add(assembleRecipe(Items.BRONZE_AXE, axe, Names.Ingots.BRONZE_INGOT));
         recipes.add(assembleRecipe(Items.BRONZE_HOE, hoe, Names.Ingots.BRONZE_INGOT));
+        recipes.add(assembleRecipe(Items.BRONZE_SWORD, sword, Names.Ingots.BRONZE_INGOT));
 
         recipes.add(assembleRecipe(Items.STEEL_PICKAXE, pick, Names.Ingots.STEEL_INGOT));
         recipes.add(assembleRecipe(Items.STEEL_SHOVEL, shovel, Names.Ingots.STEEL_INGOT));
         recipes.add(assembleRecipe(Items.STEEL_AXE, axe, Names.Ingots.STEEL_INGOT));
         recipes.add(assembleRecipe(Items.STEEL_HOE, hoe, Names.Ingots.STEEL_INGOT));
+        recipes.add(assembleRecipe(Items.STEEL_SWORD, sword, Names.Ingots.STEEL_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }
