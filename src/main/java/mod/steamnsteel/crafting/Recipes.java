@@ -39,6 +39,40 @@ public final class Recipes
     public static void init()
     {
         initFurnaceRecipes();
+        initToolRecipes();
+    }
+
+    private static void initToolRecipes()
+    {
+        for (final Table.Cell<String, RecipePattern, ItemStack> cell : getToolProductTable().cellSet())
+        {
+            final ItemStack product = cell.getValue();
+            final RecipePattern recipe = cell.getColumnKey();
+            final String ingot = cell.getRowKey();
+            GameRegistry.addRecipe(product, recipe.pattern(), '#', "stickWood", 'X', ingot);
+        }
+    }
+
+    private static Table<String, RecipePattern, ItemStack> getToolProductTable()
+    {
+        final RecipePattern pick = RecipePattern.of("XXX", " # ", " # ");
+        final RecipePattern shovel = RecipePattern.of("X", "#", "#");
+        final RecipePattern axe = RecipePattern.of("XX", "X#", " #");
+        final RecipePattern hoe = RecipePattern.of("XX", " #", " #");
+
+        final Table<String, RecipePattern, ItemStack> productTable = HashBasedTable.create();
+
+        productTable.put("bronzeIngot", pick, new ItemStack(Items.BRONZE_PICKAXE));
+        productTable.put("bronzeIngot", shovel, new ItemStack(Items.BRONZE_SHOVEL));
+        productTable.put("bronzeIngot", axe, new ItemStack(Items.BRONZE_AXE));
+        productTable.put("bronzeIngot", hoe, new ItemStack(Items.BRONZE_HOE));
+
+        productTable.put("steelIngot", pick, new ItemStack(Items.STEEL_PICKAXE));
+        productTable.put("steelIngot", shovel, new ItemStack(Items.STEEL_SHOVEL));
+        productTable.put("steelIngot", axe, new ItemStack(Items.STEEL_AXE));
+        productTable.put("steelIngot", hoe, new ItemStack(Items.STEEL_HOE));
+
+        return ImmutableTable.copyOf(productTable);
     }
 
     private static void initFurnaceRecipes()
