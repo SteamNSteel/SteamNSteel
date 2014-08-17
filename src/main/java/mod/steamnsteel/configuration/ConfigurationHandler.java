@@ -21,7 +21,7 @@ import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mod.steamnsteel.library.Reference;
-import mod.steamnsteel.utility.Logger;
+import mod.steamnsteel.utility.log.Logger;
 import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 import java.text.SimpleDateFormat;

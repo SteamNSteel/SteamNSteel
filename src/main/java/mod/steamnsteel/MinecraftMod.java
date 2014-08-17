@@ -17,6 +17,7 @@
 package mod.steamnsteel;
 
 import mod.steamnsteel.configuration.ConfigurationHandler;
+import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.library.Blocks;
 import mod.steamnsteel.library.Items;
 import mod.steamnsteel.proxy.IProxy;
@@ -51,8 +52,7 @@ public class MinecraftMod
     public void onFMLInitialization(FMLInitializationEvent event)
     {
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
-
-        // TODO: Do your mod setup. Build whatever data structures you care about. Register recipes, send FMLInterModComms messages to other mods.
+        Recipes.init();
     }
 
     @Mod.EventHandler
