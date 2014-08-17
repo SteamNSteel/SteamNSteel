@@ -21,11 +21,22 @@ import com.google.common.collect.ImmutableList;
 
 public final class RecipePattern
 {
+    public static final int CAPACITY = 20;
     private final ImmutableList<String> pattern;
 
     private RecipePattern(String firstRow, String secondRow, String thirdRow)
     {
         pattern = ImmutableList.of(firstRow, secondRow, thirdRow);
+    }
+
+    private RecipePattern(String firstRow, String secondRow)
+    {
+        pattern = ImmutableList.of(firstRow, secondRow);
+    }
+
+    private RecipePattern(String firstRow)
+    {
+        pattern = ImmutableList.of(firstRow);
     }
 
     public static RecipePattern of(String firstRow, String secondRow, String thirdRow)
@@ -35,12 +46,12 @@ public final class RecipePattern
 
     public static RecipePattern of(String firstRow, String secondRow)
     {
-        return new RecipePattern(firstRow, secondRow, "");
+        return new RecipePattern(firstRow, secondRow);
     }
 
     public static RecipePattern of(String firstRow)
     {
-        return new RecipePattern(firstRow, "", "");
+        return new RecipePattern(firstRow);
     }
 
     public String[] get()
@@ -51,10 +62,23 @@ public final class RecipePattern
     @Override
     public String toString()
     {
+        final StringBuilder sb = new StringBuilder(CAPACITY);
+        sb.append('{');
+        boolean appendComma = false;
+        for (final String s : pattern)
+        {
+            if (appendComma)
+                sb.append(", ");
+            else appendComma = true;
+
+            sb.append('\"');
+            sb.append(s);
+            sb.append('\"');
+        }
+        sb.append('}');
+
         return Objects.toStringHelper(this)
-                .add("Row 1", pattern.get(0))
-                .add("Row 2", pattern.get(1))
-                .add("Row 3", pattern.get(2))
+                .addValue(sb)
                 .toString();
     }
 
