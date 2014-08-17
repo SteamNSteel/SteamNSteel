@@ -56,7 +56,7 @@ public final class RecipePattern
 
     public String[] get()
     {
-        return pattern.toArray(new String[3]);
+        return pattern.toArray(new String[pattern.size()]);
     }
 
     @Override
