@@ -22,12 +22,15 @@ import mod.steamnsteel.library.Blocks;
 import mod.steamnsteel.library.Items;
 import mod.steamnsteel.proxy.IProxy;
 import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.network.Event.ServerEventHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, useMetadata = true, guiFactory = Reference.MOD_GUI_FACTORY)
 public class MinecraftMod
@@ -39,6 +42,8 @@ public class MinecraftMod
     @SuppressWarnings({"StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
+
+	public static final SimpleNetworkWrapper networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID.toLowerCase());
 
     @Mod.EventHandler
     public void onFMLPreInitialization(FMLPreInitializationEvent event)
@@ -53,6 +58,7 @@ public class MinecraftMod
     {
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
         Recipes.init();
+		MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
     }
 
     @Mod.EventHandler
