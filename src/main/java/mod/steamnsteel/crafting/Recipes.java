@@ -29,5 +29,6 @@ public final class Recipes
         new Smelting().init();
         new ToolRecipes().init();
         new IngotRecipes().init();
+        new ArmorRecipes().init();
     }
 }
