@@ -1,0 +1,71 @@
+#
+# Copyright (c) 2014 Rosie Alexander and Scott Killen.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation; either version 3 of the License, or (at your option) any
+# later version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, see <http://www.gnu.org/licenses>.
+#
+
+#Blocks
+tile.steamnsteel:blockBrass.name=Brass Block
+tile.steamnsteel:blockBronze.name=Bronze Block
+tile.steamnsteel:blockCopper.name=Copper Block
+tile.steamnsteel:blockPlotonium.name=Plotonium Block
+tile.steamnsteel:blockSteel.name=Steel Block
+tile.steamnsteel:blockTin.name=Tin Block
+tile.steamnsteel:blockZinc.name=Zinc Block
+tile.steamnsteel:chestPlotonium.name=Plotonium Chest
+tile.steamnsteel:cupola.name=Cupola
+tile.steamnsteel:oreCopper.name=Copper Ore
+tile.steamnsteel:oreNiter.name=Niter Ore
+tile.steamnsteel:oreSulfur.name=Sulfur Ore
+tile.steamnsteel:oreTin.name=Tin Ore
+tile.steamnsteel:oreZinc.name=Zinc Ore
+tile.steamnsteel:ruinFloorPlotonium.name=Ruined Plotonium Floor
+tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
+tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
+
+# Creative Tabs
+itemGroup.steamnsteel=Steam and Steel
+
+# Items
+item.steamnsteel:anachDoodad.name=Anachronistic Doodad
+item.steamnsteel:axeBronze.name=Bronze Axe
+item.steamnsteel:axeSteel.name=Steel Axe
+item.steamnsteel:bootsBronze.name=Bronze Boots
+item.steamnsteel:bootsSteel.name=Steel Boots
+item.steamnsteel:chestplateBronze.name=Bronze Chestplate
+item.steamnsteel:chestplateSteel.name=Steel Chestplate
+item.steamnsteel:dustNiter.name=Nitre
+item.steamnsteel:dustSulfur.name=Sulphur
+item.steamnsteel:helmetBronze.name=Bronze Helmet
+item.steamnsteel:helmetSteel.name=Steel Helmet
+item.steamnsteel:hoeBronze.name=Bronze Hoe
+item.steamnsteel:hoeSteel.name=Steel Hoe
+item.steamnsteel:ingotBrass.name=Brass Ingot
+item.steamnsteel:ingotBronze.name=Bronze Ingot
+item.steamnsteel:ingotCopper.name=Copper Ingot
+item.steamnsteel:ingotPlotonium.name=Plotonium Ingot
+item.steamnsteel:ingotSteel.name=Steel Ingot
+item.steamnsteel:ingotTin.name=Tin Ingot
+item.steamnsteel:ingotZinc.name=Zinc Ingot
+item.steamnsteel:leggingsBronze.name=Bronze Leggings
+item.steamnsteel:leggingsSteel.name=Steel Leggings
+item.steamnsteel:mustyJournal.name=Musty Journal
+item.steamnsteel:perGuiVox.name=Personal Guide Vox
+item.steamnsteel:pickBronze.name=Bronze Pickaxe
+item.steamnsteel:pickSteel.name=Steel Pickaxe
+item.steamnsteel:plotoniumScrap.name=Plotonium Scrap
+item.steamnsteel:shovelBronze.name=Bronze Shovel
+item.steamnsteel:shovelSteel.name=Steel Shovel
+item.steamnsteel:swordBronze.name=Bronze Sword
+item.steamnsteel:swordSteel.name=Steel Sword
+item.steamnsteel:voxBox.name=Vox Box
