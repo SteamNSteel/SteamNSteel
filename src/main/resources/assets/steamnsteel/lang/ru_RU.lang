@@ -13,9 +13,9 @@ tile.steamnsteel:oreNiter.name=Селитровая руда
 tile.steamnsteel:oreSulfur.name=Серная руда
 tile.steamnsteel:oreTin.name=Оловянная руда
 tile.steamnsteel:oreZinc.name=Цинковая руда
-tile.steamnsteel:ruinFloorPlotonium.name=Разрушенный пол из фабулония
-tile.steamnsteel:ruinPillarPlotonium.name=Разрушенная колонна из фабулония
-tile.steamnsteel:ruinWallPlotonium.name=Разрушенная стена из фабулония
+tile.steamnsteel:ruinFloorPlotonium.name=Пол из разрушенного фабулония
+tile.steamnsteel:ruinPillarPlotonium.name=Колонна из разрушенного фабулония
+tile.steamnsteel:ruinWallPlotonium.name=Стена из разрушенного фабулония
 
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel
