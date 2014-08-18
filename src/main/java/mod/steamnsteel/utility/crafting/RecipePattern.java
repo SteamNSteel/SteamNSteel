@@ -19,23 +19,31 @@ package mod.steamnsteel.utility.crafting;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 
+import static com.google.common.base.Preconditions.*;
+
 public final class RecipePattern
 {
-    public static final int CAPACITY = 20;
+    private static final int CAPACITY = 20;
     private final ImmutableList<String> pattern;
 
     private RecipePattern(String firstRow, String secondRow, String thirdRow)
     {
+        checkNotNull(firstRow, "Recipe row (first) cannot be 'null'.");
+        checkNotNull(secondRow, "Recipe row (second) cannot be 'null'.");
+        checkNotNull(thirdRow, "Recipe row (third) cannot be 'null'.");
         pattern = ImmutableList.of(firstRow, secondRow, thirdRow);
     }
 
     private RecipePattern(String firstRow, String secondRow)
     {
+        checkNotNull(firstRow, "Recipe row (first) cannot be 'null'.");
+        checkNotNull(secondRow, "Recipe row (second) cannot be 'null'.");
         pattern = ImmutableList.of(firstRow, secondRow);
     }
 
     private RecipePattern(String firstRow)
     {
+        checkNotNull(firstRow, "Recipe row cannot be 'null'.");
         pattern = ImmutableList.of(firstRow);
     }
 
@@ -56,7 +64,7 @@ public final class RecipePattern
 
     public String[] get()
     {
-        return pattern.toArray(new String[3]);
+        return pattern.toArray(new String[0]);
     }
 
     @Override
