@@ -1,0 +1,62 @@
+##############################
+# Steam and Steel
+#
+# German - GERMANY (DE) (de_DE) localization
+# Author: Vexatos
+#
+
+#Blocks
+tile.steamnsteel:blockBrass.name=Messingblock
+tile.steamnsteel:blockBronze.name=Bronzeblock
+tile.steamnsteel:blockCopper.name=Kupferblock
+tile.steamnsteel:blockPlotonium.name=Plotoniumblock
+tile.steamnsteel:blockSteel.name=Stahlblock
+tile.steamnsteel:blockTin.name=Zinnblock
+tile.steamnsteel:blockZinc.name=Zinkblock
+tile.steamnsteel:chestPlotonium.name=Plotoniumtruhe
+tile.steamnsteel:cupola.name=Kuppel
+tile.steamnsteel:oreCopper.name=Kupfererz
+tile.steamnsteel:oreNiter.name=Salpetererz
+tile.steamnsteel:oreSulfur.name=Schwefelerz
+tile.steamnsteel:oreTin.name=Zinnerz
+tile.steamnsteel:oreZinc.name=Zinkerz
+tile.steamnsteel:ruinFloorPlotonium.name=Verfallener Plotoniumboden
+tile.steamnsteel:ruinPillarPlotonium.name=Verfallene Plotoniumsäule
+tile.steamnsteel:ruinWallPlotonium.name=Verfallene Plotoniumwand
+
+# Creative Tabs
+itemGroup.steamnsteel=Steam and Steel
+
+# Items
+item.steamnsteel:anachDoodad.name=Anachronistisches Dingbums
+item.steamnsteel:axeBronze.name=Bronzeaxt
+item.steamnsteel:axeSteel.name=Stahlaxt
+item.steamnsteel:bootsBronze.name=Bronzestiefel
+item.steamnsteel:bootsSteel.name=Stahlstiefel
+item.steamnsteel:chestplateBronze.name=Bronzeharnisch
+item.steamnsteel:chestplateSteel.name=Stahlharnisch
+item.steamnsteel:dustNiter.name=Salpeter
+item.steamnsteel:dustSulfur.name=Schwefel
+item.steamnsteel:helmetBronze.name=Bronzehelm
+item.steamnsteel:helmetSteel.name=Stahlhelm
+item.steamnsteel:hoeBronze.name=Bronzehacke
+item.steamnsteel:hoeSteel.name=Stahlhacke
+item.steamnsteel:ingotBrass.name=Messingbarren
+item.steamnsteel:ingotBronze.name=Bronzebarren
+item.steamnsteel:ingotCopper.name=Kupferbarren
+item.steamnsteel:ingotPlotonium.name=Plotoniumbarren
+item.steamnsteel:ingotSteel.name=Stahlbarren
+item.steamnsteel:ingotTin.name=Zinnbarren
+item.steamnsteel:ingotZinc.name=Zinkbarren
+item.steamnsteel:leggingsBronze.name=Bronzebeinschutz
+item.steamnsteel:leggingsSteel.name=Stahlbeinschutz
+item.steamnsteel:mustyJournal.name=Modriges Journal
+item.steamnsteel:perGuiVox.name=Persönliches Guide Vox
+item.steamnsteel:pickBronze.name=Bronzespitzhacke
+item.steamnsteel:pickSteel.name=Stahlspitzhacke
+item.steamnsteel:plotoniumScrap.name=Plotoniumschrott
+item.steamnsteel:shovelBronze.name=Bronzeschaufel
+item.steamnsteel:shovelSteel.name=Stahlschaufel
+item.steamnsteel:swordBronze.name=Bronzeschwert
+item.steamnsteel:swordSteel.name=Stahlschwert
+item.steamnsteel:voxBox.name=Vox Box
