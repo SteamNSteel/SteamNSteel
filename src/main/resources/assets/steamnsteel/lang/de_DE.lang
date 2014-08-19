@@ -1,5 +1,9 @@
-# German localization file
+##############################
+# Steam and Steel
+#
+# German - GERMANY (DE) (de_DE) localization
 # Author: Vexatos
+#
 
 #Blocks
 tile.steamnsteel:blockBrass.name=Messingblock
