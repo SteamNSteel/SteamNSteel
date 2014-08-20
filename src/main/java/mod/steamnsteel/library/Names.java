@@ -62,6 +62,7 @@ public final class Names
     {
         public static final String BRASS_BLOCK = "blockBrass";
         public static final String BRONZE_BLOCK = "blockBronze";
+        public static final String CONCRETE_BLOCK = "blockConcrete";
         public static final String COPPER_BLOCK = "blockCopper";
         public static final String COPPER_ORE = "oreCopper";
         public static final String CUPOLA = "cupola";
