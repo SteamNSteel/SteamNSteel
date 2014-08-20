@@ -16,17 +16,13 @@
 
 package mod.steamnsteel.library;
 
-@SuppressWarnings({"InnerClassFieldHidesOuterClassField", "UtilityClass"})
-public final class Names
+@SuppressWarnings({"EnumeratedConstantNamingConvention", "InnerClassFieldHidesOuterClassField"})
+public enum Names
 {
-    private Names()
+    _;
+    public enum Armor
     {
-        throw new AssertionError();
-    }
-
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Armor
-    {
+        _;
         public static final String BRONZE_BOOTS = "bootsBronze";
         public static final String BRONZE_CHESTPLATE = "chestplateBronze";
         public static final String BRONZE_HELMET = "helmetBronze";
@@ -35,31 +31,21 @@ public final class Names
         public static final String STEEL_CHESTPLATE = "chestplateSteel";
         public static final String STEEL_HELMET = "helmetSteel";
         public static final String STEEL_LEGGINGS = "leggingsSteel";
-
-        private Armor()
-        {
-            throw new AssertionError();
-        }
     }
 
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Artifacts
+    public enum Artifacts
     {
+        _;
         public static final String ANACH_DOODAD = "anachDoodad";
         public static final String MUSTY_JOURNAL = "mustyJournal";
         public static final String PER_GUI_VOX = "perGuiVox";
         public static final String PLOTONIUM_SCRAP = "plotoniumScrap";
         public static final String VOX_BOX = "voxBox";
-
-        private Artifacts()
-        {
-            throw new AssertionError();
-        }
     }
 
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Blocks
+    public enum Blocks
     {
+        _;
         public static final String BRASS_BLOCK = "blockBrass";
         public static final String BRONZE_BLOCK = "blockBronze";
         public static final String COPPER_BLOCK = "blockCopper";
@@ -77,16 +63,11 @@ public final class Names
         public static final String TIN_ORE = "oreTin";
         public static final String ZINC_BLOCK = "blockZinc";
         public static final String ZINC_ORE = "oreZinc";
-
-        private Blocks()
-        {
-            throw new AssertionError();
-        }
     }
 
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Ingots
+    public enum Ingots
     {
+        _;
         public static final String BRASS_INGOT = "ingotBrass";
         public static final String BRONZE_INGOT = "ingotBronze";
         public static final String COPPER_INGOT = "ingotCopper";
@@ -94,28 +75,18 @@ public final class Names
         public static final String STEEL_INGOT = "ingotSteel";
         public static final String TIN_INGOT = "ingotTin";
         public static final String ZINC_INGOT = "ingotZinc";
-
-        private Ingots()
-        {
-            throw new AssertionError();
-        }
     }
 
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Items
+    public enum Items
     {
+        _;
         public static final String NITER = "dustNiter";
         public static final String SULFUR = "dustSulfur";
-
-        private Items()
-        {
-            throw new AssertionError();
-        }
     }
 
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Tools
+    public enum Tools
     {
+        _;
         public static final String BRONZE_AXE = "axeBronze";
         public static final String BRONZE_HOE = "hoeBronze";
         public static final String BRONZE_PICKAXE = "pickBronze";
@@ -124,22 +95,12 @@ public final class Names
         public static final String STEEL_HOE = "hoeSteel";
         public static final String STEEL_PICKAXE = "pickSteel";
         public static final String STEEL_SHOVEL = "shovelSteel";
-
-        private Tools()
-        {
-            throw new AssertionError();
-        }
     }
 
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Weapons
+    public enum Weapons
     {
+        _;
         public static final String BRONZE_SWORD = "swordBronze";
         public static final String STEEL_SWORD = "swordSteel";
-
-        private Weapons()
-        {
-            throw new AssertionError();
-        }
     }
 }

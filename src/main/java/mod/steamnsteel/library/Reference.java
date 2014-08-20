@@ -21,15 +21,19 @@ import net.minecraft.item.Item;
 
 public enum Reference
 {
-    INSTANCE;
+    _;
     public static final String MOD_ID = "steamnsteel";
     public static final String MOD_NAME = "Steam and Steel";
     public static final String MOD_VERSION = "@MOD_VERSION@";
     public static final String MOD_GUI_FACTORY = "mod.steamnsteel.configuration.client.ModGuiFactory";
+
     public static final String CLIENT_PROXY_CLASS = "mod.steamnsteel.proxy.ClientProxy";
     public static final String SERVER_PROXY_CLASS = "mod.steamnsteel.proxy.ServerProxy";
 
     public static final String CONFIG_VERSION = "1";
+
+    public static final String RESOURCE_PREFIX = MOD_ID.toLowerCase() + ':';
+
 
     @SuppressWarnings("AnonymousInnerClass")
     public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID.toLowerCase())

@@ -16,57 +16,35 @@
 
 package mod.steamnsteel.library;
 
-@SuppressWarnings("UtilityClass")
-public final class Textures
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+@SuppressWarnings({"EnumeratedConstantNamingConvention", "InnerClassFieldHidesOuterClassField"})
+@SideOnly(Side.CLIENT)
+public enum Textures
 {
-    public static final String RESOURCE_PREFIX = Reference.MOD_ID.toLowerCase() + ':';
-
-    private Textures()
+    _;
+    public enum Armor
     {
-        throw new AssertionError();
-    }
-
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Armor
-    {
+        _;
         private static final String SHEET_LOCATION = "textures/armor/";
-
-        private Armor()
-        {
-            throw new AssertionError();
-        }
     }
 
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Model
+    public enum Model
     {
+        _;
         private static final String TEXTURE_LOCATION = "textures/models/";
-
-        private Model()
-        {
-            throw new AssertionError();
-        }
     }
 
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Gui
+    public enum Gui
     {
+        _;
         private static final String SHEET_LOCATION = "textures/gui/";
-
-        private Gui()
-        {
-            throw new AssertionError();
-        }
     }
 
-    @SuppressWarnings({"InnerClassMayBeStatic", "NonStaticInnerClassInSecureContext"})
-    public final class Effect
+    public enum Effect
     {
+        _;
         private static final String EFFECTS_LOCATION = "textures/effects/";
-
-        private Effect()
-        {
-            throw new AssertionError();
-        }
     }
 }
