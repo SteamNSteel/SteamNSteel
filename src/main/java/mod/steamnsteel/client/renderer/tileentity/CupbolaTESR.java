@@ -32,7 +32,7 @@ public class CupbolaTESR extends TileEntitySpecialRenderer
     {
         if (tileEntity instanceof CupolaTE)
         {
-            CupolaTE TE = (CupolaTE) tileEntity;
+            final CupolaTE te = (CupolaTE) tileEntity;
 
             GL11.glPushMatrix();
 

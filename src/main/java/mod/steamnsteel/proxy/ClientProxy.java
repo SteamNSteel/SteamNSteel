@@ -22,7 +22,6 @@ import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
 import mod.steamnsteel.library.Blocks;
 import mod.steamnsteel.library.RenderIds;
 import mod.steamnsteel.tileentity.CupolaTE;
-import mod.steamnsteel.tileentity.SteamNSteelTE;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 

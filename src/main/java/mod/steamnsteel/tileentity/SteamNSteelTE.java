@@ -91,22 +91,22 @@ public class SteamNSteelTE extends TileEntity
 
         if (nbtTagCompound.hasKey(NBTTags.DIRECTION))
         {
-            this.orientation = ForgeDirection.getOrientation((int) nbtTagCompound.getByte(NBTTags.DIRECTION));
+            orientation = ForgeDirection.getOrientation((int) nbtTagCompound.getByte(NBTTags.DIRECTION));
         }
 
         if (nbtTagCompound.hasKey(NBTTags.STATE))
         {
-            this.state = nbtTagCompound.getByte(NBTTags.STATE);
+            state = nbtTagCompound.getByte(NBTTags.STATE);
         }
 
         if (nbtTagCompound.hasKey(NBTTags.CUSTOM_NAME))
         {
-            this.customName = nbtTagCompound.getString(NBTTags.CUSTOM_NAME);
+            customName = nbtTagCompound.getString(NBTTags.CUSTOM_NAME);
         }
 
         if (nbtTagCompound.hasKey(NBTTags.OWNER))
         {
-            this.owner = nbtTagCompound.getString(NBTTags.OWNER);
+            owner = nbtTagCompound.getString(NBTTags.OWNER);
         }
     }
 
@@ -118,12 +118,12 @@ public class SteamNSteelTE extends TileEntity
         nbtTagCompound.setByte(NBTTags.DIRECTION, (byte) orientation.ordinal());
         nbtTagCompound.setByte(NBTTags.STATE, state);
 
-        if (this.hasCustomName())
+        if (hasCustomName())
         {
             nbtTagCompound.setString(NBTTags.CUSTOM_NAME, customName);
         }
 
-        if (this.hasOwner())
+        if (hasOwner())
         {
             nbtTagCompound.setString(NBTTags.OWNER, owner);
         }
@@ -131,12 +131,12 @@ public class SteamNSteelTE extends TileEntity
 
     public boolean hasCustomName()
     {
-        return customName != null && customName.length() > 0;
+        return customName != null && !customName.isEmpty();
     }
 
     public boolean hasOwner()
     {
-        return owner != null && owner.length() > 0;
+        return owner != null && !owner.isEmpty();
     }
 
     @Override

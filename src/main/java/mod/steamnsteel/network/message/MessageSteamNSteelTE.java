@@ -58,9 +58,9 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
         z = buf.readInt();
         orientation = buf.readByte();
         state = buf.readByte();
-        int customNameLength = buf.readInt();
+        final int customNameLength = buf.readInt();
         customName = new String(buf.readBytes(customNameLength).array());
-        int ownerLength = buf.readInt();
+        final int ownerLength = buf.readInt();
         owner = new String(buf.readBytes(ownerLength).array());
     }
 
@@ -81,11 +81,11 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
     @Override
     public IMessage onMessage(MessageSteamNSteelTE message, MessageContext ctx)
     {
-        TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
+        final TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
 
         if (tileEntity instanceof SteamNSteelTE)
         {
-            SteamNSteelTE te = (SteamNSteelTE) tileEntity;
+            final SteamNSteelTE te = (SteamNSteelTE) tileEntity;
             te.setOrientation(message.orientation);
             te.setState(message.state);
             te.setCustomName(message.customName);
