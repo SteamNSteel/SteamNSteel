@@ -18,4 +18,5 @@ package mod.steamnsteel.proxy;
 
 public interface IProxy
 {
+    void initRendering();
 }

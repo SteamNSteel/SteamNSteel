@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.resource.ingot;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.Items;
 
 public class CopperIngot extends SteamNSteelItem
 {
     public CopperIngot()
     {
-        setUnlocalizedName(Names.Ingots.COPPER_INGOT);
+        setUnlocalizedName(Items.Names.COPPER_INGOT);
     }
 }

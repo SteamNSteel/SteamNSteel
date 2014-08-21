@@ -16,6 +16,10 @@
 
 package mod.steamnsteel.proxy;
 
-public abstract class CommonProxy implements IProxy
+public class CommonProxy implements IProxy
 {
+    protected CommonProxy() { }
+
+    @Override
+    public void initRendering() { }
 }

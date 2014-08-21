@@ -16,35 +16,11 @@
 
 package mod.steamnsteel.library;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-@SuppressWarnings({"EnumeratedConstantNamingConvention", "InnerClassFieldHidesOuterClassField"})
-@SideOnly(Side.CLIENT)
-public enum Textures
+public enum NBTTags
 {
     _;
-    public enum Armor
-    {
-        _;
-        private static final String SHEET_LOCATION = "textures/armor/";
-    }
-
-    public enum Model
-    {
-        _;
-        private static final String TEXTURE_LOCATION = "textures/models/";
-    }
-
-    public enum Gui
-    {
-        _;
-        private static final String SHEET_LOCATION = "textures/gui/";
-    }
-
-    public enum Effect
-    {
-        _;
-        private static final String EFFECTS_LOCATION = "textures/effects/";
-    }
+    public static final String CUSTOM_NAME = "CustomName";
+    public static final String DIRECTION = "teDirection";
+    public static final String OWNER = "owner";
+    public static final String STATE = "teState";
 }

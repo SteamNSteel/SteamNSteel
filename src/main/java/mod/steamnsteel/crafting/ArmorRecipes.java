@@ -20,7 +20,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.library.Items;
-import mod.steamnsteel.library.Names;
 import mod.steamnsteel.utility.crafting.RecipePattern;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
@@ -39,15 +38,15 @@ class ArmorRecipes
 
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(Items.BRONZE_HELMET, helmet, Names.Ingots.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Items.BRONZE_CHESTPLATE, chestplate, Names.Ingots.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Items.BRONZE_LEGGINGS, leggings, Names.Ingots.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Items.BRONZE_BOOTS, boots, Names.Ingots.BRONZE_INGOT));
+        recipes.add(assembleRecipe(Items.BRONZE_HELMET, helmet, Items.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(Items.BRONZE_CHESTPLATE, chestplate, Items.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(Items.BRONZE_LEGGINGS, leggings, Items.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(Items.BRONZE_BOOTS, boots, Items.Names.BRONZE_INGOT));
 
-        recipes.add(assembleRecipe(Items.STEEL_HELMET, helmet, Names.Ingots.STEEL_INGOT));
-        recipes.add(assembleRecipe(Items.STEEL_CHESTPLATE, chestplate, Names.Ingots.STEEL_INGOT));
-        recipes.add(assembleRecipe(Items.STEEL_LEGGINGS, leggings, Names.Ingots.STEEL_INGOT));
-        recipes.add(assembleRecipe(Items.STEEL_BOOTS, boots, Names.Ingots.STEEL_INGOT));
+        recipes.add(assembleRecipe(Items.STEEL_HELMET, helmet, Items.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(Items.STEEL_CHESTPLATE, chestplate, Items.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(Items.STEEL_LEGGINGS, leggings, Items.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(Items.STEEL_BOOTS, boots, Items.Names.STEEL_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }

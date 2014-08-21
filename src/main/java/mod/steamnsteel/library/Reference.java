@@ -27,6 +27,8 @@ public enum Reference
     public static final String MOD_VERSION = "@MOD_VERSION@";
     public static final String MOD_GUI_FACTORY = "mod.steamnsteel.configuration.client.ModGuiFactory";
 
+    public static final String NETWORK_CHANNEL = MOD_ID.toLowerCase();
+
     public static final String CLIENT_PROXY_CLASS = "mod.steamnsteel.proxy.ClientProxy";
     public static final String SERVER_PROXY_CLASS = "mod.steamnsteel.proxy.ServerProxy";
 

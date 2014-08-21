@@ -20,6 +20,7 @@ import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.library.Blocks;
 import mod.steamnsteel.library.Items;
+import mod.steamnsteel.network.PacketHandler;
 import mod.steamnsteel.proxy.IProxy;
 import mod.steamnsteel.library.Reference;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -36,7 +37,7 @@ public class MinecraftMod
     @Mod.Instance
     public static MinecraftMod instance;
 
-    @SuppressWarnings({"StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
+    @SuppressWarnings({"StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized", "WeakerAccess"})
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
 
@@ -44,7 +45,11 @@ public class MinecraftMod
     public void onFMLPreInitialization(FMLPreInitializationEvent event)
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+
+        PacketHandler.init();
+
         Items.init();
+
         Blocks.init();
     }
 
@@ -53,6 +58,7 @@ public class MinecraftMod
     {
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
         Recipes.init();
+        proxy.initRendering();
     }
 
     @Mod.EventHandler
