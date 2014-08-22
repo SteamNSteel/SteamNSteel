@@ -30,12 +30,12 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class CupolaItemRenderer implements IItemRenderer
 {
-    private static final Optional<Vector> ENTITY_LOC = Optional.of(new Vector(0.0f, -1.0f, 0.0f));
-    private static final Optional<Vector> EQUIPPED_LOC = Optional.of(new Vector(1.0f, 0.0f, 1.5f));
-    private static final Optional<Vector> FIRST_PERSON_LOC = Optional.of(new Vector(-0.0f, 0.0f, 0.0f));
-    private static final Optional<Vector> INVENTORY_LOC = Optional.of(new Vector(-0.0f, -1.0f, 0.0f));
+    private static final Optional<Vector> ENTITY_OFFSET = Optional.of(new Vector(0.0f, -1.0f, 0.0f));
+    private static final Optional<Vector> EQUIPPED_OFFSET = Optional.of(new Vector(1.0f, 0.0f, 1.5f));
+    private static final Optional<Vector> FIRST_PERSON_OFFSET = Optional.of(new Vector(-0.0f, 0.0f, 0.0f));
+    private static final Optional<Vector> INVENTORY_OFFSET = Optional.of(new Vector(-0.0f, -1.0f, 0.0f));
 
-    private static final float SCALE = 0.66666f;
+    private static final Vector SCALE = new Vector(0.666667f, 0.666667f, 0.666667f);
 
     private final CupolaModel model;
 
@@ -64,16 +64,16 @@ public class CupolaItemRenderer implements IItemRenderer
         switch (type)
         {
             case ENTITY:
-                vector = ENTITY_LOC;
+                vector = ENTITY_OFFSET;
                 break;
             case EQUIPPED:
-                vector = EQUIPPED_LOC;
+                vector = EQUIPPED_OFFSET;
                 break;
             case EQUIPPED_FIRST_PERSON:
-                vector = FIRST_PERSON_LOC;
+                vector = FIRST_PERSON_OFFSET;
                 break;
             case INVENTORY:
-                vector = INVENTORY_LOC;
+                vector = INVENTORY_OFFSET;
                 break;
             default:
         }
@@ -85,7 +85,7 @@ public class CupolaItemRenderer implements IItemRenderer
     private void renderCupola(Vector vector)
     {
         GL11.glPushMatrix();
-        GL11.glScalef(SCALE, SCALE, SCALE);
+        GL11.glScalef(SCALE.getX(), SCALE.getY(), SCALE.getZ());
         GL11.glTranslatef(vector.getX(), vector.getY(), vector.getZ());
 
         FMLClientHandler.instance().getClient().renderEngine.bindTexture(Textures.Model.CUPOLA);
