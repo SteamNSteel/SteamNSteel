@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.artifact;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.Items;
 
 public class PerGuiVox extends SteamNSteelItem
 {
     public PerGuiVox()
     {
-        setUnlocalizedName(Names.Artifacts.PER_GUI_VOX);
+        setUnlocalizedName(Items.Names.PER_GUI_VOX);
     }
 }

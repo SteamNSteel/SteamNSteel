@@ -17,13 +17,13 @@
 package mod.steamnsteel.item.tool;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.Items;
 
 public class SteelShovel extends SteamNSteelItem
 
 {
     public SteelShovel()
     {
-        setUnlocalizedName(Names.Tools.STEEL_SHOVEL);
+        setUnlocalizedName(Items.Names.STEEL_SHOVEL);
     }
 }

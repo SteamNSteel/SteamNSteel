@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.resource.ore;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.Blocks;
 import net.minecraft.block.material.Material;
 
 public class ZincOre extends SteamNSteelBlock
@@ -25,6 +25,6 @@ public class ZincOre extends SteamNSteelBlock
     public ZincOre()
     {
         super(Material.rock);
-        setBlockName(Names.Blocks.ZINC_ORE);
+        setBlockName(Blocks.Names.ZINC_ORE);
     }
 }

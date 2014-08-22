@@ -17,14 +17,43 @@
 package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.Blocks;
+import mod.steamnsteel.library.RenderIds;
+import mod.steamnsteel.tileentity.CupolaTE;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
-public class Cupola extends SteamNSteelBlock
+public class Cupola extends SteamNSteelBlock implements ITileEntityProvider
 {
     public Cupola()
     {
         super(Material.rock);
-        setBlockName(Names.Blocks.CUPOLA);
+        setBlockName(Blocks.Names.CUPOLA);
+    }
+
+    @Override
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+    {
+        return new CupolaTE();
+    }
+
+    @Override
+    public boolean isOpaqueCube()
+    {
+        return false;
+    }
+
+    @Override
+    public int getRenderType()
+    {
+        return RenderIds.cupola;
     }
 }

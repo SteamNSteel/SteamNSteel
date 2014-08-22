@@ -16,7 +16,7 @@
 
 package mod.steamnsteel.utility.log;
 
-import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Constants;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
@@ -62,7 +62,7 @@ public enum Logger
     {
         if (logger == null)
         {
-            logger = LogManager.getLogger(Reference.MOD_ID);
+            logger = LogManager.getLogger(Constants.MOD_ID);
         }
     }
 

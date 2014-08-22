@@ -14,8 +14,21 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.proxy;
+package mod.steamnsteel.network;
 
-public class ClientProxy extends CommonProxy
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
+import mod.steamnsteel.library.Constants;
+import mod.steamnsteel.network.message.MessageSteamNSteelTE;
+
+public enum PacketHandler
 {
+    _;
+    public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Constants.NETWORK_CHANNEL);
+
+    public static void init()
+    {
+        INSTANCE.registerMessage(MessageSteamNSteelTE.class, MessageSteamNSteelTE.class, 1, Side.CLIENT);
+    }
 }

@@ -30,9 +30,52 @@ import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings("UtilityClass")
-@GameRegistry.ObjectHolder(Reference.MOD_ID)
+@GameRegistry.ObjectHolder(Constants.MOD_ID)
 public final class Items
 {
+    public enum Names
+    {
+        _;
+        // Armor
+        public static final String BRONZE_BOOTS = "bootsBronze";
+        public static final String BRONZE_CHESTPLATE = "chestplateBronze";
+        public static final String BRONZE_HELMET = "helmetBronze";
+        public static final String BRONZE_LEGGINGS = "leggingsBronze";
+        public static final String STEEL_BOOTS = "bootsSteel";
+        public static final String STEEL_CHESTPLATE = "chestplateSteel";
+        public static final String STEEL_HELMET = "helmetSteel";
+        public static final String STEEL_LEGGINGS = "leggingsSteel";
+        // Artifacts
+        public static final String ANACH_DOODAD = "anachDoodad";
+        public static final String MUSTY_JOURNAL = "mustyJournal";
+        public static final String PER_GUI_VOX = "perGuiVox";
+        public static final String PLOTONIUM_SCRAP = "plotoniumScrap";
+        public static final String VOX_BOX = "voxBox";
+        // Ingots
+        public static final String BRASS_INGOT = "ingotBrass";
+        public static final String BRONZE_INGOT = "ingotBronze";
+        public static final String COPPER_INGOT = "ingotCopper";
+        public static final String PLOTONIUM_INGOT = "ingotPlotonium";
+        public static final String STEEL_INGOT = "ingotSteel";
+        public static final String TIN_INGOT = "ingotTin";
+        public static final String ZINC_INGOT = "ingotZinc";
+        // Items
+        public static final String NITER = "dustNiter";
+        public static final String SULFUR = "dustSulfur";
+        // Tools
+        public static final String BRONZE_AXE = "axeBronze";
+        public static final String BRONZE_HOE = "hoeBronze";
+        public static final String BRONZE_PICKAXE = "pickBronze";
+        public static final String BRONZE_SHOVEL = "shovelBronze";
+        public static final String STEEL_AXE = "axeSteel";
+        public static final String STEEL_HOE = "hoeSteel";
+        public static final String STEEL_PICKAXE = "pickSteel";
+        public static final String STEEL_SHOVEL = "shovelSteel";
+        // Weapons
+        public static final String BRONZE_SWORD = "swordBronze";
+        public static final String STEEL_SWORD = "swordSteel";
+    }
+
     public static final SteamNSteelItem BRONZE_BOOTS = new BronzeBoots();
     public static final SteamNSteelItem BRONZE_CHESTPLATE = new BronzeChestplate();
     public static final SteamNSteelItem BRONZE_HELMET = new BronzeHelmet();
@@ -79,45 +122,45 @@ public final class Items
 
     public static void init()
     {
-        GameRegistry.registerItem(ANACH_DOODAD, Names.Artifacts.ANACH_DOODAD);
-        GameRegistry.registerItem(MUSTY_JOURNAL, Names.Artifacts.MUSTY_JOURNAL);
-        GameRegistry.registerItem(PER_GUI_VOX, Names.Artifacts.PER_GUI_VOX);
-        GameRegistry.registerItem(PLOTONIUM_SCRAP, Names.Artifacts.PLOTONIUM_SCRAP);
-        GameRegistry.registerItem(VOX_BOX, Names.Artifacts.VOX_BOX);
+        GameRegistry.registerItem(ANACH_DOODAD, Names.ANACH_DOODAD);
+        GameRegistry.registerItem(MUSTY_JOURNAL, Names.MUSTY_JOURNAL);
+        GameRegistry.registerItem(PER_GUI_VOX, Names.PER_GUI_VOX);
+        GameRegistry.registerItem(PLOTONIUM_SCRAP, Names.PLOTONIUM_SCRAP);
+        GameRegistry.registerItem(VOX_BOX, Names.VOX_BOX);
 
-        GameRegistry.registerItem(BRONZE_BOOTS, Names.Armor.BRONZE_BOOTS);
-        GameRegistry.registerItem(BRONZE_CHESTPLATE, Names.Armor.BRONZE_CHESTPLATE);
-        GameRegistry.registerItem(BRONZE_HELMET, Names.Armor.BRONZE_HELMET);
-        GameRegistry.registerItem(BRONZE_LEGGINGS, Names.Armor.BRONZE_LEGGINGS);
+        GameRegistry.registerItem(BRONZE_BOOTS, Names.BRONZE_BOOTS);
+        GameRegistry.registerItem(BRONZE_CHESTPLATE, Names.BRONZE_CHESTPLATE);
+        GameRegistry.registerItem(BRONZE_HELMET, Names.BRONZE_HELMET);
+        GameRegistry.registerItem(BRONZE_LEGGINGS, Names.BRONZE_LEGGINGS);
 
-        GameRegistry.registerItem(BRONZE_AXE, Names.Tools.BRONZE_AXE);
-        GameRegistry.registerItem(BRONZE_HOE, Names.Tools.BRONZE_HOE);
-        GameRegistry.registerItem(BRONZE_PICKAXE, Names.Tools.BRONZE_PICKAXE);
-        GameRegistry.registerItem(BRONZE_SHOVEL, Names.Tools.BRONZE_SHOVEL);
+        GameRegistry.registerItem(BRONZE_AXE, Names.BRONZE_AXE);
+        GameRegistry.registerItem(BRONZE_HOE, Names.BRONZE_HOE);
+        GameRegistry.registerItem(BRONZE_PICKAXE, Names.BRONZE_PICKAXE);
+        GameRegistry.registerItem(BRONZE_SHOVEL, Names.BRONZE_SHOVEL);
 
-        registerItemAndOre(BRASS_INGOT, Names.Ingots.BRASS_INGOT);
-        registerItemAndOre(BRONZE_INGOT, Names.Ingots.BRONZE_INGOT);
-        registerItemAndOre(COPPER_INGOT, Names.Ingots.COPPER_INGOT);
-        registerItemAndOre(PLOTONIUM_INGOT, Names.Ingots.PLOTONIUM_INGOT);
-        registerItemAndOre(STEEL_INGOT, Names.Ingots.STEEL_INGOT);
-        registerItemAndOre(TIN_INGOT, Names.Ingots.TIN_INGOT);
-        registerItemAndOre(ZINC_INGOT, Names.Ingots.ZINC_INGOT);
+        registerItemAndOre(BRASS_INGOT, Names.BRASS_INGOT);
+        registerItemAndOre(BRONZE_INGOT, Names.BRONZE_INGOT);
+        registerItemAndOre(COPPER_INGOT, Names.COPPER_INGOT);
+        registerItemAndOre(PLOTONIUM_INGOT, Names.PLOTONIUM_INGOT);
+        registerItemAndOre(STEEL_INGOT, Names.STEEL_INGOT);
+        registerItemAndOre(TIN_INGOT, Names.TIN_INGOT);
+        registerItemAndOre(ZINC_INGOT, Names.ZINC_INGOT);
 
-        registerItemAndOre(NITER, Names.Items.NITER);
-        registerItemAndOre(SULFUR, Names.Items.SULFUR);
+        registerItemAndOre(NITER, Names.NITER);
+        registerItemAndOre(SULFUR, Names.SULFUR);
 
-        GameRegistry.registerItem(STEEL_BOOTS, Names.Armor.STEEL_BOOTS);
-        GameRegistry.registerItem(STEEL_CHESTPLATE, Names.Armor.STEEL_CHESTPLATE);
-        GameRegistry.registerItem(STEEL_HELMET, Names.Armor.STEEL_HELMET);
-        GameRegistry.registerItem(STEEL_LEGGINGS, Names.Armor.STEEL_LEGGINGS);
+        GameRegistry.registerItem(STEEL_BOOTS, Names.STEEL_BOOTS);
+        GameRegistry.registerItem(STEEL_CHESTPLATE, Names.STEEL_CHESTPLATE);
+        GameRegistry.registerItem(STEEL_HELMET, Names.STEEL_HELMET);
+        GameRegistry.registerItem(STEEL_LEGGINGS, Names.STEEL_LEGGINGS);
 
-        GameRegistry.registerItem(STEEL_AXE, Names.Tools.STEEL_AXE);
-        GameRegistry.registerItem(STEEL_HOE, Names.Tools.STEEL_HOE);
-        GameRegistry.registerItem(STEEL_PICKAXE, Names.Tools.STEEL_PICKAXE);
-        GameRegistry.registerItem(STEEL_SHOVEL, Names.Tools.STEEL_SHOVEL);
+        GameRegistry.registerItem(STEEL_AXE, Names.STEEL_AXE);
+        GameRegistry.registerItem(STEEL_HOE, Names.STEEL_HOE);
+        GameRegistry.registerItem(STEEL_PICKAXE, Names.STEEL_PICKAXE);
+        GameRegistry.registerItem(STEEL_SHOVEL, Names.STEEL_SHOVEL);
 
-        GameRegistry.registerItem(BRONZE_SWORD, Names.Weapons.BRONZE_SWORD);
-        GameRegistry.registerItem(STEEL_SWORD, Names.Weapons.STEEL_SWORD);
+        GameRegistry.registerItem(BRONZE_SWORD, Names.BRONZE_SWORD);
+        GameRegistry.registerItem(STEEL_SWORD, Names.STEEL_SWORD);
     }
 
     private static void registerItemAndOre(Item item, String name)

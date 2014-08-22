@@ -16,6 +16,12 @@
 
 package mod.steamnsteel.proxy;
 
-public class ServerProxy extends CommonProxy
+import cpw.mods.fml.common.SidedProxy;
+import mod.steamnsteel.library.Constants;
+
+public enum Proxies
 {
+    _;
+    @SidedProxy(clientSide = Constants.CLIENT_RENDER_PROXY_CLASS, serverSide = Constants.RENDER_PROXY_CLASS)
+    public static RenderProxy render;
 }

@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.library.Blocks;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.Items;
 import mod.steamnsteel.utility.crafting.RecipePattern;
 import net.minecraft.block.Block;
 import net.minecraft.item.crafting.IRecipe;
@@ -34,13 +34,13 @@ class IngotRecipes
     {
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(Blocks.BRASS_BLOCK, Names.Ingots.BRASS_INGOT));
-        recipes.add(assembleRecipe(Blocks.BRONZE_BLOCK, Names.Ingots.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Blocks.COPPER_BLOCK, Names.Ingots.COPPER_INGOT));
-        recipes.add(assembleRecipe(Blocks.PLOTONIUM_BLOCK, Names.Ingots.PLOTONIUM_INGOT));
-        recipes.add(assembleRecipe(Blocks.STEEL_BLOCK, Names.Ingots.STEEL_INGOT));
-        recipes.add(assembleRecipe(Blocks.TIN_BLOCK, Names.Ingots.TIN_INGOT));
-        recipes.add(assembleRecipe(Blocks.ZINC_BLOCK, Names.Ingots.ZINC_INGOT));
+        recipes.add(assembleRecipe(Blocks.BRASS_BLOCK, Items.Names.BRASS_INGOT));
+        recipes.add(assembleRecipe(Blocks.BRONZE_BLOCK, Items.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(Blocks.COPPER_BLOCK, Items.Names.COPPER_INGOT));
+        recipes.add(assembleRecipe(Blocks.PLOTONIUM_BLOCK, Items.Names.PLOTONIUM_INGOT));
+        recipes.add(assembleRecipe(Blocks.STEEL_BLOCK, Items.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(Blocks.TIN_BLOCK, Items.Names.TIN_INGOT));
+        recipes.add(assembleRecipe(Blocks.ZINC_BLOCK, Items.Names.ZINC_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }

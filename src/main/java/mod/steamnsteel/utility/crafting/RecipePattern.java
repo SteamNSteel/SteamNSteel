@@ -105,6 +105,6 @@ public final class RecipePattern
     @Override
     public int hashCode()
     {
-        return pattern.hashCode();
+        return Objects.hashCode(pattern);
     }
 }

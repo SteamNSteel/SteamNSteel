@@ -14,8 +14,21 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.proxy;
+package mod.steamnsteel.library;
 
-public abstract class CommonProxy implements IProxy
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+@SuppressWarnings({"StaticNonFinalField", "PublicField"})
+@SideOnly(Side.CLIENT)
+public enum RenderIds
 {
+    _;
+    public static int cupola;
+
+    public static void init()
+    {
+        cupola = RenderingRegistry.getNextAvailableRenderId();
+    }
 }

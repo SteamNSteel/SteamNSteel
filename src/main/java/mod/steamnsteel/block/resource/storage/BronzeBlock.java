@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.resource.storage;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.Blocks;
 import net.minecraft.block.material.Material;
 
 public class BronzeBlock extends SteamNSteelBlock
@@ -25,6 +25,6 @@ public class BronzeBlock extends SteamNSteelBlock
     public BronzeBlock()
     {
         super(Material.rock);
-        setBlockName(Names.Blocks.BRONZE_BLOCK);
+        setBlockName(Blocks.Names.BRONZE_BLOCK);
     }
 }

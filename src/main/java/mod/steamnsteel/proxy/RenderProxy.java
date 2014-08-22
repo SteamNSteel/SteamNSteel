@@ -16,6 +16,9 @@
 
 package mod.steamnsteel.proxy;
 
-public interface IProxy
+public class RenderProxy
 {
+    public RenderProxy() { }
+
+    public void init() { }
 }
