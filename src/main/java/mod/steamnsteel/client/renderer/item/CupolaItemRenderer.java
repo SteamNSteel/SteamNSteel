@@ -30,7 +30,7 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class CupolaItemRenderer implements IItemRenderer
 {
-    private static final Optional<Vector> ENTITY_LOC = Optional.of(new Vector(0.0f, 0.0f, 0.0f));
+    private static final Optional<Vector> ENTITY_LOC = Optional.of(new Vector(0.0f, -1.0f, 0.0f));
     private static final Optional<Vector> EQUIPPED_LOC = Optional.of(new Vector(1.0f, 0.0f, 1.5f));
     private static final Optional<Vector> FIRST_PERSON_LOC = Optional.of(new Vector(-0.0f, 0.0f, 0.0f));
     private static final Optional<Vector> INVENTORY_LOC = Optional.of(new Vector(-0.0f, -1.0f, 0.0f));
