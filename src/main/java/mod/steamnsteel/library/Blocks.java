@@ -29,7 +29,7 @@ import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings("UtilityClass")
-@GameRegistry.ObjectHolder(Reference.MOD_ID)
+@GameRegistry.ObjectHolder(Constants.MOD_ID)
 public final class Blocks
 {
     public enum Names

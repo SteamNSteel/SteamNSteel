@@ -25,10 +25,10 @@ import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-public class ClientProxy extends CommonProxy
+public class ClientRenderProxy extends RenderProxy
 {
     @Override
-    public void initRendering()
+    public void init()
     {
         RenderIds.init();
         registerItemRenderers();

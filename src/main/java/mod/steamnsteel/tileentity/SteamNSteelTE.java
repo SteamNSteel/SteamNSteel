@@ -16,7 +16,7 @@
 
 package mod.steamnsteel.tileentity;
 
-import mod.steamnsteel.library.NBTTags;
+import mod.steamnsteel.library.Constants;
 import mod.steamnsteel.network.PacketHandler;
 import mod.steamnsteel.network.message.MessageSteamNSteelTE;
 import net.minecraft.nbt.NBTTagCompound;
@@ -89,24 +89,24 @@ public class SteamNSteelTE extends TileEntity
     {
         super.readFromNBT(nbtTagCompound);
 
-        if (nbtTagCompound.hasKey(NBTTags.DIRECTION))
+        if (nbtTagCompound.hasKey(Constants.NBTTags.DIRECTION))
         {
-            orientation = ForgeDirection.getOrientation((int) nbtTagCompound.getByte(NBTTags.DIRECTION));
+            orientation = ForgeDirection.getOrientation((int) nbtTagCompound.getByte(Constants.NBTTags.DIRECTION));
         }
 
-        if (nbtTagCompound.hasKey(NBTTags.STATE))
+        if (nbtTagCompound.hasKey(Constants.NBTTags.STATE))
         {
-            state = nbtTagCompound.getByte(NBTTags.STATE);
+            state = nbtTagCompound.getByte(Constants.NBTTags.STATE);
         }
 
-        if (nbtTagCompound.hasKey(NBTTags.CUSTOM_NAME))
+        if (nbtTagCompound.hasKey(Constants.NBTTags.CUSTOM_NAME))
         {
-            customName = nbtTagCompound.getString(NBTTags.CUSTOM_NAME);
+            customName = nbtTagCompound.getString(Constants.NBTTags.CUSTOM_NAME);
         }
 
-        if (nbtTagCompound.hasKey(NBTTags.OWNER))
+        if (nbtTagCompound.hasKey(Constants.NBTTags.OWNER))
         {
-            owner = nbtTagCompound.getString(NBTTags.OWNER);
+            owner = nbtTagCompound.getString(Constants.NBTTags.OWNER);
         }
     }
 
@@ -115,17 +115,17 @@ public class SteamNSteelTE extends TileEntity
     {
         super.writeToNBT(nbtTagCompound);
 
-        nbtTagCompound.setByte(NBTTags.DIRECTION, (byte) orientation.ordinal());
-        nbtTagCompound.setByte(NBTTags.STATE, state);
+        nbtTagCompound.setByte(Constants.NBTTags.DIRECTION, (byte) orientation.ordinal());
+        nbtTagCompound.setByte(Constants.NBTTags.STATE, state);
 
         if (hasCustomName())
         {
-            nbtTagCompound.setString(NBTTags.CUSTOM_NAME, customName);
+            nbtTagCompound.setString(Constants.NBTTags.CUSTOM_NAME, customName);
         }
 
         if (hasOwner())
         {
-            nbtTagCompound.setString(NBTTags.OWNER, owner);
+            nbtTagCompound.setString(Constants.NBTTags.OWNER, owner);
         }
     }
 

@@ -30,7 +30,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings("UtilityClass")
-@GameRegistry.ObjectHolder(Reference.MOD_ID)
+@GameRegistry.ObjectHolder(Constants.MOD_ID)
 public final class Items
 {
     public enum Names

@@ -19,27 +19,22 @@ package mod.steamnsteel;
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.library.Blocks;
+import mod.steamnsteel.library.Constants;
 import mod.steamnsteel.library.Items;
 import mod.steamnsteel.network.PacketHandler;
-import mod.steamnsteel.proxy.IProxy;
-import mod.steamnsteel.library.Reference;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import mod.steamnsteel.proxy.Proxies;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, useMetadata = true, guiFactory = Reference.MOD_GUI_FACTORY)
-public class MinecraftMod
+@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION, useMetadata = true, guiFactory = Constants.MOD_GUI_FACTORY)
+public class ThisMod
 {
     @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
     @Mod.Instance
-    public static MinecraftMod instance;
-
-    @SuppressWarnings({"StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized", "WeakerAccess"})
-    @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
-    public static IProxy proxy;
+    public static ThisMod instance;
 
     @Mod.EventHandler
     public void onFMLPreInitialization(FMLPreInitializationEvent event)
@@ -58,7 +53,7 @@ public class MinecraftMod
     {
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
         Recipes.init();
-        proxy.initRendering();
+        Proxies.render.init();
     }
 
     @Mod.EventHandler

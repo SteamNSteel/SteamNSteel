@@ -36,7 +36,7 @@ public enum Models
 
     private static ResourceLocation getResourceLocation(String path)
     {
-        return getResourceLocation(Reference.MOD_ID.toLowerCase(), path);
+        return getResourceLocation(Constants.MOD_ID.toLowerCase(), path);
     }
 
     private static String getModelPath(String name)

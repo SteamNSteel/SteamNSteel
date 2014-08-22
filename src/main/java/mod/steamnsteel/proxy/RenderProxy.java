@@ -14,13 +14,11 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.library;
+package mod.steamnsteel.proxy;
 
-public enum NBTTags
+public class RenderProxy
 {
-    _;
-    public static final String CUSTOM_NAME = "CustomName";
-    public static final String DIRECTION = "teDirection";
-    public static final String OWNER = "owner";
-    public static final String STATE = "teState";
+    public RenderProxy() { }
+
+    public void init() { }
 }

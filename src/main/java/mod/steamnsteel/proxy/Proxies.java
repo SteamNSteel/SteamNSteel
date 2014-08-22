@@ -16,10 +16,12 @@
 
 package mod.steamnsteel.proxy;
 
-public class CommonProxy implements IProxy
-{
-    protected CommonProxy() { }
+import cpw.mods.fml.common.SidedProxy;
+import mod.steamnsteel.library.Constants;
 
-    @Override
-    public void initRendering() { }
+public enum Proxies
+{
+    _;
+    @SidedProxy(clientSide = Constants.CLIENT_RENDER_PROXY_CLASS, serverSide = Constants.RENDER_PROXY_CLASS)
+    public static RenderProxy render;
 }

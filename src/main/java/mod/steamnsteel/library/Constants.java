@@ -19,7 +19,7 @@ package mod.steamnsteel.library;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
-public enum Reference
+public enum Constants
 {
     _;
     public static final String MOD_ID = "steamnsteel";
@@ -29,8 +29,8 @@ public enum Reference
 
     public static final String NETWORK_CHANNEL = MOD_ID.toLowerCase();
 
-    public static final String CLIENT_PROXY_CLASS = "mod.steamnsteel.proxy.ClientProxy";
-    public static final String SERVER_PROXY_CLASS = "mod.steamnsteel.proxy.ServerProxy";
+    public static final String RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.RenderProxy";
+    public static final String CLIENT_RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.ClientRenderProxy";
 
     public static final String CONFIG_VERSION = "1";
 
@@ -46,4 +46,13 @@ public enum Reference
             return Items.MUSTY_JOURNAL;
         }
     };
+
+    public static enum NBTTags
+    {
+        _;
+        public static final String CUSTOM_NAME = "CustomName";
+        public static final String DIRECTION = "teDirection";
+        public static final String OWNER = "owner";
+        public static final String STATE = "teState";
+    }
 }

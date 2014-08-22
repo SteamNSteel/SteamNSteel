@@ -19,7 +19,7 @@ package mod.steamnsteel.client.library;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.library.Blocks;
-import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Constants;
 import net.minecraft.util.ResourceLocation;
 
 @SuppressWarnings({"EnumeratedConstantNamingConvention", "InnerClassFieldHidesOuterClassField"})
@@ -61,7 +61,7 @@ public enum Textures
 
     private static ResourceLocation getResourceLocation(String path)
     {
-        return getResourceLocation(Reference.MOD_ID.toLowerCase(), path);
+        return getResourceLocation(Constants.MOD_ID.toLowerCase(), path);
     }
 
     @SuppressWarnings("StringConcatenationMissingWhitespace")
