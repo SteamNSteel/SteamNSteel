@@ -16,11 +16,13 @@
 
 package mod.steamnsteel.client.renderer.item;
 
+import com.google.common.base.Optional;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import mod.steamnsteel.client.renderer.model.CupolaModel;
 import mod.steamnsteel.client.library.Textures;
+import mod.steamnsteel.client.renderer.model.CupolaModel;
+import mod.steamnsteel.utility.Vector;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
@@ -28,6 +30,13 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class CupolaItemRenderer implements IItemRenderer
 {
+    private static final Optional<Vector> ENTITY_LOC = Optional.of(new Vector(0.0f, 0.0f, 0.0f));
+    private static final Optional<Vector> EQUIPPED_LOC = Optional.of(new Vector(1.0f, 0.0f, 1.5f));
+    private static final Optional<Vector> FIRST_PERSON_LOC = Optional.of(new Vector(-0.0f, 0.0f, 0.0f));
+    private static final Optional<Vector> INVENTORY_LOC = Optional.of(new Vector(-0.0f, -1.0f, 0.0f));
+
+    private static final float SCALE = 0.66666f;
+
     private final CupolaModel model;
 
     public CupolaItemRenderer()
@@ -50,40 +59,34 @@ public class CupolaItemRenderer implements IItemRenderer
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     {
-        float x = 0.0f;
-        float y = 0.0f;
-        float z = 0.0f;
+        Optional<Vector> vector = Optional.absent();
 
-        boolean doRender = true;
-        //noinspection EnumSwitchStatementWhichMissesCases
         switch (type)
         {
             case ENTITY:
-                x = -0.5f;
-                z = 0.5f;
+                vector = ENTITY_LOC;
                 break;
             case EQUIPPED:
+                vector = EQUIPPED_LOC;
+                break;
             case EQUIPPED_FIRST_PERSON:
-                z = 1.0f;
+                vector = FIRST_PERSON_LOC;
                 break;
             case INVENTORY:
-                y = -0.1f;
-                z = 1.0f;
+                vector = INVENTORY_LOC;
                 break;
             default:
-                doRender = false;
         }
 
-        if (doRender)
-            renderCupola(x, y, z);
+        if (vector.isPresent())
+            renderCupola(vector.get());
     }
 
-    private void renderCupola(float x, float y, float z)
+    private void renderCupola(Vector vector)
     {
         GL11.glPushMatrix();
-        GL11.glScalef(1F, 1F, 1F);
-        GL11.glTranslatef(x, y, z);
-        GL11.glRotatef(-90F, 1F, 0, 0);
+        GL11.glScalef(SCALE, SCALE, SCALE);
+        GL11.glTranslatef(vector.getX(), vector.getY(), vector.getZ());
 
         FMLClientHandler.instance().getClient().renderEngine.bindTexture(Textures.Model.CUPOLA);
 
