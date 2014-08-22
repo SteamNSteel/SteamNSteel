@@ -24,24 +24,41 @@ import mod.steamnsteel.item.resource.Niter;
 import mod.steamnsteel.item.resource.Sulfur;
 import mod.steamnsteel.item.resource.ingot.*;
 import mod.steamnsteel.item.tool.*;
-import mod.steamnsteel.item.weapon.BronzeSword;
-import mod.steamnsteel.item.weapon.SteelSword;
+import mod.steamnsteel.item.weapon.SSToolSword;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings("UtilityClass")
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
 public final class Items
 {
-    public static final SteamNSteelItem BRONZE_BOOTS = new BronzeBoots();
-    public static final SteamNSteelItem BRONZE_CHESTPLATE = new BronzeChestplate();
-    public static final SteamNSteelItem BRONZE_HELMET = new BronzeHelmet();
-    public static final SteamNSteelItem BRONZE_LEGGINGS = new BronzeLeggings();
+    protected static final Item.ToolMaterial bronzeToolMaterial = EnumHelper.addToolMaterial("bronze", 2, 312, 6.5F, 2.5F, 12);
+    protected static final Item.ToolMaterial steelToolMaterial = EnumHelper.addToolMaterial("steel", 3, 969, 7.5F, 4.0F, 15);
+    
+    protected static final ItemArmor.ArmorMaterial bronzeArmorMaterial = EnumHelper.addArmorMaterial("bronze", 16, new int[] {3, 6, 5, 3}, 12);
+    protected static final ItemArmor.ArmorMaterial steelArmorMaterial = EnumHelper.addArmorMaterial("steel", 29, new int[] {3, 7, 6, 3}, 15);
 
-    public static final SteamNSteelItem STEEL_BOOTS = new SteelBoots();
-    public static final SteamNSteelItem STEEL_CHESTPLATE = new SteelChestplate();
-    public static final SteamNSteelItem STEEL_HELMET = new SteelHelmet();
-    public static final SteamNSteelItem STEEL_LEGGINGS = new SteelLeggings();
+    public static final SSArmorBoots BRONZE_BOOTS = new SSArmorBoots(bronzeArmorMaterial, Names.Armor.BRONZE_BOOTS);
+    public static final SSArmorChest BRONZE_CHESTPLATE = new SSArmorChest(bronzeArmorMaterial, Names.Armor.BRONZE_CHESTPLATE);
+    public static final SSArmorHelmet BRONZE_HELMET = new SSArmorHelmet(bronzeArmorMaterial, Names.Armor.BRONZE_HELMET);
+    public static final SSArmorLegs BRONZE_LEGGINGS = new SSArmorLegs(bronzeArmorMaterial, Names.Armor.BRONZE_LEGGINGS);
+
+    public static final SSArmorBoots STEEL_BOOTS = new SSArmorBoots(steelArmorMaterial, Names.Armor.STEEL_BOOTS);
+    public static final SSArmorChest STEEL_CHESTPLATE = new SSArmorChest(steelArmorMaterial, Names.Armor.STEEL_CHESTPLATE);
+    public static final SSArmorHelmet STEEL_HELMET = new SSArmorHelmet(steelArmorMaterial, Names.Armor.STEEL_HELMET);
+    public static final SSArmorLegs STEEL_LEGGINGS = new SSArmorLegs(steelArmorMaterial, Names.Armor.STEEL_LEGGINGS);
+
+//    public static final SteamNSteelItem BRONZE_BOOTS = new BronzeBoots();
+//    public static final SteamNSteelItem BRONZE_CHESTPLATE = new BronzeChestplate();
+//    public static final SteamNSteelItem BRONZE_HELMET = new BronzeHelmet();
+//    public static final SteamNSteelItem BRONZE_LEGGINGS = new BronzeLeggings();
+//
+//    public static final SteamNSteelItem STEEL_BOOTS = new SteelBoots();
+//    public static final SteamNSteelItem STEEL_CHESTPLATE = new SteelChestplate();
+//    public static final SteamNSteelItem STEEL_HELMET = new SteelHelmet();
+//    public static final SteamNSteelItem STEEL_LEGGINGS = new SteelLeggings();
 
     public static final SteamNSteelItem ANACH_DOODAD = new AnachDoodad();
     public static final SteamNSteelItem MUSTY_JOURNAL = new MustyJournal();
@@ -60,17 +77,29 @@ public final class Items
     public static final SteamNSteelItem TIN_INGOT = new TinIngot();
     public static final SteamNSteelItem ZINC_INGOT = new ZincIngot();
 
-    public static final SteamNSteelItem BRONZE_AXE = new BronzeAxe();
-    public static final SteamNSteelItem BRONZE_HOE = new BronzeHoe();
-    public static final SteamNSteelItem BRONZE_PICKAXE = new BronzePickaxe();
-    public static final SteamNSteelItem BRONZE_SHOVEL = new BronzeShovel();
-    public static final SteamNSteelItem BRONZE_SWORD = new BronzeSword();
+    public static final SSToolAxe BRONZE_AXE = new SSToolAxe(bronzeToolMaterial, Names.Tools.BRONZE_AXE);
+    public static final SSToolHoe BRONZE_HOE = new SSToolHoe(bronzeToolMaterial, Names.Tools.BRONZE_HOE);
+    public static final SSToolPickaxe BRONZE_PICKAXE = new SSToolPickaxe(bronzeToolMaterial, Names.Tools.BRONZE_PICKAXE);
+    public static final SSToolShovel BRONZE_SHOVEL = new SSToolShovel(bronzeToolMaterial, Names.Tools.BRONZE_SHOVEL);
+    public static final SSToolSword BRONZE_SWORD = new SSToolSword(bronzeToolMaterial, Names.Weapons.BRONZE_SWORD);
 
-    public static final SteamNSteelItem STEEL_AXE = new SteelAxe();
-    public static final SteamNSteelItem STEEL_HOE = new SteelHoe();
-    public static final SteamNSteelItem STEEL_PICKAXE = new SteelPickaxe();
-    public static final SteamNSteelItem STEEL_SHOVEL = new SteelShovel();
-    public static final SteamNSteelItem STEEL_SWORD = new SteelSword();
+    public static final SSToolAxe STEEL_AXE = new SSToolAxe(steelToolMaterial, Names.Tools.STEEL_AXE);
+    public static final SSToolHoe STEEL_HOE = new SSToolHoe(steelToolMaterial, Names.Tools.STEEL_HOE);
+    public static final SSToolPickaxe STEEL_PICKAXE = new SSToolPickaxe(steelToolMaterial, Names.Tools.STEEL_PICKAXE);
+    public static final SSToolShovel STEEL_SHOVEL = new SSToolShovel(steelToolMaterial, Names.Tools.STEEL_SHOVEL);
+    public static final SSToolSword STEEL_SWORD = new SSToolSword(steelToolMaterial, Names.Weapons.STEEL_SWORD);
+
+//    public static final SteamNSteelItem BRONZE_AXE = new BronzeAxe();
+//    public static final SteamNSteelItem BRONZE_HOE = new BronzeHoe();
+//    public static final SteamNSteelItem BRONZE_PICKAXE = new BronzePickaxe();
+//    public static final SteamNSteelItem BRONZE_SHOVEL = new BronzeShovel();
+//    public static final SteamNSteelItem BRONZE_SWORD = new BronzeSword();
+//
+//    public static final SteamNSteelItem STEEL_AXE = new SteelAxe();
+//    public static final SteamNSteelItem STEEL_HOE = new SteelHoe();
+//    public static final SteamNSteelItem STEEL_PICKAXE = new SteelPickaxe();
+//    public static final SteamNSteelItem STEEL_SHOVEL = new SteelShovel();
+//    public static final SteamNSteelItem STEEL_SWORD = new SteelSword();
 
     private Items()
     {
