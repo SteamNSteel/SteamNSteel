@@ -30,8 +30,13 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
     private int x;
     private int y;
     private int z;
-    private String customName;
-    private String owner;
+    private String customName = "";
+    private String owner = "";
+
+    public MessageSteamNSteelTE()
+    {
+        // This is required for message registration to work properly;
+    }
 
     public MessageSteamNSteelTE(SteamNSteelTE tileEntity)
     {

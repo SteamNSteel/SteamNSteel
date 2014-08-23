@@ -16,8 +16,10 @@
 
 package mod.steamnsteel.block;
 
+import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.MathHelper;
 
 public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
@@ -26,8 +28,13 @@ public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
         super(material);
     }
 
-    public static int getDirection(int metadata)
+    public static Orientation getOrientation(int metadata)
     {
-        return BlockDirectional.getDirection(metadata);
+        return Orientation.getdecodedOrientation(metadata);
+    }
+
+    @SuppressWarnings("ImplicitNumericConversion")
+    public static int getMetadataFromDirection(float direction) {
+        return BlockDirectional.getDirection(MathHelper.floor_double(direction * 4.0f / 360.0f + 0.50));
     }
 }

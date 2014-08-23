@@ -16,21 +16,45 @@
 
 package mod.steamnsteel.block.machine;
 
-import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
 import mod.steamnsteel.library.Blocks;
 import mod.steamnsteel.library.RenderIds;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class Cupola extends SteamNSteelBlock implements ITileEntityProvider
+public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEntityProvider
 {
-    public Cupola()
+    private static final int SLAVE_MASK = 0x8;
+
+    public CupolaBlock()
     {
         super(Material.rock);
         setBlockName(Blocks.Names.CUPOLA);
+    }
+
+    public static boolean isSlave(int metadata)
+    {
+        return (metadata & SLAVE_MASK) == SLAVE_MASK;
+    }
+
+    public static int codeSlaveMetadata(int metadata) {return metadata | SLAVE_MASK;}
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int targetY, int z, EntityPlayer player, int side, float hitVectorX, float hitVectorY, float hitVectorZ)
+    {
+        int y = targetY;
+        if (world.isRemote) return true;
+
+        final int metadata = world.getBlockMetadata(x, y, z);
+        if (isSlave(metadata)) y--;
+
+        // TODO: Right Click behavior
+
+        return false;
     }
 
     @Override
@@ -40,7 +64,7 @@ public class Cupola extends SteamNSteelBlock implements ITileEntityProvider
     }
 
     @Override
-    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_)
+    public TileEntity createNewTileEntity(World world, int metadata)
     {
         return new CupolaTE();
     }
