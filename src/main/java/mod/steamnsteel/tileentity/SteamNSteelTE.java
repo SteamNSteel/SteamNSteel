@@ -16,7 +16,6 @@
 
 package mod.steamnsteel.tileentity;
 
-import mod.steamnsteel.library.Constants;
 import mod.steamnsteel.network.PacketHandler;
 import mod.steamnsteel.network.message.MessageSteamNSteelTE;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,6 +25,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class SteamNSteelTE extends TileEntity
 {
+    private static final String CUSTOM_NAME = "[SNS]CustomName";
+    private static final String DIRECTION = "[SNS]Direction";
+    private static final String OWNER = "[SNS]Owner";
+    private static final String STATE = "[SNS]State";
+
     private ForgeDirection orientation;
     private byte state;
     private String customName;
@@ -89,24 +93,24 @@ public class SteamNSteelTE extends TileEntity
     {
         super.readFromNBT(nbtTagCompound);
 
-        if (nbtTagCompound.hasKey(Constants.NBTTags.DIRECTION))
+        if (nbtTagCompound.hasKey(DIRECTION))
         {
-            orientation = ForgeDirection.getOrientation((int) nbtTagCompound.getByte(Constants.NBTTags.DIRECTION));
+            orientation = ForgeDirection.getOrientation((int) nbtTagCompound.getByte(DIRECTION));
         }
 
-        if (nbtTagCompound.hasKey(Constants.NBTTags.STATE))
+        if (nbtTagCompound.hasKey(STATE))
         {
-            state = nbtTagCompound.getByte(Constants.NBTTags.STATE);
+            state = nbtTagCompound.getByte(STATE);
         }
 
-        if (nbtTagCompound.hasKey(Constants.NBTTags.CUSTOM_NAME))
+        if (nbtTagCompound.hasKey(CUSTOM_NAME))
         {
-            customName = nbtTagCompound.getString(Constants.NBTTags.CUSTOM_NAME);
+            customName = nbtTagCompound.getString(CUSTOM_NAME);
         }
 
-        if (nbtTagCompound.hasKey(Constants.NBTTags.OWNER))
+        if (nbtTagCompound.hasKey(OWNER))
         {
-            owner = nbtTagCompound.getString(Constants.NBTTags.OWNER);
+            owner = nbtTagCompound.getString(OWNER);
         }
     }
 
@@ -115,17 +119,17 @@ public class SteamNSteelTE extends TileEntity
     {
         super.writeToNBT(nbtTagCompound);
 
-        nbtTagCompound.setByte(Constants.NBTTags.DIRECTION, (byte) orientation.ordinal());
-        nbtTagCompound.setByte(Constants.NBTTags.STATE, state);
+        nbtTagCompound.setByte(DIRECTION, (byte) orientation.ordinal());
+        nbtTagCompound.setByte(STATE, state);
 
         if (hasCustomName())
         {
-            nbtTagCompound.setString(Constants.NBTTags.CUSTOM_NAME, customName);
+            nbtTagCompound.setString(CUSTOM_NAME, customName);
         }
 
         if (hasOwner())
         {
-            nbtTagCompound.setString(Constants.NBTTags.OWNER, owner);
+            nbtTagCompound.setString(OWNER, owner);
         }
     }
 
