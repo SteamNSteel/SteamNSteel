@@ -35,10 +35,6 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
     public String customName;
     public String owner;
 
-    public MessageSteamNSteelTE()
-    {
-    }
-
     public MessageSteamNSteelTE(SteamNSteelTE tileEntity)
     {
         x = tileEntity.xCoord;
