@@ -27,21 +27,17 @@ import net.minecraft.tileentity.TileEntity;
 
 public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageSteamNSteelTE, IMessage>
 {
-    public int x;
-    public int y;
-    public int z;
-    public byte orientation;
-    public byte state;
-    public String customName;
-    public String owner;
+    private int x;
+    private int y;
+    private int z;
+    private String customName;
+    private String owner;
 
     public MessageSteamNSteelTE(SteamNSteelTE tileEntity)
     {
         x = tileEntity.xCoord;
         y = tileEntity.yCoord;
         z = tileEntity.zCoord;
-        orientation = (byte) tileEntity.getOrientation().ordinal();
-        state = (byte) tileEntity.getState();
         customName = tileEntity.getCustomName();
         owner = tileEntity.getOwner();
     }
@@ -52,8 +48,6 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
         x = buf.readInt();
         y = buf.readInt();
         z = buf.readInt();
-        orientation = buf.readByte();
-        state = buf.readByte();
         final int customNameLength = buf.readInt();
         customName = new String(buf.readBytes(customNameLength).array());
         final int ownerLength = buf.readInt();
@@ -66,14 +60,13 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
         buf.writeInt(x);
         buf.writeInt(y);
         buf.writeInt(z);
-        buf.writeByte(orientation);
-        buf.writeByte(state);
         buf.writeInt(customName.length());
         buf.writeBytes(customName.getBytes());
         buf.writeInt(owner.length());
         buf.writeBytes(owner.getBytes());
     }
 
+    @SuppressWarnings("ReturnOfNull")
     @Override
     public IMessage onMessage(MessageSteamNSteelTE message, MessageContext ctx)
     {
@@ -82,8 +75,6 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
         if (tileEntity instanceof SteamNSteelTE)
         {
             final SteamNSteelTE te = (SteamNSteelTE) tileEntity;
-            te.setOrientation(message.orientation);
-            te.setState(message.state);
             te.setCustomName(message.customName);
             te.setOwner(message.owner);
         }
@@ -98,8 +89,6 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
                 .add("x", x)
                 .add("y", y)
                 .add("z", z)
-                .add("orientation", orientation)
-                .add("state", state)
                 .add("customName", customName)
                 .add("owner", owner)
                 .toString();

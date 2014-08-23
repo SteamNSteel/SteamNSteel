@@ -21,51 +21,19 @@ import mod.steamnsteel.network.message.MessageSteamNSteelTE;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class SteamNSteelTE extends TileEntity
 {
     private static final String CUSTOM_NAME = "[SNS]CustomName";
-    private static final String DIRECTION = "[SNS]Direction";
     private static final String OWNER = "[SNS]Owner";
-    private static final String STATE = "[SNS]State";
 
-    private ForgeDirection orientation;
-    private byte state;
     private String customName;
     private String owner;
 
     public SteamNSteelTE()
     {
-        orientation = ForgeDirection.SOUTH;
-        state = 0;
         customName = "";
         owner = "";
-    }
-
-    public ForgeDirection getOrientation()
-    {
-        return orientation;
-    }
-
-    public void setOrientation(ForgeDirection orientation)
-    {
-        this.orientation = orientation;
-    }
-
-    public void setOrientation(int orientation)
-    {
-        this.orientation = ForgeDirection.getOrientation(orientation);
-    }
-
-    public short getState()
-    {
-        return state;
-    }
-
-    public void setState(byte state)
-    {
-        this.state = state;
     }
 
     public String getCustomName()
@@ -93,16 +61,6 @@ public class SteamNSteelTE extends TileEntity
     {
         super.readFromNBT(nbtTagCompound);
 
-        if (nbtTagCompound.hasKey(DIRECTION))
-        {
-            orientation = ForgeDirection.getOrientation((int) nbtTagCompound.getByte(DIRECTION));
-        }
-
-        if (nbtTagCompound.hasKey(STATE))
-        {
-            state = nbtTagCompound.getByte(STATE);
-        }
-
         if (nbtTagCompound.hasKey(CUSTOM_NAME))
         {
             customName = nbtTagCompound.getString(CUSTOM_NAME);
@@ -118,9 +76,6 @@ public class SteamNSteelTE extends TileEntity
     public void writeToNBT(NBTTagCompound nbtTagCompound)
     {
         super.writeToNBT(nbtTagCompound);
-
-        nbtTagCompound.setByte(DIRECTION, (byte) orientation.ordinal());
-        nbtTagCompound.setByte(STATE, state);
 
         if (hasCustomName())
         {
