@@ -19,19 +19,21 @@ package mod.steamnsteel.library;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
-import mod.steamnsteel.block.machine.Cupola;
+import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.storage.*;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
+import mod.steamnsteel.item.block.CupolaItem;
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
-@SuppressWarnings("UtilityClass")
+@SuppressWarnings({"UtilityClass", "WeakerAccess"})
 @GameRegistry.ObjectHolder(Constants.MOD_ID)
 public final class Blocks
 {
+    @SuppressWarnings("InnerClassFieldHidesOuterClassField")
     public enum Names
     {
         _;
@@ -58,7 +60,7 @@ public final class Blocks
     public static final SteamNSteelBlock BRONZE_BLOCK = new BronzeBlock();
     public static final SteamNSteelBlock COPPER_BLOCK = new CopperBlock();
     public static final SteamNSteelBlock COPPER_ORE = new CopperOre();
-    public static final SteamNSteelBlock CUPOLA = new Cupola();
+    public static final SteamNSteelBlock CUPOLA = new CupolaBlock();
     public static final SteamNSteelBlock NITER_ORE = new NiterOre();
     public static final SteamNSteelBlock PLOTONIUM_BLOCK = new PlotoniumBlock();
     public static final SteamNSteelBlock PLOTONIUM_CHEST = new PlotoniumChest();
@@ -81,7 +83,7 @@ public final class Blocks
     {
         GameRegistry.registerBlock(PLOTONIUM_CHEST, Names.PLOTONIUM_CHEST);
 
-        GameRegistry.registerBlock(CUPOLA, Names.CUPOLA);
+        GameRegistry.registerBlock(CUPOLA, CupolaItem.class, Names.CUPOLA);
 
         registerBlockAndOre(COPPER_ORE, Names.COPPER_ORE);
         registerBlockAndOre(NITER_ORE, Names.NITER_ORE);

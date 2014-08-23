@@ -23,9 +23,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
-public class SteamNSteelBlock extends Block
+public abstract class SteamNSteelBlock extends Block
 {
-    public SteamNSteelBlock(Material material)
+    protected SteamNSteelBlock(Material material)
     {
         super(material);
         setCreativeTab(Constants.CREATIVE_TAB);

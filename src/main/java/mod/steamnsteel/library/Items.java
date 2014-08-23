@@ -33,6 +33,7 @@ import net.minecraftforge.oredict.OreDictionary;
 @GameRegistry.ObjectHolder(Constants.MOD_ID)
 public final class Items
 {
+    @SuppressWarnings("InnerClassFieldHidesOuterClassField")
     public enum Names
     {
         _;

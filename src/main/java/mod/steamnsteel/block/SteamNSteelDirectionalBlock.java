@@ -14,38 +14,27 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.configuration.client;
+package mod.steamnsteel.block;
 
-import cpw.mods.fml.client.IModGuiFactory;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import java.util.Set;
+import mod.steamnsteel.utility.Orientation;
+import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.material.Material;
+import net.minecraft.util.MathHelper;
 
-public class ModGuiFactory implements IModGuiFactory
+public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
-    @Override
-    public void initialize(Minecraft minecraftInstance)
+    protected SteamNSteelDirectionalBlock(Material material)
     {
-
+        super(material);
     }
 
-    @Override
-    public Class<? extends GuiScreen> mainConfigGuiClass()
+    public static Orientation getOrientation(int metadata)
     {
-        return ConfigGUI.class;
+        return Orientation.getdecodedOrientation(metadata);
     }
 
-    @SuppressWarnings("ReturnOfNull")
-    @Override
-    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories()
-    {
-        return null;
-    }
-
-    @SuppressWarnings("ReturnOfNull")
-    @Override
-    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element)
-    {
-        return null;
+    @SuppressWarnings("ImplicitNumericConversion")
+    public static int getMetadataFromDirection(float direction) {
+        return BlockDirectional.getDirection(MathHelper.floor_double(direction * 4.0f / 360.0f + 0.50));
     }
 }

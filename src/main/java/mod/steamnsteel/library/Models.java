@@ -39,6 +39,7 @@ public enum Models
         return getResourceLocation(Constants.MOD_ID.toLowerCase(), path);
     }
 
+    @SuppressWarnings("StringConcatenationMissingWhitespace")
     private static String getModelPath(String name)
     {
         return LOCATION + name + FILE_EXTENSION;

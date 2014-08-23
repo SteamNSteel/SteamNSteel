@@ -25,6 +25,7 @@ import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 
+@SuppressWarnings("MethodMayBeStatic")
 public class ClientRenderProxy extends RenderProxy
 {
     @Override

@@ -16,52 +16,24 @@
 
 package mod.steamnsteel.tileentity;
 
-import mod.steamnsteel.library.Constants;
 import mod.steamnsteel.network.PacketHandler;
 import mod.steamnsteel.network.message.MessageSteamNSteelTE;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class SteamNSteelTE extends TileEntity
 {
-    private ForgeDirection orientation;
-    private byte state;
+    private static final String CUSTOM_NAME = "[SNS]CustomName";
+    private static final String OWNER = "[SNS]Owner";
+
     private String customName;
     private String owner;
 
     public SteamNSteelTE()
     {
-        orientation = ForgeDirection.SOUTH;
-        state = 0;
         customName = "";
         owner = "";
-    }
-
-    public ForgeDirection getOrientation()
-    {
-        return orientation;
-    }
-
-    public void setOrientation(ForgeDirection orientation)
-    {
-        this.orientation = orientation;
-    }
-
-    public void setOrientation(int orientation)
-    {
-        this.orientation = ForgeDirection.getOrientation(orientation);
-    }
-
-    public short getState()
-    {
-        return state;
-    }
-
-    public void setState(byte state)
-    {
-        this.state = state;
     }
 
     public String getCustomName()
@@ -89,24 +61,14 @@ public class SteamNSteelTE extends TileEntity
     {
         super.readFromNBT(nbtTagCompound);
 
-        if (nbtTagCompound.hasKey(Constants.NBTTags.DIRECTION))
+        if (nbtTagCompound.hasKey(CUSTOM_NAME))
         {
-            orientation = ForgeDirection.getOrientation((int) nbtTagCompound.getByte(Constants.NBTTags.DIRECTION));
+            customName = nbtTagCompound.getString(CUSTOM_NAME);
         }
 
-        if (nbtTagCompound.hasKey(Constants.NBTTags.STATE))
+        if (nbtTagCompound.hasKey(OWNER))
         {
-            state = nbtTagCompound.getByte(Constants.NBTTags.STATE);
-        }
-
-        if (nbtTagCompound.hasKey(Constants.NBTTags.CUSTOM_NAME))
-        {
-            customName = nbtTagCompound.getString(Constants.NBTTags.CUSTOM_NAME);
-        }
-
-        if (nbtTagCompound.hasKey(Constants.NBTTags.OWNER))
-        {
-            owner = nbtTagCompound.getString(Constants.NBTTags.OWNER);
+            owner = nbtTagCompound.getString(OWNER);
         }
     }
 
@@ -115,17 +77,14 @@ public class SteamNSteelTE extends TileEntity
     {
         super.writeToNBT(nbtTagCompound);
 
-        nbtTagCompound.setByte(Constants.NBTTags.DIRECTION, (byte) orientation.ordinal());
-        nbtTagCompound.setByte(Constants.NBTTags.STATE, state);
-
         if (hasCustomName())
         {
-            nbtTagCompound.setString(Constants.NBTTags.CUSTOM_NAME, customName);
+            nbtTagCompound.setString(CUSTOM_NAME, customName);
         }
 
         if (hasOwner())
         {
-            nbtTagCompound.setString(Constants.NBTTags.OWNER, owner);
+            nbtTagCompound.setString(OWNER, owner);
         }
     }
 

@@ -46,13 +46,4 @@ public enum Constants
             return Items.MUSTY_JOURNAL;
         }
     };
-
-    public static enum NBTTags
-    {
-        _;
-        public static final String CUSTOM_NAME = "CustomName";
-        public static final String DIRECTION = "teDirection";
-        public static final String OWNER = "owner";
-        public static final String STATE = "teState";
-    }
 }

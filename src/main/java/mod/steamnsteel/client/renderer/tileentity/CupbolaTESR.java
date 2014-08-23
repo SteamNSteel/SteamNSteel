@@ -16,15 +16,21 @@
 
 package mod.steamnsteel.client.renderer.tileentity;
 
-import mod.steamnsteel.client.renderer.model.CupolaModel;
+import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.client.library.Textures;
+import mod.steamnsteel.client.renderer.model.CupolaModel;
 import mod.steamnsteel.tileentity.CupolaTE;
+import mod.steamnsteel.utility.Orientation;
+import mod.steamnsteel.utility.Vector;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 public class CupbolaTESR extends TileEntitySpecialRenderer
 {
+    private static final Vector SCALE = new Vector(1.0f, 1.0f, 1.0f);
+    private static final Vector OFFSET = new Vector(0.5f, 0.0f, 0.5f);
+
     private final CupolaModel model = new CupolaModel();
 
     @Override
@@ -34,20 +40,43 @@ public class CupbolaTESR extends TileEntitySpecialRenderer
         {
             final CupolaTE te = (CupolaTE) tileEntity;
 
-            GL11.glPushMatrix();
+            final int metadata = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
+            final boolean isSlave = CupolaBlock.isSlave(metadata);
 
-            // Scale, Translate, Rotate
-            GL11.glScalef(1.0F, 1.0F, 1.0F);
-            GL11.glTranslatef((float) x + 0.5F, (float) y + 0.0F, (float) z + 1.2F);
-            GL11.glRotatef(45F, 0F, 1F, 0F);
-            GL11.glRotatef(-90F, 1F, 0F, 0F);
+            if (!isSlave)
+            {
+                GL11.glPushMatrix();
 
-            bindTexture(Textures.Model.CUPOLA);
+                GL11.glScalef(SCALE.getX(), SCALE.getY(), SCALE.getZ());
+                //noinspection NumericCastThatLosesPrecision
+                GL11.glTranslatef((float) x + OFFSET.getX(), (float) y + OFFSET.getY(), (float) z + OFFSET.getZ());
 
-            // Render
-            model.render();
+                final float rotationAngle;
+                final Orientation orientation = Orientation.getdecodedOrientation(metadata);
+                switch (orientation)
+                {
+                    case SOUTH:
+                        rotationAngle = 0.0f;
+                        break;
+                    case WEST:
+                        rotationAngle = 270.0f;
+                        break;
+                    case NORTH:
+                        rotationAngle = 180.0f;
+                        break;
+                    default:
+                        rotationAngle = 90.0f;
+                        break;
+                }
+                GL11.glRotatef(rotationAngle, 0.0F, 1.0F, 0.0F);
 
-            GL11.glPopMatrix();
+                bindTexture(Textures.Model.CUPOLA);
+
+                // Render
+                model.render();
+
+                GL11.glPopMatrix();
+            }
         }
     }
 }
