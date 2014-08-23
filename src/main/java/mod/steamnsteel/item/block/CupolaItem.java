@@ -18,9 +18,9 @@ package mod.steamnsteel.item.block;
 
 import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
 import mod.steamnsteel.block.machine.CupolaBlock;
-import mod.steamnsteel.library.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -34,33 +34,91 @@ public class CupolaItem extends ItemBlock
         super(block);
     }
 
-    private static boolean isAir(World world, int x, int y, int z) {return world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z);}
-
     private static boolean canPlayerEdit(ItemStack itemStack, EntityPlayer player, int x, int y, int z, int side) {return player.canPlayerEdit(x, y, z, side, itemStack) && player.canPlayerEdit(x, y + 1, z, side, itemStack);}
 
+    private static boolean canPlaceOnSide(EntityPlayer player, World world, Block block, int x, int y, int z, int side, ItemStack itemStack) {return world.canPlaceEntityOnSide(block, x, y, z, false, side, player, itemStack) && world.canPlaceEntityOnSide(block, x, y + 1, z, false, 1, player, itemStack);}
+
+    private static boolean canPlayerPlaceInWorld(EntityPlayer player, World world, int x, int y, int z, int side, ItemStack itemStack) {return itemStack.stackSize == 0 || !canPlayerEdit(itemStack, player, x, y, z, side) || y > world.getActualHeight() - 3;}
+
+    @SuppressWarnings({"OverlyComplexBooleanExpression", "MethodWithMoreThanThreeNegations", "ObjectEquality"})
+    private static boolean doAdjustPlacementCoords(World world, int x, int y, int z, Block testBlock)
+    {
+        return testBlock != Blocks.vine && testBlock != Blocks.tallgrass && testBlock != Blocks.deadbush &&
+                !testBlock.isReplaceable(world, x, y, z);
+    }
+
+    @SuppressWarnings("ObjectEquality")
+    private static boolean doForceSideOne(World world, int x, int y, int z, Block testBlock) {return testBlock == Blocks.snow_layer && (world.getBlockMetadata(x, y, z) & 7) < 1;}
+
+    @SuppressWarnings({"OverlyComplexMethod", "OverlyLongMethod", "ObjectEquality", "ImplicitNumericConversion"})
     @Override
     public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitVectorX, float hitVectorY, float hitVectorZ)
     {
         if (world.isRemote) return true;
-        if (side != 1) return false;
-        if (y > world.getActualHeight() - 3) return false;
 
-        final int baseY = y + 1;
+        final Block testBlock = world.getBlock(x, y, z);
 
-        if (!canPlayerEdit(itemStack, player, x, baseY, z, side)) return false;
-        if (!isAir(world, x, baseY, z)) return false;
+        int actualSide = side;
+        int actualX = x;
+        int actualY = y;
+        int actualZ = z;
 
-        final Block block = Blocks.CUPOLA;
-        final int metadata = SteamNSteelDirectionalBlock.getMetadataFromDirection(player.rotationYaw);
-
-        world.setBlock(x, baseY, z, block, metadata, UPDATE_CLIENT);
-        //noinspection ObjectEquality
-        if (world.getBlock(x, baseY, z) == block)
+        if (doForceSideOne(world, x, y, z, testBlock))
         {
-            world.setBlock(x, baseY + 1, z, block, CupolaBlock.codeSlaveMetadata(metadata), UPDATE_CLIENT);
+            actualSide = 1;
+        } else if (doAdjustPlacementCoords(world, x, y, z, testBlock))
+        {
+            if (actualSide == 0)
+            {
+                actualY--;
+            }
+
+            if (actualSide == 1)
+            {
+                actualY++;
+            }
+
+            if (actualSide == 2)
+            {
+                actualZ--;
+            }
+
+            if (actualSide == 3)
+            {
+                actualZ++;
+            }
+
+            if (actualSide == 4)
+            {
+                actualX--;
+            }
+
+            if (actualSide == 5)
+            {
+                actualX++;
+            }
         }
 
-        itemStack.stackSize--;
-        return true;
+        if (canPlayerPlaceInWorld(player, world, actualX, actualY, actualZ, actualSide, itemStack)) return false;
+
+        if (canPlaceOnSide(player, world, testBlock, actualX, actualY, actualZ, actualSide, itemStack))
+        {
+            final Block block = mod.steamnsteel.library.Blocks.CUPOLA;
+            final int metadata = SteamNSteelDirectionalBlock.getMetadataFromDirection(player.rotationYaw);
+
+            world.setBlock(actualX, actualY, actualZ, block, metadata, UPDATE_CLIENT);
+            if (world.getBlock(actualX, actualY, actualZ) == block)
+            {
+                if (world.setBlock(actualX, actualY + 1, actualZ, block, CupolaBlock.codeSlaveMetadata(metadata), UPDATE_CLIENT))
+                {
+                    world.playSoundEffect(actualX + 0.5f, actualY + 0.5f, actualZ + 0.5f, block.stepSound.func_150496_b(), (block.stepSound.getVolume() + 1.0f) / 2.0f, block.stepSound.getPitch() + 0.8f);
+                    itemStack.stackSize--;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
