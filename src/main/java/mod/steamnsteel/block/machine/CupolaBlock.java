@@ -20,11 +20,14 @@ import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
 import mod.steamnsteel.library.Blocks;
 import mod.steamnsteel.library.RenderIds;
 import mod.steamnsteel.tileentity.CupolaTE;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import java.util.Random;
 
 public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEntityProvider
 {
@@ -32,8 +35,10 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
 
     public CupolaBlock()
     {
-        super(Material.rock);
+        super(Material.piston);
         setBlockName(Blocks.Names.CUPOLA);
+        setStepSound(Block.soundTypePiston);
+        setHardness(0.5f);
     }
 
     public static boolean isSlave(int metadata)
@@ -79,5 +84,56 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
     public int getRenderType()
     {
         return RenderIds.cupola;
+    }
+
+    @Override
+    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int metadata, float dropChance, int fortune)
+    {
+        if (!isSlave(metadata))
+            super.dropBlockAsItemWithChance(world, x, y, z, metadata, dropChance, fortune);
+    }
+
+    @Override
+    public int getMobilityFlag()
+    {
+        // total immobility and stop pistons
+        return 2;
+    }
+
+    @Override
+    public Item getItemDropped(int metadata, Random rng, int fortune)
+    {
+        return isSlave(metadata) ? Item.getItemById(0) : super.getItemDropped(metadata, rng, fortune);
+    }
+
+    @SuppressWarnings("ObjectEquality")
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+    {
+        final int metadata = world.getBlockMetadata(x, y, z);
+
+        if (isSlave(metadata))
+        {
+            if (world.getBlock(x, y - 1, z) != this)
+                world.setBlockToAir(x, y, z);
+        }
+        else if (world.getBlock(x, y + 1, z) != this)
+        {
+            world.setBlockToAir(x, y, z);
+            if (!world.isRemote)
+                dropBlockAsItem(world, x, y, z, metadata, 0);
+        }
+    }
+
+    @SuppressWarnings("ObjectEquality")
+    @Override
+    public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player)
+    {
+        if (player.capabilities.isCreativeMode && isSlave(metadata))
+        {
+            final int targetY = y - 1;
+            if (world.getBlock(x, targetY, z) == this)
+                world.setBlockToAir(x, targetY, z);
+        }
     }
 }
