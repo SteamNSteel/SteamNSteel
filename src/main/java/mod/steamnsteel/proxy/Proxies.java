@@ -19,6 +19,7 @@ package mod.steamnsteel.proxy;
 import cpw.mods.fml.common.SidedProxy;
 import mod.steamnsteel.library.Constants;
 
+@SuppressWarnings({"StaticNonFinalField", "PublicField"})
 public enum Proxies
 {
     _;

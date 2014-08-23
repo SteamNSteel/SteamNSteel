@@ -31,6 +31,7 @@ public class Vector
         this.z = z;
     }
 
+    @SuppressWarnings("QuestionableName")
     @Override
     public boolean equals(Object that)
     {
