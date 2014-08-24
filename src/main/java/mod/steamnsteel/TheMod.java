@@ -18,7 +18,7 @@ package mod.steamnsteel;
 
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
-import mod.steamnsteel.library.Blocks;
+import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.Constants;
 import mod.steamnsteel.library.Items;
 import mod.steamnsteel.network.PacketHandler;
@@ -45,7 +45,7 @@ public class TheMod
 
         Items.init();
 
-        Blocks.init();
+        ModBlocks.init();
     }
 
     @Mod.EventHandler

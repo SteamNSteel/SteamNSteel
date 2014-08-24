@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
-import mod.steamnsteel.library.Blocks;
+import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.RenderIds;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.block.Block;
@@ -36,7 +36,7 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
     public CupolaBlock()
     {
         super(Material.piston);
-        setBlockName(Blocks.Names.CUPOLA);
+        setBlockName(ModBlocks.Names.CUPOLA);
         setStepSound(Block.soundTypePiston);
         setHardness(0.5f);
     }

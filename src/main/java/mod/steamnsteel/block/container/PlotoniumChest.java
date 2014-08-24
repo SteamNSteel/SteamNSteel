@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.container;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.Blocks;
+import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class PlotoniumChest extends SteamNSteelBlock
@@ -25,6 +25,6 @@ public class PlotoniumChest extends SteamNSteelBlock
     public PlotoniumChest()
     {
         super(Material.rock);
-        setBlockName(Blocks.Names.PLOTONIUM_CHEST);
+        setBlockName(ModBlocks.Names.PLOTONIUM_CHEST);
     }
 }

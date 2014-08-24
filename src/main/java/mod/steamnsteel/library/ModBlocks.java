@@ -31,7 +31,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings({"UtilityClass", "WeakerAccess"})
 @GameRegistry.ObjectHolder(Constants.MOD_ID)
-public final class Blocks
+public final class ModBlocks
 {
     @SuppressWarnings("InnerClassFieldHidesOuterClassField")
     public enum Names
@@ -74,7 +74,7 @@ public final class Blocks
     public static final SteamNSteelBlock ZINC_BLOCK = new ZincBlock();
     public static final SteamNSteelBlock ZINC_ORE = new ZincOre();
 
-    private Blocks()
+    private ModBlocks()
     {
         throw new AssertionError();
     }

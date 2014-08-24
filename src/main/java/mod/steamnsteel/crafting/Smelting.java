@@ -17,7 +17,7 @@
 package mod.steamnsteel.crafting;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import mod.steamnsteel.library.Blocks;
+import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.Items;
 import net.minecraft.item.ItemStack;
 
@@ -27,8 +27,8 @@ class Smelting
     void init()
     {
         final float xp = 0.5F;
-        GameRegistry.addSmelting(Blocks.COPPER_ORE, new ItemStack(Items.COPPER_INGOT), xp);
-        GameRegistry.addSmelting(Blocks.TIN_ORE, new ItemStack(Items.TIN_INGOT), xp);
-        GameRegistry.addSmelting(Blocks.ZINC_ORE, new ItemStack(Items.ZINC_INGOT), xp);
+        GameRegistry.addSmelting(ModBlocks.COPPER_ORE, new ItemStack(Items.COPPER_INGOT), xp);
+        GameRegistry.addSmelting(ModBlocks.TIN_ORE, new ItemStack(Items.TIN_INGOT), xp);
+        GameRegistry.addSmelting(ModBlocks.ZINC_ORE, new ItemStack(Items.ZINC_INGOT), xp);
     }
 }

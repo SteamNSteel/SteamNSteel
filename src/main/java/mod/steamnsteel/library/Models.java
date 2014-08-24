@@ -27,7 +27,7 @@ public enum Models
     private static final String LOCATION = "models/";
     private static final String FILE_EXTENSION = ".obj";
 
-    public static final ResourceLocation CUPOLA = getResourceLocation(getModelPath(Blocks.Names.CUPOLA));
+    public static final ResourceLocation CUPOLA = getResourceLocation(getModelPath(ModBlocks.Names.CUPOLA));
 
     private static ResourceLocation getResourceLocation(String modId, String path)
     {
