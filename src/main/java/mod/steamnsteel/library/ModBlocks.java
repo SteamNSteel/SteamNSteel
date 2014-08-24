@@ -37,7 +37,7 @@ public final class ModBlocks
     @SuppressWarnings("InnerClassFieldHidesOuterClassField")
     public enum Names
     {
-        _;
+        INSTANCE;
         public static final String BRASS_BLOCK = "blockBrass";
         public static final String BRONZE_BLOCK = "blockBronze";
         public static final String COPPER_BLOCK = "blockCopper";
