@@ -19,7 +19,7 @@ package mod.steamnsteel.crafting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.registry.GameRegistry;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 import mod.steamnsteel.utility.crafting.RecipePattern;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
@@ -38,15 +38,15 @@ class ArmorRecipes
 
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(Items.BRONZE_HELMET, helmet, Items.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Items.BRONZE_CHESTPLATE, chestplate, Items.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Items.BRONZE_LEGGINGS, leggings, Items.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Items.BRONZE_BOOTS, boots, Items.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.BRONZE_HELMET, helmet, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.BRONZE_CHESTPLATE, chestplate, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.BRONZE_LEGGINGS, leggings, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.BRONZE_BOOTS, boots, ModItems.Names.BRONZE_INGOT));
 
-        recipes.add(assembleRecipe(Items.STEEL_HELMET, helmet, Items.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(Items.STEEL_CHESTPLATE, chestplate, Items.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(Items.STEEL_LEGGINGS, leggings, Items.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(Items.STEEL_BOOTS, boots, Items.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.STEEL_HELMET, helmet, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.STEEL_CHESTPLATE, chestplate, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.STEEL_LEGGINGS, leggings, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.STEEL_BOOTS, boots, ModItems.Names.STEEL_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }

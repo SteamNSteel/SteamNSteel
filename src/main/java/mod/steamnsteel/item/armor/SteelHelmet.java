@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.armor;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 
 public class SteelHelmet extends SteamNSteelItem
 {
     public SteelHelmet()
     {
-        setUnlocalizedName(Items.Names.STEEL_HELMET);
+        setUnlocalizedName(ModItems.Names.STEEL_HELMET);
     }
 }

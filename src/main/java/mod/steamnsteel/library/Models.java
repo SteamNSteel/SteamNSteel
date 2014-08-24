@@ -18,6 +18,7 @@ package mod.steamnsteel.library;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mod.steamnsteel.TheMod;
 import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
@@ -27,7 +28,7 @@ public enum Models
     private static final String LOCATION = "models/";
     private static final String FILE_EXTENSION = ".obj";
 
-    public static final ResourceLocation CUPOLA = getResourceLocation(getModelPath(Blocks.Names.CUPOLA));
+    public static final ResourceLocation CUPOLA = getResourceLocation(getModelPath(ModBlocks.Names.CUPOLA));
 
     private static ResourceLocation getResourceLocation(String modId, String path)
     {
@@ -36,7 +37,7 @@ public enum Models
 
     private static ResourceLocation getResourceLocation(String path)
     {
-        return getResourceLocation(Constants.MOD_ID.toLowerCase(), path);
+        return getResourceLocation(TheMod.MOD_ID.toLowerCase(), path);
     }
 
     @SuppressWarnings("StringConcatenationMissingWhitespace")

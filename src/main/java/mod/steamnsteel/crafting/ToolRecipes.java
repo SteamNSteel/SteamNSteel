@@ -19,7 +19,7 @@ package mod.steamnsteel.crafting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.registry.GameRegistry;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 import mod.steamnsteel.utility.crafting.RecipePattern;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
@@ -39,17 +39,17 @@ class ToolRecipes
 
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(Items.BRONZE_PICKAXE, pick, Items.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Items.BRONZE_SHOVEL, shovel, Items.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Items.BRONZE_AXE, axe, Items.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Items.BRONZE_HOE, hoe, Items.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(Items.BRONZE_SWORD, sword, Items.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.BRONZE_PICKAXE, pick, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.BRONZE_SHOVEL, shovel, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.BRONZE_AXE, axe, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.BRONZE_HOE, hoe, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.BRONZE_SWORD, sword, ModItems.Names.BRONZE_INGOT));
 
-        recipes.add(assembleRecipe(Items.STEEL_PICKAXE, pick, Items.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(Items.STEEL_SHOVEL, shovel, Items.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(Items.STEEL_AXE, axe, Items.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(Items.STEEL_HOE, hoe, Items.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(Items.STEEL_SWORD, sword, Items.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.STEEL_PICKAXE, pick, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.STEEL_SHOVEL, shovel, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.STEEL_AXE, axe, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.STEEL_HOE, hoe, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.STEEL_SWORD, sword, ModItems.Names.STEEL_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }

@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.artifact;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 
 public class MustyJournal extends SteamNSteelItem
 {
     public MustyJournal()
     {
-        setUnlocalizedName(Items.Names.MUSTY_JOURNAL);
+        setUnlocalizedName(ModItems.Names.MUSTY_JOURNAL);
     }
 }

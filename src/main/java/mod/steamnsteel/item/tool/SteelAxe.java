@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.tool;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 
 public class SteelAxe extends SteamNSteelItem
 {
     public SteelAxe()
     {
-        setUnlocalizedName(Items.Names.STEEL_AXE);
+        setUnlocalizedName(ModItems.Names.STEEL_AXE);
     }
 }

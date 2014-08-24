@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.resource.ingot;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 
 public class BronzeIngot extends SteamNSteelItem
 {
     public BronzeIngot()
     {
-        setUnlocalizedName(Items.Names.BRONZE_INGOT);
+        setUnlocalizedName(ModItems.Names.BRONZE_INGOT);
     }
 }

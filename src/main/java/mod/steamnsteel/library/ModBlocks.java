@@ -17,6 +17,7 @@
 package mod.steamnsteel.library;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.CupolaBlock;
@@ -30,13 +31,13 @@ import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings({"UtilityClass", "WeakerAccess"})
-@GameRegistry.ObjectHolder(Constants.MOD_ID)
-public final class Blocks
+@GameRegistry.ObjectHolder(TheMod.MOD_ID)
+public final class ModBlocks
 {
     @SuppressWarnings("InnerClassFieldHidesOuterClassField")
     public enum Names
     {
-        _;
+        INSTANCE;
         public static final String BRASS_BLOCK = "blockBrass";
         public static final String BRONZE_BLOCK = "blockBronze";
         public static final String COPPER_BLOCK = "blockCopper";
@@ -74,7 +75,7 @@ public final class Blocks
     public static final SteamNSteelBlock ZINC_BLOCK = new ZincBlock();
     public static final SteamNSteelBlock ZINC_ORE = new ZincOre();
 
-    private Blocks()
+    private ModBlocks()
     {
         throw new AssertionError();
     }

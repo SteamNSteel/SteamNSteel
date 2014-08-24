@@ -18,6 +18,7 @@ package mod.steamnsteel.item.block;
 
 import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
 import mod.steamnsteel.block.machine.CupolaBlock;
+import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -103,7 +104,7 @@ public class CupolaItem extends ItemBlock
 
         if (canPlaceOnSide(player, world, testBlock, actualX, actualY, actualZ, actualSide, itemStack))
         {
-            final Block block = mod.steamnsteel.library.Blocks.CUPOLA;
+            final Block block = ModBlocks.CUPOLA;
             final int metadata = SteamNSteelDirectionalBlock.getMetadataFromDirection(player.rotationYaw);
 
             world.setBlock(actualX, actualY, actualZ, block, metadata, UPDATE_CLIENT);

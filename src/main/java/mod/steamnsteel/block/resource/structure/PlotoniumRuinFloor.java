@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.Blocks;
+import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class PlotoniumRuinFloor extends SteamNSteelBlock
@@ -25,6 +25,6 @@ public class PlotoniumRuinFloor extends SteamNSteelBlock
     public PlotoniumRuinFloor()
     {
         super(Material.rock);
-        setBlockName(Blocks.Names.PLOTONIUM_RUIN_FLOOR);
+        setBlockName(ModBlocks.Names.PLOTONIUM_RUIN_FLOOR);
     }
 }
