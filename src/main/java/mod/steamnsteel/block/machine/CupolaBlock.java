@@ -18,7 +18,6 @@ package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
 import mod.steamnsteel.library.ModBlocks;
-import mod.steamnsteel.library.RenderIds;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -83,7 +82,8 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
     @Override
     public int getRenderType()
     {
-        return RenderIds.cupola;
+        // Disable normal block rendering.
+        return -1;
     }
 
     @Override
