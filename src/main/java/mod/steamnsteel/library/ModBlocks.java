@@ -17,6 +17,7 @@
 package mod.steamnsteel.library;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.CupolaBlock;
@@ -30,7 +31,7 @@ import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings({"UtilityClass", "WeakerAccess"})
-@GameRegistry.ObjectHolder(Constants.MOD_ID)
+@GameRegistry.ObjectHolder(TheMod.MOD_ID)
 public final class ModBlocks
 {
     @SuppressWarnings("InnerClassFieldHidesOuterClassField")

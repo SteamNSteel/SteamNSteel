@@ -17,6 +17,7 @@
 package mod.steamnsteel.library;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.item.SteamNSteelItem;
 import mod.steamnsteel.item.armor.*;
 import mod.steamnsteel.item.artifact.*;
@@ -30,7 +31,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings("UtilityClass")
-@GameRegistry.ObjectHolder(Constants.MOD_ID)
+@GameRegistry.ObjectHolder(TheMod.MOD_ID)
 public final class ModItems
 {
     @SuppressWarnings("InnerClassFieldHidesOuterClassField")

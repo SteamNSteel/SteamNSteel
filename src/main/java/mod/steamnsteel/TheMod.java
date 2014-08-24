@@ -16,22 +16,28 @@
 
 package mod.steamnsteel;
 
-import mod.steamnsteel.configuration.ConfigurationHandler;
-import mod.steamnsteel.crafting.Recipes;
-import mod.steamnsteel.library.ModBlocks;
-import mod.steamnsteel.library.Constants;
-import mod.steamnsteel.library.ModItems;
-import mod.steamnsteel.network.PacketHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import mod.steamnsteel.configuration.ConfigurationHandler;
+import mod.steamnsteel.crafting.Recipes;
+import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.network.PacketHandler;
 import mod.steamnsteel.proxy.Proxies;
 
-@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION, useMetadata = true, guiFactory = Constants.MOD_GUI_FACTORY)
+@SuppressWarnings({"WeakerAccess", "MethodMayBeStatic"})
+@Mod(modid = TheMod.MOD_ID, name = TheMod.MOD_NAME, version = TheMod.MOD_VERSION, useMetadata = true, guiFactory = TheMod.MOD_GUI_FACTORY)
 public class TheMod
 {
+    public static final String MOD_ID = "steamnsteel";
+    public static final String NETWORK_CHANNEL = MOD_ID.toLowerCase();
+    public static final String MOD_NAME = "Steam and Steel";
+    public static final String MOD_VERSION = "@MOD_VERSION@";
+    public static final String MOD_GUI_FACTORY = "mod.steamnsteel.configuration.client.ModGuiFactory";
+
     @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
     @Mod.Instance
     public static TheMod instance;
@@ -48,6 +54,7 @@ public class TheMod
         ModBlocks.init();
     }
 
+    @SuppressWarnings("UnusedParameters")
     @Mod.EventHandler
     public void onFMLInitialization(FMLInitializationEvent event)
     {
@@ -56,6 +63,7 @@ public class TheMod
         Proxies.render.init();
     }
 
+    @SuppressWarnings("UnusedParameters")
     @Mod.EventHandler
     public void onFMLPostInitialization(FMLPostInitializationEvent event)
     {

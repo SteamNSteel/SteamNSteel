@@ -20,6 +20,7 @@ import com.google.common.base.Optional;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.library.Constants;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraftforge.common.config.Configuration;
@@ -60,8 +61,8 @@ public enum ConfigurationHandler
         {
             final File fileBak = new File(fileRef.getAbsolutePath() + '_' + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".old");
             Logger.warning("Your %s config file is out of date and could cause issues. The existing file will be renamed to %s and a new one will be generated.",
-                    Constants.MOD_NAME, fileBak.getName());
-            Logger.warning("%s will attempt to copy your old settings, but custom mod/tree settings will have to be migrated manually.", Constants.MOD_NAME);
+                    TheMod.MOD_NAME, fileBak.getName());
+            Logger.warning("%s will attempt to copy your old settings, but custom mod/tree settings will have to be migrated manually.", TheMod.MOD_NAME);
 
             final boolean success = fileRef.renameTo(fileBak);
             Logger.warning("Rename %s successful.", success ? "was" : "was not");
@@ -126,7 +127,7 @@ public enum ConfigurationHandler
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.modID.equals(Constants.MOD_ID))
+        if (event.modID.equals(TheMod.MOD_ID))
         {
             saveConfig();
             syncConfig();

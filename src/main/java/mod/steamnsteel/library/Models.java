@@ -18,6 +18,7 @@ package mod.steamnsteel.library;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mod.steamnsteel.TheMod;
 import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
@@ -36,7 +37,7 @@ public enum Models
 
     private static ResourceLocation getResourceLocation(String path)
     {
-        return getResourceLocation(Constants.MOD_ID.toLowerCase(), path);
+        return getResourceLocation(TheMod.MOD_ID.toLowerCase(), path);
     }
 
     @SuppressWarnings("StringConcatenationMissingWhitespace")

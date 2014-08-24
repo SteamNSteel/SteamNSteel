@@ -16,29 +16,24 @@
 
 package mod.steamnsteel.library;
 
+import mod.steamnsteel.TheMod;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
 public enum Constants
 {
     _;
-    public static final String MOD_ID = "steamnsteel";
-    public static final String MOD_NAME = "Steam and Steel";
-    public static final String MOD_VERSION = "@MOD_VERSION@";
-    public static final String MOD_GUI_FACTORY = "mod.steamnsteel.configuration.client.ModGuiFactory";
-
-    public static final String NETWORK_CHANNEL = MOD_ID.toLowerCase();
 
     public static final String RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.RenderProxy";
     public static final String CLIENT_RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.ClientRenderProxy";
 
     public static final String CONFIG_VERSION = "1";
 
-    public static final String RESOURCE_PREFIX = MOD_ID.toLowerCase() + ':';
+    public static final String RESOURCE_PREFIX = TheMod.MOD_ID.toLowerCase() + ':';
 
 
     @SuppressWarnings("AnonymousInnerClass")
-    public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID.toLowerCase())
+    public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(TheMod.MOD_ID.toLowerCase())
     {
         @Override
         public Item getTabIconItem()
