@@ -27,20 +27,34 @@ import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.ModItems;
 import mod.steamnsteel.network.PacketHandler;
 import mod.steamnsteel.proxy.Proxies;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 
 @SuppressWarnings({"WeakerAccess", "MethodMayBeStatic"})
 @Mod(modid = TheMod.MOD_ID, name = TheMod.MOD_NAME, version = TheMod.MOD_VERSION, useMetadata = true, guiFactory = TheMod.MOD_GUI_FACTORY)
 public class TheMod
 {
     public static final String MOD_ID = "steamnsteel";
-    public static final String NETWORK_CHANNEL = MOD_ID.toLowerCase();
     public static final String MOD_NAME = "Steam and Steel";
     public static final String MOD_VERSION = "@MOD_VERSION@";
     public static final String MOD_GUI_FACTORY = "mod.steamnsteel.configuration.client.ModGuiFactory";
 
+    public static final String NETWORK_CHANNEL = MOD_ID.toLowerCase();
+    public static final String RESOURCE_PREFIX = MOD_ID.toLowerCase() + ':';
+
     @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
     @Mod.Instance
     public static TheMod instance;
+
+    @SuppressWarnings("AnonymousInnerClass")
+    public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID.toLowerCase())
+    {
+        @Override
+        public Item getTabIconItem()
+        {
+            return ModItems.MUSTY_JOURNAL;
+        }
+    };
 
     @Mod.EventHandler
     public void onFMLPreInitialization(FMLPreInitializationEvent event)

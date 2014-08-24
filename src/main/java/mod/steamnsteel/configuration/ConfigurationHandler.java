@@ -21,7 +21,6 @@ import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mod.steamnsteel.TheMod;
-import mod.steamnsteel.library.Constants;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraftforge.common.config.Configuration;
 import java.io.File;
@@ -34,6 +33,7 @@ import static com.google.common.base.Preconditions.*;
 public enum ConfigurationHandler
 {
     INSTANCE;
+    public static final String CONFIG_VERSION = "1";
     private File fileRef = null;
     private Configuration config = null;
     private Optional<Configuration> configOld = Optional.absent();
@@ -55,9 +55,9 @@ public enum ConfigurationHandler
 
         fileRef = configFile;
 
-        config = new Configuration(configFile, Constants.CONFIG_VERSION);
+        config = new Configuration(configFile, CONFIG_VERSION);
 
-        if (!Constants.CONFIG_VERSION.equals(config.getDefinedConfigVersion()))
+        if (!CONFIG_VERSION.equals(config.getDefinedConfigVersion()))
         {
             final File fileBak = new File(fileRef.getAbsolutePath() + '_' + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".old");
             Logger.warning("Your %s config file is out of date and could cause issues. The existing file will be renamed to %s and a new one will be generated.",
@@ -67,7 +67,7 @@ public enum ConfigurationHandler
             final boolean success = fileRef.renameTo(fileBak);
             Logger.warning("Rename %s successful.", success ? "was" : "was not");
             configOld = Optional.of(config);
-            config = new Configuration(fileRef, Constants.CONFIG_VERSION);
+            config = new Configuration(fileRef, CONFIG_VERSION);
         }
 
         syncConfig(true);
@@ -95,7 +95,7 @@ public enum ConfigurationHandler
                 final boolean success = fileRef.renameTo(fileBak);
                 Logger.warning("Rename %s successful.", success ? "was" : "was not");
 
-                config = new Configuration(fileRef, Constants.CONFIG_VERSION);
+                config = new Configuration(fileRef, CONFIG_VERSION);
             }
         }
 
