@@ -43,7 +43,7 @@ public enum Constants
         @Override
         public Item getTabIconItem()
         {
-            return Items.MUSTY_JOURNAL;
+            return ModItems.MUSTY_JOURNAL;
         }
     };
 }

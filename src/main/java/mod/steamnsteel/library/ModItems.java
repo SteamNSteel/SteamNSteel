@@ -31,7 +31,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings("UtilityClass")
 @GameRegistry.ObjectHolder(Constants.MOD_ID)
-public final class Items
+public final class ModItems
 {
     @SuppressWarnings("InnerClassFieldHidesOuterClassField")
     public enum Names
@@ -116,7 +116,7 @@ public final class Items
     public static final SteamNSteelItem STEEL_SHOVEL = new SteelShovel();
     public static final SteamNSteelItem STEEL_SWORD = new SteelSword();
 
-    private Items()
+    private ModItems()
     {
         throw new AssertionError();
     }

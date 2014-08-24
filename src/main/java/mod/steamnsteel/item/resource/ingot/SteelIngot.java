@@ -17,13 +17,13 @@
 package mod.steamnsteel.item.resource.ingot;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 
 public class SteelIngot extends SteamNSteelItem
 
 {
     public SteelIngot()
     {
-        setUnlocalizedName(Items.Names.STEEL_INGOT);
+        setUnlocalizedName(ModItems.Names.STEEL_INGOT);
     }
 }

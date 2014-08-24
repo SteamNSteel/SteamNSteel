@@ -20,7 +20,7 @@ import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.Constants;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 import mod.steamnsteel.network.PacketHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -43,7 +43,7 @@ public class TheMod
 
         PacketHandler.init();
 
-        Items.init();
+        ModItems.init();
 
         ModBlocks.init();
     }

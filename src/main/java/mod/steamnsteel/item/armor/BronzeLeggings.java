@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.armor;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 
 public class BronzeLeggings extends SteamNSteelItem
 {
     public BronzeLeggings()
     {
-        setUnlocalizedName(Items.Names.BRONZE_LEGGINGS);
+        setUnlocalizedName(ModItems.Names.BRONZE_LEGGINGS);
     }
 }

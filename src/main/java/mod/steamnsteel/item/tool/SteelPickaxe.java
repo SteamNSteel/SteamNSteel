@@ -17,13 +17,13 @@
 package mod.steamnsteel.item.tool;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 
 public class SteelPickaxe extends SteamNSteelItem
 
 {
     public SteelPickaxe()
     {
-        setUnlocalizedName(Items.Names.STEEL_PICKAXE);
+        setUnlocalizedName(ModItems.Names.STEEL_PICKAXE);
     }
 }

@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.resource.ingot;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Items;
+import mod.steamnsteel.library.ModItems;
 
 public class PlotoniumIngot extends SteamNSteelItem
 {
     public PlotoniumIngot()
     {
-        setUnlocalizedName(Items.Names.PLOTONIUM_INGOT);
+        setUnlocalizedName(ModItems.Names.PLOTONIUM_INGOT);
     }
 }
