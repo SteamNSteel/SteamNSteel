@@ -33,6 +33,7 @@ public class CupbolaTESR extends TileEntitySpecialRenderer
 
     private final CupolaModel model = new CupolaModel();
 
+    @SuppressWarnings("NumericCastThatLosesPrecision")
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick)
     {
@@ -41,9 +42,9 @@ public class CupbolaTESR extends TileEntitySpecialRenderer
             final CupolaTE te = (CupolaTE) tileEntity;
 
             final int metadata = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
-            final boolean isSlave = CupolaBlock.isSlave(metadata);
+            final boolean isMaster = !CupolaBlock.isSlave(metadata);
 
-            if (!isSlave)
+            if (isMaster)
             {
                 // Open Render buffer
                 GL11.glPushMatrix();
