@@ -17,12 +17,13 @@
 package mod.steamnsteel.proxy;
 
 import cpw.mods.fml.common.SidedProxy;
-import mod.steamnsteel.library.Constants;
 
 @SuppressWarnings({"StaticNonFinalField", "PublicField"})
 public enum Proxies
 {
     _;
-    @SidedProxy(clientSide = Constants.CLIENT_RENDER_PROXY_CLASS, serverSide = Constants.RENDER_PROXY_CLASS)
+    public static final String CLIENT_RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.ClientRenderProxy";
+    public static final String RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.RenderProxy";
+    @SidedProxy(clientSide = Proxies.CLIENT_RENDER_PROXY_CLASS, serverSide = Proxies.RENDER_PROXY_CLASS)
     public static RenderProxy render;
 }

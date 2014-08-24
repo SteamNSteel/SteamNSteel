@@ -24,9 +24,6 @@ public enum Constants
 {
     _;
 
-    public static final String RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.RenderProxy";
-    public static final String CLIENT_RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.ClientRenderProxy";
-
     public static final String CONFIG_VERSION = "1";
 
     public static final String RESOURCE_PREFIX = TheMod.MOD_ID.toLowerCase() + ':';
