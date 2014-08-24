@@ -17,19 +17,20 @@
 package mod.steamnsteel.client.renderer.tileentity;
 
 import mod.steamnsteel.block.machine.CupolaBlock;
-import mod.steamnsteel.client.library.Textures;
 import mod.steamnsteel.client.renderer.model.CupolaModel;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.Orientation;
 import mod.steamnsteel.utility.Vector;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class CupbolaTESR extends TileEntitySpecialRenderer
+public class CupbolaTESR extends SteamNSteelTESR
 {
     private static final Vector SCALE = new Vector(1.0f, 1.0f, 1.0f);
     private static final Vector OFFSET = new Vector(0.5f, 0.0f, 0.5f);
+
+    public static final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
 
     private final CupolaModel model = new CupolaModel();
 
@@ -74,7 +75,7 @@ public class CupbolaTESR extends TileEntitySpecialRenderer
                 GL11.glRotatef(rotationAngle, 0.0F, 1.0F, 0.0F);
 
                 // Bind the texture
-                bindTexture(Textures.Model.CUPOLA);
+                bindTexture(TEXTURE);
 
                 // Render
                 model.render();

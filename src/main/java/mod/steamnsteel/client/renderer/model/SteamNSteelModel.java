@@ -14,36 +14,25 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.library;
+package mod.steamnsteel.client.renderer.model;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
-import mod.steamnsteel.block.machine.CupolaBlock;
 import net.minecraft.util.ResourceLocation;
 
-@SideOnly(Side.CLIENT)
-public enum Models
+@SuppressWarnings("UtilityClass")
+abstract class SteamNSteelModel
 {
-    _;
-    private static final String LOCATION = "models/";
-    private static final String FILE_EXTENSION = ".obj";
+    private static final String MODEL_LOCATION = "models/";
+    private static final String MODEL_FILE_EXTENSION = ".obj";
 
-    public static final ResourceLocation CUPOLA = getResourceLocation(getModelPath(CupolaBlock.NAME));
-
-    private static ResourceLocation getResourceLocation(String modId, String path)
+    static ResourceLocation getResourceLocation(String path)
     {
-        return new ResourceLocation(modId, path);
-    }
-
-    private static ResourceLocation getResourceLocation(String path)
-    {
-        return getResourceLocation(TheMod.MOD_ID.toLowerCase(), path);
+        return new ResourceLocation(TheMod.MOD_ID.toLowerCase(), path);
     }
 
     @SuppressWarnings("StringConcatenationMissingWhitespace")
-    private static String getModelPath(String name)
+    protected static String getModelPath(String name)
     {
-        return LOCATION + name + FILE_EXTENSION;
+        return MODEL_LOCATION + name + MODEL_FILE_EXTENSION;
     }
 }

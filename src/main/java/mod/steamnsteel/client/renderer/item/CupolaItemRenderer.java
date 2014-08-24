@@ -20,8 +20,8 @@ import com.google.common.base.Optional;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import mod.steamnsteel.client.library.Textures;
 import mod.steamnsteel.client.renderer.model.CupolaModel;
+import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
 import mod.steamnsteel.utility.Vector;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
@@ -88,7 +88,7 @@ public class CupolaItemRenderer implements IItemRenderer
         GL11.glScalef(SCALE.getX(), SCALE.getY(), SCALE.getZ());
         GL11.glTranslatef(vector.getX(), vector.getY(), vector.getZ());
 
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(Textures.Model.CUPOLA);
+        FMLClientHandler.instance().getClient().renderEngine.bindTexture(CupbolaTESR.TEXTURE);
 
         model.render();
 

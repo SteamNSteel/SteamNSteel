@@ -30,6 +30,7 @@ import java.util.Random;
 public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEntityProvider
 {
     public static final String NAME = "cupola";
+
     private static final int SLAVE_MASK = 0x8;
 
     public CupolaBlock()

@@ -14,28 +14,26 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.client.renderer.model;
+package mod.steamnsteel.client.renderer.tileentity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mod.steamnsteel.block.machine.CupolaBlock;
+import mod.steamnsteel.TheMod;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 
-@SideOnly(Side.CLIENT)
-public class CupolaModel extends SteamNSteelModel
+abstract class SteamNSteelTESR extends TileEntitySpecialRenderer
 {
-    private static final ResourceLocation MODEL = getResourceLocation(getModelPath(CupolaBlock.NAME));
-    private final IModelCustom model;
+    private static final String TEXTURE_FILE_EXTENSION = ".png";
+    public static final String TEXTURE_LOCATION = "textures/models/";
 
-    public CupolaModel()
+    static ResourceLocation getResourceLocation(String name)
     {
-        model = AdvancedModelLoader.loadModel(MODEL);
+        return new ResourceLocation(TheMod.MOD_ID.toLowerCase(), getTexturePath(name));
     }
 
-    public void render()
+    @SuppressWarnings("StringConcatenationMissingWhitespace")
+    private static String getTexturePath(String name)
     {
-        model.renderAll();
+        return TEXTURE_LOCATION + name + TEXTURE_FILE_EXTENSION;
     }
+
 }

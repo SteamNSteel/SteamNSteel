@@ -19,7 +19,6 @@ package mod.steamnsteel.client.library;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
-import mod.steamnsteel.block.machine.CupolaBlock;
 import net.minecraft.util.ResourceLocation;
 
 @SuppressWarnings({"EnumeratedConstantNamingConvention", "InnerClassFieldHidesOuterClassField"})
@@ -28,31 +27,6 @@ public enum Textures
 {
     _;
     private static final String FILE_EXTENSION = ".png";
-
-    public enum Armor
-    {
-        _;
-        private static final String LOCATION = "textures/armor/";
-    }
-
-    public enum Model
-    {
-        _;
-        private static final String LOCATION = "textures/models/";
-        public static final ResourceLocation CUPOLA = getResourceLocation(getTexturePath(LOCATION, CupolaBlock.NAME));
-    }
-
-    public enum Gui
-    {
-        _;
-        private static final String LOCATION = "textures/gui/";
-    }
-
-    public enum Effect
-    {
-        _;
-        private static final String LOCATION = "textures/effects/";
-    }
 
     private static ResourceLocation getResourceLocation(String modId, String path)
     {
@@ -68,5 +42,23 @@ public enum Textures
     private static String getTexturePath(String location, String name)
     {
         return location + name + FILE_EXTENSION;
+    }
+
+    public enum Armor
+    {
+        _;
+        private static final String LOCATION = "textures/armor/";
+    }
+
+    public enum Gui
+    {
+        _;
+        private static final String LOCATION = "textures/gui/";
+    }
+
+    public enum Effect
+    {
+        _;
+        private static final String LOCATION = "textures/effects/";
     }
 }
