@@ -19,7 +19,7 @@ package mod.steamnsteel.client.library;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.block.machine.CupolaBlock;
 import net.minecraft.util.ResourceLocation;
 
 @SuppressWarnings({"EnumeratedConstantNamingConvention", "InnerClassFieldHidesOuterClassField"})
@@ -39,7 +39,7 @@ public enum Textures
     {
         _;
         private static final String LOCATION = "textures/models/";
-        public static final ResourceLocation CUPOLA = getResourceLocation(getTexturePath(LOCATION, ModBlocks.Names.CUPOLA));
+        public static final ResourceLocation CUPOLA = getResourceLocation(getTexturePath(LOCATION, CupolaBlock.NAME));
     }
 
     public enum Gui

@@ -17,7 +17,6 @@
 package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
-import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -30,12 +29,13 @@ import java.util.Random;
 
 public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEntityProvider
 {
+    public static final String NAME = "cupola";
     private static final int SLAVE_MASK = 0x8;
 
     public CupolaBlock()
     {
         super(Material.piston);
-        setBlockName(ModBlocks.Names.CUPOLA);
+        setBlockName(NAME);
         setStepSound(Block.soundTypePiston);
         setHardness(0.5f);
     }

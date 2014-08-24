@@ -19,6 +19,7 @@ package mod.steamnsteel.library;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.block.machine.CupolaBlock;
 import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
@@ -28,7 +29,7 @@ public enum Models
     private static final String LOCATION = "models/";
     private static final String FILE_EXTENSION = ".obj";
 
-    public static final ResourceLocation CUPOLA = getResourceLocation(getModelPath(ModBlocks.Names.CUPOLA));
+    public static final ResourceLocation CUPOLA = getResourceLocation(getModelPath(CupolaBlock.NAME));
 
     private static ResourceLocation getResourceLocation(String modId, String path)
     {

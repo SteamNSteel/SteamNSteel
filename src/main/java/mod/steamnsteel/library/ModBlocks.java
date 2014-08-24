@@ -42,7 +42,6 @@ public final class ModBlocks
         public static final String BRONZE_BLOCK = "blockBronze";
         public static final String COPPER_BLOCK = "blockCopper";
         public static final String COPPER_ORE = "oreCopper";
-        public static final String CUPOLA = "cupola";
         public static final String NITER_ORE = "oreNiter";
         public static final String PLOTONIUM_BLOCK = "blockPlotonium";
         public static final String PLOTONIUM_CHEST = "chestPlotonium";
@@ -84,7 +83,7 @@ public final class ModBlocks
     {
         GameRegistry.registerBlock(PLOTONIUM_CHEST, Names.PLOTONIUM_CHEST);
 
-        GameRegistry.registerBlock(CUPOLA, CupolaItem.class, Names.CUPOLA);
+        GameRegistry.registerBlock(CUPOLA, CupolaItem.class, CupolaBlock.NAME);
 
         registerBlockAndOre(COPPER_ORE, Names.COPPER_ORE);
         registerBlockAndOre(NITER_ORE, Names.NITER_ORE);
