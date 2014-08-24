@@ -45,36 +45,40 @@ public class CupbolaTESR extends TileEntitySpecialRenderer
 
             if (!isSlave)
             {
+                // Open Render buffer
                 GL11.glPushMatrix();
 
+                // Inherent adjustments to model
                 GL11.glScalef(SCALE.getX(), SCALE.getY(), SCALE.getZ());
-                //noinspection NumericCastThatLosesPrecision
                 GL11.glTranslatef((float) x + OFFSET.getX(), (float) y + OFFSET.getY(), (float) z + OFFSET.getZ());
 
+                // Orient the model to match the placement
                 final float rotationAngle;
                 final Orientation orientation = Orientation.getdecodedOrientation(metadata);
                 switch (orientation)
                 {
                     case SOUTH:
-                        rotationAngle = 0.0f;
-                        break;
-                    case WEST:
-                        rotationAngle = 270.0f;
-                        break;
-                    case NORTH:
                         rotationAngle = 180.0f;
                         break;
-                    default:
+                    case WEST:
                         rotationAngle = 90.0f;
+                        break;
+                    case NORTH:
+                        rotationAngle = 0.0f;
+                        break;
+                    default:
+                        rotationAngle = 270.0f;
                         break;
                 }
                 GL11.glRotatef(rotationAngle, 0.0F, 1.0F, 0.0F);
 
+                // Bind the texture
                 bindTexture(Textures.Model.CUPOLA);
 
                 // Render
                 model.render();
 
+                // Close Render Buffer
                 GL11.glPopMatrix();
             }
         }
