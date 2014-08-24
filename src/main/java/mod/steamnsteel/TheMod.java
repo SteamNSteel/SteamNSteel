@@ -30,11 +30,11 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import mod.steamnsteel.proxy.Proxies;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION, useMetadata = true, guiFactory = Constants.MOD_GUI_FACTORY)
-public class ThisMod
+public class TheMod
 {
     @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
     @Mod.Instance
-    public static ThisMod instance;
+    public static TheMod instance;
 
     @Mod.EventHandler
     public void onFMLPreInitialization(FMLPreInitializationEvent event)
