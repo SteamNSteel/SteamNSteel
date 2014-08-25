@@ -30,8 +30,7 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
     private int x;
     private int y;
     private int z;
-    private String customName = "";
-    private String owner = "";
+    private byte state;
 
     public MessageSteamNSteelTE()
     {
@@ -43,8 +42,7 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
         x = tileEntity.xCoord;
         y = tileEntity.yCoord;
         z = tileEntity.zCoord;
-        customName = tileEntity.getCustomName();
-        owner = tileEntity.getOwner();
+        state = tileEntity.getState();
     }
 
     @Override
@@ -53,10 +51,7 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
         x = buf.readInt();
         y = buf.readInt();
         z = buf.readInt();
-        final int customNameLength = buf.readInt();
-        customName = new String(buf.readBytes(customNameLength).array());
-        final int ownerLength = buf.readInt();
-        owner = new String(buf.readBytes(ownerLength).array());
+        state = buf.readByte();
     }
 
     @Override
@@ -65,10 +60,7 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
         buf.writeInt(x);
         buf.writeInt(y);
         buf.writeInt(z);
-        buf.writeInt(customName.length());
-        buf.writeBytes(customName.getBytes());
-        buf.writeInt(owner.length());
-        buf.writeBytes(owner.getBytes());
+        buf.writeByte(state);
     }
 
     @SuppressWarnings("ReturnOfNull")
@@ -80,8 +72,7 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
         if (tileEntity instanceof SteamNSteelTE)
         {
             final SteamNSteelTE te = (SteamNSteelTE) tileEntity;
-            te.setCustomName(message.customName);
-            te.setOwner(message.owner);
+            te.setState(state);
         }
 
         return null;
@@ -94,8 +85,7 @@ public class MessageSteamNSteelTE  implements IMessage, IMessageHandler<MessageS
                 .add("x", x)
                 .add("y", y)
                 .add("z", z)
-                .add("customName", customName)
-                .add("owner", owner)
+                .add("state", state)
                 .toString();
     }
 }

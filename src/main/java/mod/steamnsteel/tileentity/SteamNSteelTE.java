@@ -24,36 +24,23 @@ import net.minecraft.tileentity.TileEntity;
 
 public class SteamNSteelTE extends TileEntity
 {
-    private static final String CUSTOM_NAME = "[SNS]CustomName";
-    private static final String OWNER = "[SNS]Owner";
+    private static final String NBT_STATE = "[SNS] state";
 
-    private String customName;
-    private String owner;
+    private byte state;
+
+    public byte getState()
+    {
+        return state;
+    }
+
+    public void setState(byte state)
+    {
+        this.state = state;
+    }
 
     public SteamNSteelTE()
     {
-        customName = "";
-        owner = "";
-    }
-
-    public String getCustomName()
-    {
-        return customName;
-    }
-
-    public void setCustomName(String customName)
-    {
-        this.customName = customName;
-    }
-
-    public String getOwner()
-    {
-        return owner;
-    }
-
-    public void setOwner(String owner)
-    {
-        this.owner = owner;
+        state = (byte) 0;
     }
 
     @Override
@@ -61,14 +48,9 @@ public class SteamNSteelTE extends TileEntity
     {
         super.readFromNBT(nbtTagCompound);
 
-        if (nbtTagCompound.hasKey(CUSTOM_NAME))
+        if (nbtTagCompound.hasKey(NBT_STATE))
         {
-            customName = nbtTagCompound.getString(CUSTOM_NAME);
-        }
-
-        if (nbtTagCompound.hasKey(OWNER))
-        {
-            owner = nbtTagCompound.getString(OWNER);
+            state = nbtTagCompound.getByte(NBT_STATE);
         }
     }
 
@@ -77,25 +59,7 @@ public class SteamNSteelTE extends TileEntity
     {
         super.writeToNBT(nbtTagCompound);
 
-        if (hasCustomName())
-        {
-            nbtTagCompound.setString(CUSTOM_NAME, customName);
-        }
-
-        if (hasOwner())
-        {
-            nbtTagCompound.setString(OWNER, owner);
-        }
-    }
-
-    public boolean hasCustomName()
-    {
-        return customName != null && !customName.isEmpty();
-    }
-
-    public boolean hasOwner()
-    {
-        return owner != null && !owner.isEmpty();
+        nbtTagCompound.setByte(NBT_STATE, state);
     }
 
     @Override
