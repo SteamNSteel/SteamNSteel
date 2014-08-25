@@ -20,6 +20,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.network.message.MessageCupolaTE;
 import mod.steamnsteel.network.message.MessageSteamNSteelTE;
 
 public enum PacketHandler
@@ -29,6 +30,9 @@ public enum PacketHandler
 
     public static void init()
     {
-        INSTANCE.registerMessage(MessageSteamNSteelTE.class, MessageSteamNSteelTE.class, 1, Side.CLIENT);
+        int discriminator = 0;
+        INSTANCE.registerMessage(MessageSteamNSteelTE.class, MessageSteamNSteelTE.class, discriminator, Side.CLIENT);
+        discriminator++;
+        INSTANCE.registerMessage(MessageCupolaTE.class, MessageCupolaTE.class, discriminator, Side.CLIENT);
     }
 }

@@ -16,6 +16,35 @@
 
 package mod.steamnsteel.tileentity;
 
+import mod.steamnsteel.network.PacketHandler;
+import mod.steamnsteel.network.message.MessageCupolaTE;
+import net.minecraft.network.Packet;
+
 public class CupolaTE extends SteamNSteelTE
 {
+    private static final int STATE_ACTIVEi_FLAG = 0x1;  // 0001
+
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        return PacketHandler.INSTANCE.getPacketFrom(new MessageCupolaTE(this));
+    }
+
+    public boolean isActive()
+    {
+        return (getState() & STATE_ACTIVEi_FLAG) == STATE_ACTIVEi_FLAG;
+    }
+
+    @SuppressWarnings("BooleanParameter")
+    public void setActive(boolean isActive)
+    {
+        byte state = getState();
+
+        if (isActive)
+            state |= STATE_ACTIVEi_FLAG;
+        else
+            state &= ~STATE_ACTIVEi_FLAG;
+
+        setState(state);
+    }
 }
