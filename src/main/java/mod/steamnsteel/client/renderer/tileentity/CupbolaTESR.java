@@ -31,6 +31,7 @@ public class CupbolaTESR extends SteamNSteelTESR
     private static final Vector OFFSET = new Vector(0.5f, 0.0f, 0.5f);
 
     public static final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
+    public static final ResourceLocation TEXTURE_ACTIVE = getResourceLocation(CupolaBlock.NAME + "_active");
 
     private final CupolaModel model = new CupolaModel();
 
@@ -75,7 +76,10 @@ public class CupbolaTESR extends SteamNSteelTESR
                 GL11.glRotatef(rotationAngle, 0.0F, 1.0F, 0.0F);
 
                 // Bind the texture
-                bindTexture(TEXTURE);
+                if (te.isActive())
+                    bindTexture(TEXTURE_ACTIVE);
+                else
+                    bindTexture(TEXTURE);
 
                 // Render
                 model.render();
