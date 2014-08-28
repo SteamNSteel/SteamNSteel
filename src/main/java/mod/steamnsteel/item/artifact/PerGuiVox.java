@@ -17,12 +17,31 @@
 package mod.steamnsteel.item.artifact;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.Names;
+import mod.steamnsteel.network.Event.PropertyVoxBox;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.IExtendedEntityProperties;
 
 public class PerGuiVox extends SteamNSteelItem
 {
     public PerGuiVox()
     {
-        setUnlocalizedName(ModItems.Names.PER_GUI_VOX);
+        setUnlocalizedName(Names.Artifacts.PER_GUI_VOX);
+    }
+
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
+        if(!world.isRemote) {
+            PropertyVoxBox property = PropertyVoxBox.get(player);
+            if (!property.isVoxBoxEnabled()) {
+                property.setVoxBoxEnabled(true);
+            }
+        }
+
+        return super.onItemRightClick(itemStack, world, player);
     }
 }

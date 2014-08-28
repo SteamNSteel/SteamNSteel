@@ -4,6 +4,7 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mod.steamnsteel.client.gui.ButtonVoxBox;
 import mod.steamnsteel.client.gui.GUIVoxBox;
+import mod.steamnsteel.utility.Logger;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,7 +35,7 @@ public class ServerEventHandler  {
             int posX = event.gui.mc.displayWidth;
             int posY = event.gui.mc.displayHeight;
 
-            event.buttonList.add(new ButtonVoxBox(1000, height, width, 24, 24));
+            event.buttonList.add(new ButtonVoxBox(1000, posX, posY, 24, 24));
         }
     }
 

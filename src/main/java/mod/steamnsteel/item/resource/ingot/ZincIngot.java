@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.resource.ingot;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.Names;
 
 public class ZincIngot extends SteamNSteelItem
 {
     public ZincIngot()
     {
-        setUnlocalizedName(ModItems.Names.ZINC_INGOT);
+        setUnlocalizedName(Names.Ingots.ZINC_INGOT);
     }
 }

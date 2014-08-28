@@ -3,6 +3,7 @@ package mod.steamnsteel.client.gui;
 import mod.steamnsteel.client.gui.inventory.ContainerVoxBox;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 
 /**
  * Created by Probook on 8/15/2014.

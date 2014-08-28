@@ -16,8 +16,8 @@
 
 package mod.steamnsteel.configuration.client;
 
-import mod.steamnsteel.TheMod;
 import mod.steamnsteel.configuration.ConfigurationHandler;
+import mod.steamnsteel.library.Reference;
 import cpw.mods.fml.client.config.GuiConfig;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
@@ -29,6 +29,6 @@ public class ConfigGUI extends GuiConfig
     public ConfigGUI(GuiScreen parent)
     {
         super(parent, new ConfigElement(ConfigurationHandler.INSTANCE.getConfig().getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
-                TheMod.MOD_ID, false, false, GuiConfig.getAbridgedConfigPath(ConfigurationHandler.INSTANCE.getConfig().toString()));
+                Reference.MOD_ID, false, false, GuiConfig.getAbridgedConfigPath(ConfigurationHandler.INSTANCE.getConfig().toString()));
     }
 }

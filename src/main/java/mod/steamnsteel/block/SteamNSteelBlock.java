@@ -18,17 +18,18 @@ package mod.steamnsteel.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Textures;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
-public abstract class SteamNSteelBlock extends Block
+public class SteamNSteelBlock extends Block
 {
-    protected SteamNSteelBlock(Material material)
+    public SteamNSteelBlock(Material material)
     {
         super(material);
-        setCreativeTab(TheMod.CREATIVE_TAB);
+        setCreativeTab(Reference.CREATIVE_TAB);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -40,7 +41,7 @@ public abstract class SteamNSteelBlock extends Block
     @Override
     public String getUnlocalizedName()
     {
-        return String.format("tile.%s%s", TheMod.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("tile.%s%s", Textures.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
     @Override

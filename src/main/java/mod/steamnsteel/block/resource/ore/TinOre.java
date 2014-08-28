@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.resource.ore;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.Names;
 import net.minecraft.block.material.Material;
 
 public class TinOre extends SteamNSteelBlock
@@ -25,6 +25,6 @@ public class TinOre extends SteamNSteelBlock
     public TinOre()
     {
         super(Material.rock);
-        setBlockName(ModBlocks.Names.TIN_ORE);
+        setBlockName(Names.Blocks.TIN_ORE);
     }
 }

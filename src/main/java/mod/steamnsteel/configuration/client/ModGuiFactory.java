@@ -35,14 +35,12 @@ public class ModGuiFactory implements IModGuiFactory
         return ConfigGUI.class;
     }
 
-    @SuppressWarnings("ReturnOfNull")
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories()
     {
         return null;
     }
 
-    @SuppressWarnings("ReturnOfNull")
     @Override
     public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element)
     {

@@ -17,13 +17,13 @@
 package mod.steamnsteel.item.weapon;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.Names;
 
 public class SteelSword extends SteamNSteelItem
 
 {
     public SteelSword()
     {
-        setUnlocalizedName(ModItems.Names.STEEL_SWORD);
+        setUnlocalizedName(Names.Weapons.STEEL_SWORD);
     }
 }

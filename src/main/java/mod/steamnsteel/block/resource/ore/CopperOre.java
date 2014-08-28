@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.resource.ore;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.Names;
 import net.minecraft.block.material.Material;
 
 public class CopperOre extends SteamNSteelBlock
@@ -25,6 +25,6 @@ public class CopperOre extends SteamNSteelBlock
     public CopperOre()
     {
         super(Material.rock);
-        setBlockName(ModBlocks.Names.COPPER_ORE);
+        setBlockName(Names.Blocks.COPPER_ORE);
     }
 }

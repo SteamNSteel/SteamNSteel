@@ -17,13 +17,13 @@
 package mod.steamnsteel.item.weapon;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.Names;
 
 public class BronzeSword extends SteamNSteelItem
 
 {
     public BronzeSword()
     {
-        setUnlocalizedName(ModItems.Names.BRONZE_SWORD);
+        setUnlocalizedName(Names.Weapons.BRONZE_SWORD);
     }
 }

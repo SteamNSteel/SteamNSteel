@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.resource.ore;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.Names;
 import net.minecraft.block.material.Material;
 
 public class SulfurOre extends SteamNSteelBlock
@@ -25,6 +25,6 @@ public class SulfurOre extends SteamNSteelBlock
     public SulfurOre()
     {
         super(Material.rock);
-        setBlockName(ModBlocks.Names.SULFUR_ORE);
+        setBlockName(Names.Blocks.SULFUR_ORE);
     }
 }
