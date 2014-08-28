@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.resource.ore;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class NiterOre extends SteamNSteelBlock
@@ -25,6 +25,6 @@ public class NiterOre extends SteamNSteelBlock
     public NiterOre()
     {
         super(Material.rock);
-        setBlockName(Names.Blocks.NITER_ORE);
+        setBlockName(ModBlocks.Names.NITER_ORE);
     }
 }

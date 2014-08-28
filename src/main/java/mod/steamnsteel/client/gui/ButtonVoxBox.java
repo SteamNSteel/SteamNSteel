@@ -1,6 +1,5 @@
 package mod.steamnsteel.client.gui;
 
-import mod.steamnsteel.utility.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 

@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.resource.storage;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class ZincBlock extends SteamNSteelBlock
@@ -25,6 +25,6 @@ public class ZincBlock extends SteamNSteelBlock
     public ZincBlock()
     {
         super(Material.rock);
-        setBlockName(Names.Blocks.ZINC_BLOCK);
+        setBlockName(ModBlocks.Names.ZINC_BLOCK);
     }
 }

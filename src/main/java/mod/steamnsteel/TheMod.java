@@ -16,51 +16,71 @@
 
 package mod.steamnsteel;
 
-import mod.steamnsteel.configuration.ConfigurationHandler;
-import mod.steamnsteel.crafting.Recipes;
-import mod.steamnsteel.library.Blocks;
-import mod.steamnsteel.library.Items;
-import mod.steamnsteel.proxy.IProxy;
-import mod.steamnsteel.library.Reference;
-import mod.steamnsteel.network.Event.ServerEventHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import mod.steamnsteel.configuration.ConfigurationHandler;
+import mod.steamnsteel.crafting.Recipes;
+import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.network.Event.ServerEventHandler;
+import mod.steamnsteel.network.PacketHandler;
+import mod.steamnsteel.proxy.Proxies;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, useMetadata = true, guiFactory = Reference.MOD_GUI_FACTORY)
-public class MinecraftMod
+@SuppressWarnings({"WeakerAccess", "MethodMayBeStatic"})
+@Mod(modid = TheMod.MOD_ID, name = TheMod.MOD_NAME, version = TheMod.MOD_VERSION, useMetadata = true, guiFactory = TheMod.MOD_GUI_FACTORY)
+public class TheMod
 {
+    public static final String MOD_ID = "steamnsteel";
+    public static final String MOD_NAME = "Steam and Steel";
+    public static final String MOD_VERSION = "@MOD_VERSION@";
+    public static final String MOD_GUI_FACTORY = "mod.steamnsteel.configuration.client.ModGuiFactory";
+
+    public static final String NETWORK_CHANNEL = MOD_ID.toLowerCase();
+    public static final String RESOURCE_PREFIX = MOD_ID.toLowerCase() + ':';
+
     @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
     @Mod.Instance
-    public static MinecraftMod instance;
+    public static TheMod instance;
 
-    @SuppressWarnings({"StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
-    @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
-    public static IProxy proxy;
-
-	public static final SimpleNetworkWrapper networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID.toLowerCase());
+    @SuppressWarnings("AnonymousInnerClass")
+    public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID.toLowerCase())
+    {
+        @Override
+        public Item getTabIconItem()
+        {
+            return ModItems.MUSTY_JOURNAL;
+        }
+    };
 
     @Mod.EventHandler
     public void onFMLPreInitialization(FMLPreInitializationEvent event)
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
-        Items.init();
-        Blocks.init();
+
+        PacketHandler.init();
+
+        ModItems.init();
+
+        ModBlocks.init();
     }
 
+    @SuppressWarnings("UnusedParameters")
     @Mod.EventHandler
     public void onFMLInitialization(FMLInitializationEvent event)
     {
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
         Recipes.init();
-		MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
+        Proxies.render.init();
     }
 
+    @SuppressWarnings("UnusedParameters")
     @Mod.EventHandler
     public void onFMLPostInitialization(FMLPostInitializationEvent event)
     {

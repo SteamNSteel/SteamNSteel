@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.armor;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.ModItems;
 
 public class SteelBoots extends SteamNSteelItem
 {
     public SteelBoots()
     {
-        setUnlocalizedName(Names.Armor.STEEL_BOOTS);
+        setUnlocalizedName(ModItems.Names.STEEL_BOOTS);
     }
 }

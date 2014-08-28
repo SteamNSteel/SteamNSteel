@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.resource.storage;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.Names;
+import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class CopperBlock extends SteamNSteelBlock
@@ -25,6 +25,6 @@ public class CopperBlock extends SteamNSteelBlock
     public CopperBlock()
     {
         super(Material.rock);
-        setBlockName(Names.Blocks.COPPER_BLOCK);
+        setBlockName(ModBlocks.Names.COPPER_BLOCK);
     }
 }
