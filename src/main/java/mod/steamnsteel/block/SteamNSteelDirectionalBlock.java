@@ -16,25 +16,26 @@
 
 package mod.steamnsteel.block;
 
-import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 
-public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
+abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
-    protected SteamNSteelDirectionalBlock(Material material)
+    SteamNSteelDirectionalBlock(Material material)
     {
         super(material);
     }
 
-    public static Orientation getOrientation(int metadata)
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack)
     {
-        return Orientation.getdecodedOrientation(metadata);
-    }
+        super.onBlockPlacedBy(world, x, y, x, entity, itemStack);
 
-    @SuppressWarnings("ImplicitNumericConversion")
-    public static int getMetadataFromDirection(float direction) {
-        return BlockDirectional.getDirection(MathHelper.floor_double(direction * 4.0f / 360.0f + 0.50));
+        final int orientation = BlockDirectional.getDirection(MathHelper.floor_double(entity.rotationYaw * 4.0f / 360.0f + 0.5));
+        world.setBlockMetadataWithNotify(x, y, z, orientation, 0);
     }
 }

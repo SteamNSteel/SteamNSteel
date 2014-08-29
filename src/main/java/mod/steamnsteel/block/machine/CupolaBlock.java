@@ -16,70 +16,26 @@
 
 package mod.steamnsteel.block.machine;
 
-import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
+import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEntityProvider
+public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
     public static final String NAME = "cupola";
 
     public CupolaBlock()
     {
-        super(Material.piston);
         setBlockName(NAME);
-        setStepSound(Block.soundTypePiston);
-        setHardness(0.5f);
-    }
-
-    @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack)
-    {
-        super.onBlockPlacedBy(world, x, y, x, entity, itemStack);
-
-        final int orientation = BlockDirectional.getDirection(MathHelper.floor_double(entity.rotationYaw * 4.0f / 360.0f + 0.5));
-        world.setBlockMetadataWithNotify(x, y, z, orientation, 0);
-    }
-
-    @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
     }
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
         return new CupolaTE();
-    }
-
-    @Override
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-
-    @Override
-    public int getRenderType()
-    {
-        // Disable normal block rendering.
-        return -1;
-    }
-
-    @Override
-    public int getMobilityFlag()
-    {
-        // total immobility and stop pistons
-        return 2;
     }
 
     @Override
