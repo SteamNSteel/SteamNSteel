@@ -17,13 +17,17 @@
 package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
-import mod.steamnsteel.tileentity.SteamNSteelTE;
+import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import java.util.Random;
 
@@ -63,6 +67,15 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
     }
 
     @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack)
+    {
+        super.onBlockPlacedBy(world, x, y, x, entity, itemStack);
+
+        final int orientation = BlockDirectional.getDirection(MathHelper.floor_double(entity.rotationYaw * 4.0f / 360.0f + 0.5));
+        world.setBlockMetadataWithNotify(x, y, z, orientation, 0);
+    }
+
+    @Override
     public boolean renderAsNormalBlock()
     {
         return false;
@@ -71,7 +84,7 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
-        return new SteamNSteelTE();
+        return new CupolaTE();
     }
 
     @Override

@@ -17,9 +17,12 @@
 package mod.steamnsteel.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-public class SteamNSteelTE extends TileEntity
+public class CupolaTE extends TileEntity
 {
     private static final String IS_ACTIVE = "isActive";
 
@@ -33,6 +36,20 @@ public class SteamNSteelTE extends TileEntity
     public void setActive(boolean isActive)
     {
         this.isActive = isActive;
+    }
+
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        final NBTTagCompound nbt = new NBTTagCompound();
+        writeToNBT(nbt);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+    {
+        readFromNBT(packet.func_148857_g());
     }
 
     @Override
