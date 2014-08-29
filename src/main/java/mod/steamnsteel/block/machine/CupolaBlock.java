@@ -23,19 +23,15 @@ import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import java.util.Random;
 
 public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEntityProvider
 {
     public static final String NAME = "cupola";
-
-    private static final int SLAVE_MASK = 0x8;
 
     public CupolaBlock()
     {
@@ -43,27 +39,6 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
         setBlockName(NAME);
         setStepSound(Block.soundTypePiston);
         setHardness(0.5f);
-    }
-
-    public static boolean isSlave(int metadata)
-    {
-        return (metadata & SLAVE_MASK) == SLAVE_MASK;
-    }
-
-    public static int codeSlaveMetadata(int metadata) {return metadata | SLAVE_MASK;}
-
-    @Override
-    public boolean onBlockActivated(World world, int x, int targetY, int z, EntityPlayer player, int side, float hitVectorX, float hitVectorY, float hitVectorZ)
-    {
-        int y = targetY;
-        if (world.isRemote) return true;
-
-        final int metadata = world.getBlockMetadata(x, y, z);
-        if (isSlave(metadata)) y--;
-
-        // TODO: Right Click behavior
-
-        return false;
     }
 
     @Override
@@ -101,13 +76,6 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
     }
 
     @Override
-    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int metadata, float dropChance, int fortune)
-    {
-        if (!isSlave(metadata))
-            super.dropBlockAsItemWithChance(world, x, y, z, metadata, dropChance, fortune);
-    }
-
-    @Override
     public int getMobilityFlag()
     {
         // total immobility and stop pistons
@@ -115,39 +83,13 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
     }
 
     @Override
-    public Item getItemDropped(int metadata, Random rng, int fortune)
+    public int getLightValue(IBlockAccess world, int x, int y, int z)
     {
-        return isSlave(metadata) ? Item.getItemById(0) : super.getItemDropped(metadata, rng, fortune);
-    }
+        final TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof CupolaTE)
+            if (((CupolaTE) te).isActive())
+                return 15;
 
-    @SuppressWarnings("ObjectEquality")
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
-    {
-        final int metadata = world.getBlockMetadata(x, y, z);
-
-        if (isSlave(metadata))
-        {
-            if (world.getBlock(x, y - 1, z) != this)
-                world.setBlockToAir(x, y, z);
-        }
-        else if (world.getBlock(x, y + 1, z) != this)
-        {
-            world.setBlockToAir(x, y, z);
-            if (!world.isRemote)
-                dropBlockAsItem(world, x, y, z, metadata, 0);
-        }
-    }
-
-    @SuppressWarnings("ObjectEquality")
-    @Override
-    public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player)
-    {
-        if (player.capabilities.isCreativeMode && isSlave(metadata))
-        {
-            final int targetY = y - 1;
-            if (world.getBlock(x, targetY, z) == this)
-                world.setBlockToAir(x, targetY, z);
-        }
+        return super.getLightValue(world, x, y, z);
     }
 }
