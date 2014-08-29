@@ -16,55 +16,38 @@
 
 package mod.steamnsteel.tileentity;
 
-import mod.steamnsteel.network.PacketHandler;
-import mod.steamnsteel.network.message.MessageSteamNSteelTE;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
 public class SteamNSteelTE extends TileEntity
 {
-    private static final String NBT_STATE = "[SNS] state";
+    private static final String IS_ACTIVE = "isActive";
 
-    private byte state;
+    private boolean isActive = false;
 
-    public byte getState()
+    public boolean isActive()
     {
-        return state;
+        return isActive;
     }
 
-    public void setState(byte state)
+    public void setActive(boolean isActive)
     {
-        this.state = state;
-    }
-
-    public SteamNSteelTE()
-    {
-        state = (byte) 0;
+        this.isActive = isActive;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound)
+    public void readFromNBT(NBTTagCompound nbt)
     {
-        super.readFromNBT(nbtTagCompound);
+        super.readFromNBT(nbt);
 
-        if (nbtTagCompound.hasKey(NBT_STATE))
-        {
-            state = nbtTagCompound.getByte(NBT_STATE);
-        }
+        isActive = nbt.getBoolean(IS_ACTIVE);
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbtTagCompound)
+    public void writeToNBT(NBTTagCompound nbt)
     {
-        super.writeToNBT(nbtTagCompound);
+        super.writeToNBT(nbt);
 
-        nbtTagCompound.setByte(NBT_STATE, state);
-    }
-
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        return PacketHandler.INSTANCE.getPacketFrom(new MessageSteamNSteelTE(this));
+        nbt.setBoolean(IS_ACTIVE, isActive);
     }
 }

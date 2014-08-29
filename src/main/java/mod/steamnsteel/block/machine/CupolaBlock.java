@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
-import mod.steamnsteel.tileentity.CupolaTE;
+import mod.steamnsteel.tileentity.SteamNSteelTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -71,7 +71,7 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
-        return new CupolaTE();
+        return new SteamNSteelTE();
     }
 
     @Override
