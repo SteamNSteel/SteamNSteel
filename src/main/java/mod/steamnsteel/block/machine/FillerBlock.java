@@ -21,6 +21,7 @@ import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.FillerTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -97,6 +98,12 @@ public class FillerBlock extends SteamNSteelBlock implements ITileEntityProvider
                 world.removeTileEntity(x, y, z);
             }
         }
+    }
+
+    @Override
+    public void registerBlockIcons(IIconRegister iconRegister)
+    {
+        // no op
     }
 
     @Override

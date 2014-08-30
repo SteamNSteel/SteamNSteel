@@ -18,6 +18,7 @@ package mod.steamnsteel.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -66,5 +67,11 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
         super.onBlockEventReceived(world, x, y, z, eventId, eventParameter);
         final TileEntity te = world.getTileEntity(x, y, z);
         return te != null && te.receiveClientEvent(eventId, eventParameter);
+    }
+
+    @Override
+    public void registerBlockIcons(IIconRegister iconRegister)
+    {
+        // no op
     }
 }
