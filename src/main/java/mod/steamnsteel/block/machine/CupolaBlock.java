@@ -16,15 +16,19 @@
 
 package mod.steamnsteel.block.machine;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.tileentity.FillerTE;
+import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import java.util.Random;
 
 public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
@@ -86,6 +90,55 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
             filler.setMasterX(x);
             filler.setMasterY(y);
             filler.setMasterZ(z);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(World world, int x, int y, int z, Random rng)
+    {
+        final TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof CupolaTE)
+        {
+            final CupolaTE cupola = (CupolaTE)te;
+            if (cupola.isActive())
+            {
+                final float effectX = x + 0.5f;
+                final float effectY = y + 0.5f + rng.nextFloat() * 5.0f / 16.0f;
+                final float effectZ = z + 0.5f;
+                final float edgeOffset = 0.52f;
+                final float widthOffset = rng.nextFloat() * 0.6f - 0.3f;
+
+                final int metadata = world.getBlockMetadata(x, y, z);
+                final Orientation orientation = Orientation.getdecodedOrientation(metadata);
+
+                switch(orientation)
+                {
+                    case SOUTH:
+                        world.spawnParticle("smoke", effectX + widthOffset, effectY, effectZ - edgeOffset, 0.0d, 0.0d, 0.0d);
+                        world.spawnParticle("flame", effectX + widthOffset, effectY, effectZ - edgeOffset, 0.0d, 0.0d, 0.0d);
+                        break;
+
+                    case WEST:
+                        world.spawnParticle("smoke", effectX + edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
+                        world.spawnParticle("flame", effectX + edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
+                        break;
+
+                    case NORTH:
+                        world.spawnParticle("smoke", effectX + widthOffset, effectY, effectZ + edgeOffset, 0.0d, 0.0d, 0.0d);
+                        world.spawnParticle("flame", effectX + widthOffset, effectY, effectZ + edgeOffset, 0.0d, 0.0d, 0.0d);
+                        break;
+
+                    case EAST:
+                        world.spawnParticle("smoke", effectX - edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
+                        world.spawnParticle("flame", effectX - edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
+                }
+
+                final float centerOffset1 = rng.nextFloat() * 0.6f - 0.3f;
+                final float centerOffset2 = rng.nextFloat() * 0.6f - 0.3f;
+
+                world.spawnParticle("smoke", x +0.5d + centerOffset1, y + 2.0d, z + 0.5d + centerOffset2, 0.0d, 0.1d, 0.0d);
+            }
         }
     }
 }
