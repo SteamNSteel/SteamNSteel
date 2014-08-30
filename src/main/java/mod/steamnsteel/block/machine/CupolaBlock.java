@@ -18,13 +18,16 @@ package mod.steamnsteel.block.machine;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.gui.ModGuis;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.tileentity.FillerTE;
 import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -60,6 +63,20 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     public boolean canPlaceBlockAt(World world, int x, int y, int z)
     {
         return super.canPlaceBlockAt(world, x, y, z) && super.canPlaceBlockAt(world, x, y + 1, z);
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
+    {
+        if (world.isRemote)
+        {
+            final TileEntity te = world.getTileEntity(x, y, z);
+            if (te instanceof CupolaTE)
+            {
+                player.openGui(TheMod.instance, ModGuis.CUPOLA.getID(), world, x, y, z);
+            }
+        }
+        return true;
     }
 
     @Override

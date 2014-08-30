@@ -21,8 +21,10 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
+import mod.steamnsteel.gui.GuiHandler;
 import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.ModItems;
 import mod.steamnsteel.proxy.Proxies;
@@ -69,6 +71,7 @@ public class TheMod
     @Mod.EventHandler
     public void onFMLInitialization(FMLInitializationEvent event)
     {
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, GuiHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
         Recipes.init();
         Proxies.render.init();
