@@ -23,11 +23,15 @@ import net.minecraft.world.World;
 
 public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBlock
 {
+    public static final Material MATERIAL = Material.piston;
+    public static final SoundType SOUND = Block.soundTypePiston;
+    public static final float HARDNESS = 0.5f;
+
     protected SteamNSteelMachineBlock()
     {
-        super(Material.piston);
-        setStepSound(Block.soundTypePiston);
-        setHardness(0.5f);
+        super(MATERIAL);
+        setStepSound(SOUND);
+        setHardness(HARDNESS);
     }
 
     @Override

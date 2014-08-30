@@ -17,7 +17,10 @@
 package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
+import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.tileentity.CupolaTE;
+import mod.steamnsteel.tileentity.FillerTE;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -47,5 +50,42 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
                 return 15;
 
         return super.getLightValue(world, x, y, z);
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z)
+    {
+        return super.canPlaceBlockAt(world, x, y, z) && super.canPlaceBlockAt(world, x, y + 1, z);
+    }
+
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+    {
+        if (world.isAirBlock(x, y + 1,z ))
+        {
+            final int metadata = world.getBlockMetadata(x, y, z);
+            world.setBlockToAir(x, y, z);
+            if (!world.isRemote)
+            {
+                dropBlockAsItem(world, x, y, z, metadata, 0);
+            }
+        }
+    }
+
+    @Override
+    public void onPostBlockPlaced(World world, int x, int y, int z, int metadata)
+    {
+        super.onPostBlockPlaced(world, x, y, z, metadata);
+
+        final int fillerY = y + 1;
+        world.setBlock(x, fillerY, z, ModBlocks.CUPOLA_FILLER, 0, 2);
+        final TileEntity te = world.getTileEntity(x, fillerY, z);
+        if (te instanceof FillerTE)
+        {
+            final FillerTE filler = (FillerTE)te;
+            filler.setMasterX(x);
+            filler.setMasterY(y);
+            filler.setMasterZ(z);
+        }
     }
 }
