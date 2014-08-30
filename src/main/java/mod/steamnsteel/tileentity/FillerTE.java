@@ -17,54 +17,70 @@
 package mod.steamnsteel.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-public class CupolaTE extends TileEntity
+public class FillerTE extends TileEntity
 {
-    private static final String IS_ACTIVE = "isActive";
+    public static final String NAME = "filler";
 
-    private boolean isActive = false;
+    private static final String PX = "px";
+    private static final String PY = "py";
+    private static final String PZ = "pz";
 
-    public boolean isActive()
+    private int masterX;
+    private int masterY;
+    private int masterZ;
+
+    public int getMasterX()
     {
-        return isActive;
+        return masterX;
     }
 
-    public void setActive(boolean isActive)
+    public void setMasterX(int masterX)
     {
-        this.isActive = isActive;
+        this.masterX = masterX;
     }
 
-    @Override
-    public Packet getDescriptionPacket()
+    public int getMasterY()
     {
-        final NBTTagCompound nbt = new NBTTagCompound();
-        writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
+        return masterY;
     }
 
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+    public void setMasterY(int masterY)
     {
-        readFromNBT(packet.func_148857_g());
+        this.masterY = masterY;
+    }
+
+    public int getMasterZ()
+    {
+        return masterZ;
+    }
+
+    public void setMasterZ(int masterZ)
+    {
+        this.masterZ = masterZ;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
+        if (nbt.hasKey(PX))
+            masterX = nbt.getInteger(PX);
 
-        isActive = nbt.getBoolean(IS_ACTIVE);
+        if (nbt.hasKey(PY))
+            masterY = nbt.getInteger(PY);
+
+        if (nbt.hasKey(PZ))
+            masterZ = nbt.getInteger(PZ);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
-
-        nbt.setBoolean(IS_ACTIVE, isActive);
+        nbt.setInteger(PX, masterX);
+        nbt.setInteger(PY, masterY);
+        nbt.setInteger(PZ, masterZ);
     }
 }

@@ -24,6 +24,6 @@ public enum Proxies
     _;
     public static final String CLIENT_RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.ClientRenderProxy";
     public static final String RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.RenderProxy";
-    @SidedProxy(clientSide = Proxies.CLIENT_RENDER_PROXY_CLASS, serverSide = Proxies.RENDER_PROXY_CLASS)
+    @SidedProxy(clientSide = CLIENT_RENDER_PROXY_CLASS, serverSide = RENDER_PROXY_CLASS)
     public static RenderProxy render;
 }

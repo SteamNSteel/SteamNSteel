@@ -25,7 +25,6 @@ import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.ModItems;
-import mod.steamnsteel.network.PacketHandler;
 import mod.steamnsteel.proxy.Proxies;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -61,8 +60,6 @@ public class TheMod
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
-        PacketHandler.init();
-
         ModItems.init();
 
         ModBlocks.init();
@@ -75,6 +72,7 @@ public class TheMod
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
         Recipes.init();
         Proxies.render.init();
+        ModBlocks.registerTileEntities();
     }
 
     @SuppressWarnings("UnusedParameters")

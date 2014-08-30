@@ -25,11 +25,13 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 
 public abstract class SteamNSteelBlock extends Block
 {
-    protected SteamNSteelBlock(Material material)
+    protected SteamNSteelBlock(Material material, boolean addToCreativeTab)
     {
         super(material);
-        setCreativeTab(TheMod.CREATIVE_TAB);
+        if (addToCreativeTab) setCreativeTab(TheMod.CREATIVE_TAB);
     }
+
+    protected SteamNSteelBlock(Material material) { this(material, true); }
 
     @SuppressWarnings("WeakerAccess")
     protected static String getUnwrappedUnlocalizedName(String unlocalizedName)

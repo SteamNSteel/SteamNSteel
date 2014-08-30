@@ -16,22 +16,26 @@
 
 package mod.steamnsteel.client.renderer.tileentity;
 
+
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.client.renderer.model.CupolaModel;
+import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.Orientation;
 import mod.steamnsteel.utility.Vector;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 public class CupbolaTESR extends SteamNSteelTESR
 {
+    public static final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
     private static final Vector SCALE = new Vector(1.0f, 1.0f, 1.0f);
     private static final Vector OFFSET = new Vector(0.5f, 0.0f, 0.5f);
-
-    public static final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
-    public static final ResourceLocation TEXTURE_ACTIVE = getResourceLocation(CupolaBlock.NAME + "_active");
+    private static final ResourceLocation TEXTURE_ACTIVE = getResourceLocation(CupolaBlock.NAME + "_active");
 
     private final CupolaModel model = new CupolaModel();
 
@@ -43,50 +47,73 @@ public class CupbolaTESR extends SteamNSteelTESR
         {
             final CupolaTE te = (CupolaTE) tileEntity;
 
-            final int metadata = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
-            final boolean isMaster = !CupolaBlock.isSlave(metadata);
+            // Open Render buffer
+            GL11.glPushMatrix();
 
-            if (isMaster)
-            {
-                // Open Render buffer
-                GL11.glPushMatrix();
+            // Position Renderer
+            GL11.glTranslatef((float) x, (float) y, (float) z);
 
-                // Inherent adjustments to model
-                GL11.glScalef(SCALE.getX(), SCALE.getY(), SCALE.getZ());
-                GL11.glTranslatef((float) x + OFFSET.getX(), (float) y + OFFSET.getY(), (float) z + OFFSET.getZ());
+            renderCupola(te);
 
-                // Orient the model to match the placement
-                final float rotationAngle;
-                final Orientation orientation = Orientation.getdecodedOrientation(metadata);
-                switch (orientation)
-                {
-                    case SOUTH:
-                        rotationAngle = 180.0f;
-                        break;
-                    case WEST:
-                        rotationAngle = 90.0f;
-                        break;
-                    case NORTH:
-                        rotationAngle = 0.0f;
-                        break;
-                    default:
-                        rotationAngle = 270.0f;
-                        break;
-                }
-                GL11.glRotatef(rotationAngle, 0.0F, 1.0F, 0.0F);
+            // Close Render Buffer
+            GL11.glPopMatrix();
+        }
+    }
 
-                // Bind the texture
-                if (te.isActive())
-                    bindTexture(TEXTURE_ACTIVE);
-                else
-                    bindTexture(TEXTURE);
+    private void renderCupola(CupolaTE te)
+    {
+        final int x = te.xCoord;
+        final int y = te.yCoord;
+        final int z = te.zCoord;
+        final World world = te.getWorldObj();
 
-                // Render
-                model.render();
+        // Lighting
+        final float brightness = ModBlocks.CUPOLA.getMixedBrightnessForBlock(world, x, y, z);
+        final int skyLight = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
+        final int skyLightLSB = skyLight % 65536;
+        final int skyLightMSB = skyLight / 65536;
 
-                // Close Render Buffer
-                GL11.glPopMatrix();
-            }
+        Tessellator.instance.setColorOpaque_F(brightness, brightness, brightness);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, skyLightLSB, skyLightMSB);
+
+        // Open Render buffer
+        GL11.glPushMatrix();
+
+        // Inherent adjustments to model
+        GL11.glScalef(SCALE.getX(), SCALE.getY(), SCALE.getZ());
+        GL11.glTranslatef(OFFSET.getX(), OFFSET.getY(), OFFSET.getZ());
+
+        // Orient the model to match the placement
+        final int metadata = world.getBlockMetadata(x, y, z);
+        final Orientation orientation = Orientation.getdecodedOrientation(metadata);
+
+        GL11.glRotatef(getAngleFromOrientation(orientation), 0.0F, 1.0F, 0.0F);
+
+        // Bind the texture
+        if (te.isActive())
+            bindTexture(TEXTURE_ACTIVE);
+        else
+            bindTexture(TEXTURE);
+
+        // Render
+        model.render();
+
+        // Close Render Buffer
+        GL11.glPopMatrix();
+    }
+
+    private static float getAngleFromOrientation(Orientation orientation)
+    {
+        switch (orientation)
+        {
+            case SOUTH:
+                return 180.0f;
+            case WEST:
+                return 90.0f;
+            case NORTH:
+                return 0.0f;
+            default:
+                return 270.0f;
         }
     }
 }

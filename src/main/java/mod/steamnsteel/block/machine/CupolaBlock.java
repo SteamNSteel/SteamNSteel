@@ -16,56 +16,27 @@
 
 package mod.steamnsteel.block.machine;
 
-import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mod.steamnsteel.block.SteamNSteelMachineBlock;
+import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.tileentity.CupolaTE;
+import mod.steamnsteel.tileentity.FillerTE;
+import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import java.util.Random;
 
-public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEntityProvider
+public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
     public static final String NAME = "cupola";
 
-    private static final int SLAVE_MASK = 0x8;
-
     public CupolaBlock()
     {
-        super(Material.piston);
         setBlockName(NAME);
-        setStepSound(Block.soundTypePiston);
-        setHardness(0.5f);
-    }
-
-    public static boolean isSlave(int metadata)
-    {
-        return (metadata & SLAVE_MASK) == SLAVE_MASK;
-    }
-
-    public static int codeSlaveMetadata(int metadata) {return metadata | SLAVE_MASK;}
-
-    @Override
-    public boolean onBlockActivated(World world, int x, int targetY, int z, EntityPlayer player, int side, float hitVectorX, float hitVectorY, float hitVectorZ)
-    {
-        int y = targetY;
-        if (world.isRemote) return true;
-
-        final int metadata = world.getBlockMetadata(x, y, z);
-        if (isSlave(metadata)) y--;
-
-        // TODO: Right Click behavior
-
-        return false;
-    }
-
-    @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
     }
 
     @Override
@@ -75,66 +46,99 @@ public class CupolaBlock extends SteamNSteelDirectionalBlock implements ITileEnt
     }
 
     @Override
-    public boolean isOpaqueCube()
+    public int getLightValue(IBlockAccess world, int x, int y, int z)
     {
-        return false;
+        final TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof CupolaTE)
+            if (((CupolaTE) te).isActive())
+                return 15;
+
+        return super.getLightValue(world, x, y, z);
     }
 
     @Override
-    public int getRenderType()
+    public boolean canPlaceBlockAt(World world, int x, int y, int z)
     {
-        // Disable normal block rendering.
-        return -1;
+        return super.canPlaceBlockAt(world, x, y, z) && super.canPlaceBlockAt(world, x, y + 1, z);
     }
 
-    @Override
-    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int metadata, float dropChance, int fortune)
-    {
-        if (!isSlave(metadata))
-            super.dropBlockAsItemWithChance(world, x, y, z, metadata, dropChance, fortune);
-    }
-
-    @Override
-    public int getMobilityFlag()
-    {
-        // total immobility and stop pistons
-        return 2;
-    }
-
-    @Override
-    public Item getItemDropped(int metadata, Random rng, int fortune)
-    {
-        return isSlave(metadata) ? Item.getItemById(0) : super.getItemDropped(metadata, rng, fortune);
-    }
-
-    @SuppressWarnings("ObjectEquality")
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
     {
-        final int metadata = world.getBlockMetadata(x, y, z);
-
-        if (isSlave(metadata))
+        if (world.isAirBlock(x, y + 1,z ))
         {
-            if (world.getBlock(x, y - 1, z) != this)
-                world.setBlockToAir(x, y, z);
-        }
-        else if (world.getBlock(x, y + 1, z) != this)
-        {
+            final int metadata = world.getBlockMetadata(x, y, z);
             world.setBlockToAir(x, y, z);
             if (!world.isRemote)
+            {
                 dropBlockAsItem(world, x, y, z, metadata, 0);
+            }
         }
     }
 
-    @SuppressWarnings("ObjectEquality")
     @Override
-    public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player)
+    public void onPostBlockPlaced(World world, int x, int y, int z, int metadata)
     {
-        if (player.capabilities.isCreativeMode && isSlave(metadata))
+        super.onPostBlockPlaced(world, x, y, z, metadata);
+
+        final int fillerY = y + 1;
+        world.setBlock(x, fillerY, z, ModBlocks.CUPOLA_FILLER, 0, 2);
+        final TileEntity te = world.getTileEntity(x, fillerY, z);
+        if (te instanceof FillerTE)
         {
-            final int targetY = y - 1;
-            if (world.getBlock(x, targetY, z) == this)
-                world.setBlockToAir(x, targetY, z);
+            final FillerTE filler = (FillerTE)te;
+            filler.setMasterX(x);
+            filler.setMasterY(y);
+            filler.setMasterZ(z);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(World world, int x, int y, int z, Random rng)
+    {
+        final TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof CupolaTE)
+        {
+            final CupolaTE cupola = (CupolaTE)te;
+            if (cupola.isActive())
+            {
+                final float effectX = x + 0.5f;
+                final float effectY = y + 0.5f + rng.nextFloat() * 5.0f / 16.0f;
+                final float effectZ = z + 0.5f;
+                final float edgeOffset = 0.52f;
+                final float widthOffset = rng.nextFloat() * 0.6f - 0.3f;
+
+                final int metadata = world.getBlockMetadata(x, y, z);
+                final Orientation orientation = Orientation.getdecodedOrientation(metadata);
+
+                switch(orientation)
+                {
+                    case SOUTH:
+                        world.spawnParticle("smoke", effectX + widthOffset, effectY, effectZ - edgeOffset, 0.0d, 0.0d, 0.0d);
+                        world.spawnParticle("flame", effectX + widthOffset, effectY, effectZ - edgeOffset, 0.0d, 0.0d, 0.0d);
+                        break;
+
+                    case WEST:
+                        world.spawnParticle("smoke", effectX + edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
+                        world.spawnParticle("flame", effectX + edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
+                        break;
+
+                    case NORTH:
+                        world.spawnParticle("smoke", effectX + widthOffset, effectY, effectZ + edgeOffset, 0.0d, 0.0d, 0.0d);
+                        world.spawnParticle("flame", effectX + widthOffset, effectY, effectZ + edgeOffset, 0.0d, 0.0d, 0.0d);
+                        break;
+
+                    case EAST:
+                        world.spawnParticle("smoke", effectX - edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
+                        world.spawnParticle("flame", effectX - edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
+                }
+
+                final float centerOffset1 = rng.nextFloat() * 0.6f - 0.3f;
+                final float centerOffset2 = rng.nextFloat() * 0.6f - 0.3f;
+
+                world.spawnParticle("smoke", x +0.5d + centerOffset1, y + 2.0d, z + 0.5d + centerOffset2, 0.0d, 0.1d, 0.0d);
+            }
         }
     }
 }

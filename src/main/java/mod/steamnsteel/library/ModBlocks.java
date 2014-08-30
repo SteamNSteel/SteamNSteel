@@ -21,12 +21,14 @@ import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.CupolaBlock;
+import mod.steamnsteel.block.machine.FillerBlock;
 import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.storage.*;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
-import mod.steamnsteel.item.block.CupolaItem;
+import mod.steamnsteel.tileentity.CupolaTE;
+import mod.steamnsteel.tileentity.FillerTE;
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -34,33 +36,12 @@ import net.minecraftforge.oredict.OreDictionary;
 @GameRegistry.ObjectHolder(TheMod.MOD_ID)
 public final class ModBlocks
 {
-    @SuppressWarnings("InnerClassFieldHidesOuterClassField")
-    public enum Names
-    {
-        INSTANCE;
-        public static final String BRASS_BLOCK = "blockBrass";
-        public static final String BRONZE_BLOCK = "blockBronze";
-        public static final String COPPER_BLOCK = "blockCopper";
-        public static final String COPPER_ORE = "oreCopper";
-        public static final String NITER_ORE = "oreNiter";
-        public static final String PLOTONIUM_BLOCK = "blockPlotonium";
-        public static final String PLOTONIUM_CHEST = "chestPlotonium";
-        public static final String PLOTONIUM_RUIN_FLOOR = "ruinFloorPlotonium";
-        public static final String PLOTONIUM_RUIN_PILLAR = "ruinPillarPlotonium";
-        public static final String PLOTONIUM_RUIN_WALL = "ruinWallPlotonium";
-        public static final String STEEL_BLOCK = "blockSteel";
-        public static final String SULFUR_ORE = "oreSulfur";
-        public static final String TIN_BLOCK = "blockTin";
-        public static final String TIN_ORE = "oreTin";
-        public static final String ZINC_BLOCK = "blockZinc";
-        public static final String ZINC_ORE = "oreZinc";
-    }
-
     public static final SteamNSteelBlock BRASS_BLOCK = new BrassBlock();
     public static final SteamNSteelBlock BRONZE_BLOCK = new BronzeBlock();
     public static final SteamNSteelBlock COPPER_BLOCK = new CopperBlock();
     public static final SteamNSteelBlock COPPER_ORE = new CopperOre();
     public static final SteamNSteelBlock CUPOLA = new CupolaBlock();
+    public static final SteamNSteelBlock CUPOLA_FILLER = new FillerBlock(CupolaBlock.NAME);
     public static final SteamNSteelBlock NITER_ORE = new NiterOre();
     public static final SteamNSteelBlock PLOTONIUM_BLOCK = new PlotoniumBlock();
     public static final SteamNSteelBlock PLOTONIUM_CHEST = new PlotoniumChest();
@@ -79,11 +60,20 @@ public final class ModBlocks
         throw new AssertionError();
     }
 
+    public static void registerTileEntities()
+    {
+        GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
+        GameRegistry.registerTileEntity(FillerTE.class, getTEName(FillerTE.NAME));
+    }
+
+    private static String getTEName(String name) { return "tile." + name;}
+
     public static void init()
     {
         GameRegistry.registerBlock(PLOTONIUM_CHEST, Names.PLOTONIUM_CHEST);
 
-        GameRegistry.registerBlock(CUPOLA, CupolaItem.class, CupolaBlock.NAME);
+        GameRegistry.registerBlock(CUPOLA, CupolaBlock.NAME);
+        GameRegistry.registerBlock(CUPOLA_FILLER, CupolaBlock.NAME + "_filler");
 
         registerBlockAndOre(COPPER_ORE, Names.COPPER_ORE);
         registerBlockAndOre(NITER_ORE, Names.NITER_ORE);
@@ -108,5 +98,27 @@ public final class ModBlocks
     {
         GameRegistry.registerBlock(block, name);
         OreDictionary.registerOre(name, block);
+    }
+
+    @SuppressWarnings("InnerClassFieldHidesOuterClassField")
+    public enum Names
+    {
+        INSTANCE;
+        public static final String BRASS_BLOCK = "blockBrass";
+        public static final String BRONZE_BLOCK = "blockBronze";
+        public static final String COPPER_BLOCK = "blockCopper";
+        public static final String COPPER_ORE = "oreCopper";
+        public static final String NITER_ORE = "oreNiter";
+        public static final String PLOTONIUM_BLOCK = "blockPlotonium";
+        public static final String PLOTONIUM_CHEST = "chestPlotonium";
+        public static final String PLOTONIUM_RUIN_FLOOR = "ruinFloorPlotonium";
+        public static final String PLOTONIUM_RUIN_PILLAR = "ruinPillarPlotonium";
+        public static final String PLOTONIUM_RUIN_WALL = "ruinWallPlotonium";
+        public static final String STEEL_BLOCK = "blockSteel";
+        public static final String SULFUR_ORE = "oreSulfur";
+        public static final String TIN_BLOCK = "blockTin";
+        public static final String TIN_ORE = "oreTin";
+        public static final String ZINC_BLOCK = "blockZinc";
+        public static final String ZINC_ORE = "oreZinc";
     }
 }

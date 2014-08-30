@@ -30,26 +30,29 @@ public enum Orientation
 
     // Reverse-lookup map for getting an orientation from the metadata code
     private static final ImmutableMap<Integer, Orientation> LOOKUP;
-    static {
+
+    static
+    {
         final Map<Integer, Orientation> lookup = Maps.newHashMapWithExpectedSize(Orientation.values().length);
         for (final Orientation o : Orientation.values())
-            lookup.put(o.metadata, o);
+            lookup.put(o.flag, o);
         LOOKUP = ImmutableMap.copyOf(lookup);
     }
 
-    private final int metadata;
+    private final int flag;
 
-    Orientation(int metadata) {
-        this.metadata = metadata;
-    }
-
-    private int getMetadata()
+    Orientation(int flag)
     {
-        return metadata;
+        this.flag = flag;
     }
 
     public static Orientation getdecodedOrientation(int encoded)
     {
         return LOOKUP.get(BlockDirectional.getDirection(encoded));
+    }
+
+    public int encode()
+    {
+        return flag;
     }
 }
