@@ -16,14 +16,18 @@
 
 package mod.steamnsteel;
 
+import com.google.common.base.Optional;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import mod.steamnsteel.api.crafting.CraftingManager;
+import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
+import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.gui.GuiHandler;
 import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.ModItems;
@@ -43,10 +47,6 @@ public class TheMod
     public static final String NETWORK_CHANNEL = MOD_ID.toLowerCase();
     public static final String RESOURCE_PREFIX = MOD_ID.toLowerCase() + ':';
 
-    @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
-    @Mod.Instance
-    public static TheMod instance;
-
     @SuppressWarnings("AnonymousInnerClass")
     public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID.toLowerCase())
     {
@@ -57,14 +57,25 @@ public class TheMod
         }
     };
 
+    @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "PublicField", "StaticVariableMayNotBeInitialized"})
+    @Mod.Instance
+    public static TheMod instance;
+
     @Mod.EventHandler
     public void onFMLPreInitialization(FMLPreInitializationEvent event)
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
-        ModItems.init();
+        initAPI();
 
+        ModItems.init();
         ModBlocks.init();
+    }
+
+    @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
+    private void initAPI()
+    {
+        CraftingManager.alloyManager = Optional.of((IAlloyManager) AlloyManager.INSTANCE);
     }
 
     @SuppressWarnings("UnusedParameters")
