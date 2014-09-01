@@ -16,22 +16,16 @@
 
 package mod.steamnsteel.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class SteamNSteelContainer extends Container
+public abstract class SteamNSteelContainer extends Container
 {
     protected static final int PLAYER_INVENTORY_ROWS = 3;
     protected static final int PLAYER_INVENTORY_COLUMNS = 9;
-
-    @Override
-    public boolean canInteractWith(EntityPlayer entityPlayer)
-    {
-        return true;
-    }
 
     @Override
     protected boolean mergeItemStack(ItemStack itemStack, int slotMin, int slotMax, boolean ascending)
@@ -137,5 +131,21 @@ public class SteamNSteelContainer extends Container
         final ItemStack clonedItemStack = itemStack.copy();
         clonedItemStack.stackSize = stackSize;
         return clonedItemStack;
+    }
+
+    protected void addPlayerInventory(InventoryPlayer playerInventory, int xOffset, int yOffset)
+    {
+        for (int inventoryRowIndex = 0; inventoryRowIndex < PLAYER_INVENTORY_ROWS; ++inventoryRowIndex)
+        {
+            for (int inventoryColumnIndex = 0; inventoryColumnIndex < PLAYER_INVENTORY_COLUMNS; ++inventoryColumnIndex)
+            {
+                addSlotToContainer(new Slot(playerInventory, inventoryColumnIndex + inventoryRowIndex * 9 + 9, xOffset + inventoryColumnIndex * 18, yOffset + inventoryRowIndex * 18));
+            }
+        }
+
+        for (int actionBarSlotIndex = 0; actionBarSlotIndex < 9; ++actionBarSlotIndex)
+        {
+            addSlotToContainer(new Slot(playerInventory, actionBarSlotIndex, xOffset + actionBarSlotIndex * 18, yOffset + 58));
+        }
     }
 }

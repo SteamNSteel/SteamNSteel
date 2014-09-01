@@ -16,160 +16,180 @@
 
 package mod.steamnsteel.inventory;
 
+import com.google.common.base.Optional;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mod.steamnsteel.api.crafting.CraftingManager;
+import mod.steamnsteel.inventory.slot.CupolaSlot;
 import mod.steamnsteel.tileentity.CupolaTE;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 public class CupolaContainer extends SteamNSteelContainer
 {
     private CupolaTE te;
-    private int lastCookTime;               // How much longer the Cupola will burn
-    private int lastBurnTime;               // The fuel value for the currently burning fuel
-    private int lastItemCookTime;           // How long the current item has been "cooking"
+    private int lastCookTime;
+    private int lastBurnTime;
+    private int lastItemCookTime;
 
     public CupolaContainer(InventoryPlayer inventoryPlayer, CupolaTE te)
     {
         this.te = te;
 
-//        addSlotToContainer(new Slot(te, CupolaTE.FUEL_INVENTORY_INDEX, 56, 62));
-//
-//        addSlotToContainer(new Slot(te, CupolaTE.INPUT_LEFT_INVENTORY_INDEX, 56, 17));
-//        addSlotToContainer(new Slot(te, CupolaTE.INPUT_RIGHT_INVENTORY_INDEX, 56, 17));
-//
-//        addSlotToContainer(new CupolaSlot(te, CupolaTE.OUTPUTINVENTORY_INDEX, 116, 35));
+        addSlotToContainer(new Slot(te, CupolaTE.FUEL_INVENTORY_INDEX, 42, 53));
 
-        for (int inventoryRowIndex = 0; inventoryRowIndex < PLAYER_INVENTORY_ROWS; ++inventoryRowIndex)
+        addSlotToContainer(new Slot(te, CupolaTE.INPUT_LEFT_INVENTORY_INDEX, 25, 17));
+        addSlotToContainer(new Slot(te, CupolaTE.INPUT_RIGHT_INVENTORY_INDEX, 59, 17));
+
+        addSlotToContainer(new CupolaSlot(te, CupolaTE.OUTPUT_INVENTORY_INDEX, 118, 37));
+
+        addPlayerInventory(inventoryPlayer, 8, 84);
+    }
+
+    @Override
+    public void addCraftingToCrafters(ICrafting iCrafting)
+    {
+        super.addCraftingToCrafters(iCrafting);
+        iCrafting.sendProgressBarUpdate(this, 0, te.deviceCookTime);
+        iCrafting.sendProgressBarUpdate(this, 1, te.fuelBurnTime);
+        iCrafting.sendProgressBarUpdate(this, 2, te.itemCookTime);
+    }
+
+    @Override
+    public boolean canInteractWith(EntityPlayer player)
+    {
+        return te.isUseableByPlayer(player);
+    }
+
+    @Override
+    public void detectAndSendChanges()
+    {
+        super.detectAndSendChanges();
+
+        for (Object crafter : crafters)
         {
-            for (int inventoryColumnIndex = 0; inventoryColumnIndex < PLAYER_INVENTORY_COLUMNS; ++inventoryColumnIndex)
+            ICrafting icrafting = (ICrafting) crafter;
+
+            if (lastCookTime != te.deviceCookTime)
             {
-                addSlotToContainer(new Slot(inventoryPlayer, inventoryColumnIndex + inventoryRowIndex * 9 + 9, 8 + inventoryColumnIndex * 18, 94 + inventoryRowIndex * 18));
+                icrafting.sendProgressBarUpdate(this, 0, te.deviceCookTime);
+            }
+
+            if (lastBurnTime != te.fuelBurnTime)
+            {
+                icrafting.sendProgressBarUpdate(this, 1, te.fuelBurnTime);
+            }
+
+            if (lastItemCookTime != te.itemCookTime)
+            {
+                icrafting.sendProgressBarUpdate(this, 2, te.itemCookTime);
             }
         }
 
-        for (int actionBarSlotIndex = 0; actionBarSlotIndex < 9; ++actionBarSlotIndex)
-        {
-            addSlotToContainer(new Slot(inventoryPlayer, actionBarSlotIndex, 8 + actionBarSlotIndex * 18, 152));
-        }
+        lastCookTime = te.deviceCookTime;
+        lastBurnTime = te.fuelBurnTime;
+        lastItemCookTime = te.itemCookTime;
     }
 
-    // @Override
-    // public void addCraftingToCrafters(ICrafting iCrafting)
-    // {
-    //     super.addCraftingToCrafters(iCrafting);
-    //     iCrafting.sendProgressBarUpdate(this, 0, this.tileEntityCalcinator.deviceCookTime);
-    //     iCrafting.sendProgressBarUpdate(this, 1, this.tileEntityCalcinator.fuelBurnTime);
-    //     iCrafting.sendProgressBarUpdate(this, 2, this.tileEntityCalcinator.itemCookTime);
-    // }
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex)
+    {
+        ItemStack itemStack = null;
+        Slot slot = (Slot)inventorySlots.get(slotIndex);
 
-//    @Override
-//    public void detectAndSendChanges()
-//    {
-//        super.detectAndSendChanges();
-//
-//        for (Object crafter : this.crafters)
-//        {
-//            ICrafting icrafting = (ICrafting) crafter;
-//
-//            if (this.lastCookTime != this.tileEntityCalcinator.deviceCookTime)
-//            {
-//                icrafting.sendProgressBarUpdate(this, 0, this.tileEntityCalcinator.deviceCookTime);
-//            }
-//
-//            if (this.lastBurnTime != this.tileEntityCalcinator.fuelBurnTime)
-//            {
-//                icrafting.sendProgressBarUpdate(this, 1, this.tileEntityCalcinator.fuelBurnTime);
-//            }
-//
-//            if (this.lastItemCookTime != this.tileEntityCalcinator.itemCookTime)
-//            {
-//                icrafting.sendProgressBarUpdate(this, 2, this.tileEntityCalcinator.itemCookTime);
-//            }
-//        }
-//
-//        this.lastCookTime = this.tileEntityCalcinator.deviceCookTime;
-//        this.lastBurnTime = this.tileEntityCalcinator.fuelBurnTime;
-//        this.lastItemCookTime = this.tileEntityCalcinator.itemCookTime;
-//    }
+        if (slot != null && slot.getHasStack())
+        {
 
-//    @Override
-//    public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int slotIndex)
-//    {
-//        ItemStack itemStack = null;
-//        Slot slot = (Slot) inventorySlots.get(slotIndex);
-//
-//        if (slot != null && slot.getHasStack())
-//        {
-//
-//            ItemStack slotItemStack = slot.getStack();
-//            itemStack = slotItemStack.copy();
-//
-//            /**
-//             * If we are shift-clicking an item out of the Aludel's container,
-//             * attempt to put it in the first available slot in the player's
-//             * inventory
-//             */
-//            if (slotIndex < TileEntityCalcinator.INVENTORY_SIZE)
-//            {
-//                if (!this.mergeItemStack(slotItemStack, TileEntityCalcinator.INVENTORY_SIZE, inventorySlots.size(), false))
-//                {
-//                    return null;
-//                }
-//            }
-//            else
-//            {
-//                /**
-//                 * If the stack being shift-clicked into the Aludel's container
-//                 * is a fuel, first try to put it in the fuel slot. If it cannot
-//                 * be merged into the fuel slot, try to put it in the input
-//                 * slot.
-//                 */
-//                if (TileEntityFurnace.isItemFuel(slotItemStack))
-//                {
-//                    if (!this.mergeItemStack(slotItemStack, TileEntityCalcinator.FUEL_INVENTORY_INDEX, TileEntityCalcinator.OUTPUT_LEFT_INVENTORY_INDEX, false))
-//                    {
-//                        return null;
-//                    }
-//                }
-//
-//                /**
-//                 * Finally, attempt to put stack into the input slot
-//                 */
-//                else if (!this.mergeItemStack(slotItemStack, TileEntityCalcinator.INPUT_INVENTORY_INDEX, TileEntityCalcinator.OUTPUT_LEFT_INVENTORY_INDEX, false))
-//                {
-//                    return null;
-//                }
-//            }
-//
-//            if (slotItemStack.stackSize == 0)
-//            {
-//                slot.putStack(null);
-//            }
-//            else
-//            {
-//                slot.onSlotChanged();
-//            }
-//        }
-//
-//        return itemStack;
-//    }
+            ItemStack slotItemStack = slot.getStack();
+            itemStack = slotItemStack.copy();
 
-//    @SideOnly(Side.CLIENT)
-//    public void updateProgressBar(int valueType, int updatedValue)
-//    {
-//        if (valueType == 0)
-//        {
-//            this.tileEntityCalcinator.deviceCookTime = updatedValue;
-//        }
-//
-//        if (valueType == 1)
-//        {
-//            this.tileEntityCalcinator.fuelBurnTime = updatedValue;
-//        }
-//
-//        if (valueType == 2)
-//        {
-//            this.tileEntityCalcinator.itemCookTime = updatedValue;
-//        }
-//    }
+            if (slotIndex == CupolaTE.OUTPUT_INVENTORY_INDEX)
+            {
+                if (!this.mergeItemStack(slotItemStack, te.INVENTORY_SIZE, inventorySlots.size(), true))
+                {
+                    return null;
+                }
+
+                slot.onSlotChange(slotItemStack, itemStack);
+            }
+            else if (slotIndex > CupolaTE.FUEL_INVENTORY_INDEX)
+            {
+                Optional<ItemStack> result1 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
+                        te.getStackInSlot(CupolaTE.INPUT_RIGHT_INVENTORY_INDEX)).getItemStack();
+                Optional<ItemStack> result2 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
+                        te.getStackInSlot(CupolaTE.INPUT_LEFT_INVENTORY_INDEX)).getItemStack();
+                if (result1.isPresent() || result2.isPresent())
+                {
+                    if (!mergeItemStack(slotItemStack, CupolaTE.INPUT_LEFT_INVENTORY_INDEX, CupolaTE.FUEL_INVENTORY_INDEX, false))
+                    {
+                        return null;
+                    }
+                } else if (TileEntityFurnace.isItemFuel(slotItemStack))
+                {
+                    if (!mergeItemStack(slotItemStack, te.FUEL_INVENTORY_INDEX, te.OUTPUT_INVENTORY_INDEX, false))
+                    {
+                        return null;
+                    }
+                } else if (slotIndex >= CupolaTE.INVENTORY_SIZE && slotIndex < inventorySlots.size() - 9)
+                {
+                    if (!mergeItemStack(slotItemStack, inventorySlots.size() - 9, inventorySlots.size(), false))
+                    {
+                        return null;
+                    }
+                } else if (slotIndex >= inventorySlots.size() - 9 && slotIndex < inventorySlots.size())
+                {
+                    if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size() - 9, false))
+                    {
+                        return null;
+                    }
+                }
+            }
+            else if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), false))
+            {
+                return null;
+            }
+
+            if (slotItemStack.stackSize == 0)
+            {
+                slot.putStack(null);
+            }
+            else
+            {
+                slot.onSlotChanged();
+            }
+
+            if (slotItemStack.stackSize == itemStack.stackSize)
+            {
+                return null;
+            }
+
+            slot.onPickupFromSlot(player, slotItemStack);
+        }
+
+        return itemStack;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int valueType, int updatedValue)
+    {
+        if (valueType == 0)
+        {
+            te.deviceCookTime = updatedValue;
+        }
+
+        if (valueType == 1)
+        {
+            te.fuelBurnTime = updatedValue;
+        }
+
+        if (valueType == 2)
+        {
+            te.itemCookTime = updatedValue;
+        }
+    }
 }
