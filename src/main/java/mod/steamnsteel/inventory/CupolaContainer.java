@@ -24,7 +24,6 @@ import mod.steamnsteel.inventory.slot.CupolaSlot;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -32,7 +31,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 public class CupolaContainer extends SteamNSteelContainer
 {
-    private CupolaTE te;
+    private final CupolaTE te;
     private int lastCookTime;
     private int lastBurnTime;
     private int lastItemCookTime;
@@ -46,7 +45,7 @@ public class CupolaContainer extends SteamNSteelContainer
         addSlotToContainer(new Slot(te, CupolaTE.INPUT_LEFT_INVENTORY_INDEX, 25, 17));
         addSlotToContainer(new Slot(te, CupolaTE.INPUT_RIGHT_INVENTORY_INDEX, 59, 17));
 
-        addSlotToContainer(new CupolaSlot(te, CupolaTE.OUTPUT_INVENTORY_INDEX, 118, 37));
+        addSlotToContainer(new CupolaSlot(te, CupolaTE.OUTPUT_INVENTORY_INDEX, 116, 35));
 
         addPlayerInventory(inventoryPlayer, 8, 84);
     }
@@ -71,9 +70,9 @@ public class CupolaContainer extends SteamNSteelContainer
     {
         super.detectAndSendChanges();
 
-        for (Object crafter : crafters)
+        for (final Object crafter : crafters)
         {
-            ICrafting icrafting = (ICrafting) crafter;
+            final ICrafting icrafting = (ICrafting) crafter;
 
             if (lastCookTime != te.deviceCookTime)
             {
@@ -96,21 +95,22 @@ public class CupolaContainer extends SteamNSteelContainer
         lastItemCookTime = te.itemCookTime;
     }
 
+    @SuppressWarnings("ReturnOfNull")
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex)
     {
         ItemStack itemStack = null;
-        Slot slot = (Slot)inventorySlots.get(slotIndex);
+        final Slot slot = (Slot)inventorySlots.get(slotIndex);
 
         if (slot != null && slot.getHasStack())
         {
 
-            ItemStack slotItemStack = slot.getStack();
+            final ItemStack slotItemStack = slot.getStack();
             itemStack = slotItemStack.copy();
 
             if (slotIndex == CupolaTE.OUTPUT_INVENTORY_INDEX)
             {
-                if (!this.mergeItemStack(slotItemStack, te.INVENTORY_SIZE, inventorySlots.size(), true))
+                if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), true))
                 {
                     return null;
                 }
@@ -119,9 +119,9 @@ public class CupolaContainer extends SteamNSteelContainer
             }
             else if (slotIndex > CupolaTE.FUEL_INVENTORY_INDEX)
             {
-                Optional<ItemStack> result1 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
+                final Optional<ItemStack> result1 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
                         te.getStackInSlot(CupolaTE.INPUT_RIGHT_INVENTORY_INDEX)).getItemStack();
-                Optional<ItemStack> result2 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
+                final Optional<ItemStack> result2 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
                         te.getStackInSlot(CupolaTE.INPUT_LEFT_INVENTORY_INDEX)).getItemStack();
                 if (result1.isPresent() || result2.isPresent())
                 {
@@ -131,7 +131,7 @@ public class CupolaContainer extends SteamNSteelContainer
                     }
                 } else if (TileEntityFurnace.isItemFuel(slotItemStack))
                 {
-                    if (!mergeItemStack(slotItemStack, te.FUEL_INVENTORY_INDEX, te.OUTPUT_INVENTORY_INDEX, false))
+                    if (!mergeItemStack(slotItemStack, CupolaTE.FUEL_INVENTORY_INDEX, CupolaTE.OUTPUT_INVENTORY_INDEX, false))
                     {
                         return null;
                     }
@@ -174,6 +174,7 @@ public class CupolaContainer extends SteamNSteelContainer
         return itemStack;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int valueType, int updatedValue)
     {

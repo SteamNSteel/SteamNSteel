@@ -20,8 +20,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
-import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.gui.ModGuis;
+import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.tileentity.FillerTE;
 import mod.steamnsteel.utility.Orientation;
@@ -68,13 +68,10 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
     {
-        if (world.isRemote)
+        final TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof CupolaTE)
         {
-            final TileEntity te = world.getTileEntity(x, y, z);
-            if (te instanceof CupolaTE)
-            {
-                player.openGui(TheMod.instance, ModGuis.CUPOLA.getID(), world, x, y, z);
-            }
+            player.openGui(TheMod.instance, ModGuis.CUPOLA.getID(), world, x, y, z);
         }
         return true;
     }
@@ -82,7 +79,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
     {
-        if (world.isAirBlock(x, y + 1,z ))
+        if (world.isAirBlock(x, y + 1, z))
         {
             final int metadata = world.getBlockMetadata(x, y, z);
             world.setBlockToAir(x, y, z);
@@ -103,7 +100,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         final TileEntity te = world.getTileEntity(x, fillerY, z);
         if (te instanceof FillerTE)
         {
-            final FillerTE filler = (FillerTE)te;
+            final FillerTE filler = (FillerTE) te;
             filler.setMasterX(x);
             filler.setMasterY(y);
             filler.setMasterZ(z);
@@ -117,7 +114,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         final TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof CupolaTE)
         {
-            final CupolaTE cupola = (CupolaTE)te;
+            final CupolaTE cupola = (CupolaTE) te;
             if (cupola.isActive())
             {
                 final float effectX = x + 0.5f;
@@ -129,7 +126,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
                 final int metadata = world.getBlockMetadata(x, y, z);
                 final Orientation orientation = Orientation.getdecodedOrientation(metadata);
 
-                switch(orientation)
+                switch (orientation)
                 {
                     case SOUTH:
                         world.spawnParticle("smoke", effectX + widthOffset, effectY, effectZ - edgeOffset, 0.0d, 0.0d, 0.0d);
@@ -154,7 +151,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
                 final float centerOffset1 = rng.nextFloat() * 0.6f - 0.3f;
                 final float centerOffset2 = rng.nextFloat() * 0.6f - 0.3f;
 
-                world.spawnParticle("smoke", x +0.5d + centerOffset1, y + 2.0d, z + 0.5d + centerOffset2, 0.0d, 0.1d, 0.0d);
+                world.spawnParticle("smoke", x + 0.5d + centerOffset1, y + 2.0d, z + 0.5d + centerOffset2, 0.0d, 0.1d, 0.0d);
             }
         }
     }
