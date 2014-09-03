@@ -39,32 +39,27 @@ public class TerrainGenEventHandler {
 		int chunkX = event.chunkX >> 4;
 		int chunkZ = event.chunkZ >> 4;
 
-		boolean creatingBlob = false;
-
-		int minBlocksInCluster = 3;
-		int maxBlocksInCluster = 8;
-		int chanceToStartCluster = 24;
+		int minBlocksInCluster = 5;
+		int maxBlocksInCluster = 15;
+		int chanceToStartCluster = 4;
 
 		if (maxBlocksInCluster == 0 || chanceToStartCluster == 0) {
 			return;
 		}
 
-		int maxCreatedBlocks = event.rand.nextInt(maxBlocksInCluster) + minBlocksInCluster;
+		int maxCreatedBlocks = event.rand.nextInt(maxBlocksInCluster - minBlocksInCluster) + minBlocksInCluster;
 		int blocksCreated = 0;
+		boolean creatingBlob = false;
+
 		for (int x = 0; x < 16; ++x) {
 			int blockX = event.chunkX + x;
 			for (int z = 0; z < 16; ++z) {
 				int blockZ = event.chunkZ + z;
-				for (int y = 0; y < 32; ++y) {
+				for (int y = 0; y < 48; ++y) {
 					int blockY = y;
 
 					Block worldBlock = world.getBlock(blockX, blockY, blockZ);
 					if (worldBlock == Blocks.stone || worldBlock == Blocks.dirt) {
-						//Don't start generating where it won't be visible
-						if (!creatingBlob && world.getBlock(blockX, blockY + 1, blockZ) != Blocks.air) {
-							continue;
-						}
-
 						boolean lavaFound = false;
 						boolean sulfurFound = false;
 
@@ -87,22 +82,25 @@ public class TerrainGenEventHandler {
 
 							//If we find a lava block, there is a chance we'll use it as the start generating from here.
 							if (!creatingBlob && lavaFound && event.rand.nextInt(chanceToStartCluster) == 0) {
-								world.setBlock(blockX, blockY, blockZ, ModBlocks.SULFUR_ORE, 0, 0);
-								creatingBlob = true;
-								blocksCreated++;
-								break;
+								Block blockAbove = world.getBlock(blockX, blockY + 1, blockZ);
+								if (blockAbove == Blocks.air) {
+									world.setBlock(blockX, blockY, blockZ, ModBlocks.SULFUR_ORE, 0, 0);
+									creatingBlob = true;
+									blocksCreated++;
+									break;
+								}
 							} else
 							//Create a blob by detecting neighbour sulfur blocks once we've started creating a blob
 							//Make the blob a bit more interesting, definately place a block if there is sulfur nearby
 							//maybe place a block if there isn't
-							if (creatingBlob == true && sulfurFound && (lavaFound || event.rand.nextInt(4) == 0)) {
+							if (creatingBlob == true && sulfurFound && (lavaFound || event.rand.nextInt(16) == 0)) {
 								world.setBlock(blockX, blockY, blockZ, ModBlocks.SULFUR_ORE, 0, 0);
 								blocksCreated++;
 								break;
 							}
 
 							if (blocksCreated == maxCreatedBlocks) {
-								//FMLLog.log(TheMod.MOD_ID, Level.INFO, "sulfur @ (%d, %d, %d) - %d blocks", blockX, blockY, blockZ, blocksCreated);
+								//FMLLog.log(TheMod.MOD_ID, Level.INFO, "sulfur @ (/tp %d %d %d) - %d blocks", blockX, blockY + 2, blockZ, blocksCreated);
 								return;
 							}
 						}
