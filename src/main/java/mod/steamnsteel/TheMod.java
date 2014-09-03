@@ -26,8 +26,10 @@ import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.ModItems;
 import mod.steamnsteel.proxy.Proxies;
+import mod.steamnsteel.world.TerrainGenEventHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 
 @SuppressWarnings({"WeakerAccess", "MethodMayBeStatic"})
 @Mod(modid = TheMod.MOD_ID, name = TheMod.MOD_NAME, version = TheMod.MOD_VERSION, useMetadata = true, guiFactory = TheMod.MOD_GUI_FACTORY)
@@ -70,7 +72,7 @@ public class TheMod
     public void onFMLInitialization(FMLInitializationEvent event)
     {
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
-		MinecraftForge.TERRAIN_GEN_BUS.register(TerrainGenEventHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(TerrainGenEventHandler.INSTANCE);
         Recipes.init();
         Proxies.render.init();
         ModBlocks.registerTileEntities();

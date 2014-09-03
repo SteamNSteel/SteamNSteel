@@ -16,74 +16,94 @@
 
 package mod.steamnsteel.world;
 
-import akka.event.Logging;
 import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.library.ModBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenLakes;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import org.apache.logging.log4j.Level;
-
-import java.util.Random;
 
 public class TerrainGenEventHandler {
 	public static final TerrainGenEventHandler INSTANCE = new TerrainGenEventHandler();
-	private TerrainGenEventHandler() {}
 
-	@SubscribeEvent
-	public void onPopulateChunkEvent(PopulateChunkEvent.Populate event) {
-		if (event.type == PopulateChunkEvent.Populate.EventType.LAVA && !event.hasVillageGenerated && event.rand.nextInt(8) == 0) {
-			//Stolen from ChunkProviderGenerate
-			int blockX = event.chunkX * 16;
-			int blockZ = event.chunkZ * 16;
-			Random rand = event.rand;
-			int x = blockX + rand.nextInt(16) + 8;
-			int y = rand.nextInt(rand.nextInt(248) + 8);
-			int z = blockZ + rand.nextInt(16) + 8;
-
-			if (y < 63 || rand.nextInt(10) == 0)
-			{
-				World world = event.world;
-				(new WorldGenLakes(Blocks.lava)).generate(world, rand, x, y, z);
-				calculateSulphurEdges(world, rand, x, y, z);
-			}
-			event.setResult(Event.Result.DENY);
-		}
+	private TerrainGenEventHandler() {
 	}
 
-	static final int[][] neighbours = {
-			{0, 0, 1},
-			{0, 1, 0},
-			{1, 0, 0},
-			{0, 0, -1},
-			{0, -1, 0},
-			{-1, 0, 0}
-	};
+	@SubscribeEvent
+	public void onPopulateChunkEvent(DecorateBiomeEvent.Post event) {
+		World world = event.world;
+		//event.chunkX is actually block space, not chunk space.
+		int chunkX = event.chunkX >> 4;
+		int chunkZ = event.chunkZ >> 4;
 
-	private void calculateSulphurEdges(World world, Random rand, int worldX, int worldY, int worldZ) {
-		for (int x = 0; x < 16; ++x)
-		{
-			int blockX = worldX + x;
-			for (int z = 0; z < 16; ++z)
-			{
-				int blockZ = worldZ + z;
-				for (int y = 0; y < 8; ++y)
-				{
-					int blockY = worldY + y;
-					if (world.getBlock(blockX, blockY, blockZ) == Blocks.stone)
-					{
-						for (int[] neighbour : neighbours)
-						{
-							if (world.getBlock(blockX + neighbour[0], blockY + neighbour[1], blockZ + neighbour[2]) == Blocks.lava)
-							{
-								FMLLog.log(TheMod.MOD_ID, Level.INFO, "sulfur @ (%d, %d, %d)", blockX, blockY, blockZ);
-										world.setBlock(blockX, blockY, blockZ, ModBlocks.SULFUR_ORE);
+		boolean creatingBlob = false;
+
+		int minBlocksInCluster = 3;
+		int maxBlocksInCluster = 8;
+		int chanceToStartCluster = 24;
+
+		if (maxBlocksInCluster == 0 || chanceToStartCluster == 0) {
+			return;
+		}
+
+		int maxCreatedBlocks = event.rand.nextInt(maxBlocksInCluster) + minBlocksInCluster;
+		int blocksCreated = 0;
+		for (int x = 0; x < 16; ++x) {
+			int blockX = event.chunkX + x;
+			for (int z = 0; z < 16; ++z) {
+				int blockZ = event.chunkZ + z;
+				for (int y = 0; y < 32; ++y) {
+					int blockY = y;
+
+					Block worldBlock = world.getBlock(blockX, blockY, blockZ);
+					if (worldBlock == Blocks.stone || worldBlock == Blocks.dirt) {
+						//Don't start generating where it won't be visible
+						if (!creatingBlob && world.getBlock(blockX, blockY + 1, blockZ) != Blocks.air) {
+							continue;
+						}
+
+						boolean lavaFound = false;
+						boolean sulfurFound = false;
+
+						for (int[] neighbour : neighbours) {
+							int neighbourChunkX = (blockX + neighbour[0]) >> 4;
+							int neighbourChunkZ = (blockZ + neighbour[2]) >> 4;
+
+							//Don't inspect neighbours in chunks that haven't been created - causes Already Decorating!! exception
+							if ((neighbourChunkX != chunkX || neighbourChunkZ != chunkZ) && !world.getChunkProvider().chunkExists(neighbourChunkX, neighbourChunkZ)) {
+								continue;
+							}
+
+							Block neighbourBlock = world.getBlock(blockX + neighbour[0], blockY + neighbour[1], blockZ + neighbour[2]);
+
+							if (neighbourBlock == Blocks.lava) {
+								lavaFound = true;
+							} else if (neighbourBlock == ModBlocks.SULFUR_ORE) {
+								sulfurFound = true;
+							}
+
+							//If we find a lava block, there is a chance we'll use it as the start generating from here.
+							if (!creatingBlob && lavaFound && event.rand.nextInt(chanceToStartCluster) == 0) {
+								world.setBlock(blockX, blockY, blockZ, ModBlocks.SULFUR_ORE, 0, 0);
+								creatingBlob = true;
+								blocksCreated++;
 								break;
+							} else
+							//Create a blob by detecting neighbour sulfur blocks once we've started creating a blob
+							//Make the blob a bit more interesting, definately place a block if there is sulfur nearby
+							//maybe place a block if there isn't
+							if (creatingBlob == true && sulfurFound && (lavaFound || event.rand.nextInt(4) == 0)) {
+								world.setBlock(blockX, blockY, blockZ, ModBlocks.SULFUR_ORE, 0, 0);
+								blocksCreated++;
+								break;
+							}
+
+							if (blocksCreated == maxCreatedBlocks) {
+								//FMLLog.log(TheMod.MOD_ID, Level.INFO, "sulfur @ (%d, %d, %d) - %d blocks", blockX, blockY, blockZ, blocksCreated);
+								return;
 							}
 						}
 					}
@@ -91,4 +111,13 @@ public class TerrainGenEventHandler {
 			}
 		}
 	}
+
+	static final int[][] neighbours = {
+			{0, 0, 1},
+			{1, 0, 0},
+			{0, 0, -1},
+			{-1, 0, 0},
+			{0, 1, 0},
+			{0, -1, 0}
+	};
 }
