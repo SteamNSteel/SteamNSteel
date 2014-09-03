@@ -18,8 +18,10 @@ package mod.steamnsteel.crafting.alloy;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
+import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 import mod.steamnsteel.api.crafting.IAlloyResult;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class AlloyResult implements IAlloyResult
@@ -27,26 +29,39 @@ public class AlloyResult implements IAlloyResult
     public static final AlloyResult EMPTY = new AlloyResult(null, 0, 0);
 
     @Nullable
-    private final ItemStack itemStack;
-    private final int consumedFirst;
-    private final int consumedSecond;
+    private final Item item;
+    private final int meta;
+    private final int quantity;
+    private final int consumedA;
+    private final int consumedB;
 
-    AlloyResult(ItemStack itemStack, int consumedFirst, int consumedSecond)
+    AlloyResult(ItemStack itemStack, int consumedA, int consumedB)
     {
-        this.itemStack = itemStack;
-        this.consumedFirst = consumedFirst;
-        this.consumedSecond = consumedSecond;
+        //noinspection AssignmentToNull
+        item = itemStack == null ? null : itemStack.getItem();
+        meta = itemStack == null ? 0 : itemStack.getItemDamage();
+        quantity = itemStack == null ? 0 : itemStack.stackSize;
+        this.consumedA = consumedA;
+        this.consumedB = consumedB;
+    }
+
+    @NotNull
+    @Override
+    public Optional<ItemStack> getItemStack()
+    {
+        if (item == null)
+            return Optional.absent();
+
+        return Optional.of(new ItemStack(item, quantity, meta));
     }
 
     @Override
-    public Optional<ItemStack> getItemStack() { return Optional.fromNullable(itemStack); }
+    public int getConsumedA() { return consumedA; }
 
     @Override
-    public int getConsumedFirst() { return consumedFirst; }
+    public int getConsumedB() { return consumedB; }
 
-    @Override
-    public int getConsumedSecond() { return consumedSecond; }
-
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o)
     {
@@ -54,23 +69,31 @@ public class AlloyResult implements IAlloyResult
         if (o == null || getClass() != o.getClass()) return false;
 
         final AlloyResult that = (AlloyResult) o;
-        return consumedFirst == that.consumedFirst && consumedSecond == that.consumedSecond &&
-                (itemStack != null ? itemStack.equals(that.itemStack) : that.itemStack == null);
+
+        if (consumedA != that.consumedA || consumedB != that.consumedB) return false;
+        return meta == that.meta && quantity == that.quantity && item == that.item;
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hashCode(itemStack, consumedFirst, consumedSecond);
+        int result = item != null ? item.hashCode() : 0;
+        result = 31 * result + meta;
+        result = 31 * result + quantity;
+        result = 31 * result + consumedA;
+        result = 31 * result + consumedB;
+        return result;
     }
 
     @Override
     public String toString()
     {
         return Objects.toStringHelper(this)
-                .add("itemStack", itemStack)
-                .add("consumedFirst", consumedFirst)
-                .add("consumedSecond", consumedSecond)
+                .add("item", item)
+                .add("meta", meta)
+                .add("quantity", quantity)
+                .add("consumedA", consumedA)
+                .add("consumedB", consumedB)
                 .toString();
     }
 }

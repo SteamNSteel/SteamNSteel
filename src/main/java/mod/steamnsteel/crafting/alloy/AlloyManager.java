@@ -16,17 +16,17 @@
 
 package mod.steamnsteel.crafting.alloy;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Table;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.api.crafting.IAlloyResult;
 import mod.steamnsteel.api.crafting.ingredient.IIngredient;
+import mod.steamnsteel.utility.ItemWrapper;
 import net.minecraft.item.ItemStack;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -34,50 +34,45 @@ public enum AlloyManager implements IAlloyManager
 {
     INSTANCE;
 
-    private static final Table<IIngredient, IIngredient, ItemStack> alloys = HashBasedTable.create();
+    private static final Table<ItemWrapper, ItemWrapper, IAlloyResult> alloys = HashBasedTable.create();
 
-    private static Optional<IIngredient> findMatchingIngredient(Set<IIngredient> ingredients, ItemStack itemStack)
-    {
-        for (final IIngredient ingredient : ingredients)
-        {
-            if (ingredient.isMatch(itemStack))
-                return Optional.of(ingredient);
-        }
-
-        return Optional.absent();
-    }
-
+    @SuppressWarnings("MethodWithMultipleLoops")
     @Override
-    public void addAlloy(@NotNull IIngredient ingredient1, @NotNull IIngredient ingredient2, @NotNull ItemStack output)
+    public void addAlloy(@NotNull IIngredient ingredientA, @NotNull IIngredient ingredientB, @NotNull ItemStack output)
     {
-        checkNotNull(ingredient1, "Input may not be null.");
-        checkNotNull(ingredient2, "Input may not be null.");
-        checkNotNull(output, "output may not be null.");
+        final AlloyResult result = new AlloyResult(checkNotNull(output),
+                checkNotNull(ingredientA).getQuantityConsumed(),
+                checkNotNull(ingredientB).getQuantityConsumed());
 
-        alloys.put(ingredient1, ingredient2, output);
+        final List<ItemStack> itemStacksA = ImmutableList.copyOf(ingredientA.getItemStacks());
+        final List<ItemStack> itemStacksB = ImmutableList.copyOf(ingredientB.getItemStacks());
+
+        for (final ItemStack row : itemStacksA)
+            for (final ItemStack column : itemStacksB)
+                //noinspection ObjectAllocationInLoop
+                alloys.put(new ItemWrapper(row), new ItemWrapper(column), result);
     }
 
     @Override
     @NotNull
     public IAlloyResult getCupolaResult(@Nullable ItemStack itemStackLeft, @Nullable ItemStack itemStackRight)
     {
-        final Map<IIngredient, Map<IIngredient, ItemStack>> rowMap = alloys.rowMap();
+        if (itemStackLeft == null || itemStackRight == null)
+            return AlloyResult.EMPTY;
 
-        boolean reverse = false;
-        Optional<IIngredient> row = findMatchingIngredient(rowMap.keySet(), itemStackLeft);
-        if (!row.isPresent())
-        {
-            reverse = true;
-            row = findMatchingIngredient(rowMap.keySet(), itemStackRight);
-        }
-        if (row.isPresent())
-        {
-            final Optional<IIngredient> column = findMatchingIngredient(alloys.row(row.get()).keySet(), reverse ? itemStackLeft : itemStackRight);
-            if (column.isPresent())
-                return new AlloyResult(alloys.get(row, column),
-                        reverse ? column.get().getQuantityConsumed() : row.get().getQuantityConsumed(),
-                        reverse ? row.get().getQuantityConsumed() : column.get().getQuantityConsumed());
-        }
+        final ItemWrapper rowKey = new ItemWrapper(itemStackLeft);
+        final ItemWrapper columnKey = new ItemWrapper(itemStackRight);
+
+        final IAlloyResult result = alloys.get(rowKey, columnKey);
+
+        if (result != null) return result;
+
+        final IAlloyResult reversedResult = alloys.get(columnKey, rowKey);
+        if (reversedResult != null)
+            return new AlloyResult(reversedResult.getItemStack().orNull(),
+                    reversedResult.getConsumedB(),
+                    reversedResult.getConsumedA());
+
         return AlloyResult.EMPTY;
     }
 }

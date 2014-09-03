@@ -44,7 +44,7 @@ public interface IAlloyResult
      * @return The amount consumed for the first ingredient.
      * @see IAlloyManager#getCupolaResult(net.minecraft.item.ItemStack, net.minecraft.item.ItemStack)
      */
-    int getConsumedFirst();
+    int getConsumedA();
 
     /**
      * Returns the amount consumed for the second ingredient.
@@ -52,5 +52,5 @@ public interface IAlloyResult
      * @return The amount consumed for the second ingredient.
      * @see IAlloyManager#getCupolaResult(net.minecraft.item.ItemStack, net.minecraft.item.ItemStack)
      */
-    int getConsumedSecond();
+    int getConsumedB();
 }

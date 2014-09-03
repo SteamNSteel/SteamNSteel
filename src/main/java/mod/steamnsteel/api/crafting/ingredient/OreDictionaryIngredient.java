@@ -17,6 +17,7 @@
 package mod.steamnsteel.api.crafting.ingredient;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
 import com.sun.istack.internal.NotNull;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -33,7 +34,7 @@ import static com.google.common.base.Preconditions.*;
  */
 public class OreDictionaryIngredient implements IIngredient
 {
-    private final int oreId;
+    private final String name;
     private final int quantityConsumed;
 
     /**
@@ -55,26 +56,19 @@ public class OreDictionaryIngredient implements IIngredient
     public OreDictionaryIngredient(String name, int quantityConsumed)
     {
         checkArgument(!checkNotNull(name).isEmpty());
-        oreId = OreDictionary.getOreID(name);
+        this.name = name;
         this.quantityConsumed = quantityConsumed;
     }
 
     /**
-     * Determine whether an ItemStack matches this ingredient
+     * Returns a list of ItemStack aliases for this ingredient.
      *
-     * @param itemStack The ItemStack to check for a match with this ingredient.
-     * @return <CODE>true</CODE> if itemStack is a match, <CODE>false</CODE> otherwise.
+     * @return A  list of ItemStack aliases for this ingredient.
      */
     @Override
-    public boolean isMatch(ItemStack itemStack)
+    public ImmutableList<ItemStack> getItemStacks()
     {
-        final int[] ids = OreDictionary.getOreIDs(itemStack);
-
-        for (final int id : ids)
-            if (id == oreId)
-                return true;
-
-        return false;
+        return ImmutableList.copyOf(OreDictionary.getOres(name));
     }
 
     /**
@@ -89,27 +83,10 @@ public class OreDictionaryIngredient implements IIngredient
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final OreDictionaryIngredient that = (OreDictionaryIngredient) o;
-
-        return oreId == that.oreId && quantityConsumed == that.quantityConsumed;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hashCode(oreId, quantityConsumed);
-    }
-
-    @Override
     public String toString()
     {
         return Objects.toStringHelper(this)
-                .add("oreId", oreId)
+                .add("name", name)
                 .add("quantityConsumed", quantityConsumed)
                 .toString();
     }

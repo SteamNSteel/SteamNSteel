@@ -17,10 +17,9 @@
 package mod.steamnsteel.api.crafting.ingredient;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
 import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -52,16 +51,17 @@ public class ItemStackIngredient implements IIngredient
         quantityConsumed = itemStack.stackSize;
     }
 
+
     /**
-     * Determine whether an ItemStack matches this ingredient
+     * Returns a list of ItemStack aliases for this ingredient.
      *
-     * @param itemStack The ItemStack to check for a match with this ingredient.
-     * @return <CODE>true</CODE> if itemStack is a match, <CODE>false</CODE> otherwise.
+     * @return A  list of ItemStack aliases for this ingredient.
      */
     @Override
-    public boolean isMatch(@Nullable ItemStack itemStack)
+    @NotNull
+    public ImmutableList<ItemStack> getItemStacks()
     {
-        return OreDictionary.itemMatches(this.itemStack, itemStack, false);
+        return ImmutableList.of(itemStack);
     }
 
     /**
@@ -73,23 +73,6 @@ public class ItemStackIngredient implements IIngredient
     public int getQuantityConsumed()
     {
         return quantityConsumed;
-    }
-
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final ItemStackIngredient that = (ItemStackIngredient) o;
-
-        return itemStack != null ? OreDictionary.itemMatches(itemStack, that.itemStack, true) && quantityConsumed == that.quantityConsumed : that.itemStack == null;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hashCode(itemStack.getItem(), itemStack.getItemDamage(), quantityConsumed);
     }
 
     @Override

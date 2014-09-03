@@ -16,6 +16,8 @@
 
 package mod.steamnsteel.api.crafting.ingredient;
 
+import com.google.common.collect.ImmutableList;
+import com.sun.istack.internal.NotNull;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -30,15 +32,15 @@ import net.minecraft.item.ItemStack;
 public interface IIngredient
 {
     /**
-     * Determine whether an ItemStack matches this ingredient
+     * Returns a list of ItemStack aliases for this ingredient.
      *
-     * @param itemStack The ItemStack to check for a match with this ingredient.
-     * @return <CODE>true</CODE> if itemStack is a match, <CODE>false</CODE> otherwise.
+     * @return A  list of ItemStack aliases for this ingredient.
      */
-    boolean isMatch(ItemStack itemStack);
+    @NotNull
+    ImmutableList<ItemStack> getItemStacks();
 
     /**
-     * Return the quantity of this ingredient to be consumed on a successful use.
+     * Returns the quantity of this ingredient to be consumed on a successful use.
      *
      * @return The quantity of this ingredient to be consumed on a successful use.
      */
