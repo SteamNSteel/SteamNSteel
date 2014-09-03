@@ -1,0 +1,62 @@
+##############################
+# Steam and Steel
+#
+# Italain - ITALY (IT) (it_IT) localization
+# Author: Davide Cossu
+#
+
+#Blocks
+tile.steamnsteel:blockBrass.name=Blocco di Ottone
+tile.steamnsteel:blockBronze.name=Blocco di Bronzo
+tile.steamnsteel:blockCopper.name=Blocco di Rame
+tile.steamnsteel:blockPlotonium.name=Blocco di Plotonio
+tile.steamnsteel:blockSteel.name=Blocco di Acciaio
+tile.steamnsteel:blockTin.name=Blocco di Stagno
+tile.steamnsteel:blockZinc.name=Blocco di Zinco
+tile.steamnsteel:chestPlotonium.name=Cassa di Plotonio
+tile.steamnsteel:cupola.name=Cupola
+tile.steamnsteel:oreCopper.name=Rame Grezzo
+tile.steamnsteel:oreNiter.name=Salnitro Grezzo
+tile.steamnsteel:oreSulfur.name=Zolfo Grezzo
+tile.steamnsteel:oreTin.name=Stagno Grezzo
+tile.steamnsteel:oreZinc.name=Zinco Grezzo
+tile.steamnsteel:ruinFloorPlotonium.name=Pavimento di Plotonio Rovinato
+tile.steamnsteel:ruinPillarPlotonium.name=Colonna di Plotonio Rovinata
+tile.steamnsteel:ruinWallPlotonium.name=Muro di Plotonio Rovinato
+
+# Creative Tabs
+itemGroup.steamnsteel=Vapore e acciaio
+
+# Items
+item.steamnsteel:anachDoodad.name=Aggegio Anacronistico
+item.steamnsteel:axeBronze.name=Ascia di Bronzo
+item.steamnsteel:axeSteel.name=Ascia d'Acciaio
+item.steamnsteel:bootsBronze.name=Stivali di Bronzo
+item.steamnsteel:bootsSteel.name=Stivali d'acciaio
+item.steamnsteel:chestplateBronze.name=Corazza di Bronzo
+item.steamnsteel:chestplateSteel.name=Corazza d'Acciaio
+item.steamnsteel:dustNiter.name=Salnitro
+item.steamnsteel:dustSulfur.name=Zolfo
+item.steamnsteel:helmetBronze.name=Elmetto di Bronzo
+item.steamnsteel:helmetSteel.name=Elmetto d'Acciaio
+item.steamnsteel:hoeBronze.name=Zappa di Bronzo
+item.steamnsteel:hoeSteel.name=Zappa d'Acciaio
+item.steamnsteel:ingotBrass.name=Lingotto d'Ottone
+item.steamnsteel:ingotBronze.name=Lingotto di Bronzo
+item.steamnsteel:ingotCopper.name=Lingotto di Rame
+item.steamnsteel:ingotPlotonium.name=Lingotto di Plotonio
+item.steamnsteel:ingotSteel.name=Lingotto d'Acciaio
+item.steamnsteel:ingotTin.name=Lingotto di Stagno
+item.steamnsteel:ingotZinc.name=Lingotto di Zinco
+item.steamnsteel:leggingsBronze.name=Gambali di Bronzo
+item.steamnsteel:leggingsSteel.name=Gambali d'Acciaio
+item.steamnsteel:mustyJournal.name=Giornale Ammuffito
+item.steamnsteel:perGuiVox.name=Guida Personale Parlante
+item.steamnsteel:pickBronze.name=Piccone di Bronzo
+item.steamnsteel:pickSteel.name=Piccone d'Acciaio
+item.steamnsteel:plotoniumScrap.name=Residuo di Plotonio
+item.steamnsteel:shovelBronze.name=Pala di Bronzo
+item.steamnsteel:shovelSteel.name=Pala d'Acciaio
+item.steamnsteel:swordBronze.name=Spada di Bronzo
+item.steamnsteel:swordSteel.name=Spada d'Acciaio
+item.steamnsteel:voxBox.name=Scatola Parlante
