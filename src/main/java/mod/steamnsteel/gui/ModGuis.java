@@ -14,25 +14,22 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.client.renderer.tileentity;
+package mod.steamnsteel.gui;
 
-import mod.steamnsteel.TheMod;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
-
-abstract class SteamNSteelTESR extends TileEntitySpecialRenderer
+public enum ModGuis
 {
-    private static final String TEXTURE_FILE_EXTENSION = ".png";
-    public static final String TEXTURE_LOCATION = "textures/models/";
+    CUPOLA;
 
-    static ResourceLocation getResourceLocation(String name)
+    private static final ModGuis[] cache = values();
+
+    public int getID()
     {
-        return new ResourceLocation(TheMod.MOD_ID.toLowerCase(), getTexturePath(name));
+        // Not used for persistent data, so ordinal is perfect here!
+        return ordinal();
     }
 
-    @SuppressWarnings("StringConcatenationMissingWhitespace")
-    private static String getTexturePath(String name)
+    public static ModGuis fromId(int id)
     {
-        return TEXTURE_LOCATION + name + TEXTURE_FILE_EXTENSION;
+        return cache[id];
     }
 }

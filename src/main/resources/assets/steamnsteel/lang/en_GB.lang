@@ -24,6 +24,9 @@ tile.steamnsteel:ruinFloorPlotonium.name=Ruined Plotonium Floor
 tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
 tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
 
+#Containers
+container.steamnsteel:cupola=Cupola
+
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel
 
