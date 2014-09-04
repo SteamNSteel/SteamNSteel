@@ -16,6 +16,8 @@
 
 package mod.steamnsteel.client.gui;
 
+import com.google.common.base.Objects;
+import com.sun.istack.internal.NotNull;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.inventory.CupolaContainer;
 import mod.steamnsteel.tileentity.CupolaTE;
@@ -27,7 +29,7 @@ public class CupolaGui extends SteamNSteelGui
 {
     private static final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
 
-    final CupolaTE te;
+    private final CupolaTE te;
 
     public CupolaGui(InventoryPlayer playerInventory, CupolaTE te)
     {
@@ -36,7 +38,7 @@ public class CupolaGui extends SteamNSteelGui
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_)
+    protected void drawGuiContainerBackgroundLayer(float mouseX, int mouseZ, int renderPartialTicks)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -46,22 +48,29 @@ public class CupolaGui extends SteamNSteelGui
         final int yStart = (height - ySize) / 2;
         drawTexturedModalRect(xStart, yStart, 0, 0, xSize, ySize);
 
-         int scaleAdjustment;
-         if (te.isActive())
-         {
-             scaleAdjustment = te.getBurnTimeRemainingScaled(12);
-             drawTexturedModalRect(xStart + 57, yStart + 36 + 23 - scaleAdjustment, 176, 12 - scaleAdjustment, 14, scaleAdjustment + 2);
-         }
+        int scaleAdjustment;
+        if (te.isActive())
+        {
+            scaleAdjustment = te.getBurnTimeRemainingScaled(12);
+            drawTexturedModalRect(xStart + 57, yStart + 36 + 23 - scaleAdjustment, 176, 12 - scaleAdjustment, 14, scaleAdjustment + 2);
+        }
 
-         scaleAdjustment = te.getCookProgressScaled(24);
-         drawTexturedModalRect(xStart + 83, yStart + 34, 176, 14, scaleAdjustment + 1, 16);
+        scaleAdjustment = te.getCookProgressScaled(24);
+        drawTexturedModalRect(xStart + 83, yStart + 34, 176, 14, scaleAdjustment + 1, 16);
+    }
+
+    @NotNull
+    @Override
+    public String getInventoryName()
+    {
+        return te.getInventoryName();
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_)
+    public String toString()
     {
-        // final String name = StatCollector.translateToLocal(te.getInventoryName());
-        // fontRendererObj.drawString(name, xSize / 2 - fontRendererObj.getStringWidth(name) / 2, 6, TEXT_COLOR);
-        // fontRendererObj.drawString(StatCollector.translateToLocal(.VANILLA_INVENTORY), 8, ySize - 96 + 2, TEXT_COLOR);
+        return Objects.toStringHelper(this)
+                .add("te", te)
+                .toString();
     }
 }

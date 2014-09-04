@@ -16,30 +16,44 @@
 
 package mod.steamnsteel.client.gui;
 
+import com.sun.istack.internal.NotNull;
 import mod.steamnsteel.TheMod;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
-public abstract class SteamNSteelGui extends GuiContainer
+abstract class SteamNSteelGui extends GuiContainer
 {
-    protected static final int TEXT_COLOR = 4210752;
-    protected static final String VANILLA_INVENTORY = "container.inventory";
+    private static final int TEXT_COLOR = 4210752;
     private static final String LOCATION = "textures/gui/";
     private static final String FILE_EXTENSION = ".png";
+    private static final String INVENTORY = "container.inventory";
 
-    public SteamNSteelGui(Container container)
+    SteamNSteelGui(Container container)
     {
         super(container);
     }
 
-    protected static ResourceLocation getResourceLocation(String path)
+    static ResourceLocation getResourceLocation(String path)
     {
+        //noinspection StringConcatenationMissingWhitespace
         return getResourceLocation(TheMod.MOD_ID.toLowerCase(), LOCATION + path + FILE_EXTENSION);
     }
 
     private static ResourceLocation getResourceLocation(String modID, String path)
     {
         return new ResourceLocation(modID, path);
+    }
+
+    @NotNull
+    protected abstract String getInventoryName();
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseZ)
+    {
+        final String name = StatCollector.translateToLocal(getInventoryName());
+        fontRendererObj.drawString(name, xSize / 2 - fontRendererObj.getStringWidth(name) / 2, 6, TEXT_COLOR);
+        fontRendererObj.drawString(StatCollector.translateToLocal(INVENTORY), 8, ySize - 96 + 2, TEXT_COLOR);
     }
 }
