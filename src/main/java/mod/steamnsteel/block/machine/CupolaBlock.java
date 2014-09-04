@@ -148,11 +148,19 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
                         world.spawnParticle("flame", effectX - edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
                 }
 
-                final float centerOffset1 = rng.nextFloat() * 0.6f - 0.3f;
-                final float centerOffset2 = rng.nextFloat() * 0.6f - 0.3f;
-
-                world.spawnParticle("smoke", x + 0.5d + centerOffset1, y + 2.0d, z + 0.5d + centerOffset2, 0.0d, 0.1d, 0.0d);
+                renderSmokeOnTop(world, x, y, z, rng);
             }
+        }
+    }
+
+    private static void renderSmokeOnTop(World world, int x, int y, int z, Random rng)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            final float centerOffset1 = rng.nextFloat() * 0.6f - 0.3f;
+            final float centerOffset2 = rng.nextFloat() * 0.6f - 0.3f;
+
+            world.spawnParticle("smoke", x + 0.5d + centerOffset1, y + 2.0d, z + 0.5d + centerOffset2, 0.0d, 0.1d, 0.0d);
         }
     }
 }
