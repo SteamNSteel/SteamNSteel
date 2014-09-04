@@ -40,19 +40,24 @@ public class CupolaTE extends TileEntity implements ISidedInventory
 {
     public static final int INPUT_LEFT_INVENTORY_INDEX = 0;
     public static final int INPUT_RIGHT_INVENTORY_INDEX = 1;
-    private static final int[] slotsTop = {INPUT_LEFT_INVENTORY_INDEX, INPUT_RIGHT_INVENTORY_INDEX};
     public static final int FUEL_INVENTORY_INDEX = 2;
-    private static final int[] slotsSides = {FUEL_INVENTORY_INDEX};
     public static final int OUTPUT_INVENTORY_INDEX = 3;
-    private static final int[] slotsBottom = {OUTPUT_INVENTORY_INDEX, FUEL_INVENTORY_INDEX};
     public static final int INVENTORY_SIZE = 4;
-    private ItemStack[] inventory = new ItemStack[INVENTORY_SIZE];
+
+    private static final int[] slotsTop = {INPUT_LEFT_INVENTORY_INDEX, INPUT_RIGHT_INVENTORY_INDEX};
+    private static final int[] slotsSides = {FUEL_INVENTORY_INDEX};
+    private static final int[] slotsBottom = {OUTPUT_INVENTORY_INDEX, FUEL_INVENTORY_INDEX};
+
+    private static final int COOK_TIME_PER_ITEM = 400;  // 200 is standard furnace rate, so cupola process 4 ops per coal
+
     private static final String IS_ACTIVE = "isActive";
     private static final String INVENTORY = "inventory";
     private static final String SLOT = "Slot";
     private static final String DEVICE_COOK_TIME = "deviceCookTime";
     private static final String FUEL_BURN_TIME = "fuelBurnTime";
     private static final String ITEM_COOK_TIME = "itemCookTime";
+
+    private ItemStack[] inventory = new ItemStack[INVENTORY_SIZE];
     private int deviceCookTime;
     private int fuelBurnTime;
     private int itemCookTime;
@@ -96,7 +101,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     @SideOnly(Side.CLIENT)
     public int getCookProgressScaled(int scale)
     {
-        return itemCookTime * scale / 200;
+        return itemCookTime * scale / COOK_TIME_PER_ITEM;
     }
 
     @SideOnly(Side.CLIENT)
@@ -354,7 +359,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
         itemCookTime++;
 
         boolean sendUpdate = false;
-        if (itemCookTime == 200)
+        if (itemCookTime == COOK_TIME_PER_ITEM)
         {
             itemCookTime = 0;
             alloy();
