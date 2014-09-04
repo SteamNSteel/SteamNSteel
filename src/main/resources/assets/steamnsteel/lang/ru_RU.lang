@@ -24,6 +24,9 @@ tile.steamnsteel:ruinFloorPlotonium.name=Пол из разрушенного ф
 tile.steamnsteel:ruinPillarPlotonium.name=Колонна из разрушенного фабулония
 tile.steamnsteel:ruinWallPlotonium.name=Стена из разрушенного фабулония
 
+#Containers
+container.steamnsteel:cupola=Купол
+
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel
 

@@ -50,12 +50,6 @@ public enum Textures
         private static final String LOCATION = "textures/armor/";
     }
 
-    public enum Gui
-    {
-        _;
-        private static final String LOCATION = "textures/gui/";
-    }
-
     public enum Effect
     {
         _;
