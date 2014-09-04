@@ -52,11 +52,11 @@ public class CupolaGui extends SteamNSteelGui
         if (te.isActive())
         {
             scaleAdjustment = te.getBurnTimeRemainingScaled(12);
-            drawTexturedModalRect(xStart + 57, yStart + 36 + 23 - scaleAdjustment, 176, 12 - scaleAdjustment, 14, scaleAdjustment + 2);
+            drawTexturedModalRect(xStart + 43, yStart + 26 + 23 - scaleAdjustment, 176, 12 - scaleAdjustment, 14, scaleAdjustment + 2);
         }
 
         scaleAdjustment = te.getCookProgressScaled(24);
-        drawTexturedModalRect(xStart + 83, yStart + 34, 176, 14, scaleAdjustment + 1, 16);
+        drawTexturedModalRect(xStart + 78, yStart + 35, 176, 14, scaleAdjustment + 1, 16);
     }
 
     @NotNull
