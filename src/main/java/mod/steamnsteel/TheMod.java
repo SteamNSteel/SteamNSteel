@@ -70,7 +70,6 @@ public class TheMod
     public void onFMLInitialization(FMLInitializationEvent event)
     {
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
-		MinecraftForge.TERRAIN_GEN_BUS.register(TerrainGenEventHandler.INSTANCE);
         Recipes.init();
         Proxies.render.init();
         ModBlocks.registerTileEntities();
