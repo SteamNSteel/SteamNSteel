@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.inventory;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -54,9 +55,9 @@ public class CupolaContainer extends SteamNSteelContainer
     public void addCraftingToCrafters(ICrafting iCrafting)
     {
         super.addCraftingToCrafters(iCrafting);
-        iCrafting.sendProgressBarUpdate(this, 0, te.deviceCookTime);
-        iCrafting.sendProgressBarUpdate(this, 1, te.fuelBurnTime);
-        iCrafting.sendProgressBarUpdate(this, 2, te.itemCookTime);
+        iCrafting.sendProgressBarUpdate(this, 0, te.getDeviceCookTime());
+        iCrafting.sendProgressBarUpdate(this, 1, te.getFuelBurnTime());
+        iCrafting.sendProgressBarUpdate(this, 2, te.getItemCookTime());
     }
 
     @Override
@@ -74,102 +75,73 @@ public class CupolaContainer extends SteamNSteelContainer
         {
             final ICrafting icrafting = (ICrafting) crafter;
 
-            if (lastCookTime != te.deviceCookTime)
+            if (lastCookTime != te.getDeviceCookTime())
             {
-                icrafting.sendProgressBarUpdate(this, 0, te.deviceCookTime);
+                icrafting.sendProgressBarUpdate(this, 0, te.getDeviceCookTime());
             }
 
-            if (lastBurnTime != te.fuelBurnTime)
+            if (lastBurnTime != te.getFuelBurnTime())
             {
-                icrafting.sendProgressBarUpdate(this, 1, te.fuelBurnTime);
+                icrafting.sendProgressBarUpdate(this, 1, te.getFuelBurnTime());
             }
 
-            if (lastItemCookTime != te.itemCookTime)
+            if (lastItemCookTime != te.getItemCookTime())
             {
-                icrafting.sendProgressBarUpdate(this, 2, te.itemCookTime);
+                icrafting.sendProgressBarUpdate(this, 2, te.getItemCookTime());
             }
         }
 
-        lastCookTime = te.deviceCookTime;
-        lastBurnTime = te.fuelBurnTime;
-        lastItemCookTime = te.itemCookTime;
+        lastCookTime = te.getDeviceCookTime();
+        lastBurnTime = te.getFuelBurnTime();
+        lastItemCookTime = te.getItemCookTime();
     }
 
-    @SuppressWarnings("ReturnOfNull")
+    @SuppressWarnings({"ReturnOfNull", "MethodWithMoreThanThreeNegations", "OverlyComplexMethod"})
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex)
     {
-        ItemStack itemStack = null;
-        final Slot slot = (Slot)inventorySlots.get(slotIndex);
+        final Slot slot = (Slot) inventorySlots.get(slotIndex);
+        if (slot == null || !slot.getHasStack())
+            return null;
 
-        if (slot != null && slot.getHasStack())
+        final ItemStack slotItemStack = slot.getStack();
+        final ItemStack itemStack = slotItemStack.copy();
+
+        if (slotIndex == CupolaTE.OUTPUT_INVENTORY_INDEX)
         {
-
-            final ItemStack slotItemStack = slot.getStack();
-            itemStack = slotItemStack.copy();
-
-            if (slotIndex == CupolaTE.OUTPUT_INVENTORY_INDEX)
-            {
-                if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), true))
-                {
-                    return null;
-                }
-
+            if (mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), true))
                 slot.onSlotChange(slotItemStack, itemStack);
-            }
-            else if (slotIndex > CupolaTE.FUEL_INVENTORY_INDEX)
-            {
-                final Optional<ItemStack> result1 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
-                        te.getStackInSlot(CupolaTE.INPUT_RIGHT_INVENTORY_INDEX)).getItemStack();
-                final Optional<ItemStack> result2 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
-                        te.getStackInSlot(CupolaTE.INPUT_LEFT_INVENTORY_INDEX)).getItemStack();
-                if (result1.isPresent() || result2.isPresent())
-                {
-                    if (!mergeItemStack(slotItemStack, CupolaTE.INPUT_LEFT_INVENTORY_INDEX, CupolaTE.FUEL_INVENTORY_INDEX, false))
-                    {
-                        return null;
-                    }
-                } else if (TileEntityFurnace.isItemFuel(slotItemStack))
-                {
-                    if (!mergeItemStack(slotItemStack, CupolaTE.FUEL_INVENTORY_INDEX, CupolaTE.OUTPUT_INVENTORY_INDEX, false))
-                    {
-                        return null;
-                    }
-                } else if (slotIndex >= CupolaTE.INVENTORY_SIZE && slotIndex < inventorySlots.size() - 9)
-                {
-                    if (!mergeItemStack(slotItemStack, inventorySlots.size() - 9, inventorySlots.size(), false))
-                    {
-                        return null;
-                    }
-                } else if (slotIndex >= inventorySlots.size() - 9 && slotIndex < inventorySlots.size())
-                {
-                    if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size() - 9, false))
-                    {
-                        return null;
-                    }
-                }
-            }
-            else if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), false))
-            {
-                return null;
-            }
-
-            if (slotItemStack.stackSize == 0)
-            {
-                slot.putStack(null);
-            }
             else
-            {
-                slot.onSlotChanged();
-            }
-
-            if (slotItemStack.stackSize == itemStack.stackSize)
-            {
                 return null;
-            }
-
-            slot.onPickupFromSlot(player, slotItemStack);
+        } else if (slotIndex > CupolaTE.FUEL_INVENTORY_INDEX)
+        {
+            final Optional<ItemStack> result1 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
+                    te.getStackInSlot(CupolaTE.INPUT_RIGHT_INVENTORY_INDEX)).getItemStack();
+            final Optional<ItemStack> result2 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
+                    te.getStackInSlot(CupolaTE.INPUT_LEFT_INVENTORY_INDEX)).getItemStack();
+            if (result1.isPresent() || result2.isPresent())
+            {
+                if (!mergeItemStack(slotItemStack, CupolaTE.INPUT_LEFT_INVENTORY_INDEX, CupolaTE.FUEL_INVENTORY_INDEX, false))
+                    return null;
+            } else if (TileEntityFurnace.isItemFuel(slotItemStack))
+            {
+                if (!mergeItemStack(slotItemStack, CupolaTE.FUEL_INVENTORY_INDEX, CupolaTE.OUTPUT_INVENTORY_INDEX, false))
+                    return null;
+            } else if (didTransferStackInStandardSlot(slotIndex, slotItemStack, CupolaTE.INVENTORY_SIZE)) return null;
+        } else if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), false))
+        {
+            return null;
         }
+
+        if (slotItemStack.stackSize == 0)
+            slot.putStack(null);
+        else
+            slot.onSlotChanged();
+
+        if (slotItemStack.stackSize == itemStack.stackSize)
+            return null;
+
+        slot.onPickupFromSlot(player, slotItemStack);
 
         return itemStack;
     }
@@ -180,17 +152,28 @@ public class CupolaContainer extends SteamNSteelContainer
     {
         if (valueType == 0)
         {
-            te.deviceCookTime = updatedValue;
+            te.setDeviceCookTime(updatedValue);
         }
 
         if (valueType == 1)
         {
-            te.fuelBurnTime = updatedValue;
+            te.setFuelBurnTime(updatedValue);
         }
 
         if (valueType == 2)
         {
-            te.itemCookTime = updatedValue;
+            te.setItemCookTime(updatedValue);
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this)
+                .add("te", te)
+                .add("lastCookTime", lastCookTime)
+                .add("lastBurnTime", lastBurnTime)
+                .add("lastItemCookTime", lastItemCookTime)
+                .toString();
     }
 }
