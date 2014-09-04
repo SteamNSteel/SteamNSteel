@@ -18,8 +18,6 @@ package mod.steamnsteel.crafting.alloy;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import mod.steamnsteel.api.crafting.IAlloyResult;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,7 +26,6 @@ public class AlloyResult implements IAlloyResult
 {
     public static final AlloyResult EMPTY = new AlloyResult(null, 0, 0);
 
-    @Nullable
     private final Item item;
     private final int meta;
     private final int quantity;
@@ -45,7 +42,6 @@ public class AlloyResult implements IAlloyResult
         this.consumedB = consumedB;
     }
 
-    @NotNull
     @Override
     public Optional<ItemStack> getItemStack()
     {

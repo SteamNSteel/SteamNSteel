@@ -17,7 +17,6 @@
 package mod.steamnsteel.api.crafting.ingredient;
 
 import com.google.common.collect.ImmutableList;
-import com.sun.istack.internal.NotNull;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -36,7 +35,6 @@ public interface IIngredient
      *
      * @return A  list of ItemStack aliases for this ingredient.
      */
-    @NotNull
     ImmutableList<ItemStack> getItemStacks();
 
     /**

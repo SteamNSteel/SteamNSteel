@@ -17,7 +17,6 @@
 package mod.steamnsteel.utility;
 
 import com.google.common.base.Objects;
-import com.sun.istack.internal.NotNull;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -25,17 +24,16 @@ import static com.google.common.base.Preconditions.*;
 
 public class ItemWrapper
 {
-    @NotNull
     private final Item item;
     private final int meta;
 
-    public ItemWrapper(@NotNull Item item, int meta)
+    public ItemWrapper(Item item, int meta)
     {
         this.item = checkNotNull(item);
         this.meta = meta;
     }
 
-    public ItemWrapper(@NotNull ItemStack itemStack)
+    public ItemWrapper(ItemStack itemStack)
     {
         this(checkNotNull(itemStack).getItem(), itemStack.getItemDamage());
     }

@@ -18,7 +18,6 @@ package mod.steamnsteel.api.crafting.ingredient;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
-import com.sun.istack.internal.NotNull;
 import net.minecraft.item.ItemStack;
 
 import static com.google.common.base.Preconditions.*;
@@ -33,7 +32,6 @@ import static com.google.common.base.Preconditions.*;
  */
 public class ItemStackIngredient implements IIngredient
 {
-    @NotNull
     private final ItemStack itemStack;
     private final int quantityConsumed;
 
@@ -43,7 +41,7 @@ public class ItemStackIngredient implements IIngredient
      * @param itemStack The ore name to use as an ingredient. This must not be <code>null</code> nor an empty stack. A
      *                  reference to itemStack is <i>not</i> maintained.
      */
-    public ItemStackIngredient(@NotNull ItemStack itemStack)
+    public ItemStackIngredient(ItemStack itemStack)
     {
         checkArgument(checkNotNull(itemStack).stackSize > 0);
         checkNotNull(itemStack.getItem());
@@ -58,7 +56,6 @@ public class ItemStackIngredient implements IIngredient
      * @return A  list of ItemStack aliases for this ingredient.
      */
     @Override
-    @NotNull
     public ImmutableList<ItemStack> getItemStacks()
     {
         return ImmutableList.of(itemStack);

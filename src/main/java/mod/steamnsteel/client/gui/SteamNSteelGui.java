@@ -16,7 +16,6 @@
 
 package mod.steamnsteel.client.gui;
 
-import com.sun.istack.internal.NotNull;
 import mod.steamnsteel.TheMod;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
@@ -46,7 +45,6 @@ abstract class SteamNSteelGui extends GuiContainer
         return new ResourceLocation(modID, path);
     }
 
-    @NotNull
     protected abstract String getInventoryName();
 
     @Override

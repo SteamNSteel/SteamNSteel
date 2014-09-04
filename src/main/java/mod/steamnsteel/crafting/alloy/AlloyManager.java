@@ -19,8 +19,6 @@ package mod.steamnsteel.crafting.alloy;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Table;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.api.crafting.IAlloyResult;
 import mod.steamnsteel.api.crafting.ingredient.IIngredient;
@@ -38,7 +36,7 @@ public enum AlloyManager implements IAlloyManager
 
     @SuppressWarnings("MethodWithMultipleLoops")
     @Override
-    public void addAlloy(@NotNull IIngredient ingredientA, @NotNull IIngredient ingredientB, @NotNull ItemStack output)
+    public void addAlloy(IIngredient ingredientA, IIngredient ingredientB, ItemStack output)
     {
         final AlloyResult result = new AlloyResult(checkNotNull(output),
                 checkNotNull(ingredientA).getQuantityConsumed(),
@@ -54,8 +52,7 @@ public enum AlloyManager implements IAlloyManager
     }
 
     @Override
-    @NotNull
-    public IAlloyResult getCupolaResult(@Nullable ItemStack itemStackLeft, @Nullable ItemStack itemStackRight)
+    public IAlloyResult getCupolaResult(ItemStack itemStackLeft, ItemStack itemStackRight)
     {
         if (itemStackLeft == null || itemStackRight == null)
             return AlloyResult.EMPTY;

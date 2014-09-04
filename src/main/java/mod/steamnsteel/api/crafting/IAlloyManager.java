@@ -16,8 +16,6 @@
 
 package mod.steamnsteel.api.crafting;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import mod.steamnsteel.api.crafting.ingredient.IIngredient;
 import net.minecraft.item.ItemStack;
 
@@ -37,7 +35,7 @@ public interface IAlloyManager
      * @param ingredient2 An instance of IIngredient
      * @param output      The ItemStack instance that is produced by the recipe
      */
-    void addAlloy(@NotNull IIngredient ingredient1, @NotNull IIngredient ingredient2, @NotNull ItemStack output);
+    void addAlloy(IIngredient ingredient1, IIngredient ingredient2, ItemStack output);
 
     /**
      * Retrieves the result produced by the two ingredients. Ore Dictionary compatible. If a result is not found with
@@ -48,6 +46,5 @@ public interface IAlloyManager
      * @return The resulting {@link mod.steamnsteel.api.crafting.IAlloyResult}, or an empty instance of
      * {@link mod.steamnsteel.api.crafting.IAlloyResult} if no result is found.
      */
-    @NotNull
-    IAlloyResult getCupolaResult(@Nullable ItemStack ingredient1, @Nullable ItemStack ingredient2);
+    IAlloyResult getCupolaResult(ItemStack ingredient1, ItemStack ingredient2);
 }

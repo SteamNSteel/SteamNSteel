@@ -18,7 +18,6 @@ package mod.steamnsteel.api.crafting.ingredient;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
-import com.sun.istack.internal.NotNull;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -42,7 +41,7 @@ public class OreDictionaryIngredient implements IIngredient
      *
      * @param name The ore name to use as an ingredient. Must not be <code>null</code> nor empty.
      */
-    public OreDictionaryIngredient(@NotNull String name)
+    public OreDictionaryIngredient(String name)
     {
         this(name, 1);
     }

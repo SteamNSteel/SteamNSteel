@@ -17,7 +17,6 @@
 package mod.steamnsteel.api.crafting;
 
 import com.google.common.base.Optional;
-import com.sun.istack.internal.NotNull;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -35,7 +34,6 @@ public interface IAlloyResult
      *
      * @return The ItemStack resulting from the submitted ingredients.
      */
-    @NotNull
     Optional<ItemStack> getItemStack();
 
     /**

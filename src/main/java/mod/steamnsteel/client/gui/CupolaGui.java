@@ -17,7 +17,6 @@
 package mod.steamnsteel.client.gui;
 
 import com.google.common.base.Objects;
-import com.sun.istack.internal.NotNull;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.inventory.CupolaContainer;
 import mod.steamnsteel.tileentity.CupolaTE;
@@ -59,7 +58,6 @@ public class CupolaGui extends SteamNSteelGui
         drawTexturedModalRect(xStart + 78, yStart + 35, 176, 14, scaleAdjustment + 1, 16);
     }
 
-    @NotNull
     @Override
     public String getInventoryName()
     {
