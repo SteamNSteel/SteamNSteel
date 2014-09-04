@@ -447,8 +447,8 @@ public class CupolaTE extends TileEntity implements ISidedInventory
             {
                 addItemStackToOutput(output.getItemStack().get().copy());
 
-                inventory[INPUT_RIGHT_INVENTORY_INDEX].stackSize -= output.getConsumedA();
-                inventory[INPUT_LEFT_INVENTORY_INDEX].stackSize -= output.getConsumedB();
+                inventory[INPUT_LEFT_INVENTORY_INDEX].stackSize -= output.getConsumedA();
+                inventory[INPUT_RIGHT_INVENTORY_INDEX].stackSize -= output.getConsumedB();
 
                 if (inventory[INPUT_RIGHT_INVENTORY_INDEX].stackSize <= 0)
                 {
