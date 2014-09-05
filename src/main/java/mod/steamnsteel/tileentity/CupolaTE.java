@@ -38,15 +38,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 @SuppressWarnings("ClassWithTooManyMethods")
 public class CupolaTE extends TileEntity implements ISidedInventory
 {
-    public static final int INPUT_LEFT_INVENTORY_INDEX = 0;
-    public static final int INPUT_RIGHT_INVENTORY_INDEX = 1;
-    public static final int FUEL_INVENTORY_INDEX = 2;
-    public static final int OUTPUT_INVENTORY_INDEX = 3;
+    public static final int INPUT_LEFT = 0;
+    public static final int INPUT_RIGHT = 1;
+    public static final int INPUT_FUEL = 2;
+    public static final int OUTPUT = 3;
     public static final int INVENTORY_SIZE = 4;
 
-    private static final int[] slotsTop = {INPUT_LEFT_INVENTORY_INDEX, INPUT_RIGHT_INVENTORY_INDEX};
-    private static final int[] slotsSides = {FUEL_INVENTORY_INDEX};
-    private static final int[] slotsBottom = {OUTPUT_INVENTORY_INDEX, FUEL_INVENTORY_INDEX};
+    private static final int[] slotsTop = {INPUT_LEFT, INPUT_RIGHT};
+    private static final int[] slotsSides = {INPUT_FUEL};
+    private static final int[] slotsBottom = {OUTPUT, INPUT_FUEL};
 
     private static final int COOK_TIME_PER_ITEM = 400;  // 200 is standard furnace rate, so cupola process 4 ops per coal
 
@@ -185,7 +185,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     @Override
     public boolean canExtractItem(int slotIndex, ItemStack itemStack, int side)
     {
-        return slotIndex == OUTPUT_INVENTORY_INDEX;
+        return slotIndex == OUTPUT;
     }
 
     @Override
@@ -257,7 +257,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     @Override
     public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack)
     {
-        return slotIndex != OUTPUT_INVENTORY_INDEX && (slotIndex != FUEL_INVENTORY_INDEX || TileEntityFurnace.isItemFuel(itemStack));
+        return slotIndex != OUTPUT && (slotIndex != INPUT_FUEL || TileEntityFurnace.isItemFuel(itemStack));
 
     }
 
@@ -313,7 +313,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
 
     private boolean didConsumeNextFuel()
     {
-        final ItemStack fuelStack = inventory.getStack(FUEL_INVENTORY_INDEX);
+        final ItemStack fuelStack = inventory.getStack(INPUT_FUEL);
         fuelBurnTime = TileEntityFurnace.getItemBurnTime(fuelStack);
         deviceCookTime = fuelBurnTime;
 
@@ -322,13 +322,13 @@ public class CupolaTE extends TileEntity implements ISidedInventory
         {
             sendUpdate = true;
 
-            if (inventory.isEmpty(FUEL_INVENTORY_INDEX))
+            if (inventory.isEmpty(INPUT_FUEL))
             {
                 fuelStack.stackSize--;
 
                 if (fuelStack.stackSize == 0)
                 {
-                    inventory.setSlot(FUEL_INVENTORY_INDEX, fuelStack.getItem().getContainerItem(fuelStack));
+                    inventory.setSlot(INPUT_FUEL, fuelStack.getItem().getContainerItem(fuelStack));
                 }
             }
         }
@@ -357,11 +357,11 @@ public class CupolaTE extends TileEntity implements ISidedInventory
 
     private boolean canAlloy()
     {
-        if (inventory.isEmpty(INPUT_LEFT_INVENTORY_INDEX) || inventory.isEmpty(INPUT_RIGHT_INVENTORY_INDEX))
+        if (inventory.isEmpty(INPUT_LEFT) || inventory.isEmpty(INPUT_RIGHT))
             return false;
 
-        final ItemStack leftStack = inventory.getStack(INPUT_LEFT_INVENTORY_INDEX);
-        final ItemStack rightStack = inventory.getStack(INPUT_RIGHT_INVENTORY_INDEX);
+        final ItemStack leftStack = inventory.getStack(INPUT_LEFT);
+        final ItemStack rightStack = inventory.getStack(INPUT_RIGHT);
 
         final IAlloyResult output = AlloyManager.INSTANCE.getCupolaResult(leftStack, rightStack);
         if (!output.getItemStack().isPresent() ||
@@ -370,10 +370,10 @@ public class CupolaTE extends TileEntity implements ISidedInventory
             return false;
         }
 
-        if (inventory.isEmpty(OUTPUT_INVENTORY_INDEX))
+        if (inventory.isEmpty(OUTPUT))
             return true;
 
-        final ItemStack outputStack = inventory.getStack(OUTPUT_INVENTORY_INDEX);
+        final ItemStack outputStack = inventory.getStack(OUTPUT);
         if (!outputStack.isItemEqual(output.getItemStack().get()))
             return false;
 
@@ -385,8 +385,8 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     {
         if (canAlloy())
         {
-            final ItemStack leftStack = inventory.getStack(INPUT_LEFT_INVENTORY_INDEX);
-            final ItemStack rightStack = inventory.getStack(INPUT_RIGHT_INVENTORY_INDEX);
+            final ItemStack leftStack = inventory.getStack(INPUT_LEFT);
+            final ItemStack rightStack = inventory.getStack(INPUT_RIGHT);
 
             final IAlloyResult output = AlloyManager.INSTANCE.getCupolaResult(leftStack, rightStack);
             if (output.getItemStack().isPresent())
@@ -398,12 +398,12 @@ public class CupolaTE extends TileEntity implements ISidedInventory
 
                 if (rightStack.stackSize <= 0)
                 {
-                    inventory.clearSlot(INPUT_RIGHT_INVENTORY_INDEX);
+                    inventory.clearSlot(INPUT_RIGHT);
                 }
 
                 if (leftStack.stackSize <= 0)
                 {
-                    inventory.clearSlot(INPUT_LEFT_INVENTORY_INDEX);
+                    inventory.clearSlot(INPUT_LEFT);
                 }
             }
         }
@@ -413,12 +413,12 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     {
         final int maxStackSize = Math.min(getInventoryStackLimit(), itemStack.getMaxStackSize());
 
-        if (inventory.isEmpty(OUTPUT_INVENTORY_INDEX))
+        if (inventory.isEmpty(OUTPUT))
         {
-            inventory.setSlot(OUTPUT_INVENTORY_INDEX, itemStack);
+            inventory.setSlot(OUTPUT, itemStack);
             return;
         }
-        final ItemStack outputStack = inventory.getStack(OUTPUT_INVENTORY_INDEX);
+        final ItemStack outputStack = inventory.getStack(OUTPUT);
         if (outputStack.isItemEqual(itemStack)
                 && outputStack.stackSize < maxStackSize)
         {

@@ -41,12 +41,12 @@ public class CupolaContainer extends SteamNSteelContainer
     {
         this.te = te;
 
-        addSlotToContainer(new Slot(te, CupolaTE.FUEL_INVENTORY_INDEX, 42, 53));
+        addSlotToContainer(new Slot(te, CupolaTE.INPUT_FUEL, 42, 53));
 
-        addSlotToContainer(new Slot(te, CupolaTE.INPUT_LEFT_INVENTORY_INDEX, 25, 17));
-        addSlotToContainer(new Slot(te, CupolaTE.INPUT_RIGHT_INVENTORY_INDEX, 59, 17));
+        addSlotToContainer(new Slot(te, CupolaTE.INPUT_LEFT, 25, 17));
+        addSlotToContainer(new Slot(te, CupolaTE.INPUT_RIGHT, 59, 17));
 
-        addSlotToContainer(new CupolaSlot(te, CupolaTE.OUTPUT_INVENTORY_INDEX, 116, 35));
+        addSlotToContainer(new CupolaSlot(te, CupolaTE.OUTPUT, 116, 35));
 
         addPlayerInventory(inventoryPlayer, 8, 84);
     }
@@ -107,25 +107,25 @@ public class CupolaContainer extends SteamNSteelContainer
         final ItemStack slotItemStack = slot.getStack();
         final ItemStack itemStack = slotItemStack.copy();
 
-        if (slotIndex == CupolaTE.OUTPUT_INVENTORY_INDEX)
+        if (slotIndex == CupolaTE.OUTPUT)
         {
             if (mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), true))
                 slot.onSlotChange(slotItemStack, itemStack);
             else
                 return null;
-        } else if (slotIndex > CupolaTE.FUEL_INVENTORY_INDEX)
+        } else if (slotIndex > CupolaTE.INPUT_FUEL)
         {
             final Optional<ItemStack> result1 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
-                    te.getStackInSlot(CupolaTE.INPUT_RIGHT_INVENTORY_INDEX)).getItemStack();
+                    te.getStackInSlot(CupolaTE.INPUT_RIGHT)).getItemStack();
             final Optional<ItemStack> result2 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
-                    te.getStackInSlot(CupolaTE.INPUT_LEFT_INVENTORY_INDEX)).getItemStack();
+                    te.getStackInSlot(CupolaTE.INPUT_LEFT)).getItemStack();
             if (result1.isPresent() || result2.isPresent())
             {
-                if (!mergeItemStack(slotItemStack, CupolaTE.INPUT_LEFT_INVENTORY_INDEX, CupolaTE.FUEL_INVENTORY_INDEX, false))
+                if (!mergeItemStack(slotItemStack, CupolaTE.INPUT_LEFT, CupolaTE.INPUT_FUEL, false))
                     return null;
             } else if (TileEntityFurnace.isItemFuel(slotItemStack))
             {
-                if (!mergeItemStack(slotItemStack, CupolaTE.FUEL_INVENTORY_INDEX, CupolaTE.OUTPUT_INVENTORY_INDEX, false))
+                if (!mergeItemStack(slotItemStack, CupolaTE.INPUT_FUEL, CupolaTE.OUTPUT, false))
                     return null;
             } else if (didTransferStackInStandardSlot(slotIndex, slotItemStack, CupolaTE.INVENTORY_SIZE)) return null;
         } else if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), false))
