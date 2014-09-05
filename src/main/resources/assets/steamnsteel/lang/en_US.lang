@@ -1,0 +1,65 @@
+##############################
+# Steam and Steel
+#
+# English - UNITED STATES (US) (en_US) localization
+# Author: Scott Killen
+#
+
+#Blocks
+tile.steamnsteel:blockBrass.name=Brass Block
+tile.steamnsteel:blockBronze.name=Bronze Block
+tile.steamnsteel:blockCopper.name=Copper Block
+tile.steamnsteel:blockPlotonium.name=Plotonium Block
+tile.steamnsteel:blockSteel.name=Steel Block
+tile.steamnsteel:blockTin.name=Tin Block
+tile.steamnsteel:blockZinc.name=Zinc Block
+tile.steamnsteel:chestPlotonium.name=Plotonium Chest
+tile.steamnsteel:cupola.name=Cupola
+tile.steamnsteel:oreCopper.name=Copper Ore
+tile.steamnsteel:oreNiter.name=Niter Ore
+tile.steamnsteel:oreSulfur.name=Sulfur Ore
+tile.steamnsteel:oreTin.name=Tin Ore
+tile.steamnsteel:oreZinc.name=Zinc Ore
+tile.steamnsteel:ruinFloorPlotonium.name=Ruined Plotonium Floor
+tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
+tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
+
+#Containers
+container.steamnsteel:cupola=Cupola
+
+# Creative Tabs
+itemGroup.steamnsteel=Steam and Steel
+
+# Items
+item.steamnsteel:anachDoodad.name=Anachronistic Doodad
+item.steamnsteel:axeBronze.name=Bronze Axe
+item.steamnsteel:axeSteel.name=Steel Axe
+item.steamnsteel:bootsBronze.name=Bronze Boots
+item.steamnsteel:bootsSteel.name=Steel Boots
+item.steamnsteel:chestplateBronze.name=Bronze Chestplate
+item.steamnsteel:chestplateSteel.name=Steel Chestplate
+item.steamnsteel:dustNiter.name=Niter
+item.steamnsteel:dustSulfur.name=Sulfur
+item.steamnsteel:helmetBronze.name=Bronze Helmet
+item.steamnsteel:helmetSteel.name=Steel Helmet
+item.steamnsteel:hoeBronze.name=Bronze Hoe
+item.steamnsteel:hoeSteel.name=Steel Hoe
+item.steamnsteel:ingotBrass.name=Brass Ingot
+item.steamnsteel:ingotBronze.name=Bronze Ingot
+item.steamnsteel:ingotCopper.name=Copper Ingot
+item.steamnsteel:ingotPlotonium.name=Plotonium Ingot
+item.steamnsteel:ingotSteel.name=Steel Ingot
+item.steamnsteel:ingotTin.name=Tin Ingot
+item.steamnsteel:ingotZinc.name=Zinc Ingot
+item.steamnsteel:leggingsBronze.name=Bronze Leggings
+item.steamnsteel:leggingsSteel.name=Steel Leggings
+item.steamnsteel:mustyJournal.name=Musty Journal
+item.steamnsteel:perGuiVox.name=Personal Guide Vox
+item.steamnsteel:pickBronze.name=Bronze Pickaxe
+item.steamnsteel:pickSteel.name=Steel Pickaxe
+item.steamnsteel:plotoniumScrap.name=Plotonium Scrap
+item.steamnsteel:shovelBronze.name=Bronze Shovel
+item.steamnsteel:shovelSteel.name=Steel Shovel
+item.steamnsteel:swordBronze.name=Bronze Sword
+item.steamnsteel:swordSteel.name=Steel Sword
+item.steamnsteel:voxBox.name=Vox Box
