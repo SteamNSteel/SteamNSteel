@@ -23,11 +23,11 @@ import mod.steamnsteel.TheMod;
 import mod.steamnsteel.api.crafting.IAlloyResult;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
+import mod.steamnsteel.inventory.Inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -38,30 +38,30 @@ import net.minecraftforge.common.util.ForgeDirection;
 @SuppressWarnings("ClassWithTooManyMethods")
 public class CupolaTE extends TileEntity implements ISidedInventory
 {
-    public static final int INPUT_LEFT_INVENTORY_INDEX = 0;
-    public static final int INPUT_RIGHT_INVENTORY_INDEX = 1;
-    public static final int FUEL_INVENTORY_INDEX = 2;
-    public static final int OUTPUT_INVENTORY_INDEX = 3;
+    public static final int INPUT_LEFT = 0;
+    public static final int INPUT_RIGHT = 1;
+    public static final int INPUT_FUEL = 2;
+    public static final int OUTPUT = 3;
     public static final int INVENTORY_SIZE = 4;
 
-    private static final int[] slotsTop = {INPUT_LEFT_INVENTORY_INDEX, INPUT_RIGHT_INVENTORY_INDEX};
-    private static final int[] slotsSides = {FUEL_INVENTORY_INDEX};
-    private static final int[] slotsBottom = {OUTPUT_INVENTORY_INDEX, FUEL_INVENTORY_INDEX};
+    private static final int[] slotsTop = {INPUT_LEFT, INPUT_RIGHT};
+    private static final int[] slotsSides = {INPUT_FUEL};
+    private static final int[] slotsBottom = {OUTPUT, INPUT_FUEL};
 
     private static final int COOK_TIME_PER_ITEM = 400;  // 200 is standard furnace rate, so cupola process 4 ops per coal
 
     private static final String IS_ACTIVE = "isActive";
-    private static final String INVENTORY = "inventory";
-    private static final String SLOT = "Slot";
+    private static final String IS_SLAVE = "isSlave";
     private static final String DEVICE_COOK_TIME = "deviceCookTime";
     private static final String FUEL_BURN_TIME = "fuelBurnTime";
     private static final String ITEM_COOK_TIME = "itemCookTime";
 
-    private ItemStack[] inventory = new ItemStack[INVENTORY_SIZE];
+    private final Inventory inventory = new Inventory(INVENTORY_SIZE);
     private int deviceCookTime;
     private int fuelBurnTime;
     private int itemCookTime;
     private boolean isActive = false;
+    private boolean isSlave = false;
 
     private static String containerName(String name)
     {
@@ -120,6 +120,16 @@ public class CupolaTE extends TileEntity implements ISidedInventory
         return isActive;
     }
 
+    public boolean isSlave()
+    {
+        return isSlave;
+    }
+
+    public void setSlave()
+    {
+        isSlave = true;
+    }
+
     @Override
     public Packet getDescriptionPacket()
     {
@@ -139,19 +149,12 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     {
         super.readFromNBT(nbt);
 
+        isSlave = nbt.getBoolean(IS_SLAVE);
+        if (isSlave) return;
+
         isActive = nbt.getBoolean(IS_ACTIVE);
 
-        final NBTTagList tagList = nbt.getTagList(INVENTORY, 10);
-        inventory = new ItemStack[INVENTORY_SIZE];
-        for (int i = 0; i < tagList.tagCount(); ++i)
-        {
-            final NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
-            final byte slotIndex = tagCompound.getByte(SLOT);
-            if (slotIndex >= 0 && slotIndex < inventory.length)
-            {
-                inventory[slotIndex] = ItemStack.loadItemStackFromNBT(tagCompound);
-            }
-        }
+        inventory.readFromNBT(nbt);
 
         deviceCookTime = nbt.getInteger(DEVICE_COOK_TIME);
         fuelBurnTime = nbt.getInteger(FUEL_BURN_TIME);
@@ -163,22 +166,13 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     {
         super.writeToNBT(nbt);
 
+        nbt.setBoolean(IS_SLAVE, isSlave);
+        if (isSlave) return;
+
         nbt.setBoolean(IS_ACTIVE, isActive);
 
-        final NBTTagList tagList = new NBTTagList();
-        for (int currentIndex = 0; currentIndex < INVENTORY_SIZE; ++currentIndex)
-        {
-            if (inventory[currentIndex] != null)
-            {
-                //noinspection ObjectAllocationInLoop
-                final NBTTagCompound tagCompound = new NBTTagCompound();
-                //noinspection NumericCastThatLosesPrecision
-                tagCompound.setByte(SLOT, (byte) currentIndex);
-                inventory[currentIndex].writeToNBT(tagCompound);
-                tagList.appendTag(tagCompound);
-            }
-        }
-        nbt.setTag(INVENTORY, tagList);
+        inventory.writeToNBT(nbt);
+
         nbt.setInteger(DEVICE_COOK_TIME, deviceCookTime);
         nbt.setInteger(FUEL_BURN_TIME, fuelBurnTime);
         nbt.setInteger(ITEM_COOK_TIME, itemCookTime);
@@ -209,70 +203,37 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     @Override
     public boolean canExtractItem(int slotIndex, ItemStack itemStack, int side)
     {
-        return slotIndex == OUTPUT_INVENTORY_INDEX;
+        return slotIndex == OUTPUT;
     }
 
     @Override
     public int getSizeInventory()
     {
-        return INVENTORY_SIZE;
+        return inventory.getSize();
     }
 
     @Override
     public ItemStack getStackInSlot(int slotIndex)
     {
-        return inventory[slotIndex];
+        return inventory.getStack(slotIndex);
     }
 
-    @SuppressWarnings({"AssignmentToNull", "ReturnOfNull"})
     @Override
-    public ItemStack decrStackSize(int slotIndex, int decrementAmount)
+    public ItemStack decrStackSize(int slotIndex, int decrAmount)
     {
-        if (inventory[slotIndex] != null)
-        {
-            final ItemStack itemStack;
-
-            if (inventory[slotIndex].stackSize <= decrementAmount)
-            {
-                itemStack = inventory[slotIndex];
-                inventory[slotIndex] = null;
-                return itemStack;
-            } else
-            {
-                itemStack = inventory[slotIndex].splitStack(decrementAmount);
-
-                if (inventory[slotIndex].stackSize == 0)
-                {
-                    inventory[slotIndex] = null;
-                }
-
-                return itemStack;
-            }
-        }
-
-        return null;
+        return inventory.decrStackSize(slotIndex, decrAmount);
     }
 
     @Override
     public ItemStack getStackInSlotOnClosing(int slotIndex)
     {
-        final ItemStack itemStack = getStackInSlot(slotIndex);
-        //noinspection VariableNotUsedInsideIf
-        if (itemStack != null)
-        {
-            setInventorySlotContents(slotIndex, null);
-        }
-        return itemStack;
+        return inventory.getStackOnClosing(slotIndex);
     }
 
     @Override
     public void setInventorySlotContents(int slotIndex, ItemStack itemStack)
     {
-        inventory[slotIndex] = itemStack;
-        if (itemStack != null && itemStack.stackSize > getInventoryStackLimit())
-        {
-            itemStack.stackSize = getInventoryStackLimit();
-        }
+        inventory.setSlot(slotIndex, itemStack);
     }
 
     @Override
@@ -290,7 +251,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     @Override
     public int getInventoryStackLimit()
     {
-        return 64;
+        return inventory.getStackSizeMax();
     }
 
     @Override
@@ -314,7 +275,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     @Override
     public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack)
     {
-        return slotIndex != OUTPUT_INVENTORY_INDEX && (slotIndex != FUEL_INVENTORY_INDEX || TileEntityFurnace.isItemFuel(itemStack));
+        return slotIndex != OUTPUT && (slotIndex != INPUT_FUEL || TileEntityFurnace.isItemFuel(itemStack));
 
     }
 
@@ -370,7 +331,8 @@ public class CupolaTE extends TileEntity implements ISidedInventory
 
     private boolean didConsumeNextFuel()
     {
-        fuelBurnTime = TileEntityFurnace.getItemBurnTime(inventory[FUEL_INVENTORY_INDEX]);
+        final ItemStack fuelStack = inventory.getStack(INPUT_FUEL);
+        fuelBurnTime = TileEntityFurnace.getItemBurnTime(fuelStack);
         deviceCookTime = fuelBurnTime;
 
         boolean sendUpdate = false;
@@ -378,13 +340,13 @@ public class CupolaTE extends TileEntity implements ISidedInventory
         {
             sendUpdate = true;
 
-            if (inventory[FUEL_INVENTORY_INDEX] != null)
+            if (inventory.isEmpty(INPUT_FUEL))
             {
-                inventory[FUEL_INVENTORY_INDEX].stackSize--;
+                fuelStack.stackSize--;
 
-                if (inventory[FUEL_INVENTORY_INDEX].stackSize == 0)
+                if (fuelStack.stackSize == 0)
                 {
-                    inventory[FUEL_INVENTORY_INDEX] = inventory[FUEL_INVENTORY_INDEX].getItem().getContainerItem(inventory[FUEL_INVENTORY_INDEX]);
+                    inventory.setSlot(INPUT_FUEL, fuelStack.getItem().getContainerItem(fuelStack));
                 }
             }
         }
@@ -413,51 +375,53 @@ public class CupolaTE extends TileEntity implements ISidedInventory
 
     private boolean canAlloy()
     {
-        if (inventory[INPUT_LEFT_INVENTORY_INDEX] == null || inventory[INPUT_RIGHT_INVENTORY_INDEX] == null)
+        if (inventory.isEmpty(INPUT_LEFT) || inventory.isEmpty(INPUT_RIGHT))
             return false;
 
-        final IAlloyResult output = AlloyManager.INSTANCE.getCupolaResult(inventory[INPUT_LEFT_INVENTORY_INDEX], inventory[INPUT_RIGHT_INVENTORY_INDEX]);
-        if (!output.getItemStack().isPresent() || output.getConsumedA() > inventory[INPUT_LEFT_INVENTORY_INDEX].stackSize || output.getConsumedB() > inventory[INPUT_RIGHT_INVENTORY_INDEX].stackSize)
+        final ItemStack leftStack = inventory.getStack(INPUT_LEFT);
+        final ItemStack rightStack = inventory.getStack(INPUT_RIGHT);
+
+        final IAlloyResult output = AlloyManager.INSTANCE.getCupolaResult(leftStack, rightStack);
+        if (!output.getItemStack().isPresent() ||
+                output.getConsumedA() > leftStack.stackSize || output.getConsumedB() > rightStack.stackSize)
         {
             return false;
         }
 
-        if (inventory[OUTPUT_INVENTORY_INDEX] == null)
-        {
+        if (inventory.isEmpty(OUTPUT))
             return true;
 
-        }
-
-        if (!inventory[OUTPUT_INVENTORY_INDEX].isItemEqual(output.getItemStack().get()))
-        {
+        final ItemStack outputStack = inventory.getStack(OUTPUT);
+        if (!outputStack.isItemEqual(output.getItemStack().get()))
             return false;
-        }
 
-        final int result = inventory[OUTPUT_INVENTORY_INDEX].stackSize + output.getItemStack().get().stackSize;
+        final int result = outputStack.stackSize + output.getItemStack().get().stackSize;
         return result <= getInventoryStackLimit() && result <= output.getItemStack().get().getMaxStackSize();
     }
 
-    @SuppressWarnings("AssignmentToNull")
     private void alloy()
     {
         if (canAlloy())
         {
-            final IAlloyResult output = AlloyManager.INSTANCE.getCupolaResult(inventory[INPUT_LEFT_INVENTORY_INDEX], inventory[INPUT_RIGHT_INVENTORY_INDEX]);
+            final ItemStack leftStack = inventory.getStack(INPUT_LEFT);
+            final ItemStack rightStack = inventory.getStack(INPUT_RIGHT);
+
+            final IAlloyResult output = AlloyManager.INSTANCE.getCupolaResult(leftStack, rightStack);
             if (output.getItemStack().isPresent())
             {
                 addItemStackToOutput(output.getItemStack().get().copy());
 
-                inventory[INPUT_LEFT_INVENTORY_INDEX].stackSize -= output.getConsumedA();
-                inventory[INPUT_RIGHT_INVENTORY_INDEX].stackSize -= output.getConsumedB();
+                leftStack.stackSize -= output.getConsumedA();
+                rightStack.stackSize -= output.getConsumedB();
 
-                if (inventory[INPUT_RIGHT_INVENTORY_INDEX].stackSize <= 0)
+                if (rightStack.stackSize <= 0)
                 {
-                    inventory[INPUT_RIGHT_INVENTORY_INDEX] = null;
+                    inventory.clearSlot(INPUT_RIGHT);
                 }
 
-                if (inventory[INPUT_LEFT_INVENTORY_INDEX].stackSize <= 0)
+                if (leftStack.stackSize <= 0)
                 {
-                    inventory[INPUT_LEFT_INVENTORY_INDEX] = null;
+                    inventory.clearSlot(INPUT_LEFT);
                 }
             }
         }
@@ -467,17 +431,18 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     {
         final int maxStackSize = Math.min(getInventoryStackLimit(), itemStack.getMaxStackSize());
 
-        if (inventory[OUTPUT_INVENTORY_INDEX] == null)
+        if (inventory.isEmpty(OUTPUT))
         {
-            inventory[OUTPUT_INVENTORY_INDEX] = itemStack;
+            inventory.setSlot(OUTPUT, itemStack);
             return;
         }
-        if (inventory[OUTPUT_INVENTORY_INDEX].isItemEqual(itemStack)
-                && inventory[OUTPUT_INVENTORY_INDEX].stackSize < maxStackSize)
+        final ItemStack outputStack = inventory.getStack(OUTPUT);
+        if (outputStack.isItemEqual(itemStack)
+                && outputStack.stackSize < maxStackSize)
         {
-            final int addedSize = Math.min(itemStack.stackSize, maxStackSize - inventory[OUTPUT_INVENTORY_INDEX].stackSize);
+            final int addedSize = Math.min(itemStack.stackSize, maxStackSize - outputStack.stackSize);
             itemStack.stackSize -= addedSize;
-            inventory[OUTPUT_INVENTORY_INDEX].stackSize += addedSize;
+            outputStack.stackSize += addedSize;
         }
     }
 
@@ -490,6 +455,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
                 .add("fuelBurnTime", fuelBurnTime)
                 .add("itemCookTime", itemCookTime)
                 .add("isActive", isActive)
+                .add("isSlave", isSlave)
                 .toString();
     }
 }
