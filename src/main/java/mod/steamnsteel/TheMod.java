@@ -26,7 +26,7 @@ import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.ModItems;
 import mod.steamnsteel.proxy.Proxies;
-import mod.steamnsteel.world.TerrainGenEventHandler;
+import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
@@ -72,9 +72,10 @@ public class TheMod
     public void onFMLInitialization(FMLInitializationEvent event)
     {
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(TerrainGenEventHandler.INSTANCE);
+
         Recipes.init();
         Proxies.render.init();
+	    WorldGen.init();
         ModBlocks.registerTileEntities();
     }
 
