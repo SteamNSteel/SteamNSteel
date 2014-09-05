@@ -17,6 +17,7 @@
 package mod.steamnsteel.client.renderer.tileentity;
 
 
+import com.google.common.base.Objects;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.client.renderer.model.CupolaModel;
 import mod.steamnsteel.library.ModBlocks;
@@ -62,6 +63,8 @@ public class CupbolaTESR extends SteamNSteelTESR
 
     private void renderCupola(CupolaTE te)
     {
+        if (te.isSlave()) return;
+
         final int x = te.xCoord;
         final int y = te.yCoord;
         final int z = te.zCoord;
@@ -115,5 +118,13 @@ public class CupbolaTESR extends SteamNSteelTESR
             default:
                 return 270.0f;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this)
+                .add("model", model)
+                .toString();
     }
 }

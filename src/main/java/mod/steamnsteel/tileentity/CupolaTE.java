@@ -51,6 +51,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     private static final int COOK_TIME_PER_ITEM = 400;  // 200 is standard furnace rate, so cupola process 4 ops per coal
 
     private static final String IS_ACTIVE = "isActive";
+    private static final String IS_SLAVE = "isSlave";
     private static final String DEVICE_COOK_TIME = "deviceCookTime";
     private static final String FUEL_BURN_TIME = "fuelBurnTime";
     private static final String ITEM_COOK_TIME = "itemCookTime";
@@ -60,6 +61,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     private int fuelBurnTime;
     private int itemCookTime;
     private boolean isActive = false;
+    private boolean isSlave = false;
 
     private static String containerName(String name)
     {
@@ -118,6 +120,16 @@ public class CupolaTE extends TileEntity implements ISidedInventory
         return isActive;
     }
 
+    public boolean isSlave()
+    {
+        return isSlave;
+    }
+
+    public void setSlave()
+    {
+        isSlave = true;
+    }
+
     @Override
     public Packet getDescriptionPacket()
     {
@@ -137,6 +149,9 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     {
         super.readFromNBT(nbt);
 
+        isSlave = nbt.getBoolean(IS_SLAVE);
+        if (isSlave) return;
+
         isActive = nbt.getBoolean(IS_ACTIVE);
 
         inventory.readFromNBT(nbt);
@@ -150,6 +165,9 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     public void writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
+
+        nbt.setBoolean(IS_SLAVE, isSlave);
+        if (isSlave) return;
 
         nbt.setBoolean(IS_ACTIVE, isActive);
 
@@ -437,6 +455,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
                 .add("fuelBurnTime", fuelBurnTime)
                 .add("itemCookTime", itemCookTime)
                 .add("isActive", isActive)
+                .add("isSlave", isSlave)
                 .toString();
     }
 }

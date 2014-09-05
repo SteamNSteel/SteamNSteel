@@ -21,14 +21,12 @@ import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.CupolaBlock;
-import mod.steamnsteel.block.machine.FillerBlock;
 import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.storage.*;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
 import mod.steamnsteel.tileentity.CupolaTE;
-import mod.steamnsteel.tileentity.FillerTE;
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -41,7 +39,6 @@ public final class ModBlocks
     public static final SteamNSteelBlock COPPER_BLOCK = new CopperBlock();
     public static final SteamNSteelBlock COPPER_ORE = new CopperOre();
     public static final SteamNSteelBlock CUPOLA = new CupolaBlock();
-    public static final SteamNSteelBlock CUPOLA_FILLER = new FillerBlock(CupolaBlock.NAME);
     public static final SteamNSteelBlock NITER_ORE = new NiterOre();
     public static final SteamNSteelBlock PLOTONIUM_BLOCK = new PlotoniumBlock();
     public static final SteamNSteelBlock PLOTONIUM_CHEST = new PlotoniumChest();
@@ -63,7 +60,6 @@ public final class ModBlocks
     public static void registerTileEntities()
     {
         GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
-        GameRegistry.registerTileEntity(FillerTE.class, getTEName(FillerTE.NAME));
     }
 
     private static String getTEName(String name) { return "tile." + name;}
@@ -73,7 +69,6 @@ public final class ModBlocks
         GameRegistry.registerBlock(PLOTONIUM_CHEST, Names.PLOTONIUM_CHEST);
 
         GameRegistry.registerBlock(CUPOLA, CupolaBlock.NAME);
-        GameRegistry.registerBlock(CUPOLA_FILLER, CupolaBlock.NAME + "_filler");
 
         registerBlockAndOre(COPPER_ORE, Names.COPPER_ORE);
         registerBlockAndOre(NITER_ORE, Names.NITER_ORE);
