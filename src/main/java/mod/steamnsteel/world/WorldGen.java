@@ -35,9 +35,11 @@ public final class WorldGen {
 
 	private void createConfigurations() {
 		//TODO:  read these from configuration
+		//For reference:
+		//       ironConfiguration = new OreConfiguration(Blocks.Iron, 20, 8, 0, 64);
 		INSTANCE.copperConfiguration = new OreConfiguration(ModBlocks.COPPER_ORE, 20, 6, 0, 64);
-		INSTANCE.tinConfiguration = new OreConfiguration(ModBlocks.TIN_ORE, 20, 6, 0, 64);
-		INSTANCE.zincConfiguration = new OreConfiguration(ModBlocks.ZINC_ORE, 20, 2, 0, 64);
+		INSTANCE.tinConfiguration = new OreConfiguration(ModBlocks.TIN_ORE, 20, 3, 0, 64);
+		INSTANCE.zincConfiguration = new OreConfiguration(ModBlocks.ZINC_ORE, 20, 6, 0, 64);
 	}
 
 	@SubscribeEvent
