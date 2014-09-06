@@ -16,7 +16,6 @@
 
 package mod.steamnsteel.configuration;
 
-import mod.steamnsteel.world.WorldGen;
 import net.minecraftforge.common.config.Configuration;
 
 public enum Settings
@@ -60,8 +59,6 @@ public enum Settings
             isCopperGenerated = config.getBoolean("Generate Copper?", CATEGORY, isCopperGenerated, "A boolean");
             isTinGenerated = config.getBoolean("Generate Tin?", CATEGORY, isTinGenerated, "A boolean");
             isZincGenerated = config.getBoolean("Generate Zinc?", CATEGORY, isZincGenerated, "A boolean");
-
-            WorldGen.syncConfig();
         }
     }
 }

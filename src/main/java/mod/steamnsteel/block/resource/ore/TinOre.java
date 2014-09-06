@@ -16,15 +16,20 @@
 
 package mod.steamnsteel.block.resource.ore;
 
-import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.configuration.Settings;
 import mod.steamnsteel.library.ModBlocks;
-import net.minecraft.block.material.Material;
 
-public class TinOre extends SteamNSteelBlock
+public class TinOre extends SteamNSteelOreBlock
 {
     public TinOre()
     {
-        super(Material.rock);
         setBlockName(ModBlocks.Names.TIN_ORE);
+    }
+
+    @Override
+    public boolean isGenEnabled()
+    {
+        return Settings.World.isTinGenerated();
     }
 }

@@ -14,22 +14,21 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.world;
+package mod.steamnsteel.block;
 
-import mod.steamnsteel.block.SteamNSteelBlock;
+import net.minecraft.block.material.Material;
 
-class OreConfiguration {
-    public final SteamNSteelBlock block;
-    public final int clusterCount;
-    public final int blocksPerCluster;
-    public final int minHeight;
-    public final int maxHeight;
-
-    public OreConfiguration(SteamNSteelBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight) {
-        this.block = block;
-        this.clusterCount = clusterCount;
-        this.blocksPerCluster = blocksPerCluster;
-        this.minHeight = minHeight;
-        this.maxHeight = maxHeight;
+public abstract class SteamNSteelOreBlock extends SteamNSteelBlock
+{
+    protected SteamNSteelOreBlock(Material material)
+    {
+        super(material);
     }
+
+    protected SteamNSteelOreBlock()
+    {
+        super(Material.rock);
+    }
+
+    public abstract boolean isGenEnabled();
 }

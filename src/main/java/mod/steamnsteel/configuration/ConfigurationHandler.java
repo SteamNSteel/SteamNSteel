@@ -34,7 +34,7 @@ import static com.google.common.base.Preconditions.*;
 public enum ConfigurationHandler
 {
     INSTANCE;
-    public static final String CONFIG_VERSION = "1";
+    private static final String CONFIG_VERSION = "1";
     private File fileRef = null;
     private Configuration config = null;
     private Optional<Configuration> configOld = Optional.absent();
@@ -74,7 +74,7 @@ public enum ConfigurationHandler
         syncConfig(true);
     }
 
-    public void syncConfig()
+    void syncConfig()
     {
         syncConfig(false);
     }
