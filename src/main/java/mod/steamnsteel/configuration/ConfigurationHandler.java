@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.configuration;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -127,10 +128,20 @@ public enum ConfigurationHandler
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.modID.equals(TheMod.MOD_ID))
+        if (event.modID.equalsIgnoreCase(TheMod.MOD_ID))
         {
             saveConfig();
             syncConfig();
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this)
+                .add("fileRef", fileRef)
+                .add("config", config)
+                .add("configOld", configOld)
+                .toString();
     }
 }
