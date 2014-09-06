@@ -14,22 +14,21 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.block.resource.ore;
+package mod.steamnsteel.block;
 
-import mod.steamnsteel.block.SteamNSteelOreBlock;
-import mod.steamnsteel.configuration.Settings;
-import mod.steamnsteel.library.ModBlocks;
+import net.minecraft.block.material.Material;
 
-public class ZincOre extends SteamNSteelOreBlock
+public abstract class SteamNSteelOreBlock extends SteamNSteelBlock
 {
-    public ZincOre()
+    protected SteamNSteelOreBlock(Material material)
     {
-        setBlockName(ModBlocks.Names.ZINC_ORE);
+        super(material);
     }
 
-    @Override
-    public boolean isGenEnabled()
+    protected SteamNSteelOreBlock()
     {
-        return Settings.World.isZincGenerated();
+        super(Material.rock);
     }
+
+    public abstract boolean isGenEnabled();
 }

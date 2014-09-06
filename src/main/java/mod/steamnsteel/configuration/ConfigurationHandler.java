@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.configuration;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -33,7 +34,7 @@ import static com.google.common.base.Preconditions.*;
 public enum ConfigurationHandler
 {
     INSTANCE;
-    public static final String CONFIG_VERSION = "1";
+    private static final String CONFIG_VERSION = "1";
     private File fileRef = null;
     private Configuration config = null;
     private Optional<Configuration> configOld = Optional.absent();
@@ -73,7 +74,7 @@ public enum ConfigurationHandler
         syncConfig(true);
     }
 
-    public void syncConfig()
+    void syncConfig()
     {
         syncConfig(false);
     }
@@ -127,10 +128,20 @@ public enum ConfigurationHandler
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.modID.equals(TheMod.MOD_ID))
+        if (event.modID.equalsIgnoreCase(TheMod.MOD_ID))
         {
             saveConfig();
             syncConfig();
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this)
+                .add("fileRef", fileRef)
+                .add("config", config)
+                .add("configOld", configOld)
+                .toString();
     }
 }

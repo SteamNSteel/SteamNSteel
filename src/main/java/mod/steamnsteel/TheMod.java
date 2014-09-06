@@ -32,6 +32,7 @@ import mod.steamnsteel.gui.GuiHandler;
 import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.ModItems;
 import mod.steamnsteel.proxy.Proxies;
+import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
@@ -44,7 +45,6 @@ public class TheMod
     public static final String MOD_VERSION = "@MOD_VERSION@";
     public static final String MOD_GUI_FACTORY = "mod.steamnsteel.configuration.client.ModGuiFactory";
 
-    public static final String NETWORK_CHANNEL = MOD_ID.toLowerCase();
     public static final String RESOURCE_PREFIX = MOD_ID.toLowerCase() + ':';
 
     @SuppressWarnings("AnonymousInnerClass")
@@ -84,8 +84,10 @@ public class TheMod
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, GuiHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
+
         Recipes.init();
         Proxies.render.init();
+        WorldGen.init();
         ModBlocks.registerTileEntities();
     }
 

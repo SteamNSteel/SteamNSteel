@@ -16,15 +16,20 @@
 
 package mod.steamnsteel.block.resource.ore;
 
-import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.configuration.Settings;
 import mod.steamnsteel.library.ModBlocks;
-import net.minecraft.block.material.Material;
 
-public class CopperOre extends SteamNSteelBlock
+public class CopperOre extends SteamNSteelOreBlock
 {
     public CopperOre()
     {
-        super(Material.rock);
         setBlockName(ModBlocks.Names.COPPER_ORE);
+    }
+
+    @Override
+    public boolean isGenEnabled()
+    {
+        return Settings.World.isCopperGenerated();
     }
 }

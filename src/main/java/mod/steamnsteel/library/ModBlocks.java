@@ -19,6 +19,7 @@ package mod.steamnsteel.library;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.block.resource.ore.*;
@@ -37,7 +38,7 @@ public final class ModBlocks
     public static final SteamNSteelBlock BRASS_BLOCK = new BrassBlock();
     public static final SteamNSteelBlock BRONZE_BLOCK = new BronzeBlock();
     public static final SteamNSteelBlock COPPER_BLOCK = new CopperBlock();
-    public static final SteamNSteelBlock COPPER_ORE = new CopperOre();
+    public static final SteamNSteelOreBlock COPPER_ORE = new CopperOre();
     public static final SteamNSteelBlock CUPOLA = new CupolaBlock();
     public static final SteamNSteelBlock NITER_ORE = new NiterOre();
     public static final SteamNSteelBlock PLOTONIUM_BLOCK = new PlotoniumBlock();
@@ -48,9 +49,9 @@ public final class ModBlocks
     public static final SteamNSteelBlock STEEL_BLOCK = new SteelBlock();
     public static final SteamNSteelBlock SULFUR_ORE = new SulfurOre();
     public static final SteamNSteelBlock TIN_BLOCK = new TinBlock();
-    public static final SteamNSteelBlock TIN_ORE = new TinOre();
+    public static final SteamNSteelOreBlock TIN_ORE = new TinOre();
     public static final SteamNSteelBlock ZINC_BLOCK = new ZincBlock();
-    public static final SteamNSteelBlock ZINC_ORE = new ZincOre();
+    public static final SteamNSteelOreBlock ZINC_ORE = new ZincOre();
 
     private ModBlocks()
     {

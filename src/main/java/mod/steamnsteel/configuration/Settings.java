@@ -18,16 +18,47 @@ package mod.steamnsteel.configuration;
 
 import net.minecraftforge.common.config.Configuration;
 
-@SuppressWarnings("UtilityClass")
-public final class Settings
+public enum Settings
 {
-    private Settings()
-    {
-        throw new AssertionError();
-    }
+    INSTANCE;
 
     public static void syncConfig(Configuration config)
     {
-        // TODO: Load settings
+        World.syncConfig(config);
+    }
+
+    @SuppressWarnings("StaticNonFinalField")
+    public enum World
+    {
+        @SuppressWarnings("InnerClassFieldHidesOuterClassField")
+        INSTANCE;
+
+        public static final String CATEGORY = Configuration.CATEGORY_GENERAL + ".world";
+        // Defaults
+        private static boolean isCopperGenerated = true;
+        private static boolean isTinGenerated = true;
+        private static boolean isZincGenerated = true;
+
+        public static boolean isCopperGenerated()
+        {
+            return isCopperGenerated;
+        }
+
+        public static boolean isTinGenerated()
+        {
+            return isTinGenerated;
+        }
+
+        public static boolean isZincGenerated()
+        {
+            return isZincGenerated;
+        }
+
+        private static void syncConfig(Configuration config)
+        {
+            isCopperGenerated = config.getBoolean("Generate Copper?", CATEGORY, isCopperGenerated, "A boolean");
+            isTinGenerated = config.getBoolean("Generate Tin?", CATEGORY, isTinGenerated, "A boolean");
+            isZincGenerated = config.getBoolean("Generate Zinc?", CATEGORY, isZincGenerated, "A boolean");
+        }
     }
 }
