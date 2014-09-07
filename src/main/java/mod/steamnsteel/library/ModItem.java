@@ -28,7 +28,7 @@ import mod.steamnsteel.item.tool.SSToolAxe;
 import mod.steamnsteel.item.tool.SSToolHoe;
 import mod.steamnsteel.item.tool.SSToolPickaxe;
 import mod.steamnsteel.item.tool.SSToolShovel;
-import mod.steamnsteel.item.weapon.SSToolSword;
+import mod.steamnsteel.item.tool.SSToolSword;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
 
