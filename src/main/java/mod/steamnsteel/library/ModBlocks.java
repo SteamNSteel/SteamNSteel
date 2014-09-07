@@ -67,50 +67,32 @@ public final class ModBlocks
 
     public static void init()
     {
-        GameRegistry.registerBlock(chestPlotonium, Names.PLOTONIUM_CHEST);
+        GameRegistry.registerBlock(chestPlotonium, PlotoniumChest.NAME);
 
         GameRegistry.registerBlock(cupola, CupolaBlock.NAME);
 
-        registerBlockAndOre(oreCopper, Names.COPPER_ORE);
-        registerBlockAndOre(oreNiter, Names.NITER_ORE);
-        registerBlockAndOre(oreSulfur, Names.SULFUR_ORE);
-        registerBlockAndOre(oreTin, Names.TIN_ORE);
-        registerBlockAndOre(oreZinc, Names.ZINC_ORE);
+        registerBlockAndOre(oreCopper, CopperOre.NAME);
+        registerBlockAndOre(oreNiter, NiterOre.NAME);
+        registerBlockAndOre(oreSulfur, SulfurOre.NAME);
+        registerBlockAndOre(oreTin, TinOre.NAME);
+        registerBlockAndOre(oreZinc, ZincOre.NAME);
 
         registerBlockAndOre(blockBrass, BrassBlock.NAME);
         registerBlockAndOre(blockBronze, BronzeBlock.NAME);
         registerBlockAndOre(blockCopper, CopperBlock.NAME);
-        registerBlockAndOre(blockPlotonium, Names.PLOTONIUM_BLOCK);
-        registerBlockAndOre(blockSteel, Names.STEEL_BLOCK);
-        registerBlockAndOre(blockTin, Names.TIN_BLOCK);
-        registerBlockAndOre(blockZinc, Names.ZINC_BLOCK);
+        registerBlockAndOre(blockPlotonium, PlotoniumBlock.NAME);
+        registerBlockAndOre(blockSteel, SteelBlock.NAME);
+        registerBlockAndOre(blockTin, TinBlock.NAME);
+        registerBlockAndOre(blockZinc, ZincBlock.NAME);
 
-        GameRegistry.registerBlock(ruinFloorPlotonium, Names.PLOTONIUM_RUIN_FLOOR);
-        GameRegistry.registerBlock(ruinPillarPlotonium, Names.PLOTONIUM_RUIN_PILLAR);
-        GameRegistry.registerBlock(ruinWallPlotonium, Names.PLOTONIUM_RUIN_WALL);
+        GameRegistry.registerBlock(ruinFloorPlotonium, PlotoniumRuinFloor.NAME);
+        GameRegistry.registerBlock(ruinPillarPlotonium, PlotoniumRuinPillar.NAME);
+        GameRegistry.registerBlock(ruinWallPlotonium, PlotoniumRuinWall.NAME);
     }
 
     private static void registerBlockAndOre(Block block, String name)
     {
         GameRegistry.registerBlock(block, name);
         OreDictionary.registerOre(name, block);
-    }
-
-    public enum Names
-    {
-        INSTANCE;
-        public static final String COPPER_ORE = "oreCopper";
-        public static final String NITER_ORE = "oreNiter";
-        public static final String PLOTONIUM_BLOCK = "blockPlotonium";
-        public static final String PLOTONIUM_CHEST = "chestPlotonium";
-        public static final String PLOTONIUM_RUIN_FLOOR = "ruinFloorPlotonium";
-        public static final String PLOTONIUM_RUIN_PILLAR = "ruinPillarPlotonium";
-        public static final String PLOTONIUM_RUIN_WALL = "ruinWallPlotonium";
-        public static final String STEEL_BLOCK = "blockSteel";
-        public static final String SULFUR_ORE = "oreSulfur";
-        public static final String TIN_BLOCK = "blockTin";
-        public static final String TIN_ORE = "oreTin";
-        public static final String ZINC_BLOCK = "blockZinc";
-        public static final String ZINC_ORE = "oreZinc";
     }
 }

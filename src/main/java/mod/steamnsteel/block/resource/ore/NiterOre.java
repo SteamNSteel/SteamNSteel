@@ -17,14 +17,15 @@
 package mod.steamnsteel.block.resource.ore;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class NiterOre extends SteamNSteelBlock
 {
+    public static final String NAME = "oreNiter";
+
     public NiterOre()
     {
         super(Material.rock);
-        setBlockName(ModBlocks.Names.NITER_ORE);
+        setBlockName(NAME);
     }
 }

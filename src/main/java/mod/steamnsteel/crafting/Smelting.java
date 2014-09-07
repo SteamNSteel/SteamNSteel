@@ -21,8 +21,7 @@ import mod.steamnsteel.api.crafting.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.api.crafting.ingredient.ItemStackIngredient;
 import mod.steamnsteel.api.crafting.ingredient.OreDictionaryIngredient;
-import mod.steamnsteel.block.resource.storage.BrassBlock;
-import mod.steamnsteel.block.resource.storage.CopperBlock;
+import mod.steamnsteel.block.resource.storage.*;
 import mod.steamnsteel.library.ModBlocks;
 import mod.steamnsteel.library.ModItems;
 import net.minecraft.init.Blocks;
@@ -48,14 +47,14 @@ class Smelting
                 new OreDictionaryIngredient(ModItems.Names.TIN_INGOT),
                 new ItemStack(ModItems.BRONZE_INGOT, 2));
         alloyManager.addAlloy(cuBlockIngredient,
-                new OreDictionaryIngredient(ModBlocks.Names.TIN_BLOCK),
+                new OreDictionaryIngredient(TinBlock.NAME),
                 new ItemStack(ModBlocks.blockBronze, 2));
 
         alloyManager.addAlloy(cuIngotIngredient,
                 new OreDictionaryIngredient(ModItems.Names.ZINC_INGOT),
                 new ItemStack(ModItems.BRASS_INGOT, 2));
         alloyManager.addAlloy(cuBlockIngredient,
-                new OreDictionaryIngredient(ModBlocks.Names.ZINC_BLOCK),
+                new OreDictionaryIngredient(ZincBlock.NAME),
                 new ItemStack(ModBlocks.blockBrass, 2));
 
         alloyManager.addAlloy(new OreDictionaryIngredient("ingotIron"),
@@ -69,7 +68,7 @@ class Smelting
                 new OreDictionaryIngredient(ModItems.Names.STEEL_INGOT),
                 new ItemStack(ModItems.PLOTONIUM_INGOT, 2));
         alloyManager.addAlloy(new OreDictionaryIngredient(BrassBlock.NAME),
-                new OreDictionaryIngredient(ModBlocks.Names.STEEL_BLOCK),
+                new OreDictionaryIngredient(SteelBlock.NAME),
                 new ItemStack(ModBlocks.blockPlotonium, 2));
     }
 }

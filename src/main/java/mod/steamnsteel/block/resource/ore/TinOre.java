@@ -18,13 +18,14 @@ package mod.steamnsteel.block.resource.ore;
 
 import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.configuration.Settings;
-import mod.steamnsteel.library.ModBlocks;
 
 public class TinOre extends SteamNSteelOreBlock
 {
+    public static final String NAME = "oreTin";
+
     public TinOre()
     {
-        setBlockName(ModBlocks.Names.TIN_ORE);
+        setBlockName(NAME);
     }
 
     @Override
