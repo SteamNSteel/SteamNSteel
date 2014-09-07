@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.item.armor;
 
+import com.google.common.base.Objects;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
@@ -23,13 +24,23 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
+import static mod.steamnsteel.item.SteamNSteelItem.getUnwrappedUnlocalizedName;
+
 public abstract class SteamNSteelItemArmor extends ItemArmor
 {
+    private final String undecoratedName;
+
     SteamNSteelItemArmor(ArmorMaterial material, int armorType, int renderIndex, String name)
     {
         super(material, armorType, renderIndex);
         setCreativeTab(TheMod.CREATIVE_TAB);
         setUnlocalizedName(name);
+        undecoratedName = name;
+    }
+
+    public String getUndecoratedName()
+    {
+        return undecoratedName;
     }
 
     @Override
@@ -52,8 +63,11 @@ public abstract class SteamNSteelItemArmor extends ItemArmor
         itemIcon = iconRegister.registerIcon(unlocalizedName.substring(unlocalizedName.indexOf('.') + 1));
     }
 
-    private static String getUnwrappedUnlocalizedName(String unlocalizedName)
+    @Override
+    public String toString()
     {
-        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
+        return Objects.toStringHelper(this)
+                .add("undecoratedName", undecoratedName)
+                .toString();
     }
 }

@@ -16,20 +16,34 @@
 
 package mod.steamnsteel.item.tool;
 
+import com.google.common.base.Objects;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 
+import static mod.steamnsteel.item.SteamNSteelItem.getFormattedName;
+import static mod.steamnsteel.item.SteamNSteelItem.getUnwrappedUnlocalizedName;
+
 public class SSToolHoe extends ItemHoe
 {
-    public SSToolHoe(ToolMaterial toolMaterial, String name)
+    private final String undecoratedName;
+
+    public SSToolHoe(Material material)
     {
-        super(toolMaterial);
-        setUnlocalizedName(name);
+        super(material.getToolMaterial());
+        //noinspection StringConcatenationMissingWhitespace
+        undecoratedName = "hoe" + getFormattedName(material);
+        setUnlocalizedName(undecoratedName);
         setCreativeTab(TheMod.CREATIVE_TAB);
+    }
+
+    public String getUndecoratedName()
+    {
+        return undecoratedName;
     }
 
     @Override
@@ -52,8 +66,11 @@ public class SSToolHoe extends ItemHoe
         itemIcon = iconRegister.registerIcon(unlocalizedName.substring(unlocalizedName.indexOf('.') + 1));
     }
 
-    private static String getUnwrappedUnlocalizedName(String unlocalizedName)
+    @Override
+    public String toString()
     {
-        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
+        return Objects.toStringHelper(this)
+                .add("undecoratedName", undecoratedName)
+                .toString();
     }
 }

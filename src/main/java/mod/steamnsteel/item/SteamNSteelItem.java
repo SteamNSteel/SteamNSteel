@@ -19,15 +19,22 @@ package mod.steamnsteel.item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.apache.commons.lang3.text.WordUtils;
 
 public class SteamNSteelItem extends Item
 {
     public SteamNSteelItem()
     {
         setCreativeTab(TheMod.CREATIVE_TAB);
+    }
+
+    public static String getFormattedName(Material material)
+    {
+        return WordUtils.capitalizeFully(material.name().toLowerCase());
     }
 
     @Override
@@ -50,8 +57,7 @@ public class SteamNSteelItem extends Item
         itemIcon = iconRegister.registerIcon(unlocalizedName.substring(unlocalizedName.indexOf('.') + 1));
     }
 
-    @SuppressWarnings("WeakerAccess")
-    protected String getUnwrappedUnlocalizedName(String unlocalizedName)
+    public static String getUnwrappedUnlocalizedName(String unlocalizedName)
     {
         return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
     }

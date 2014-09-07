@@ -16,11 +16,16 @@
 
 package mod.steamnsteel.item.armor;
 
+import mod.steamnsteel.library.Material;
+
+import static mod.steamnsteel.item.SteamNSteelItem.getFormattedName;
+
 public class SSArmorHelmet extends SteamNSteelItemArmor
 {
 
-    public SSArmorHelmet(ArmorMaterial armorMaterial, String name)
+    public SSArmorHelmet(Material material)
     {
-        super(armorMaterial, 0, 0, name);
+        //noinspection StringConcatenationMissingWhitespace
+        super(material.getArmorMaterial(), 0, 0, "helmet" + getFormattedName(material));
     }
 }
