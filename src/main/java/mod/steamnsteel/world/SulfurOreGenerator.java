@@ -42,8 +42,6 @@ public class SulfurOreGenerator extends OreGenerator {
 	@Override
 	public boolean generate(World world, Random random, int worldX, int unusedY, int worldZ) {
 		try {
-			int blocksCreated = 0;
-
 			HashMap<BlockPos, GenData> interestingBlocks = new HashMap<BlockPos, GenData>();
 			SortedSet<GenData> potentialStartingPoints = new TreeSet<GenData>(new GenDataComparator());
 
@@ -59,16 +57,29 @@ public class SulfurOreGenerator extends OreGenerator {
 			}
 
 			int blocksChanged = 0;
-
+			double minDistanceBetweenClusters = Math.pow(20, 2);
+			List<BlockPos> createdClusters = new LinkedList<BlockPos>();
 			for (GenData data : potentialStartingPoints) {
-				BlockPos pos = data.position;
+				BlockPos clusterPosition = data.position;
+				boolean clusterAllowed = true;
+				for (BlockPos otherClusterPosition : createdClusters) {
+					double distance = Math.pow(clusterPosition.x - otherClusterPosition.x, 2) +
+							Math.pow(clusterPosition.y - otherClusterPosition.y, 2) +
+							Math.pow(clusterPosition.z - otherClusterPosition.y, 2);
+
+					if (distance < minDistanceBetweenClusters) {
+						clusterAllowed = false;
+						break;
+					}
+				}
 
 				float chance = data.heatScore / 8.0f;
-				if (chance > random.nextFloat()) {
+				if (clusterAllowed && chance > random.nextFloat()) {
 
 					//TODO Check radius to other clusters
-					Logger.info("Start Point (%d, %d, %d) HeatScore %d", pos.x, pos.y, pos.z, data.heatScore);
-					blocksChanged += createCluster(world, random, pos, interestingBlocks);
+					Logger.info("Start Point (%d, %d, %d) HeatScore %d", clusterPosition.x, clusterPosition.y, clusterPosition.z, data.heatScore);
+					blocksChanged += createCluster(world, random, clusterPosition, interestingBlocks);
+					createdClusters.add(clusterPosition);
 				}
 			}
 
@@ -167,6 +178,14 @@ public class SulfurOreGenerator extends OreGenerator {
 				} else if (blockY > 0) {
 					Block blockBelow = chunk.getBlock(blockX & 15, blockY - 1, blockZ & 15);
 					if (blockBelow == Blocks.lava || blockBelow == Blocks.flowing_lava) {
+						//the heat score of these blocks tends to be abnormally high, usually because they are
+						//potentially surrounded by more blocks, they're also harder to see, so we'll limit the heat
+						//score in these instances.
+						if (data.heatScore > 5) {
+							data.heatScore = 5;
+							//interestingBlocks.put(blockPos, data);
+						}
+
 						potentialStartingPoints.add(data);
 					}
 				}
