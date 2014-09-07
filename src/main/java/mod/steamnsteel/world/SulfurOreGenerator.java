@@ -1,14 +1,11 @@
 package mod.steamnsteel.world;
 
-import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.feature.WorldGenMinable;
-import scala.actors.LinkedQueue;
 
 import java.util.*;
 
@@ -50,14 +47,13 @@ public class SulfurOreGenerator extends OreGenerator {
 				for (int z = 1; z < 15; ++z) {
 					int blockZ = worldZ + z;
 					for (int y = minHeight; y < maxHeight; ++y) {
-						int blockY = y;
-						checkBlock(world, blockX, blockY, blockZ, interestingBlocks, potentialStartingPoints);
+						checkBlock(world, blockX, y, blockZ, interestingBlocks, potentialStartingPoints);
 					}
 				}
 			}
 
 			int blocksChanged = 0;
-			double minDistanceBetweenClusters = Math.pow(20, 2);
+			double minDistanceBetweenClusters = Math.pow(10, 2);
 			List<BlockPos> createdClusters = new LinkedList<BlockPos>();
 			for (GenData data : potentialStartingPoints) {
 				BlockPos clusterPosition = data.position;
@@ -75,11 +71,13 @@ public class SulfurOreGenerator extends OreGenerator {
 
 				float chance = data.heatScore / 8.0f;
 				if (clusterAllowed && chance > random.nextFloat()) {
-
-					//TODO Check radius to other clusters
 					Logger.info("Start Point (%d, %d, %d) HeatScore %d", clusterPosition.x, clusterPosition.y, clusterPosition.z, data.heatScore);
 					blocksChanged += createCluster(world, random, clusterPosition, interestingBlocks);
 					createdClusters.add(clusterPosition);
+
+					if (createdClusters.size() >= this.clusterCount) {
+						break;
+					}
 				}
 			}
 
@@ -97,9 +95,6 @@ public class SulfurOreGenerator extends OreGenerator {
 		Queue<GenData> blocksToProcess = new LinkedList<GenData>();
 		HashSet<BlockPos> processedBlocks = new HashSet<BlockPos>();
 		GenData genData = interestingBlocks.get(startPosition);
-		if (genData == null) {
-			Logger.warning("wtf, the sulfur gen starting block wasn't interesting?");
-		}
 		genData.heatScore = Integer.MAX_VALUE;
 		blocksToProcess.add(genData);
 		int blocksAdded = 0;
@@ -166,7 +161,7 @@ public class SulfurOreGenerator extends OreGenerator {
 				GenData data = interestingBlocks.get(blockPos);
 				if (data == null) {
 
-					data = new GenData(blockPos, BlockType.REPLACABLE);
+					data = new GenData(blockPos);
 					interestingBlocks.put(blockPos, data);
 				}
 				data.heatScore = heatScore;
@@ -183,7 +178,6 @@ public class SulfurOreGenerator extends OreGenerator {
 						//score in these instances.
 						if (data.heatScore > 5) {
 							data.heatScore = 5;
-							//interestingBlocks.put(blockPos, data);
 						}
 
 						potentialStartingPoints.add(data);
@@ -194,7 +188,7 @@ public class SulfurOreGenerator extends OreGenerator {
 				for (BlockPos neighbour : potentialNeighboursToAdd) {
 					data = interestingBlocks.get(neighbour);
 					if (data == null) {
-						data = new GenData(neighbour, BlockType.REPLACABLE);
+						data = new GenData(neighbour);
 						interestingBlocks.put(neighbour, data);
 						data.heatScore = 1;
 					}
@@ -203,24 +197,12 @@ public class SulfurOreGenerator extends OreGenerator {
 		}
 	}
 
-	private enum BlockType {
-		REPLACABLE,
-		LAVA
-	}
-
 	private static class GenData {
 		public final BlockPos position;
-		public final BlockType type;
 		public int heatScore;
 
-		public GenData(BlockPos position, BlockType type) {
+		public GenData(BlockPos position) {
 			this.position = position;
-			this.type = type;
-		}
-
-		public GenData(BlockPos position, BlockType type, int heatScore) {
-			this(position, type);
-			this.heatScore = heatScore;
 		}
 
 		@Override
@@ -230,9 +212,8 @@ public class SulfurOreGenerator extends OreGenerator {
 
 			GenData genData = (GenData) o;
 
-			if (!position.equals(genData.position)) return false;
+			return position.equals(genData.position);
 
-			return true;
 		}
 
 		@Override
@@ -253,6 +234,7 @@ public class SulfurOreGenerator extends OreGenerator {
 			this.z = z;
 		}
 
+		@SuppressWarnings("RedundantIfStatement")
 		@Override
 		public boolean equals(Object o) {
 			if (this == o) return true;
@@ -276,31 +258,22 @@ public class SulfurOreGenerator extends OreGenerator {
 		}
 	}
 
-	static final int[][] neighbours = new int[26][4];
+	static final int[][] neighbours = new int[26][3];
 
 	static {
 		int pos = 0;
 		for (int z = -1; z <= 1; ++z) {
 			for (int y = -1; y <= 1; ++y) {
 				for (int x = -1; x <= 1; ++x) {
-					int importance = 3;
-					if (x == 0) {
-						importance--;
+					if (x == 0 && y == 0 && z == 0) {
+						continue;
 					}
-					if (y == 0) {
-						importance--;
-					}
-					if (z == 0) {
-						importance--;
-					}
-					if (importance > 0) {
-						neighbours[pos][0] = x;
-						neighbours[pos][1] = y;
-						neighbours[pos][2] = z;
-						neighbours[pos][3] = importance;
 
-						++pos;
-					}
+					neighbours[pos][0] = x;
+					neighbours[pos][1] = y;
+					neighbours[pos][2] = z;
+
+					++pos;
 				}
 			}
 		}

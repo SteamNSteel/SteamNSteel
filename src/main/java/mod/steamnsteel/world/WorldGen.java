@@ -51,7 +51,7 @@ public enum WorldGen
         oreGens.add(new OreGenerator(ModBlock.oreCopper, 20, 6, 0, 64));
         oreGens.add(new OreGenerator(ModBlock.oreTin, 20, 3, 0, 64));
         oreGens.add(new OreGenerator(ModBlock.oreZinc, 20, 6, 0, 64));
-	    oreGens.add(new SulfurOreGenerator(ModBlock.oreSulfur, 3, 10, 0, 64));
+	    oreGens.add(new SulfurOreGenerator(ModBlock.oreSulfur, 10, 12, 0, 64));
     }
 
     @SuppressWarnings("MethodMayBeStatic")
