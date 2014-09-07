@@ -1,10 +1,13 @@
 package mod.steamnsteel.world;
 
+import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.feature.WorldGenMinable;
 import scala.actors.LinkedQueue;
 
 import java.util.*;
@@ -30,11 +33,15 @@ import java.util.*;
  * Crashes in the generation shouldn't happen, but just in case let's not prevent people from playing the game. I highly
  * doubt that a crash would happen in every chunk.
  */
-public class WorldGenSulfur implements ICustomOreGenerator {
+public class SulfurOreGenerator extends OreGenerator {
+	public SulfurOreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight)
+	{
+		super(block, clusterCount, blocksPerCluster, minHeight, maxHeight);
+	}
+
 	@Override
-	public void generate(OreConfiguration configuration, World world, Random random, int worldX, int worldZ) {
+	public boolean generate(World world, Random random, int worldX, int unusedY, int worldZ) {
 		try {
-			int maxCreatedBlocks = random.nextInt(configuration.blocksPerCluster);
 			int blocksCreated = 0;
 
 			HashMap<BlockPos, GenData> interestingBlocks = new HashMap<BlockPos, GenData>();
@@ -44,7 +51,7 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 				int blockX = worldX + x;
 				for (int z = 1; z < 15; ++z) {
 					int blockZ = worldZ + z;
-					for (int y = configuration.minHeight; y < configuration.maxHeight; ++y) {
+					for (int y = minHeight; y < maxHeight; ++y) {
 						int blockY = y;
 						checkBlock(world, blockX, blockY, blockZ, interestingBlocks, potentialStartingPoints);
 					}
@@ -61,19 +68,21 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 
 					//TODO Check radius to other clusters
 					Logger.info("Start Point (%d, %d, %d) HeatScore %d", pos.x, pos.y, pos.z, data.heatScore);
-					blocksChanged += createCluster(world, random, pos, configuration, interestingBlocks);
+					blocksChanged += createCluster(world, random, pos, interestingBlocks);
 				}
 			}
 
 			Logger.info("Changed %d blocks to Sulfur", blocksChanged);
+			return true;
 		} catch (Exception e) {
 			Logger.severe("Error generating sulfur: %s", e.toString());
 			e.printStackTrace();
 		}
+		return false;
 	}
 
-	private int createCluster(World world, Random random, BlockPos startPosition, OreConfiguration configuration, Map<BlockPos, GenData> interestingBlocks) {
-		int blocks = random.nextInt(configuration.blocksPerCluster);
+	private int createCluster(World world, Random random, BlockPos startPosition, Map<BlockPos, GenData> interestingBlocks) {
+		int blocks = random.nextInt(blocksPerCluster);
 		Queue<GenData> blocksToProcess = new LinkedList<GenData>();
 		HashSet<BlockPos> processedBlocks = new HashSet<BlockPos>();
 		GenData genData = interestingBlocks.get(startPosition);
@@ -88,7 +97,7 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 			BlockPos pos = data.position;
 			float chance = data.heatScore / 8.0f;
 			if (chance > random.nextFloat()) {
-				world.setBlock(pos.x, pos.y, pos.z, configuration.block, 0, 0);
+				world.setBlock(pos.x, pos.y, pos.z, block, 0, 0);
 				processedBlocks.add(pos);
 				blocksAdded++;
 				for (int[] neighbour : neighbours) {
@@ -174,8 +183,6 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 			}
 		}
 	}
-
-
 
 	private enum BlockType {
 		REPLACABLE,

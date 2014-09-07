@@ -17,15 +17,22 @@
 package mod.steamnsteel.block.resource.ore;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.configuration.Settings;
 import net.minecraft.block.material.Material;
 
-public class SulfurOre extends SteamNSteelBlock
+public class SulfurOre extends SteamNSteelOreBlock
 {
     public static final String NAME = "oreSulfur";
 
-    public SulfurOre()
-    {
-        super(Material.rock);
-        setBlockName(NAME);
-    }
+	public SulfurOre()
+	{
+		setBlockName(NAME);
+	}
+
+	@Override
+	public boolean isGenEnabled()
+	{
+		return Settings.World.isSulfurGenerated();
+	}
 }
