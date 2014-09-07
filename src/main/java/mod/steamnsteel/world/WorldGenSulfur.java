@@ -52,16 +52,6 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 			}
 
 			int blocksChanged = 0;
-			/*
-			for (Map.Entry<BlockPos, GenData> x : interestingBlocks.entrySet()) {
-				BlockPos pos = x.getKey();
-				GenData data = x.getValue();
-				if (data.type == BlockType.REPLACABLE) {
-					world.setBlock(pos.x, pos.y, pos.z, configuration.block, 0, 2);
-					blocksChanged++;
-					//Logger.info("(%d, %d, %d) HeatScore %d", pos.x, pos.y, pos.z, data.heatScore);
-				}
-			}*/
 
 			for (GenData data : potentialStartingPoints) {
 				BlockPos pos = data.position;
@@ -121,9 +111,9 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 		int worldX = (blockX) >> 4;
 		int worldZ = (blockZ) >> 4;
 
-		Chunk thisChunk = world.getChunkFromBlockCoords(blockX, blockZ);
+		Chunk chunk = world.getChunkFromBlockCoords(blockX, blockZ);
 
-		Block worldBlock = thisChunk.getBlock(blockX & 15, blockY, blockZ & 15);
+		Block worldBlock = chunk.getBlock(blockX & 15, blockY, blockZ & 15);
 		BlockPos blockPos = new BlockPos(blockX, blockY, blockZ);
 
 		LinkedList<BlockPos> potentialNeighboursToAdd = new LinkedList<BlockPos>();
@@ -131,34 +121,22 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 		if (worldBlock == Blocks.stone || worldBlock == Blocks.dirt || worldBlock == Blocks.gravel) {
 			int heatScore = 0;
 			for (int[] neighbour : neighbours) {
-				Chunk checkChunk = thisChunk;
-				int neighbourChunkX = (blockX + neighbour[0]) >> 4;
-				int neighbourChunkZ = (blockZ + neighbour[2]) >> 4;
-
-				int neighbourBlockX =(blockX + neighbour[0]) & 15;
-				int neighbourBlockZ =(blockZ + neighbour[2]) & 15;
+				BlockPos neighbourBlockPos = new BlockPos(blockX + neighbour[0], blockY + neighbour[1], blockZ + neighbour[2]);
 
 				//Don't inspect neighbours in chunks that haven't been created - it causes Already Decorating!! exception
-				if ((neighbourChunkX != worldX || neighbourChunkZ != worldZ)) {
+				if ((neighbourBlockPos.x >> 4 != worldX || neighbourBlockPos.z >> 4 != worldZ)) {
 					Logger.warning("wtf, encountered a block that wasn't in this chunk. I thought I'd prevented that.");
 					continue;
 				}
 
-				Block neighbourBlock = checkChunk.getBlock(
-						neighbourBlockX,
+				Block neighbourBlock = chunk.getBlock(
+						neighbourBlockPos.x & 15,
 						blockY + neighbour[1],
-						neighbourBlockZ);
+						neighbourBlockPos.z & 15);
 
-				BlockPos neighbourBlockPos = new BlockPos(blockX + neighbour[0], blockY + neighbour[1], blockZ + neighbour[2]);
-
-				//If we've found a block neighbouring Lava, we've found a block of interest we'll want to track.
+				//If we've found a block neighbouring Lava, increase this block's heat score
 				if (neighbourBlock == Blocks.lava || neighbourBlock == Blocks.flowing_lava) {
 					heatScore += 2;
-
-					//Keeping track of the lava blocks will allow me to quickly tell me that this is a block that shouldn't be replaced.
-					/*if (!interestingBlocks.containsKey(neighbourBlockPos)) {
-						interestingBlocks.put(neighbourBlockPos, new GenData(neighbourBlockPos, BlockType.LAVA, 16));
-					}*/
 				} else if (neighbourBlock == Blocks.stone || neighbourBlock == Blocks.dirt || neighbourBlock == Blocks.gravel) {
 					potentialNeighboursToAdd.add(neighbourBlockPos);
 				}
@@ -174,11 +152,11 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 				data.heatScore = heatScore;
 
 				//A heat score of 2 or higher means that we're adjacent to lava.
-				Block blockAbove = thisChunk.getBlock(blockX & 15, blockY + 1, blockZ & 15);
+				Block blockAbove = chunk.getBlock(blockX & 15, blockY + 1, blockZ & 15);
 				if (blockAbove == Blocks.air) {
 					potentialStartingPoints.add(data);
 				} else if (blockY > 0) {
-					Block blockBelow = thisChunk.getBlock(blockX & 15, blockY - 1, blockZ & 15);
+					Block blockBelow = chunk.getBlock(blockX & 15, blockY - 1, blockZ & 15);
 					if (blockBelow == Blocks.lava || blockBelow == Blocks.flowing_lava) {
 						potentialStartingPoints.add(data);
 					}
