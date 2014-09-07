@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import scala.actors.LinkedQueue;
 
 import java.util.*;
 
@@ -51,19 +52,27 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 			}
 
 			int blocksChanged = 0;
+			/*
 			for (Map.Entry<BlockPos, GenData> x : interestingBlocks.entrySet()) {
 				BlockPos pos = x.getKey();
 				GenData data = x.getValue();
 				if (data.type == BlockType.REPLACABLE) {
 					world.setBlock(pos.x, pos.y, pos.z, configuration.block, 0, 2);
 					blocksChanged++;
-					Logger.info("(%d, %d, %d) HeatScore %d", pos.x, pos.y, pos.z, data.heatScore);
+					//Logger.info("(%d, %d, %d) HeatScore %d", pos.x, pos.y, pos.z, data.heatScore);
 				}
-			}
+			}*/
 
 			for (GenData data : potentialStartingPoints) {
 				BlockPos pos = data.position;
-				Logger.info("Start Point (%d, %d, %d) HeatScore %d", pos.x, pos.y, pos.z, data.heatScore);
+
+				float chance = data.heatScore / 8.0f;
+				if (chance > random.nextFloat()) {
+
+					//TODO Check radius to other clusters
+					Logger.info("Start Point (%d, %d, %d) HeatScore %d", pos.x, pos.y, pos.z, data.heatScore);
+					blocksChanged += createCluster(world, random, pos, configuration, interestingBlocks);
+				}
 			}
 
 			Logger.info("Changed %d blocks to Sulfur", blocksChanged);
@@ -71,6 +80,41 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 			Logger.severe("Error generating sulfur: %s", e.toString());
 			e.printStackTrace();
 		}
+	}
+
+	private int createCluster(World world, Random random, BlockPos startPosition, OreConfiguration configuration, Map<BlockPos, GenData> interestingBlocks) {
+		int blocks = random.nextInt(configuration.blocksPerCluster);
+		Queue<GenData> blocksToProcess = new LinkedList<GenData>();
+		HashSet<BlockPos> processedBlocks = new HashSet<BlockPos>();
+		GenData genData = interestingBlocks.get(startPosition);
+		if (genData == null) {
+			Logger.warning("wtf, the sulfur gen starting block wasn't interesting?");
+		}
+		genData.heatScore = Integer.MAX_VALUE;
+		blocksToProcess.add(genData);
+		int blocksAdded = 0;
+		while (!blocksToProcess.isEmpty()) {
+			GenData data = blocksToProcess.poll();
+			BlockPos pos = data.position;
+			float chance = data.heatScore / 8.0f;
+			if (chance > random.nextFloat()) {
+				world.setBlock(pos.x, pos.y, pos.z, configuration.block, 0, 0);
+				processedBlocks.add(pos);
+				blocksAdded++;
+				for (int[] neighbour : neighbours) {
+					BlockPos neighbourPos = new BlockPos(pos.x + neighbour[0], pos.y + neighbour[1], pos.z + neighbour[2]);
+					GenData neighbourData = interestingBlocks.get(neighbourPos);
+					if (neighbourData != null && !processedBlocks.contains(neighbourPos)) {
+						blocksToProcess.add(neighbourData);
+					}
+				}
+
+				if (blocksAdded >= blocks) {
+					return blocksAdded;
+				}
+			}
+		}
+		return blocksAdded;
 	}
 
 	private void checkBlock(World world, int blockX, int blockY, int blockZ, Map<BlockPos, GenData> interestingBlocks, Set<GenData> potentialStartingPoints) {
@@ -98,10 +142,6 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 				if ((neighbourChunkX != worldX || neighbourChunkZ != worldZ)) {
 					Logger.warning("wtf, encountered a block that wasn't in this chunk. I thought I'd prevented that.");
 					continue;
-					/*if (!world.getChunkProvider().chunkExists(neighbourChunkX, neighbourChunkZ)) {
-
-					}
-					checkChunk = world.getChunkFromChunkCoords(neighbourChunkX, neighbourChunkZ);*/
 				}
 
 				Block neighbourBlock = checkChunk.getBlock(
@@ -116,9 +156,9 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 					heatScore += 2;
 
 					//Keeping track of the lava blocks will allow me to quickly tell me that this is a block that shouldn't be replaced.
-					if (!interestingBlocks.containsKey(neighbourBlockPos)) {
+					/*if (!interestingBlocks.containsKey(neighbourBlockPos)) {
 						interestingBlocks.put(neighbourBlockPos, new GenData(neighbourBlockPos, BlockType.LAVA, 16));
-					}
+					}*/
 				} else if (neighbourBlock == Blocks.stone || neighbourBlock == Blocks.dirt || neighbourBlock == Blocks.gravel) {
 					potentialNeighboursToAdd.add(neighbourBlockPos);
 				}
@@ -132,22 +172,25 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 					interestingBlocks.put(blockPos, data);
 				}
 				data.heatScore = heatScore;
+
+				//A heat score of 2 or higher means that we're adjacent to lava.
+				Block blockAbove = thisChunk.getBlock(blockX & 15, blockY + 1, blockZ & 15);
+				if (blockAbove == Blocks.air) {
+					potentialStartingPoints.add(data);
+				} else if (blockY > 0) {
+					Block blockBelow = thisChunk.getBlock(blockX & 15, blockY - 1, blockZ & 15);
+					if (blockBelow == Blocks.lava || blockBelow == Blocks.flowing_lava) {
+						potentialStartingPoints.add(data);
+					}
+				}
+
+
 				for (BlockPos neighbour : potentialNeighboursToAdd) {
 					data = interestingBlocks.get(neighbour);
 					if (data == null) {
 						data = new GenData(neighbour, BlockType.REPLACABLE);
 						interestingBlocks.put(neighbour, data);
 						data.heatScore = 1;
-					}
-				}
-
-				Block blockAbove = thisChunk.getBlock(blockX&15, blockY + 1, blockZ&15);
-				if (blockAbove == Blocks.air) {
-					potentialStartingPoints.add(data);
-				} else if (blockY > 0) {
-					Block blockBelow = thisChunk.getBlock(blockX&15, blockY - 1, blockZ&15);
-					if (blockAbove == Blocks.lava || blockAbove == Blocks.flowing_lava) {
-						potentialStartingPoints.add(data);
 					}
 				}
 			}
@@ -174,6 +217,23 @@ public class WorldGenSulfur implements ICustomOreGenerator {
 		public GenData(BlockPos position, BlockType type, int heatScore) {
 			this(position, type);
 			this.heatScore = heatScore;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+
+			GenData genData = (GenData) o;
+
+			if (!position.equals(genData.position)) return false;
+
+			return true;
+		}
+
+		@Override
+		public int hashCode() {
+			return position.hashCode();
 		}
 	}
 
