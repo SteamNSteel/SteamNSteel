@@ -34,7 +34,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings({"UtilityClass", "WeakerAccess"})
 @GameRegistry.ObjectHolder(TheMod.MOD_ID)
-public final class ModItems
+public final class ModItem
 {
     // *******
     // * NOTE: @GameRegistry.ObjectHolder requires these fields to have the same name as the unlocalized name of the
@@ -76,7 +76,7 @@ public final class ModItems
     public static final SteamNSteelItem plotoniumScrap = new PlotoniumScrap();
     public static final SteamNSteelItem voxBox = new VoxBox();
 
-    private ModItems()
+    private ModItem()
     {
         throw new AssertionError();
     }

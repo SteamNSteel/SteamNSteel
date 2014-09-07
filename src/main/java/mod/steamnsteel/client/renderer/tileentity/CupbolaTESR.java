@@ -20,7 +20,7 @@ package mod.steamnsteel.client.renderer.tileentity;
 import com.google.common.base.Objects;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.client.renderer.model.CupolaModel;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.Orientation;
 import mod.steamnsteel.utility.Vector;
@@ -86,7 +86,7 @@ public class CupbolaTESR extends SteamNSteelTESR
         final World world = te.getWorldObj();
 
         // Lighting
-        final float brightness = ModBlocks.cupola.getMixedBrightnessForBlock(world, x, y, z);
+        final float brightness = ModBlock.cupola.getMixedBrightnessForBlock(world, x, y, z);
         final int skyLight = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
         final int skyLightLSB = skyLight % 65536;
         final int skyLightMSB = skyLight / 65536;

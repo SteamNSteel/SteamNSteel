@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.resource;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.ModItem;
 
 public class Sulfur extends SteamNSteelItem
 {
     public Sulfur()
     {
-        setUnlocalizedName(ModItems.Names.SULFUR);
+        setUnlocalizedName(ModItem.Names.SULFUR);
     }
 }

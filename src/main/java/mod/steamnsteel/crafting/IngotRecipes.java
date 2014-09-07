@@ -19,28 +19,29 @@ package mod.steamnsteel.crafting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.registry.GameRegistry;
-import mod.steamnsteel.library.ModBlocks;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.utility.crafting.RecipePattern;
 import net.minecraft.block.Block;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.util.List;
 
-@SuppressWarnings("MethodMayBeStatic")
-class IngotRecipes
+enum IngotRecipes
 {
+    INSTANCE;
+
     private static List<IRecipe> getRecipes()
     {
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(ModBlocks.blockBrass, ModItems.Names.BRASS_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.blockBronze, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.blockCopper, ModItems.Names.COPPER_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.blockPlotonium, ModItems.Names.PLOTONIUM_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.blockSteel, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.blockTin, ModItems.Names.TIN_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.blockZinc, ModItems.Names.ZINC_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockBrass, ModItem.Names.BRASS_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockBronze, ModItem.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockCopper, ModItem.Names.COPPER_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockPlotonium, ModItem.Names.PLOTONIUM_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockSteel, ModItem.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockTin, ModItem.Names.TIN_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockZinc, ModItem.Names.ZINC_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }
@@ -51,7 +52,7 @@ class IngotRecipes
         return new ShapedOreRecipe(result, pattern.get(), '#', ingot);
     }
 
-    void init()
+    static void init()
     {
         final List<IRecipe> recipes = getRecipes();
         for (final IRecipe recipe : recipes)

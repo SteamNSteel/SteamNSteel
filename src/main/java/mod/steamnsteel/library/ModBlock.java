@@ -33,7 +33,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 @SuppressWarnings({"UtilityClass", "WeakerAccess"})
 @GameRegistry.ObjectHolder(TheMod.MOD_ID)
-public final class ModBlocks
+public final class ModBlock
 {
     // *******
     // * NOTE: @GameRegistry.ObjectHolder requires these fields to have the same name as the unlocalized name of the
@@ -57,7 +57,7 @@ public final class ModBlocks
     public static final SteamNSteelBlock ruinPillarPlotonium = new PlotoniumRuinPillar();
     public static final SteamNSteelBlock ruinWallPlotonium = new PlotoniumRuinWall();
 
-    private ModBlocks()
+    private ModBlock()
     {
         throw new AssertionError();
     }

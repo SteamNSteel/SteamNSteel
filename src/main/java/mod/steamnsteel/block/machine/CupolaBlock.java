@@ -21,7 +21,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.gui.ModGuis;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.Block;
@@ -132,7 +132,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         super.onPostBlockPlaced(world, x, y, z, metadata);
 
         final int fillerY = y + 1;
-        world.setBlock(x, fillerY, z, ModBlocks.cupola, 0, 2);
+        world.setBlock(x, fillerY, z, ModBlock.cupola, 0, 2);
 
         final TileEntity te = world.getTileEntity(x, fillerY, z);
         ((CupolaTE) te).setSlave();

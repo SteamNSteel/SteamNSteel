@@ -29,8 +29,8 @@ import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.gui.GuiHandler;
-import mod.steamnsteel.library.ModBlocks;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.proxy.Proxies;
 import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
@@ -53,7 +53,7 @@ public class TheMod
         @Override
         public Item getTabIconItem()
         {
-            return ModItems.mustyJournal;
+            return ModItem.mustyJournal;
         }
     };
 
@@ -68,8 +68,8 @@ public class TheMod
 
         initAPI();
 
-        ModItems.init();
-        ModBlocks.init();
+        ModItem.init();
+        ModBlock.init();
     }
 
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
@@ -88,7 +88,7 @@ public class TheMod
         Recipes.init();
         Proxies.render.init();
         WorldGen.init();
-        ModBlocks.registerTileEntities();
+        ModBlock.registerTileEntities();
     }
 
     @SuppressWarnings("UnusedParameters")
