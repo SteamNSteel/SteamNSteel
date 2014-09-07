@@ -24,6 +24,9 @@ tile.steamnsteel:ruinFloorPlotonium.name=Ruined Plotonium Floor
 tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
 tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
 
+#Containers
+container.steamnsteel:cupola=Cupola
+
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel
 
@@ -55,8 +58,8 @@ item.steamnsteel:perGuiVox.name=Personal Guide Vox
 item.steamnsteel:pickBronze.name=Bronze Pickaxe
 item.steamnsteel:pickSteel.name=Steel Pickaxe
 item.steamnsteel:plotoniumScrap.name=Plotonium Scrap
-item.steamnsteel:shovelBronze.name=Bronze Shovel
-item.steamnsteel:shovelSteel.name=Steel Shovel
+item.steamnsteel:shovelBronze.name=Bronze Spade
+item.steamnsteel:shovelSteel.name=Steel Spade
 item.steamnsteel:swordBronze.name=Bronze Sword
 item.steamnsteel:swordSteel.name=Steel Sword
 item.steamnsteel:voxBox.name=Vox Box

@@ -17,14 +17,15 @@
 package mod.steamnsteel.block.resource.storage;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class TinBlock extends SteamNSteelBlock
 {
+    public static final String NAME = "blockTin";
+
     public TinBlock()
     {
         super(Material.rock);
-        setBlockName(ModBlocks.Names.TIN_BLOCK);
+        setBlockName(NAME);
     }
 }

@@ -17,14 +17,15 @@
 package mod.steamnsteel.block.resource.storage;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class ZincBlock extends SteamNSteelBlock
 {
+    public static final String NAME = "blockZinc";
+
     public ZincBlock()
     {
         super(Material.rock);
-        setBlockName(ModBlocks.Names.ZINC_BLOCK);
+        setBlockName(NAME);
     }
 }

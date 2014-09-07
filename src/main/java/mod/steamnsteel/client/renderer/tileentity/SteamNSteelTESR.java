@@ -35,5 +35,4 @@ abstract class SteamNSteelTESR extends TileEntitySpecialRenderer
     {
         return TEXTURE_LOCATION + name + TEXTURE_FILE_EXTENSION;
     }
-
 }

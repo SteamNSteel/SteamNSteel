@@ -14,16 +14,22 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.weapon;
+package mod.steamnsteel.gui;
 
-import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
-
-public class SteelSword extends SteamNSteelItem
-
+public enum ModGuis
 {
-    public SteelSword()
+    CUPOLA;
+
+    private static final ModGuis[] cache = values();
+
+    public int getID()
     {
-        setUnlocalizedName(ModItems.Names.STEEL_SWORD);
+        // Not used for persistent data, so ordinal is perfect here!
+        return ordinal();
+    }
+
+    public static ModGuis fromId(int id)
+    {
+        return cache[id];
     }
 }

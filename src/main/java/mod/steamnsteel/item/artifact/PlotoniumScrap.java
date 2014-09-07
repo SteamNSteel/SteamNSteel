@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.artifact;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.ModItem;
 
 public class PlotoniumScrap extends SteamNSteelItem
 {
     public PlotoniumScrap()
     {
-        setUnlocalizedName(ModItems.Names.PLOTONIUM_SCRAP);
+        setUnlocalizedName(ModItem.Names.PLOTONIUM_SCRAP);
     }
 }

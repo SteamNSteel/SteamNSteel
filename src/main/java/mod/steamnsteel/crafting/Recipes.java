@@ -17,7 +17,7 @@
 package mod.steamnsteel.crafting;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.utility.crafting.RecipePattern;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.crafting.IRecipe;
@@ -33,18 +33,18 @@ public final class Recipes
 
     public static void init()
     {
-        new Smelting().init();
-        new ToolRecipes().init();
-        new IngotRecipes().init();
-        new ArmorRecipes().init();
-        
+        Smelting.init();
+        ToolRecipes.init();
+        IngotRecipes.init();
+        ArmorRecipes.init();
+
         addCupolaRecipe();
     }
 
     private static void addCupolaRecipe()
     {
         final RecipePattern pattern = RecipePattern.of("#X#", "X X", "#X#");
-        final IRecipe recipe = new ShapedOreRecipe(ModBlocks.CUPOLA, pattern.get(), '#', "ingotIron", 'X', Blocks.brick_block);
+        final IRecipe recipe = new ShapedOreRecipe(ModBlock.cupola, pattern.get(), '#', "ingotIron", 'X', Blocks.brick_block);
         GameRegistry.addRecipe(recipe);
     }
 }

@@ -18,13 +18,16 @@ package mod.steamnsteel.block.machine;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.gui.ModGuis;
+import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
-import mod.steamnsteel.tileentity.FillerTE;
 import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -39,6 +42,17 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         setBlockName(NAME);
     }
 
+    private static void renderSmokeOnTop(World world, int x, int y, int z, Random rng)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            final float centerOffset1 = rng.nextFloat() * 0.6f - 0.3f;
+            final float centerOffset2 = rng.nextFloat() * 0.6f - 0.3f;
+
+            world.spawnParticle("smoke", x + 0.5d + centerOffset1, y + 2.0d, z + 0.5d + centerOffset2, 0.0d, 0.1d, 0.0d);
+        }
+    }
+
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
@@ -48,10 +62,15 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     @Override
     public int getLightValue(IBlockAccess world, int x, int y, int z)
     {
-        final TileEntity te = world.getTileEntity(x, y, z);
-        if (te instanceof CupolaTE)
-            if (((CupolaTE) te).isActive())
-                return 15;
+        TileEntity te = world.getTileEntity(x, y, z);
+
+        if (((CupolaTE) te).isSlave())
+        {
+            te = world.getTileEntity(x, y - 1, z);
+        }
+
+        if (((CupolaTE) te).isActive())
+            return 15;
 
         return super.getLightValue(world, x, y, z);
     }
@@ -63,17 +82,48 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
+    {
+        int y1 = y;
+        final TileEntity te = world.getTileEntity(x, y1, z);
+        if (((CupolaTE) te).isSlave())
+            y1--;
+
+        player.openGui(TheMod.instance, ModGuis.CUPOLA.getID(), world, x, y1, z);
+        return true;
+    }
+
+    @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
     {
-        if (world.isAirBlock(x, y + 1,z ))
+        final TileEntity te = world.getTileEntity(x, y, z);
+        if (((CupolaTE) te).isSlave())
         {
-            final int metadata = world.getBlockMetadata(x, y, z);
+            if (world.isAirBlock(x, y - 1, z))
+            {
+                world.setBlockToAir(x, y, z);
+                world.removeTileEntity(x, y, z);
+            }
+            return;
+        }
+
+        if (world.isAirBlock(x, y + 1, z))
+        {
             world.setBlockToAir(x, y, z);
             if (!world.isRemote)
             {
-                dropBlockAsItem(world, x, y, z, metadata, 0);
+                // pass 8 here to stop duplication error
+                dropBlockAsItem(world, x, y, z, 8, 0);
             }
         }
+    }
+
+    @Override
+    public Item getItemDropped(int metadata, Random rng, int fortune)
+    {
+        if (metadata != 8) // if we get 8, we will spawn 2 items...so skip one
+            return super.getItemDropped(metadata, rng, fortune);
+        return Item.getItemById(0);
     }
 
     @Override
@@ -82,15 +132,10 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         super.onPostBlockPlaced(world, x, y, z, metadata);
 
         final int fillerY = y + 1;
-        world.setBlock(x, fillerY, z, ModBlocks.CUPOLA_FILLER, 0, 2);
+        world.setBlock(x, fillerY, z, ModBlock.cupola, 0, 2);
+
         final TileEntity te = world.getTileEntity(x, fillerY, z);
-        if (te instanceof FillerTE)
-        {
-            final FillerTE filler = (FillerTE)te;
-            filler.setMasterX(x);
-            filler.setMasterY(y);
-            filler.setMasterZ(z);
-        }
+        ((CupolaTE) te).setSlave();
     }
 
     @SideOnly(Side.CLIENT)
@@ -100,7 +145,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         final TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof CupolaTE)
         {
-            final CupolaTE cupola = (CupolaTE)te;
+            final CupolaTE cupola = (CupolaTE) te;
             if (cupola.isActive())
             {
                 final float effectX = x + 0.5f;
@@ -112,7 +157,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
                 final int metadata = world.getBlockMetadata(x, y, z);
                 final Orientation orientation = Orientation.getdecodedOrientation(metadata);
 
-                switch(orientation)
+                switch (orientation)
                 {
                     case SOUTH:
                         world.spawnParticle("smoke", effectX + widthOffset, effectY, effectZ - edgeOffset, 0.0d, 0.0d, 0.0d);
@@ -134,11 +179,24 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
                         world.spawnParticle("flame", effectX - edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
                 }
 
-                final float centerOffset1 = rng.nextFloat() * 0.6f - 0.3f;
-                final float centerOffset2 = rng.nextFloat() * 0.6f - 0.3f;
-
-                world.spawnParticle("smoke", x +0.5d + centerOffset1, y + 2.0d, z + 0.5d + centerOffset2, 0.0d, 0.1d, 0.0d);
+                renderSmokeOnTop(world, x, y, z, rng);
             }
         }
+    }
+
+    @Override
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
+    {
+        if (player.capabilities.isCreativeMode)
+        {
+            final TileEntity te = world.getTileEntity(x, y, z);
+            if (((CupolaTE) te).isSlave())
+            {
+                world.setBlockToAir(x, y - 1, z);
+                return false;
+            }
+        }
+
+        return super.removedByPlayer(world, player, x, y, z, willHarvest);
     }
 }

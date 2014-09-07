@@ -17,9 +17,10 @@
 package mod.steamnsteel.client.renderer.tileentity;
 
 
+import com.google.common.base.Objects;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.client.renderer.model.CupolaModel;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.Orientation;
 import mod.steamnsteel.utility.Vector;
@@ -38,6 +39,21 @@ public class CupbolaTESR extends SteamNSteelTESR
     private static final ResourceLocation TEXTURE_ACTIVE = getResourceLocation(CupolaBlock.NAME + "_active");
 
     private final CupolaModel model = new CupolaModel();
+
+    private static float getAngleFromOrientation(Orientation orientation)
+    {
+        switch (orientation)
+        {
+            case SOUTH:
+                return 180.0f;
+            case WEST:
+                return 90.0f;
+            case NORTH:
+                return 0.0f;
+            default:
+                return 270.0f;
+        }
+    }
 
     @SuppressWarnings("NumericCastThatLosesPrecision")
     @Override
@@ -62,13 +78,15 @@ public class CupbolaTESR extends SteamNSteelTESR
 
     private void renderCupola(CupolaTE te)
     {
+        if (te.isSlave()) return;
+
         final int x = te.xCoord;
         final int y = te.yCoord;
         final int z = te.zCoord;
         final World world = te.getWorldObj();
 
         // Lighting
-        final float brightness = ModBlocks.CUPOLA.getMixedBrightnessForBlock(world, x, y, z);
+        final float brightness = ModBlock.cupola.getMixedBrightnessForBlock(world, x, y, z);
         final int skyLight = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
         final int skyLightLSB = skyLight % 65536;
         final int skyLightMSB = skyLight / 65536;
@@ -102,18 +120,11 @@ public class CupbolaTESR extends SteamNSteelTESR
         GL11.glPopMatrix();
     }
 
-    private static float getAngleFromOrientation(Orientation orientation)
+    @Override
+    public String toString()
     {
-        switch (orientation)
-        {
-            case SOUTH:
-                return 180.0f;
-            case WEST:
-                return 90.0f;
-            case NORTH:
-                return 0.0f;
-            default:
-                return 270.0f;
-        }
+        return Objects.toStringHelper(this)
+                .add("model", model)
+                .toString();
     }
 }

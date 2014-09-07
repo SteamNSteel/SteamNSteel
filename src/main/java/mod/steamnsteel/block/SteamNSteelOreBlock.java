@@ -14,15 +14,21 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.tool;
+package mod.steamnsteel.block;
 
-import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import net.minecraft.block.material.Material;
 
-public class SteelAxe extends SteamNSteelItem
+public abstract class SteamNSteelOreBlock extends SteamNSteelBlock
 {
-    public SteelAxe()
+    protected SteamNSteelOreBlock(Material material)
     {
-        setUnlocalizedName(ModItems.Names.STEEL_AXE);
+        super(material);
     }
+
+    protected SteamNSteelOreBlock()
+    {
+        super(Material.rock);
+    }
+
+    public abstract boolean isGenEnabled();
 }

@@ -16,19 +16,33 @@
 
 package mod.steamnsteel.configuration.client;
 
+import com.google.common.collect.Lists;
+import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.IConfigElement;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.configuration.ConfigurationHandler;
-import cpw.mods.fml.client.config.GuiConfig;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
+import java.util.List;
 
 public class ConfigGUI extends GuiConfig
 {
-    @SuppressWarnings("unchecked")
     public ConfigGUI(GuiScreen parent)
     {
-        super(parent, new ConfigElement(ConfigurationHandler.INSTANCE.getConfig().getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
-                TheMod.MOD_ID, false, false, GuiConfig.getAbridgedConfigPath(ConfigurationHandler.INSTANCE.getConfig().toString()));
+        super(parent, getConfigElements(), TheMod.MOD_ID, false, false,
+                GuiConfig.getAbridgedConfigPath(ConfigurationHandler.INSTANCE.getConfig().toString()));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<IConfigElement> getConfigElements()
+    {
+        final List<IConfigElement> configElements = Lists.newArrayList();
+
+        final Configuration config = ConfigurationHandler.INSTANCE.getConfig();
+        final ConfigElement general = new ConfigElement(config.getCategory(Configuration.CATEGORY_GENERAL));
+        configElements.addAll(general.getChildElements());
+
+        return configElements;
     }
 }

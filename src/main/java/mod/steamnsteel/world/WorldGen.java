@@ -16,28 +16,52 @@
 
 package mod.steamnsteel.world;
 
+import com.google.common.collect.Lists;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import mod.steamnsteel.library.ModBlocks;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import mod.steamnsteel.library.ModBlock;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
+import net.minecraftforge.event.terraingen.OreGenEvent;
+import net.minecraftforge.event.terraingen.TerrainGen;
+import java.util.List;
 
-public class WorldGen {
+import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.CUSTOM;
 
-	private OreConfiguration sulfurConfiguration;
-	private ICustomOreGenerator sulfurGenerator;
+public enum WorldGen
+{
+    INSTANCE;
 
-	private WorldGen() {
-	}
+    private static final List<OreGenerator> oreGens = Lists.newArrayList();
 
-	public static WorldGen INSTANCE;
-	public static void init() {
-		INSTANCE = new WorldGen();
-		INSTANCE.createCustomGenerators();
-		INSTANCE.createConfigurations();
-		INSTANCE.registerToEventBus();
-	}
+    public static void init()
+    {
+        createOreGenerators();
+        register();
+    }
 
+    private static void register()
+    {
+        MinecraftForge.ORE_GEN_BUS.register(INSTANCE);
+    }
+
+    private static void createOreGenerators()
+    {
+        //For reference:
+        //       ironConfiguration = new OreConfiguration(Blocks.Iron, 20, 8, 0, 64);
+
+        oreGens.add(new OreGenerator(ModBlock.oreCopper, 20, 6, 0, 64));
+        oreGens.add(new OreGenerator(ModBlock.oreTin, 20, 3, 0, 64));
+        oreGens.add(new OreGenerator(ModBlock.oreZinc, 20, 6, 0, 64));
+    }
+
+    @SuppressWarnings("MethodMayBeStatic")
+    @SubscribeEvent
+    public void OnPostOreGenerated(OreGenEvent.Post event)
+    {
+        for (final OreGenerator oreGen : oreGens)
+            if (TerrainGen.generateOre(event.world, event.rand, oreGen, event.worldX, event.worldZ, CUSTOM))
+                oreGen.generate(event.world, event.rand, event.worldX, 0, event.worldZ);
+    }
+/*
 	private void registerToEventBus() {
 		MinecraftForge.EVENT_BUS.register(WorldGen.INSTANCE);
 	}
@@ -59,4 +83,5 @@ public class WorldGen {
 
 		sulfurGenerator.generate(sulfurConfiguration, event.world, event.rand, event.chunkX, event.chunkZ);
 	}
+	*/
 }

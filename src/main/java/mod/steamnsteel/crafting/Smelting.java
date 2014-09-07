@@ -17,18 +17,59 @@
 package mod.steamnsteel.crafting;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import mod.steamnsteel.library.ModBlocks;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.api.crafting.CraftingManager;
+import mod.steamnsteel.api.crafting.IAlloyManager;
+import mod.steamnsteel.api.crafting.ingredient.ItemStackIngredient;
+import mod.steamnsteel.api.crafting.ingredient.OreDictionaryIngredient;
+import mod.steamnsteel.block.resource.storage.*;
+import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.library.ModItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-@SuppressWarnings("MethodMayBeStatic")
-class Smelting
+enum Smelting
 {
-    void init()
+    INSTANCE;
+
+    static void init()
     {
         final float xp = 0.5F;
-        GameRegistry.addSmelting(ModBlocks.COPPER_ORE, new ItemStack(ModItems.COPPER_INGOT), xp);
-        GameRegistry.addSmelting(ModBlocks.TIN_ORE, new ItemStack(ModItems.TIN_INGOT), xp);
-        GameRegistry.addSmelting(ModBlocks.ZINC_ORE, new ItemStack(ModItems.ZINC_INGOT), xp);
+        GameRegistry.addSmelting(ModBlock.oreCopper, new ItemStack(ModItem.ingotCopper), xp);
+        GameRegistry.addSmelting(ModBlock.oreTin, new ItemStack(ModItem.ingotTin), xp);
+        GameRegistry.addSmelting(ModBlock.oreZinc, new ItemStack(ModItem.ingotZinc), xp);
+
+        final IAlloyManager alloyManager = CraftingManager.alloyManager.get();
+
+        final OreDictionaryIngredient cuIngotIngredient = new OreDictionaryIngredient(ModItem.Names.COPPER_INGOT);
+        final OreDictionaryIngredient cuBlockIngredient = new OreDictionaryIngredient(CopperBlock.NAME);
+
+        alloyManager.addAlloy(cuIngotIngredient,
+                new OreDictionaryIngredient(ModItem.Names.TIN_INGOT),
+                new ItemStack(ModItem.ingotBronze, 2));
+        alloyManager.addAlloy(cuBlockIngredient,
+                new OreDictionaryIngredient(TinBlock.NAME),
+                new ItemStack(ModBlock.blockBronze, 2));
+
+        alloyManager.addAlloy(cuIngotIngredient,
+                new OreDictionaryIngredient(ModItem.Names.ZINC_INGOT),
+                new ItemStack(ModItem.ingotBrass, 2));
+        alloyManager.addAlloy(cuBlockIngredient,
+                new OreDictionaryIngredient(ZincBlock.NAME),
+                new ItemStack(ModBlock.blockBrass, 2));
+
+        alloyManager.addAlloy(new OreDictionaryIngredient("ingotIron"),
+                new ItemStackIngredient(new ItemStack(Items.coal, 2)),
+                new ItemStack(ModItem.ingotSteel));
+        alloyManager.addAlloy(new OreDictionaryIngredient("blockIron"),
+                new ItemStackIngredient(new ItemStack(Blocks.coal_block, 2)),
+                new ItemStack(ModBlock.blockSteel));
+
+        alloyManager.addAlloy(new OreDictionaryIngredient(ModItem.Names.BRASS_INGOT),
+                new OreDictionaryIngredient(ModItem.Names.STEEL_INGOT),
+                new ItemStack(ModItem.ingotPlotonium, 2));
+        alloyManager.addAlloy(new OreDictionaryIngredient(BrassBlock.NAME),
+                new OreDictionaryIngredient(SteelBlock.NAME),
+                new ItemStack(ModBlock.blockPlotonium, 2));
     }
 }

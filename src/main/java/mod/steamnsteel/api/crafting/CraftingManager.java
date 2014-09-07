@@ -14,16 +14,25 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.tool;
+package mod.steamnsteel.api.crafting;
 
-import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import com.google.common.base.Optional;
 
-public class SteelPickaxe extends SteamNSteelItem
-
+/**
+ * The class that accesses the singleton crafting managers..
+ *
+ * @author Scott Killen
+ * @version 1.0
+ * @since 0.1
+ */
+@SuppressWarnings({"StaticNonFinalField", "PublicField", "NonConstantFieldWithUpperCaseName"})
+public enum CraftingManager
 {
-    public SteelPickaxe()
-    {
-        setUnlocalizedName(ModItems.Names.STEEL_PICKAXE);
-    }
+    INSTANCE;
+
+    /**
+     * The singleton IAlloyManager implementation. If the API is present without the mod, alloyManager.isPresent()
+     * returns <code>false</code>.
+     */
+    public static Optional<IAlloyManager> alloyManager = Optional.absent();
 }

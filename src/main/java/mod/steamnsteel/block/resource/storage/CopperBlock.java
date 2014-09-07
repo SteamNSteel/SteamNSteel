@@ -17,14 +17,15 @@
 package mod.steamnsteel.block.resource.storage;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class CopperBlock extends SteamNSteelBlock
 {
+    public static final String NAME = "blockCopper";
+
     public CopperBlock()
     {
         super(Material.rock);
-        setBlockName(ModBlocks.Names.COPPER_BLOCK);
+        setBlockName(NAME);
     }
 }

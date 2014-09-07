@@ -19,16 +19,17 @@ package mod.steamnsteel.crafting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.registry.GameRegistry;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.utility.crafting.RecipePattern;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.util.List;
 
-@SuppressWarnings("MethodMayBeStatic")
-class ArmorRecipes
+enum ArmorRecipes
 {
+    INSTANCE;
+
     private static List<IRecipe> getRecipes()
     {
         final RecipePattern helmet = RecipePattern.of("XXX", "X X");
@@ -38,15 +39,15 @@ class ArmorRecipes
 
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(ModItems.BRONZE_HELMET, helmet, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItems.BRONZE_CHESTPLATE, chestplate, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItems.BRONZE_LEGGINGS, leggings, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItems.BRONZE_BOOTS, boots, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItem.helmetBronze, helmet, ModItem.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItem.chestplateBronze, chestplate, ModItem.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItem.leggingsBronze, leggings, ModItem.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItem.bootsBronze, boots, ModItem.Names.BRONZE_INGOT));
 
-        recipes.add(assembleRecipe(ModItems.STEEL_HELMET, helmet, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItems.STEEL_CHESTPLATE, chestplate, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItems.STEEL_LEGGINGS, leggings, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItems.STEEL_BOOTS, boots, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItem.helmetSteel, helmet, ModItem.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItem.chestplateSteel, chestplate, ModItem.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItem.leggingsSteel, leggings, ModItem.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItem.bootsSteel, boots, ModItem.Names.STEEL_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }
@@ -56,7 +57,7 @@ class ArmorRecipes
         return new ShapedOreRecipe(result, pattern.get(), 'X', ingot);
     }
 
-    void init()
+    static void init()
     {
         final List<IRecipe> recipes = getRecipes();
         for (final IRecipe recipe : recipes)

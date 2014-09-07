@@ -16,15 +16,21 @@
 
 package mod.steamnsteel.block.resource.ore;
 
-import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
-import net.minecraft.block.material.Material;
+import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.configuration.Settings;
 
-public class ZincOre extends SteamNSteelBlock
+public class ZincOre extends SteamNSteelOreBlock
 {
+    public static final String NAME = "oreZinc";
+
     public ZincOre()
     {
-        super(Material.rock);
-        setBlockName(ModBlocks.Names.ZINC_ORE);
+        setBlockName(NAME);
+    }
+
+    @Override
+    public boolean isGenEnabled()
+    {
+        return Settings.World.isZincGenerated();
     }
 }
