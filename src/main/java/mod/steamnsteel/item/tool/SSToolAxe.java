@@ -1,25 +1,41 @@
+/*
+ * Copyright (c) 2014 Rosie Alexander and Scott Killen.
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, see <http://www.gnu.org/licenses>.
+ */
+
 package mod.steamnsteel.item.tool;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import mod.steamnsteel.library.Reference;
-import mod.steamnsteel.library.Textures;
+import mod.steamnsteel.TheMod;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 
-public class SSToolAxe extends ItemAxe{
-
-    public SSToolAxe(ToolMaterial material, String name){
+public class SSToolAxe extends ItemAxe
+{
+    public SSToolAxe(ToolMaterial material, String name)
+    {
         super(material);
-        this.setUnlocalizedName(name);
-        this.setCreativeTab(Reference.CREATIVE_TAB);
+        setUnlocalizedName(name);
+        setCreativeTab(TheMod.CREATIVE_TAB);
     }
 
     @Override
     public String getUnlocalizedName()
     {
-        return String.format("item.%s%s", Textures.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s%s", TheMod.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
     @Override
@@ -36,8 +52,7 @@ public class SSToolAxe extends ItemAxe{
         itemIcon = iconRegister.registerIcon(unlocalizedName.substring(unlocalizedName.indexOf('.') + 1));
     }
 
-    @SuppressWarnings("WeakerAccess")
-    protected String getUnwrappedUnlocalizedName(String unlocalizedName)
+    private static String getUnwrappedUnlocalizedName(String unlocalizedName)
     {
         return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
     }

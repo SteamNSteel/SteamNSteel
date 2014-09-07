@@ -14,16 +14,15 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.tool;
+package mod.steamnsteel.library;
 
-import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import net.minecraft.item.ItemArmor;
+import net.minecraftforge.common.util.EnumHelper;
 
-public class BronzePickaxe extends SteamNSteelItem
-
+public enum ArmorMaterial
 {
-    public BronzePickaxe()
-    {
-        setUnlocalizedName(ModItems.Names.BRONZE_PICKAXE);
-    }
+    INSTANCE;
+
+    public static final ItemArmor.ArmorMaterial BRONZE = EnumHelper.addArmorMaterial("bronze", 16, new int[]{3, 6, 5, 3}, 12);
+    public static final ItemArmor.ArmorMaterial STEEL = EnumHelper.addArmorMaterial("steel", 29, new int[]{3, 7, 6, 3}, 15);
 }

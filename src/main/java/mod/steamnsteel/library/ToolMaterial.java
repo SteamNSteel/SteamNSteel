@@ -14,16 +14,15 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.weapon;
+package mod.steamnsteel.library;
 
-import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import net.minecraft.item.Item;
+import net.minecraftforge.common.util.EnumHelper;
 
-public class SteelSword extends SteamNSteelItem
-
+public enum ToolMaterial
 {
-    public SteelSword()
-    {
-        setUnlocalizedName(ModItems.Names.STEEL_SWORD);
-    }
+    INSTANCE;
+
+    public static final Item.ToolMaterial BRONZE = EnumHelper.addToolMaterial("bronze", 2, 312, 6.5F, 2.5F, 12);
+    public static final Item.ToolMaterial STEEL = EnumHelper.addToolMaterial("steel", 3, 969, 7.5F, 4.0F, 15);
 }
