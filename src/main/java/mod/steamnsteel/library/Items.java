@@ -1,0 +1,157 @@
+/*
+ * Copyright (c) 2014 Rosie Alexander and Scott Killen.
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, see <http://www.gnu.org/licenses>.
+ */
+
+package mod.steamnsteel.library;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import mod.steamnsteel.item.SteamNSteelItem;
+import mod.steamnsteel.item.armor.*;
+import mod.steamnsteel.item.artifact.*;
+import mod.steamnsteel.item.resource.Niter;
+import mod.steamnsteel.item.resource.Sulfur;
+import mod.steamnsteel.item.resource.ingot.*;
+import mod.steamnsteel.item.tool.*;
+import mod.steamnsteel.item.weapon.SSToolSword;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.oredict.OreDictionary;
+
+@SuppressWarnings("UtilityClass")
+@GameRegistry.ObjectHolder(Reference.MOD_ID)
+public final class Items
+{
+    protected static final Item.ToolMaterial bronzeToolMaterial = EnumHelper.addToolMaterial("bronze", 2, 312, 6.5F, 2.5F, 12);
+    protected static final Item.ToolMaterial steelToolMaterial = EnumHelper.addToolMaterial("steel", 3, 969, 7.5F, 4.0F, 15);
+    
+    protected static final ItemArmor.ArmorMaterial bronzeArmorMaterial = EnumHelper.addArmorMaterial("bronze", 16, new int[] {3, 6, 5, 3}, 12);
+    protected static final ItemArmor.ArmorMaterial steelArmorMaterial = EnumHelper.addArmorMaterial("steel", 29, new int[] {3, 7, 6, 3}, 15);
+
+    public static final SSArmorBoots BRONZE_BOOTS = new SSArmorBoots(bronzeArmorMaterial, Names.Armor.BRONZE_BOOTS);
+    public static final SSArmorChest BRONZE_CHESTPLATE = new SSArmorChest(bronzeArmorMaterial, Names.Armor.BRONZE_CHESTPLATE);
+    public static final SSArmorHelmet BRONZE_HELMET = new SSArmorHelmet(bronzeArmorMaterial, Names.Armor.BRONZE_HELMET);
+    public static final SSArmorLegs BRONZE_LEGGINGS = new SSArmorLegs(bronzeArmorMaterial, Names.Armor.BRONZE_LEGGINGS);
+
+    public static final SSArmorBoots STEEL_BOOTS = new SSArmorBoots(steelArmorMaterial, Names.Armor.STEEL_BOOTS);
+    public static final SSArmorChest STEEL_CHESTPLATE = new SSArmorChest(steelArmorMaterial, Names.Armor.STEEL_CHESTPLATE);
+    public static final SSArmorHelmet STEEL_HELMET = new SSArmorHelmet(steelArmorMaterial, Names.Armor.STEEL_HELMET);
+    public static final SSArmorLegs STEEL_LEGGINGS = new SSArmorLegs(steelArmorMaterial, Names.Armor.STEEL_LEGGINGS);
+
+//    public static final SteamNSteelItem BRONZE_BOOTS = new BronzeBoots();
+//    public static final SteamNSteelItem BRONZE_CHESTPLATE = new BronzeChestplate();
+//    public static final SteamNSteelItem BRONZE_HELMET = new BronzeHelmet();
+//    public static final SteamNSteelItem BRONZE_LEGGINGS = new BronzeLeggings();
+//
+//    public static final SteamNSteelItem STEEL_BOOTS = new SteelBoots();
+//    public static final SteamNSteelItem STEEL_CHESTPLATE = new SteelChestplate();
+//    public static final SteamNSteelItem STEEL_HELMET = new SteelHelmet();
+//    public static final SteamNSteelItem STEEL_LEGGINGS = new SteelLeggings();
+
+    public static final SteamNSteelItem ANACH_DOODAD = new AnachDoodad();
+    public static final SteamNSteelItem MUSTY_JOURNAL = new MustyJournal();
+    public static final SteamNSteelItem PER_GUI_VOX = new PerGuiVox();
+    public static final SteamNSteelItem PLOTONIUM_SCRAP = new PlotoniumScrap();
+    public static final SteamNSteelItem VOX_BOX = new VoxBox();
+
+    public static final SteamNSteelItem NITER = new Niter();
+    public static final SteamNSteelItem SULFUR = new Sulfur();
+
+    public static final SteamNSteelItem BRASS_INGOT = new BrassIngot();
+    public static final SteamNSteelItem BRONZE_INGOT = new BronzeIngot();
+    public static final SteamNSteelItem COPPER_INGOT = new CopperIngot();
+    public static final SteamNSteelItem PLOTONIUM_INGOT = new PlotoniumIngot();
+    public static final SteamNSteelItem STEEL_INGOT = new SteelIngot();
+    public static final SteamNSteelItem TIN_INGOT = new TinIngot();
+    public static final SteamNSteelItem ZINC_INGOT = new ZincIngot();
+
+    public static final SSToolAxe BRONZE_AXE = new SSToolAxe(bronzeToolMaterial, Names.Tools.BRONZE_AXE);
+    public static final SSToolHoe BRONZE_HOE = new SSToolHoe(bronzeToolMaterial, Names.Tools.BRONZE_HOE);
+    public static final SSToolPickaxe BRONZE_PICKAXE = new SSToolPickaxe(bronzeToolMaterial, Names.Tools.BRONZE_PICKAXE);
+    public static final SSToolShovel BRONZE_SHOVEL = new SSToolShovel(bronzeToolMaterial, Names.Tools.BRONZE_SHOVEL);
+    public static final SSToolSword BRONZE_SWORD = new SSToolSword(bronzeToolMaterial, Names.Weapons.BRONZE_SWORD);
+
+    public static final SSToolAxe STEEL_AXE = new SSToolAxe(steelToolMaterial, Names.Tools.STEEL_AXE);
+    public static final SSToolHoe STEEL_HOE = new SSToolHoe(steelToolMaterial, Names.Tools.STEEL_HOE);
+    public static final SSToolPickaxe STEEL_PICKAXE = new SSToolPickaxe(steelToolMaterial, Names.Tools.STEEL_PICKAXE);
+    public static final SSToolShovel STEEL_SHOVEL = new SSToolShovel(steelToolMaterial, Names.Tools.STEEL_SHOVEL);
+    public static final SSToolSword STEEL_SWORD = new SSToolSword(steelToolMaterial, Names.Weapons.STEEL_SWORD);
+
+//    public static final SteamNSteelItem BRONZE_AXE = new BronzeAxe();
+//    public static final SteamNSteelItem BRONZE_HOE = new BronzeHoe();
+//    public static final SteamNSteelItem BRONZE_PICKAXE = new BronzePickaxe();
+//    public static final SteamNSteelItem BRONZE_SHOVEL = new BronzeShovel();
+//    public static final SteamNSteelItem BRONZE_SWORD = new BronzeSword();
+//
+//    public static final SteamNSteelItem STEEL_AXE = new SteelAxe();
+//    public static final SteamNSteelItem STEEL_HOE = new SteelHoe();
+//    public static final SteamNSteelItem STEEL_PICKAXE = new SteelPickaxe();
+//    public static final SteamNSteelItem STEEL_SHOVEL = new SteelShovel();
+//    public static final SteamNSteelItem STEEL_SWORD = new SteelSword();
+
+    private Items()
+    {
+        throw new AssertionError();
+    }
+
+    public static void init()
+    {
+        GameRegistry.registerItem(ANACH_DOODAD, Names.Artifacts.ANACH_DOODAD);
+        GameRegistry.registerItem(MUSTY_JOURNAL, Names.Artifacts.MUSTY_JOURNAL);
+        GameRegistry.registerItem(PER_GUI_VOX, Names.Artifacts.PER_GUI_VOX);
+        GameRegistry.registerItem(PLOTONIUM_SCRAP, Names.Artifacts.PLOTONIUM_SCRAP);
+        GameRegistry.registerItem(VOX_BOX, Names.Artifacts.VOX_BOX);
+
+        GameRegistry.registerItem(BRONZE_BOOTS, Names.Armor.BRONZE_BOOTS);
+        GameRegistry.registerItem(BRONZE_CHESTPLATE, Names.Armor.BRONZE_CHESTPLATE);
+        GameRegistry.registerItem(BRONZE_HELMET, Names.Armor.BRONZE_HELMET);
+        GameRegistry.registerItem(BRONZE_LEGGINGS, Names.Armor.BRONZE_LEGGINGS);
+
+        GameRegistry.registerItem(BRONZE_AXE, Names.Tools.BRONZE_AXE);
+        GameRegistry.registerItem(BRONZE_HOE, Names.Tools.BRONZE_HOE);
+        GameRegistry.registerItem(BRONZE_PICKAXE, Names.Tools.BRONZE_PICKAXE);
+        GameRegistry.registerItem(BRONZE_SHOVEL, Names.Tools.BRONZE_SHOVEL);
+
+        registerItemAndOre(BRASS_INGOT, Names.Ingots.BRASS_INGOT);
+        registerItemAndOre(BRONZE_INGOT, Names.Ingots.BRONZE_INGOT);
+        registerItemAndOre(COPPER_INGOT, Names.Ingots.COPPER_INGOT);
+        registerItemAndOre(PLOTONIUM_INGOT, Names.Ingots.PLOTONIUM_INGOT);
+        registerItemAndOre(STEEL_INGOT, Names.Ingots.STEEL_INGOT);
+        registerItemAndOre(TIN_INGOT, Names.Ingots.TIN_INGOT);
+        registerItemAndOre(ZINC_INGOT, Names.Ingots.ZINC_INGOT);
+
+        registerItemAndOre(NITER, Names.Items.NITER);
+        registerItemAndOre(SULFUR, Names.Items.SULFUR);
+
+        GameRegistry.registerItem(STEEL_BOOTS, Names.Armor.STEEL_BOOTS);
+        GameRegistry.registerItem(STEEL_CHESTPLATE, Names.Armor.STEEL_CHESTPLATE);
+        GameRegistry.registerItem(STEEL_HELMET, Names.Armor.STEEL_HELMET);
+        GameRegistry.registerItem(STEEL_LEGGINGS, Names.Armor.STEEL_LEGGINGS);
+
+        GameRegistry.registerItem(STEEL_AXE, Names.Tools.STEEL_AXE);
+        GameRegistry.registerItem(STEEL_HOE, Names.Tools.STEEL_HOE);
+        GameRegistry.registerItem(STEEL_PICKAXE, Names.Tools.STEEL_PICKAXE);
+        GameRegistry.registerItem(STEEL_SHOVEL, Names.Tools.STEEL_SHOVEL);
+
+        GameRegistry.registerItem(BRONZE_SWORD, Names.Weapons.BRONZE_SWORD);
+        GameRegistry.registerItem(STEEL_SWORD, Names.Weapons.STEEL_SWORD);
+    }
+
+    private static void registerItemAndOre(Item item, String name)
+    {
+        GameRegistry.registerItem(item, name);
+        OreDictionary.registerOre(name, item);
+    }
+}
