@@ -35,23 +35,27 @@ import net.minecraftforge.oredict.OreDictionary;
 @GameRegistry.ObjectHolder(TheMod.MOD_ID)
 public final class ModBlocks
 {
+    // *******
+    // * NOTE: @GameRegistry.ObjectHolder requires these fields to have the same name as the unlocalized name of the
+    // *       object.
+    // *
     public static final SteamNSteelBlock blockBrass = new BrassBlock();
     public static final SteamNSteelBlock blockBronze = new BronzeBlock();
     public static final SteamNSteelBlock blockCopper = new CopperBlock();
-    public static final SteamNSteelOreBlock oreCopper = new CopperOre();
-    public static final SteamNSteelBlock cupola = new CupolaBlock();
-    public static final SteamNSteelBlock oreNiter = new NiterOre();
     public static final SteamNSteelBlock blockPlotonium = new PlotoniumBlock();
+    public static final SteamNSteelBlock blockSteel = new SteelBlock();
+    public static final SteamNSteelBlock blockTin = new TinBlock();
+    public static final SteamNSteelBlock blockZinc = new ZincBlock();
     public static final SteamNSteelBlock chestPlotonium = new PlotoniumChest();
+    public static final SteamNSteelBlock cupola = new CupolaBlock();
+    public static final SteamNSteelOreBlock oreCopper = new CopperOre();
+    public static final SteamNSteelBlock oreNiter = new NiterOre();
+    public static final SteamNSteelBlock oreSulfur = new SulfurOre();
+    public static final SteamNSteelOreBlock oreTin = new TinOre();
+    public static final SteamNSteelOreBlock oreZinc = new ZincOre();
     public static final SteamNSteelBlock ruinFloorPlotonium = new PlotoniumRuinFloor();
     public static final SteamNSteelBlock ruinPillarPlotonium = new PlotoniumRuinPillar();
     public static final SteamNSteelBlock ruinWallPlotonium = new PlotoniumRuinWall();
-    public static final SteamNSteelBlock blockSteel = new SteelBlock();
-    public static final SteamNSteelBlock oreSulfur = new SulfurOre();
-    public static final SteamNSteelBlock blockTin = new TinBlock();
-    public static final SteamNSteelOreBlock oreTin = new TinOre();
-    public static final SteamNSteelBlock blockZinc = new ZincBlock();
-    public static final SteamNSteelOreBlock oreZinc = new ZincOre();
 
     private ModBlocks()
     {

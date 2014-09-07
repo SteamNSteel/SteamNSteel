@@ -34,21 +34,23 @@ import net.minecraftforge.oredict.OreDictionary;
 @GameRegistry.ObjectHolder(TheMod.MOD_ID)
 public final class ModItems
 {
-    public static final SteamNSteelItem bootsBronze = new BronzeBoots();
-    public static final SteamNSteelItem chestplateBronze = new BronzeChestplate();
-    public static final SteamNSteelItem helmetBronze = new BronzeHelmet();
-    public static final SteamNSteelItem leggingsBronze = new BronzeLeggings();
-    public static final SteamNSteelItem bootsSteel = new SteelBoots();
-    public static final SteamNSteelItem chestplateSteel = new SteelChestplate();
-    public static final SteamNSteelItem helmetSteel = new SteelHelmet();
-    public static final SteamNSteelItem leggingsSteel = new SteelLeggings();
+    // *******
+    // * NOTE: @GameRegistry.ObjectHolder requires these fields to have the same name as the unlocalized name of the
+    // *       object.
+    // *
     public static final SteamNSteelItem anachDoodad = new AnachDoodad();
-    public static final SteamNSteelItem mustyJournal = new MustyJournal();
-    public static final SteamNSteelItem perGuiVox = new PerGuiVox();
-    public static final SteamNSteelItem plotoniumScrap = new PlotoniumScrap();
-    public static final SteamNSteelItem voxBox = new VoxBox();
+    public static final SteamNSteelItem axeBronze = new BronzeAxe();
+    public static final SteamNSteelItem axeSteel = new SteelAxe();
+    public static final SteamNSteelItem bootsBronze = new BronzeBoots();
+    public static final SteamNSteelItem bootsSteel = new SteelBoots();
+    public static final SteamNSteelItem chestplateBronze = new BronzeChestplate();
+    public static final SteamNSteelItem chestplateSteel = new SteelChestplate();
     public static final SteamNSteelItem dustNiter = new Niter();
     public static final SteamNSteelItem dustSulfur = new Sulfur();
+    public static final SteamNSteelItem helmetBronze = new BronzeHelmet();
+    public static final SteamNSteelItem helmetSteel = new SteelHelmet();
+    public static final SteamNSteelItem hoeBronze = new BronzeHoe();
+    public static final SteamNSteelItem hoeSteel = new SteelHoe();
     public static final SteamNSteelItem ingotBrass = new BrassIngot();
     public static final SteamNSteelItem ingotBronze = new BronzeIngot();
     public static final SteamNSteelItem ingotCopper = new CopperIngot();
@@ -56,16 +58,18 @@ public final class ModItems
     public static final SteamNSteelItem ingotSteel = new SteelIngot();
     public static final SteamNSteelItem ingotTin = new TinIngot();
     public static final SteamNSteelItem ingotZinc = new ZincIngot();
-    public static final SteamNSteelItem axeBronze = new BronzeAxe();
-    public static final SteamNSteelItem hoeBronze = new BronzeHoe();
+    public static final SteamNSteelItem leggingsBronze = new BronzeLeggings();
+    public static final SteamNSteelItem leggingsSteel = new SteelLeggings();
+    public static final SteamNSteelItem mustyJournal = new MustyJournal();
+    public static final SteamNSteelItem perGuiVox = new PerGuiVox();
     public static final SteamNSteelItem pickBronze = new BronzePickaxe();
-    public static final SteamNSteelItem shovelBronze = new BronzeShovel();
-    public static final SteamNSteelItem swordBronze = new BronzeSword();
-    public static final SteamNSteelItem axeSteel = new SteelAxe();
-    public static final SteamNSteelItem hoeSteel = new SteelHoe();
     public static final SteamNSteelItem pickSteel = new SteelPickaxe();
+    public static final SteamNSteelItem plotoniumScrap = new PlotoniumScrap();
+    public static final SteamNSteelItem shovelBronze = new BronzeShovel();
     public static final SteamNSteelItem shovelSteel = new SteelShovel();
+    public static final SteamNSteelItem swordBronze = new BronzeSword();
     public static final SteamNSteelItem swordSteel = new SteelSword();
+    public static final SteamNSteelItem voxBox = new VoxBox();
 
     private ModItems()
     {
