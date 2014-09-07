@@ -14,16 +14,18 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.tool;
+package mod.steamnsteel.item.armor;
 
-import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.Material;
 
-public class BronzePickaxe extends SteamNSteelItem
+import static mod.steamnsteel.item.SteamNSteelItem.getFormattedName;
 
+public class SSArmorHelmet extends SteamNSteelItemArmor
 {
-    public BronzePickaxe()
+
+    public SSArmorHelmet(Material material)
     {
-        setUnlocalizedName(ModItems.Names.BRONZE_PICKAXE);
+        //noinspection StringConcatenationMissingWhitespace
+        super(material.getArmorMaterial(), 0, 0, "helmet" + getFormattedName(material));
     }
 }

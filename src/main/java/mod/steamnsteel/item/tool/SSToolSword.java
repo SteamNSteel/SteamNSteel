@@ -14,27 +14,37 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item;
+package mod.steamnsteel.item.tool;
 
+import com.google.common.base.Objects;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.library.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import org.apache.commons.lang3.text.WordUtils;
+import net.minecraft.item.ItemSword;
 
-public class SteamNSteelItem extends Item
+import static mod.steamnsteel.item.SteamNSteelItem.getFormattedName;
+import static mod.steamnsteel.item.SteamNSteelItem.getUnwrappedUnlocalizedName;
+
+
+public class SSToolSword extends ItemSword
 {
-    public SteamNSteelItem()
+    private final String undecoratedName;
+
+    public SSToolSword(Material material)
     {
+        super(material.getToolMaterial());
+        //noinspection StringConcatenationMissingWhitespace
+        undecoratedName = "sword" + getFormattedName(material);
+        setUnlocalizedName(undecoratedName);
         setCreativeTab(TheMod.CREATIVE_TAB);
     }
 
-    public static String getFormattedName(Material material)
+    public String getUndecoratedName()
     {
-        return WordUtils.capitalizeFully(material.name().toLowerCase());
+        return undecoratedName;
     }
 
     @Override
@@ -57,8 +67,11 @@ public class SteamNSteelItem extends Item
         itemIcon = iconRegister.registerIcon(unlocalizedName.substring(unlocalizedName.indexOf('.') + 1));
     }
 
-    public static String getUnwrappedUnlocalizedName(String unlocalizedName)
+    @Override
+    public String toString()
     {
-        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
+        return Objects.toStringHelper(this)
+                .add("undecoratedName", undecoratedName)
+                .toString();
     }
 }

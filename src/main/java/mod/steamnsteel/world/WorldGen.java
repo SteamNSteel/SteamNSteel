@@ -18,7 +18,7 @@ package mod.steamnsteel.world;
 
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.ModBlock;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -48,9 +48,9 @@ public enum WorldGen
         //For reference:
         //       ironConfiguration = new OreConfiguration(Blocks.Iron, 20, 8, 0, 64);
 
-        oreGens.add(new OreGenerator(ModBlocks.oreCopper, 20, 6, 0, 64));
-        oreGens.add(new OreGenerator(ModBlocks.oreTin, 20, 3, 0, 64));
-        oreGens.add(new OreGenerator(ModBlocks.oreZinc, 20, 6, 0, 64));
+        oreGens.add(new OreGenerator(ModBlock.oreCopper, 20, 6, 0, 64));
+        oreGens.add(new OreGenerator(ModBlock.oreTin, 20, 3, 0, 64));
+        oreGens.add(new OreGenerator(ModBlock.oreZinc, 20, 6, 0, 64));
     }
 
     @SuppressWarnings("MethodMayBeStatic")

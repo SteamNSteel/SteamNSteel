@@ -17,12 +17,12 @@
 package mod.steamnsteel.item.resource;
 
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.ModItem;
 
 public class Niter extends SteamNSteelItem
 {
     public Niter()
     {
-        setUnlocalizedName(ModItems.Names.NITER);
+        setUnlocalizedName(ModItem.Names.NITER);
     }
 }

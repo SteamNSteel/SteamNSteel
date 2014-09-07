@@ -14,15 +14,17 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.item.tool;
+package mod.steamnsteel.item.armor;
 
-import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.library.ModItems;
+import mod.steamnsteel.library.Material;
 
-public class SteelAxe extends SteamNSteelItem
+import static mod.steamnsteel.item.SteamNSteelItem.getFormattedName;
+
+public class SSArmorLegs extends SteamNSteelItemArmor
 {
-    public SteelAxe()
+    public SSArmorLegs(Material material)
     {
-        setUnlocalizedName(ModItems.Names.STEEL_AXE);
+        //noinspection StringConcatenationMissingWhitespace
+        super(material.getArmorMaterial(), 2, 2, "leggings" + getFormattedName(material));
     }
 }

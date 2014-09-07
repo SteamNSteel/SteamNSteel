@@ -19,7 +19,7 @@ package mod.steamnsteel.proxy;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import mod.steamnsteel.client.renderer.item.CupolaItemRenderer;
 import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
-import mod.steamnsteel.library.ModBlocks;
+import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -36,7 +36,7 @@ public class ClientRenderProxy extends RenderProxy
 
     private void registerItemRenderers()
     {
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.cupola), new CupolaItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.cupola), new CupolaItemRenderer());
     }
 
     private void registerTESRs()
