@@ -40,6 +40,21 @@ public class CupbolaTESR extends SteamNSteelTESR
 
     private final CupolaModel model = new CupolaModel();
 
+    private static float getAngleFromOrientation(Orientation orientation)
+    {
+        switch (orientation)
+        {
+            case SOUTH:
+                return 180.0f;
+            case WEST:
+                return 90.0f;
+            case NORTH:
+                return 0.0f;
+            default:
+                return 270.0f;
+        }
+    }
+
     @SuppressWarnings("NumericCastThatLosesPrecision")
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick)
@@ -71,7 +86,7 @@ public class CupbolaTESR extends SteamNSteelTESR
         final World world = te.getWorldObj();
 
         // Lighting
-        final float brightness = ModBlocks.CUPOLA.getMixedBrightnessForBlock(world, x, y, z);
+        final float brightness = ModBlocks.cupola.getMixedBrightnessForBlock(world, x, y, z);
         final int skyLight = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
         final int skyLightLSB = skyLight % 65536;
         final int skyLightMSB = skyLight / 65536;
@@ -103,21 +118,6 @@ public class CupbolaTESR extends SteamNSteelTESR
 
         // Close Render Buffer
         GL11.glPopMatrix();
-    }
-
-    private static float getAngleFromOrientation(Orientation orientation)
-    {
-        switch (orientation)
-        {
-            case SOUTH:
-                return 180.0f;
-            case WEST:
-                return 90.0f;
-            case NORTH:
-                return 0.0f;
-            default:
-                return 270.0f;
-        }
     }
 
     @Override

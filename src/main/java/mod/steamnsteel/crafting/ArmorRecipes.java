@@ -38,15 +38,15 @@ class ArmorRecipes
 
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(ModItems.BRONZE_HELMET, helmet, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItems.BRONZE_CHESTPLATE, chestplate, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItems.BRONZE_LEGGINGS, leggings, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItems.BRONZE_BOOTS, boots, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.helmetBronze, helmet, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.chestplateBronze, chestplate, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.leggingsBronze, leggings, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.bootsBronze, boots, ModItems.Names.BRONZE_INGOT));
 
-        recipes.add(assembleRecipe(ModItems.STEEL_HELMET, helmet, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItems.STEEL_CHESTPLATE, chestplate, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItems.STEEL_LEGGINGS, leggings, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItems.STEEL_BOOTS, boots, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.helmetSteel, helmet, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.chestplateSteel, chestplate, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.leggingsSteel, leggings, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.bootsSteel, boots, ModItems.Names.STEEL_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }

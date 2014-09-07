@@ -18,13 +18,14 @@ package mod.steamnsteel.block.resource.ore;
 
 import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.configuration.Settings;
-import mod.steamnsteel.library.ModBlocks;
 
 public class ZincOre extends SteamNSteelOreBlock
 {
+    public static final String NAME = "oreZinc";
+
     public ZincOre()
     {
-        setBlockName(ModBlocks.Names.ZINC_ORE);
+        setBlockName(NAME);
     }
 
     @Override

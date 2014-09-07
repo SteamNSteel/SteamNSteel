@@ -34,13 +34,13 @@ class IngotRecipes
     {
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(ModBlocks.BRASS_BLOCK, ModItems.Names.BRASS_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.BRONZE_BLOCK, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.COPPER_BLOCK, ModItems.Names.COPPER_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.PLOTONIUM_BLOCK, ModItems.Names.PLOTONIUM_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.STEEL_BLOCK, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.TIN_BLOCK, ModItems.Names.TIN_INGOT));
-        recipes.add(assembleRecipe(ModBlocks.ZINC_BLOCK, ModItems.Names.ZINC_INGOT));
+        recipes.add(assembleRecipe(ModBlocks.blockBrass, ModItems.Names.BRASS_INGOT));
+        recipes.add(assembleRecipe(ModBlocks.blockBronze, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModBlocks.blockCopper, ModItems.Names.COPPER_INGOT));
+        recipes.add(assembleRecipe(ModBlocks.blockPlotonium, ModItems.Names.PLOTONIUM_INGOT));
+        recipes.add(assembleRecipe(ModBlocks.blockSteel, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModBlocks.blockTin, ModItems.Names.TIN_INGOT));
+        recipes.add(assembleRecipe(ModBlocks.blockZinc, ModItems.Names.ZINC_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }

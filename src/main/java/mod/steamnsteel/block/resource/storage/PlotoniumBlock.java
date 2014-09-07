@@ -17,14 +17,15 @@
 package mod.steamnsteel.block.resource.storage;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class PlotoniumBlock extends SteamNSteelBlock
 {
+    public static final String NAME = "blockPlotonium";
+
     public PlotoniumBlock()
     {
         super(Material.rock);
-        setBlockName(ModBlocks.Names.PLOTONIUM_BLOCK);
+        setBlockName(NAME);
     }
 }

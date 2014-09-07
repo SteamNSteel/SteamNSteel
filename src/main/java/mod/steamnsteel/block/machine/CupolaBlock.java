@@ -132,7 +132,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         super.onPostBlockPlaced(world, x, y, z, metadata);
 
         final int fillerY = y + 1;
-        world.setBlock(x, fillerY, z, ModBlocks.CUPOLA, 0, 2);
+        world.setBlock(x, fillerY, z, ModBlocks.cupola, 0, 2);
 
         final TileEntity te = world.getTileEntity(x, fillerY, z);
         ((CupolaTE) te).setSlave();

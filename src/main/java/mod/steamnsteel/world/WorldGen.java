@@ -48,9 +48,9 @@ public enum WorldGen
         //For reference:
         //       ironConfiguration = new OreConfiguration(Blocks.Iron, 20, 8, 0, 64);
 
-        oreGens.add(new OreGenerator(ModBlocks.COPPER_ORE, 20, 6, 0, 64));
-        oreGens.add(new OreGenerator(ModBlocks.TIN_ORE, 20, 3, 0, 64));
-        oreGens.add(new OreGenerator(ModBlocks.ZINC_ORE, 20, 6, 0, 64));
+        oreGens.add(new OreGenerator(ModBlocks.oreCopper, 20, 6, 0, 64));
+        oreGens.add(new OreGenerator(ModBlocks.oreTin, 20, 3, 0, 64));
+        oreGens.add(new OreGenerator(ModBlocks.oreZinc, 20, 6, 0, 64));
     }
 
     @SuppressWarnings("MethodMayBeStatic")

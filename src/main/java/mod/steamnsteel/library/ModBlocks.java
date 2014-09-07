@@ -35,23 +35,27 @@ import net.minecraftforge.oredict.OreDictionary;
 @GameRegistry.ObjectHolder(TheMod.MOD_ID)
 public final class ModBlocks
 {
-    public static final SteamNSteelBlock BRASS_BLOCK = new BrassBlock();
-    public static final SteamNSteelBlock BRONZE_BLOCK = new BronzeBlock();
-    public static final SteamNSteelBlock COPPER_BLOCK = new CopperBlock();
-    public static final SteamNSteelOreBlock COPPER_ORE = new CopperOre();
-    public static final SteamNSteelBlock CUPOLA = new CupolaBlock();
-    public static final SteamNSteelBlock NITER_ORE = new NiterOre();
-    public static final SteamNSteelBlock PLOTONIUM_BLOCK = new PlotoniumBlock();
-    public static final SteamNSteelBlock PLOTONIUM_CHEST = new PlotoniumChest();
-    public static final SteamNSteelBlock PLOTONIUM_RUIN_FLOOR = new PlotoniumRuinFloor();
-    public static final SteamNSteelBlock PLOTONIUM_RUIN_PILLAR = new PlotoniumRuinPillar();
-    public static final SteamNSteelBlock PLOTONIUM_RUIN_WALL = new PlotoniumRuinWall();
-    public static final SteamNSteelBlock STEEL_BLOCK = new SteelBlock();
-    public static final SteamNSteelBlock SULFUR_ORE = new SulfurOre();
-    public static final SteamNSteelBlock TIN_BLOCK = new TinBlock();
-    public static final SteamNSteelOreBlock TIN_ORE = new TinOre();
-    public static final SteamNSteelBlock ZINC_BLOCK = new ZincBlock();
-    public static final SteamNSteelOreBlock ZINC_ORE = new ZincOre();
+    // *******
+    // * NOTE: @GameRegistry.ObjectHolder requires these fields to have the same name as the unlocalized name of the
+    // *       object.
+    // *
+    public static final SteamNSteelBlock blockBrass = new BrassBlock();
+    public static final SteamNSteelBlock blockBronze = new BronzeBlock();
+    public static final SteamNSteelBlock blockCopper = new CopperBlock();
+    public static final SteamNSteelBlock blockPlotonium = new PlotoniumBlock();
+    public static final SteamNSteelBlock blockSteel = new SteelBlock();
+    public static final SteamNSteelBlock blockTin = new TinBlock();
+    public static final SteamNSteelBlock blockZinc = new ZincBlock();
+    public static final SteamNSteelBlock chestPlotonium = new PlotoniumChest();
+    public static final SteamNSteelBlock cupola = new CupolaBlock();
+    public static final SteamNSteelOreBlock oreCopper = new CopperOre();
+    public static final SteamNSteelBlock oreNiter = new NiterOre();
+    public static final SteamNSteelBlock oreSulfur = new SulfurOre();
+    public static final SteamNSteelOreBlock oreTin = new TinOre();
+    public static final SteamNSteelOreBlock oreZinc = new ZincOre();
+    public static final SteamNSteelBlock ruinFloorPlotonium = new PlotoniumRuinFloor();
+    public static final SteamNSteelBlock ruinPillarPlotonium = new PlotoniumRuinPillar();
+    public static final SteamNSteelBlock ruinWallPlotonium = new PlotoniumRuinWall();
 
     private ModBlocks()
     {
@@ -67,54 +71,32 @@ public final class ModBlocks
 
     public static void init()
     {
-        GameRegistry.registerBlock(PLOTONIUM_CHEST, Names.PLOTONIUM_CHEST);
+        GameRegistry.registerBlock(chestPlotonium, PlotoniumChest.NAME);
 
-        GameRegistry.registerBlock(CUPOLA, CupolaBlock.NAME);
+        GameRegistry.registerBlock(cupola, CupolaBlock.NAME);
 
-        registerBlockAndOre(COPPER_ORE, Names.COPPER_ORE);
-        registerBlockAndOre(NITER_ORE, Names.NITER_ORE);
-        registerBlockAndOre(SULFUR_ORE, Names.SULFUR_ORE);
-        registerBlockAndOre(TIN_ORE, Names.TIN_ORE);
-        registerBlockAndOre(ZINC_ORE, Names.ZINC_ORE);
+        registerBlockAndOre(oreCopper, CopperOre.NAME);
+        registerBlockAndOre(oreNiter, NiterOre.NAME);
+        registerBlockAndOre(oreSulfur, SulfurOre.NAME);
+        registerBlockAndOre(oreTin, TinOre.NAME);
+        registerBlockAndOre(oreZinc, ZincOre.NAME);
 
-        registerBlockAndOre(BRASS_BLOCK, Names.BRASS_BLOCK);
-        registerBlockAndOre(BRONZE_BLOCK, Names.BRONZE_BLOCK);
-        registerBlockAndOre(COPPER_BLOCK, Names.COPPER_BLOCK);
-        registerBlockAndOre(PLOTONIUM_BLOCK, Names.PLOTONIUM_BLOCK);
-        registerBlockAndOre(STEEL_BLOCK, Names.STEEL_BLOCK);
-        registerBlockAndOre(TIN_BLOCK, Names.TIN_BLOCK);
-        registerBlockAndOre(ZINC_BLOCK, Names.ZINC_BLOCK);
+        registerBlockAndOre(blockBrass, BrassBlock.NAME);
+        registerBlockAndOre(blockBronze, BronzeBlock.NAME);
+        registerBlockAndOre(blockCopper, CopperBlock.NAME);
+        registerBlockAndOre(blockPlotonium, PlotoniumBlock.NAME);
+        registerBlockAndOre(blockSteel, SteelBlock.NAME);
+        registerBlockAndOre(blockTin, TinBlock.NAME);
+        registerBlockAndOre(blockZinc, ZincBlock.NAME);
 
-        GameRegistry.registerBlock(PLOTONIUM_RUIN_FLOOR, Names.PLOTONIUM_RUIN_FLOOR);
-        GameRegistry.registerBlock(PLOTONIUM_RUIN_PILLAR, Names.PLOTONIUM_RUIN_PILLAR);
-        GameRegistry.registerBlock(PLOTONIUM_RUIN_WALL, Names.PLOTONIUM_RUIN_WALL);
+        GameRegistry.registerBlock(ruinFloorPlotonium, PlotoniumRuinFloor.NAME);
+        GameRegistry.registerBlock(ruinPillarPlotonium, PlotoniumRuinPillar.NAME);
+        GameRegistry.registerBlock(ruinWallPlotonium, PlotoniumRuinWall.NAME);
     }
 
     private static void registerBlockAndOre(Block block, String name)
     {
         GameRegistry.registerBlock(block, name);
         OreDictionary.registerOre(name, block);
-    }
-
-    @SuppressWarnings("InnerClassFieldHidesOuterClassField")
-    public enum Names
-    {
-        INSTANCE;
-        public static final String BRASS_BLOCK = "blockBrass";
-        public static final String BRONZE_BLOCK = "blockBronze";
-        public static final String COPPER_BLOCK = "blockCopper";
-        public static final String COPPER_ORE = "oreCopper";
-        public static final String NITER_ORE = "oreNiter";
-        public static final String PLOTONIUM_BLOCK = "blockPlotonium";
-        public static final String PLOTONIUM_CHEST = "chestPlotonium";
-        public static final String PLOTONIUM_RUIN_FLOOR = "ruinFloorPlotonium";
-        public static final String PLOTONIUM_RUIN_PILLAR = "ruinPillarPlotonium";
-        public static final String PLOTONIUM_RUIN_WALL = "ruinWallPlotonium";
-        public static final String STEEL_BLOCK = "blockSteel";
-        public static final String SULFUR_ORE = "oreSulfur";
-        public static final String TIN_BLOCK = "blockTin";
-        public static final String TIN_ORE = "oreTin";
-        public static final String ZINC_BLOCK = "blockZinc";
-        public static final String ZINC_ORE = "oreZinc";
     }
 }

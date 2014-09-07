@@ -17,14 +17,15 @@
 package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class PlotoniumRuinWall extends SteamNSteelBlock
 {
+    public static final String NAME = "ruinWallPlotonium";
+
     public PlotoniumRuinWall()
     {
         super(Material.rock);
-        setBlockName(ModBlocks.Names.PLOTONIUM_RUIN_WALL);
+        setBlockName(NAME);
     }
 }

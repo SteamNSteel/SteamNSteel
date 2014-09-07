@@ -53,7 +53,7 @@ public class TheMod
         @Override
         public Item getTabIconItem()
         {
-            return ModItems.MUSTY_JOURNAL;
+            return ModItems.mustyJournal;
         }
     };
 

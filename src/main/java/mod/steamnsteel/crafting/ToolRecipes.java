@@ -39,17 +39,17 @@ class ToolRecipes
 
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(ModItems.BRONZE_PICKAXE, pick, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItems.BRONZE_SHOVEL, shovel, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItems.BRONZE_AXE, axe, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItems.BRONZE_HOE, hoe, ModItems.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItems.BRONZE_SWORD, sword, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.pickBronze, pick, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.shovelBronze, shovel, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.axeBronze, axe, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.hoeBronze, hoe, ModItems.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItems.swordBronze, sword, ModItems.Names.BRONZE_INGOT));
 
-        recipes.add(assembleRecipe(ModItems.STEEL_PICKAXE, pick, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItems.STEEL_SHOVEL, shovel, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItems.STEEL_AXE, axe, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItems.STEEL_HOE, hoe, ModItems.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItems.STEEL_SWORD, sword, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.pickSteel, pick, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.shovelSteel, shovel, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.axeSteel, axe, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.hoeSteel, hoe, ModItems.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItems.swordSteel, sword, ModItems.Names.STEEL_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }
