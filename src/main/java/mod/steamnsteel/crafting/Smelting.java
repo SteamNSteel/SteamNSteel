@@ -34,9 +34,9 @@ class Smelting
     void init()
     {
         final float xp = 0.5F;
-        GameRegistry.addSmelting(ModBlocks.oreCopper, new ItemStack(ModItems.COPPER_INGOT), xp);
-        GameRegistry.addSmelting(ModBlocks.oreTin, new ItemStack(ModItems.TIN_INGOT), xp);
-        GameRegistry.addSmelting(ModBlocks.oreZinc, new ItemStack(ModItems.ZINC_INGOT), xp);
+        GameRegistry.addSmelting(ModBlocks.oreCopper, new ItemStack(ModItems.ingotCopper), xp);
+        GameRegistry.addSmelting(ModBlocks.oreTin, new ItemStack(ModItems.ingotTin), xp);
+        GameRegistry.addSmelting(ModBlocks.oreZinc, new ItemStack(ModItems.ingotZinc), xp);
 
         final IAlloyManager alloyManager = CraftingManager.alloyManager.get();
 
@@ -45,28 +45,28 @@ class Smelting
 
         alloyManager.addAlloy(cuIngotIngredient,
                 new OreDictionaryIngredient(ModItems.Names.TIN_INGOT),
-                new ItemStack(ModItems.BRONZE_INGOT, 2));
+                new ItemStack(ModItems.ingotBronze, 2));
         alloyManager.addAlloy(cuBlockIngredient,
                 new OreDictionaryIngredient(TinBlock.NAME),
                 new ItemStack(ModBlocks.blockBronze, 2));
 
         alloyManager.addAlloy(cuIngotIngredient,
                 new OreDictionaryIngredient(ModItems.Names.ZINC_INGOT),
-                new ItemStack(ModItems.BRASS_INGOT, 2));
+                new ItemStack(ModItems.ingotBrass, 2));
         alloyManager.addAlloy(cuBlockIngredient,
                 new OreDictionaryIngredient(ZincBlock.NAME),
                 new ItemStack(ModBlocks.blockBrass, 2));
 
         alloyManager.addAlloy(new OreDictionaryIngredient("ingotIron"),
                 new ItemStackIngredient(new ItemStack(Items.coal, 2)),
-                new ItemStack(ModItems.STEEL_INGOT));
+                new ItemStack(ModItems.ingotSteel));
         alloyManager.addAlloy(new OreDictionaryIngredient("blockIron"),
                 new ItemStackIngredient(new ItemStack(Blocks.coal_block, 2)),
                 new ItemStack(ModBlocks.blockSteel));
 
         alloyManager.addAlloy(new OreDictionaryIngredient(ModItems.Names.BRASS_INGOT),
                 new OreDictionaryIngredient(ModItems.Names.STEEL_INGOT),
-                new ItemStack(ModItems.PLOTONIUM_INGOT, 2));
+                new ItemStack(ModItems.ingotPlotonium, 2));
         alloyManager.addAlloy(new OreDictionaryIngredient(BrassBlock.NAME),
                 new OreDictionaryIngredient(SteelBlock.NAME),
                 new ItemStack(ModBlocks.blockPlotonium, 2));
