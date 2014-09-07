@@ -24,7 +24,7 @@ import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-@SuppressWarnings("MethodMayBeStatic")
+@SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends RenderProxy
 {
     @Override
@@ -36,7 +36,7 @@ public class ClientRenderProxy extends RenderProxy
 
     private void registerItemRenderers()
     {
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.CUPOLA), new CupolaItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.cupola), new CupolaItemRenderer());
     }
 
     private void registerTESRs()

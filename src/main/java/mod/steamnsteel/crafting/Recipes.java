@@ -44,7 +44,7 @@ public final class Recipes
     private static void addCupolaRecipe()
     {
         final RecipePattern pattern = RecipePattern.of("#X#", "X X", "#X#");
-        final IRecipe recipe = new ShapedOreRecipe(ModBlocks.CUPOLA, pattern.get(), '#', "ingotIron", 'X', Blocks.brick_block);
+        final IRecipe recipe = new ShapedOreRecipe(ModBlocks.cupola, pattern.get(), '#', "ingotIron", 'X', Blocks.brick_block);
         GameRegistry.addRecipe(recipe);
     }
 }

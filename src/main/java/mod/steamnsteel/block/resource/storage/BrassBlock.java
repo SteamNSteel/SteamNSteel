@@ -17,14 +17,15 @@
 package mod.steamnsteel.block.resource.storage;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlocks;
 import net.minecraft.block.material.Material;
 
 public class BrassBlock extends SteamNSteelBlock
 {
+    public static final String NAME = "blockBrass";
+
     public BrassBlock()
     {
         super(Material.rock);
-        setBlockName(ModBlocks.Names.BRASS_BLOCK);
+        setBlockName(NAME);
     }
 }
