@@ -71,7 +71,7 @@ public class SulfurOreGenerator extends OreGenerator {
 
 				float chance = data.heatScore / 8.0f;
 				if (clusterAllowed && chance > random.nextFloat()) {
-					Logger.info("Start Point (%d, %d, %d) HeatScore %d", clusterPosition.x, clusterPosition.y, clusterPosition.z, data.heatScore);
+					//Logger.info("Start Point (%d, %d, %d) HeatScore %d", clusterPosition.x, clusterPosition.y, clusterPosition.z, data.heatScore);
 					blocksChanged += createCluster(world, random, clusterPosition, interestingBlocks);
 					createdClusters.add(clusterPosition);
 
@@ -81,7 +81,7 @@ public class SulfurOreGenerator extends OreGenerator {
 				}
 			}
 
-			Logger.info("Changed %d blocks to Sulfur", blocksChanged);
+			//Logger.info("Changed %d blocks to Sulfur", blocksChanged);
 			return true;
 		} catch (Exception e) {
 			Logger.severe("Error generating sulfur: %s", e.toString());
