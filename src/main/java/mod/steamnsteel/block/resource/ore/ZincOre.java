@@ -26,6 +26,7 @@ public class ZincOre extends SteamNSteelOreBlock
     public ZincOre()
     {
         setBlockName(NAME);
+        setHarvestLevel("pickaxe", 1); // iron pick
     }
 
     @Override

@@ -27,5 +27,6 @@ public class SulfurOre extends SteamNSteelBlock
     {
         super(Material.rock);
         setBlockName(NAME);
+        setHarvestLevel("pickaxe", 1); // iron pick
     }
 }

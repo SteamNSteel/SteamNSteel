@@ -26,6 +26,7 @@ public class CopperOre extends SteamNSteelOreBlock
     public CopperOre()
     {
         setBlockName(NAME);
+        setHarvestLevel("pickaxe", 1); // iron pick
     }
 
     @Override
