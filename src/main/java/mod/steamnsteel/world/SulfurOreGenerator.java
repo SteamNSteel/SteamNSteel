@@ -41,7 +41,7 @@ public class SulfurOreGenerator extends OreGenerator {
 	public boolean generate(World world, Random random, int worldX, int unusedY, int worldZ) {
 		try {
 			HashMap<Vector<Integer>, GenData> interestingBlocks = new HashMap<Vector<Integer>, GenData>();
-			SortedSet<GenData> potentialStartingPoints = new TreeSet<GenData>(new GenDataComparator());
+			SortedSet<GenData> potentialStartingPoints = new TreeSet<GenData>();
 
 			for (int x = 1; x < 15; ++x) {
 				int blockX = worldX + x;
@@ -198,7 +198,7 @@ public class SulfurOreGenerator extends OreGenerator {
 		}
 	}
 
-	private static class GenData {
+	private static class GenData implements Comparable<GenData> {
 		public final Vector<Integer> position;
 		public int heatScore;
 
@@ -221,6 +221,16 @@ public class SulfurOreGenerator extends OreGenerator {
 		public int hashCode() {
 			return position.hashCode();
 		}
+
+		@Override
+		public int compareTo(GenData genData) {
+			if (genData == null) { return 1; }
+			int compare = genData.heatScore - this.heatScore;
+			if (compare == 0) {
+				compare = genData.position.hashCode() - this.position.hashCode();
+			}
+			return compare;
+		}
 	}
 
 	static final int[][] neighbours = new int[26][3];
@@ -241,18 +251,6 @@ public class SulfurOreGenerator extends OreGenerator {
 					++pos;
 				}
 			}
-		}
-	}
-
-
-	private static class GenDataComparator implements Comparator<GenData> {
-		@Override
-		public int compare(GenData genData, GenData genData2) {
-			int compare = genData2.heatScore - genData.heatScore;
-			if (compare == 0) {
-				compare = genData2.position.hashCode() - genData.position.hashCode();
-			}
-			return compare;
 		}
 	}
 }
