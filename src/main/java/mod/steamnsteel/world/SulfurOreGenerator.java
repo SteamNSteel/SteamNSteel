@@ -1,6 +1,7 @@
 package mod.steamnsteel.world;
 
 import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.configuration.Settings;
 import mod.steamnsteel.utility.Vector;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.Block;
@@ -39,6 +40,9 @@ public class SulfurOreGenerator extends OreGenerator {
 
 	@Override
 	public boolean generate(World world, Random random, int worldX, int unusedY, int worldZ) {
+		if (!block.isGenEnabled()) {
+			return false;
+		}
 		try {
 			HashMap<Vector<Integer>, GenData> interestingBlocks = new HashMap<Vector<Integer>, GenData>();
 			SortedSet<GenData> potentialStartingPoints = new TreeSet<GenData>();
