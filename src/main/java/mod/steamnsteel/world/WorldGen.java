@@ -62,27 +62,4 @@ public enum WorldGen
             if (TerrainGen.generateOre(event.world, event.rand, oreGen, event.worldX, event.worldZ, CUSTOM))
                 oreGen.generate(event.world, event.rand, event.worldX, 0, event.worldZ);
     }
-/*
-	private void registerToEventBus() {
-		MinecraftForge.EVENT_BUS.register(WorldGen.INSTANCE);
-	}
-
-	private void createConfigurations() {
-		OreConfiguration sulfurConfig = new OreConfiguration(ModBlocks.SULFUR_ORE, 3, 15, 0, 64);
-		sulfurConfiguration = sulfurConfig;
-	}
-
-	private void createCustomGenerators() {
-		sulfurGenerator = new WorldGenSulfur();
-	}
-
-	@SubscribeEvent
-	public void onPopulateChunkEvent(DecorateBiomeEvent.Post event) {
-		//event.chunkX is actually block space, not chunk space.
-		//int chunkX = event.chunkX >> 4;
-		//int chunkZ = event.chunkZ >> 4;
-
-		sulfurGenerator.generate(sulfurConfiguration, event.world, event.rand, event.chunkX, event.chunkZ);
-	}
-	*/
 }
