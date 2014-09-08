@@ -1,6 +1,7 @@
 package mod.steamnsteel.world;
 
 import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.utility.Vector;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -39,7 +40,7 @@ public class SulfurOreGenerator extends OreGenerator {
 	@Override
 	public boolean generate(World world, Random random, int worldX, int unusedY, int worldZ) {
 		try {
-			HashMap<BlockPos, GenData> interestingBlocks = new HashMap<BlockPos, GenData>();
+			HashMap<Vector<Integer>, GenData> interestingBlocks = new HashMap<Vector<Integer>, GenData>();
 			SortedSet<GenData> potentialStartingPoints = new TreeSet<GenData>(new GenDataComparator());
 
 			for (int x = 1; x < 15; ++x) {
@@ -54,14 +55,14 @@ public class SulfurOreGenerator extends OreGenerator {
 
 			int blocksChanged = 0;
 			double minDistanceBetweenClusters = Math.pow(10, 2);
-			List<BlockPos> createdClusters = new LinkedList<BlockPos>();
+			List<Vector<Integer>> createdClusters = new LinkedList<Vector<Integer>>();
 			for (GenData data : potentialStartingPoints) {
-				BlockPos clusterPosition = data.position;
+				Vector<Integer> clusterPosition = data.position;
 				boolean clusterAllowed = true;
-				for (BlockPos otherClusterPosition : createdClusters) {
-					double distance = Math.pow(clusterPosition.x - otherClusterPosition.x, 2) +
-							Math.pow(clusterPosition.y - otherClusterPosition.y, 2) +
-							Math.pow(clusterPosition.z - otherClusterPosition.y, 2);
+				for (Vector<Integer> otherClusterPosition : createdClusters) {
+					double distance = Math.pow(clusterPosition.getX() - otherClusterPosition.getX(), 2) +
+							Math.pow(clusterPosition.getY() - otherClusterPosition.getY(), 2) +
+							Math.pow(clusterPosition.getZ() - otherClusterPosition.getZ(), 2);
 
 					if (distance < minDistanceBetweenClusters) {
 						clusterAllowed = false;
@@ -90,24 +91,24 @@ public class SulfurOreGenerator extends OreGenerator {
 		return false;
 	}
 
-	private int createCluster(World world, Random random, BlockPos startPosition, Map<BlockPos, GenData> interestingBlocks) {
+	private int createCluster(World world, Random random, Vector<Integer> startPosition, Map<Vector<Integer>, GenData> interestingBlocks) {
 		int blocks = random.nextInt(blocksPerCluster);
 		Queue<GenData> blocksToProcess = new LinkedList<GenData>();
-		HashSet<BlockPos> processedBlocks = new HashSet<BlockPos>();
+		HashSet<Vector<Integer>> processedBlocks = new HashSet<Vector<Integer>>();
 		GenData genData = interestingBlocks.get(startPosition);
 		genData.heatScore = Integer.MAX_VALUE;
 		blocksToProcess.add(genData);
 		int blocksAdded = 0;
 		while (!blocksToProcess.isEmpty()) {
 			GenData data = blocksToProcess.poll();
-			BlockPos pos = data.position;
+			Vector<Integer> pos = data.position;
 			float chance = data.heatScore / 8.0f;
 			if (chance > random.nextFloat()) {
-				world.setBlock(pos.x, pos.y, pos.z, block, 0, 0);
+				world.setBlock(pos.getX(), pos.getY(), pos.getZ(), block, 0, 0);
 				processedBlocks.add(pos);
 				blocksAdded++;
 				for (int[] neighbour : neighbours) {
-					BlockPos neighbourPos = new BlockPos(pos.x + neighbour[0], pos.y + neighbour[1], pos.z + neighbour[2]);
+					Vector<Integer> neighbourPos = new Vector<Integer>(pos.getX() + neighbour[0], pos.getY() + neighbour[1], pos.getZ() + neighbour[2]);
 					GenData neighbourData = interestingBlocks.get(neighbourPos);
 					if (neighbourData != null && !processedBlocks.contains(neighbourPos)) {
 						blocksToProcess.add(neighbourData);
@@ -122,32 +123,32 @@ public class SulfurOreGenerator extends OreGenerator {
 		return blocksAdded;
 	}
 
-	private void checkBlock(World world, int blockX, int blockY, int blockZ, Map<BlockPos, GenData> interestingBlocks, Set<GenData> potentialStartingPoints) {
+	private void checkBlock(World world, int blockX, int blockY, int blockZ, Map<Vector<Integer>, GenData> interestingBlocks, Set<GenData> potentialStartingPoints) {
 		int worldX = (blockX) >> 4;
 		int worldZ = (blockZ) >> 4;
 
 		Chunk chunk = world.getChunkFromBlockCoords(blockX, blockZ);
 
 		Block worldBlock = chunk.getBlock(blockX & 15, blockY, blockZ & 15);
-		BlockPos blockPos = new BlockPos(blockX, blockY, blockZ);
+		Vector<Integer> blockPos = new Vector<Integer>(blockX, blockY, blockZ);
 
-		LinkedList<BlockPos> potentialNeighboursToAdd = new LinkedList<BlockPos>();
+		LinkedList<Vector<Integer>> potentialNeighboursToAdd = new LinkedList<Vector<Integer>>();
 
 		if (worldBlock == Blocks.stone || worldBlock == Blocks.dirt || worldBlock == Blocks.gravel) {
 			int heatScore = 0;
 			for (int[] neighbour : neighbours) {
-				BlockPos neighbourBlockPos = new BlockPos(blockX + neighbour[0], blockY + neighbour[1], blockZ + neighbour[2]);
+				Vector<Integer> neighbourBlockPos = new Vector<Integer>(blockX + neighbour[0], blockY + neighbour[1], blockZ + neighbour[2]);
 
 				//Don't inspect neighbours in chunks that haven't been created - it causes Already Decorating!! exception
-				if ((neighbourBlockPos.x >> 4 != worldX || neighbourBlockPos.z >> 4 != worldZ)) {
+				if ((neighbourBlockPos.getX() >> 4 != worldX || neighbourBlockPos.getZ() >> 4 != worldZ)) {
 					Logger.warning("wtf, encountered a block that wasn't in this chunk. I thought I'd prevented that.");
 					continue;
 				}
 
 				Block neighbourBlock = chunk.getBlock(
-						neighbourBlockPos.x & 15,
+						neighbourBlockPos.getX() & 15,
 						blockY + neighbour[1],
-						neighbourBlockPos.z & 15);
+						neighbourBlockPos.getZ() & 15);
 
 				//If we've found a block neighbouring Lava, increase this block's heat score
 				if (neighbourBlock == Blocks.lava || neighbourBlock == Blocks.flowing_lava) {
@@ -185,7 +186,7 @@ public class SulfurOreGenerator extends OreGenerator {
 				}
 
 
-				for (BlockPos neighbour : potentialNeighboursToAdd) {
+				for (Vector<Integer> neighbour : potentialNeighboursToAdd) {
 					data = interestingBlocks.get(neighbour);
 					if (data == null) {
 						data = new GenData(neighbour);
@@ -198,10 +199,10 @@ public class SulfurOreGenerator extends OreGenerator {
 	}
 
 	private static class GenData {
-		public final BlockPos position;
+		public final Vector<Integer> position;
 		public int heatScore;
 
-		public GenData(BlockPos position) {
+		public GenData(Vector<Integer> position) {
 			this.position = position;
 		}
 
@@ -219,42 +220,6 @@ public class SulfurOreGenerator extends OreGenerator {
 		@Override
 		public int hashCode() {
 			return position.hashCode();
-		}
-	}
-
-	private static class BlockPos {
-		public final int x;
-		public final int y;
-		public final int z;
-
-		public BlockPos(int x, int y, int z) {
-
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
-
-		@SuppressWarnings("RedundantIfStatement")
-		@Override
-		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
-
-			BlockPos blockPos = (BlockPos) o;
-
-			if (x != blockPos.x) return false;
-			if (y != blockPos.y) return false;
-			if (z != blockPos.z) return false;
-
-			return true;
-		}
-
-		@Override
-		public int hashCode() {
-			int result = x;
-			result = 31 * result + y;
-			result = 31 * result + z;
-			return result;
 		}
 	}
 
