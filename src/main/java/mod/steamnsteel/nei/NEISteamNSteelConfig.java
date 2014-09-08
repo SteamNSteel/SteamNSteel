@@ -23,10 +23,12 @@ import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import codechicken.nei.recipe.DefaultOverlayHandler;
 
-public class NEISteamNSteelConfig implements IConfigureNEI {
+public class NEISteamNSteelConfig implements IConfigureNEI
+{
 
 	@Override
-	public void loadConfig() {
+	public void loadConfig()
+	{
 		API.registerRecipeHandler(new CupolaRecipeHandler());
 		API.registerUsageHandler(new CupolaRecipeHandler());
 		API.registerGuiOverlay(CupolaGui.class, TheMod.MOD_ID + CupolaBlock.NAME, 5, 11);
@@ -34,12 +36,14 @@ public class NEISteamNSteelConfig implements IConfigureNEI {
 	}
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return TheMod.MOD_NAME;
 	}
 
 	@Override
-	public String getVersion() {
+	public String getVersion()
+	{
 		return TheMod.MOD_VERSION;
 	}
 }
