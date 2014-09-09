@@ -47,6 +47,11 @@ public class ItemWrapper
     {
         return meta;
     }
+    
+    public ItemStack getStack()
+    {
+    	return new ItemStack(item, 1, meta);
+    }
 
     @Override
     public boolean equals(Object o)

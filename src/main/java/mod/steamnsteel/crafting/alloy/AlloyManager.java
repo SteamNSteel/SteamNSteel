@@ -32,7 +32,7 @@ public enum AlloyManager implements IAlloyManager
 {
     INSTANCE;
 
-    private static final Table<ItemWrapper, ItemWrapper, IAlloyResult> alloys = HashBasedTable.create();
+    public static final Table<ItemWrapper, ItemWrapper, IAlloyResult> alloys = HashBasedTable.create();
 
     @SuppressWarnings("MethodWithMultipleLoops")
     @Override
