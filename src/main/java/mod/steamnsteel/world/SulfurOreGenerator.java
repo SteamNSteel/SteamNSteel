@@ -1,13 +1,6 @@
 package mod.steamnsteel.world;
 
-import com.google.common.base.Functions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
-import com.google.common.primitives.Ints;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
-import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -32,23 +25,32 @@ import java.util.*;
  * neighbours at a time, in order of their heat rating.
  *
  * When doing the initial search for replaceable blocks, we'll ignore the chunk borders as they ruin determinism.
- *
- * Crashes in the generation shouldn't happen, but just in case let's not prevent people from playing the game. I highly
- * doubt that a crash would happen in every chunk.
  */
 public class SulfurOreGenerator extends OreGenerator {
+	private static final float HEAT_SCORE_CHANCE_DENOMINATOR = 8.0f;
+	private static final int DISTANCE_BETWEEN_CLUSTERS = 10;
+	private static final int CHUNK_WIDTH = 16;
+	private static final int CHUNK_DEPTH = 16;
+
 	private int worldHeight;
 	private int worldHeightShift;
 	private int depthShift;
-	private int[] neighbourOffsets;
+	static final int[][] neighbours = new int[26][3];
+	static final int[] neighbourOffsets = new int[26];
 	private final double logTwo = Math.log(2);
 	private int[] potentialStartingPoints;
 	private int potentialStartingPointIndex;
 
-	public SulfurOreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight)
-	{
+	private int[] potentialNeighbourToAdd = new int[26];
+
+	private int[] createdClusters;
+
+	private int startingPointMask;
+
+	public SulfurOreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight) {
 		super(block, clusterCount, blocksPerCluster, minHeight, maxHeight);
-		depthShift = (int)(Math.log(16)/ logTwo);
+		depthShift = (int) (Math.log(CHUNK_DEPTH) / logTwo);
+		createdClusters = new int[clusterCount];
 	}
 
 	@Override
@@ -56,96 +58,100 @@ public class SulfurOreGenerator extends OreGenerator {
 		if (!block.isGenEnabled()) {
 			return false;
 		}
-		long startTime = System.currentTimeMillis();
+		//long startTime = System.currentTimeMillis();
 
-		try {
-			int height = world.getActualHeight();
-			if (height >= maxHeight) {
-				height = maxHeight;
-			}
-
-			//Rounds the world actual height to the nearest base 2 for safety.
-			height = (1 << ((int)((Math.log(height - 1)/ logTwo)+1)));
-
-			if (height != worldHeight) {
-				worldHeightShift = (int)(Math.log(height)/ logTwo);
-				worldHeight = height;
-				calculateNeighbourOffsets();
-				potentialStartingPoints = new int[16 * 16 * worldHeight];
-			}
-			potentialStartingPointIndex = 0;
-
-			int[] heatScoreMap = new int[16 * 16 * worldHeight];
-
-			for (int x = 1; x < 15; ++x) {
-				int worldBlockX = worldX + x;
-				for (int z = 1; z < 15; ++z) {
-					int worldBlockZ = worldZ + z;
-					for (int y = minHeight; y < maxHeight; ++y) {
-						checkBlock(world, worldBlockX, y, worldBlockZ, heatScoreMap);
-					}
-				}
-			}
-
-			int blocksChanged = 0;
-			double minDistanceBetweenClusters = Math.pow(10, 2);
-			List<Integer> createdClusters = new LinkedList<Integer>();
-
-			Arrays.sort(potentialStartingPoints, 0, potentialStartingPointIndex);
-
-			final int startingPointMask = (1 << (worldHeightShift + depthShift + depthShift)) - 1;
-			for (int complexStartingPoint : potentialStartingPoints) {
-				boolean clusterAllowed = true;
-				int startingPoint = complexStartingPoint & startingPointMask;
-
-				int posX = startingPoint >> (worldHeightShift + depthShift) & (16-1) ;
-				int posY = startingPoint & (worldHeight-1);
-				int posZ = startingPoint >> worldHeightShift & (16-1);
-
-				for (int otherClusterPosition : createdClusters) {
-					int otherPosX = otherClusterPosition >> (worldHeightShift + depthShift) & (16-1) ;
-					int otherPosY = otherClusterPosition & (worldHeight-1);
-					int otherPosZ = otherClusterPosition >> worldHeightShift & (16-1);
-
-					double distance = Math.pow(posX - otherPosX, 2) +
-							Math.pow(posY - otherPosY, 2) +
-							Math.pow(posZ - otherPosZ, 2);
-
-					if (distance < minDistanceBetweenClusters) {
-						clusterAllowed = false;
-						break;
-					}
-				}
-
-				int heatScore = heatScoreMap[startingPoint];
-				float chance = heatScore / 8.0f;
-				if (clusterAllowed && chance > random.nextFloat()) {
-					Logger.info("Start Point (%d, %d, %d) HeatScore %d", posX, posY, posZ, heatScore);
-					blocksChanged += createCluster(world, random, worldX, worldZ, posX, posY, posZ, heatScoreMap);
-					createdClusters.add(startingPoint);
-
-					if (createdClusters.size() >= this.clusterCount) {
-						break;
-					}
-				}
-			}
-
-			Logger.info("Changed %d blocks to Sulfur", blocksChanged);
-			long stopTime = System.currentTimeMillis();
-			long runTime = stopTime - startTime;
-			Logger.info("Run time: " + runTime);
-			return true;
-		} catch (Exception e) {
-			Logger.severe("Error generating sulfur: %s", e.toString());
-			e.printStackTrace();
+		int height = world.getActualHeight();
+		if (height >= maxHeight) {
+			height = maxHeight;
 		}
-		return false;
+
+		//Rounds the world actual height to the nearest base 2 for safety.
+		height = (1 << ((int) ((Math.log(height - 1) / logTwo) + 1)));
+
+		//If we are generating in a world with a different height since the last time this was called, we'll need to
+		//reallocate our arrays.
+		if (height != worldHeight) {
+			worldHeightShift = (int) (Math.log(height) / logTwo);
+			worldHeight = height;
+			calculateNeighbourOffsets();
+			potentialStartingPoints = new int[CHUNK_WIDTH * CHUNK_DEPTH * worldHeight];
+			startingPointMask = (1 << (worldHeightShift + depthShift + depthShift)) - 1;
+		}
+		potentialStartingPointIndex = 0;
+
+		//We need this reallocated ever time unfortunately, the 0s matter.
+		int[] heatScoreMap = new int[CHUNK_WIDTH * CHUNK_DEPTH * worldHeight];
+
+		for (int x = 1; x < 15; ++x) {
+			int worldBlockX = worldX + x;
+			for (int z = 1; z < 15; ++z) {
+				int worldBlockZ = worldZ + z;
+				for (int y = minHeight; y < maxHeight; ++y) {
+					checkBlock(world, worldBlockX, y, worldBlockZ, heatScoreMap);
+				}
+			}
+		}
+
+		//Distance Squared of the desired distance between clusters in blocks.
+		double minDistanceBetweenClusters = Math.pow(DISTANCE_BETWEEN_CLUSTERS, 2);
+
+		//Sort the potential starting points that we've collected.
+		Arrays.sort(potentialStartingPoints, 0, potentialStartingPointIndex);
+		int createdClusterCount = 0;
+
+		for (int complexStartingPoint : potentialStartingPoints) {
+			boolean clusterAllowed = true;
+			//Strip off the heat score, we don't need it at this point
+			int startingPoint = complexStartingPoint & startingPointMask;
+
+			//recalculate the XYZ
+			int posX = startingPoint >> (worldHeightShift + depthShift) & (CHUNK_WIDTH - 1);
+			int posY = startingPoint & (worldHeight - 1);
+			int posZ = startingPoint >> worldHeightShift & (CHUNK_DEPTH - 1);
+
+			//Ensure that we're not too close to another cluster.
+			for (int i = 0; i < createdClusterCount; i++) {
+				int otherClusterPosition = createdClusters[i];
+				int otherPosX = otherClusterPosition >> (worldHeightShift + depthShift) & (CHUNK_WIDTH - 1);
+				int otherPosY = otherClusterPosition & (worldHeight - 1);
+				int otherPosZ = otherClusterPosition >> worldHeightShift & (CHUNK_DEPTH - 1);
+
+				double distance = Math.pow(posX - otherPosX, 2) +
+						Math.pow(posY - otherPosY, 2) +
+						Math.pow(posZ - otherPosZ, 2);
+
+				if (distance < minDistanceBetweenClusters) {
+					clusterAllowed = false;
+					break;
+				}
+			}
+
+
+			int heatScore = heatScoreMap[startingPoint];
+			float chance = heatScore / HEAT_SCORE_CHANCE_DENOMINATOR;
+			if (clusterAllowed && chance > random.nextFloat()) {
+				//Logger.info("Start Point (%d, %d, %d) HeatScore %d", posX, posY, posZ, heatScore);
+				createCluster(world, random, worldX, worldZ, posX, posY, posZ, heatScoreMap);
+				createdClusters[createdClusterCount++] = startingPoint;
+
+				if (createdClusterCount >= this.clusterCount) {
+					break;
+				}
+			}
+		}
+
+		//long stopTime = System.currentTimeMillis();
+		//long runTime = stopTime - startTime;
+		//Logger.info("Run time: " + runTime);
+		return true;
 	}
 
+	/**
+	 * Calculates an array that can be used to navigate a 1D array as if it were actually 3D.
+	 */
 	private void calculateNeighbourOffsets() {
-		neighbourOffsets = new int[26];
 		int pos = 0;
-		final int xOffset = 16*worldHeight;
+		final int xOffset = CHUNK_DEPTH * worldHeight;
 		final int yOffset = 1;
 		final int zOffset = worldHeight;
 		for (int z = -zOffset; z <= zOffset; z += zOffset) {
@@ -161,51 +167,53 @@ public class SulfurOreGenerator extends OreGenerator {
 	}
 
 	private int createCluster(World world, Random random, int worldBlockX, int worldBlockZ, int chunkBlockX, int chunkBlockY, int chunkBlockZ, int[] interestingBlocks) {
-		final int blocks = random.nextInt(blocksPerCluster);
+		final int maxBlocksInThisCluster = random.nextInt(blocksPerCluster);
 		Queue<Integer> blocksToProcess = new LinkedList<Integer>();
 		HashSet<Integer> processedBlocks = new HashSet<Integer>();
 
-		//16 = chunk depth
-		int startPosition = 16*worldHeight*chunkBlockX + worldHeight*chunkBlockZ + chunkBlockY;
+		int startPosition = CHUNK_DEPTH * worldHeight * chunkBlockX + worldHeight * chunkBlockZ + chunkBlockY;
 
-		//We WILL be starting here.
+		//Ensure that the chance of a block spawning here is 100%
 		interestingBlocks[startPosition] = Integer.MAX_VALUE;
 		blocksToProcess.add(startPosition);
 		int blocksAdded = 0;
-		while (!blocksToProcess.isEmpty()) {
-			int blockPos = blocksToProcess.poll();
-			float chance = interestingBlocks[blockPos] / 8.0f;
-			if (chance > random.nextFloat()) {
-				//TODO: Convert pos back to x,y,z
-				int posX = blockPos >> (worldHeightShift + depthShift) & (16-1) ;
-				int posY = blockPos & (worldHeight-1);
-				int posZ = blockPos >> worldHeightShift & (16-1);
 
+		while (blocksAdded < maxBlocksInThisCluster && !blocksToProcess.isEmpty()) {
+			//Get the next block from the queue
+			int blockIndex = blocksToProcess.poll();
+			float chance = interestingBlocks[blockIndex] / 8.0f;
+			if (chance > random.nextFloat()) {
+				//Convert the block index back to it's XYZ components
+				int posX = blockIndex >> (worldHeightShift + depthShift) & (CHUNK_WIDTH - 1);
+				int posY = blockIndex & (worldHeight - 1);
+				int posZ = blockIndex >> worldHeightShift & (CHUNK_DEPTH - 1);
+
+				//Change the block to sulfur
 				world.setBlock(posX + worldBlockX, posY, posZ + worldBlockZ, block, 0, 0);
-				processedBlocks.add(blockPos);
+				//Mark it as processed so we don't end up in loops.
+				processedBlocks.add(blockIndex);
 				blocksAdded++;
+
+				//For any neighbour that has a calculated heat score, give it a chance to be part of the cluster.
 				for (int i = 0; i < neighbours.length; i++) {
 					int[] neighbour = neighbours[i];
-					if (posX + neighbour[0] < 0 || posX + neighbour[0] > 15) {
+					//But do not cross the boundary into other chunks.
+					if (posX + neighbour[0] < 0 || posX + neighbour[0] > (CHUNK_WIDTH - 1)) {
 						continue;
 					}
 					if (posY + neighbour[1] < 0 || posY + neighbour[1] >= this.maxHeight) {
 						continue;
 					}
-					if (posZ + neighbour[2] < 0 || posZ + neighbour[2] > 15) {
+					if (posZ + neighbour[2] < 0 || posZ + neighbour[2] > (CHUNK_DEPTH - 1)) {
 						continue;
 					}
 
-					int neighbourPos = blockPos + neighbourOffsets[i];
+					int neighbourPos = blockIndex + neighbourOffsets[i];
 					int neighbourHeatScore = interestingBlocks[neighbourPos];
 
 					if (neighbourHeatScore != 0 && !processedBlocks.contains(neighbourPos)) {
 						blocksToProcess.add(neighbourPos);
 					}
-				}
-
-				if (blocksAdded >= blocks) {
-					return blocksAdded;
 				}
 			}
 		}
@@ -215,22 +223,21 @@ public class SulfurOreGenerator extends OreGenerator {
 	private void checkBlock(World world, int worldBlockX, int worldBlockY, int worldBlockZ, int[] heatScoreMap) {
 		final int worldX = (worldBlockX) >> 4;
 		final int worldZ = (worldBlockZ) >> 4;
+		int potentialNeighbourToAddCount = 0;
 
-		//final int worldHeight = world.getActualHeight();
+		//grab the chunk. We don't need the extra things that world provides
 		Chunk chunk = world.getChunkFromBlockCoords(worldBlockX, worldBlockZ);
 
-		int chunkBlockX = worldBlockX & 15;
-		int chunkBlockZ = worldBlockZ & 15;
+		int chunkBlockX = worldBlockX & (CHUNK_WIDTH - 1);
+		int chunkBlockZ = worldBlockZ & (CHUNK_DEPTH - 1);
 		Block worldBlock = chunk.getBlock(chunkBlockX, worldBlockY, chunkBlockZ);
 
-		//16 = chunk depth
-		int blockIndex = 16*worldHeight* chunkBlockX + worldHeight* chunkBlockZ + worldBlockY;
-
-		LinkedList<Integer> potentialNeighboursToAdd = new LinkedList<Integer>();
+		int blockIndex = CHUNK_DEPTH * worldHeight * chunkBlockX + worldHeight * chunkBlockZ + worldBlockY;
 
 		if (worldBlock.isReplaceableOreGen(world, worldBlockX, worldBlockY, worldBlockZ, Blocks.stone) ||
 				worldBlock.isReplaceableOreGen(world, worldBlockX, worldBlockY, worldBlockZ, Blocks.dirt)) {
 			int heatScore = 0;
+			//Calculate the heat score, based on it's neighbours
 			for (int i = 0; i < neighbours.length; i++) {
 				int[] neighbour = neighbours[i];
 				int neighbourIndexOffset = neighbourOffsets[i];
@@ -245,37 +252,41 @@ public class SulfurOreGenerator extends OreGenerator {
 
 				//Don't inspect neighbours in chunks that haven't been created - it causes Already Decorating!! exception
 				if ((neighbourWorldX >> 4 != worldX || neighbourWorldZ >> 4 != worldZ)) {
-					Logger.warning("wtf, encountered a block that wasn't in this chunk. I thought I'd prevented that.");
+					//Logger.warning("wtf, encountered a block that wasn't in this chunk. I thought I'd prevented that.");
 					continue;
 				}
 
 				Block neighbourBlock = chunk.getBlock(
-						neighbourWorldX & 15,
+						neighbourWorldX & (CHUNK_WIDTH - 1),
 						neighbourWorldY,
-						neighbourWorldZ & 15);
+						neighbourWorldZ & (CHUNK_DEPTH - 1));
 
 				//If we've found a block neighbouring Lava, increase this block's heat score
 				if (neighbourBlock == Blocks.lava || neighbourBlock == Blocks.flowing_lava) {
 					heatScore += 2;
+					//Otherwise, if the neighbour is replacable, it's eligible to be replaced as part of a cluster, assuming
+					//that the current block is deemed to be an appropriate start location.
 				} else if (worldBlock.isReplaceableOreGen(world, worldBlockX, worldBlockY, worldBlockZ, Blocks.stone) ||
 						worldBlock.isReplaceableOreGen(world, worldBlockX, worldBlockY, worldBlockZ, Blocks.dirt)) {
-					potentialNeighboursToAdd.add(neighbourIndex);
+					potentialNeighbourToAdd[potentialNeighbourToAddCount++] = neighbourIndex;
 				}
 			}
 
+			//If we've found a block with a heat score
+			//A heat score of 2 or higher means that we're adjacent to lava.
 			if (heatScore > 0) {
+				//stash the heat score in the heat map
 				heatScoreMap[blockIndex] = heatScore;
-
-				//A heat score of 2 or higher means that we're adjacent to lava.
 				Block blockAbove = chunk.getBlock(chunkBlockX, worldBlockY + 1, chunkBlockZ);
 				//heatScore should never be higher than 54, so we can pack that into 6 bits (64)
 				boolean addPotentialStartingPoint = false;
 				if (blockAbove == Blocks.air) {
 					addPotentialStartingPoint = true;
 				} else if (worldBlockY > 0) {
+					//We'll also allow starting points to be blocks that are above lava.
 					Block blockBelow = chunk.getBlock(chunkBlockX, worldBlockY - 1, chunkBlockZ);
 					if (blockBelow == Blocks.lava || blockBelow == Blocks.flowing_lava) {
-						//the heat score of these blocks tends to be abnormally high, usually because they are
+						//The heat score of these blocks tends to be abnormally high, usually because they are
 						//potentially surrounded by more blocks, they're also harder to see, so we'll limit the heat
 						//score in these instances.
 						if (heatScore > 5) {
@@ -285,12 +296,19 @@ public class SulfurOreGenerator extends OreGenerator {
 					}
 				}
 				if (addPotentialStartingPoint) {
+					//We can avoid using a SortedSet by bit-packing the heat score with the blockIndex.
+					//By packing the heat into the higher order bits allows us to sort on them, but for that to work
+					//we need to order the heat descending, we can pack it into 6 bits if we subtract it from 64
+					//Then we just need to mask out the heat score.
 					int encodedStartPoint = blockIndex | ((64 - heatScoreMap[blockIndex]) << (worldHeightShift + depthShift + depthShift));
 					//Logger.info("Adding potential starting point (%d, %d, %d) index %d, heat score of %d, encoded=%d", chunkBlockX, worldBlockY, chunkBlockZ, blockIndex, heatScoreMap[blockIndex], encodedStartPoint);
 					potentialStartingPoints[potentialStartingPointIndex++] = encodedStartPoint;
 				}
 
-				for (int neighbour : potentialNeighboursToAdd) {
+				//Add all the potential neighbours to the heat map with a heat value of 1 if they don't already have a
+				//higher value.
+				for (int i = 0; i < potentialNeighbourToAddCount; i++) {
+					int neighbour = potentialNeighbourToAdd[i];
 					int neighbourHeat = heatScoreMap[neighbour];
 					if (neighbourHeat == 0) {
 						heatScoreMap[neighbour] = 1;
@@ -299,8 +317,6 @@ public class SulfurOreGenerator extends OreGenerator {
 			}
 		}
 	}
-
-	static final int[][] neighbours = new int[26][3];
 
 	static {
 		int pos = 0;
