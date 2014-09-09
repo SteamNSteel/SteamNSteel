@@ -23,13 +23,15 @@ import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.block.resource.ore.*;
-import mod.steamnsteel.block.resource.storage.*;
+import mod.steamnsteel.block.resource.storage.SteamNSteelStorageBlock;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
+
+import static mod.steamnsteel.block.resource.storage.SteamNSteelStorageBlock.*;
 
 @SuppressWarnings({"UtilityClass", "WeakerAccess"})
 @GameRegistry.ObjectHolder(TheMod.MOD_ID)
@@ -39,13 +41,14 @@ public final class ModBlock
     // * NOTE: @GameRegistry.ObjectHolder requires these fields to have the same name as the unlocalized name of the
     // *       object.
     // *
-    public static final SteamNSteelBlock blockBrass = new BrassBlock();
-    public static final SteamNSteelBlock blockBronze = new BronzeBlock();
-    public static final SteamNSteelBlock blockCopper = new CopperBlock();
-    public static final SteamNSteelBlock blockPlotonium = new PlotoniumBlock();
-    public static final SteamNSteelBlock blockSteel = new SteelBlock();
-    public static final SteamNSteelBlock blockTin = new TinBlock();
-    public static final SteamNSteelBlock blockZinc = new ZincBlock();
+    public static final SteamNSteelBlock blockBrass = new SteamNSteelStorageBlock(BRASS_BLOCK);
+    public static final SteamNSteelBlock blockBronze = new SteamNSteelStorageBlock(BRONZE_BLOCK);
+    public static final SteamNSteelBlock blockCopper = new SteamNSteelStorageBlock(COPPER_BLOCK);
+    public static final SteamNSteelBlock blockPlotonium = new SteamNSteelStorageBlock(PLOTONIUM_BLOCK);
+    public static final SteamNSteelBlock blockSteel = new SteamNSteelStorageBlock(STEEL_BLOCK);
+    public static final SteamNSteelBlock blockTin = new SteamNSteelStorageBlock(TIN_BLOCK);
+    public static final SteamNSteelBlock blockZinc = new SteamNSteelStorageBlock(ZINC_BLOCK);
+
     public static final SteamNSteelBlock chestPlotonium = new PlotoniumChest();
     public static final SteamNSteelBlock cupola = new CupolaBlock();
     public static final SteamNSteelOreBlock oreCopper = new CopperOre();
@@ -81,13 +84,13 @@ public final class ModBlock
         registerBlockAndOre(oreTin, TinOre.NAME);
         registerBlockAndOre(oreZinc, ZincOre.NAME);
 
-        registerBlockAndOre(blockBrass, BrassBlock.NAME);
-        registerBlockAndOre(blockBronze, BronzeBlock.NAME);
-        registerBlockAndOre(blockCopper, CopperBlock.NAME);
-        registerBlockAndOre(blockPlotonium, PlotoniumBlock.NAME);
-        registerBlockAndOre(blockSteel, SteelBlock.NAME);
-        registerBlockAndOre(blockTin, TinBlock.NAME);
-        registerBlockAndOre(blockZinc, ZincBlock.NAME);
+        registerBlockAndOre(blockBrass, BRASS_BLOCK);
+        registerBlockAndOre(blockBronze, BRONZE_BLOCK);
+        registerBlockAndOre(blockCopper, COPPER_BLOCK);
+        registerBlockAndOre(blockPlotonium, PLOTONIUM_BLOCK);
+        registerBlockAndOre(blockSteel, STEEL_BLOCK);
+        registerBlockAndOre(blockTin, TIN_BLOCK);
+        registerBlockAndOre(blockZinc, ZINC_BLOCK);
 
         GameRegistry.registerBlock(ruinFloorPlotonium, PlotoniumRuinFloor.NAME);
         GameRegistry.registerBlock(ruinPillarPlotonium, PlotoniumRuinPillar.NAME);
