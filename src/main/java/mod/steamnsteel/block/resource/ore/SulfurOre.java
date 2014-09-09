@@ -25,10 +25,12 @@ public class SulfurOre extends SteamNSteelOreBlock
 {
     public static final String NAME = "oreSulfur";
 
-	public SulfurOre()
-	{
-		setBlockName(NAME);
-	}
+    public SulfurOre()
+    {
+        super(Material.rock);
+        setBlockName(NAME);
+        setHarvestLevel("pickaxe", 1); // stone pick
+    }
 
 	@Override
 	public boolean isGenEnabled()

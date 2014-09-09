@@ -28,6 +28,11 @@ public abstract class SteamNSteelOreBlock extends SteamNSteelBlock
     protected SteamNSteelOreBlock()
     {
         super(Material.rock);
+        setHardness(3.0f);
+        setResistance(5.0f);
+
+        // vanilla ores use this (I don't know why)
+        setStepSound(soundTypePiston);
     }
 
     public abstract boolean isGenEnabled();
