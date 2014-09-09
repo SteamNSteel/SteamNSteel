@@ -23,7 +23,7 @@ import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.block.resource.ore.*;
-import mod.steamnsteel.block.resource.storage.SteamNSteelStorageBlock;
+import mod.steamnsteel.block.SteamNSteelStorageBlock;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
@@ -31,7 +31,7 @@ import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
-import static mod.steamnsteel.block.resource.storage.SteamNSteelStorageBlock.*;
+import static mod.steamnsteel.block.SteamNSteelStorageBlock.*;
 
 @SuppressWarnings({"UtilityClass", "WeakerAccess"})
 @GameRegistry.ObjectHolder(TheMod.MOD_ID)

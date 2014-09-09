@@ -14,7 +14,7 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.block.resource.storage;
+package mod.steamnsteel.block;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
 import net.minecraft.block.material.Material;
