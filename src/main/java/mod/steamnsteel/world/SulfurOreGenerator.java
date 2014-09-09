@@ -1,9 +1,11 @@
 package mod.steamnsteel.world;
 
 import com.google.common.base.Functions;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
+import com.google.common.primitives.Ints;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.Block;
@@ -40,17 +42,8 @@ public class SulfurOreGenerator extends OreGenerator {
 	private int depthShift;
 	private int[] neighbourOffsets;
 	private final double logTwo = Math.log(2);
-	private final Set<Map.Entry<Integer, Integer>> potentialStartingPoints = Sets.newTreeSet(new Comparator<Map.Entry<Integer,Integer>>() {
-
-		@Override
-		public int compare(Map.Entry<Integer, Integer> entryA, Map.Entry<Integer, Integer> entryB) {
-			int comparison = entryB.getValue().compareTo(entryA.getValue());
-			if (comparison == 0) {
-				return entryB.getKey().compareTo(entryA.getKey());
-			}
-			return comparison;
-		}
-	} );
+	private int[] potentialStartingPoints;
+	private int potentialStartingPointIndex;
 
 	public SulfurOreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight)
 	{
@@ -78,34 +71,36 @@ public class SulfurOreGenerator extends OreGenerator {
 				worldHeightShift = (int)(Math.log(height)/ logTwo);
 				worldHeight = height;
 				calculateNeighbourOffsets();
-
+				potentialStartingPoints = new int[16 * 16 * worldHeight];
 			}
+			potentialStartingPointIndex = 0;
 
 			int[] heatScoreMap = new int[16 * 16 * worldHeight];
-			potentialStartingPoints.clear();
 
 			for (int x = 1; x < 15; ++x) {
-				int blockX = worldX + x;
+				int worldBlockX = worldX + x;
 				for (int z = 1; z < 15; ++z) {
-					int blockZ = worldZ + z;
+					int worldBlockZ = worldZ + z;
 					for (int y = minHeight; y < maxHeight; ++y) {
-						checkBlock(world, blockX, y, blockZ, heatScoreMap);
+						checkBlock(world, worldBlockX, y, worldBlockZ, heatScoreMap);
 					}
 				}
 			}
 
-			//Ordering<Integer> valueComparator = Ordering.natural().onResultOf(Functions.forMap(potentialStartingPoints));
-
 			int blocksChanged = 0;
 			double minDistanceBetweenClusters = Math.pow(10, 2);
 			List<Integer> createdClusters = new LinkedList<Integer>();
-			for (Map.Entry<Integer, Integer> startingPoint : potentialStartingPoints) {
-				boolean clusterAllowed = true;
-				int clusterPosition = startingPoint.getKey();
 
-				int posX = clusterPosition >> (worldHeightShift + depthShift) & (16-1) ;
-				int posY = clusterPosition & (worldHeight-1);
-				int posZ = clusterPosition >> worldHeightShift & (16-1);
+			Arrays.sort(potentialStartingPoints, 0, potentialStartingPointIndex);
+
+			final int startingPointMask = (1 << (worldHeightShift + depthShift + depthShift)) - 1;
+			for (int complexStartingPoint : potentialStartingPoints) {
+				boolean clusterAllowed = true;
+				int startingPoint = complexStartingPoint & startingPointMask;
+
+				int posX = startingPoint >> (worldHeightShift + depthShift) & (16-1) ;
+				int posY = startingPoint & (worldHeight-1);
+				int posZ = startingPoint >> worldHeightShift & (16-1);
 
 				for (int otherClusterPosition : createdClusters) {
 					int otherPosX = otherClusterPosition >> (worldHeightShift + depthShift) & (16-1) ;
@@ -122,12 +117,12 @@ public class SulfurOreGenerator extends OreGenerator {
 					}
 				}
 
-				int heatScore = heatScoreMap[clusterPosition];
+				int heatScore = heatScoreMap[startingPoint];
 				float chance = heatScore / 8.0f;
 				if (clusterAllowed && chance > random.nextFloat()) {
-					//Logger.info("Start Point (%d, %d, %d) HeatScore %d", clusterPosition.x, clusterPosition.y, clusterPosition.z, data.heatScore);
-					blocksChanged += createCluster(world, random, posX, posY, posZ, heatScoreMap);
-					createdClusters.add(clusterPosition);
+					Logger.info("Start Point (%d, %d, %d) HeatScore %d", posX, posY, posZ, heatScore);
+					blocksChanged += createCluster(world, random, worldX, worldZ, posX, posY, posZ, heatScoreMap);
+					createdClusters.add(startingPoint);
 
 					if (createdClusters.size() >= this.clusterCount) {
 						break;
@@ -165,7 +160,7 @@ public class SulfurOreGenerator extends OreGenerator {
 		}
 	}
 
-	private int createCluster(World world, Random random, int chunkBlockX, int chunkBlockY, int chunkBlockZ, int[] interestingBlocks) {
+	private int createCluster(World world, Random random, int worldBlockX, int worldBlockZ, int chunkBlockX, int chunkBlockY, int chunkBlockZ, int[] interestingBlocks) {
 		final int blocks = random.nextInt(blocksPerCluster);
 		Queue<Integer> blocksToProcess = new LinkedList<Integer>();
 		HashSet<Integer> processedBlocks = new HashSet<Integer>();
@@ -186,7 +181,7 @@ public class SulfurOreGenerator extends OreGenerator {
 				int posY = blockPos & (worldHeight-1);
 				int posZ = blockPos >> worldHeightShift & (16-1);
 
-				world.setBlock(posX, posY, posZ, block, 0, 0);
+				world.setBlock(posX + worldBlockX, posY, posZ + worldBlockZ, block, 0, 0);
 				processedBlocks.add(blockPos);
 				blocksAdded++;
 				for (int i = 0; i < neighbours.length; i++) {
@@ -273,8 +268,10 @@ public class SulfurOreGenerator extends OreGenerator {
 
 				//A heat score of 2 or higher means that we're adjacent to lava.
 				Block blockAbove = chunk.getBlock(chunkBlockX, worldBlockY + 1, chunkBlockZ);
+				//heatScore should never be higher than 54, so we can pack that into 6 bits (64)
+				boolean addPotentialStartingPoint = false;
 				if (blockAbove == Blocks.air) {
-					potentialStartingPoints.add(Maps.immutableEntry(blockIndex, heatScore));
+					addPotentialStartingPoint = true;
 				} else if (worldBlockY > 0) {
 					Block blockBelow = chunk.getBlock(chunkBlockX, worldBlockY - 1, chunkBlockZ);
 					if (blockBelow == Blocks.lava || blockBelow == Blocks.flowing_lava) {
@@ -284,8 +281,13 @@ public class SulfurOreGenerator extends OreGenerator {
 						if (heatScore > 5) {
 							heatScoreMap[blockIndex] = 5;
 						}
-						potentialStartingPoints.add(Maps.immutableEntry(blockIndex, heatScore));
+						addPotentialStartingPoint = true;
 					}
+				}
+				if (addPotentialStartingPoint) {
+					int encodedStartPoint = blockIndex | ((64 - heatScoreMap[blockIndex]) << (worldHeightShift + depthShift + depthShift));
+					//Logger.info("Adding potential starting point (%d, %d, %d) index %d, heat score of %d, encoded=%d", chunkBlockX, worldBlockY, chunkBlockZ, blockIndex, heatScoreMap[blockIndex], encodedStartPoint);
+					potentialStartingPoints[potentialStartingPointIndex++] = encodedStartPoint;
 				}
 
 				for (int neighbour : potentialNeighboursToAdd) {
