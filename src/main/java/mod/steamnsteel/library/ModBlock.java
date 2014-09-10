@@ -53,7 +53,7 @@ public final class ModBlock
     public static final SteamNSteelBlock cupola = new CupolaBlock();
     public static final SteamNSteelOreBlock oreCopper = new CopperOre();
     public static final SteamNSteelBlock oreNiter = new NiterOre();
-    public static final SteamNSteelBlock oreSulfur = new SulfurOre();
+    public static final SteamNSteelOreBlock oreSulfur = new SulfurOre();
     public static final SteamNSteelOreBlock oreTin = new TinOre();
     public static final SteamNSteelOreBlock oreZinc = new ZincOre();
     public static final SteamNSteelBlock ruinFloorPlotonium = new PlotoniumRuinFloor();

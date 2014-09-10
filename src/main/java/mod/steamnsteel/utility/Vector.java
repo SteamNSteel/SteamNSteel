@@ -18,13 +18,13 @@ package mod.steamnsteel.utility;
 
 import com.google.common.base.Objects;
 
-public class Vector
+public class Vector<T>
 {
-    private final float x;
-    private final float y;
-    private final float z;
+    private final T x;
+    private final T y;
+    private final T z;
 
-    public Vector(float x, float y, float z)
+    public Vector(T x, T y, T z)
     {
         this.x = x;
         this.y = y;
@@ -39,10 +39,7 @@ public class Vector
         if (that == null || getClass() != that.getClass()) return false;
 
         final Vector vector = (Vector) that;
-
-        return Float.compare(vector.x, x) == 0 &&
-                Float.compare(vector.y, y) == 0 &&
-                Float.compare(vector.z, z) == 0;
+	    return x.equals(vector.x) && y.equals(vector.y) && z.equals(vector.z);
     }
 
     @Override
@@ -61,19 +58,19 @@ public class Vector
                 .toString();
     }
 
-    public float getX()
+    public T getX()
     {
 
         return x;
     }
 
-    public float getY()
+    public T getY()
     {
 
         return y;
     }
 
-    public float getZ()
+    public T getZ()
     {
         return z;
     }

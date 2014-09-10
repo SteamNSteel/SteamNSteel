@@ -24,10 +24,11 @@ import java.util.Random;
 
 class OreGenerator extends WorldGenMinable
 {
-    private final SteamNSteelOreBlock block;
-    private final int clusterCount;
-    private final int minHeight;
-    private final int maxHeight;
+    protected final SteamNSteelOreBlock block;
+	protected final int clusterCount;
+	protected final int blocksPerCluster;
+	protected final int minHeight;
+	protected final int maxHeight;
 
     OreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight)
     {
@@ -35,7 +36,8 @@ class OreGenerator extends WorldGenMinable
 
         this.block = block;
         this.clusterCount = clusterCount;
-        this.minHeight = minHeight;
+	    this.blocksPerCluster = blocksPerCluster;
+	    this.minHeight = minHeight;
         this.maxHeight = maxHeight;
     }
 

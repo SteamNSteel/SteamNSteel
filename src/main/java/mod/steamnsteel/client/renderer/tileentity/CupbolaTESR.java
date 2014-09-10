@@ -34,8 +34,8 @@ import org.lwjgl.opengl.GL11;
 public class CupbolaTESR extends SteamNSteelTESR
 {
     public static final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
-    private static final Vector SCALE = new Vector(1.0f, 1.0f, 1.0f);
-    private static final Vector OFFSET = new Vector(0.5f, 0.0f, 0.5f);
+    private static final Vector<Float> SCALE = new Vector<Float>(1.0f, 1.0f, 1.0f);
+    private static final Vector<Float> OFFSET = new Vector<Float>(0.5f, 0.0f, 0.5f);
     private static final ResourceLocation TEXTURE_ACTIVE = getResourceLocation(CupolaBlock.NAME + "_active");
 
     private final CupolaModel model = new CupolaModel();
