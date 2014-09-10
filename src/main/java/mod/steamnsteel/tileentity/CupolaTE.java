@@ -63,7 +63,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     private boolean isActive = false;
     private boolean isSlave = false;
 
-    private static String containerName(String name)
+    public static String containerName(String name)
     {
         return "container." + TheMod.MOD_ID + ':' + name;
     }

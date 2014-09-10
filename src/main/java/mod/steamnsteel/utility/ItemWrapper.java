@@ -27,7 +27,7 @@ public class ItemWrapper
     private final Item item;
     private final int meta;
 
-    public ItemWrapper(Item item, int meta)
+    private ItemWrapper(Item item, int meta)
     {
         this.item = checkNotNull(item);
         this.meta = meta;
@@ -38,19 +38,9 @@ public class ItemWrapper
         this(checkNotNull(itemStack).getItem(), itemStack.getItemDamage());
     }
 
-    protected Item getItem()
-    {
-        return item;
-    }
-
-    protected int getMeta()
-    {
-        return meta;
-    }
-    
     public ItemStack getStack()
     {
-    	return new ItemStack(item, 1, meta);
+        return new ItemStack(item, 1, meta);
     }
 
     @Override

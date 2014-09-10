@@ -23,27 +23,29 @@ import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import codechicken.nei.recipe.DefaultOverlayHandler;
 
+@SuppressWarnings("WeakerAccess")
 public class NEISteamNSteelConfig implements IConfigureNEI
 {
 
-	@Override
-	public void loadConfig()
-	{
-		API.registerRecipeHandler(new CupolaRecipeHandler());
-		API.registerUsageHandler(new CupolaRecipeHandler());
-		API.registerGuiOverlay(CupolaGui.class, TheMod.MOD_ID + CupolaBlock.NAME, 5, 11);
-		API.registerGuiOverlayHandler(CupolaGui.class, new DefaultOverlayHandler(5, 11), TheMod.MOD_ID + CupolaBlock.NAME);
-	}
+    @SuppressWarnings("StringConcatenationMissingWhitespace")
+    @Override
+    public void loadConfig()
+    {
+        API.registerRecipeHandler(new CupolaRecipeHandler());
+        API.registerUsageHandler(new CupolaRecipeHandler());
+        API.registerGuiOverlay(CupolaGui.class, TheMod.MOD_ID + CupolaBlock.NAME, 5, 11);
+        API.registerGuiOverlayHandler(CupolaGui.class, new DefaultOverlayHandler(5, 11), TheMod.MOD_ID + CupolaBlock.NAME);
+    }
 
-	@Override
-	public String getName()
-	{
-		return TheMod.MOD_NAME;
-	}
+    @Override
+    public String getName()
+    {
+        return TheMod.MOD_NAME;
+    }
 
-	@Override
-	public String getVersion()
-	{
-		return TheMod.MOD_VERSION;
-	}
+    @Override
+    public String getVersion()
+    {
+        return TheMod.MOD_VERSION;
+    }
 }

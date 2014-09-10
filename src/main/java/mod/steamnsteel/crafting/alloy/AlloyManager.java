@@ -18,6 +18,7 @@ package mod.steamnsteel.crafting.alloy;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.api.crafting.IAlloyResult;
@@ -32,7 +33,12 @@ public enum AlloyManager implements IAlloyManager
 {
     INSTANCE;
 
-    public static final Table<ItemWrapper, ItemWrapper, IAlloyResult> alloys = HashBasedTable.create();
+    private static final Table<ItemWrapper, ItemWrapper, IAlloyResult> alloys = HashBasedTable.create();
+
+    public static ImmutableTable<ItemWrapper, ItemWrapper, IAlloyResult> getAlloys()
+    {
+        return ImmutableTable.copyOf(alloys);
+    }
 
     @SuppressWarnings("MethodWithMultipleLoops")
     @Override
