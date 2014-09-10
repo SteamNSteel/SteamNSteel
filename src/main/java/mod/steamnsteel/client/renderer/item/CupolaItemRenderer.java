@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.client.renderer.item;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -30,12 +31,12 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class CupolaItemRenderer implements IItemRenderer
 {
-    private static final Optional<Vector> ENTITY_OFFSET = Optional.of(new Vector(0.0f, -1.0f, 0.0f));
-    private static final Optional<Vector> EQUIPPED_OFFSET = Optional.of(new Vector(1.0f, 0.0f, 1.5f));
-    private static final Optional<Vector> FIRST_PERSON_OFFSET = Optional.of(new Vector(-0.0f, 0.0f, 0.0f));
-    private static final Optional<Vector> INVENTORY_OFFSET = Optional.of(new Vector(-0.0f, -1.0f, 0.0f));
+    private static final Optional<Vector<Float>> ENTITY_OFFSET = Optional.of(new Vector<Float>(0.0f, -1.0f, 0.0f));
+    private static final Optional<Vector<Float>> EQUIPPED_OFFSET = Optional.of(new Vector<Float>(1.0f, 0.0f, 1.5f));
+    private static final Optional<Vector<Float>> FIRST_PERSON_OFFSET = Optional.of(new Vector<Float>(-0.0f, 0.0f, 0.0f));
+    private static final Optional<Vector<Float>> INVENTORY_OFFSET = Optional.of(new Vector<Float>(-0.0f, -1.0f, 0.0f));
 
-    private static final Vector SCALE = new Vector(0.666667f, 0.666667f, 0.666667f);
+    private static final Vector<Float> SCALE = new Vector<Float>(0.666667f, 0.666667f, 0.666667f);
 
     private final CupolaModel model;
 
@@ -59,7 +60,7 @@ public class CupolaItemRenderer implements IItemRenderer
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     {
-        Optional<Vector> vector = Optional.absent();
+        Optional<Vector<Float>> vector = Optional.absent();
 
         switch (type)
         {
@@ -82,7 +83,7 @@ public class CupolaItemRenderer implements IItemRenderer
             renderCupola(vector.get());
     }
 
-    private void renderCupola(Vector vector)
+    private void renderCupola(Vector<Float> vector)
     {
         GL11.glPushMatrix();
         GL11.glScalef(SCALE.getX(), SCALE.getY(), SCALE.getZ());
@@ -93,5 +94,13 @@ public class CupolaItemRenderer implements IItemRenderer
         model.render();
 
         GL11.glPopMatrix();
+    }
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this)
+                .add("model", model)
+                .toString();
     }
 }

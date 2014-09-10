@@ -29,6 +29,26 @@ class OreGenerator extends WorldGenMinable
     private final int minHeight;
     private final int maxHeight;
 
+    SteamNSteelOreBlock getBlock()
+    {
+        return block;
+    }
+
+    int getClusterCount()
+    {
+        return clusterCount;
+    }
+
+    int getMaxHeight()
+    {
+        return maxHeight;
+    }
+
+    int getMinHeight()
+    {
+        return minHeight;
+    }
+
     OreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight)
     {
         super(block, blocksPerCluster);
