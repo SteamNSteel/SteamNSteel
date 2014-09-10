@@ -39,7 +39,7 @@ public class Vector<T>
         if (that == null || getClass() != that.getClass()) return false;
 
         final Vector vector = (Vector) that;
-	    return x.equals(vector.x) && y.equals(vector.y) && z.equals(vector.z);
+        return x.equals(vector.x) && y.equals(vector.y) && z.equals(vector.z);
     }
 
     @Override

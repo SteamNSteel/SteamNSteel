@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.client.renderer.item;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -93,5 +94,13 @@ public class CupolaItemRenderer implements IItemRenderer
         model.render();
 
         GL11.glPopMatrix();
+    }
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this)
+                .add("model", model)
+                .toString();
     }
 }

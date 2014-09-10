@@ -36,13 +36,18 @@ public enum Settings
         public static final String CATEGORY = Configuration.CATEGORY_GENERAL + ".world";
         // Defaults
         private static boolean isCopperGenerated = true;
+        private static boolean isSulfurGenerated = true;
         private static boolean isTinGenerated = true;
         private static boolean isZincGenerated = true;
-	    private static boolean isSulfurGenerated = true;
 
         public static boolean isCopperGenerated()
         {
             return isCopperGenerated;
+        }
+
+        public static boolean isSulfurGenerated()
+        {
+            return isSulfurGenerated;
         }
 
         public static boolean isTinGenerated()
@@ -55,17 +60,12 @@ public enum Settings
             return isZincGenerated;
         }
 
-	    public static boolean isSulfurGenerated()
-	    {
-		    return isSulfurGenerated;
-	    }
-
         private static void syncConfig(Configuration config)
         {
             isCopperGenerated = config.getBoolean("Generate Copper?", CATEGORY, isCopperGenerated, "A boolean");
+            isSulfurGenerated = config.getBoolean("Generate Sulfur?", CATEGORY, isSulfurGenerated, "A boolean");
             isTinGenerated = config.getBoolean("Generate Tin?", CATEGORY, isTinGenerated, "A boolean");
             isZincGenerated = config.getBoolean("Generate Zinc?", CATEGORY, isZincGenerated, "A boolean");
-	        isSulfurGenerated = config.getBoolean("Generate Sulfur?", CATEGORY, isSulfurGenerated, "A boolean");
         }
     }
 }
