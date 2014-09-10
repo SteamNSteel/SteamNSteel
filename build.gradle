@@ -38,20 +38,20 @@ minecraft {
     replace '@API_VERSION@', config.api_version
 }
 
-dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+repositories
+{
+    maven
+    {
+        name = "ChickenBones"
+        url = "http://chickenbones.net/maven/"
+    }
+}
 
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+dependencies
+{
+    compile 'codechicken:CodeChickenLib:1.7.10-1.1.1.99:dev'
+    compile 'codechicken:CodeChickenCore:1.7.10-1.0.2.9:dev'
+    compile 'codechicken:NotEnoughItems:1.7.10-1.0.2.15:dev'
 }
 
 processResources

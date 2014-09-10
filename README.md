@@ -25,6 +25,12 @@ If you use Eclipse or IntelliJ Idea follow the above with:
  gradlew idea
  ```
  
+You will need to mannually add these libraries to your project. They are downloaeded by gradle during build:
+
+- CodechickenCore-1.7.10-1.0.2.9-dev.jar
+- CodeChickenLib-1.7.10-1.1.1.99-dev.jar
+- NotEnoughItems-1.7.10-1.0.2.15-dev.jar
+ 
 ### How to build the mod
 
 Execute the following in the CLI:
