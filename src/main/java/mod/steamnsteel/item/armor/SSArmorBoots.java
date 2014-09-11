@@ -18,13 +18,16 @@ package mod.steamnsteel.item.armor;
 
 import mod.steamnsteel.library.Material;
 
-import static mod.steamnsteel.item.SteamNSteelItem.getFormattedName;
-
 public class SSArmorBoots extends SteamNSteelItemArmor
 {
     public SSArmorBoots(Material material)
     {
-        //noinspection StringConcatenationMissingWhitespace
-        super(material.getArmorMaterial(), 3, 3, "boots" + getFormattedName(material));
+        super(material, 3, "boots");
+    }
+
+    @Override
+    protected int getArmorLayer()
+    {
+        return 1;
     }
 }

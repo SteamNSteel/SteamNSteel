@@ -20,23 +20,44 @@ import com.google.common.base.Objects;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Material;
+import mod.steamnsteel.proxy.Proxies;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
+import static mod.steamnsteel.item.SteamNSteelItem.getFormattedName;
 import static mod.steamnsteel.item.SteamNSteelItem.getUnwrappedUnlocalizedName;
 
+@SuppressWarnings("StringConcatenationMissingWhitespace")
 public abstract class SteamNSteelItemArmor extends ItemArmor
 {
+    private static final String TEXTURE_LOCATION = "textures/armor/";
     private final String undecoratedName;
+    private final String materialName;
 
-    SteamNSteelItemArmor(ArmorMaterial material, int armorType, int renderIndex, String name)
+    SteamNSteelItemArmor(Material material, int renderIndex, String name)
     {
-        super(material, armorType, renderIndex);
+        super(material.getArmorMaterial(), Proxies.render.addNewArmourRenderers(getRendererName(material)), renderIndex);
         setCreativeTab(TheMod.CREATIVE_TAB);
-        setUnlocalizedName(name);
-        undecoratedName = name;
+        undecoratedName = name + getFormattedName(material);
+        setUnlocalizedName(undecoratedName);
+        materialName = material.name().toLowerCase();
     }
+
+    private static String getRendererName(Material material)
+    {
+        return TheMod.MOD_ID + ':' + material.toString() + "Armor";
+    }
+
+    @Override
+    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
+    {
+        return TheMod.MOD_ID + ':' + TEXTURE_LOCATION + materialName + "_layer_" + getArmorLayer() + ".png";
+    }
+
+    protected abstract int getArmorLayer();
 
     public String getUndecoratedName()
     {
@@ -68,6 +89,7 @@ public abstract class SteamNSteelItemArmor extends ItemArmor
     {
         return Objects.toStringHelper(this)
                 .add("undecoratedName", undecoratedName)
+                .add("materialName", materialName)
                 .toString();
     }
 }

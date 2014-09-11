@@ -17,6 +17,7 @@
 package mod.steamnsteel.proxy;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import mod.steamnsteel.client.renderer.item.CupolaItemRenderer;
 import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
 import mod.steamnsteel.library.ModBlock;
@@ -32,6 +33,12 @@ public class ClientRenderProxy extends RenderProxy
     {
         registerItemRenderers();
         registerTESRs();
+    }
+
+    @Override
+    public int addNewArmourRenderers(String armor)
+    {
+        return RenderingRegistry.addNewArmourRendererPrefix(armor);
     }
 
     private void registerItemRenderers()

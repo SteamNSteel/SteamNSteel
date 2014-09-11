@@ -19,4 +19,9 @@ package mod.steamnsteel.proxy;
 public class RenderProxy
 {
     public void init() { }
+
+    public int addNewArmourRenderers(String armor)
+    {
+        return 0;
+    }
 }
