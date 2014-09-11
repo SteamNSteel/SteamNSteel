@@ -92,15 +92,15 @@ public final class ModItem
 
     private static void registerArmor()
     {
-        GameRegistry.registerItem(bootsBronze, bootsBronze.getUndecoratedName());
-        GameRegistry.registerItem(chestplateBronze, chestplateBronze.getUndecoratedName());
         GameRegistry.registerItem(helmetBronze, helmetBronze.getUndecoratedName());
+        GameRegistry.registerItem(chestplateBronze, chestplateBronze.getUndecoratedName());
         GameRegistry.registerItem(leggingsBronze, leggingsBronze.getUndecoratedName());
+        GameRegistry.registerItem(bootsBronze, bootsBronze.getUndecoratedName());
 
-        GameRegistry.registerItem(bootsSteel, bootsSteel.getUndecoratedName());
-        GameRegistry.registerItem(chestplateSteel, chestplateSteel.getUndecoratedName());
         GameRegistry.registerItem(helmetSteel, helmetSteel.getUndecoratedName());
+        GameRegistry.registerItem(chestplateSteel, chestplateSteel.getUndecoratedName());
         GameRegistry.registerItem(leggingsSteel, leggingsSteel.getUndecoratedName());
+        GameRegistry.registerItem(bootsSteel, bootsSteel.getUndecoratedName());
     }
 
     private static void registerArtifacts()
@@ -131,15 +131,15 @@ public final class ModItem
 
     private static void registerTools()
     {
+        GameRegistry.registerItem(shovelBronze, shovelBronze.getUndecoratedName());
+        GameRegistry.registerItem(pickBronze, pickBronze.getUndecoratedName());
         GameRegistry.registerItem(axeBronze, axeBronze.getUndecoratedName());
         GameRegistry.registerItem(hoeBronze, hoeBronze.getUndecoratedName());
-        GameRegistry.registerItem(pickBronze, pickBronze.getUndecoratedName());
-        GameRegistry.registerItem(shovelBronze, shovelBronze.getUndecoratedName());
 
+        GameRegistry.registerItem(shovelSteel, shovelSteel.getUndecoratedName());
+        GameRegistry.registerItem(pickSteel, pickSteel.getUndecoratedName());
         GameRegistry.registerItem(axeSteel, axeSteel.getUndecoratedName());
         GameRegistry.registerItem(hoeSteel, hoeSteel.getUndecoratedName());
-        GameRegistry.registerItem(pickSteel, pickSteel.getUndecoratedName());
-        GameRegistry.registerItem(shovelSteel, shovelSteel.getUndecoratedName());
     }
 
     private static void registerWeapons()
