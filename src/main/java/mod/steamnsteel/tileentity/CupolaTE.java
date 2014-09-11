@@ -17,6 +17,7 @@
 package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
@@ -57,6 +58,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     private static final String ITEM_COOK_TIME = "itemCookTime";
 
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
+    private Optional<Inventory> masterInventory = null; // the inventory of the block below, if this block is a slave
     private int deviceCookTime;
     private int fuelBurnTime;
     private int itemCookTime;
@@ -209,31 +211,31 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     @Override
     public int getSizeInventory()
     {
-        return inventory.getSize();
+        return getTargetInventory().getSize();
     }
 
     @Override
     public ItemStack getStackInSlot(int slotIndex)
     {
-        return inventory.getStack(slotIndex);
+        return getTargetInventory().getStack(slotIndex);
     }
 
     @Override
     public ItemStack decrStackSize(int slotIndex, int decrAmount)
     {
-        return inventory.decrStackSize(slotIndex, decrAmount);
+        return getTargetInventory().decrStackSize(slotIndex, decrAmount);
     }
 
     @Override
     public ItemStack getStackInSlotOnClosing(int slotIndex)
     {
-        return inventory.getStackOnClosing(slotIndex);
+        return getTargetInventory().getStackOnClosing(slotIndex);
     }
 
     @Override
     public void setInventorySlotContents(int slotIndex, ItemStack itemStack)
     {
-        inventory.setSlot(slotIndex, itemStack);
+        getTargetInventory().setSlot(slotIndex, itemStack);
     }
 
     @Override
@@ -251,7 +253,23 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     @Override
     public int getInventoryStackLimit()
     {
-        return inventory.getStackSizeMax();
+        return getTargetInventory().getStackSizeMax();
+    }
+
+    /**
+     * @return In the case of slave blocks, return the inventory of the block below
+     */
+    private Inventory getTargetInventory()
+    {
+        if (!isSlave) return inventory;
+
+        // Lazy initialization of masterInventory
+        if (!masterInventory.isPresent())
+        {
+            final CupolaTE te = (CupolaTE) worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
+            masterInventory = Optional.of(te.inventory);
+        }
+        return masterInventory.get();
     }
 
     @Override
@@ -451,6 +469,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     {
         return Objects.toStringHelper(this)
                 .add("inventory", inventory)
+                .add("masterInventory", masterInventory)
                 .add("deviceCookTime", deviceCookTime)
                 .add("fuelBurnTime", fuelBurnTime)
                 .add("itemCookTime", itemCookTime)
