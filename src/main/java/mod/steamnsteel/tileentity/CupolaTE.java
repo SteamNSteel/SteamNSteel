@@ -58,7 +58,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     private static final String ITEM_COOK_TIME = "itemCookTime";
 
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
-    private Optional<Inventory> masterInventory = Optional.fromNullable(null); // the inventory of the block below, if this block is a slave
+    private Optional<Inventory> masterInventory = Optional.absent(); // the inventory of the block below, if this block is a slave
     private int deviceCookTime;
     private int fuelBurnTime;
     private int itemCookTime;
