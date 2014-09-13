@@ -33,11 +33,13 @@ public class NiterOreGenerator extends OreGenerator {
 	private static final float otherBiomeChancePercent = 0.5f;
 	private static final float sandstonePaddingChancePercent = 0.5f;
 
-	private final Set<BiomeGenBase> desertLikeBiomes;
+	private final Set<BiomeGenBase> preferredBiomes;
+	private final Set<BiomeGenBase> blacklistedBiomes;
 	private final int blocksPerCluster;
 	//list of blocks that can be replaced by the ore.
 	private final Block[] replaceableBlocks;
 	private final Block paddingBlock;
+	;
 	private double sandstoneDistance;
 
 	NiterOreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight) {
@@ -46,8 +48,9 @@ public class NiterOreGenerator extends OreGenerator {
 		//Find the intersection of DRY, HOT and SANDY biome types
 		Set<BiomeGenBase> dryBiomes = Sets.newHashSet(BiomeDictionary.getBiomesForType(BiomeDictionary.Type.DRY));
 		Set<BiomeGenBase> hotBiomes = Sets.newHashSet(BiomeDictionary.getBiomesForType(BiomeDictionary.Type.HOT));
-		Set<BiomeGenBase> sandyBiomes = Sets.newHashSet(BiomeDictionary.getBiomesForType(BiomeDictionary.Type.SANDY));
-		desertLikeBiomes = Sets.intersection(dryBiomes, Sets.intersection(hotBiomes, sandyBiomes));
+		//Set<BiomeGenBase> sandyBiomes = Sets.newHashSet(BiomeDictionary.getBiomesForType(BiomeDictionary.Type.SANDY));
+		preferredBiomes = Sets.intersection(dryBiomes, hotBiomes);
+		blacklistedBiomes = Sets.newHashSet(BiomeDictionary.getBiomesForType(BiomeDictionary.Type.WET));
 
 		replaceableBlocks = new Block[]{
 				Blocks.sand,
@@ -88,8 +91,12 @@ public class NiterOreGenerator extends OreGenerator {
 				}
 				int yHeight = -1;
 
+				//Don't create ores in the blacklisted biomes.
+				if (blacklistedBiomes.contains(biomeGenBase)) {
+					continue;
+				}
 				//If we're in a desert like biome
-				if (desertLikeBiomes.contains(biomeGenBase)) {
+				if (preferredBiomes.contains(biomeGenBase)) {
 					//Use the desert method for finding the generation location
 					yHeight = findDesertSeam(chunk, worldBlockX, height, worldBlockZ);
 				} else if (rand.nextFloat() < otherBiomeChancePercent) {
