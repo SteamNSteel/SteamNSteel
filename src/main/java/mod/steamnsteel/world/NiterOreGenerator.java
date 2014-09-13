@@ -38,6 +38,7 @@ public class NiterOreGenerator extends OreGenerator {
 	//list of blocks that can be replaced by the ore.
 	private final Block[] replaceableBlocks;
 	private final Block paddingBlock;
+	private double sandstoneDistance;
 
 	NiterOreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight) {
 		super(block, clusterCount, blocksPerCluster, minHeight, maxHeight);
@@ -56,6 +57,7 @@ public class NiterOreGenerator extends OreGenerator {
 		};
 
 		paddingBlock = Blocks.sandstone;
+		sandstoneDistance = 1.4D;
 	}
 
 	@Override
@@ -174,8 +176,6 @@ public class NiterOreGenerator extends OreGenerator {
 			int clusterEndX = MathHelper.floor_double(clusterCentreX + clusterSize / 2.0D);
 			int clusterEndY = MathHelper.floor_double(clusterCentreY + clusterSize / 2.0D);
 			int clusterEndZ = MathHelper.floor_double(clusterCentreZ + clusterSize / 2.0D);
-
-			double sandstoneDistance = 1.4D;
 
 			for (int x = clusterStartX; x <= clusterEndX; ++x)
 			{
