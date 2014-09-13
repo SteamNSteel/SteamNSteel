@@ -38,7 +38,8 @@ public enum Settings
         private static boolean isCopperGenerated = true;
         private static boolean isSulfurGenerated = true;
         private static boolean isTinGenerated = true;
-        private static boolean isZincGenerated = true;
+	    private static boolean isZincGenerated = true;
+	    private static boolean isNiterGenerated = true;
 
         public static boolean isCopperGenerated()
         {
@@ -60,12 +61,18 @@ public enum Settings
             return isZincGenerated;
         }
 
+	    public static boolean isNiterGenerated()
+	    {
+		    return isNiterGenerated;
+	    }
+
         private static void syncConfig(Configuration config)
         {
             isCopperGenerated = config.getBoolean("Generate Copper?", CATEGORY, isCopperGenerated, "A boolean");
             isSulfurGenerated = config.getBoolean("Generate Sulfur?", CATEGORY, isSulfurGenerated, "A boolean");
             isTinGenerated = config.getBoolean("Generate Tin?", CATEGORY, isTinGenerated, "A boolean");
-            isZincGenerated = config.getBoolean("Generate Zinc?", CATEGORY, isZincGenerated, "A boolean");
+	        isZincGenerated = config.getBoolean("Generate Zinc?", CATEGORY, isZincGenerated, "A boolean");
+	        isZincGenerated = config.getBoolean("Generate Niter?", CATEGORY, isNiterGenerated, "A boolean");
         }
     }
 }
