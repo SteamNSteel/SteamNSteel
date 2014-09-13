@@ -15,16 +15,16 @@ import java.util.Set;
 
 /**
  * Generates Veins of Niter.
- *
+ * <p/>
  * Pick a random {x,z} in the chunk and check the type of the biome.
- *
+ * <p/>
  * * If we're in a biome that is HOT, DRY and SANDY, then we search vertically through the {x,z} chosen for where sand
- *      meets sandstone.
+ * meets sandstone.
  * * If we're in any other biome, we have a lower chance of generating (currently 50%). We search vertically through the
- *      {x,z} for a grass block, then search below that block for where dirt meets stone.
- *
+ * {x,z} for a grass block, then search below that block for where dirt meets stone.
+ * <p/>
  * If we've found a valid location, we'll create a vein at that location.
- *
+ * <p/>
  * The Vein generation is a slightly modified version of Minecraft's vanilla oregen in that it uses a slightly wider
  * diameter and generates sandstone together with the niter with a 50% chance.
  */
@@ -49,7 +49,7 @@ public class NiterOreGenerator extends OreGenerator {
 		Set<BiomeGenBase> sandyBiomes = Sets.newHashSet(BiomeDictionary.getBiomesForType(BiomeDictionary.Type.SANDY));
 		desertLikeBiomes = Sets.intersection(dryBiomes, Sets.intersection(hotBiomes, sandyBiomes));
 
-		replaceableBlocks = new Block[] {
+		replaceableBlocks = new Block[]{
 				Blocks.sand,
 				Blocks.sandstone,
 				Blocks.dirt,
@@ -152,24 +152,22 @@ public class NiterOreGenerator extends OreGenerator {
 	}
 
 	@SuppressWarnings("ConstantConditions")
-	public boolean generateOreVein(World world, Chunk chunk, Random random, int worldX, int worldY, int worldZ)
-	{
-		float direction = random.nextFloat() * (float)Math.PI;
-		double maxX = (double)((float)(worldX + 8) + MathHelper.sin(direction) * (float)this.blocksPerCluster / 8.0F);
-		double minX = (double)((float)(worldX + 8) - MathHelper.sin(direction) * (float)this.blocksPerCluster / 8.0F);
-		double maxZ = (double)((float)(worldZ + 8) + MathHelper.cos(direction) * (float)this.blocksPerCluster / 8.0F);
-		double minZ = (double)((float)(worldZ + 8) - MathHelper.cos(direction) * (float)this.blocksPerCluster / 8.0F);
+	public boolean generateOreVein(World world, Chunk chunk, Random random, int worldX, int worldY, int worldZ) {
+		float direction = random.nextFloat() * (float) Math.PI;
+		double maxX = (double) ((float) (worldX + 8) + MathHelper.sin(direction) * (float) this.blocksPerCluster / 8.0F);
+		double minX = (double) ((float) (worldX + 8) - MathHelper.sin(direction) * (float) this.blocksPerCluster / 8.0F);
+		double maxZ = (double) ((float) (worldZ + 8) + MathHelper.cos(direction) * (float) this.blocksPerCluster / 8.0F);
+		double minZ = (double) ((float) (worldZ + 8) - MathHelper.cos(direction) * (float) this.blocksPerCluster / 8.0F);
 		//neither of these are really the min or max.
-		double yBoundsA = (double)(worldY + random.nextInt(3) - 2);
-		double yBoundsB = (double)(worldY + random.nextInt(3) - 2);
+		double yBoundsA = (double) (worldY + random.nextInt(3) - 2);
+		double yBoundsB = (double) (worldY + random.nextInt(3) - 2);
 
-		for (int blockNum = 0; blockNum <= this.blocksPerCluster; ++blockNum)
-		{
-			double clusterCentreX = maxX + (minX - maxX) * (double)blockNum / (double)this.blocksPerCluster;
+		for (int blockNum = 0; blockNum <= this.blocksPerCluster; ++blockNum) {
+			double clusterCentreX = maxX + (minX - maxX) * (double) blockNum / (double) this.blocksPerCluster;
 			double clusterCentreY = yBoundsA + (((yBoundsB - yBoundsA) * (double) blockNum) / (double) this.blocksPerCluster);
-			double clusterCentreZ = maxZ + (minZ - maxZ) * (double)blockNum / (double)this.blocksPerCluster;
-			double d9 = random.nextDouble() * (double)this.blocksPerCluster / 16.0D;
-			double clusterSize = (double)(MathHelper.sin((float)blockNum * (float)Math.PI / (float)this.blocksPerCluster) + 1.0F) * d9 + 1.0D;
+			double clusterCentreZ = maxZ + (minZ - maxZ) * (double) blockNum / (double) this.blocksPerCluster;
+			double d9 = random.nextDouble() * (double) this.blocksPerCluster / 16.0D;
+			double clusterSize = (double) (MathHelper.sin((float) blockNum * (float) Math.PI / (float) this.blocksPerCluster) + 1.0F) * d9 + 1.0D;
 			int clusterStartX = MathHelper.floor_double(clusterCentreX - clusterSize / 2.0D);
 			int clusterStartY = MathHelper.floor_double(clusterCentreY - clusterSize / 2.0D);
 			int clusterStartZ = MathHelper.floor_double(clusterCentreZ - clusterSize / 2.0D);
@@ -177,21 +175,15 @@ public class NiterOreGenerator extends OreGenerator {
 			int clusterEndY = MathHelper.floor_double(clusterCentreY + clusterSize / 2.0D);
 			int clusterEndZ = MathHelper.floor_double(clusterCentreZ + clusterSize / 2.0D);
 
-			for (int x = clusterStartX; x <= clusterEndX; ++x)
-			{
-				double d12 = ((double)x + 0.5D - clusterCentreX) / (clusterSize / 2.0D);
-				if (d12 * d12 < sandstoneDistance)
-				{
-					for (int y = clusterStartY; y <= clusterEndY; ++y)
-					{
-						double d13 = ((double)y + 0.5D - clusterCentreY) / (clusterSize / 2.0D);
+			for (int x = clusterStartX; x <= clusterEndX; ++x) {
+				double d12 = ((double) x + 0.5D - clusterCentreX) / (clusterSize / 2.0D);
 
-						if (d12 * d12 + d13 * d13 < sandstoneDistance)
-						{
-							for (int z = clusterStartZ; z <= clusterEndZ; ++z)
-							{
-								double d14 = ((double)z + 0.5D - clusterCentreZ) / (clusterSize / 2.0D);
+				if (d12 * d12 < sandstoneDistance) {
+					for (int y = clusterStartY; y <= clusterEndY; ++y) {
+						double d13 = ((double) y + 0.5D - clusterCentreY) / (clusterSize / 2.0D);
 
+						if (d12 * d12 + d13 * d13 < sandstoneDistance) {
+							for (int z = clusterStartZ; z <= clusterEndZ; ++z) {
 								Block chunkBlock = chunk.getBlock(x & 15, y, z & 15);
 
 								boolean replaceAllowed = false;
@@ -199,9 +191,9 @@ public class NiterOreGenerator extends OreGenerator {
 									replaceAllowed |= !replaceAllowed && chunkBlock.isReplaceableOreGen(world, x, y, z, replaceableBlock);
 								}
 
+								double d14 = ((double) z + 0.5D - clusterCentreZ) / (clusterSize / 2.0D);
 								double distance = d12 * d12 + d13 * d13 + d14 * d14;
-								if (distance < sandstoneDistance && replaceAllowed)
-								{
+								if (distance < sandstoneDistance && replaceAllowed) {
 									Block block;
 									if (random.nextFloat() < sandstonePaddingChancePercent) {
 										block = paddingBlock;
