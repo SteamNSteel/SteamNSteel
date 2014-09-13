@@ -17,15 +17,26 @@
 package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 
 public class PlotoniumRuinWall extends SteamNSteelBlock
 {
     public static final String NAME = "ruinWallPlotonium";
 
-    public PlotoniumRuinWall()
+	@Override
+	public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side) {
+		Logger.info("%d, %d, %d, %d", x, y, z, side);
+		return super.getIcon(blockAccess, x, y, z, side);
+	}
+
+	public PlotoniumRuinWall()
     {
         super(Material.rock);
         setBlockName(NAME);
+
+
     }
 }
