@@ -18,6 +18,7 @@ package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.utility.log.Logger;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -29,6 +30,23 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 	@Override
 	public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side) {
 		Logger.info("%d, %d, %d, %d", x, y, z, side);
+
+		//0 Faces Down
+		//1 Faces Up
+		//2 Faces North
+		//3 Faces South
+		//4 Faces West
+		//5 Faces East
+
+		Block xMinus = blockAccess.getBlock(x - 1, y, z);
+		Block xPlus = blockAccess.getBlock(x + 1, y, z);
+		Block yMinus = blockAccess.getBlock(x, y - 1, z);
+		Block yPlus = blockAccess.getBlock(x, y + 1, z);
+		Block zMinus = blockAccess.getBlock(x, y, z - 1);
+		Block zPlus = blockAccess.getBlock(x, z, z + 1);
+
+
+
 		return super.getIcon(blockAccess, x, y, z, side);
 	}
 
