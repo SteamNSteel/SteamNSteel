@@ -16,38 +16,101 @@
 
 package mod.steamnsteel.block.resource.structure;
 
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.HashMap;
 
 public class PlotoniumRuinWall extends SteamNSteelBlock
 {
     public static final String NAME = "ruinWallPlotonium";
 
+	private HashMap<Integer, IIcon> icons2 = new HashMap<Integer, IIcon>();
+
+	final int DEFAULT = 0;
+	final int TOP = 1;
+	final int BOTTOM = 2;
+	final int LEFT = 4;
+	final int RIGHT = 8;
+	final int SINGLE = 12;
+
+	int[][] ROTATION_MATRIX = {
+			{0,0,0,0,6},
+			{0,0,0,0,6},
+			{5,4,0,1,6},
+			{4,5,0,1,6},
+			{2,3,0,1,6},
+			{3,2,0,1,6}
+	};
+
+	@Override
+	public void registerBlockIcons(IIconRegister iconRegister) {
+		icons2.put(TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Top"));
+		icons2.put(TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TopL"));
+		icons2.put(TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TopR"));
+		icons2.put(TOP | SINGLE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TopSingle"));
+
+		icons2.put(DEFAULT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
+
+		icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Bottom"));
+		icons2.put(BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-BottomL"));
+		icons2.put(BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-BottomR"));
+		icons2.put(BOTTOM | SINGLE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-BottomSingle"));
+	}
+
 	@Override
 	public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side) {
 		Logger.info("%d, %d, %d, %d", x, y, z, side);
 
-		//0 Faces Down
-		//1 Faces Up
-		//2 Faces North
-		//3 Faces South
-		//4 Faces West
-		//5 Faces East
+		ForgeDirection orientation = ForgeDirection.getOrientation(side);
+		if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN) {
+			return icons2.get(DEFAULT);
+		}
 
-		Block xMinus = blockAccess.getBlock(x - 1, y, z);
-		Block xPlus = blockAccess.getBlock(x + 1, y, z);
-		Block yMinus = blockAccess.getBlock(x, y - 1, z);
-		Block yPlus = blockAccess.getBlock(x, y + 1, z);
-		Block zMinus = blockAccess.getBlock(x, y, z - 1);
-		Block zPlus = blockAccess.getBlock(x, z, z + 1);
+		int[] rotationMatrix = ROTATION_MATRIX[side];
 
+		ForgeDirection above = ForgeDirection.getOrientation(rotationMatrix[3]);
+		ForgeDirection below = ForgeDirection.getOrientation(rotationMatrix[2]);
+		ForgeDirection left = ForgeDirection.getOrientation(rotationMatrix[0]);
+		ForgeDirection right = ForgeDirection.getOrientation(rotationMatrix[1]);
 
+		Block blockRight = blockAccess.getBlock(x + left.offsetX, y + left.offsetY, z + left.offsetZ);
+		Block blockLeft = blockAccess.getBlock(x + right.offsetX, y + right.offsetY, z + right.offsetZ);
+		Block blockAbove = blockAccess.getBlock(x + above.offsetX, y + above.offsetY, z + above.offsetZ);
+		Block blockBelow = blockAccess.getBlock(x + below.offsetX, y + below.offsetY, z + below.offsetZ);
 
-		return super.getIcon(blockAccess, x, y, z, side);
+		int blockProperties = 0;
+
+		//if (blockAbove != ModBlock.ruinWallPlotonium) {
+		if (!blockAbove.getMaterial().isOpaque()) {
+			blockProperties |= 1;
+		}
+		if (blockBelow != ModBlock.ruinWallPlotonium && blockBelow.getMaterial().isOpaque()) {// && !blockAbove.getMaterial().isOpaque()) {
+			blockProperties = 2;
+		}
+
+		if (blockLeft != ModBlock.ruinWallPlotonium) {
+			blockProperties |= 8;
+		}
+		if (blockRight != ModBlock.ruinWallPlotonium) {
+			blockProperties |= 4;
+		}
+
+		if (!icons2.containsKey(blockProperties))
+		{
+			blockProperties = 0;
+		}
+
+		return icons2.get(blockProperties);
 	}
 
 	public PlotoniumRuinWall()
