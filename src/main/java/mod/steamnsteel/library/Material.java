@@ -25,10 +25,10 @@ import static net.minecraftforge.common.util.EnumHelper.addToolMaterial;
 
 public enum Material
 {
-    BRONZE(addArmorMaterial("bronze", 16, new int[]{3, 6, 5, 3}, 12),
-            addToolMaterial("bronze", 2, 312, 6.5F, 2.5F, 12)),
-    STEEL(addArmorMaterial("steel", 29, new int[]{3, 7, 6, 3}, 15),
-            addToolMaterial("steel", 3, 969, 7.5F, 4.0F, 15));
+    BRONZE(addArmorMaterial("bronze", 11, new int[]{2, 6, 4, 2}, 9),
+            addToolMaterial("bronze", 2, 250, 5.0F, 1.5F, 14)),
+    STEEL(addArmorMaterial("steel", 24, new int[]{3, 7, 6, 3}, 10),
+            addToolMaterial("steel", 3, 905, 7.0F, 2.5F, 10));
 
     private final ItemArmor.ArmorMaterial armorMaterial;
     private final Item.ToolMaterial toolMaterial;
