@@ -17,6 +17,9 @@
 package mod.steamnsteel.nei;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 
 import com.google.common.base.Objects;
@@ -30,8 +33,11 @@ import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.ItemWrapper;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
 import codechicken.nei.PositionedStack;
@@ -41,12 +47,17 @@ import codechicken.nei.api.IRecipeOverlayRenderer;
 import codechicken.nei.api.IStackPositioner;
 import codechicken.nei.recipe.RecipeInfo;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import codechicken.nei.ItemList;
 
 import com.google.common.collect.Table.Cell;
 
 @SuppressWarnings("WeakerAccess")
 public class CupolaRecipeHandler extends TemplateRecipeHandler
 {
+    public static List<ItemStack> burnable;
+    public static Set<Item> hiddenBurnable;
+    private static int ticks = 24;
+
     @SuppressWarnings("NonStaticInnerClassInSecureContext")
     private class CachedCupolaRecipe extends CachedRecipe
     {
@@ -56,10 +67,10 @@ public class CupolaRecipeHandler extends TemplateRecipeHandler
         CachedCupolaRecipe(ItemWrapper input1, ItemWrapper input2, ItemStack result)
         {
             inputs = Lists.newArrayList();
-            inputs.add(new PositionedStack(input1.getStack(), 20, 6));
-            inputs.add(new PositionedStack(input2.getStack(), 54, 6));
+            inputs.add(new PositionedStack(input1.getStack(), 20, 6));  //Left
+            inputs.add(new PositionedStack(input2.getStack(), 54, 6));  //Right
 
-            this.result = new PositionedStack(result, 37, 42);
+            this.result = new PositionedStack(result, 111, 23);    //Out
         }
 
         @Override
@@ -75,6 +86,11 @@ public class CupolaRecipeHandler extends TemplateRecipeHandler
         }
 
         @Override
+        public PositionedStack getOtherStack() {        //Fuel
+            return new PositionedStack(burnable.get((cycleticks / ticks) % burnable.size()), 37, 42);
+        }
+
+        @Override
         public String toString()
         {
             return Objects.toStringHelper(this)
@@ -84,10 +100,54 @@ public class CupolaRecipeHandler extends TemplateRecipeHandler
         }
     }
 
+    private static void getHiddenFuelTypes(){
+        hiddenBurnable = new HashSet<Item>();
+
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.brown_mushroom));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.daylight_detector));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.fence));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.fence_gate));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.jukebox));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.noteblock));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.red_mushroom));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.standing_sign));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.trapdoor));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.trapped_chest));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.wall_sign));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.wooden_door));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.wooden_pressure_plate));
+    }
+
+    private static void getFuelTypes() {
+        burnable = new ArrayList<ItemStack>();
+
+        for (ItemStack item: ItemList.items)
+                if (!hiddenBurnable.contains(item.getItem()))
+                    if (TileEntityFurnace.getItemBurnTime(item) > 0)
+                        burnable.add(item);
+    }
+
+    @Override
+    public TemplateRecipeHandler newInstance() {
+        if (hiddenBurnable == null)
+            getHiddenFuelTypes();
+
+        if (burnable == null)
+            getFuelTypes();
+
+        return super.newInstance();
+    }
+
     @Override
     public void loadTransferRects()
     {
         transferRects.add(new RecipeTransferRect(new Rectangle(76, 24, 24, 16), getOverlayIdentifier()));
+    }
+
+    @Override
+    public void drawExtras(int recipe) {
+        drawProgressBar(38, 25, 176, 0, 14, 14, ticks, 7);
+        drawProgressBar(74, 23, 176, 14, 24, 16, ticks, 0);
     }
 
     @Override
