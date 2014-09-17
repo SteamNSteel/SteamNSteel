@@ -357,15 +357,11 @@ public class CupolaTE extends TileEntity implements ISidedInventory
         if (deviceCookTime > 0)
         {
             sendUpdate = true;
+            fuelStack.stackSize--;
 
-            if (inventory.isEmpty(INPUT_FUEL))
+            if (fuelStack.stackSize == 0)
             {
-                fuelStack.stackSize--;
-
-                if (fuelStack.stackSize == 0)
-                {
-                    inventory.setSlot(INPUT_FUEL, fuelStack.getItem().getContainerItem(fuelStack));
-                }
+                inventory.setSlot(INPUT_FUEL, fuelStack.getItem().getContainerItem(fuelStack));
             }
         }
         return sendUpdate;
@@ -384,6 +380,7 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     {
         if (eventId == 1)
         {
+
             isActive = eventData != 0;
             worldObj.func_147451_t(xCoord, yCoord, zCoord);
             return true;

@@ -16,12 +16,19 @@
 
 package mod.steamnsteel.nei;
 
-import java.awt.Rectangle;
-import java.util.List;
-
+import codechicken.nei.ItemList;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.api.DefaultOverlayRenderer;
+import codechicken.nei.api.IOverlayHandler;
+import codechicken.nei.api.IRecipeOverlayRenderer;
+import codechicken.nei.api.IStackPositioner;
+import codechicken.nei.recipe.RecipeInfo;
+import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.google.common.collect.Table.Cell;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.api.crafting.IAlloyResult;
 import mod.steamnsteel.block.machine.CupolaBlock;
@@ -30,64 +37,99 @@ import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.ItemWrapper;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.api.DefaultOverlayRenderer;
-import codechicken.nei.api.IOverlayHandler;
-import codechicken.nei.api.IRecipeOverlayRenderer;
-import codechicken.nei.api.IStackPositioner;
-import codechicken.nei.recipe.RecipeInfo;
-import codechicken.nei.recipe.TemplateRecipeHandler;
-
-import com.google.common.collect.Table.Cell;
+import java.awt.*;
+import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
 public class CupolaRecipeHandler extends TemplateRecipeHandler
 {
-    @SuppressWarnings("NonStaticInnerClassInSecureContext")
-    private class CachedCupolaRecipe extends CachedRecipe
+    private static final List<ItemStack> burnable = Lists.newArrayList();
+    private static final Set<Item> hiddenBurnable = Sets.newHashSet();
+    private static final int TICKS = 24;
+
+    private static void getHiddenFuelTypes()
     {
-        private final PositionedStack result;
-        private final List<PositionedStack> inputs;
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.brown_mushroom));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.daylight_detector));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.fence));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.fence_gate));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.jukebox));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.noteblock));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.red_mushroom));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.standing_sign));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.trapdoor));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.trapped_chest));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.wall_sign));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.wooden_door));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.wooden_pressure_plate));
+    }
 
-        CachedCupolaRecipe(ItemWrapper input1, ItemWrapper input2, ItemStack result)
+    private static void getFuelTypes()
+    {
+        for (final ItemStack item : ItemList.items)
+            if (!hiddenBurnable.contains(item.getItem()))
+                if (TileEntityFurnace.getItemBurnTime(item) > 0)
+                    burnable.add(item);
+    }
+
+    @SuppressWarnings("ObjectEquality")
+    private static boolean areStacksTheSame(ItemStack stack1, ItemStack stack2)
+    {
+        if (stack1 == null || stack2 == null)
         {
-            inputs = Lists.newArrayList();
-            inputs.add(new PositionedStack(input1.getStack(), 20, 6));
-            inputs.add(new PositionedStack(input2.getStack(), 54, 6));
-
-            this.result = new PositionedStack(result, 37, 42);
+            return false;
         }
 
-        @Override
-        public List<PositionedStack> getIngredients()
+        if (stack1.getItem() == stack2.getItem())
         {
-            return ImmutableList.copyOf(inputs);
+            if (stack1.getItemDamage() == stack2.getItemDamage() || isWildcard(stack1.getItemDamage()) || isWildcard(stack2.getItemDamage()))
+            {
+                if (stack1.hasTagCompound() && stack2.hasTagCompound())
+                {
+                    return stack1.getTagCompound().equals(stack2.getTagCompound());
+                }
+                return stack1.hasTagCompound() == stack2.hasTagCompound();
+            }
         }
+        return false;
+    }
 
-        @Override
-        public PositionedStack getResult()
-        {
-            return result;
-        }
+    private static boolean isWildcard(int meta)
+    {
+        return meta == OreDictionary.WILDCARD_VALUE;
+    }
 
-        @Override
-        public String toString()
-        {
-            return Objects.toStringHelper(this)
-                    .add("result", result)
-                    .add("inputs", inputs)
-                    .toString();
-        }
+    @Override
+    public TemplateRecipeHandler newInstance()
+    {
+        if (hiddenBurnable.isEmpty())
+            getHiddenFuelTypes();
+
+        if (burnable.isEmpty())
+            getFuelTypes();
+
+        return super.newInstance();
     }
 
     @Override
     public void loadTransferRects()
     {
         transferRects.add(new RecipeTransferRect(new Rectangle(76, 24, 24, 16), getOverlayIdentifier()));
+    }
+
+    @Override
+    public void drawExtras(int recipe)
+    {
+        drawProgressBar(38, 25, 176, 0, 14, 14, TICKS, 7);
+        drawProgressBar(74, 23, 176, 14, 24, 16, TICKS, 0);
     }
 
     @Override
@@ -121,7 +163,8 @@ public class CupolaRecipeHandler extends TemplateRecipeHandler
 
     @SuppressWarnings("ObjectAllocationInLoop")
     @Override
-    public void loadCraftingRecipes(ItemStack result) {
+    public void loadCraftingRecipes(ItemStack result)
+    {
         for (final Cell<ItemWrapper, ItemWrapper, IAlloyResult> cell : AlloyManager.getAlloys().cellSet())
         {
             if (areStacksTheSame(result, cell.getValue().getItemStack().get()))
@@ -134,7 +177,8 @@ public class CupolaRecipeHandler extends TemplateRecipeHandler
 
     @SuppressWarnings("ObjectAllocationInLoop")
     @Override
-    public void loadUsageRecipes(ItemStack ingredient) {
+    public void loadUsageRecipes(ItemStack ingredient)
+    {
         for (final Cell<ItemWrapper, ItemWrapper, IAlloyResult> cell : AlloyManager.getAlloys().cellSet())
         {
             if (areStacksTheSame(ingredient, cell.getRowKey().getStack()) || areStacksTheSame(ingredient, cell.getColumnKey().getStack()))
@@ -182,30 +226,46 @@ public class CupolaRecipeHandler extends TemplateRecipeHandler
         return RecipeInfo.getOverlayHandler(gui, getOverlayIdentifier());
     }
 
-    @SuppressWarnings("ObjectEquality")
-    private static boolean areStacksTheSame(ItemStack stack1, ItemStack stack2)
+    @SuppressWarnings("NonStaticInnerClassInSecureContext")
+    private class CachedCupolaRecipe extends CachedRecipe
     {
-        if (stack1 == null || stack2 == null)
+        private final PositionedStack result;
+        private final List<PositionedStack> inputs;
+
+        CachedCupolaRecipe(ItemWrapper input1, ItemWrapper input2, ItemStack result)
         {
-            return false;
+            inputs = Lists.newArrayList();
+            inputs.add(new PositionedStack(input1.getStack(), 20, 6));  //Left
+            inputs.add(new PositionedStack(input2.getStack(), 54, 6));  //Right
+
+            this.result = new PositionedStack(result, 111, 23);    //Out
         }
 
-        if (stack1.getItem() == stack2.getItem())
+        @Override
+        public List<PositionedStack> getIngredients()
         {
-            if (stack1.getItemDamage() == stack2.getItemDamage() || isWildcard(stack1.getItemDamage()) || isWildcard(stack2.getItemDamage()))
-            {
-                if (stack1.hasTagCompound() && stack2.hasTagCompound())
-                {
-                    return stack1.getTagCompound().equals(stack2.getTagCompound());
-                }
-                return stack1.hasTagCompound() == stack2.hasTagCompound();
-            }
+            return ImmutableList.copyOf(inputs);
         }
-        return false;
-    }
 
-    private static boolean isWildcard(int meta)
-    {
-        return meta == OreDictionary.WILDCARD_VALUE;
+        @Override
+        public PositionedStack getResult()
+        {
+            return result;
+        }
+
+        @Override
+        public PositionedStack getOtherStack()
+        {        //Fuel
+            return new PositionedStack(burnable.get(cycleticks / TICKS % burnable.size()), 37, 42);
+        }
+
+        @Override
+        public String toString()
+        {
+            return Objects.toStringHelper(this)
+                    .add("result", result)
+                    .add("inputs", inputs)
+                    .toString();
+        }
     }
 }
