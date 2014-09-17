@@ -32,8 +32,9 @@ public class NiterOre extends SteamNSteelOreBlock
         setHarvestLevel("pickaxe", 0); // wooden pick
     }
 
-	@Override
-	public boolean isGenEnabled() {
-		return Settings.World.isNiterGenerated();
-	}
+    @Override
+    public boolean isGenEnabled()
+    {
+        return Settings.World.isNiterGenerated();
+    }
 }
