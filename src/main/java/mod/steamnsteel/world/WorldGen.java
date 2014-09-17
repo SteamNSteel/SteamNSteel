@@ -19,6 +19,7 @@ package mod.steamnsteel.world;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.utility.log.Logger;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -52,14 +53,21 @@ public enum WorldGen
         oreGens.add(new OreGenerator(ModBlock.oreTin, 20, 3, 0, 64));
         oreGens.add(new OreGenerator(ModBlock.oreZinc, 20, 6, 0, 64));
 	    oreGens.add(new SulfurOreGenerator(ModBlock.oreSulfur, 10, 12, 0, 64));
+	    oreGens.add(new NiterOreGenerator(ModBlock.oreNiter, 2, 12, 0, 70));
     }
 
     @SuppressWarnings("MethodMayBeStatic")
     @SubscribeEvent
     public void OnPostOreGenerated(OreGenEvent.Post event)
     {
-        for (final OreGenerator oreGen : oreGens)
+	    //long startTime = System.currentTimeMillis();
+
+	    for (final OreGenerator oreGen : oreGens)
             if (TerrainGen.generateOre(event.world, event.rand, oreGen, event.worldX, event.worldZ, CUSTOM))
                 oreGen.generate(event.world, event.rand, event.worldX, 0, event.worldZ);
+
+	    //long stopTime = System.currentTimeMillis();
+	    //long runTime = stopTime - startTime;
+	    //Logger.info("Total Gen Run time: " + runTime);
     }
 }
