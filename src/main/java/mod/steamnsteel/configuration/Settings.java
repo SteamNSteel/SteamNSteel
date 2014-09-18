@@ -43,11 +43,12 @@ public enum Settings
         private static boolean isSulfurGenerated = true;
         private static boolean isTinGenerated = true;
         private static boolean isZincGenerated = true;
-        private static boolean isCopperRetroGenned = true;
-        private static boolean isNiterRetroGenned = true;
-        private static boolean isSulfurRetroGenned = true;
-        private static boolean isTinRetroGenned = true;
-        private static boolean isZincRetroGenned = true;
+
+        private static boolean isCopperRetroGenned = false;
+        private static boolean isNiterRetroGenned = false;
+        private static boolean isSulfurRetroGenned = false;
+        private static boolean isTinRetroGenned = false;
+        private static boolean isZincRetroGenned = false;
 
         public static boolean isCopperGenerated() { return isCopperGenerated; }
 
