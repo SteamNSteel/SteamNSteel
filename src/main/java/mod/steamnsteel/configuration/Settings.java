@@ -16,8 +16,11 @@
 
 package mod.steamnsteel.configuration;
 
+import mod.steamnsteel.TheMod;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
 
+@SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
 public enum Settings
 {
     INSTANCE;
@@ -40,6 +43,7 @@ public enum Settings
         private static boolean isSulfurGenerated = true;
         private static boolean isTinGenerated = true;
         private static boolean isZincGenerated = true;
+
 
         public static boolean isCopperGenerated()
         {
@@ -68,11 +72,21 @@ public enum Settings
 
         private static void syncConfig(Configuration config)
         {
-            isCopperGenerated = config.getBoolean("Generate Copper?", CATEGORY, isCopperGenerated, "A boolean");
-            isNiterGenerated = config.getBoolean("Generate Niter?", CATEGORY, isNiterGenerated, "A boolean");
-            isSulfurGenerated = config.getBoolean("Generate Sulfur?", CATEGORY, isSulfurGenerated, "A boolean");
-            isTinGenerated = config.getBoolean("Generate Tin?", CATEGORY, isTinGenerated, "A boolean");
-            isZincGenerated = config.getBoolean("Generate Zinc?", CATEGORY, isZincGenerated, "A boolean");
+            isCopperGenerated = get(config, "doCopperGen", CATEGORY, isCopperGenerated);
+            isNiterGenerated = get(config, "doNiterGen", CATEGORY, isNiterGenerated);
+            isSulfurGenerated = get(config, "doSulfurGen", CATEGORY, isSulfurGenerated);
+            isTinGenerated = get(config, "doTinGen", CATEGORY, isTinGenerated);
+            isZincGenerated = get(config, "doZincGen", CATEGORY, isZincGenerated);
         }
+    }
+
+    private static boolean get(Configuration config, String settingName, String category, boolean defaultValue)
+    {
+        return config.getBoolean(settingName, category, defaultValue, getLocalizedComment(settingName));
+    }
+
+    private static String getLocalizedComment(String settingName)
+    {
+        return StatCollector.translateToLocal("config." + TheMod.MOD_ID + ':' + settingName);
     }
 }

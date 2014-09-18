@@ -24,7 +24,14 @@ tile.steamnsteel:ruinFloorPlotonium.name=Пол из разрушенного ф
 tile.steamnsteel:ruinPillarPlotonium.name=Колонна из разрушенного фабулония
 tile.steamnsteel:ruinWallPlotonium.name=Стена из разрушенного фабулония
 
-#Containers
+# Config file comments
+config.steamnsteel:doCopperGen=Should copper be generated in new chunks?
+config.steamnsteel:doNiterGen=Should niter be generated in new chunks?
+config.steamnsteel:doSulfurGen=Should sulfur be generated in new chunks?
+config.steamnsteel:doTinGen=Should tin be generated in new chunks?
+config.steamnsteel:doZincGen=Should zinc be generated in new chunks?
+
+# Containers
 container.steamnsteel:cupola=Купол
 
 # Creative Tabs

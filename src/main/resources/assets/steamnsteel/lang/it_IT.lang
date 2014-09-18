@@ -24,7 +24,14 @@ tile.steamnsteel:ruinFloorPlotonium.name=Pavimento di Plotonio Rovinato
 tile.steamnsteel:ruinPillarPlotonium.name=Colonna di Plotonio Rovinata
 tile.steamnsteel:ruinWallPlotonium.name=Muro di Plotonio Rovinato
 
-#Containers
+# Config file comments
+config.steamnsteel:doCopperGen=Should copper be generated in new chunks?
+config.steamnsteel:doNiterGen=Should niter be generated in new chunks?
+config.steamnsteel:doSulfurGen=Should sulfur be generated in new chunks?
+config.steamnsteel:doTinGen=Should tin be generated in new chunks?
+config.steamnsteel:doZincGen=Should zinc be generated in new chunks?
+
+# Containers
 container.steamnsteel:cupola=Cupola
 
 # Creative Tabs
