@@ -43,40 +43,46 @@ public enum Settings
         private static boolean isSulfurGenerated = true;
         private static boolean isTinGenerated = true;
         private static boolean isZincGenerated = true;
+        private static boolean isCopperRetroGenned = true;
+        private static boolean isNiterRetroGenned = true;
+        private static boolean isSulfurRetroGenned = true;
+        private static boolean isTinRetroGenned = true;
+        private static boolean isZincRetroGenned = true;
 
+        public static boolean isCopperGenerated() { return isCopperGenerated; }
 
-        public static boolean isCopperGenerated()
-        {
-            return isCopperGenerated;
-        }
+        public static boolean isNiterGenerated() { return isNiterGenerated; }
 
-        public static boolean isSulfurGenerated()
-        {
-            return isSulfurGenerated;
-        }
+        public static boolean isSulfurGenerated() { return isSulfurGenerated; }
 
-        public static boolean isTinGenerated()
-        {
-            return isTinGenerated;
-        }
+        public static boolean isTinGenerated() { return isTinGenerated; }
 
-        public static boolean isZincGenerated()
-        {
-            return isZincGenerated;
-        }
+        public static boolean isZincGenerated() { return isZincGenerated; }
 
-        public static boolean isNiterGenerated()
-        {
-            return isNiterGenerated;
-        }
+        public static boolean isCopperRetroGenerated() { return isCopperRetroGenned; }
+
+        public static boolean isNiterRetroGenerated() { return isNiterRetroGenned; }
+
+        public static boolean isSulfurRetroGenerated() { return isSulfurRetroGenned; }
+
+        public static boolean isTinRetroGenerated() { return isTinRetroGenned; }
+
+        public static boolean isZincRetroGenerated() { return isZincRetroGenned; }
 
         private static void syncConfig(Configuration config)
         {
+            // Ore Generation
             isCopperGenerated = get(config, "genCopper", CATEGORY, isCopperGenerated);
             isNiterGenerated = get(config, "genNiter", CATEGORY, isNiterGenerated);
             isSulfurGenerated = get(config, "genSulfur", CATEGORY, isSulfurGenerated);
             isTinGenerated = get(config, "genTin", CATEGORY, isTinGenerated);
             isZincGenerated = get(config, "genZinc", CATEGORY, isZincGenerated);
+
+            isCopperRetroGenned = get(config, "retroGenCopper", CATEGORY, isCopperRetroGenned);
+            isNiterRetroGenned = get(config, "retroGenNiter", CATEGORY, isNiterRetroGenned);
+            isSulfurRetroGenned = get(config, "retroGenSulfur", CATEGORY, isSulfurRetroGenned);
+            isTinRetroGenned = get(config, "retroGenTin", CATEGORY, isTinRetroGenned);
+            isZincRetroGenned = get(config, "retroGenZinc", CATEGORY, isZincRetroGenned);
         }
     }
 

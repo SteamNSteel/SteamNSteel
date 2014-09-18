@@ -25,11 +25,16 @@ tile.steamnsteel:ruinPillarPlotonium.name=遗迹情节支柱
 tile.steamnsteel:ruinWallPlotonium.name=遗迹绘制墙
 
 # Config file comments
-config.steamnsteel:genCopper=Should copper be generated in new chunks?
-config.steamnsteel:genNiter=Should niter be generated in new chunks?
-config.steamnsteel:genSulfur=Should sulfur be generated in new chunks?
-config.steamnsteel:genTin=Should tin be generated in new chunks?
-config.steamnsteel:genZinc=Should zinc be generated in new chunks?
+config.steamnsteel:genCopper=Should copper ore be generated in new chunks?
+config.steamnsteel:genNiter=Should niter ore be generated in new chunks?
+config.steamnsteel:genSulfur=Should sulfur ore be generated in new chunks?
+config.steamnsteel:genTin=Should tin ore be generated in new chunks?
+config.steamnsteel:genZinc=Should zinc ore be generated in new chunks?
+config.steamnsteel:retroGenCopper=Should copper ore be generated in existing chunks? (also requires genCopper)
+config.steamnsteel:retroGenNiter=Should niter ore be generated in existing chunks? (also requires genNiter)
+config.steamnsteel:retroGenSulfur=Should sulfur ore be generated in existing chunks? (also requires genSulfur)
+config.steamnsteel:retroGenTin=Should tin ore be generated in existing chunks? (also requires genTin)
+config.steamnsteel:retroGenZinc=Should zinc ore be generated in existing chunks? (also requires genZinc)
 
 # Containers
 container.steamnsteel:cupola=冲天炉
