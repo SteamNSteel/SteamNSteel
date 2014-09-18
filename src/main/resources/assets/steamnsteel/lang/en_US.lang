@@ -25,11 +25,11 @@ tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
 tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
 
 # Config file comments
-config.steamnsteel:doCopperGen=Should copper be generated in new chunks?
-config.steamnsteel:doNiterGen=Should niter be generated in new chunks?
-config.steamnsteel:doSulfurGen=Should sulfur be generated in new chunks?
-config.steamnsteel:doTinGen=Should tin be generated in new chunks?
-config.steamnsteel:doZincGen=Should zinc be generated in new chunks?
+config.steamnsteel:genCopper=Should copper be generated in new chunks?
+config.steamnsteel:genNiter=Should niter be generated in new chunks?
+config.steamnsteel:genSulfur=Should sulfur be generated in new chunks?
+config.steamnsteel:genTin=Should tin be generated in new chunks?
+config.steamnsteel:genZinc=Should zinc be generated in new chunks?
 
 # Containers
 container.steamnsteel:cupola=Cupola

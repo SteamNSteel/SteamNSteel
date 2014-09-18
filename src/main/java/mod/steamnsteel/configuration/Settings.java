@@ -72,11 +72,11 @@ public enum Settings
 
         private static void syncConfig(Configuration config)
         {
-            isCopperGenerated = get(config, "doCopperGen", CATEGORY, isCopperGenerated);
-            isNiterGenerated = get(config, "doNiterGen", CATEGORY, isNiterGenerated);
-            isSulfurGenerated = get(config, "doSulfurGen", CATEGORY, isSulfurGenerated);
-            isTinGenerated = get(config, "doTinGen", CATEGORY, isTinGenerated);
-            isZincGenerated = get(config, "doZincGen", CATEGORY, isZincGenerated);
+            isCopperGenerated = get(config, "genCopper", CATEGORY, isCopperGenerated);
+            isNiterGenerated = get(config, "genNiter", CATEGORY, isNiterGenerated);
+            isSulfurGenerated = get(config, "genSulfur", CATEGORY, isSulfurGenerated);
+            isTinGenerated = get(config, "genTin", CATEGORY, isTinGenerated);
+            isZincGenerated = get(config, "genZinc", CATEGORY, isZincGenerated);
         }
     }
 
