@@ -17,26 +17,25 @@
 package mod.steamnsteel.client.renderer.item;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.client.renderer.model.CupolaModel;
 import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
-import mod.steamnsteel.utility.Vector;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class CupolaItemRenderer implements IItemRenderer
 {
-    private static final Optional<Vector<Float>> ENTITY_OFFSET = Optional.of(new Vector<Float>(0.0f, -1.0f, 0.0f));
-    private static final Optional<Vector<Float>> EQUIPPED_OFFSET = Optional.of(new Vector<Float>(1.0f, 0.0f, 1.5f));
-    private static final Optional<Vector<Float>> FIRST_PERSON_OFFSET = Optional.of(new Vector<Float>(-0.0f, 0.0f, 0.0f));
-    private static final Optional<Vector<Float>> INVENTORY_OFFSET = Optional.of(new Vector<Float>(-0.0f, -1.0f, 0.0f));
+    private static final ImmutableTriple<Float, Float, Float> ENTITY_OFFSET = ImmutableTriple.of(0.0f, -1.0f, 0.0f);
+    private static final ImmutableTriple<Float, Float, Float> EQUIPPED_OFFSET = ImmutableTriple.of(1.0f, 0.0f, 1.5f);
+    private static final ImmutableTriple<Float, Float, Float> FIRST_PERSON_OFFSET = ImmutableTriple.of(-0.0f, 0.0f, 0.0f);
+    private static final ImmutableTriple<Float, Float, Float> INVENTORY_OFFSET = ImmutableTriple.of(-0.0f, -1.0f, 0.0f);
 
-    private static final Vector<Float> SCALE = new Vector<Float>(0.666667f, 0.666667f, 0.666667f);
+    private static final ImmutableTriple<Float, Float, Float> SCALE = ImmutableTriple.of(0.666667f, 0.666667f, 0.666667f);
 
     private final CupolaModel model;
 
@@ -60,34 +59,29 @@ public class CupolaItemRenderer implements IItemRenderer
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     {
-        Optional<Vector<Float>> vector = Optional.absent();
-
         switch (type)
         {
             case ENTITY:
-                vector = ENTITY_OFFSET;
+                renderCupola(ENTITY_OFFSET);
                 break;
             case EQUIPPED:
-                vector = EQUIPPED_OFFSET;
+                renderCupola(EQUIPPED_OFFSET);
                 break;
             case EQUIPPED_FIRST_PERSON:
-                vector = FIRST_PERSON_OFFSET;
+                renderCupola(FIRST_PERSON_OFFSET);
                 break;
             case INVENTORY:
-                vector = INVENTORY_OFFSET;
+                renderCupola(INVENTORY_OFFSET);
                 break;
             default:
         }
-
-        if (vector.isPresent())
-            renderCupola(vector.get());
     }
 
-    private void renderCupola(Vector<Float> vector)
+    private void renderCupola(ImmutableTriple<Float, Float, Float> offset)
     {
         GL11.glPushMatrix();
-        GL11.glScalef(SCALE.getX(), SCALE.getY(), SCALE.getZ());
-        GL11.glTranslatef(vector.getX(), vector.getY(), vector.getZ());
+        GL11.glScalef(SCALE.left, SCALE.middle, SCALE.right);
+        GL11.glTranslatef(offset.left, offset.middle, offset.right);
 
         FMLClientHandler.instance().getClient().renderEngine.bindTexture(CupbolaTESR.TEXTURE);
 
