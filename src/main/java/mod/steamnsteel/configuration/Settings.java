@@ -44,11 +44,7 @@ public enum Settings
         private static boolean isTinGenerated = true;
         private static boolean isZincGenerated = true;
 
-        private static boolean isCopperRetroGenned = false;
-        private static boolean isNiterRetroGenned = false;
-        private static boolean isSulfurRetroGenned = false;
-        private static boolean isTinRetroGenned = false;
-        private static boolean isZincRetroGenned = false;
+        private static boolean doRetroOreGen = false;
 
         public static boolean isCopperGenerated() { return isCopperGenerated; }
 
@@ -60,15 +56,7 @@ public enum Settings
 
         public static boolean isZincGenerated() { return isZincGenerated; }
 
-        public static boolean isCopperRetroGenerated() { return isCopperRetroGenned; }
-
-        public static boolean isNiterRetroGenerated() { return isNiterRetroGenned; }
-
-        public static boolean isSulfurRetroGenerated() { return isSulfurRetroGenned; }
-
-        public static boolean isTinRetroGenerated() { return isTinRetroGenned; }
-
-        public static boolean isZincRetroGenerated() { return isZincRetroGenned; }
+        public static boolean doRetroOreGen() { return doRetroOreGen; }
 
         private static void syncConfig(Configuration config)
         {
@@ -79,11 +67,7 @@ public enum Settings
             isTinGenerated = get(config, "genTin", CATEGORY, isTinGenerated);
             isZincGenerated = get(config, "genZinc", CATEGORY, isZincGenerated);
 
-            isCopperRetroGenned = get(config, "retroGenCopper", CATEGORY, isCopperRetroGenned);
-            isNiterRetroGenned = get(config, "retroGenNiter", CATEGORY, isNiterRetroGenned);
-            isSulfurRetroGenned = get(config, "retroGenSulfur", CATEGORY, isSulfurRetroGenned);
-            isTinRetroGenned = get(config, "retroGenTin", CATEGORY, isTinRetroGenned);
-            isZincRetroGenned = get(config, "retroGenZinc", CATEGORY, isZincRetroGenned);
+            doRetroOreGen = get(config, "retroOreGen", CATEGORY, doRetroOreGen);
         }
     }
 
