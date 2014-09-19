@@ -30,11 +30,7 @@ config.steamnsteel:genNiter=Should niter ore be generated in new chunks?
 config.steamnsteel:genSulfur=Should sulfur ore be generated in new chunks?
 config.steamnsteel:genTin=Should tin ore be generated in new chunks?
 config.steamnsteel:genZinc=Should zinc ore be generated in new chunks?
-config.steamnsteel:retroGenCopper=Should copper ore be generated in existing chunks? (also requires genCopper)
-config.steamnsteel:retroGenNiter=Should niter ore be generated in existing chunks? (also requires genNiter)
-config.steamnsteel:retroGenSulfur=Should sulfur ore be generated in existing chunks? (also requires genSulfur)
-config.steamnsteel:retroGenTin=Should tin ore be generated in existing chunks? (also requires genTin)
-config.steamnsteel:retroGenZinc=Should zinc ore be generated in existing chunks? (also requires genZinc)
+config.steamnsteel:retroOreGen=Should ore be generated in existing chunks? (also requires specific ore gens set to true)
 
 # Containers
 container.steamnsteel:cupola=Kuppel
