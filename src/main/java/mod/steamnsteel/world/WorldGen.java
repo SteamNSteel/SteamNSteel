@@ -18,8 +18,8 @@ package mod.steamnsteel.world;
 
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import mod.steamnsteel.configuration.Settings;
 import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.utility.log.Logger;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -37,37 +37,46 @@ public enum WorldGen
     {
         createOreGenerators();
         register();
+        RetroGenHandler.register();
     }
 
-    private static void register()
-    {
-        MinecraftForge.ORE_GEN_BUS.register(INSTANCE);
-    }
+    private static void register() { MinecraftForge.ORE_GEN_BUS.register(INSTANCE); }
 
     private static void createOreGenerators()
     {
         //For reference:
         //       ironConfiguration = new OreConfiguration(Blocks.Iron, 20, 8, 0, 64);
+        final OreGenerator copperGen = new OreGenerator(ModBlock.oreCopper, 20, 6, 0, 64);
+        oreGens.add(copperGen);
 
-        oreGens.add(new OreGenerator(ModBlock.oreCopper, 20, 6, 0, 64));
-        oreGens.add(new OreGenerator(ModBlock.oreTin, 20, 3, 0, 64));
-        oreGens.add(new OreGenerator(ModBlock.oreZinc, 20, 6, 0, 64));
-	    oreGens.add(new SulfurOreGenerator(ModBlock.oreSulfur, 10, 12, 0, 64));
-	    oreGens.add(new NiterOreGenerator(ModBlock.oreNiter, 2, 12, 0, 70));
+        final NiterOreGenerator niterGen = new NiterOreGenerator();
+        oreGens.add(niterGen);
+
+        final SulfurOreGenerator sulfurGen = new SulfurOreGenerator();
+        oreGens.add(sulfurGen);
+
+        final OreGenerator tinGen = new OreGenerator(ModBlock.oreTin, 20, 3, 0, 64);
+        oreGens.add(tinGen);
+
+        final OreGenerator zincGen = new OreGenerator(ModBlock.oreZinc, 20, 6, 0, 64);
+        oreGens.add(zincGen);
+
+        if (Settings.World.doRetroOreGen())
+        {
+            RetroGenHandler.INSTANCE.register(copperGen);
+            RetroGenHandler.INSTANCE.register(niterGen);
+            RetroGenHandler.INSTANCE.register(sulfurGen);
+            RetroGenHandler.INSTANCE.register(tinGen);
+            RetroGenHandler.INSTANCE.register(zincGen);
+        }
     }
 
     @SuppressWarnings("MethodMayBeStatic")
     @SubscribeEvent
     public void OnPostOreGenerated(OreGenEvent.Post event)
     {
-	    //long startTime = System.currentTimeMillis();
-
-	    for (final OreGenerator oreGen : oreGens)
+        for (final OreGenerator oreGen : oreGens)
             if (TerrainGen.generateOre(event.world, event.rand, oreGen, event.worldX, event.worldZ, CUSTOM))
                 oreGen.generate(event.world, event.rand, event.worldX, 0, event.worldZ);
-
-	    //long stopTime = System.currentTimeMillis();
-	    //long runTime = stopTime - startTime;
-	    //Logger.info("Total Gen Run time: " + runTime);
     }
 }
