@@ -22,7 +22,7 @@ public class SSArmorBoots extends SteamNSteelItemArmor
 {
     public SSArmorBoots(Material material)
     {
-        super(material, 3, "boots");
+        super(material, 0, "boots");
     }
 
     @Override
