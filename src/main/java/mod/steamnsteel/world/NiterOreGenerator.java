@@ -18,7 +18,7 @@ package mod.steamnsteel.world;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
-import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -59,10 +59,10 @@ public class NiterOreGenerator extends OreGenerator
 
     private final double sandstoneDistance;
 
-    NiterOreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight)
+    NiterOreGenerator()
     {
-        super(block, clusterCount, blocksPerCluster, minHeight, maxHeight);
-        this.blocksPerCluster = blocksPerCluster;
+        super(ModBlock.oreNiter, 2, 12, 0, 70);
+        blocksPerCluster = 12;
         //Find the intersection of DRY, HOT and SANDY biome types
         final Set<BiomeGenBase> dryBiomes = Sets.newHashSet(BiomeDictionary.getBiomesForType(BiomeDictionary.Type.DRY));
         final Set<BiomeGenBase> hotBiomes = Sets.newHashSet(BiomeDictionary.getBiomesForType(BiomeDictionary.Type.HOT));
@@ -87,14 +87,14 @@ public class NiterOreGenerator extends OreGenerator
         //noinspection OverlyBroadCatchBlock
         try
         {
-            if (!block.isGenEnabled())
+            if (!getBlock().isGenEnabled())
             {
                 return false;
             }
 
-            //long startTime = System.currentTimeMillis();
+            final int maxHeight = getMaxHeight();
 
-            for (int clusterNum = 0; clusterNum < clusterCount; ++clusterNum)
+            for (int clusterNum = 0; clusterNum < getClusterCount(); ++clusterNum)
             {
                 final int x = rand.nextInt(16);
                 final int z = rand.nextInt(16);
@@ -158,7 +158,7 @@ public class NiterOreGenerator extends OreGenerator
     {
         boolean foundSand = false;
         int genHeight = -1;
-        for (int ySearch = y; ySearch >= minHeight; --ySearch)
+        for (int ySearch = y; ySearch >= getMinHeight(); --ySearch)
         {
             final Block test = chunk.getBlock(x & 15, ySearch, z & 15);
             if (test == Blocks.sand && !foundSand)
@@ -179,7 +179,7 @@ public class NiterOreGenerator extends OreGenerator
         boolean foundGrass = false;
         boolean foundDirt = false;
         int genHeight = -1;
-        for (int ySearch = y; ySearch >= minHeight; --ySearch)
+        for (int ySearch = y; ySearch >= getMinHeight(); --ySearch)
         {
             final Block test = chunk.getBlock(x & 15, ySearch, z & 15);
             if (test == Blocks.grass && !foundGrass)
@@ -251,7 +251,7 @@ public class NiterOreGenerator extends OreGenerator
                                 if (distance < sandstoneDistance && replaceAllowed)
                                 {
                                     final Block blockToPlace = random.nextFloat() < SANDSTONE_PADDING_CHANCE_PERCENT
-                                            ? paddingBlock : block;
+                                            ? paddingBlock : getBlock();
                                     world.setBlock(x, y, z, blockToPlace, 0, 2);
                                 }
                             }

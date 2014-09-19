@@ -2,7 +2,7 @@ package mod.steamnsteel.world;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
-import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.library.ModBlock;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -46,13 +46,13 @@ public class SulfurOreGenerator extends OreGenerator
     private int potentialStartingPointIndex;
     private int startingPointMask;
 
-    public SulfurOreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight)
+    public SulfurOreGenerator()
     {
-        super(block, clusterCount, blocksPerCluster, minHeight, maxHeight);
-        this.blocksPerCluster = blocksPerCluster;
+        super(ModBlock.oreSulfur, 10, 12, 0, 64);
+        blocksPerCluster = 12;
         //noinspection NumericCastThatLosesPrecision
         depthShift = (int) (StrictMath.log(CHUNK_DEPTH) / logTwo);
-        createdClusters = new int[clusterCount];
+        createdClusters = new int[10];
     }
 
     @Override
@@ -72,7 +72,7 @@ public class SulfurOreGenerator extends OreGenerator
         }
 
         //Rounds the world actual height to the nearest base 2 for safety.
-        //noinspection NumericCastThatLosesPrecision
+        //noinspection NumericCastThatLosesPrecision,UnnecessaryExplicitNumericCast
         height = 1 << (int) (StrictMath.log(height - 1) / logTwo + 1);
 
         //If we are generating in a world with a different height since the last time this was called, we'll need to
@@ -99,7 +99,7 @@ public class SulfurOreGenerator extends OreGenerator
                 final int worldBlockZ = worldZ + z;
                 for (int y = getMinHeight(); y < maxHeight; ++y)
                 {
-                    checkBlock(world, worldBlockX, y, worldBlockZ, heatScoreMap);
+                    examineBlock(world, worldBlockX, y, worldBlockZ, heatScoreMap);
                 }
             }
         }
@@ -250,7 +250,7 @@ public class SulfurOreGenerator extends OreGenerator
     }
 
     @SuppressWarnings("ObjectEquality")
-    private void checkBlock(World world, int worldBlockX, int worldBlockY, int worldBlockZ, int[] heatScoreMap)
+    private void examineBlock(World world, int worldBlockX, int worldBlockY, int worldBlockZ, int[] heatScoreMap)
     {
         final int worldX = worldBlockX >> 4;
         final int worldZ = worldBlockZ >> 4;
