@@ -16,10 +16,11 @@
 
 package mod.steamnsteel.block.resource.ore;
 
-import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.configuration.Settings;
 import net.minecraft.block.material.Material;
 
-public class NiterOre extends SteamNSteelBlock
+public class NiterOre extends SteamNSteelOreBlock
 {
     public static final String NAME = "oreNiter";
 
@@ -29,5 +30,11 @@ public class NiterOre extends SteamNSteelBlock
         setBlockName(NAME);
         setHardness(0.8F);
         setHarvestLevel("pickaxe", 0); // wooden pick
+    }
+
+    @Override
+    public boolean isGenEnabled()
+    {
+        return Settings.World.isNiterGenerated();
     }
 }

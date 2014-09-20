@@ -23,19 +23,19 @@ import mod.steamnsteel.client.renderer.model.CupolaModel;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.Orientation;
-import mod.steamnsteel.utility.Vector;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lwjgl.opengl.GL11;
 
 public class CupbolaTESR extends SteamNSteelTESR
 {
     public static final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
-    private static final Vector<Float> SCALE = new Vector<Float>(1.0f, 1.0f, 1.0f);
-    private static final Vector<Float> OFFSET = new Vector<Float>(0.5f, 0.0f, 0.5f);
+    private static final ImmutableTriple<Float, Float, Float> SCALE = ImmutableTriple.of(1.0f, 1.0f, 1.0f);
+    private static final ImmutableTriple<Float, Float, Float> OFFSET = ImmutableTriple.of(0.5f, 0.0f, 0.5f);
     private static final ResourceLocation TEXTURE_ACTIVE = getResourceLocation(CupolaBlock.NAME + "_active");
 
     private final CupolaModel model = new CupolaModel();
@@ -98,8 +98,8 @@ public class CupbolaTESR extends SteamNSteelTESR
         GL11.glPushMatrix();
 
         // Inherent adjustments to model
-        GL11.glScalef(SCALE.getX(), SCALE.getY(), SCALE.getZ());
-        GL11.glTranslatef(OFFSET.getX(), OFFSET.getY(), OFFSET.getZ());
+        GL11.glScalef(SCALE.left, SCALE.middle, SCALE.right);
+        GL11.glTranslatef(OFFSET.left, OFFSET.middle, OFFSET.right);
 
         // Orient the model to match the placement
         final int metadata = world.getBlockMetadata(x, y, z);

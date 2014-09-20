@@ -24,7 +24,15 @@ tile.steamnsteel:ruinFloorPlotonium.name=Ruined Plotonium Floor
 tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
 tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
 
-#Containers
+# Config file comments
+config.steamnsteel:genCopper=Should copper ore be generated in new chunks?
+config.steamnsteel:genNiter=Should nitre ore be generated in new chunks?
+config.steamnsteel:genSulfur=Should sulphur ore be generated in new chunks?
+config.steamnsteel:genTin=Should tin ore be generated in new chunks?
+config.steamnsteel:genZinc=Should zinc ore be generated in new chunks?
+config.steamnsteel:retroOreGen=Should ore be generated in existing chunks? (also requires specific ore gens set to true)
+
+# Containers
 container.steamnsteel:cupola=Cupola
 
 # Creative Tabs

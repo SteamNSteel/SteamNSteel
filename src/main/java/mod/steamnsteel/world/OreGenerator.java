@@ -18,6 +18,7 @@ package mod.steamnsteel.world;
 
 import com.google.common.base.Objects;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.utility.position.ChunkCoord;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import java.util.Random;
@@ -59,10 +60,16 @@ class OreGenerator extends WorldGenMinable
         this.maxHeight = maxHeight;
     }
 
+    public void generate(World world, Random rng, ChunkCoord coord)
+    {
+        generate(world, rng, coord.getX() << 4, 0, coord.getZ() << 4);
+    }
+
     @Override
     public boolean generate(World world, Random rand, int worldX, int unused, int worldZ)
     {
         if (block.isGenEnabled())
+        {
             for (int cluster = 0; cluster < clusterCount; cluster++)
             {
                 final int x = worldX + rand.nextInt(16);
@@ -70,6 +77,9 @@ class OreGenerator extends WorldGenMinable
                 final int z = worldZ + rand.nextInt(16);
                 super.generate(world, rand, x, y, z);
             }
+
+            RetroGenHandler.markChunk(new ChunkCoord(worldX >>4, worldZ >> 4));
+        }
 
         return true;
     }

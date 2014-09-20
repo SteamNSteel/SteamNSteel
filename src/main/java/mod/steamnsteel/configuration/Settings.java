@@ -16,8 +16,11 @@
 
 package mod.steamnsteel.configuration;
 
+import mod.steamnsteel.TheMod;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
 
+@SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
 public enum Settings
 {
     INSTANCE;
@@ -36,36 +39,45 @@ public enum Settings
         public static final String CATEGORY = Configuration.CATEGORY_GENERAL + ".world";
         // Defaults
         private static boolean isCopperGenerated = true;
+        private static boolean isNiterGenerated = true;
         private static boolean isSulfurGenerated = true;
         private static boolean isTinGenerated = true;
         private static boolean isZincGenerated = true;
 
-        public static boolean isCopperGenerated()
-        {
-            return isCopperGenerated;
-        }
+        private static boolean doRetroOreGen = false;
 
-        public static boolean isSulfurGenerated()
-        {
-            return isSulfurGenerated;
-        }
+        public static boolean isCopperGenerated() { return isCopperGenerated; }
 
-        public static boolean isTinGenerated()
-        {
-            return isTinGenerated;
-        }
+        public static boolean isNiterGenerated() { return isNiterGenerated; }
 
-        public static boolean isZincGenerated()
-        {
-            return isZincGenerated;
-        }
+        public static boolean isSulfurGenerated() { return isSulfurGenerated; }
+
+        public static boolean isTinGenerated() { return isTinGenerated; }
+
+        public static boolean isZincGenerated() { return isZincGenerated; }
+
+        public static boolean doRetroOreGen() { return doRetroOreGen; }
 
         private static void syncConfig(Configuration config)
         {
-            isCopperGenerated = config.getBoolean("Generate Copper?", CATEGORY, isCopperGenerated, "A boolean");
-            isSulfurGenerated = config.getBoolean("Generate Sulfur?", CATEGORY, isSulfurGenerated, "A boolean");
-            isTinGenerated = config.getBoolean("Generate Tin?", CATEGORY, isTinGenerated, "A boolean");
-            isZincGenerated = config.getBoolean("Generate Zinc?", CATEGORY, isZincGenerated, "A boolean");
+            // Ore Generation
+            isCopperGenerated = get(config, "genCopper", CATEGORY, isCopperGenerated);
+            isNiterGenerated = get(config, "genNiter", CATEGORY, isNiterGenerated);
+            isSulfurGenerated = get(config, "genSulfur", CATEGORY, isSulfurGenerated);
+            isTinGenerated = get(config, "genTin", CATEGORY, isTinGenerated);
+            isZincGenerated = get(config, "genZinc", CATEGORY, isZincGenerated);
+
+            doRetroOreGen = get(config, "retroOreGen", CATEGORY, doRetroOreGen);
         }
+    }
+
+    private static boolean get(Configuration config, String settingName, String category, boolean defaultValue)
+    {
+        return config.getBoolean(settingName, category, defaultValue, getLocalizedComment(settingName));
+    }
+
+    private static String getLocalizedComment(String settingName)
+    {
+        return StatCollector.translateToLocal("config." + TheMod.MOD_ID + ':' + settingName);
     }
 }

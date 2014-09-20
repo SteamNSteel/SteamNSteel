@@ -18,6 +18,7 @@ package mod.steamnsteel.world;
 
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import mod.steamnsteel.configuration.Settings;
 import mod.steamnsteel.library.ModBlock;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.OreGenEvent;
@@ -36,22 +37,38 @@ public enum WorldGen
     {
         createOreGenerators();
         register();
+        RetroGenHandler.register();
     }
 
-    private static void register()
-    {
-        MinecraftForge.ORE_GEN_BUS.register(INSTANCE);
-    }
+    private static void register() { MinecraftForge.ORE_GEN_BUS.register(INSTANCE); }
 
     private static void createOreGenerators()
     {
         //For reference:
         //       ironConfiguration = new OreConfiguration(Blocks.Iron, 20, 8, 0, 64);
+        final OreGenerator copperGen = new OreGenerator(ModBlock.oreCopper, 20, 6, 0, 64);
+        oreGens.add(copperGen);
 
-        oreGens.add(new OreGenerator(ModBlock.oreCopper, 20, 6, 0, 64));
-        oreGens.add(new OreGenerator(ModBlock.oreTin, 20, 3, 0, 64));
-        oreGens.add(new OreGenerator(ModBlock.oreZinc, 20, 6, 0, 64));
-	    oreGens.add(new SulfurOreGenerator(ModBlock.oreSulfur, 10, 12, 0, 64));
+        final NiterOreGenerator niterGen = new NiterOreGenerator();
+        oreGens.add(niterGen);
+
+        final SulfurOreGenerator sulfurGen = new SulfurOreGenerator();
+        oreGens.add(sulfurGen);
+
+        final OreGenerator tinGen = new OreGenerator(ModBlock.oreTin, 20, 3, 0, 64);
+        oreGens.add(tinGen);
+
+        final OreGenerator zincGen = new OreGenerator(ModBlock.oreZinc, 20, 6, 0, 64);
+        oreGens.add(zincGen);
+
+        if (Settings.World.doRetroOreGen())
+        {
+            RetroGenHandler.INSTANCE.register(copperGen);
+            RetroGenHandler.INSTANCE.register(niterGen);
+            RetroGenHandler.INSTANCE.register(sulfurGen);
+            RetroGenHandler.INSTANCE.register(tinGen);
+            RetroGenHandler.INSTANCE.register(zincGen);
+        }
     }
 
     @SuppressWarnings("MethodMayBeStatic")
