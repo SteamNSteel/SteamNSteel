@@ -41,12 +41,6 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 
 	private HashMap<Integer, IIcon> icons2 = new HashMap<Integer, IIcon>();
 
-	final int DEFAULT = 0;
-	final int TOP = 1;
-	final int BOTTOM = 2;
-	final int LEFT = 4;
-	final int RIGHT = 8;
-
 	int[][] ROTATION_MATRIX = {
 			{0,0,0,0,0,0,6},
 			{0,0,0,0,0,0,6},
@@ -56,52 +50,32 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 			{3,2,5,4,0,1,6}
 	};
 
+	final int DEFAULT = 0;
+	final int TOP = 1;
+	final int BOTTOM = 2;
+	final int LEFT = 4;
+	final int RIGHT = 8;
 
-	final int TOP_EDGE = 1;
-	final int BOTTOM_EDGE = 2;
-	final int LEFT_EDGE = 4;
-	final int RIGHT_EDGE = 8;
-	final int SINGLE = LEFT_EDGE | RIGHT_EDGE;
-
-	final int NO_FEATURE = 0;
 	final int FEATURE_PLATE = 16;
 	final int FEATURE_TRUSS = 32;
-	final int FEATURE_MASK = FEATURE_PLATE | FEATURE_TRUSS;
-
-	//final int LEFT_FEATURE_EDGE = 64;
-	//final int RIGHT_FEATURE_EDGE = 128;
-	//final int TOP_FEATURE_EDGE = 256;
-	//final int BOTTOM_FEATURE_EDGE = 512;
+	final int NO_FEATURE = 0;
 
 	final int MISSING_TEXTURE = Integer.MAX_VALUE;
-	final int ERASE_FEATURE_DATA = TOP_EDGE | BOTTOM_EDGE | LEFT_EDGE | RIGHT_EDGE;
 
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		icons2.clear();
-		/*icons2.put(TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Top"));
-		icons2.put(TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TopL"));
-		icons2.put(TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TopR"));
-		icons2.put(TOP | SINGLE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TopSingle"));*/
 
 		icons2.put(DEFAULT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
 		icons2.put(LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
 		icons2.put(RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
 		icons2.put(LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
 
-		/*icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Bottom"));
-		icons2.put(BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-BottomL"));
-		icons2.put(BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-BottomR"));
-		icons2.put(BOTTOM | SINGLE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-BottomSingle"));*/
-
 		icons2.put(FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
-
-
 
 		icons2.put(FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateL"));
 		icons2.put(FEATURE_PLATE | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateT"));
 		icons2.put(FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateR"));
 		icons2.put(FEATURE_PLATE | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateB"));
-
 		icons2.put(FEATURE_PLATE | RIGHT| BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBR"));
 		icons2.put(FEATURE_PLATE | RIGHT| TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTR"));
 		icons2.put(FEATURE_PLATE | LEFT| BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBL"));
@@ -123,14 +97,26 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 		icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBPlateL"));
 		icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBPlateR"));
 
+		//Unusual Truss circumstances. Not sure if I'm handling this right.
+		icons2.put(FEATURE_TRUSS | TOP | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussT"));
+		icons2.put(FEATURE_TRUSS | TOP | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTL"));
+		icons2.put(FEATURE_TRUSS | TOP | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTR"));
+		icons2.put(FEATURE_TRUSS | TOP | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTC"));
+		icons2.put(BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBC"));
+		icons2.put(BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
+		icons2.put(BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
+		icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
+
 		icons2.put(MISSING_TEXTURE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Missing"));
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
-		int blockProperties = getTexturePropertiesForSide(world, x, y, z, side);
-		String description = describeTextureProperties(blockProperties);
-		player.addChatComponentMessage(new ChatComponentText(description));
+		if (world.isRemote) {
+			int blockProperties = getTexturePropertiesForSide(world, x, y, z, side);
+			String description = describeTextureProperties(blockProperties);
+			player.addChatComponentMessage(new ChatComponentText(description));
+		}
 		return super.onBlockActivated(world, x, y, z, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
 	}
 
@@ -152,17 +138,17 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 
 	private String describeTextureProperties(int blockProperties) {
 		StringBuilder sb = new StringBuilder();
-		if ((blockProperties & TOP_EDGE) == TOP_EDGE) {
-			sb.append("TE,");
+		if ((blockProperties & TOP) == TOP) {
+			sb.append("T,");
 		}
-		if ((blockProperties & BOTTOM_EDGE) == BOTTOM_EDGE) {
-			sb.append("BE,");
+		if ((blockProperties & BOTTOM) == BOTTOM) {
+			sb.append("B,");
 		}
-		if ((blockProperties & LEFT_EDGE) == LEFT_EDGE) {
-			sb.append("LE,");
+		if ((blockProperties & LEFT) == LEFT) {
+			sb.append("L,");
 		}
-		if ((blockProperties & RIGHT_EDGE) == RIGHT_EDGE) {
-			sb.append("RE,");
+		if ((blockProperties & RIGHT) == RIGHT) {
+			sb.append("R,");
 		}
 
 		if ((blockProperties & FEATURE_PLATE) == FEATURE_PLATE) {
@@ -171,21 +157,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 		if ((blockProperties & FEATURE_TRUSS) == FEATURE_TRUSS) {
 			sb.append("Truss,");
 		}
-		/*if ((blockProperties & PIPE_FEATURE) == PIPE_FEATURE) {
-			sb.append("Pipe,");
-		}
-		if ((blockProperties & LEFT_FEATURE_EDGE) == LEFT_FEATURE_EDGE) {
-			sb.append("LFE,");
-		}
-		if ((blockProperties & RIGHT_FEATURE_EDGE) == RIGHT_FEATURE_EDGE) {
-			sb.append("RFE,");
-		}
-		if ((blockProperties & TOP_FEATURE_EDGE) == TOP_FEATURE_EDGE) {
-			sb.append("TFE,");
-		}
-		if ((blockProperties & BOTTOM_FEATURE_EDGE) == BOTTOM_FEATURE_EDGE) {
-			sb.append("BFE,");
-		}*/
+
 		return sb.toString();
 	}
 
@@ -215,46 +187,51 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 			Block blockBackAndUp = blockAccess.getBlock(x + above.offsetX + back.offsetX, y + above.offsetY + back.offsetY, z + above.offsetZ + back.offsetZ);
 			Block blockBackAndLeft = blockAccess.getBlock(x + left.offsetX + back.offsetX, y + left.offsetY + back.offsetY, z + left.offsetZ + back.offsetZ);
 			Block blockBackAndRight = blockAccess.getBlock(x + right.offsetX + back.offsetX, y + right.offsetY + back.offsetY, z + right.offsetZ + back.offsetZ);
+			Block blockBackAndBottom = blockAccess.getBlock(x + below.offsetX + back.offsetX, y + below.offsetY + back.offsetY, z + below.offsetZ + back.offsetZ);
 
 			int blockProperties = 0;
 			if (!blockAbove.getMaterial().isOpaque() || blockBackAndUp.getMaterial().isOpaque()) {
-				blockProperties |= TOP_EDGE;
+				blockProperties |= TOP;
 				blockProperties |= FEATURE_TRUSS;
 			}
-			if (blockBelow != ModBlock.ruinWallPlotonium && blockBelow.getMaterial().isOpaque()) {
-				blockProperties = BOTTOM_EDGE;
+			if (blockBackAndBottom.getMaterial().isOpaque()) {
+				blockProperties |= BOTTOM;
+			} else if (blockBelow != ModBlock.ruinWallPlotonium && blockBelow.getMaterial().isOpaque()) {
+				blockProperties = BOTTOM;
 				blockProperties |= FEATURE_TRUSS;
 			}
 			if (blockLeft != ModBlock.ruinWallPlotonium || blockBackAndLeft.getMaterial().isOpaque()) {
-				blockProperties |= LEFT_EDGE;
+				blockProperties |= LEFT;
 			}
 
 			if (blockRight != ModBlock.ruinWallPlotonium || blockBackAndRight.getMaterial().isOpaque()) {
-				blockProperties |= RIGHT_EDGE;
+				blockProperties |= RIGHT;
 			}
+
 
 			int featureId = getSideFeature(x, y, z);
 			if (featureId != NO_FEATURE) {
 				int savedBlockProperties = blockProperties;
 				blockProperties |= featureId;
 				if (getSideFeature(x + left.offsetX, y + left.offsetY, z + left.offsetZ) != featureId) {
-					blockProperties |= LEFT_EDGE;
+					blockProperties |= LEFT;
 				}
 				if (getSideFeature(x + right.offsetX, y + right.offsetY, z + right.offsetZ) != featureId) {
-					blockProperties |= RIGHT_EDGE;
+					blockProperties |= RIGHT;
 				}
 				if (getSideFeature(x + above.offsetX, y + above.offsetY, z + above.offsetZ) != featureId) {
-					blockProperties |= TOP_EDGE;
+					blockProperties |= TOP;
 				}
 				if (getSideFeature(x + below.offsetX, y + below.offsetY, z + below.offsetZ) != featureId) {
-					blockProperties |= BOTTOM_EDGE;
+					blockProperties |= BOTTOM;
 				}
 
-				if ((blockProperties & (TOP_EDGE | BOTTOM_EDGE)) == (TOP_EDGE | BOTTOM_EDGE)) {
+				//Plates don't support single width/height blocks. Revert to non-plate feature.
+				if ((blockProperties & (TOP | BOTTOM)) == (TOP | BOTTOM)) {
 					blockProperties = savedBlockProperties;
 				}
 
-				if ((blockProperties & (LEFT_EDGE | RIGHT_EDGE)) == (LEFT_EDGE | RIGHT_EDGE)) {
+				if ((blockProperties & (LEFT | RIGHT)) == (LEFT | RIGHT)) {
 					blockProperties = savedBlockProperties;
 				}
 			}
