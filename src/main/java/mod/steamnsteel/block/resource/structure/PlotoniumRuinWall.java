@@ -25,7 +25,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -34,7 +33,6 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Random;
 
 public class PlotoniumRuinWall extends SteamNSteelBlock
@@ -66,59 +64,66 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 	final int SINGLE = LEFT_EDGE | RIGHT_EDGE;
 
 	final int NO_FEATURE = 0;
-	final int PLATE_FEATURE = 16;
-	final int PIPE_FEATURE = 32;
-	final int FEATURE_MASK = PLATE_FEATURE | PIPE_FEATURE;
+	final int FEATURE_PLATE = 16;
+	final int FEATURE_TRUSS = 32;
+	final int FEATURE_MASK = FEATURE_PLATE | FEATURE_TRUSS;
 
-	final int LEFT_FEATURE_EDGE = 64;
-	final int RIGHT_FEATURE_EDGE = 128;
-	final int TOP_FEATURE_EDGE = 256;
-	final int BOTTOM_FEATURE_EDGE = 512;
+	//final int LEFT_FEATURE_EDGE = 64;
+	//final int RIGHT_FEATURE_EDGE = 128;
+	//final int TOP_FEATURE_EDGE = 256;
+	//final int BOTTOM_FEATURE_EDGE = 512;
 
 	final int MISSING_TEXTURE = Integer.MAX_VALUE;
 	final int ERASE_FEATURE_DATA = TOP_EDGE | BOTTOM_EDGE | LEFT_EDGE | RIGHT_EDGE;
 
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		icons2.clear();
-		icons2.put(TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Top"));
+		/*icons2.put(TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Top"));
 		icons2.put(TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TopL"));
 		icons2.put(TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TopR"));
-		icons2.put(TOP | SINGLE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TopSingle"));
+		icons2.put(TOP | SINGLE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TopSingle"));*/
 
 		icons2.put(DEFAULT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
 		icons2.put(LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
 		icons2.put(RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
 		icons2.put(LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
 
-		icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Bottom"));
+		/*icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Bottom"));
 		icons2.put(BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-BottomL"));
 		icons2.put(BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-BottomR"));
-		icons2.put(BOTTOM | SINGLE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-BottomSingle"));
+		icons2.put(BOTTOM | SINGLE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-BottomSingle"));*/
 
-		icons2.put(PLATE_FEATURE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
-		icons2.put(PLATE_FEATURE | LEFT_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateL"));
-		icons2.put(PLATE_FEATURE | LEFT_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateL"));
-		icons2.put(PLATE_FEATURE | RIGHT_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateR"));
-		icons2.put(PLATE_FEATURE | RIGHT_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateR"));
-		icons2.put(PLATE_FEATURE | TOP_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateT"));
-		icons2.put(PLATE_FEATURE | BOTTOM_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateB"));
+		icons2.put(FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
 
-		icons2.put(PLATE_FEATURE | LEFT_FEATURE_EDGE | BOTTOM_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBL"));
-		icons2.put(PLATE_FEATURE | LEFT_EDGE | BOTTOM_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBL"));
-		icons2.put(PLATE_FEATURE | RIGHT_FEATURE_EDGE | BOTTOM_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBR"));
-		icons2.put(PLATE_FEATURE | RIGHT_EDGE | BOTTOM_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBR"));
-		icons2.put(PLATE_FEATURE | RIGHT_EDGE | BOTTOM_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTR"));
-		icons2.put(PLATE_FEATURE | LEFT_FEATURE_EDGE | TOP_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTL"));
-		icons2.put(PLATE_FEATURE | RIGHT_FEATURE_EDGE | TOP_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTR"));
-		icons2.put(PLATE_FEATURE | RIGHT_EDGE | TOP_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTR"));
-		icons2.put(PLATE_FEATURE | RIGHT_EDGE | TOP_FEATURE_EDGE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTR"));
+
+
+		icons2.put(FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateL"));
+		icons2.put(FEATURE_PLATE | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateT"));
+		icons2.put(FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateR"));
+		icons2.put(FEATURE_PLATE | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateB"));
+
+		icons2.put(FEATURE_PLATE | RIGHT| BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBR"));
+		icons2.put(FEATURE_PLATE | RIGHT| TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTR"));
+		icons2.put(FEATURE_PLATE | LEFT| BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBL"));
+		icons2.put(FEATURE_PLATE | LEFT| TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTL"));
+
+		icons2.put(FEATURE_TRUSS | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussT"));
+		icons2.put(FEATURE_TRUSS | TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTL"));
+		icons2.put(FEATURE_TRUSS | TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTR"));
+		icons2.put(FEATURE_TRUSS | TOP | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTC"));
+		icons2.put(FEATURE_TRUSS | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussB"));
+		icons2.put(FEATURE_TRUSS | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBL"));
+		icons2.put(FEATURE_TRUSS | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBR"));
+		icons2.put(FEATURE_TRUSS | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBC"));
+
+		icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussT"));
+		icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTPlateL"));
+		icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTPlateR"));
+		icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussB"));
+		icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBPlateL"));
+		icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBPlateR"));
 
 		icons2.put(MISSING_TEXTURE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Missing"));
-	}
-
-	@Override
-	public void onBlockClicked(World p_149699_1_, int p_149699_2_, int p_149699_3_, int p_149699_4_, EntityPlayer p_149699_5_) {
-		super.onBlockClicked(p_149699_1_, p_149699_2_, p_149699_3_, p_149699_4_, p_149699_5_);
 	}
 
 	@Override
@@ -160,10 +165,13 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 			sb.append("RE,");
 		}
 
-		if ((blockProperties & PLATE_FEATURE) == PLATE_FEATURE) {
+		if ((blockProperties & FEATURE_PLATE) == FEATURE_PLATE) {
 			sb.append("Plate,");
 		}
-		if ((blockProperties & PIPE_FEATURE) == PIPE_FEATURE) {
+		if ((blockProperties & FEATURE_TRUSS) == FEATURE_TRUSS) {
+			sb.append("Truss,");
+		}
+		/*if ((blockProperties & PIPE_FEATURE) == PIPE_FEATURE) {
 			sb.append("Pipe,");
 		}
 		if ((blockProperties & LEFT_FEATURE_EDGE) == LEFT_FEATURE_EDGE) {
@@ -177,7 +185,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 		}
 		if ((blockProperties & BOTTOM_FEATURE_EDGE) == BOTTOM_FEATURE_EDGE) {
 			sb.append("BFE,");
-		}
+		}*/
 		return sb.toString();
 	}
 
@@ -211,9 +219,11 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 			int blockProperties = 0;
 			if (!blockAbove.getMaterial().isOpaque() || blockBackAndUp.getMaterial().isOpaque()) {
 				blockProperties |= TOP_EDGE;
+				blockProperties |= FEATURE_TRUSS;
 			}
 			if (blockBelow != ModBlock.ruinWallPlotonium && blockBelow.getMaterial().isOpaque()) {
 				blockProperties = BOTTOM_EDGE;
+				blockProperties |= FEATURE_TRUSS;
 			}
 			if (blockLeft != ModBlock.ruinWallPlotonium || blockBackAndLeft.getMaterial().isOpaque()) {
 				blockProperties |= LEFT_EDGE;
@@ -225,26 +235,27 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 
 			int featureId = getSideFeature(x, y, z);
 			if (featureId != NO_FEATURE) {
+				int savedBlockProperties = blockProperties;
 				blockProperties |= featureId;
 				if (getSideFeature(x + left.offsetX, y + left.offsetY, z + left.offsetZ) != featureId) {
-					blockProperties |= LEFT_FEATURE_EDGE;
+					blockProperties |= LEFT_EDGE;
 				}
 				if (getSideFeature(x + right.offsetX, y + right.offsetY, z + right.offsetZ) != featureId) {
-					blockProperties |= RIGHT_FEATURE_EDGE;
+					blockProperties |= RIGHT_EDGE;
 				}
 				if (getSideFeature(x + above.offsetX, y + above.offsetY, z + above.offsetZ) != featureId) {
-					blockProperties |= TOP_FEATURE_EDGE;
+					blockProperties |= TOP_EDGE;
 				}
 				if (getSideFeature(x + below.offsetX, y + below.offsetY, z + below.offsetZ) != featureId) {
-					blockProperties |= BOTTOM_FEATURE_EDGE;
+					blockProperties |= BOTTOM_EDGE;
 				}
 
-				if ((blockProperties & (TOP_FEATURE_EDGE | BOTTOM_FEATURE_EDGE)) == (TOP_FEATURE_EDGE | BOTTOM_FEATURE_EDGE)) {
-					blockProperties &= ERASE_FEATURE_DATA;
+				if ((blockProperties & (TOP_EDGE | BOTTOM_EDGE)) == (TOP_EDGE | BOTTOM_EDGE)) {
+					blockProperties = savedBlockProperties;
 				}
 
-				if ((blockProperties & (LEFT_FEATURE_EDGE | RIGHT_FEATURE_EDGE)) == (LEFT_FEATURE_EDGE | RIGHT_FEATURE_EDGE)) {
-					blockProperties &= ERASE_FEATURE_DATA;
+				if ((blockProperties & (LEFT_EDGE | RIGHT_EDGE)) == (LEFT_EDGE | RIGHT_EDGE)) {
+					blockProperties = savedBlockProperties;
 				}
 			}
 
@@ -286,9 +297,9 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 		double featureNoise = noiseData[i];
 
 		if (featureNoise > -17.8877 && featureNoise < -10.6177) {
-			return PLATE_FEATURE;
+			return FEATURE_PLATE;
 		} else if (featureNoise >= -2.9167 && featureNoise < 0.403) {
-			return PLATE_FEATURE;
+			return FEATURE_PLATE;
 		}
 		return 0;
 	}
