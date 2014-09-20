@@ -35,19 +35,18 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.HashMap;
 import java.util.Random;
 
-public class PlotoniumRuinWall extends SteamNSteelBlock
-{
-    public static final String NAME = "ruinWallPlotonium";
+public class PlotoniumRuinWall extends SteamNSteelBlock {
+	public static final String NAME = "ruinWallPlotonium";
 
 	private HashMap<Integer, IIcon> icons2 = new HashMap<Integer, IIcon>();
 
 	int[][] ROTATION_MATRIX = {
-			{0,0,0,0,0,0,6},
-			{0,0,0,0,0,0,6},
-			{5,4,2,3,0,1,6},
-			{4,5,3,2,0,1,6},
-			{2,3,4,5,0,1,6},
-			{3,2,5,4,0,1,6}
+			{0, 0, 0, 0, 0, 0, 6},
+			{0, 0, 0, 0, 0, 0, 6},
+			{5, 4, 2, 3, 0, 1, 6},
+			{4, 5, 3, 2, 0, 1, 6},
+			{2, 3, 4, 5, 0, 1, 6},
+			{3, 2, 5, 4, 0, 1, 6}
 	};
 
 	final int DEFAULT = 0;
@@ -76,10 +75,10 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 		icons2.put(FEATURE_PLATE | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateT"));
 		icons2.put(FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateR"));
 		icons2.put(FEATURE_PLATE | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateB"));
-		icons2.put(FEATURE_PLATE | RIGHT| BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBR"));
-		icons2.put(FEATURE_PLATE | RIGHT| TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTR"));
-		icons2.put(FEATURE_PLATE | LEFT| BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBL"));
-		icons2.put(FEATURE_PLATE | LEFT| TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTL"));
+		icons2.put(FEATURE_PLATE | RIGHT | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBR"));
+		icons2.put(FEATURE_PLATE | RIGHT | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTR"));
+		icons2.put(FEATURE_PLATE | LEFT | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBL"));
+		icons2.put(FEATURE_PLATE | LEFT | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTL"));
 
 		icons2.put(FEATURE_TRUSS | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussT"));
 		icons2.put(FEATURE_TRUSS | TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTL"));
@@ -168,17 +167,13 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 				return DEFAULT;
 			}
 
-
 			int[] rotationMatrix = ROTATION_MATRIX[side];
 
 			ForgeDirection left = ForgeDirection.getOrientation(rotationMatrix[0]);
 			ForgeDirection right = ForgeDirection.getOrientation(rotationMatrix[1]);
 			ForgeDirection back = ForgeDirection.getOrientation(rotationMatrix[2]);
-			ForgeDirection forward = ForgeDirection.getOrientation(rotationMatrix[3]);
-
 			ForgeDirection above = ForgeDirection.getOrientation(rotationMatrix[5]);
 			ForgeDirection below = ForgeDirection.getOrientation(rotationMatrix[4]);
-
 
 			Block blockLeft = blockAccess.getBlock(x + left.offsetX, y + left.offsetY, z + left.offsetZ);
 			Block blockRight = blockAccess.getBlock(x + right.offsetX, y + right.offsetY, z + right.offsetZ);
@@ -247,7 +242,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 	NoiseGeneratorOctaves noiseGen = new NoiseGeneratorOctaves(new Random(1L), 5);
 
 	//x, y, z in world coordinates
-	private double[] getNoiseGen(int x, int y, int z) {
+	private double[] getNoiseGen(int x, int z) {
 		x = (x >> 4) << 4;
 		z = (z >> 4) << 4;
 		final Vector<Integer> integerVector = new Vector<Integer>(x, 0, z);
@@ -257,7 +252,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 			 * pars:(par2,3,4=noiseOffset ; so that adjacent noise segments connect) (pars5,6,7=x,y,zArraySize),(pars8,10,12 =
 			 * x,y,z noiseScale)
 			 */
-			noiseData = new double[16*256*16];
+			noiseData = new double[16 * 256 * 16];
 			noiseGen.generateNoiseOctaves(noiseData, x, 0, z, 16, 256, 16, 3, 3, 3);
 			cachedNoiseGens.put(integerVector, noiseData);
 		}
@@ -265,7 +260,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 	}
 
 	private int getSideFeature(int x, int y, int z) {
-		double[] noiseData = getNoiseGen(x, y, z);
+		double[] noiseData = getNoiseGen(x, z);
 		x = x & 16;
 		z = z & 16;
 
@@ -281,11 +276,10 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 		return 0;
 	}
 
-	public PlotoniumRuinWall()
-    {
-        super(Material.rock);
-        setBlockName(NAME);
+	public PlotoniumRuinWall() {
+		super(Material.rock);
+		setBlockName(NAME);
 
 
-    }
+	}
 }
