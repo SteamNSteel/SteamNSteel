@@ -24,12 +24,21 @@ public class ChunkCoord implements Comparable<ChunkCoord>
 {
     private final ImmutablePair<Integer, Integer> data;
 
-    public ChunkCoord(int x, int z) { data = ImmutablePair.of(x, z); }
+    private ChunkCoord(int x, int z) { data = ImmutablePair.of(x, z); }
 
-    public ChunkCoord(ChunkEvent event)
+    private ChunkCoord(ChunkEvent event)
     {
         this(event.getChunk().xPosition, event.getChunk().zPosition);
     }
+
+    public static ChunkCoord of(int x, int z) { return new ChunkCoord(x, z); }
+
+    public static ChunkCoord of(BlockCoord blockCoord)
+    {
+        return new ChunkCoord(blockCoord.getX() >> 4, blockCoord.getZ() >> 4);
+    }
+
+    public static ChunkCoord of(ChunkEvent event) { return new ChunkCoord(event); }
 
     public int getX() { return data.left; }
 

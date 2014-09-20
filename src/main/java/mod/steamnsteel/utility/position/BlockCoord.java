@@ -17,19 +17,28 @@
 package mod.steamnsteel.utility.position;
 
 import com.google.common.base.Objects;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 public class BlockCoord implements Comparable<BlockCoord>
 {
     private final ImmutableTriple<Integer, Integer, Integer> data;
 
-    public BlockCoord(int x, int y, int z) { data = ImmutableTriple.of(x, y, z); }
+    private BlockCoord(int x, int y, int z) { data = ImmutableTriple.of(x, y, z); }
+
+    public static BlockCoord of(int x, int y, int z) { return new BlockCoord(x, y, z); }
 
     public int getX() { return data.left; }
 
     public int getY() { return data.middle; }
 
     public int getZ() { return data.right; }
+
+    public BlockCoord offset(ForgeDirection direction)
+    {
+        return new BlockCoord(data.left + direction.offsetX, data.middle + direction.offsetY,
+                data.right + direction.offsetZ);
+    }
 
     @Override
     public boolean equals(Object o)
