@@ -33,6 +33,7 @@ config.steamnsteel:doZincGen=Should zinc be generated in new chunks?
 
 # Containers
 container.steamnsteel:cupola=Cupola
+container.steamnsteel:chestPlotonium=Plotonium Chest
 
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel
