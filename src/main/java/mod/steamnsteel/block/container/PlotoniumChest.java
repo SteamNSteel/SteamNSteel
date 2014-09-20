@@ -43,7 +43,7 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
     {
         TileEntity te = world.getTileEntity(x, y, z);
 
-        if (te != null && te instanceof PlotoniumChestTE)
+        if (!world.isRemote && te != null && te instanceof PlotoniumChestTE)
         {
             player.displayGUIChest((PlotoniumChestTE) te);
             return true;
