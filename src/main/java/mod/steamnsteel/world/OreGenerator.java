@@ -50,6 +50,11 @@ class OreGenerator extends WorldGenMinable
         return minHeight;
     }
 
+    OreGenerator()
+    {
+        this(null, 0, 0, 0, 0);
+    }
+
     OreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight)
     {
         super(block, blocksPerCluster);
@@ -78,7 +83,7 @@ class OreGenerator extends WorldGenMinable
                 super.generate(world, rand, x, y, z);
             }
 
-            RetroGenHandler.markChunk(new ChunkCoord(worldX >>4, worldZ >> 4));
+            RetroGenHandler.markChunk(ChunkCoord.of(worldX >>4, worldZ >> 4));
         }
 
         return true;

@@ -24,16 +24,41 @@ public class ChunkCoord implements Comparable<ChunkCoord>
 {
     private final ImmutablePair<Integer, Integer> data;
 
-    public ChunkCoord(int x, int z) { data = ImmutablePair.of(x, z); }
+    private ChunkCoord(int x, int z) { data = ImmutablePair.of(x, z); }
 
-    public ChunkCoord(ChunkEvent event)
+    private ChunkCoord(ChunkEvent event)
     {
         this(event.getChunk().xPosition, event.getChunk().zPosition);
+    }
+
+    public static ChunkCoord of(int x, int z) { return new ChunkCoord(x, z); }
+
+    public static ChunkCoord of(WorldBlockCoord coord)
+    {
+        return new ChunkCoord(coord.getX() >> 4, coord.getZ() >> 4);
+    }
+
+    public static ChunkCoord of(ChunkEvent event) { return new ChunkCoord(event); }
+
+    public boolean containsWorldCoord(WorldBlockCoord coord)
+    {
+        return equals(of(coord));
     }
 
     public int getX() { return data.left; }
 
     public int getZ() { return data.right; }
+
+    public WorldBlockCoord localToWorldCoords(ChunkBlockCoord coord)
+    {
+        return WorldBlockCoord.of((data.left << 4) + coord.getX(), coord.getY(), (data.right << 4) + coord.getZ());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hashCode(data.left, data.right);
+    }
 
     @Override
     public boolean equals(Object o)
@@ -46,9 +71,12 @@ public class ChunkCoord implements Comparable<ChunkCoord>
     }
 
     @Override
-    public int hashCode()
+    public String toString()
     {
-        return Objects.hashCode(data.left, data.right);
+        return Objects.toStringHelper(this)
+                .add("X", data.left)
+                .add("Z", data.right)
+                .toString();
     }
 
     @Override
@@ -57,14 +85,5 @@ public class ChunkCoord implements Comparable<ChunkCoord>
         return data.left.equals(o.data.left)
                 ? data.right.compareTo(o.data.right)
                 : data.left.compareTo(o.data.left);
-    }
-
-    @Override
-    public String toString()
-    {
-        return Objects.toStringHelper(this)
-                .add("X", data.left)
-                .add("Z", data.right)
-                .toString();
     }
 }
