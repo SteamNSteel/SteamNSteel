@@ -43,6 +43,11 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
                 data.right + direction.offsetZ);
     }
 
+
+	public static WorldBlockCoord forOriginOf(ChunkCoord chunkCoord) {
+		return new WorldBlockCoord(chunkCoord.getX() << 4, 0, chunkCoord.getZ() << 4);
+	}
+
     @Override
     public int hashCode()
     {
@@ -80,4 +85,5 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
 
         else return data.left.compareTo(o.data.left);
     }
+
 }

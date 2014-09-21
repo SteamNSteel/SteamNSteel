@@ -19,8 +19,10 @@ package mod.steamnsteel.block.resource.structure;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.utility.Vector;
 import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.utility.position.ChunkBlockCoord;
+import mod.steamnsteel.utility.position.ChunkCoord;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -162,6 +164,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock {
 
 	private int getTexturePropertiesForSide(IBlockAccess blockAccess, int x, int y, int z, int side) {
 		try {
+			final WorldBlockCoord worldBlockCoord = WorldBlockCoord.of(x, y, z);
 			ForgeDirection orientation = ForgeDirection.getOrientation(side);
 			if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN) {
 				return DEFAULT;
@@ -204,20 +207,20 @@ public class PlotoniumRuinWall extends SteamNSteelBlock {
 			}
 
 
-			int featureId = getSideFeature(x, y, z);
+			int featureId = getSideFeature(worldBlockCoord);
 			if (featureId != NO_FEATURE) {
 				int savedBlockProperties = blockProperties;
 				blockProperties |= featureId;
-				if (getSideFeature(x + left.offsetX, y + left.offsetY, z + left.offsetZ) != featureId) {
+				if (getSideFeature(worldBlockCoord.offset(left)) != featureId) {
 					blockProperties |= LEFT;
 				}
-				if (getSideFeature(x + right.offsetX, y + right.offsetY, z + right.offsetZ) != featureId) {
+				if (getSideFeature(worldBlockCoord.offset(right)) != featureId) {
 					blockProperties |= RIGHT;
 				}
-				if (getSideFeature(x + above.offsetX, y + above.offsetY, z + above.offsetZ) != featureId) {
+				if (getSideFeature(worldBlockCoord.offset(above)) != featureId) {
 					blockProperties |= TOP;
 				}
-				if (getSideFeature(x + below.offsetX, y + below.offsetY, z + below.offsetZ) != featureId) {
+				if (getSideFeature(worldBlockCoord.offset(below)) != featureId) {
 					blockProperties |= BOTTOM;
 				}
 
@@ -238,34 +241,30 @@ public class PlotoniumRuinWall extends SteamNSteelBlock {
 		}
 	}
 
-	HashMap<Vector<Integer>, double[]> cachedNoiseGens = new HashMap<Vector<Integer>, double[]>();
+	HashMap<ChunkCoord, double[]> cachedNoiseGens = new HashMap<ChunkCoord, double[]>();
 	NoiseGeneratorOctaves noiseGen = new NoiseGeneratorOctaves(new Random(1L), 5);
 
 	//x, y, z in world coordinates
-	private double[] getNoiseGen(int x, int z) {
-		x = (x >> 4) << 4;
-		z = (z >> 4) << 4;
-		final Vector<Integer> integerVector = new Vector<Integer>(x, 0, z);
-		double[] noiseData = cachedNoiseGens.get(integerVector);
+	private double[] getNoiseGen(ChunkCoord chunkCoord) {
+		double[] noiseData = cachedNoiseGens.get(chunkCoord);
 		if (noiseData == null) {
 			/**
 			 * pars:(par2,3,4=noiseOffset ; so that adjacent noise segments connect) (pars5,6,7=x,y,zArraySize),(pars8,10,12 =
 			 * x,y,z noiseScale)
 			 */
 			noiseData = new double[16 * 256 * 16];
-			noiseGen.generateNoiseOctaves(noiseData, x, 0, z, 16, 256, 16, 3, 3, 3);
-			cachedNoiseGens.put(integerVector, noiseData);
+			final WorldBlockCoord origin = WorldBlockCoord.forOriginOf(chunkCoord);
+			noiseGen.generateNoiseOctaves(noiseData, origin.getX(), 0, origin.getZ(), 16, 256, 16, 3, 3, 3);
+			cachedNoiseGens.put(chunkCoord, noiseData);
 		}
 		return noiseData;
 	}
 
-	private int getSideFeature(int x, int y, int z) {
-		double[] noiseData = getNoiseGen(x, z);
-		x = x & 16;
-		z = z & 16;
+	private int getSideFeature(WorldBlockCoord worldBlockCoord) {
+		double[] noiseData = getNoiseGen(ChunkCoord.of(worldBlockCoord));
+		ChunkBlockCoord localCoord = ChunkBlockCoord.of(worldBlockCoord);
 
-		//Flat[x + WIDTH * (y + DEPTH * z)] = Original[x, y, z]
-		final int i = y + (z*256) + (x * 256 * 16);
+		final int i = localCoord.getY() + (localCoord.getZ()*256) + (localCoord.getX() * 256 * 16);
 		double featureNoise = noiseData[i];
 
 		if (featureNoise > -17.8877 && featureNoise < -10.6177) {
@@ -279,7 +278,5 @@ public class PlotoniumRuinWall extends SteamNSteelBlock {
 	public PlotoniumRuinWall() {
 		super(Material.rock);
 		setBlockName(NAME);
-
-
 	}
 }
