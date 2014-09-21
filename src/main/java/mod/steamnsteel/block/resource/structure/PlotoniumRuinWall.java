@@ -265,7 +265,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock {
 		z = z & 16;
 
 		//Flat[x + WIDTH * (y + DEPTH * z)] = Original[x, y, z]
-		final int i = y + 16 * (x + 16 * z);
+		final int i = y + (z*256) + (x * 256 * 16);
 		double featureNoise = noiseData[i];
 
 		if (featureNoise > -17.8877 && featureNoise < -10.6177) {
