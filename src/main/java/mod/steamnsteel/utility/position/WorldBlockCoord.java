@@ -20,13 +20,16 @@ import com.google.common.base.Objects;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
-public class BlockCoord implements Comparable<BlockCoord>
+/**
+ * Coordinates in terms of position within the world
+ */
+public class WorldBlockCoord implements Comparable<WorldBlockCoord>
 {
     private final ImmutableTriple<Integer, Integer, Integer> data;
 
-    private BlockCoord(int x, int y, int z) { data = ImmutableTriple.of(x, y, z); }
+    private WorldBlockCoord(int x, int y, int z) { data = ImmutableTriple.of(x, y, z); }
 
-    public static BlockCoord of(int x, int y, int z) { return new BlockCoord(x, y, z); }
+    public static WorldBlockCoord of(int x, int y, int z) { return new WorldBlockCoord(x, y, z); }
 
     public int getX() { return data.left; }
 
@@ -34,22 +37,10 @@ public class BlockCoord implements Comparable<BlockCoord>
 
     public int getZ() { return data.right; }
 
-    public BlockCoord offset(ForgeDirection direction)
+    public WorldBlockCoord offset(ForgeDirection direction)
     {
-        return new BlockCoord(data.left + direction.offsetX, data.middle + direction.offsetY,
+        return new WorldBlockCoord(data.left + direction.offsetX, data.middle + direction.offsetY,
                 data.right + direction.offsetZ);
-    }
-
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final BlockCoord that = (BlockCoord) o;
-        return data.left.equals(that.data.left)
-                && data.middle.equals(that.data.middle)
-                && data.right.equals(that.data.right);
     }
 
     @Override
@@ -59,13 +50,15 @@ public class BlockCoord implements Comparable<BlockCoord>
     }
 
     @Override
-    public int compareTo(BlockCoord o)
+    public boolean equals(Object o)
     {
-        if (data.left.equals(o.data.left)) return data.middle.equals(o.data.middle)
-                ? data.right.compareTo(o.data.right)
-                : data.middle.compareTo(o.data.middle);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        else return data.left.compareTo(o.data.left);
+        final WorldBlockCoord that = (WorldBlockCoord) o;
+        return data.left.equals(that.data.left)
+                && data.middle.equals(that.data.middle)
+                && data.right.equals(that.data.right);
     }
 
     @Override
@@ -76,5 +69,15 @@ public class BlockCoord implements Comparable<BlockCoord>
                 .add("Y", data.middle)
                 .add("Z", data.right)
                 .toString();
+    }
+
+    @Override
+    public int compareTo(WorldBlockCoord o)
+    {
+        if (data.left.equals(o.data.left)) return data.middle.equals(o.data.middle)
+                ? data.right.compareTo(o.data.right)
+                : data.middle.compareTo(o.data.middle);
+
+        else return data.left.compareTo(o.data.left);
     }
 }

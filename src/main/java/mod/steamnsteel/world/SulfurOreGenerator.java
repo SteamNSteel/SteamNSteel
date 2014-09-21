@@ -2,7 +2,7 @@ package mod.steamnsteel.world;
 
 import com.google.common.collect.ImmutableSet;
 import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.utility.position.BlockCoord;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -68,11 +68,11 @@ public class SulfurOreGenerator extends OreGenerator
             ForgeDirection.WEST,
             ForgeDirection.EAST));
 
-    private static void genOreVein(World world, Random rand, BlockCoord coord)
+    private static void genOreVein(World world, Random rand, WorldBlockCoord coord)
     {
         final int veinSize = NUM_BLOCKS_IN_VEIN + rand.nextInt(NUM_BLOCKS_IN_VEIN) - NUM_BLOCKS_IN_VEIN_VARIATION;
 
-        BlockCoord target = coord;
+        WorldBlockCoord target = coord;
         for (int blockCount = 0; blockCount < veinSize; blockCount++)
         {
             if (isBlockReplaceable(world, target))
@@ -86,24 +86,24 @@ public class SulfurOreGenerator extends OreGenerator
         }
     }
 
-    private static boolean doesBlockExist(World world, BlockCoord coord)
+    private static boolean doesBlockExist(World world, WorldBlockCoord coord)
     {
         return world.blockExists(coord.getX(), coord.getY(), coord.getZ());
     }
 
-    private static Block getBlock(World world, BlockCoord coord)
+    private static Block getBlock(World world, WorldBlockCoord coord)
     {
         return world.getBlock(coord.getX(), coord.getY(), coord.getZ());
     }
 
-    private static boolean isAirBlock(World world, Block block, BlockCoord coord)
+    private static boolean isAirBlock(World world, Block block, WorldBlockCoord coord)
     {
         return block.isAir(world, coord.getX(), coord.getY(), coord.getZ());
     }
 
-    private static boolean isBlockAirJustAboveLava(World world, BlockCoord coord)
+    private static boolean isBlockAirJustAboveLava(World world, WorldBlockCoord coord)
     {
-        BlockCoord target = coord;
+        WorldBlockCoord target = coord;
         for (int i = 0; i < 4; i++)
         {
             if (target.getY() >= 0)
@@ -124,11 +124,11 @@ public class SulfurOreGenerator extends OreGenerator
         return false;
     }
 
-    private static boolean isBlockLavaNeighbor(World world, BlockCoord coord)
+    private static boolean isBlockLavaNeighbor(World world, WorldBlockCoord coord)
     {
         for (final ForgeDirection offset : BRANCH_DIRECTIONS)
         {
-            final BlockCoord target = coord.offset(offset);
+            final WorldBlockCoord target = coord.offset(offset);
             if (doesBlockExist(world, target))
                 if (getBlock(world, coord).getMaterial().equals(Material.lava))
                     return true;
@@ -136,7 +136,7 @@ public class SulfurOreGenerator extends OreGenerator
         return false;
     }
 
-    private static boolean isBlockReplaceable(World world, BlockCoord coord)
+    private static boolean isBlockReplaceable(World world, WorldBlockCoord coord)
     {
         final Block block = getBlock(world, coord);
 
@@ -148,12 +148,12 @@ public class SulfurOreGenerator extends OreGenerator
                 || block.isReplaceableOreGen(world, x, y, z, Blocks.dirt);
     }
 
-    private static boolean isPotentialVein(World world, BlockCoord coord)
+    private static boolean isPotentialVein(World world, WorldBlockCoord coord)
     {
         return isBlockLavaNeighbor(world, coord) || isBlockAirJustAboveLava(world, coord);
     }
 
-    private static void placeSulfurOre(World world, BlockCoord coord)
+    private static void placeSulfurOre(World world, WorldBlockCoord coord)
     {
         world.setBlock(coord.getX(), coord.getY(), coord.getZ(), ModBlock.oreSulfur, 0, 2);
     }
@@ -169,7 +169,7 @@ public class SulfurOreGenerator extends OreGenerator
                 // 66% will try to place in underground lava range and 33% will try range for lava lakes
                 final int yGen = rand.nextInt(3) < 2 ? rand.nextInt(MAX_HEIGHT + 1) : rand.nextInt(248) + 8;
 
-                final BlockCoord coordBlock = BlockCoord.of(x + rand.nextInt(16), yGen, z + rand.nextInt(16));
+                final WorldBlockCoord coordBlock = WorldBlockCoord.of(x + rand.nextInt(16), yGen, z + rand.nextInt(16));
                 if (isPotentialVein(world, coordBlock))
                     genOreVein(world, rand, coordBlock);
             }
