@@ -20,6 +20,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.utility.position.ChunkCoord;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
@@ -141,9 +142,7 @@ public class NiterOreGenerator extends OreGenerator
                 }
             }
 
-            //long stopTime = System.currentTimeMillis();
-            //long runTime = stopTime - startTime;
-            //Logger.info("Niter Run time: " + runTime);
+            RetroGenHandler.markChunk(ChunkCoord.of(worldX >> 4, worldZ >> 4));
 
             return true;
         } catch (final Exception ignored)

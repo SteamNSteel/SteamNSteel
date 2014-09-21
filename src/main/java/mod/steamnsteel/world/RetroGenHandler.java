@@ -108,7 +108,7 @@ enum RetroGenHandler
     {
         if (isChunkEligibleForRetroGen(event))
         {
-            final ChunkCoord coord = new ChunkCoord(event);
+            final ChunkCoord coord = ChunkCoord.of(event);
             Logger.info("Queueing retro ore gen for " + coord + '.');
             chunksToRetroGen.addLast(coord);
         }
@@ -118,7 +118,7 @@ enum RetroGenHandler
     @SubscribeEvent
     public void onChunkSave(ChunkDataEvent.Save event)
     {
-        final ChunkCoord coord = new ChunkCoord(event);
+        final ChunkCoord coord = ChunkCoord.of(event);
         if (completedChunks.contains(coord))
         {
             event.getData().setString(RETROGEN_TAG, "X");
