@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2014 Rosie Alexander and Scott Killen.
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, see <http://www.gnu.org/licenses>.
+ */
+
 package mod.steamnsteel.client.renderer.tileentity;
 
 import mod.steamnsteel.block.container.PlotoniumChest;
@@ -13,7 +29,7 @@ import org.lwjgl.opengl.GL12;
 public class PlotoniumChestTESR extends SteamNSteelTESR
 {
     public static final ResourceLocation TEXTURE = getResourceLocation(PlotoniumChest.NAME);
-    public static final ModelChest vanillaChest = new ModelChest();
+    private static final ModelChest vanillaChest = new ModelChest();
 
     private static float getAngleFromOrientation(Orientation orientation)
     {
@@ -41,7 +57,8 @@ public class PlotoniumChestTESR extends SteamNSteelTESR
             GL11.glPushMatrix();
 
             // Position Renderer
-            GL11.glTranslatef((float) x, (float) y+1F, (float) z+1F);
+            //noinspection NumericCastThatLosesPrecision
+            GL11.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
 
             renderPlotoniumChest(te, tick);
 
@@ -60,7 +77,7 @@ public class PlotoniumChestTESR extends SteamNSteelTESR
         GL11.glPushMatrix();
 
         // Position Renderer
-        this.bindTexture(TEXTURE);
+        bindTexture(TEXTURE);
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glScalef(1.0F, -1.0F, -1.0F);  //flip & rotate
         GL11.glTranslatef(0.5F, 0.5F, 0.5F); //translate block pos around fromBLK ORG
@@ -72,9 +89,10 @@ public class PlotoniumChestTESR extends SteamNSteelTESR
         GL11.glTranslatef(-0.5F, -0.5F, -0.5F); //translate BLK ORG to block pos
 
         //lid angle.
-        float adjLDAngle = te.prevLidAngle + (te.lidAngle - te.prevLidAngle) * tick;
+        float adjLDAngle = te.getPrevLidAngle() + (te.getLidAngle() - te.getPrevLidAngle()) * tick;
         adjLDAngle = 1.0F - adjLDAngle;
         adjLDAngle = 1.0F - adjLDAngle * adjLDAngle * adjLDAngle;
+        //noinspection NumericCastThatLosesPrecision
         vanillaChest.chestLid.rotateAngleX = -(adjLDAngle * (float) Math.PI / 2.0F);
 
         vanillaChest.renderAll();

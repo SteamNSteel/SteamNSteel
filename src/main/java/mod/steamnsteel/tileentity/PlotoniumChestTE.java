@@ -1,6 +1,22 @@
+/*
+ * Copyright (c) 2014 Rosie Alexander and Scott Killen.
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, see <http://www.gnu.org/licenses>.
+ */
+
 package mod.steamnsteel.tileentity;
 
-import mod.steamnsteel.TheMod;
+import com.google.common.base.Objects;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.inventory.Inventory;
 import mod.steamnsteel.library.ModBlock;
@@ -8,21 +24,26 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 
-public class PlotoniumChestTE extends TileEntity implements IInventory {
-    public static final int INVENTORY_SIZE = 27;
+public class PlotoniumChestTE extends SteamNSteelTE implements IInventory
+{
+    private static final int INVENTORY_SIZE = 27;
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
 
-    public float lidAngle;
-    public float prevLidAngle;
+    private float lidAngle;
+    private float prevLidAngle;
 
-    public int numUsingPlayers;
+    private int numUsingPlayers;
     private int ticksSinceSync;
 
-    public static String containerName(String name)
+    public float getLidAngle()
     {
-        return "container." + TheMod.MOD_ID + ':' + name;
+        return lidAngle;
+    }
+
+    public float getPrevLidAngle()
+    {
+        return prevLidAngle;
     }
 
     @Override
@@ -34,17 +55,13 @@ public class PlotoniumChestTE extends TileEntity implements IInventory {
     @Override
     public ItemStack getStackInSlot(int slot)
     {
-        ItemStack item = inventory.getStack(slot);
-        this.markDirty();
-        return item;
+        return inventory.getStack(slot);
     }
 
     @Override
     public ItemStack decrStackSize(int slotIndex, int decrAmount)
     {
-        ItemStack item = inventory.decrStackSize(slotIndex, decrAmount);
-        this.markDirty();
-        return item;
+        return inventory.decrStackSize(slotIndex, decrAmount);
     }
 
     @Override
@@ -56,8 +73,7 @@ public class PlotoniumChestTE extends TileEntity implements IInventory {
     @Override
     public void setInventorySlotContents(int slotIndex, ItemStack itemStack)
     {
-        inventory.setSlot(slotIndex,itemStack);
-        this.markDirty();
+        inventory.setSlot(slotIndex, itemStack);
     }
 
     @Override
@@ -85,49 +101,37 @@ public class PlotoniumChestTE extends TileEntity implements IInventory {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        inventory.writeToNBT(nbt);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        inventory.readFromNBT(nbt);
-    }
-
-    @Override
     public void openInventory()
     {
         ++numUsingPlayers;
-        worldObj.addBlockEvent(xCoord,yCoord,zCoord, ModBlock.chestPlotonium, 1, numUsingPlayers);
+        worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.chestPlotonium, 1, numUsingPlayers);
     }
 
     @Override
     public void closeInventory()
     {
         --numUsingPlayers;
-        worldObj.addBlockEvent(xCoord,yCoord,zCoord, ModBlock.chestPlotonium, 1, numUsingPlayers);
+        worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.chestPlotonium, 1, numUsingPlayers);
     }
 
     @Override
-    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_)
+    public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack)
     {
         return true;
     }
 
     @Override
-    public boolean receiveClientEvent(int eventID, int numUsingPlayers)
+    public void readFromNBT(NBTTagCompound nbt)
     {
-        if (eventID == 1)
-        {
-            this.numUsingPlayers = numUsingPlayers;
-            return true;
-        }
-        else
-        {
-            return super.receiveClientEvent(eventID, numUsingPlayers);
-        }
+        super.readFromNBT(nbt);
+        inventory.readFromNBT(nbt);
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        inventory.writeToNBT(nbt);
     }
 
     @Override
@@ -135,19 +139,20 @@ public class PlotoniumChestTE extends TileEntity implements IInventory {
     {
         super.updateEntity();
 
-        if (++ticksSinceSync % 20 * 4 == 0)
+        ++ticksSinceSync;
+        if (ticksSinceSync % 20 * 4 == 0)
         {
             worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.chestPlotonium, 1, numUsingPlayers);
         }
 
         prevLidAngle = lidAngle;
-        float angleIncrement = 0.1F;
 
         if (numUsingPlayers != 0 && lidAngle == 0.0F)
-            worldObj.playSoundEffect(xCoord, yCoord +0.5F, zCoord, "random.chestopen", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            worldObj.playSoundEffect(xCoord, yCoord + 0.5F, zCoord, "random.chestopen", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
 
-        if (numUsingPlayers == 0 && lidAngle > 0.0F || numUsingPlayers > 0 && lidAngle < 1.0F)
+        if (isChestOpen())
         {
+            final float angleIncrement = 0.1F;
             if (numUsingPlayers > 0)
                 lidAngle += angleIncrement;
 
@@ -160,11 +165,41 @@ public class PlotoniumChestTE extends TileEntity implements IInventory {
             if (lidAngle > 1.0F)
                 lidAngle = 1.0F;
 
-            if (lidAngle < 0.5 && prevLidAngle > 0.5){
-                worldObj.playSoundEffect(xCoord, yCoord +0.5F, zCoord, "random.chestclosed", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            if (lidAngle < 0.5 && prevLidAngle > 0.5)
+            {
+                worldObj.playSoundEffect(xCoord, yCoord + 0.5F, zCoord, "random.chestclosed", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
             }
-
         }
     }
 
+    @Override
+    public boolean receiveClientEvent(int eventID, int numUsingPlayers)
+    {
+        if (eventID == 1)
+        {
+            this.numUsingPlayers = numUsingPlayers;
+            return true;
+        } else
+        {
+            return super.receiveClientEvent(eventID, numUsingPlayers);
+        }
+    }
+
+    @SuppressWarnings("OverlyComplexBooleanExpression")
+    private boolean isChestOpen()
+    {
+        return numUsingPlayers == 0 && lidAngle > 0.0F || numUsingPlayers > 0 && lidAngle < 1.0F;
+    }
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this)
+                .add("inventory", inventory)
+                .add("lidAngle", lidAngle)
+                .add("prevLidAngle", prevLidAngle)
+                .add("numUsingPlayers", numUsingPlayers)
+                .add("ticksSinceSync", ticksSinceSync)
+                .toString();
+    }
 }
