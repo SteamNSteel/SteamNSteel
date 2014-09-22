@@ -20,14 +20,15 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.block.SteamNSteelStorageBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.block.resource.ore.*;
-import mod.steamnsteel.block.SteamNSteelStorageBlock;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
 import mod.steamnsteel.tileentity.CupolaTE;
+import mod.steamnsteel.tileentity.PlotoniumChestTE;
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -68,6 +69,7 @@ public final class ModBlock
     public static void registerTileEntities()
     {
         GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
+        GameRegistry.registerTileEntity(PlotoniumChestTE.class, getTEName(PlotoniumChest.NAME));
     }
 
     private static String getTEName(String name) { return "tile." + name;}

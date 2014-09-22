@@ -34,6 +34,7 @@ config.steamnsteel:retroOreGen=Should ore be generated in existing chunks? (also
 
 # Containers
 container.steamnsteel:cupola=Купол
+container.steamnsteel:chestPlotonium.name=Сундук из фабулония
 
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel

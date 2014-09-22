@@ -34,6 +34,7 @@ config.steamnsteel:retroOreGen=Dovrebbero i minerali grezzi essere generati in n
 
 # Containers
 container.steamnsteel:cupola=Cupola
+container.steamnsteel:chestPlotonium.name=Cassa di Plotonio
 
 # Creative Tabs
 itemGroup.steamnsteel=Vapore e Acciaio
