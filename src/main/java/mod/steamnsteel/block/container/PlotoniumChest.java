@@ -20,6 +20,7 @@ import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.PlotoniumChestTE;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -27,11 +28,7 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
 {
     public static final String NAME = "chestPlotonium";
 
-    public PlotoniumChest()
-    {
-        super();
-        setBlockName(NAME);
-    }
+    public PlotoniumChest() { setBlockName(NAME); }
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
@@ -41,11 +38,11 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
     {
-        TileEntity te = world.getTileEntity(x, y, z);
+        final TileEntity te = world.getTileEntity(x, y, z);
 
         if (!world.isRemote && te != null && te instanceof PlotoniumChestTE)
         {
-            player.displayGUIChest((PlotoniumChestTE) te);
+            player.displayGUIChest((IInventory) te);
             return true;
         }
 

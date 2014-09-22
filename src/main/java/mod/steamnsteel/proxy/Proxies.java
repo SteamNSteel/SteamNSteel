@@ -21,9 +21,13 @@ import cpw.mods.fml.common.SidedProxy;
 @SuppressWarnings({"StaticNonFinalField", "PublicField"})
 public enum Proxies
 {
-    _;
+    INSTANCE;
+    @SuppressWarnings("WeakerAccess")
     public static final String CLIENT_RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.ClientRenderProxy";
+
+    @SuppressWarnings("WeakerAccess")
     public static final String RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.RenderProxy";
+
     @SidedProxy(clientSide = CLIENT_RENDER_PROXY_CLASS, serverSide = RENDER_PROXY_CLASS)
     public static RenderProxy render;
 }
