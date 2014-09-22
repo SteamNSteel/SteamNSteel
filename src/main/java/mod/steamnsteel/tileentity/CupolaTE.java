@@ -20,7 +20,6 @@ import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import mod.steamnsteel.TheMod;
 import mod.steamnsteel.api.crafting.IAlloyResult;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
@@ -32,12 +31,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.common.util.ForgeDirection;
 
 @SuppressWarnings("ClassWithTooManyMethods")
-public class CupolaTE extends TileEntity implements ISidedInventory
+public class CupolaTE extends SteamNSteelTE implements ISidedInventory
 {
     public static final int INPUT_LEFT = 0;
     public static final int INPUT_RIGHT = 1;
@@ -64,11 +62,6 @@ public class CupolaTE extends TileEntity implements ISidedInventory
     private int itemCookTime;
     private boolean isActive = false;
     private boolean isSlave = false;
-
-    public static String containerName(String name)
-    {
-        return "container." + TheMod.MOD_ID + ':' + name;
-    }
 
     public int getDeviceCookTime()
     {
