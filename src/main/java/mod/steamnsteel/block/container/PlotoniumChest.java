@@ -62,13 +62,11 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
     {
         final TileEntity te = world.getTileEntity(x, y, z);
 
-        if (!world.isRemote && te != null && te instanceof PlotoniumChestTE)
-        {
-            player.displayGUIChest((IInventory) te);
-            return true;
-        }
+        if (!player.isSneaking())
+            if (!world.isRemote && te != null && te instanceof PlotoniumChestTE)
+                player.displayGUIChest((IInventory) te);
 
-        return false;
+        return true;
     }
 
     @SuppressWarnings("ObjectAllocationInLoop")
