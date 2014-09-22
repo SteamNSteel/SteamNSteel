@@ -69,7 +69,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
             te = world.getTileEntity(x, y - 1, z);
         }
 
-        if ((te != null) && ((CupolaTE) te).isActive())
+        if (te != null && ((CupolaTE) te).isActive())
             return 15;
 
         return super.getLightValue(world, x, y, z);
