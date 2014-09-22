@@ -1,29 +1,47 @@
+/*
+ * Copyright (c) 2014 Rosie Alexander and Scott Killen.
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, see <http://www.gnu.org/licenses>.
+ */
+
 package mod.steamnsteel.client.renderer.item;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.client.renderer.tileentity.PlotoniumChestTESR;
-import mod.steamnsteel.utility.Vector;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class PlotoniumChestItemRenderer implements IItemRenderer
 {
-    private static final Optional<Vector<Float>> ENTITY_OFFSET = Optional.of(new Vector<Float>(0.0f, -1.0f, 0.0f));
-    private static final Optional<Vector<Float>> EQUIPPED_OFFSET = Optional.of(new Vector<Float>(1.0f, 1.0f, 1.0f));
-    private static final Optional<Vector<Float>> FIRST_PERSON_OFFSET = Optional.of(new Vector<Float>(1.0f, 1.0f, 1f));
-    private static final Optional<Vector<Float>> INVENTORY_OFFSET = Optional.of(new Vector<Float>(0.0f, 0.09f, 0.0f));
+    private static final ImmutableTriple<Float, Float, Float> ENTITY_OFFSET = ImmutableTriple.of(0.0f, -1.0f, 0.0f);
+    private static final ImmutableTriple<Float, Float, Float> EQUIPPED_OFFSET = ImmutableTriple.of(1.0f, 1.0f, 1.0f);
+    private static final ImmutableTriple<Float, Float, Float> FIRST_PERSON_OFFSET = ImmutableTriple.of(1.0f, 1.0f, 1.0f);
+    private static final ImmutableTriple<Float, Float, Float> INVENTORY_OFFSET = ImmutableTriple.of(0.0f, 0.09f, 0.0f);
 
-    private static final Vector<Float> SCALE = new Vector<Float>(1f, 1.0F, 1.0F);
+    private static final ImmutableTriple<Float, Float, Float> SCALE = ImmutableTriple.of(1.0f, 1.0F, 1.0F);
 
     private final ModelChest vanillaChest;
 
     public PlotoniumChestItemRenderer()
     {
-       vanillaChest = new ModelChest();
+        vanillaChest = new ModelChest();
     }
 
     @Override
@@ -41,37 +59,32 @@ public class PlotoniumChestItemRenderer implements IItemRenderer
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     {
-        Optional<Vector<Float>> vector = Optional.absent();
-
         switch (type)
         {
             case ENTITY:
-                vector = ENTITY_OFFSET;
+                renderPlotoniumChest(ENTITY_OFFSET);
                 break;
             case EQUIPPED:
-                vector = EQUIPPED_OFFSET;
+                renderPlotoniumChest(EQUIPPED_OFFSET);
                 break;
             case EQUIPPED_FIRST_PERSON:
-                vector = FIRST_PERSON_OFFSET;
+                renderPlotoniumChest(FIRST_PERSON_OFFSET);
                 break;
             case INVENTORY:
-                vector = INVENTORY_OFFSET;
+                renderPlotoniumChest(INVENTORY_OFFSET);
                 break;
             default:
         }
-
-        if (vector.isPresent())
-            renderPlotoniumChest(vector.get());
     }
 
-    private void renderPlotoniumChest(Vector<Float> vector)
+    private void renderPlotoniumChest(ImmutableTriple<Float, Float, Float> offset)
     {
         GL11.glPushMatrix();
 
-        GL11.glScalef(SCALE.getX(), SCALE.getY(), SCALE.getZ());
-        GL11.glTranslatef(vector.getX(), vector.getY(), vector.getZ());
-        GL11.glRotatef(180f, 1.0f, 0.0f, 0.0f);
-        GL11.glRotatef(90f, 0.0f, -1.0f, 0.0f);
+        GL11.glScalef(SCALE.left, SCALE.middle, SCALE.right);
+        GL11.glTranslatef(offset.left, offset.middle, offset.right);
+        GL11.glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+        GL11.glRotatef(90.0f, 0.0f, -1.0f, 0.0f);
 
         FMLClientHandler.instance().getClient().renderEngine.bindTexture(PlotoniumChestTESR.TEXTURE);
 
