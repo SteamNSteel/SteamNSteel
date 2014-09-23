@@ -31,9 +31,10 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class PlotoniumRuinWall extends SteamNSteelBlock
@@ -59,6 +60,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 
     final int FEATURE_PLATE = 16;
     final int FEATURE_TRUSS = 32;
+    final int FEATURE_PIPES = 64;
     final int NO_FEATURE = 0;
 
     final int MISSING_TEXTURE = Integer.MAX_VALUE;
@@ -170,6 +172,10 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         {
             sb.append("Truss,");
         }
+        if ((blockProperties & FEATURE_PIPES) == FEATURE_PIPES)
+        {
+            sb.append("Pipes,");
+        }
 
         return sb.toString();
     }
@@ -229,22 +235,26 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 
             int featureId = getSideFeature(worldBlockCoord);
             if (featureId != NO_FEATURE)
-            {
+            {// && isFeatureValid(worldBlockCoord, featureId, side)) {
                 int savedBlockProperties = blockProperties;
                 blockProperties |= featureId;
-                if (getSideFeature(worldBlockCoord.offset(left)) != featureId)
+                final WorldBlockCoord leftBlockCoord = worldBlockCoord.offset(left);
+                if (getSideFeature(leftBlockCoord) != featureId || !isFeatureValid(blockAccess, leftBlockCoord, featureId, side))
                 {
                     blockProperties |= LEFT;
                 }
-                if (getSideFeature(worldBlockCoord.offset(right)) != featureId)
+                final WorldBlockCoord rightBlockCoord = worldBlockCoord.offset(right);
+                if (getSideFeature(rightBlockCoord) != featureId || !isFeatureValid(blockAccess, rightBlockCoord, featureId, side))
                 {
                     blockProperties |= RIGHT;
                 }
-                if (getSideFeature(worldBlockCoord.offset(above)) != featureId)
+                final WorldBlockCoord aboveBlockCoord = worldBlockCoord.offset(above);
+                if (getSideFeature(aboveBlockCoord) != featureId || !isFeatureValid(blockAccess, aboveBlockCoord, featureId, side))
                 {
                     blockProperties |= TOP;
                 }
-                if (getSideFeature(worldBlockCoord.offset(below)) != featureId)
+                final WorldBlockCoord belowBlockCoord = worldBlockCoord.offset(below);
+                if (getSideFeature(belowBlockCoord) != featureId || !isFeatureValid(blockAccess, belowBlockCoord, featureId, side))
                 {
                     blockProperties |= BOTTOM;
                 }
@@ -254,7 +264,6 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
                 {
                     blockProperties = savedBlockProperties;
                 }
-
                 if ((blockProperties & (LEFT | RIGHT)) == (LEFT | RIGHT))
                 {
                     blockProperties = savedBlockProperties;
@@ -269,43 +278,127 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         }
     }
 
-    HashMap<ChunkCoord, double[]> cachedNoiseGens = new HashMap<ChunkCoord, double[]>();
-    NoiseGeneratorOctaves noiseGen = new NoiseGeneratorOctaves(new Random(1L), 5);
-
-    //x, y, z in world coordinates
-    private double[] getNoiseGen(ChunkCoord chunkCoord)
-    {
-        double[] noiseData = cachedNoiseGens.get(chunkCoord);
-        if (noiseData == null)
-        {
-            /**
-             * pars:(par2,3,4=noiseOffset ; so that adjacent noise segments connect) (pars5,6,7=x,y,zArraySize),(pars8,10,12 =
-             * x,y,z noiseScale)
-             */
-            noiseData = new double[16 * 256 * 16];
-            final WorldBlockCoord origin = WorldBlockCoord.forOriginOf(chunkCoord);
-            noiseGen.generateNoiseOctaves(noiseData, origin.getX(), 0, origin.getZ(), 16, 256, 16, 3, 3, 3);
-            cachedNoiseGens.put(chunkCoord, noiseData);
-        }
-        return noiseData;
-    }
 
     private int getSideFeature(WorldBlockCoord worldBlockCoord)
     {
-        double[] noiseData = getNoiseGen(ChunkCoord.of(worldBlockCoord));
-        ChunkBlockCoord localCoord = ChunkBlockCoord.of(worldBlockCoord);
-
-        final int i = localCoord.getY() + (localCoord.getZ() * 256) + (localCoord.getX() * 256 * 16);
-        double featureNoise = noiseData[i];
-
-        if (featureNoise > -17.8877 && featureNoise < -10.6177)
-        {
-            return FEATURE_PLATE;
-        } else if (featureNoise >= -2.9167 && featureNoise < 0.403)
-        {
-            return FEATURE_PLATE;
+        final ChunkCoord chunkCoord = ChunkCoord.of(worldBlockCoord);
+        int[] noiseData = cachedNoiseGens.get(chunkCoord);
+        if (noiseData == null) {
+            noiseData = new int[16 * 256 * 16];
+            cachedNoiseGens.put(chunkCoord, noiseData);
         }
-        return 0;
+        ChunkBlockCoord localCoord = ChunkBlockCoord.of(worldBlockCoord);
+        final int index = localCoord.getY() | localCoord.getZ() << 8 | localCoord.getX() << 12;
+        int featureId = noiseData[index];
+        if (featureId == 0) {
+            int x = localCoord.getX();
+            int y = localCoord.getY() & 15;
+            int z = localCoord.getZ();
+
+            for (Feature feature : getChunkFeatures(chunkCoord)) {
+                if (x >= feature.blockCoord.getX() && x < feature.blockCoord.getX() + feature.width) {
+                    if (z >= feature.blockCoord.getZ() && z < feature.blockCoord.getZ() + feature.depth) {
+                        if (y >= feature.blockCoord.getY() && y < feature.blockCoord.getY() + feature.height) {
+                            featureId = feature.featureId;
+                            break;
+                        }
+                    }
+                }
+            }
+            noiseData[index] = featureId;
+        }
+        return featureId;
+    }
+
+    HashMap<ChunkCoord, int[]> cachedNoiseGens = new HashMap<ChunkCoord, int[]>();
+    HashMap<ChunkCoord, List<Feature>> cachedFeatures = new HashMap<ChunkCoord, List<Feature>>();
+
+    private List<Feature> getChunkFeatures(ChunkCoord chunkCoord)
+    {
+        List<Feature> features = cachedFeatures.get(chunkCoord);
+        if (features != null) {
+            return features;
+        }
+        features = new ArrayList<Feature>();
+        Random random = new Random(chunkCoord.hashCode());
+
+        //Generate Pipe features
+        for (int i = 0; i < 32; ++i) {
+            int xPos = random.nextInt(16);
+            int yPos = random.nextInt(15);
+            int zPos = random.nextInt(16);
+
+            features.add(new Feature(FEATURE_PIPES, WorldBlockCoord.of(xPos, yPos, zPos), 1, 2, 1));
+        }
+
+        //Generate plate features
+        for (int i = 0; i < 64; ++i)
+        {
+            int xPos = random.nextInt(16);
+            int yPos = random.nextInt(16);
+            int zPos = random.nextInt(16);
+
+            int width = random.nextInt(5) + 1;
+            int height = random.nextInt(5) + 1;
+            int depth = random.nextInt(5) + 1;
+
+            features.add(new Feature(FEATURE_PLATE, WorldBlockCoord.of(xPos, yPos, zPos), width, height, depth));
+        }
+        cachedFeatures.put(chunkCoord, features);
+
+        return features;
+    }
+
+    private boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int featureId, int side)
+    {
+        boolean leftSet = false;
+        boolean rightSet = false;
+        boolean aboveSet = false;
+        boolean belowSet = false;
+
+        int[] rotationMatrix = ROTATION_MATRIX[side];
+
+        ForgeDirection left = ForgeDirection.getOrientation(rotationMatrix[0]);
+        ForgeDirection right = ForgeDirection.getOrientation(rotationMatrix[1]);
+        ForgeDirection above = ForgeDirection.getOrientation(rotationMatrix[5]);
+        ForgeDirection below = ForgeDirection.getOrientation(rotationMatrix[4]);
+        ForgeDirection back = ForgeDirection.getOrientation(rotationMatrix[2]);
+
+        Block blockBackAndUp = worldBlockCoord.offset(back).offset(above).getBlock(blockAccess);
+        Block blockBackAndLeft = worldBlockCoord.offset(back).offset(left).getBlock(blockAccess);
+        Block blockBackAndRight = worldBlockCoord.offset(back).offset(right).getBlock(blockAccess);
+        Block blockBackAndBottom = worldBlockCoord.offset(back).offset(below).getBlock(blockAccess);
+
+        final WorldBlockCoord leftBlockCoord = worldBlockCoord.offset(left);
+        int neighbours = 0;
+        if (getSideFeature(leftBlockCoord) != featureId || blockBackAndLeft.getMaterial().isOpaque())
+        {
+            leftSet = true;
+            neighbours++;
+        }
+        final WorldBlockCoord rightBlockCoord = worldBlockCoord.offset(right);
+        if (getSideFeature(rightBlockCoord) != featureId || blockBackAndRight.getMaterial().isOpaque())
+        {
+            rightSet = true;
+            neighbours++;
+        }
+        final WorldBlockCoord aboveBlockCoord = worldBlockCoord.offset(above);
+        if (getSideFeature(aboveBlockCoord) != featureId || blockBackAndUp.getMaterial().isOpaque())
+        {
+            aboveSet = true;
+            neighbours++;
+        }
+        final WorldBlockCoord belowBlockCoord = worldBlockCoord.offset(below);
+        if (belowBlockCoord.getY() > 0 && (getSideFeature(belowBlockCoord) != featureId || blockBackAndBottom.getMaterial().isOpaque()))
+        {
+            belowSet = true;
+            neighbours++;
+        }
+
+        if ((aboveSet && belowSet) || (leftSet && rightSet)) return false;
+        //if (neighbours == 1) return false;
+
+        return true;
     }
 
     public PlotoniumRuinWall()
@@ -313,4 +406,24 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         super(Material.rock);
         setBlockName(NAME);
     }
+
+    private class Feature
+    {
+        private final int featureId;
+        private final WorldBlockCoord blockCoord;
+        private final int width;
+        private final int height;
+        private final int depth;
+
+        public Feature(int featureId, WorldBlockCoord blockCoord, int width, int height, int depth)
+        {
+
+            this.featureId = featureId;
+            this.blockCoord = blockCoord;
+            this.width = width;
+            this.height = height;
+            this.depth = depth;
+        }
+    }
+
 }
