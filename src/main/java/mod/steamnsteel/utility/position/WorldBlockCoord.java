@@ -17,6 +17,8 @@
 package mod.steamnsteel.utility.position;
 
 import com.google.common.base.Objects;
+import net.minecraft.block.Block;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
@@ -47,6 +49,10 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
 	public static WorldBlockCoord forOriginOf(ChunkCoord chunkCoord) {
 		return new WorldBlockCoord(chunkCoord.getX() << 4, 0, chunkCoord.getZ() << 4);
 	}
+
+    public Block getBlock(IBlockAccess blockAccess) {
+        return blockAccess.getBlock(data.left, data.middle, data.right);
+    }
 
     @Override
     public int hashCode()
