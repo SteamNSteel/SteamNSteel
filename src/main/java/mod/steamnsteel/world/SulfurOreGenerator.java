@@ -2,8 +2,8 @@ package mod.steamnsteel.world;
 
 import com.google.common.collect.ImmutableSet;
 import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -61,6 +61,8 @@ public class SulfurOreGenerator extends OreGenerator
     private static final int NUM_BLOCKS_IN_VEIN = 16;
     private static final int NUM_BLOCKS_IN_VEIN_VARIATION = NUM_BLOCKS_IN_VEIN / 2;
 
+    private static final ImmutableSet<Block> TARGET_BLOCKS = ImmutableSet.of(Blocks.stone, Blocks.dirt);
+
     private static final ImmutableSet<ForgeDirection> BRANCH_DIRECTIONS = ImmutableSet.copyOf(EnumSet.of(
             ForgeDirection.UP,
             ForgeDirection.NORTH,
@@ -75,30 +77,15 @@ public class SulfurOreGenerator extends OreGenerator
         WorldBlockCoord target = coord;
         for (int blockCount = 0; blockCount < veinSize; blockCount++)
         {
-            if (isBlockReplaceable(world, target))
+            if (isBlockReplaceable(world, target, TARGET_BLOCKS))
                 placeSulfurOre(world, target);
 
             final ForgeDirection offsetToNext = ForgeDirection.getOrientation(rand.nextInt(6));
             target = target.offset(offsetToNext);
 
             // Has vein strayed into an unloaded chunk? If so, STOP!
-            if (!doesBlockExist(world, target)) return;
+            if (!target.blockExists(world)) return;
         }
-    }
-
-    private static boolean doesBlockExist(World world, WorldBlockCoord coord)
-    {
-        return world.blockExists(coord.getX(), coord.getY(), coord.getZ());
-    }
-
-    private static Block getBlock(World world, WorldBlockCoord coord)
-    {
-        return world.getBlock(coord.getX(), coord.getY(), coord.getZ());
-    }
-
-    private static boolean isAirBlock(World world, Block block, WorldBlockCoord coord)
-    {
-        return block.isAir(world, coord.getX(), coord.getY(), coord.getZ());
     }
 
     private static boolean isBlockAirJustAboveLava(World world, WorldBlockCoord coord)
@@ -108,11 +95,11 @@ public class SulfurOreGenerator extends OreGenerator
         {
             if (target.getY() >= 0)
             {
-                final Block block = getBlock(world, target);
+                final Block block = target.getBlock(world);
                 if (block.getMaterial().equals(Material.lava))
                     return true;
 
-                if (!isAirBlock(world, block, target))
+                if (!target.isAirBlock(world))
                 {
                     return false;
                 }
@@ -129,23 +116,11 @@ public class SulfurOreGenerator extends OreGenerator
         for (final ForgeDirection offset : BRANCH_DIRECTIONS)
         {
             final WorldBlockCoord target = coord.offset(offset);
-            if (doesBlockExist(world, target))
-                if (getBlock(world, coord).getMaterial().equals(Material.lava))
+            if (target.blockExists(world))
+                if (target.getBlock(world).getMaterial().equals(Material.lava))
                     return true;
         }
         return false;
-    }
-
-    private static boolean isBlockReplaceable(World world, WorldBlockCoord coord)
-    {
-        final Block block = getBlock(world, coord);
-
-        final int x = coord.getX();
-        final int y = coord.getY();
-        final int z = coord.getZ();
-
-        return block.isReplaceableOreGen(world, x, y, z, Blocks.stone)
-                || block.isReplaceableOreGen(world, x, y, z, Blocks.dirt);
     }
 
     private static boolean isPotentialVein(World world, WorldBlockCoord coord)
@@ -155,7 +130,7 @@ public class SulfurOreGenerator extends OreGenerator
 
     private static void placeSulfurOre(World world, WorldBlockCoord coord)
     {
-        world.setBlock(coord.getX(), coord.getY(), coord.getZ(), ModBlock.oreSulfur, 0, 2);
+        coord.setBlock(world, ModBlock.oreSulfur, 0, 2);
     }
 
     @Override

@@ -17,6 +17,8 @@
 package mod.steamnsteel.utility.position;
 
 import com.google.common.base.Objects;
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
@@ -37,10 +39,36 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
 
     public int getZ() { return data.right; }
 
+    public Block getBlock(World world)
+    {
+        return world.getBlock(data.left, data.middle, data.right);
+    }
+
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
+    public boolean blockExists(World world)
+    {
+        return world.blockExists(data.left, data.middle, data.right);
+    }
+
     public WorldBlockCoord offset(ForgeDirection direction)
     {
         return new WorldBlockCoord(data.left + direction.offsetX, data.middle + direction.offsetY,
                 data.right + direction.offsetZ);
+    }
+
+    public boolean isAirBlock(World world)
+    {
+        return world.isAirBlock(data.left, data.middle, data.right);
+    }
+
+    public void setBlock(World world, Block block, int metadata, int flags)
+    {
+        world.setBlock(data.left, data.middle, data.right, block, metadata, flags);
+    }
+
+    public void setBlock(World world, Block block)
+    {
+        world.setBlock(data.left, data.middle, data.right, block);
     }
 
     @Override

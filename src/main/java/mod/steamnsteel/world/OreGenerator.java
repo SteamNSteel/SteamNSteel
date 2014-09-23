@@ -17,8 +17,11 @@
 package mod.steamnsteel.world;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableSet;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.utility.position.ChunkCoord;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import java.util.Random;
@@ -68,6 +71,27 @@ class OreGenerator extends WorldGenMinable
     public void generate(World world, Random rng, ChunkCoord coord)
     {
         generate(world, rng, coord.getX() << 4, 0, coord.getZ() << 4);
+    }
+
+    protected static boolean isBlockReplaceable(World world, WorldBlockCoord coord, Block targetBlock)
+    {
+        return isBlockReplaceable(world, coord, ImmutableSet.of(targetBlock));
+    }
+
+    static boolean isBlockReplaceable(World world, WorldBlockCoord coord, Iterable<Block> targetBlocks)
+    {
+        final Block block = coord.getBlock(world);
+
+        final int x = coord.getX();
+        final int y = coord.getY();
+        final int z = coord.getZ();
+
+        for (final Block target: targetBlocks)
+        {
+            if (block.isReplaceableOreGen(world, x, y, z, target)) return true;
+        }
+
+        return false;
     }
 
     @Override
