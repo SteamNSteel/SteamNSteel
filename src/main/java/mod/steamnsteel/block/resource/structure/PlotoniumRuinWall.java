@@ -69,47 +69,52 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     {
         icons2.clear();
 
-        icons2.put(DEFAULT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
-        icons2.put(LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
-        icons2.put(RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
-        icons2.put(LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
+        icons2.put(DEFAULT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+        icons2.put(LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+        icons2.put(RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+        icons2.put(LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
 
-        icons2.put(FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
+        icons2.put(FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
 
-        icons2.put(FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateL"));
-        icons2.put(FEATURE_PLATE | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateT"));
-        icons2.put(FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateR"));
-        icons2.put(FEATURE_PLATE | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateB"));
-        icons2.put(FEATURE_PLATE | RIGHT | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBR"));
-        icons2.put(FEATURE_PLATE | RIGHT | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTR"));
-        icons2.put(FEATURE_PLATE | LEFT | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateBL"));
-        icons2.put(FEATURE_PLATE | LEFT | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-PlateTL"));
+        icons2.put(FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVL"));
+        icons2.put(FEATURE_PLATE | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeHU"));
+        icons2.put(FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVR"));
+        icons2.put(FEATURE_PLATE | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeHD"));
+        icons2.put(FEATURE_PLATE | RIGHT | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeRDC"));
+        icons2.put(FEATURE_PLATE | RIGHT | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeRUC"));
+        icons2.put(FEATURE_PLATE | LEFT | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeLDC"));
+        icons2.put(FEATURE_PLATE | LEFT | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeLUC"));
 
-        icons2.put(FEATURE_TRUSS | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussT"));
-        icons2.put(FEATURE_TRUSS | TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTL"));
-        icons2.put(FEATURE_TRUSS | TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTR"));
-        icons2.put(FEATURE_TRUSS | TOP | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTC"));
-        icons2.put(FEATURE_TRUSS | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussB"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBL"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBR"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBC"));
+        icons2.put(FEATURE_TRUSS | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
+        icons2.put(FEATURE_TRUSS | TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL"));
+        icons2.put(FEATURE_TRUSS | TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR"));
+        icons2.put(FEATURE_TRUSS | TOP | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge"));
+        icons2.put(FEATURE_TRUSS | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center"));
+        icons2.put(FEATURE_TRUSS | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeL"));
+        icons2.put(FEATURE_TRUSS | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeR"));
+        icons2.put(FEATURE_TRUSS | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge"));
 
-        icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussT"));
-        icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTPlateL"));
-        icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTPlateR"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussB"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBPlateL"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBPlateR"));
+        icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
+        icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_DDPanelCL"));
+        icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_DDPanelCR"));
+        icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center"));
+        icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_DDPanelCL"));
+        icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_DDPanelCR"));
 
         //Unusual Truss circumstances. Not sure if I'm handling this right.
-        icons2.put(FEATURE_TRUSS | TOP | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussT"));
-        icons2.put(FEATURE_TRUSS | TOP | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTL"));
-        icons2.put(FEATURE_TRUSS | TOP | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTR"));
-        icons2.put(FEATURE_TRUSS | TOP | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussTC"));
-        icons2.put(BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-TrussBC"));
-        icons2.put(BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
-        icons2.put(BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
-        icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall"));
+        icons2.put(FEATURE_TRUSS | TOP | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
+        icons2.put(FEATURE_TRUSS | TOP | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL"));
+        icons2.put(FEATURE_TRUSS | TOP | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR"));
+        icons2.put(FEATURE_TRUSS | TOP | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge"));
+        icons2.put(BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge"));
+        icons2.put(BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+        icons2.put(BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+        icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+
+        icons2.put(FEATURE_PIPES | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeB"));
+        icons2.put(FEATURE_PIPES | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeB"));
+        icons2.put(FEATURE_PIPES | TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeA"));
+        icons2.put(FEATURE_PIPES | TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeA"));
 
         icons2.put(MISSING_TEXTURE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Missing"));
     }
@@ -283,22 +288,28 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     {
         final ChunkCoord chunkCoord = ChunkCoord.of(worldBlockCoord);
         int[] noiseData = cachedNoiseGens.get(chunkCoord);
-        if (noiseData == null) {
+        if (noiseData == null)
+        {
             noiseData = new int[16 * 256 * 16];
             cachedNoiseGens.put(chunkCoord, noiseData);
         }
         ChunkBlockCoord localCoord = ChunkBlockCoord.of(worldBlockCoord);
         final int index = localCoord.getY() | localCoord.getZ() << 8 | localCoord.getX() << 12;
         int featureId = noiseData[index];
-        if (featureId == 0) {
+        if (featureId == 0)
+        {
             int x = localCoord.getX();
             int y = localCoord.getY() & 15;
             int z = localCoord.getZ();
 
-            for (Feature feature : getChunkFeatures(chunkCoord)) {
-                if (x >= feature.blockCoord.getX() && x < feature.blockCoord.getX() + feature.width) {
-                    if (z >= feature.blockCoord.getZ() && z < feature.blockCoord.getZ() + feature.depth) {
-                        if (y >= feature.blockCoord.getY() && y < feature.blockCoord.getY() + feature.height) {
+            for (Feature feature : getChunkFeatures(chunkCoord))
+            {
+                if (x >= feature.blockCoord.getX() && x < feature.blockCoord.getX() + feature.width)
+                {
+                    if (z >= feature.blockCoord.getZ() && z < feature.blockCoord.getZ() + feature.depth)
+                    {
+                        if (y >= feature.blockCoord.getY() && y < feature.blockCoord.getY() + feature.height)
+                        {
                             featureId = feature.featureId;
                             break;
                         }
@@ -316,14 +327,16 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     private List<Feature> getChunkFeatures(ChunkCoord chunkCoord)
     {
         List<Feature> features = cachedFeatures.get(chunkCoord);
-        if (features != null) {
+        if (features != null)
+        {
             return features;
         }
         features = new ArrayList<Feature>();
         Random random = new Random(chunkCoord.hashCode());
 
         //Generate Pipe features
-        for (int i = 0; i < 32; ++i) {
+        for (int i = 0; i < 32; ++i)
+        {
             int xPos = random.nextInt(16);
             int yPos = random.nextInt(15);
             int zPos = random.nextInt(16);
