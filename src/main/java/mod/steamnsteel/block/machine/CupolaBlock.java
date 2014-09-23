@@ -199,4 +199,22 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 
         return super.removedByPlayer(world, player, x, y, z, willHarvest);
     }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
+    {
+        final CupolaTE te = (CupolaTE) world.getTileEntity(x, y, z);
+
+        if (te != null && !te.isSlave())
+        {
+            dropSlotContents(world, x, y + 1, z, te, CupolaTE.INPUT_LEFT);
+            dropSlotContents(world, x, y + 1, z, te, CupolaTE.INPUT_RIGHT);
+            dropSlotContents(world, x, y    , z, te, CupolaTE.INPUT_FUEL);
+            dropSlotContents(world, x, y    , z, te, CupolaTE.OUTPUT);
+
+            world.func_147453_f(x, y, z, block);
+        }
+
+        super.breakBlock(world, x, y, z, block, metadata);
+    }
 }
