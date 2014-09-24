@@ -21,21 +21,14 @@ import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.PlotoniumChestTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import java.util.Random;
 
 public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
     public static final String NAME = "chestPlotonium";
-
-    @SuppressWarnings("UnsecureRandomNumberGeneration")
-    private final Random rng = new Random();
 
     public PlotoniumChest() { setBlockName(NAME); }
 
@@ -46,9 +39,9 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
 
         if (te != null)
         {
-            for (int slotindex = 0; slotindex < te.getSizeInventory(); ++slotindex)
+            for (int slotIndex = 0; slotIndex < te.getSizeInventory(); ++slotIndex)
             {
-                dropSlotContents(world, x, y, z, te, slotindex);
+                dropSlotContents(world, x, y, z, te, slotIndex);
             }
 
             world.func_147453_f(x, y, z, block);
@@ -62,53 +55,11 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
     {
         final TileEntity te = world.getTileEntity(x, y, z);
 
-        if (!world.isRemote && te != null && te instanceof PlotoniumChestTE)
-        {
-            player.displayGUIChest((IInventory) te);
-            return true;
-        }
+        if (!player.isSneaking())
+            if (!world.isRemote && te != null && te instanceof PlotoniumChestTE)
+                player.displayGUIChest((IInventory) te);
 
-        return false;
-    }
-
-    @SuppressWarnings("ObjectAllocationInLoop")
-    private void dropSlotContents(World world, int x, int y, int z, PlotoniumChestTE te, int slotIndex)
-    {
-        final ItemStack itemstack = te.getStackInSlot(slotIndex);
-
-        if (itemstack != null)
-        {
-            final float xOffset = rng.nextFloat() * 0.8F + 0.1F;
-            final float yOffset = rng.nextFloat() * 0.8F + 0.1F;
-            final float zOffset = rng.nextFloat() * 0.8F + 0.1F;
-
-            while (itemstack.stackSize > 0)
-            {
-                int j1 = rng.nextInt(21) + 10;
-
-                if (j1 > itemstack.stackSize)
-                {
-                    j1 = itemstack.stackSize;
-                }
-
-                itemstack.stackSize -= j1;
-                final EntityItem entityitem = new EntityItem(world, x + xOffset, y + yOffset, z + zOffset, new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
-                final float motionMax = 0.05F;
-                //noinspection NumericCastThatLosesPrecision
-                entityitem.motionX = (float) rng.nextGaussian() * motionMax;
-                //noinspection NumericCastThatLosesPrecision
-                entityitem.motionY = (float) rng.nextGaussian() * motionMax + 0.2F;
-                //noinspection NumericCastThatLosesPrecision
-                entityitem.motionZ = (float) rng.nextGaussian() * motionMax;
-
-                if (itemstack.hasTagCompound())
-                {
-                    entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
-                }
-
-                world.spawnEntityInWorld(entityitem);
-            }
-        }
+        return true;
     }
 
     @Override

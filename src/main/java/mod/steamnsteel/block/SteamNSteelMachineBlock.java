@@ -19,14 +19,22 @@ package mod.steamnsteel.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import java.util.Random;
 
 public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBlock
 {
     public static final Material MATERIAL = Material.piston;
     public static final SoundType SOUND = Block.soundTypePiston;
     public static final float HARDNESS = 0.5f;
+
+    @SuppressWarnings("UnsecureRandomNumberGeneration")
+    protected final Random rng = new Random();
 
     protected SteamNSteelMachineBlock()
     {
@@ -73,5 +81,45 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
     public void registerBlockIcons(IIconRegister iconRegister)
     {
         // no op
+    }
+
+    protected void dropSlotContents(World world, int x, int y, int z, IInventory te, int slotIndex)
+    {
+        final ItemStack itemstack = te.getStackInSlot(slotIndex);
+
+        if (itemstack != null)
+        {
+            final float xOffset = rng.nextFloat() * 0.8F + 0.1F;
+            final float yOffset = rng.nextFloat() * 0.8F + 0.1F;
+            final float zOffset = rng.nextFloat() * 0.8F + 0.1F;
+
+            while (itemstack.stackSize > 0)
+            {
+                int j1 = rng.nextInt(21) + 10;
+
+                if (j1 > itemstack.stackSize)
+                {
+                    j1 = itemstack.stackSize;
+                }
+
+                itemstack.stackSize -= j1;
+                //noinspection ObjectAllocationInLoop
+                final EntityItem entityitem = new EntityItem(world, x + xOffset, y + yOffset, z + zOffset, new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
+                final float motionMax = 0.05F;
+                //noinspection NumericCastThatLosesPrecision
+                entityitem.motionX = (float) rng.nextGaussian() * motionMax;
+                //noinspection NumericCastThatLosesPrecision
+                entityitem.motionY = (float) rng.nextGaussian() * motionMax + 0.2F;
+                //noinspection NumericCastThatLosesPrecision
+                entityitem.motionZ = (float) rng.nextGaussian() * motionMax;
+
+                if (itemstack.hasTagCompound())
+                {
+                    entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+                }
+
+                world.spawnEntityInWorld(entityitem);
+            }
+        }
     }
 }
