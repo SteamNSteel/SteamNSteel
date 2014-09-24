@@ -18,6 +18,7 @@ package mod.steamnsteel.utility.position;
 
 import com.google.common.base.Objects;
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -42,6 +43,11 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
     public Block getBlock(World world)
     {
         return world.getBlock(data.left, data.middle, data.right);
+    }
+
+    public TileEntity getTileEntity(World world)
+    {
+        return world.getTileEntity(data.left, data.middle, data.right);
     }
 
     @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
