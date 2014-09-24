@@ -16,6 +16,8 @@
 
 package mod.steamnsteel.block;
 
+import com.google.common.base.Objects;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -29,12 +31,12 @@ import java.util.Random;
 
 public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBlock
 {
-    public static final Material MATERIAL = Material.piston;
-    public static final SoundType SOUND = Block.soundTypePiston;
-    public static final float HARDNESS = 0.5f;
+    private static final Material MATERIAL = Material.piston;
+    private static final SoundType SOUND = Block.soundTypePiston;
+    private static final float HARDNESS = 0.5f;
 
     @SuppressWarnings("UnsecureRandomNumberGeneration")
-    protected final Random rng = new Random();
+    private final Random rng = new Random();
 
     protected SteamNSteelMachineBlock()
     {
@@ -50,12 +52,6 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
     }
 
     @Override
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-
-    @Override
     public int getRenderType()
     {
         // Disable normal block rendering.
@@ -63,10 +59,9 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
     }
 
     @Override
-    public int getMobilityFlag()
+    public boolean isOpaqueCube()
     {
-        // total immobility and stop pistons
-        return 2;
+        return false;
     }
 
     @Override
@@ -78,14 +73,30 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
     }
 
     @Override
+    public int getMobilityFlag()
+    {
+        // total immobility and stop pistons
+        return 2;
+    }
+
+    @SuppressWarnings("NoopMethodInAbstractClass")
+    @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
         // no op
     }
 
-    protected void dropSlotContents(World world, int x, int y, int z, IInventory te, int slotIndex)
+    protected void dropInventory(World world, WorldBlockCoord coord, IInventory inventory)
     {
-        final ItemStack itemstack = te.getStackInSlot(slotIndex);
+        for (int slotIndex = 0; slotIndex < inventory.getSizeInventory(); slotIndex++)
+        {
+            dropSlotContents(world, coord, inventory, slotIndex);
+        }
+    }
+
+    void dropSlotContents(World world, WorldBlockCoord coord, IInventory inventory, int slotIndex)
+    {
+        final ItemStack itemstack = inventory.getStackInSlot(slotIndex);
 
         if (itemstack != null)
         {
@@ -104,7 +115,9 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
 
                 itemstack.stackSize -= j1;
                 //noinspection ObjectAllocationInLoop
-                final EntityItem entityitem = new EntityItem(world, x + xOffset, y + yOffset, z + zOffset, new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
+                final EntityItem entityitem = new EntityItem(world,
+                        coord.getX() + xOffset, coord.getY() + yOffset, coord.getZ() + zOffset,
+                        new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
                 final float motionMax = 0.05F;
                 //noinspection NumericCastThatLosesPrecision
                 entityitem.motionX = (float) rng.nextGaussian() * motionMax;
@@ -121,5 +134,13 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
                 world.spawnEntityInWorld(entityitem);
             }
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this)
+                .add("rng", rng)
+                .toString();
     }
 }

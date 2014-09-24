@@ -16,9 +16,9 @@
 
 package mod.steamnsteel.block.container;
 
-import com.google.common.base.Objects;
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.PlotoniumChestTE;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,12 +39,8 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
 
         if (te != null)
         {
-            for (int slotIndex = 0; slotIndex < te.getSizeInventory(); ++slotIndex)
-            {
-                dropSlotContents(world, x, y, z, te, slotIndex);
-            }
-
-            world.func_147453_f(x, y, z, block);
+            dropInventory(world, WorldBlockCoord.of(x, y, z), te);
+            world.func_147453_f(x, y, z, block); // notify neighbors
         }
 
         super.breakBlock(world, x, y, z, block, metadata);
@@ -66,13 +62,5 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
     public TileEntity createNewTileEntity(World world, int metadata)
     {
         return new PlotoniumChestTE();
-    }
-
-    @Override
-    public String toString()
-    {
-        return Objects.toStringHelper(this)
-                .add("rng", rng)
-                .toString();
     }
 }
