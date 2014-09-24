@@ -58,16 +58,20 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     final int LEFT = 4;
     final int RIGHT = 8;
 
-    final int FEATURE_PLATE = 16;
-    final int FEATURE_TRUSS = 32;
-    final int FEATURE_PIPES = 64;
-    final int NO_FEATURE = 0;
+    final int FEATURE_CROWN = 16;
+    final int FEATURE_BASE = 32;
+    final int FEATURE_PLATE = 64;
+    final int FEATURE_PIPES = 128;
+
+    final int NO_FEATURE = -1;
 
     final int MISSING_TEXTURE = Integer.MAX_VALUE;
 
     public void registerBlockIcons(IIconRegister iconRegister)
     {
         icons2.clear();
+        cachedNoiseGens.clear();
+        cachedFeatures.clear();
 
         icons2.put(DEFAULT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
         icons2.put(LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
@@ -85,36 +89,40 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         icons2.put(FEATURE_PLATE | LEFT | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeLDC"));
         icons2.put(FEATURE_PLATE | LEFT | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeLUC"));
 
-        icons2.put(FEATURE_TRUSS | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
-        icons2.put(FEATURE_TRUSS | TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL"));
-        icons2.put(FEATURE_TRUSS | TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR"));
-        icons2.put(FEATURE_TRUSS | TOP | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge"));
-        icons2.put(FEATURE_TRUSS | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeL"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeR"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge"));
+        icons2.put(FEATURE_CROWN | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
+        icons2.put(FEATURE_CROWN | TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL"));
+        icons2.put(FEATURE_CROWN | TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR"));
+        icons2.put(FEATURE_CROWN | TOP | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge"));
+        icons2.put(FEATURE_BASE | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center"));
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeL"));
+        icons2.put(FEATURE_BASE | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeR"));
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge"));
 
-        icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
-        icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_DDPanelCL"));
-        icons2.put(FEATURE_TRUSS | TOP | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_DDPanelCR"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_DDPanelCL"));
-        icons2.put(FEATURE_TRUSS | BOTTOM | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_DDPanelCR"));
-
-        //Unusual Truss circumstances. Not sure if I'm handling this right.
-        icons2.put(FEATURE_TRUSS | TOP | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
-        icons2.put(FEATURE_TRUSS | TOP | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL"));
-        icons2.put(FEATURE_TRUSS | TOP | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR"));
-        icons2.put(FEATURE_TRUSS | TOP | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge"));
-        icons2.put(BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge"));
-        icons2.put(BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
-        icons2.put(BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
-        icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+        icons2.put(FEATURE_CROWN | TOP | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
+        icons2.put(FEATURE_CROWN | TOP | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_DDPanelCL"));
+        icons2.put(FEATURE_CROWN | TOP | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_DDPanelCR"));
+        icons2.put(FEATURE_CROWN | TOP | FEATURE_PLATE | LEFT | RIGHT , iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge"));
+        icons2.put(FEATURE_BASE | BOTTOM | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center"));
+        icons2.put(FEATURE_BASE | BOTTOM | FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_DDPanelCL"));
+        icons2.put(FEATURE_BASE | BOTTOM | FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_DDPanelCR"));
 
         icons2.put(FEATURE_PIPES | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeB"));
         icons2.put(FEATURE_PIPES | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeB"));
         icons2.put(FEATURE_PIPES | TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeA"));
         icons2.put(FEATURE_PIPES | TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeA"));
+
+        //Unusual Truss circumstances. Not sure if I'm handling this right.
+        icons2.put(FEATURE_CROWN | TOP | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
+        icons2.put(FEATURE_CROWN | TOP | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL"));
+        icons2.put(FEATURE_CROWN | TOP | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR"));
+        icons2.put(FEATURE_CROWN | TOP | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge"));
+        icons2.put(BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge"));
+        icons2.put(BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+        icons2.put(BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+        icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+
+        //Single pipes
+        icons2.put(FEATURE_PIPES | TOP | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
 
         icons2.put(MISSING_TEXTURE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Missing"));
     }
@@ -152,6 +160,23 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     private String describeTextureProperties(int blockProperties)
     {
         StringBuilder sb = new StringBuilder();
+        if ((blockProperties & FEATURE_PLATE) == FEATURE_PLATE)
+        {
+            sb.append("Plate,");
+        }
+        if ((blockProperties & FEATURE_CROWN) == FEATURE_CROWN)
+        {
+            sb.append("Crown,");
+        }
+        if ((blockProperties & FEATURE_BASE) == FEATURE_BASE)
+        {
+            sb.append("Base,");
+        }
+        if ((blockProperties & FEATURE_PIPES) == FEATURE_PIPES)
+        {
+            sb.append("Pipes,");
+        }
+
         if ((blockProperties & TOP) == TOP)
         {
             sb.append("T,");
@@ -167,19 +192,6 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         if ((blockProperties & RIGHT) == RIGHT)
         {
             sb.append("R,");
-        }
-
-        if ((blockProperties & FEATURE_PLATE) == FEATURE_PLATE)
-        {
-            sb.append("Plate,");
-        }
-        if ((blockProperties & FEATURE_TRUSS) == FEATURE_TRUSS)
-        {
-            sb.append("Truss,");
-        }
-        if ((blockProperties & FEATURE_PIPES) == FEATURE_PIPES)
-        {
-            sb.append("Pipes,");
         }
 
         return sb.toString();
@@ -217,7 +229,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
             if (!blockAbove.getMaterial().isOpaque() || blockBackAndUp.getMaterial().isOpaque())
             {
                 blockProperties |= TOP;
-                blockProperties |= FEATURE_TRUSS;
+                blockProperties |= FEATURE_CROWN;
             }
             if (blockBackAndBottom.getMaterial().isOpaque())
             {
@@ -225,7 +237,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
             } else if (blockBelow != ModBlock.ruinWallPlotonium && blockBelow.getMaterial().isOpaque())
             {
                 blockProperties = BOTTOM;
-                blockProperties |= FEATURE_TRUSS;
+                blockProperties |= FEATURE_BASE;
             }
             if (blockLeft != ModBlock.ruinWallPlotonium || blockBackAndLeft.getMaterial().isOpaque())
             {
@@ -236,7 +248,6 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
             {
                 blockProperties |= RIGHT;
             }
-
 
             int featureId = getSideFeature(worldBlockCoord);
             if (featureId != NO_FEATURE)
@@ -259,19 +270,39 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
                     blockProperties |= TOP;
                 }
                 final WorldBlockCoord belowBlockCoord = worldBlockCoord.offset(below);
-                if (getSideFeature(belowBlockCoord) != featureId || !isFeatureValid(blockAccess, belowBlockCoord, featureId, side))
+                final int sideFeature = getSideFeature(belowBlockCoord);
+                final boolean belowBlockFeature = sideFeature != featureId;
+                final boolean belowFeatureIsValid = isFeatureValid(blockAccess, belowBlockCoord, featureId, side);
+                if (belowBlockFeature || !belowFeatureIsValid || blockBelow != ModBlock.ruinWallPlotonium)
                 {
                     blockProperties |= BOTTOM;
                 }
 
-                //Plates don't support single width/height blocks. Revert to non-plate feature.
-                if ((blockProperties & (TOP | BOTTOM)) == (TOP | BOTTOM))
+                if (featureId == FEATURE_PLATE)
                 {
-                    blockProperties = savedBlockProperties;
+                    //Plates don't support single width/height blocks. Revert to non-plate feature.
+                    if ((blockProperties & (TOP | BOTTOM)) == (TOP | BOTTOM))
+                    {
+                        blockProperties = savedBlockProperties;
+                    }
+                    if ((blockProperties & (LEFT | RIGHT)) == (LEFT | RIGHT))
+                    {
+                        blockProperties = savedBlockProperties;
+                    }
                 }
-                if ((blockProperties & (LEFT | RIGHT)) == (LEFT | RIGHT))
-                {
-                    blockProperties = savedBlockProperties;
+
+                if ((blockProperties & FEATURE_CROWN) == FEATURE_CROWN) {
+                    Block blockLeftAndAbove = worldBlockCoord.offset(left).offset(above).getBlock(blockAccess);
+                    Block blockRightAndAbove = worldBlockCoord.offset(right).offset(above).getBlock(blockAccess);
+
+                    if (blockLeftAndAbove instanceof PlotoniumRuinWall) {
+                        blockProperties |= LEFT;
+                    }
+
+                    if (blockRightAndAbove instanceof PlotoniumRuinWall) {
+                        blockProperties |= RIGHT;
+                    }
+
                 }
             }
 
@@ -301,7 +332,8 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
             int x = localCoord.getX();
             int y = localCoord.getY() & 15;
             int z = localCoord.getZ();
-
+            //-1 denotes processed, but needs special handling elsewhere then.
+            featureId = -1;
             for (Feature feature : getChunkFeatures(chunkCoord))
             {
                 if (x >= feature.blockCoord.getX() && x < feature.blockCoord.getX() + feature.width)
@@ -335,7 +367,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         Random random = new Random(chunkCoord.hashCode());
 
         //Generate Pipe features
-        for (int i = 0; i < 32; ++i)
+        for (int i = 0; i < 64; ++i)
         {
             int xPos = random.nextInt(16);
             int yPos = random.nextInt(15);
@@ -384,25 +416,25 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 
         final WorldBlockCoord leftBlockCoord = worldBlockCoord.offset(left);
         int neighbours = 0;
-        if (getSideFeature(leftBlockCoord) != featureId || blockBackAndLeft.getMaterial().isOpaque())
+        if (getSideFeature(leftBlockCoord) != featureId)// || blockBackAndLeft.getMaterial().isOpaque())
         {
             leftSet = true;
             neighbours++;
         }
         final WorldBlockCoord rightBlockCoord = worldBlockCoord.offset(right);
-        if (getSideFeature(rightBlockCoord) != featureId || blockBackAndRight.getMaterial().isOpaque())
+        if (getSideFeature(rightBlockCoord) != featureId)// || blockBackAndRight.getMaterial().isOpaque())
         {
             rightSet = true;
             neighbours++;
         }
         final WorldBlockCoord aboveBlockCoord = worldBlockCoord.offset(above);
-        if (getSideFeature(aboveBlockCoord) != featureId || blockBackAndUp.getMaterial().isOpaque())
+        if (getSideFeature(aboveBlockCoord) != featureId)// || blockBackAndUp.getMaterial().isOpaque())
         {
             aboveSet = true;
             neighbours++;
         }
         final WorldBlockCoord belowBlockCoord = worldBlockCoord.offset(below);
-        if (belowBlockCoord.getY() > 0 && (getSideFeature(belowBlockCoord) != featureId || blockBackAndBottom.getMaterial().isOpaque()))
+        if (belowBlockCoord.getY() > 0 && (getSideFeature(belowBlockCoord) != featureId) || !(belowBlockCoord.getBlock(blockAccess) instanceof PlotoniumRuinWall))// || blockBackAndBottom.getMaterial().isOpaque()))
         {
             belowSet = true;
             neighbours++;
