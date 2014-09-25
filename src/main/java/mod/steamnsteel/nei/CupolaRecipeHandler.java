@@ -34,7 +34,7 @@ import mod.steamnsteel.api.crafting.IAlloyResult;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.client.gui.CupolaGui;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
-import mod.steamnsteel.tileentity.CupolaTE;
+import mod.steamnsteel.tileentity.SteamNSteelTE;
 import mod.steamnsteel.utility.ItemWrapper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Blocks;
@@ -141,7 +141,7 @@ public class CupolaRecipeHandler extends TemplateRecipeHandler
     @Override
     public String getRecipeName()
     {
-        return StatCollector.translateToLocal(CupolaTE.containerName(CupolaBlock.NAME));
+        return StatCollector.translateToLocal(SteamNSteelTE.containerName(CupolaBlock.NAME));
     }
 
     @SuppressWarnings("ObjectAllocationInLoop")

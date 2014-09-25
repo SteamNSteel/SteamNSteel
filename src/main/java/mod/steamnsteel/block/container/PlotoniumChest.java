@@ -16,16 +16,51 @@
 
 package mod.steamnsteel.block.container;
 
-import mod.steamnsteel.block.SteamNSteelBlock;
-import net.minecraft.block.material.Material;
+import mod.steamnsteel.block.SteamNSteelMachineBlock;
+import mod.steamnsteel.tileentity.PlotoniumChestTE;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
-public class PlotoniumChest extends SteamNSteelBlock
+public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
     public static final String NAME = "chestPlotonium";
 
-    public PlotoniumChest()
+    public PlotoniumChest() { setBlockName(NAME); }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
     {
-        super(Material.rock);
-        setBlockName(NAME);
+        final PlotoniumChestTE te = (PlotoniumChestTE) world.getTileEntity(x, y, z);
+
+        if (te != null)
+        {
+            dropInventory(world, WorldBlockCoord.of(x, y, z), te);
+            world.func_147453_f(x, y, z, block); // notify neighbors
+        }
+
+        super.breakBlock(world, x, y, z, block, metadata);
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
+    {
+        final TileEntity te = world.getTileEntity(x, y, z);
+
+        if (!player.isSneaking())
+            if (!world.isRemote && te != null && te instanceof PlotoniumChestTE)
+                player.displayGUIChest((IInventory) te);
+
+        return true;
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World world, int metadata)
+    {
+        return new PlotoniumChestTE();
     }
 }

@@ -24,6 +24,7 @@ import mod.steamnsteel.gui.ModGuis;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.Orientation;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,85 +58,6 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     public TileEntity createNewTileEntity(World world, int metadata)
     {
         return new CupolaTE();
-    }
-
-    @Override
-    public int getLightValue(IBlockAccess world, int x, int y, int z)
-    {
-        TileEntity te = world.getTileEntity(x, y, z);
-
-        if (((CupolaTE) te).isSlave())
-        {
-            te = world.getTileEntity(x, y - 1, z);
-        }
-
-        if ((te != null) && ((CupolaTE) te).isActive())
-            return 15;
-
-        return super.getLightValue(world, x, y, z);
-    }
-
-    @Override
-    public boolean canPlaceBlockAt(World world, int x, int y, int z)
-    {
-        return super.canPlaceBlockAt(world, x, y, z) && super.canPlaceBlockAt(world, x, y + 1, z);
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
-    {
-        int y1 = y;
-        final TileEntity te = world.getTileEntity(x, y1, z);
-        if (((CupolaTE) te).isSlave())
-            y1--;
-
-        player.openGui(TheMod.instance, ModGuis.CUPOLA.getID(), world, x, y1, z);
-        return true;
-    }
-
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
-    {
-        final TileEntity te = world.getTileEntity(x, y, z);
-        if (((CupolaTE) te).isSlave())
-        {
-            if (world.isAirBlock(x, y - 1, z))
-            {
-                world.setBlockToAir(x, y, z);
-                world.removeTileEntity(x, y, z);
-            }
-            return;
-        }
-
-        if (world.isAirBlock(x, y + 1, z))
-        {
-            world.setBlockToAir(x, y, z);
-            if (!world.isRemote)
-            {
-                // pass 8 here to stop duplication error
-                dropBlockAsItem(world, x, y, z, 8, 0);
-            }
-        }
-    }
-
-    @Override
-    public Item getItemDropped(int metadata, Random rng, int fortune)
-    {
-        if (metadata != 8) // if we get 8, we will spawn 2 items...so skip one
-            return super.getItemDropped(metadata, rng, fortune);
-        return Item.getItemById(0);
-    }
-
-    @Override
-    public void onPostBlockPlaced(World world, int x, int y, int z, int metadata)
-    {
-        super.onPostBlockPlaced(world, x, y, z, metadata);
-
-        final int fillerY = y + 1;
-        world.setBlock(x, fillerY, z, ModBlock.cupola, 0, 2);
-
-        final TileEntity te = world.getTileEntity(x, fillerY, z);
-        ((CupolaTE) te).setSlave();
     }
 
     @SideOnly(Side.CLIENT)
@@ -182,6 +104,99 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
                 renderSmokeOnTop(world, x, y, z, rng);
             }
         }
+    }
+
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+    {
+        final TileEntity te = world.getTileEntity(x, y, z);
+        if (((CupolaTE) te).isSlave())
+        {
+            if (world.isAirBlock(x, y - 1, z))
+            {
+                world.setBlockToAir(x, y, z);
+                world.removeTileEntity(x, y, z);
+            }
+            return;
+        }
+
+        if (world.isAirBlock(x, y + 1, z))
+        {
+            world.setBlockToAir(x, y, z);
+            if (!world.isRemote)
+            {
+                // pass 8 here to stop duplication error
+                dropBlockAsItem(world, x, y, z, 8, 0);
+            }
+        }
+    }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
+    {
+        final CupolaTE te = (CupolaTE) world.getTileEntity(x, y, z);
+
+        if (te != null && !te.isSlave())
+        {
+            dropInventory(world, WorldBlockCoord.of(x, y, z), te);
+            world.func_147453_f(x, y, z, block); // notify neighbors
+        }
+
+        super.breakBlock(world, x, y, z, block, metadata);
+    }
+
+    @Override
+    public Item getItemDropped(int metadata, Random rng, int fortune)
+    {
+        if (metadata != 8) // if we get 8, we will spawn 2 items...so skip one
+            return super.getItemDropped(metadata, rng, fortune);
+        return Item.getItemById(0);
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z)
+    {
+        return super.canPlaceBlockAt(world, x, y, z) && super.canPlaceBlockAt(world, x, y + 1, z);
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
+    {
+        int y1 = y;
+        final TileEntity te = world.getTileEntity(x, y1, z);
+        if (((CupolaTE) te).isSlave())
+            y1--;
+
+        player.openGui(TheMod.instance, ModGuis.CUPOLA.getID(), world, x, y1, z);
+        return true;
+    }
+
+    @Override
+    public void onPostBlockPlaced(World world, int x, int y, int z, int metadata)
+    {
+        super.onPostBlockPlaced(world, x, y, z, metadata);
+
+        final int fillerY = y + 1;
+        world.setBlock(x, fillerY, z, ModBlock.cupola, 0, 2);
+
+        final TileEntity te = world.getTileEntity(x, fillerY, z);
+        ((CupolaTE) te).setSlave();
+    }
+
+    @Override
+    public int getLightValue(IBlockAccess world, int x, int y, int z)
+    {
+        TileEntity te = world.getTileEntity(x, y, z);
+
+        if (((CupolaTE) te).isSlave())
+        {
+            te = world.getTileEntity(x, y - 1, z);
+        }
+
+        if (te != null && ((CupolaTE) te).isActive())
+            return 15;
+
+        return super.getLightValue(world, x, y, z);
     }
 
     @Override

@@ -14,20 +14,15 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.proxy;
+package mod.steamnsteel.tileentity;
 
-import cpw.mods.fml.common.SidedProxy;
+import mod.steamnsteel.TheMod;
+import net.minecraft.tileentity.TileEntity;
 
-@SuppressWarnings({"StaticNonFinalField", "PublicField"})
-public enum Proxies
+public abstract class SteamNSteelTE extends TileEntity
 {
-    INSTANCE;
-    @SuppressWarnings("WeakerAccess")
-    public static final String CLIENT_RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.ClientRenderProxy";
-
-    @SuppressWarnings("WeakerAccess")
-    public static final String RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.RenderProxy";
-
-    @SidedProxy(clientSide = CLIENT_RENDER_PROXY_CLASS, serverSide = RENDER_PROXY_CLASS)
-    public static RenderProxy render;
+    public static String containerName(String name)
+    {
+        return "container." + TheMod.MOD_ID + ':' + name;
+    }
 }

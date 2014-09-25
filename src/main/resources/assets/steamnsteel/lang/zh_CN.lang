@@ -34,6 +34,7 @@ config.steamnsteel:retroOreGen=Should ore be generated in existing chunks? (also
 
 # Containers
 container.steamnsteel:cupola=冲天炉
+container.steamnsteel:chestPlotonium.name=胸腔积
 
 # Creative Tabs
 itemGroup.steamnsteel=蒸汽和钢铁
