@@ -33,12 +33,10 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     public static final String NAME = "ruinWallPlotonium";
     ProceduralConnectedTexture textureManager;
 
-
-
     public void registerBlockIcons(IIconRegister iconRegister)
     {
         textureManager = new RuinWallTexture();
-        textureManager.registerIconsInternal(iconRegister);
+        textureManager.registerIcons(iconRegister);
     }
 
     @Override

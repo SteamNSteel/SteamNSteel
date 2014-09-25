@@ -9,10 +9,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public abstract class ProceduralConnectedTexture
 {
@@ -24,10 +21,10 @@ public abstract class ProceduralConnectedTexture
     protected final int LEFT = 1 << 2;
     protected final int RIGHT = 1 << 3;
 
-    protected final int FEATURE_EDGE_TOP = 1<<4;
-    protected final int FEATURE_EDGE_BOTTOM = 1<<5;
-    protected final int FEATURE_EDGE_LEFT = 1<<6;
-    protected final int FEATURE_EDGE_RIGHT = 1<<7;
+    protected final int FEATURE_EDGE_TOP = 1 << 4;
+    protected final int FEATURE_EDGE_BOTTOM = 1 << 5;
+    protected final int FEATURE_EDGE_LEFT = 1 << 6;
+    protected final int FEATURE_EDGE_RIGHT = 1 << 7;
 
     private HashMap<Integer, IRuinWallFeature> features;
 
@@ -36,24 +33,33 @@ public abstract class ProceduralConnectedTexture
         this.features = getFeatures();
     }
 
-    protected abstract HashMap<Integer,IRuinWallFeature> getFeatures();
+    protected abstract HashMap<Integer, IRuinWallFeature> getFeatures();
 
     final int MISSING_TEXTURE = Integer.MAX_VALUE;
     private HashMap<Integer, IIcon> icons = new HashMap<Integer, IIcon>();
 
-    public void registerIcons(IIconRegister iconRegister) {
+    public void registerIcons(IIconRegister iconRegister)
+    {
         icons.clear();
         cachedNoiseGens.clear();
         cachedFeatures.clear();
 
-        registerIconsInternal(iconRegister);
+        final Map<String, Integer[]> iconMap = getIconMap();
 
+        for (Map.Entry<String, Integer[]> set : iconMap.entrySet())
+        {
+            for (Integer i : set.getValue())
+            {
+                addIcon(i, iconRegister.registerIcon(TheMod.MOD_ID + ":" + set.getKey()));
+            }
+        }
         addIcon(MISSING_TEXTURE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Missing"));
     }
 
-    public abstract void registerIconsInternal(IIconRegister iconRegister);
+    protected abstract Map<String, Integer[]> getIconMap();
 
-    protected void addIcon(int fingerprint, IIcon icon) {
+    protected void addIcon(int fingerprint, IIcon icon)
+    {
         icons.put(fingerprint, icon);
     }
 
@@ -88,7 +94,8 @@ public abstract class ProceduralConnectedTexture
         }
         features = new ArrayList<Feature>();
 
-        for (IRuinWallFeature wallFeature : this.features.values()) {
+        for (IRuinWallFeature wallFeature : this.features.values())
+        {
             features.addAll(wallFeature.getFeatureAreasFor(chunkCoord));
         }
 
@@ -97,13 +104,16 @@ public abstract class ProceduralConnectedTexture
         return features;
     }
 
-    protected int getValidFeature(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation) {
+    protected int getValidFeature(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    {
         int desiredFeatureId = getFeatureAt(worldBlockCoord);
-        if (desiredFeatureId == NO_FEATURE) {
+        if (desiredFeatureId == NO_FEATURE)
+        {
             return NO_FEATURE;
         }
         IRuinWallFeature wallFeature = features.get(desiredFeatureId);
-        if (wallFeature.isFeatureValid(blockAccess, worldBlockCoord, orientation, desiredFeatureId)) {
+        if (wallFeature.isFeatureValid(blockAccess, worldBlockCoord, orientation, desiredFeatureId))
+        {
             return desiredFeatureId;
         }
         return NO_FEATURE;
@@ -156,7 +166,8 @@ public abstract class ProceduralConnectedTexture
     }
 
 
-    protected interface IRuinWallFeature {
+    protected interface IRuinWallFeature
+    {
         boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int featureId);
 
         Collection<Feature> getFeatureAreasFor(ChunkCoord chunkCoord);
