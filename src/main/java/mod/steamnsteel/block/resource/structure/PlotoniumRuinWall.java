@@ -18,6 +18,7 @@ package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.texturing.BlockSideRotation;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
@@ -35,22 +36,10 @@ import java.util.*;
 public class PlotoniumRuinWall extends SteamNSteelBlock
 {
     public static final String NAME = "ruinWallPlotonium";
-    public static final int ROTATION_INDEX_LEFT = 0;
-    public static final int ROTATION_INDEX_RIGHT = 1;
-    public static final int ROTATION_INDEX_BACK = 2;
-    public static final int ROTATION_INDEX_ABOVE = 5;
-    public static final int ROTATION_INDEX_BELOW = 4;
 
     private HashMap<Integer, IIcon> icons2 = new HashMap<Integer, IIcon>();
     private HashMap<Integer, IRuinWallFeature> features = new HashMap<Integer, IRuinWallFeature>();
-    ForgeDirection[][] ROTATION_MATRIX = {
-            {ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN},
-            {ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN},
-            {ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN},
-            {ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.SOUTH, ForgeDirection.NORTH, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN},
-            {ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN},
-            {ForgeDirection.SOUTH, ForgeDirection.NORTH, ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN}
-    };
+
 
     final int DEFAULT = 0;
     final int TOP = 1 << 0;
@@ -219,12 +208,13 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
             {
                 return DEFAULT;
             }
-            ForgeDirection[] rotationMatrix = ROTATION_MATRIX[side];
-            ForgeDirection left = rotationMatrix[ROTATION_INDEX_LEFT];
-            ForgeDirection right = rotationMatrix[ROTATION_INDEX_RIGHT];
-            ForgeDirection back = rotationMatrix[ROTATION_INDEX_BACK];
-            ForgeDirection above = rotationMatrix[ROTATION_INDEX_ABOVE];
-            ForgeDirection below = rotationMatrix[ROTATION_INDEX_BELOW];
+            /*ForgeDirection[] rotationMatrix = ForgeDirectionRotation.forSide(side);
+            ForgeDirection left = rotationMatrix[ROTATION_INDEX_LEFT];*/
+            ForgeDirection left = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.LEFT, orientation);
+            ForgeDirection right = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.RIGHT, orientation);
+            ForgeDirection back = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BACK, orientation);
+            ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
+            ForgeDirection below = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BELOW, orientation);
 
             boolean leftIsRuinWallAndNotObscured = checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(left), back);
             boolean rightIsRuinWallAndNotObscured = checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(right), back);
@@ -294,15 +284,14 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         @Override
         public boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int featureId, boolean debugging)
         {
-            ForgeDirection[] rotationMatrix = ROTATION_MATRIX[orientation.ordinal()];
-            ForgeDirection back = rotationMatrix[ROTATION_INDEX_BACK];
+            ForgeDirection back = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BACK, orientation);
 
             if (!checkRuinWallAndNotObscured(blockAccess, worldBlockCoord, back)) {
                 return false;
             }
 
-            ForgeDirection below = rotationMatrix[ROTATION_INDEX_BELOW];
-            ForgeDirection above = rotationMatrix[ROTATION_INDEX_ABOVE];
+            ForgeDirection below = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BELOW, orientation);
+            ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
 
             boolean aboveValid = (checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above), back) && getFeatureAt(worldBlockCoord.offset(above)) == featureId);
             if (aboveValid) {
@@ -341,17 +330,16 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     private class PlateRuinWallFeature implements IRuinWallFeature {
         public boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int featureId, boolean debugging)
         {
-            ForgeDirection[] rotationMatrix = ROTATION_MATRIX[orientation.ordinal()];
-            ForgeDirection back = rotationMatrix[ROTATION_INDEX_BACK];
+            ForgeDirection back = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BACK, orientation);
 
             if (!checkRuinWallAndNotObscured(blockAccess, worldBlockCoord, back)) {
                 return false;
             }
 
-            ForgeDirection left = rotationMatrix[ROTATION_INDEX_LEFT];
-            ForgeDirection right = rotationMatrix[ROTATION_INDEX_RIGHT];
-            ForgeDirection below = rotationMatrix[ROTATION_INDEX_BELOW];
-            ForgeDirection above = rotationMatrix[ROTATION_INDEX_ABOVE];
+            ForgeDirection left = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.LEFT, orientation);
+            ForgeDirection right = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.RIGHT, orientation);
+            ForgeDirection below = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BELOW, orientation);
+            ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
 
             //check Left
             boolean leftValid = (checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(left), back) && getFeatureAt(worldBlockCoord.offset(left)) == featureId);
@@ -431,11 +419,10 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
 
     private int getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int featureId)
     {
-        ForgeDirection[] rotationMatrix = ROTATION_MATRIX[orientation.ordinal()];
-        ForgeDirection left = rotationMatrix[ROTATION_INDEX_LEFT];
-        ForgeDirection right = rotationMatrix[ROTATION_INDEX_RIGHT];
-        ForgeDirection below = rotationMatrix[ROTATION_INDEX_BELOW];
-        ForgeDirection above = rotationMatrix[ROTATION_INDEX_ABOVE];
+        ForgeDirection left = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.LEFT, orientation);
+        ForgeDirection right = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.RIGHT, orientation);
+        ForgeDirection below = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BELOW, orientation);
+        ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
 
         int subProperties = featureId;
         int leftBlockFeature = getValidFeature(blockAccess, worldBlockCoord.offset(left), orientation, false);
