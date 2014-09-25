@@ -18,6 +18,7 @@ package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
@@ -93,7 +94,6 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         icons2.put(LEFT | RIGHT | FEATURE_PIPES | FEATURE_EDGE_TOP , iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeA"));
         icons2.put(LEFT | RIGHT | FEATURE_PIPES | FEATURE_EDGE_BOTTOM , iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeB"));
 
-
         icons2.put(FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
 
         icons2.put(FEATURE_PLATE | FEATURE_EDGE_LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVL"));
@@ -114,16 +114,10 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         icons2.put(FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeRUC"));
         icons2.put(FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVR"));
 
-        icons2.put(FEATURE_BASE | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeL"));
-        icons2.put(FEATURE_BASE | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeR"));
-        icons2.put(FEATURE_BASE | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge"));
-        icons2.put(FEATURE_BASE | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center"));
-
         icons2.put(FEATURE_CROWN | TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL"));
         icons2.put(FEATURE_CROWN | TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR"));
         icons2.put(FEATURE_CROWN | TOP | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge"));
         icons2.put(FEATURE_CROWN | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
-
         icons2.put(FEATURE_CROWN | TOP | FEATURE_PLATE | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
         icons2.put(FEATURE_CROWN | TOP | FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_DDPanelCL"));
         icons2.put(FEATURE_CROWN | TOP | FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_DDPanelCR"));
@@ -131,40 +125,44 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         icons2.put(FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL"));
         icons2.put(FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR"));
         icons2.put(FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL"));
+        ////////
+        icons2.put(FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR_DDPanelCR_S"));
+        icons2.put(FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR_DDPanelCL_S"));
+        icons2.put(FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL_DDPanelCL_S"));
+        icons2.put(FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL_DDPanelCR_S"));
+        icons2.put(FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge_DDPanelCR_S"));
+        icons2.put(FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge_DDPanelCL_S"));
 
+        icons2.put(FEATURE_CROWN | TOP | FEATURE_PIPES | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center_DD1_PipeA_S"));
+        icons2.put(FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PIPES | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge_DD1_PipeA_S"));
+        icons2.put(FEATURE_CROWN | TOP | LEFT | FEATURE_PIPES | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeL_DD1_PipeA_S"));
+        icons2.put(FEATURE_CROWN | TOP | RIGHT | FEATURE_PIPES | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeR_DD1_PipeA_S"));
 
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeL"));
+        icons2.put(FEATURE_BASE | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeR"));
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge"));
+        icons2.put(FEATURE_BASE | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center"));
+        icons2.put(FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeR"));
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeL"));
         icons2.put(FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center"));
-        icons2.put(FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_DDPanelCL"));
-        icons2.put(FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_DDPanelCR"));
+        icons2.put(FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT , iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_DDPanelCL"));
+        icons2.put(FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT , iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_DDPanelCR"));
 
-        /*icons2.put(FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVL"));
-        icons2.put(FEATURE_PLATE | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeHU"));
-        icons2.put(FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVR"));
-        icons2.put(FEATURE_PLATE | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeHD"));
-        icons2.put(FEATURE_PLATE | RIGHT | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeRDC"));
-        icons2.put(FEATURE_PLATE | RIGHT | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeRUC"));
-        icons2.put(FEATURE_PLATE | LEFT | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeLDC"));
-        icons2.put(FEATURE_PLATE | LEFT | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeLUC"));
+        ///Check?
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeHD"));
+        icons2.put(FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeHU"));
+        ///////////////
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT , iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeL_DDPanelCL_S"));
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT , iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeL_DDPanelCR_S"));
+        icons2.put(FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeR_DDPanelCR_S"));
+        icons2.put(FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeR_DDPanelCL_S"));
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge_DDPanelCR_S"));
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge_DDPanelCL_S"));
 
-
-
-        icons2.put(FEATURE_PIPES | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeB"));
-        icons2.put(FEATURE_PIPES | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeB"));
-        icons2.put(FEATURE_PIPES | TOP | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeA"));
-        icons2.put(FEATURE_PIPES | TOP | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeA"));
-
-        //Unusual Truss circumstances. Not sure if I'm handling this right.
-        icons2.put(FEATURE_CROWN | TOP | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_Center"));
-        icons2.put(FEATURE_CROWN | TOP | BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeL"));
-        icons2.put(FEATURE_CROWN | TOP | BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_EdgeR"));
-        icons2.put(FEATURE_CROWN | TOP | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_CrownM_AllEdge"));
-        icons2.put(BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge"));
-        icons2.put(BOTTOM | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
-        icons2.put(BOTTOM | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
-        icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
-
-        //Single pipes
-        icons2.put(FEATURE_PIPES | TOP | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));*/
+        icons2.put(FEATURE_BASE | BOTTOM | FEATURE_PIPES | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_Center_DD1_PipeB_S"));
+        icons2.put(FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PIPES | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeR_DD1_PipeB_S"));
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT | FEATURE_PIPES | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_EdgeL_DD1_PipeB_S"));
+        icons2.put(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PIPES | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_BaseM_AllEdge_DD1_PipeB_S"));
 
         icons2.put(MISSING_TEXTURE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Missing"));
 
@@ -195,7 +193,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         {
             String blockPropertiesDescription = describeTextureProperties(blockProperties);
 
-            //Logger.warning("Unknown Ruin Wall bitmap: %d (%s) - %s @ (%d, %d, %d) - %d", blockProperties, Integer.toBinaryString(blockProperties), blockPropertiesDescription, x, y, z, side);
+            Logger.warning("Unknown Ruin Wall bitmap: %d (%s) - %s @ (%d, %d, %d) - %d", blockProperties, Integer.toBinaryString(blockProperties), blockPropertiesDescription, x, y, z, side);
 
             blockProperties = MISSING_TEXTURE;
         }
@@ -330,9 +328,9 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
             //Generate Pipe features
             for (int i = 0; i < featureCount; ++i)
             {
-                int xPos = random.nextInt(16);
+                int xPos = random.nextInt(18) - 1;
                 int yPos = random.nextInt(15);
-                int zPos = random.nextInt(16);
+                int zPos = random.nextInt(18) - 1;
 
                 features.add(new Feature(FEATURE_PIPES, WorldBlockCoord.of(xPos, yPos, zPos), 1, 2, 1));
             }
@@ -402,13 +400,13 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
             //Generate plate features
             for (int i = 0; i < featureCount; ++i)
             {
-                int xPos = random.nextInt(16);
+                int xPos = random.nextInt(18) - 1;
                 int yPos = random.nextInt(16);
-                int zPos = random.nextInt(16);
+                int zPos = random.nextInt(18) - 1;
 
-                int width = random.nextInt(5) + 1;
-                int height = random.nextInt(5) + 1;
-                int depth = random.nextInt(5) + 1;
+                int width = random.nextInt(7) + 1;
+                int height = random.nextInt(7) + 1;
+                int depth = random.nextInt(7) + 1;
 
                 features.add(new Feature(FEATURE_PLATE, WorldBlockCoord.of(xPos, yPos, zPos), width, height, depth));
             }
