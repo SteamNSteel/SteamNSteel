@@ -120,7 +120,7 @@ public abstract class ProceduralConnectedTexture
     }
 
 
-    protected int getFeatureAt(WorldBlockCoord worldBlockCoord)
+    public int getFeatureAt(WorldBlockCoord worldBlockCoord)
     {
         final ChunkCoord chunkCoord = ChunkCoord.of(worldBlockCoord);
         int[] noiseData = cachedNoiseGens.get(chunkCoord);
@@ -141,11 +141,17 @@ public abstract class ProceduralConnectedTexture
             featureId = -1;
             for (Feature feature : getChunkFeatures(chunkCoord))
             {
-                if (x >= feature.getBlockCoord().getX() && x < feature.getBlockCoord().getX() + feature.getWidth())
+
+                final WorldBlockCoord featureBlockCoord = feature.getBlockCoord();
+
+
+                final int featureX = featureBlockCoord.getX();
+                if (x >= featureX && x < featureX + feature.getWidth())
                 {
-                    if (z >= feature.getBlockCoord().getZ() && z < feature.getBlockCoord().getZ() + feature.getDepth())
+                    final int featureZ = featureBlockCoord.getZ();
+                    if (z >= featureZ && z < featureZ + feature.getDepth())
                     {
-                        if (y >= feature.getBlockCoord().getY() && y < feature.getBlockCoord().getY() + feature.getHeight())
+                        if (y >= featureBlockCoord.getY() && y < featureBlockCoord.getY() + feature.getHeight())
                         {
                             featureId = feature.getFeatureId();
                             break;
@@ -166,14 +172,7 @@ public abstract class ProceduralConnectedTexture
     }
 
 
-    protected interface IRuinWallFeature
-    {
-        boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int featureId);
-
-        Collection<Feature> getFeatureAreasFor(ChunkCoord chunkCoord);
-    }
-
-    protected static class Feature
+    public static class Feature
     {
         private final int featureId;
         private final WorldBlockCoord blockCoord;

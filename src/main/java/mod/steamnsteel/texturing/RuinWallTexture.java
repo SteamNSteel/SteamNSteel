@@ -2,7 +2,8 @@ package mod.steamnsteel.texturing;
 
 import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
-import mod.steamnsteel.utility.position.ChunkCoord;
+import mod.steamnsteel.texturing.feature.PipesRuinWallFeature;
+import mod.steamnsteel.texturing.feature.PlateRuinWallFeature;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -22,8 +23,8 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     protected HashMap<Integer, IRuinWallFeature> getFeatures()
     {
         HashMap<Integer, IRuinWallFeature> features = new HashMap<Integer, IRuinWallFeature>();
-        features.put(FEATURE_PLATE, new PlateRuinWallFeature());
-        features.put(FEATURE_PIPES, new PipesRuinWallFeature());
+        features.put(FEATURE_PLATE, new PlateRuinWallFeature(this, FEATURE_PLATE));
+        features.put(FEATURE_PIPES, new PipesRuinWallFeature(this, FEATURE_PIPES));
         return features;
     }
 
@@ -306,7 +307,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         return subProperties;
     }
 
-    private boolean checkRuinWallAndNotObscured(IBlockAccess blockAccess, WorldBlockCoord startingBlock, ForgeDirection back)
+    public boolean checkRuinWallAndNotObscured(IBlockAccess blockAccess, WorldBlockCoord startingBlock, ForgeDirection back)
     {
         if (!(startingBlock.getBlock(blockAccess) instanceof PlotoniumRuinWall))
         {
@@ -375,142 +376,6 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         }
 
         return sb.toString();
-    }
-
-    private class PipesRuinWallFeature implements IRuinWallFeature
-    {
-
-        @Override
-        public boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int featureId)
-        {
-            ForgeDirection back = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BACK, orientation);
-
-            if (!checkRuinWallAndNotObscured(blockAccess, worldBlockCoord, back))
-            {
-                return false;
-            }
-
-            ForgeDirection below = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BELOW, orientation);
-            ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
-
-            boolean aboveValid = (checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above), back) && getFeatureAt(worldBlockCoord.offset(above)) == featureId);
-            if (aboveValid)
-            {
-                return true;
-            }
-            boolean belowValid = (checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below), back) && getFeatureAt(worldBlockCoord.offset(below)) == featureId);
-
-            if (belowValid)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        @Override
-        public Collection<Feature> getFeatureAreasFor(ChunkCoord chunkCoord)
-        {
-            Random random = new Random(Objects.hash(chunkCoord, FEATURE_PIPES));
-
-            final int featureCount = 64;
-
-            List<Feature> features = new ArrayList<Feature>(featureCount);
-            //Generate Pipe features
-            for (int i = 0; i < featureCount; ++i)
-            {
-                int xPos = random.nextInt(18) - 1;
-                int yPos = random.nextInt(15);
-                int zPos = random.nextInt(18) - 1;
-
-                features.add(new Feature(FEATURE_PIPES, WorldBlockCoord.of(xPos, yPos, zPos), 1, 2, 1));
-            }
-            return features;
-        }
-    }
-
-    private class PlateRuinWallFeature implements IRuinWallFeature
-    {
-        public boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int featureId)
-        {
-            ForgeDirection back = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BACK, orientation);
-
-            if (!checkRuinWallAndNotObscured(blockAccess, worldBlockCoord, back))
-            {
-                return false;
-            }
-
-            ForgeDirection left = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.LEFT, orientation);
-            ForgeDirection right = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.RIGHT, orientation);
-            ForgeDirection below = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BELOW, orientation);
-            ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
-
-            //check Left
-            boolean leftValid = (checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(left), back) && getFeatureAt(worldBlockCoord.offset(left)) == featureId);
-            boolean rightValid = (checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(right), back) && getFeatureAt(worldBlockCoord.offset(right)) == featureId);
-            if (!leftValid && !rightValid)
-            {
-                return false;
-            }
-            boolean aboveValid = (checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above), back) && getFeatureAt(worldBlockCoord.offset(above)) == featureId);
-            boolean belowValid = (checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below), back) && getFeatureAt(worldBlockCoord.offset(below)) == featureId);
-
-            if (!aboveValid && !belowValid)
-            {
-                return false;
-            }
-
-            //check for a cluster of 4 - Automatically valid
-            //check above and left
-            if (aboveValid && leftValid && checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above).offset(left), back) && getFeatureAt(worldBlockCoord.offset(above).offset(left)) == featureId)
-            {
-                return true;
-            }
-            //check above and right
-            if (aboveValid && rightValid && checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above).offset(right), back) && getFeatureAt(worldBlockCoord.offset(above).offset(right)) == featureId)
-            {
-                return true;
-            }
-            //check below and left
-            if (belowValid && leftValid && checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below).offset(left), back) && getFeatureAt(worldBlockCoord.offset(below).offset(left)) == featureId)
-            {
-                return true;
-            }
-            //check below and right
-            if (belowValid && rightValid && checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below).offset(right), back) && getFeatureAt(worldBlockCoord.offset(below).offset(right)) == featureId)
-            {
-                return true;
-            }
-
-            //We have encountered an S or Z shape;
-            return false;
-        }
-
-        @Override
-        public Collection<Feature> getFeatureAreasFor(ChunkCoord chunkCoord)
-        {
-            final int featureCount = 64;
-
-            Random random = new Random(Objects.hash(chunkCoord, FEATURE_PIPES));
-
-            List<Feature> features = new ArrayList<Feature>(featureCount);
-
-            //Generate plate features
-            for (int i = 0; i < featureCount; ++i)
-            {
-                int xPos = random.nextInt(18) - 1;
-                int yPos = random.nextInt(16);
-                int zPos = random.nextInt(18) - 1;
-
-                int width = random.nextInt(7) + 1;
-                int height = random.nextInt(7) + 1;
-                int depth = random.nextInt(7) + 1;
-
-                features.add(new Feature(FEATURE_PLATE, WorldBlockCoord.of(xPos, yPos, zPos), width, height, depth));
-            }
-
-            return features;
-        }
     }
 
 
