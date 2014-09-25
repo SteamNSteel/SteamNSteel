@@ -18,8 +18,6 @@ package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
@@ -40,28 +38,38 @@ import java.util.Random;
 public class PlotoniumRuinWall extends SteamNSteelBlock
 {
     public static final String NAME = "ruinWallPlotonium";
+    public static final int ROTATION_INDEX_LEFT = 0;
+    public static final int ROTATION_INDEX_RIGHT = 1;
+    public static final int ROTATION_INDEX_BACK = 2;
+    public static final int ROTATION_INDEX_ABOVE = 5;
+    public static final int ROTATION_INDEX_BELOW = 4;
 
     private HashMap<Integer, IIcon> icons2 = new HashMap<Integer, IIcon>();
 
-    int[][] ROTATION_MATRIX = {
-            {0, 0, 0, 0, 0, 0, 6},
-            {0, 0, 0, 0, 0, 0, 6},
-            {5, 4, 2, 3, 0, 1, 6},
-            {4, 5, 3, 2, 0, 1, 6},
-            {2, 3, 4, 5, 0, 1, 6},
-            {3, 2, 5, 4, 0, 1, 6}
+    ForgeDirection[][] ROTATION_MATRIX = {
+            {ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN},
+            {ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN},
+            {ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN},
+            {ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.SOUTH, ForgeDirection.NORTH, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN},
+            {ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN},
+            {ForgeDirection.SOUTH, ForgeDirection.NORTH, ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN}
     };
 
     final int DEFAULT = 0;
-    final int TOP = 1;
-    final int BOTTOM = 2;
-    final int LEFT = 4;
-    final int RIGHT = 8;
+    final int TOP = 1 << 0;
+    final int BOTTOM = 1 << 1;
+    final int LEFT = 1 << 2;
+    final int RIGHT = 1 << 3;
 
-    final int FEATURE_CROWN = 16;
-    final int FEATURE_BASE = 32;
-    final int FEATURE_PLATE = 64;
-    final int FEATURE_PIPES = 128;
+    final int FEATURE_EDGE_TOP = 1<<4;
+    final int FEATURE_EDGE_BOTTOM = 1<<5;
+    final int FEATURE_EDGE_LEFT = 1<<6;
+    final int FEATURE_EDGE_RIGHT = 1<<7;
+
+    final int FEATURE_CROWN = 1<<8;
+    final int FEATURE_BASE = 1<<9;
+    final int FEATURE_PLATE = 1<<10;
+    final int FEATURE_PIPES = 1<<11;
 
     final int NO_FEATURE = -1;
 
@@ -78,9 +86,22 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         icons2.put(RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
         icons2.put(LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
 
+        icons2.put(FEATURE_PIPES | FEATURE_EDGE_TOP , iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeA"));
+        icons2.put(FEATURE_PIPES | FEATURE_EDGE_BOTTOM , iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD1_PipeB"));
+
         icons2.put(FEATURE_PLATE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
 
-        icons2.put(FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVL"));
+        icons2.put(FEATURE_PLATE | FEATURE_EDGE_LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVL"));
+        icons2.put(FEATURE_PLATE | FEATURE_EDGE_RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVR"));
+        icons2.put(FEATURE_PLATE | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeHU"));
+        icons2.put(FEATURE_PLATE | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeHD"));
+
+        icons2.put(FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeRDC"));
+        icons2.put(FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeRUC"));
+        icons2.put(FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeLDC"));
+        icons2.put(FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeLUC"));
+
+        /*icons2.put(FEATURE_PLATE | LEFT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVL"));
         icons2.put(FEATURE_PLATE | TOP, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeHU"));
         icons2.put(FEATURE_PLATE | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeVR"));
         icons2.put(FEATURE_PLATE | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_DD2_PEdgeHD"));
@@ -122,9 +143,12 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         icons2.put(BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
 
         //Single pipes
-        icons2.put(FEATURE_PIPES | TOP | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
+        icons2.put(FEATURE_PIPES | TOP | BOTTOM | LEFT | RIGHT, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));*/
 
         icons2.put(MISSING_TEXTURE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Missing"));
+
+        //Remove these later once the default is the default block
+        icons2.put(TOP | BOTTOM, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "Wall_Generic"));
     }
 
     @Override
@@ -142,168 +166,103 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     @Override
     public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side)
     {
-        //Logger.info("%d, %d, %d, %d", );
-
         int blockProperties = getTexturePropertiesForSide(blockAccess, x, y, z, side);
 
         if (!icons2.containsKey(blockProperties))
         {
             String blockPropertiesDescription = describeTextureProperties(blockProperties);
 
-            Logger.warning("Unknown Ruin Wall bitmap: %d (%s) - %s @ (%d, %d, %d) - %d", blockProperties, Integer.toBinaryString(blockProperties), blockPropertiesDescription, x, y, z, side);
+            //Logger.warning("Unknown Ruin Wall bitmap: %d (%s) - %s @ (%d, %d, %d) - %d", blockProperties, Integer.toBinaryString(blockProperties), blockPropertiesDescription, x, y, z, side);
 
             blockProperties = MISSING_TEXTURE;
         }
         return icons2.get(blockProperties);
     }
 
-    private String describeTextureProperties(int blockProperties)
-    {
-        StringBuilder sb = new StringBuilder();
-        if ((blockProperties & FEATURE_PLATE) == FEATURE_PLATE)
-        {
-            sb.append("Plate,");
-        }
-        if ((blockProperties & FEATURE_CROWN) == FEATURE_CROWN)
-        {
-            sb.append("Crown,");
-        }
-        if ((blockProperties & FEATURE_BASE) == FEATURE_BASE)
-        {
-            sb.append("Base,");
-        }
-        if ((blockProperties & FEATURE_PIPES) == FEATURE_PIPES)
-        {
-            sb.append("Pipes,");
-        }
-
-        if ((blockProperties & TOP) == TOP)
-        {
-            sb.append("T,");
-        }
-        if ((blockProperties & BOTTOM) == BOTTOM)
-        {
-            sb.append("B,");
-        }
-        if ((blockProperties & LEFT) == LEFT)
-        {
-            sb.append("L,");
-        }
-        if ((blockProperties & RIGHT) == RIGHT)
-        {
-            sb.append("R,");
-        }
-
-        return sb.toString();
-    }
-
     private int getTexturePropertiesForSide(IBlockAccess blockAccess, int x, int y, int z, int side)
     {
         try
         {
+            int blockProperties = 0;
+
             final WorldBlockCoord worldBlockCoord = WorldBlockCoord.of(x, y, z);
             ForgeDirection orientation = ForgeDirection.getOrientation(side);
             if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN)
             {
                 return DEFAULT;
             }
+            ForgeDirection[] rotationMatrix = ROTATION_MATRIX[side];
+            ForgeDirection left = rotationMatrix[ROTATION_INDEX_LEFT];
+            ForgeDirection right = rotationMatrix[ROTATION_INDEX_RIGHT];
+            ForgeDirection back = rotationMatrix[ROTATION_INDEX_BACK];
+            ForgeDirection above = rotationMatrix[ROTATION_INDEX_ABOVE];
+            ForgeDirection below = rotationMatrix[ROTATION_INDEX_BELOW];
 
-            int[] rotationMatrix = ROTATION_MATRIX[side];
+            boolean leftIsRuinWallAndNotObscured = checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(left), back);
+            boolean rightIsRuinWallAndNotObscured = checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(right), back);
+            boolean aboveIsRuinWallAndNotObscured = checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above), back);
+            boolean belowIsRuinWallAndNotObscured = checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below), back);
 
-            ForgeDirection left = ForgeDirection.getOrientation(rotationMatrix[0]);
-            ForgeDirection right = ForgeDirection.getOrientation(rotationMatrix[1]);
-            ForgeDirection back = ForgeDirection.getOrientation(rotationMatrix[2]);
-            ForgeDirection above = ForgeDirection.getOrientation(rotationMatrix[5]);
-            ForgeDirection below = ForgeDirection.getOrientation(rotationMatrix[4]);
-
-            Block blockLeft = blockAccess.getBlock(x + left.offsetX, y + left.offsetY, z + left.offsetZ);
-            Block blockRight = blockAccess.getBlock(x + right.offsetX, y + right.offsetY, z + right.offsetZ);
-            Block blockAbove = blockAccess.getBlock(x + above.offsetX, y + above.offsetY, z + above.offsetZ);
-            Block blockBelow = blockAccess.getBlock(x + below.offsetX, y + below.offsetY, z + below.offsetZ);
-            Block blockBackAndUp = blockAccess.getBlock(x + above.offsetX + back.offsetX, y + above.offsetY + back.offsetY, z + above.offsetZ + back.offsetZ);
-            Block blockBackAndLeft = blockAccess.getBlock(x + left.offsetX + back.offsetX, y + left.offsetY + back.offsetY, z + left.offsetZ + back.offsetZ);
-            Block blockBackAndRight = blockAccess.getBlock(x + right.offsetX + back.offsetX, y + right.offsetY + back.offsetY, z + right.offsetZ + back.offsetZ);
-            Block blockBackAndBottom = blockAccess.getBlock(x + below.offsetX + back.offsetX, y + below.offsetY + back.offsetY, z + below.offsetZ + back.offsetZ);
-
-            int blockProperties = 0;
-            if (!blockAbove.getMaterial().isOpaque() || blockBackAndUp.getMaterial().isOpaque())
-            {
+            if (!aboveIsRuinWallAndNotObscured) {
                 blockProperties |= TOP;
-                blockProperties |= FEATURE_CROWN;
             }
-            if (blockBackAndBottom.getMaterial().isOpaque())
-            {
+            if (!belowIsRuinWallAndNotObscured) {
                 blockProperties |= BOTTOM;
-            } else if (blockBelow != ModBlock.ruinWallPlotonium && blockBelow.getMaterial().isOpaque())
-            {
-                blockProperties = BOTTOM;
-                blockProperties |= FEATURE_BASE;
             }
-            if (blockLeft != ModBlock.ruinWallPlotonium || blockBackAndLeft.getMaterial().isOpaque())
-            {
+            if (!leftIsRuinWallAndNotObscured) {
                 blockProperties |= LEFT;
             }
-
-            if (blockRight != ModBlock.ruinWallPlotonium || blockBackAndRight.getMaterial().isOpaque())
-            {
+            if (!rightIsRuinWallAndNotObscured) {
                 blockProperties |= RIGHT;
+            }
+
+
+            if ((blockProperties & TOP) == TOP && (blockProperties & BOTTOM) != BOTTOM) {
+                blockProperties |= FEATURE_CROWN;
             }
 
             int featureId = getSideFeature(worldBlockCoord);
             if (featureId != NO_FEATURE)
-            {// && isFeatureValid(worldBlockCoord, featureId, side)) {
-                int savedBlockProperties = blockProperties;
-                blockProperties |= featureId;
-                final WorldBlockCoord leftBlockCoord = worldBlockCoord.offset(left);
-                if (getSideFeature(leftBlockCoord) != featureId || !isFeatureValid(blockAccess, leftBlockCoord, featureId, side))
-                {
-                    blockProperties |= LEFT;
+            {
+                int subProperties = featureId;
+
+                int leftBlockFeature = getSideFeature(worldBlockCoord.offset(left));
+                int rightBlockFeature = getSideFeature(worldBlockCoord.offset(right));
+                int topBlockFeature = getSideFeature(worldBlockCoord.offset(above));
+                int bottomBlockFeature = getSideFeature(worldBlockCoord.offset(below));
+
+                if (leftBlockFeature != featureId) {
+                    subProperties |= FEATURE_EDGE_LEFT;
                 }
-                final WorldBlockCoord rightBlockCoord = worldBlockCoord.offset(right);
-                if (getSideFeature(rightBlockCoord) != featureId || !isFeatureValid(blockAccess, rightBlockCoord, featureId, side))
-                {
-                    blockProperties |= RIGHT;
+                if (rightBlockFeature != featureId) {
+                    subProperties |= FEATURE_EDGE_RIGHT;
                 }
-                final WorldBlockCoord aboveBlockCoord = worldBlockCoord.offset(above);
-                if (getSideFeature(aboveBlockCoord) != featureId || !isFeatureValid(blockAccess, aboveBlockCoord, featureId, side))
-                {
-                    blockProperties |= TOP;
+                if (topBlockFeature != featureId) {
+                    subProperties |= FEATURE_EDGE_TOP;
                 }
-                final WorldBlockCoord belowBlockCoord = worldBlockCoord.offset(below);
-                final int sideFeature = getSideFeature(belowBlockCoord);
-                final boolean belowBlockFeature = sideFeature != featureId;
-                final boolean belowFeatureIsValid = isFeatureValid(blockAccess, belowBlockCoord, featureId, side);
-                if (belowBlockFeature || !belowFeatureIsValid || blockBelow != ModBlock.ruinWallPlotonium)
-                {
-                    blockProperties |= BOTTOM;
+                if (bottomBlockFeature != featureId) {
+                    subProperties |= FEATURE_EDGE_BOTTOM;
                 }
 
-                if (featureId == FEATURE_PLATE)
-                {
-                    //Plates don't support single width/height blocks. Revert to non-plate feature.
-                    if ((blockProperties & (TOP | BOTTOM)) == (TOP | BOTTOM))
-                    {
-                        blockProperties = savedBlockProperties;
-                    }
-                    if ((blockProperties & (LEFT | RIGHT)) == (LEFT | RIGHT))
-                    {
-                        blockProperties = savedBlockProperties;
-                    }
+                final int FEATURE_EDGE_TOP_AND_BOTTOM = FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM;
+                final int FEATURE_EDGE_LEFT_AND_RIGHT = FEATURE_EDGE_LEFT | FEATURE_EDGE_RIGHT;
+
+                switch (featureId) {
+                    case FEATURE_PIPES:
+                        //Pipes are only a single block wide and must ignore LEFT | RIGHT edges
+                        subProperties &= featureId | FEATURE_EDGE_TOP_AND_BOTTOM;
+                        break;
+                    case FEATURE_PLATE:
+                        //Plates cannot be a single block wide.
+                        if ((subProperties & FEATURE_EDGE_TOP_AND_BOTTOM) == FEATURE_EDGE_TOP_AND_BOTTOM) {
+                            subProperties = 0;
+                        } else if ((subProperties & FEATURE_EDGE_LEFT_AND_RIGHT) == FEATURE_EDGE_LEFT_AND_RIGHT) {
+                            subProperties = 0;
+                        }
+                        break;
                 }
 
-                if ((blockProperties & FEATURE_CROWN) == FEATURE_CROWN) {
-                    Block blockLeftAndAbove = worldBlockCoord.offset(left).offset(above).getBlock(blockAccess);
-                    Block blockRightAndAbove = worldBlockCoord.offset(right).offset(above).getBlock(blockAccess);
-
-                    if (blockLeftAndAbove instanceof PlotoniumRuinWall) {
-                        blockProperties |= LEFT;
-                    }
-
-                    if (blockRightAndAbove instanceof PlotoniumRuinWall) {
-                        blockProperties |= RIGHT;
-                    }
-
-                }
+                blockProperties |= subProperties;
             }
 
             return blockProperties;
@@ -312,6 +271,17 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
             e.printStackTrace();
             return MISSING_TEXTURE;
         }
+    }
+
+    private boolean checkRuinWallAndNotObscured(IBlockAccess blockAccess, WorldBlockCoord startingBlock, ForgeDirection back)
+    {
+        if (!(startingBlock.getBlock(blockAccess) instanceof PlotoniumRuinWall)) {
+            return false;
+        }
+        if (!startingBlock.offset(back).getBlock(blockAccess).getMaterial().isOpaque()) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -394,57 +364,64 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         return features;
     }
 
-    private boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int featureId, int side)
+
+    private String describeTextureProperties(int blockProperties)
     {
-        boolean leftSet = false;
-        boolean rightSet = false;
-        boolean aboveSet = false;
-        boolean belowSet = false;
-
-        int[] rotationMatrix = ROTATION_MATRIX[side];
-
-        ForgeDirection left = ForgeDirection.getOrientation(rotationMatrix[0]);
-        ForgeDirection right = ForgeDirection.getOrientation(rotationMatrix[1]);
-        ForgeDirection above = ForgeDirection.getOrientation(rotationMatrix[5]);
-        ForgeDirection below = ForgeDirection.getOrientation(rotationMatrix[4]);
-        ForgeDirection back = ForgeDirection.getOrientation(rotationMatrix[2]);
-
-        Block blockBackAndUp = worldBlockCoord.offset(back).offset(above).getBlock(blockAccess);
-        Block blockBackAndLeft = worldBlockCoord.offset(back).offset(left).getBlock(blockAccess);
-        Block blockBackAndRight = worldBlockCoord.offset(back).offset(right).getBlock(blockAccess);
-        Block blockBackAndBottom = worldBlockCoord.offset(back).offset(below).getBlock(blockAccess);
-
-        final WorldBlockCoord leftBlockCoord = worldBlockCoord.offset(left);
-        int neighbours = 0;
-        if (getSideFeature(leftBlockCoord) != featureId)// || blockBackAndLeft.getMaterial().isOpaque())
+        StringBuilder sb = new StringBuilder();
+        if ((blockProperties & FEATURE_PLATE) == FEATURE_PLATE)
         {
-            leftSet = true;
-            neighbours++;
+            sb.append("Plate,");
         }
-        final WorldBlockCoord rightBlockCoord = worldBlockCoord.offset(right);
-        if (getSideFeature(rightBlockCoord) != featureId)// || blockBackAndRight.getMaterial().isOpaque())
+        if ((blockProperties & FEATURE_CROWN) == FEATURE_CROWN)
         {
-            rightSet = true;
-            neighbours++;
+            sb.append("Crown,");
         }
-        final WorldBlockCoord aboveBlockCoord = worldBlockCoord.offset(above);
-        if (getSideFeature(aboveBlockCoord) != featureId)// || blockBackAndUp.getMaterial().isOpaque())
+        if ((blockProperties & FEATURE_BASE) == FEATURE_BASE)
         {
-            aboveSet = true;
-            neighbours++;
+            sb.append("Base,");
         }
-        final WorldBlockCoord belowBlockCoord = worldBlockCoord.offset(below);
-        if (belowBlockCoord.getY() > 0 && (getSideFeature(belowBlockCoord) != featureId) || !(belowBlockCoord.getBlock(blockAccess) instanceof PlotoniumRuinWall))// || blockBackAndBottom.getMaterial().isOpaque()))
+        if ((blockProperties & FEATURE_PIPES) == FEATURE_PIPES)
         {
-            belowSet = true;
-            neighbours++;
+            sb.append("Pipes,");
         }
 
-        if ((aboveSet && belowSet) || (leftSet && rightSet)) return false;
-        //if (neighbours == 1) return false;
+        if ((blockProperties & TOP) == TOP)
+        {
+            sb.append("T,");
+        }
+        if ((blockProperties & BOTTOM) == BOTTOM)
+        {
+            sb.append("B,");
+        }
+        if ((blockProperties & LEFT) == LEFT)
+        {
+            sb.append("L,");
+        }
+        if ((blockProperties & RIGHT) == RIGHT)
+        {
+            sb.append("R,");
+        }
 
-        return true;
+        if ((blockProperties & FEATURE_EDGE_TOP) == FEATURE_EDGE_TOP)
+        {
+            sb.append("FE_T,");
+        }
+        if ((blockProperties & FEATURE_EDGE_BOTTOM) == FEATURE_EDGE_BOTTOM)
+        {
+            sb.append("FE_B,");
+        }
+        if ((blockProperties & FEATURE_EDGE_LEFT) == FEATURE_EDGE_LEFT)
+        {
+            sb.append("FE_L,");
+        }
+        if ((blockProperties & FEATURE_EDGE_RIGHT) == FEATURE_EDGE_RIGHT)
+        {
+            sb.append("FE_R,");
+        }
+
+        return sb.toString();
     }
+
 
     public PlotoniumRuinWall()
     {
