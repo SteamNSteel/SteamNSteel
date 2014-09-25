@@ -20,6 +20,7 @@ import com.google.common.base.Objects;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
@@ -49,6 +50,10 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
     {
         return world.getTileEntity(data.left, data.middle, data.right);
     }
+
+    public BiomeGenBase getBiome(World world) { return world.getBiomeGenForCoords(data.left, data.right); }
+
+    public int getHeightofTopBlock(World world) { return world.getHeightValue(data.left, data.right); }
 
     @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
     public boolean blockExists(World world)
