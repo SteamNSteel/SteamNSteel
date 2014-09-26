@@ -56,7 +56,6 @@ public abstract class ProceduralConnectedTexture
                 addIcon(i, iconRegister.registerIcon(TheMod.MOD_ID + ":" + set.getKey()));
             }
         }
-        //addIcon(MISSING_TEXTURE, iconRegister.registerIcon(TheMod.MOD_ID + ":" + "blockPlotoniumWall-Missing"));
     }
 
     protected abstract Map<String, Integer[]> getIconMap();
