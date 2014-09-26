@@ -7,7 +7,8 @@ import mod.steamnsteel.texturing.feature.PlateRuinWallFeature;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RuinWallTexture extends ProceduralConnectedTexture
 {
@@ -112,22 +113,22 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                         FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER,
                         FEATURE_PLATE | FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER
                 })
-                .put("Wall_DD2_PEdgeInnerRDC_S", new Integer[] {
+                .put("Wall_DD2_PEdgeInnerRDC_S", new Integer[]{
                         FEATURE_PLATE | FEATURE_PLATE_BR_CORNER,
                 })
-                .put("Wall_DD2_PEdgeInnerRUC_S", new Integer[] {
+                .put("Wall_DD2_PEdgeInnerRUC_S", new Integer[]{
                         FEATURE_PLATE | FEATURE_PLATE_TR_CORNER,
                 })
-                .put("Wall_DD2_PEdgeInnerLDC_S", new Integer[] {
+                .put("Wall_DD2_PEdgeInnerLDC_S", new Integer[]{
                         FEATURE_PLATE | FEATURE_PLATE_BL_CORNER
                 })
-                .put("Wall_DD2_PEdgeInnerLUC_S", new Integer[] {
+                .put("Wall_DD2_PEdgeInnerLUC_S", new Integer[]{
                         FEATURE_PLATE | FEATURE_PLATE_TL_CORNER,
                 })
-                .put("Wall_DD2_PEdgeInnerLURDC_S", new Integer[] {
+                .put("Wall_DD2_PEdgeInnerLURDC_S", new Integer[]{
                         FEATURE_PLATE | FEATURE_PLATE_TL_CORNER | FEATURE_PLATE_BR_CORNER
                 })
-                .put("Wall_DD2_PEdgeInnerLDRUC_S", new Integer[] {
+                .put("Wall_DD2_PEdgeInnerLDRUC_S", new Integer[]{
                         FEATURE_PLATE | FEATURE_PLATE_BL_CORNER | FEATURE_PLATE_TR_CORNER
                 })
                 .put("Wall_CrownM_EdgeL", new Integer[]{
@@ -292,10 +293,12 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 }
 
                 //Break up the bases
-                if ((worldBlockCoord.hashCode() & 7) == 0) {
+                if ((worldBlockCoord.hashCode() & 7) == 0)
+                {
                     blockProperties |= LEFT;
                 }
-                if ((worldBlockCoord.offset(right).hashCode() & 7) == 0) {
+                if ((worldBlockCoord.offset(right).hashCode() & 7) == 0)
+                {
                     blockProperties |= RIGHT;
                 }
 
@@ -312,10 +315,12 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 }
 
                 //Break up the crowns
-                if ((worldBlockCoord.hashCode() & 7) == 0) {
+                if ((worldBlockCoord.hashCode() & 7) == 0)
+                {
                     blockProperties |= LEFT;
                 }
-                if ((worldBlockCoord.offset(right).hashCode() & 7) == 0) {
+                if ((worldBlockCoord.offset(right).hashCode() & 7) == 0)
+                {
                     blockProperties |= RIGHT;
                 }
             }
@@ -327,7 +332,6 @@ public class RuinWallTexture extends ProceduralConnectedTexture
             return MISSING_TEXTURE;
         }
     }
-
 
 
     public boolean checkRuinWallAndNotObscured(IBlockAccess blockAccess, WorldBlockCoord startingBlock, ForgeDirection back)
