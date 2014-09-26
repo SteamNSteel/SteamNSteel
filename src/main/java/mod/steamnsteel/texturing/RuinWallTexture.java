@@ -2,9 +2,9 @@ package mod.steamnsteel.texturing;
 
 import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
+import mod.steamnsteel.texturing.feature.OneByOneRuinWallFeature;
 import mod.steamnsteel.texturing.feature.PipesRuinWallFeature;
 import mod.steamnsteel.texturing.feature.PlateRuinWallFeature;
-import mod.steamnsteel.texturing.feature.VentRuinWallFeature;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -19,9 +19,10 @@ public class RuinWallTexture extends ProceduralConnectedTexture
 
     public static final int FEATURE_PIPES = 1 << 14;
     public static final int FEATURE_VENT = 1 << 15;
-    public static final int FEATURE_PLATE = 1 << 16;
+    public static final int FEATURE_SCREEN = 1 << 16;
+    public static final int FEATURE_PLATE = 1 << 17;
 
-    final int FEATURE_MASK = FEATURE_PLATE | FEATURE_PIPES | FEATURE_VENT;
+    final int FEATURE_MASK = FEATURE_PLATE | FEATURE_PIPES | FEATURE_SCREEN | FEATURE_VENT;
 
     public static final int FEATURE_PLATE_TL_CORNER = 1 << 8;
     public static final int FEATURE_PLATE_TR_CORNER = 1 << 9;
@@ -33,7 +34,8 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     {
         HashMap<Integer, IProceduralWallFeature> features = new HashMap<Integer, IProceduralWallFeature>();
         features.put(FEATURE_PIPES, new PipesRuinWallFeature(this, FEATURE_PIPES));
-        features.put(FEATURE_VENT, new VentRuinWallFeature(this, FEATURE_VENT));
+        features.put(FEATURE_VENT, new OneByOneRuinWallFeature(this, FEATURE_VENT));
+        features.put(FEATURE_SCREEN, new OneByOneRuinWallFeature(this, FEATURE_SCREEN));
         features.put(FEATURE_PLATE, new PlateRuinWallFeature(this, FEATURE_PLATE));
 
 
@@ -70,6 +72,12 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                         FEATURE_VENT | LEFT,
                         FEATURE_VENT | RIGHT,
                         FEATURE_VENT | LEFT | RIGHT
+                })
+                .put("Wall_DDScreen", new Integer[] {
+                        FEATURE_SCREEN,
+                        FEATURE_SCREEN | LEFT,
+                        FEATURE_SCREEN | RIGHT,
+                        FEATURE_SCREEN | LEFT | RIGHT
                 })
                 .put("Wall_DD1_PipeB", new Integer[]{
                         FEATURE_PIPES | FEATURE_EDGE_BOTTOM,

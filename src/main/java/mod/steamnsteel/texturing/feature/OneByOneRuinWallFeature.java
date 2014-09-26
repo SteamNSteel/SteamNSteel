@@ -10,12 +10,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
-public class VentRuinWallFeature implements IProceduralWallFeature
+public class OneByOneRuinWallFeature implements IProceduralWallFeature
 {
     private RuinWallTexture ruinWallTexture;
     private final int featureId;
 
-    public VentRuinWallFeature(RuinWallTexture ruinWallTexture, int featureId)
+    public OneByOneRuinWallFeature(RuinWallTexture ruinWallTexture, int featureId)
     {
         this.ruinWallTexture = ruinWallTexture;
         this.featureId = featureId;
