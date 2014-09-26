@@ -39,7 +39,13 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                         RIGHT,
                         LEFT | RIGHT,
                         TOP | BOTTOM,
-                        FEATURE_PLATE
+                        FEATURE_PLATE,
+                        //Hacks around a hard to detect issue of two pipes spawning in a 1x4 stack.
+                        //An alternative would be to replace these with a 1x1 texture.
+                        FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM,
+                        FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | RIGHT,
+                        FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT,
+                        FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT | RIGHT,
                 })
                 .put("Wall_DD1_PipeA", new Integer[]{
                         FEATURE_PIPES | FEATURE_EDGE_TOP,

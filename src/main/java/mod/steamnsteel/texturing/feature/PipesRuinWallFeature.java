@@ -33,21 +33,31 @@ public class PipesRuinWallFeature implements IProceduralWallFeature
         ForgeDirection below = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BELOW, orientation);
         ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
 
-        boolean aboveValid = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(above)) == featureId);
+        final boolean aboveBlockIsClear = ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above), back);
+        final int aboveBlockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(above));
+        boolean aboveValid = (aboveBlockIsClear && aboveBlockFeature == featureId);
+        final boolean belowBlockIsClear = ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below), back);
+        final int belowBlockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(below));
+        boolean belowValid = (belowBlockIsClear && belowBlockFeature == featureId);
+
+        /*if (!belowValid && !aboveValid) {
+            return false;
+        }*/
+
         boolean aboveValid2 = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above).offset(above), back));
-        if (aboveValid && aboveValid2)
-        {
+        boolean belowValid2 = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below).offset(below), back));
+
+        if (aboveBlockIsClear && aboveBlockFeature != featureId && belowBlockIsClear && belowBlockFeature == featureId && belowValid2) {
             return true;
         }
 
-
-        boolean belowValid = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(below)) == featureId);
-        //boolean belowValid2 = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below).offset(below), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(below).offset(below)) == featureId);
-
-        if (belowValid)
-        {
+        if (belowBlockIsClear && belowBlockFeature != featureId && aboveBlockIsClear && aboveBlockFeature == featureId && aboveValid2) {
             return true;
         }
+
+        /*if (!aboveValid2 || !belowValid2) {
+            return false;
+        }*/
 
         return false;
     }
