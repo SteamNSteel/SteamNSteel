@@ -20,9 +20,9 @@ public class RuinWallTexture extends ProceduralConnectedTexture
 
 
     @Override
-    protected HashMap<Integer, IRuinWallFeature> getFeatures()
+    protected HashMap<Integer, IProceduralWallFeature> getFeatures()
     {
-        HashMap<Integer, IRuinWallFeature> features = new HashMap<Integer, IRuinWallFeature>();
+        HashMap<Integer, IProceduralWallFeature> features = new HashMap<Integer, IProceduralWallFeature>();
         features.put(FEATURE_PLATE, new PlateRuinWallFeature(this, FEATURE_PLATE));
         features.put(FEATURE_PIPES, new PipesRuinWallFeature(this, FEATURE_PIPES));
         return features;

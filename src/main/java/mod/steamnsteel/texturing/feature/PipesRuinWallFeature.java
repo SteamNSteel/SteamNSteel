@@ -1,7 +1,7 @@
 package mod.steamnsteel.texturing.feature;
 
 import mod.steamnsteel.texturing.BlockSideRotation;
-import mod.steamnsteel.texturing.IRuinWallFeature;
+import mod.steamnsteel.texturing.IProceduralWallFeature;
 import mod.steamnsteel.texturing.ProceduralConnectedTexture;
 import mod.steamnsteel.texturing.RuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
@@ -10,7 +10,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
-public class PipesRuinWallFeature implements IRuinWallFeature
+public class PipesRuinWallFeature implements IProceduralWallFeature
 {
 
     private RuinWallTexture ruinWallTexture;
@@ -34,8 +34,8 @@ public class PipesRuinWallFeature implements IRuinWallFeature
         ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
 
         boolean aboveValid = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(above)) == featureId);
-        //boolean aboveValid2 = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above).offset(above), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(above).offset(above)) == featureId);
-        if (aboveValid)
+        boolean aboveValid2 = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above).offset(above), back));
+        if (aboveValid && aboveValid2)
         {
             return true;
         }
@@ -53,13 +53,13 @@ public class PipesRuinWallFeature implements IRuinWallFeature
     }
 
     @Override
-    public Collection<ProceduralConnectedTexture.Feature> getFeatureAreasFor(ChunkCoord chunkCoord)
+    public Collection<ProceduralConnectedTexture.FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord)
     {
-        Random random = new Random(Objects.hash(chunkCoord, featureId));
+        Random random = new Random(Objects.hash(chunkCoord, featureId, 6));
 
         final int featureCount = 64;
 
-        List<ProceduralConnectedTexture.Feature> features = new ArrayList<ProceduralConnectedTexture.Feature>(featureCount);
+        List<ProceduralConnectedTexture.FeatureInstance> features = new ArrayList<ProceduralConnectedTexture.FeatureInstance>(featureCount);
         //Generate Pipe features
         for (int i = 0; i < featureCount; ++i)
         {
@@ -67,8 +67,23 @@ public class PipesRuinWallFeature implements IRuinWallFeature
             int yPos = random.nextInt(15);
             int zPos = random.nextInt(18) - 1;
 
-            features.add(new ProceduralConnectedTexture.Feature(featureId, WorldBlockCoord.of(xPos, yPos, zPos), 1, 2, 1));
+            features.add(new ProceduralConnectedTexture.FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 1, 2, 1));
         }
         return features;
+    }
+
+    @Override
+    public int getFeatureId()
+    {
+        return featureId;
+    }
+
+    @Override
+    public boolean canIntersect(IProceduralWallFeature feature)
+    {
+        if (feature instanceof PlateRuinWallFeature) {
+            return true;
+        }
+        return false;
     }
 }

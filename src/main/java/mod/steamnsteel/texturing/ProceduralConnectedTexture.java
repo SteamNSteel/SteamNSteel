@@ -9,7 +9,10 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class ProceduralConnectedTexture
 {
@@ -26,14 +29,14 @@ public abstract class ProceduralConnectedTexture
     protected final int FEATURE_EDGE_LEFT = 1 << 6;
     protected final int FEATURE_EDGE_RIGHT = 1 << 7;
 
-    private HashMap<Integer, IRuinWallFeature> features;
+    private HashMap<Integer, IProceduralWallFeature> features;
 
     protected ProceduralConnectedTexture()
     {
         this.features = getFeatures();
     }
 
-    protected abstract HashMap<Integer, IRuinWallFeature> getFeatures();
+    protected abstract HashMap<Integer, IProceduralWallFeature> getFeatures();
 
     final int MISSING_TEXTURE = Integer.MAX_VALUE;
     private HashMap<Integer, IIcon> icons = new HashMap<Integer, IIcon>();
@@ -83,19 +86,50 @@ public abstract class ProceduralConnectedTexture
     protected abstract int getTexturePropertiesForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side);
 
     HashMap<ChunkCoord, int[]> cachedNoiseGens = new HashMap<ChunkCoord, int[]>();
-    HashMap<ChunkCoord, List<Feature>> cachedFeatures = new HashMap<ChunkCoord, List<Feature>>();
+    HashMap<ChunkCoord, List<FeatureInstance>> cachedFeatures = new HashMap<ChunkCoord, List<FeatureInstance>>();
 
-    private List<Feature> getChunkFeatures(ChunkCoord chunkCoord)
+    private List<FeatureInstance> getChunkFeatures(ChunkCoord chunkCoord)
     {
-        List<Feature> features = cachedFeatures.get(chunkCoord);
+        List<FeatureInstance> features = cachedFeatures.get(chunkCoord);
         if (features != null)
         {
             return features;
         }
-        features = new ArrayList<Feature>();
+        features = new ArrayList<FeatureInstance>();
 
-        for (IRuinWallFeature wallFeature : this.features.values())
+        for (IProceduralWallFeature wallFeature : this.features.values())
         {
+
+            for (FeatureInstance feature : wallFeature.getFeatureAreasFor(chunkCoord))
+            {
+                final IProceduralWallFeature ruinWallFeature = this.features.get(feature.featureId);
+                final WorldBlockCoord blockCoord = feature.getBlockCoord();
+                boolean addFeature = true;
+                for (FeatureInstance otherFeature : features)
+                {
+
+                    final WorldBlockCoord otherFeatureBlockCoord = otherFeature.getBlockCoord();
+                    if (blockCoord.getX() + feature.getWidth() >= otherFeatureBlockCoord.getX() &&
+                            blockCoord.getX() <= otherFeatureBlockCoord.getX() + otherFeature.getWidth() &&
+                            blockCoord.getY() + feature.getHeight() >= otherFeatureBlockCoord.getY() &&
+                            blockCoord.getY() <= otherFeatureBlockCoord.getY() + otherFeature.getHeight() &&
+                            blockCoord.getZ() + feature.getDepth() >= otherFeatureBlockCoord.getZ() &&
+                            blockCoord.getZ() <= otherFeatureBlockCoord.getZ() + otherFeature.getDepth()
+                            )
+                    {
+                        if (!feature.getFeature().canIntersect(otherFeature.getFeature()))
+                        {
+                            addFeature = false;
+                            break;
+                        }
+                    }
+                }
+                if (addFeature)
+                {
+                    features.add(feature);
+                }
+            }
+
             features.addAll(wallFeature.getFeatureAreasFor(chunkCoord));
         }
 
@@ -111,7 +145,7 @@ public abstract class ProceduralConnectedTexture
         {
             return NO_FEATURE;
         }
-        IRuinWallFeature wallFeature = features.get(desiredFeatureId);
+        IProceduralWallFeature wallFeature = features.get(desiredFeatureId);
         if (wallFeature.isFeatureValid(blockAccess, worldBlockCoord, orientation, desiredFeatureId))
         {
             return desiredFeatureId;
@@ -139,21 +173,19 @@ public abstract class ProceduralConnectedTexture
             int z = localCoord.getZ();
             //-1 denotes processed, but needs special handling elsewhere then.
             featureId = -1;
-            for (Feature feature : getChunkFeatures(chunkCoord))
+            int offsetAmount = localCoord.getY() >> 4;
+            for (FeatureInstance feature : getChunkFeatures(chunkCoord))
             {
-
                 final WorldBlockCoord featureBlockCoord = feature.getBlockCoord();
-
-
-                final int featureX = featureBlockCoord.getX();
+                final int featureX = (featureBlockCoord.getX() + offsetAmount) & 15;
                 if (x >= featureX && x < featureX + feature.getWidth())
                 {
-                    final int featureZ = featureBlockCoord.getZ();
+                    final int featureZ = (featureBlockCoord.getZ() + offsetAmount) & 15;
                     if (z >= featureZ && z < featureZ + feature.getDepth())
                     {
                         if (y >= featureBlockCoord.getY() && y < featureBlockCoord.getY() + feature.getHeight())
                         {
-                            featureId = feature.getFeatureId();
+                            featureId = feature.getFeature().getFeatureId();
                             break;
                         }
                     }
@@ -172,15 +204,15 @@ public abstract class ProceduralConnectedTexture
     }
 
 
-    public static class Feature
+    public static class FeatureInstance
     {
-        private final int featureId;
+        private final IProceduralWallFeature featureId;
         private final WorldBlockCoord blockCoord;
         private final int width;
         private final int height;
         private final int depth;
 
-        public Feature(int featureId, WorldBlockCoord blockCoord, int width, int height, int depth)
+        public FeatureInstance(IProceduralWallFeature featureId, WorldBlockCoord blockCoord, int width, int height, int depth)
         {
 
             this.featureId = featureId;
@@ -190,7 +222,7 @@ public abstract class ProceduralConnectedTexture
             this.depth = depth;
         }
 
-        public int getFeatureId()
+        public IProceduralWallFeature getFeature()
         {
             return featureId;
         }

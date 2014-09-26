@@ -1,7 +1,7 @@
 package mod.steamnsteel.texturing.feature;
 
 import mod.steamnsteel.texturing.BlockSideRotation;
-import mod.steamnsteel.texturing.IRuinWallFeature;
+import mod.steamnsteel.texturing.IProceduralWallFeature;
 import mod.steamnsteel.texturing.ProceduralConnectedTexture;
 import mod.steamnsteel.texturing.RuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
@@ -10,7 +10,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
-public class PlateRuinWallFeature implements IRuinWallFeature
+public class PlateRuinWallFeature implements IProceduralWallFeature
 {
     private RuinWallTexture ruinWallTexture;
     private final int featureId;
@@ -75,13 +75,13 @@ public class PlateRuinWallFeature implements IRuinWallFeature
     }
 
     @Override
-    public Collection<ProceduralConnectedTexture.Feature> getFeatureAreasFor(ChunkCoord chunkCoord)
+    public Collection<ProceduralConnectedTexture.FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord)
     {
         final int featureCount = 64;
 
-        Random random = new Random(Objects.hash(chunkCoord, featureId));
+        Random random = new Random(Objects.hash(chunkCoord, featureId, 6));
 
-        List<ProceduralConnectedTexture.Feature> features = new ArrayList<ProceduralConnectedTexture.Feature>(featureCount);
+        List<ProceduralConnectedTexture.FeatureInstance> features = new ArrayList<ProceduralConnectedTexture.FeatureInstance>(featureCount);
 
         //Generate plate features
         for (int i = 0; i < featureCount; ++i)
@@ -94,9 +94,21 @@ public class PlateRuinWallFeature implements IRuinWallFeature
             int height = random.nextInt(7) + 1;
             int depth = random.nextInt(7) + 1;
 
-            features.add(new ProceduralConnectedTexture.Feature(featureId, WorldBlockCoord.of(xPos, yPos, zPos), width, height, depth));
+            features.add(new ProceduralConnectedTexture.FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), width, height, depth));
         }
 
         return features;
+    }
+
+    @Override
+    public int getFeatureId()
+    {
+        return featureId;
+    }
+
+    @Override
+    public boolean canIntersect(IProceduralWallFeature feature)
+    {
+        return true;
     }
 }
