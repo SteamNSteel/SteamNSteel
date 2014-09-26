@@ -20,9 +20,10 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     public static final int FEATURE_PIPES = 1 << 14;
     public static final int FEATURE_VENT = 1 << 15;
     public static final int FEATURE_SCREEN = 1 << 16;
-    public static final int FEATURE_PLATE = 1 << 17;
+    public static final int FEATURE_VALVE = 1 << 17;
+    public static final int FEATURE_PLATE = 1 << 18;
 
-    final int FEATURE_MASK = FEATURE_PLATE | FEATURE_PIPES | FEATURE_SCREEN | FEATURE_VENT;
+    final int FEATURE_MASK = FEATURE_PLATE | FEATURE_PIPES | FEATURE_SCREEN | FEATURE_VALVE | FEATURE_VENT;
 
     public static final int FEATURE_PLATE_TL_CORNER = 1 << 8;
     public static final int FEATURE_PLATE_TR_CORNER = 1 << 9;
@@ -35,9 +36,9 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         HashMap<Integer, IProceduralWallFeature> features = new HashMap<Integer, IProceduralWallFeature>();
         features.put(FEATURE_PIPES, new PipesRuinWallFeature(this, FEATURE_PIPES));
         features.put(FEATURE_VENT, new OneByOneRuinWallFeature(this, FEATURE_VENT));
+        features.put(FEATURE_VALVE, new OneByOneRuinWallFeature(this, FEATURE_VALVE));
         features.put(FEATURE_SCREEN, new OneByOneRuinWallFeature(this, FEATURE_SCREEN));
         features.put(FEATURE_PLATE, new PlateRuinWallFeature(this, FEATURE_PLATE));
-
 
         return features;
     }
@@ -78,6 +79,12 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                         FEATURE_SCREEN | LEFT,
                         FEATURE_SCREEN | RIGHT,
                         FEATURE_SCREEN | LEFT | RIGHT
+                })
+                .put("Wall_DDValve", new Integer[] {
+                        FEATURE_VALVE,
+                        FEATURE_VALVE | LEFT,
+                        FEATURE_VALVE | RIGHT,
+                        FEATURE_VALVE | LEFT | RIGHT
                 })
                 .put("Wall_DD1_PipeB", new Integer[]{
                         FEATURE_PIPES | FEATURE_EDGE_BOTTOM,
