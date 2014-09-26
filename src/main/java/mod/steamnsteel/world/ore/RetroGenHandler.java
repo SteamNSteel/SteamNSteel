@@ -14,7 +14,7 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.world;
+package mod.steamnsteel.world.ore;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
@@ -33,7 +33,7 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import java.util.*;
 
 @SuppressWarnings("NonSerializableFieldInSerializableClass")
-enum RetroGenHandler
+public enum RetroGenHandler
 {
     INSTANCE;
     private static final String RETROGEN_TAG = TheMod.MOD_ID + ':' + "retroGenMarker";
@@ -67,7 +67,7 @@ enum RetroGenHandler
         return event.phase == TickEvent.Phase.END || event.side == Side.SERVER;
     }
 
-    void register(OreGenerator oreGen)
+    public void register(OreGenerator oreGen)
     {
         retroGens.add(oreGen);
     }
