@@ -21,7 +21,7 @@ public class PipesRuinWallFeature implements IProceduralWallFeature
     }
 
     @Override
-    public boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int featureId)
+    public boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
     {
         ForgeDirection back = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BACK, orientation);
 
@@ -34,30 +34,20 @@ public class PipesRuinWallFeature implements IProceduralWallFeature
         ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
 
         final boolean aboveBlockIsClear = ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above), back);
-        final int aboveBlockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(above));
-        boolean aboveValid = (aboveBlockIsClear && aboveBlockFeature == featureId);
+        final IProceduralWallFeature aboveBlockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(above));
         final boolean belowBlockIsClear = ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below), back);
-        final int belowBlockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(below));
-        boolean belowValid = (belowBlockIsClear && belowBlockFeature == featureId);
-
-        /*if (!belowValid && !aboveValid) {
-            return false;
-        }*/
+        final IProceduralWallFeature belowBlockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(below));
 
         boolean aboveValid2 = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above).offset(above), back));
         boolean belowValid2 = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below).offset(below), back));
 
-        if (aboveBlockIsClear && aboveBlockFeature != featureId && belowBlockIsClear && belowBlockFeature == featureId && belowValid2) {
+        if (aboveBlockIsClear && !(aboveBlockFeature instanceof PipesRuinWallFeature) && belowBlockIsClear && !(belowBlockFeature instanceof PipesRuinWallFeature) && belowValid2) {
             return true;
         }
 
-        if (belowBlockIsClear && belowBlockFeature != featureId && aboveBlockIsClear && aboveBlockFeature == featureId && aboveValid2) {
+        if (belowBlockIsClear && !(belowBlockFeature instanceof PipesRuinWallFeature)&& aboveBlockIsClear && !(aboveBlockFeature instanceof PipesRuinWallFeature) && aboveValid2) {
             return true;
         }
-
-        /*if (!aboveValid2 || !belowValid2) {
-            return false;
-        }*/
 
         return false;
     }
@@ -95,5 +85,31 @@ public class PipesRuinWallFeature implements IProceduralWallFeature
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    {
+        ForgeDirection below = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BELOW, orientation);
+        ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
+
+        int subProperties = featureId;
+        IProceduralWallFeature aboveBlockFeature = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(above), orientation);
+        IProceduralWallFeature belowBlockFeature = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(below), orientation);
+
+        if (!(aboveBlockFeature instanceof PipesRuinWallFeature))
+        {
+            subProperties |= ruinWallTexture.FEATURE_EDGE_TOP;
+        }
+        if (!(belowBlockFeature instanceof PipesRuinWallFeature))
+        {
+            subProperties |= ruinWallTexture.FEATURE_EDGE_BOTTOM;
+        }
+
+        final int FEATURE_EDGE_TOP_AND_BOTTOM = ruinWallTexture.FEATURE_EDGE_TOP | ruinWallTexture.FEATURE_EDGE_BOTTOM;
+
+        //Pipes are only a single block wide and must ignore LEFT | RIGHT edges
+        subProperties &= featureId | FEATURE_EDGE_TOP_AND_BOTTOM;
+        return subProperties;
     }
 }

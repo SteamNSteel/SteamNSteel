@@ -11,13 +11,17 @@ import java.util.*;
 
 public class RuinWallTexture extends ProceduralConnectedTexture
 {
-    final int FEATURE_CROWN = 1 << 8;
-    final int FEATURE_BASE = 1 << 9;
-    final int FEATURE_PLATE = 1 << 10;
-    final int FEATURE_PIPES = 1 << 11;
+    static final int FEATURE_CROWN = 1 << 8;
+    static final int FEATURE_BASE = 1 << 9;
+    public static final int FEATURE_PLATE = 1 << 10;
+    public static final int FEATURE_PIPES = 1 << 11;
 
     final int FEATURE_MASK = FEATURE_PLATE | FEATURE_PIPES;
 
+    public static final int FEATURE_PLATE_TL_CORNER = 1 << 12;
+    public static final int FEATURE_PLATE_TR_CORNER = 1 << 13;
+    public static final int FEATURE_PLATE_BL_CORNER = 1 << 14;
+    public static final int FEATURE_PLATE_BR_CORNER = 1 << 15;
 
     @Override
     protected HashMap<Integer, IProceduralWallFeature> getFeatures()
@@ -77,19 +81,54 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 })
                 .put("Wall_DD2_PEdgeRDC", new Integer[]{
                         FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM,
-                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM
+                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM,
+                        FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER,
+                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER,
+                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BR_CORNER,
+                        FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER
                 })
                 .put("Wall_DD2_PEdgeRUC", new Integer[]{
                         FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP,
-                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP
+                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP,
+                        FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER,
+                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER,
+                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TR_CORNER,
+                        FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER
                 })
                 .put("Wall_DD2_PEdgeLDC", new Integer[]{
                         FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM,
-                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM
+                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM,
+                        FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER,
+                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER,
+                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BL_CORNER,
+                        FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER
                 })
                 .put("Wall_DD2_PEdgeLUC", new Integer[]{
                         FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP,
-                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP
+                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP,
+                        FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER,
+                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TL_CORNER,
+                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER,
+                        FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER,
+                        FEATURE_PLATE | FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER
+                })
+                .put("Wall_DD2_PEdgeInnerRDC_S", new Integer[] {
+                        FEATURE_PLATE | FEATURE_PLATE_BR_CORNER,
+                })
+                .put("Wall_DD2_PEdgeInnerRUC_S", new Integer[] {
+                        FEATURE_PLATE | FEATURE_PLATE_TR_CORNER,
+                })
+                .put("Wall_DD2_PEdgeInnerLDC_S", new Integer[] {
+                        FEATURE_PLATE | FEATURE_PLATE_BL_CORNER
+                })
+                .put("Wall_DD2_PEdgeInnerLUC_S", new Integer[] {
+                        FEATURE_PLATE | FEATURE_PLATE_TL_CORNER,
+                })
+                .put("Wall_DD2_PEdgeInnerLURDC_S", new Integer[] {
+                        FEATURE_PLATE | FEATURE_PLATE_TL_CORNER | FEATURE_PLATE_BR_CORNER
+                })
+                .put("Wall_DD2_PEdgeInnerLDRUC_S", new Integer[] {
+                        FEATURE_PLATE | FEATURE_PLATE_BL_CORNER | FEATURE_PLATE_TR_CORNER
                 })
                 .put("Wall_CrownM_EdgeL", new Integer[]{
                         FEATURE_CROWN | TOP | LEFT,
@@ -136,13 +175,16 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                         FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT
                 })
                 .put("Wall_CrownM_EdgeL_DDPanelCL_S", new Integer[]{
-                        FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT
+                        FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT,
+                        FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER
                 })
                 .put("Wall_CrownM_EdgeL_DDPanelCR_S", new Integer[]{
                         FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT
                 })
                 .put("Wall_CrownM_EdgeR_DDPanelCR_S", new Integer[]{
-                        FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT
+                        FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT,
+                        FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER,
+
                 })
                 .put("Wall_CrownM_EdgeR_DDPanelCL_S", new Integer[]{
                         FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT
@@ -154,7 +196,8 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                         FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT
                 })
                 .put("Wall_BaseM_EdgeL_DDPanelCL_S", new Integer[]{
-                        FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT
+                        FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT,
+                        FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER
                 })
                 .put("Wall_BaseM_EdgeL_DDPanelCR_S", new Integer[]{
                         FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT
@@ -163,7 +206,8 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                         FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT
                 })
                 .put("Wall_BaseM_EdgeR_DDPanelCR_S", new Integer[]{
-                        FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT
+                        FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT,
+                        FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER
                 })
                 .put("Wall_BaseM_AllEdge_DDPanelCR_S", new Integer[]{
                         FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT
@@ -216,10 +260,11 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 blockProperties |= RIGHT;
             }
 
-            int featureId = getValidFeature(blockAccess, worldBlockCoord, orientation);
-            if (featureId != NO_FEATURE)
+            IProceduralWallFeature feature = getValidFeature(blockAccess, worldBlockCoord, orientation);
+            if (feature != null)
             {
-                int subProperties = getSubProperties(blockAccess, worldBlockCoord, orientation, featureId);
+                int subProperties = feature.getSubProperties(blockAccess, worldBlockCoord, orientation);
+                //int subProperties = getSubProperties(blockAccess, worldBlockCoord, orientation, featureId);
 
                 if ((subProperties & FEATURE_MASK) != 0)
                 {
@@ -260,58 +305,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         }
     }
 
-    private int getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int featureId)
-    {
-        ForgeDirection left = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.LEFT, orientation);
-        ForgeDirection right = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.RIGHT, orientation);
-        ForgeDirection below = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BELOW, orientation);
-        ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
 
-        int subProperties = featureId;
-        int leftBlockFeature = getValidFeature(blockAccess, worldBlockCoord.offset(left), orientation);
-        int rightBlockFeature = getValidFeature(blockAccess, worldBlockCoord.offset(right), orientation);
-        int aboveBlockFeature = getValidFeature(blockAccess, worldBlockCoord.offset(above), orientation);
-        int belowBlockFeature = getValidFeature(blockAccess, worldBlockCoord.offset(below), orientation);
-
-        if (leftBlockFeature != featureId)
-        {
-            subProperties |= FEATURE_EDGE_LEFT;
-        }
-        if (rightBlockFeature != featureId)
-        {
-            subProperties |= FEATURE_EDGE_RIGHT;
-        }
-        if (aboveBlockFeature != featureId)
-        {
-            subProperties |= FEATURE_EDGE_TOP;
-        }
-        if (belowBlockFeature != featureId)
-        {
-            subProperties |= FEATURE_EDGE_BOTTOM;
-        }
-
-        final int FEATURE_EDGE_TOP_AND_BOTTOM = FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM;
-        final int FEATURE_EDGE_LEFT_AND_RIGHT = FEATURE_EDGE_LEFT | FEATURE_EDGE_RIGHT;
-
-        switch (featureId)
-        {
-            case FEATURE_PIPES:
-                //Pipes are only a single block wide and must ignore LEFT | RIGHT edges
-                subProperties &= featureId | FEATURE_EDGE_TOP_AND_BOTTOM;
-                break;
-            case FEATURE_PLATE:
-                //Plates cannot be a single block wide.
-                if ((subProperties & FEATURE_EDGE_TOP_AND_BOTTOM) == FEATURE_EDGE_TOP_AND_BOTTOM)
-                {
-                    subProperties = 0;
-                } else if ((subProperties & FEATURE_EDGE_LEFT_AND_RIGHT) == FEATURE_EDGE_LEFT_AND_RIGHT)
-                {
-                    subProperties = 0;
-                }
-                break;
-        }
-        return subProperties;
-    }
 
     public boolean checkRuinWallAndNotObscured(IBlockAccess blockAccess, WorldBlockCoord startingBlock, ForgeDirection back)
     {
@@ -379,6 +373,23 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         if ((blockProperties & FEATURE_EDGE_RIGHT) == FEATURE_EDGE_RIGHT)
         {
             sb.append("FE_R,");
+        }
+
+        if ((blockProperties & FEATURE_PLATE_TL_CORNER) == FEATURE_PLATE_TL_CORNER)
+        {
+            sb.append("TLCRNR,");
+        }
+        if ((blockProperties & FEATURE_PLATE_TR_CORNER) == FEATURE_PLATE_TR_CORNER)
+        {
+            sb.append("TRCRNR,");
+        }
+        if ((blockProperties & FEATURE_PLATE_BL_CORNER) == FEATURE_PLATE_BL_CORNER)
+        {
+            sb.append("BLCRNR,");
+        }
+        if ((blockProperties & FEATURE_PLATE_BR_CORNER) == FEATURE_PLATE_BR_CORNER)
+        {
+            sb.append("BRCRNR,");
         }
 
         return sb.toString();

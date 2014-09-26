@@ -24,10 +24,10 @@ public abstract class ProceduralConnectedTexture
     protected final int LEFT = 1 << 2;
     protected final int RIGHT = 1 << 3;
 
-    protected final int FEATURE_EDGE_TOP = 1 << 4;
-    protected final int FEATURE_EDGE_BOTTOM = 1 << 5;
-    protected final int FEATURE_EDGE_LEFT = 1 << 6;
-    protected final int FEATURE_EDGE_RIGHT = 1 << 7;
+    public static final int FEATURE_EDGE_TOP = 1 << 4;
+    public static final int FEATURE_EDGE_BOTTOM = 1 << 5;
+    public static final int FEATURE_EDGE_LEFT = 1 << 6;
+    public static final int FEATURE_EDGE_RIGHT = 1 << 7;
 
     private HashMap<Integer, IProceduralWallFeature> features;
 
@@ -138,23 +138,22 @@ public abstract class ProceduralConnectedTexture
         return features;
     }
 
-    protected int getValidFeature(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    public IProceduralWallFeature getValidFeature(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
     {
-        int desiredFeatureId = getFeatureAt(worldBlockCoord);
-        if (desiredFeatureId == NO_FEATURE)
+        IProceduralWallFeature desiredFeature = getFeatureAt(worldBlockCoord);
+        if (desiredFeature == null)
         {
-            return NO_FEATURE;
+            return null;
         }
-        IProceduralWallFeature wallFeature = features.get(desiredFeatureId);
-        if (wallFeature.isFeatureValid(blockAccess, worldBlockCoord, orientation, desiredFeatureId))
+        if (desiredFeature.isFeatureValid(blockAccess, worldBlockCoord, orientation))
         {
-            return desiredFeatureId;
+            return desiredFeature;
         }
-        return NO_FEATURE;
+        return null;
     }
 
 
-    public int getFeatureAt(WorldBlockCoord worldBlockCoord)
+    public IProceduralWallFeature getFeatureAt(WorldBlockCoord worldBlockCoord)
     {
         final ChunkCoord chunkCoord = ChunkCoord.of(worldBlockCoord);
         int[] noiseData = cachedNoiseGens.get(chunkCoord);
@@ -193,7 +192,7 @@ public abstract class ProceduralConnectedTexture
             }
             noiseData[index] = featureId;
         }
-        return featureId;
+        return this.features.get(featureId);
     }
 
     public String describeTextureAt(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
