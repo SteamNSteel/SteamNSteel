@@ -281,7 +281,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
             if ((blockProperties & BOTTOM) == BOTTOM)
             {
                 blockProperties |= FEATURE_BASE;
-                blockProperties &= (-1 ^ TOP); //Force the TOP bit off Not sure if I should do this...
+                blockProperties &= (~TOP); //Force the TOP bit off Not sure if I should do this...
                 if (checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(left).offset(below), back))
                 {
                     blockProperties |= LEFT;
@@ -290,6 +290,15 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 {
                     blockProperties |= RIGHT;
                 }
+
+                //Break up the bases
+                if ((worldBlockCoord.hashCode() & 7) == 0) {
+                    blockProperties |= LEFT;
+                }
+                if ((worldBlockCoord.offset(right).hashCode() & 7) == 0) {
+                    blockProperties |= RIGHT;
+                }
+
             } else if ((blockProperties & TOP) == TOP)
             {
                 blockProperties |= FEATURE_CROWN;
@@ -299,6 +308,14 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 }
                 if (checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(right).offset(above), back))
                 {
+                    blockProperties |= RIGHT;
+                }
+
+                //Break up the crowns
+                if ((worldBlockCoord.hashCode() & 7) == 0) {
+                    blockProperties |= LEFT;
+                }
+                if ((worldBlockCoord.offset(right).hashCode() & 7) == 0) {
                     blockProperties |= RIGHT;
                 }
             }
