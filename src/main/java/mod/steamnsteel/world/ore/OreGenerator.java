@@ -14,10 +14,9 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.world;
+package mod.steamnsteel.world.ore;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableSet;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
@@ -26,59 +25,29 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import java.util.Random;
 
-class OreGenerator extends WorldGenMinable
+public class OreGenerator extends WorldGenMinable
 {
     private final SteamNSteelOreBlock block;
     private final int clusterCount;
     private final int minHeight;
     private final int maxHeight;
 
-    SteamNSteelOreBlock getBlock()
-    {
-        return block;
-    }
-
-    int getClusterCount()
-    {
-        return clusterCount;
-    }
-
-    int getMaxHeight()
-    {
-        return maxHeight;
-    }
-
-    int getMinHeight()
-    {
-        return minHeight;
-    }
-
     OreGenerator()
     {
-        this(null, 0, 0, 0, 0);
+        this(null, 0, 0, 0);
     }
 
-    OreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int minHeight, int maxHeight)
+    public OreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int maxHeight)
     {
         super(block, blocksPerCluster);
 
         this.block = block;
         this.clusterCount = clusterCount;
-        this.minHeight = minHeight;
+        minHeight = 0;
         this.maxHeight = maxHeight;
     }
 
-    public void generate(World world, Random rng, ChunkCoord coord)
-    {
-        generate(world, rng, coord.getX() << 4, 0, coord.getZ() << 4);
-    }
-
-    protected static boolean isBlockReplaceable(World world, WorldBlockCoord coord, Block targetBlock)
-    {
-        return isBlockReplaceable(world, coord, ImmutableSet.of(targetBlock));
-    }
-
-    static boolean isBlockReplaceable(World world, WorldBlockCoord coord, Iterable<Block> targetBlocks)
+    public static boolean isBlockReplaceable(World world, WorldBlockCoord coord, Iterable<Block> targetBlocks)
     {
         final Block block = coord.getBlock(world);
 
@@ -86,12 +55,17 @@ class OreGenerator extends WorldGenMinable
         final int y = coord.getY();
         final int z = coord.getZ();
 
-        for (final Block target: targetBlocks)
+        for (final Block target : targetBlocks)
         {
             if (block.isReplaceableOreGen(world, x, y, z, target)) return true;
         }
 
         return false;
+    }
+
+    public void generate(World world, Random rng, ChunkCoord coord)
+    {
+        generate(world, rng, coord.getX() << 4, 0, coord.getZ() << 4);
     }
 
     @Override
@@ -107,7 +81,7 @@ class OreGenerator extends WorldGenMinable
                 super.generate(world, rand, x, y, z);
             }
 
-            RetroGenHandler.markChunk(ChunkCoord.of(worldX >>4, worldZ >> 4));
+            RetroGenHandler.markChunk(ChunkCoord.of(worldX >> 4, worldZ >> 4));
         }
 
         return true;

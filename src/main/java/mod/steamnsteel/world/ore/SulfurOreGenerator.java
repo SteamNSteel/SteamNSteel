@@ -1,4 +1,4 @@
-package mod.steamnsteel.world;
+package mod.steamnsteel.world.ore;
 
 import com.google.common.collect.ImmutableSet;
 import mod.steamnsteel.library.ModBlock;
