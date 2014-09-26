@@ -9,6 +9,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class RuinWallTexture extends ProceduralConnectedTexture
 {
@@ -271,7 +272,6 @@ public class RuinWallTexture extends ProceduralConnectedTexture
             if (feature != null)
             {
                 int subProperties = feature.getSubProperties(blockAccess, worldBlockCoord, orientation);
-                //int subProperties = getSubProperties(blockAccess, worldBlockCoord, orientation, featureId);
 
                 if ((subProperties & FEATURE_MASK) != 0)
                 {
@@ -293,11 +293,11 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 }
 
                 //Break up the bases
-                if ((worldBlockCoord.hashCode() & 7) == 0)
+                if ((getCrownSplitOpportunity(worldBlockCoord) & 14) == 0)
                 {
                     blockProperties |= LEFT;
                 }
-                if ((worldBlockCoord.offset(right).hashCode() & 7) == 0)
+                if ((getCrownSplitOpportunity(worldBlockCoord.offset(right)) & 14) == 0)
                 {
                     blockProperties |= RIGHT;
                 }
@@ -315,11 +315,11 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 }
 
                 //Break up the crowns
-                if ((worldBlockCoord.hashCode() & 7) == 0)
+                if ((getCrownSplitOpportunity(worldBlockCoord) & 14) == 0)
                 {
                     blockProperties |= LEFT;
                 }
-                if ((worldBlockCoord.offset(right).hashCode() & 7) == 0)
+                if ((getCrownSplitOpportunity(worldBlockCoord.offset(right)) & 14) == 0)
                 {
                     blockProperties |= RIGHT;
                 }
@@ -331,6 +331,15 @@ public class RuinWallTexture extends ProceduralConnectedTexture
             e.printStackTrace();
             return MISSING_TEXTURE;
         }
+    }
+
+    private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord){
+        int x = worldBlockCoord.getX();
+        int y = worldBlockCoord.getY();
+        int z = worldBlockCoord.getZ();
+        //return (worldBlockCoord.getX() * 7) + (worldBlockCoord.getY() * (worldBlockCoord.getX() | worldBlockCoord.getZ())) + (~worldBlockCoord.getZ() * 31);
+        Random r = new Random(x * y * z * 31);
+        return r.nextInt();
     }
 
 
