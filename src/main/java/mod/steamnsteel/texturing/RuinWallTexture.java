@@ -37,7 +37,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     {
 
         final Map<String, Integer[]> icons = ImmutableMap.<String, Integer[]>builder()
-                .put("Wall_Generic", new Integer[]{
+                .put("ruinWallPlotonium", new Integer[]{
                         DEFAULT,
                         LEFT,
                         RIGHT,

@@ -33,8 +33,17 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     public static final String NAME = "ruinWallPlotonium";
     ProceduralConnectedTexture textureManager;
 
+    public PlotoniumRuinWall()
+    {
+        super(Material.rock);
+        setBlockName(NAME);
+    }
+
+    @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
+        blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
+
         textureManager = new RuinWallTexture();
         textureManager.registerIcons(iconRegister);
     }
@@ -55,11 +64,5 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     {
         return textureManager.getIconForSide(blockAccess, WorldBlockCoord.of(x, y, z), side);
 
-    }
-
-    public PlotoniumRuinWall()
-    {
-        super(Material.rock);
-        setBlockName(NAME);
     }
 }
