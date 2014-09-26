@@ -20,6 +20,10 @@ import com.google.common.collect.Lists;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mod.steamnsteel.configuration.Settings;
 import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.world.ore.NiterOreGenerator;
+import mod.steamnsteel.world.ore.OreGenerator;
+import mod.steamnsteel.world.ore.RetroGenHandler;
+import mod.steamnsteel.world.ore.SulfurOreGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -46,7 +50,7 @@ public enum WorldGen
     {
         //For reference:
         //       ironConfiguration = new OreConfiguration(Blocks.Iron, 20, 8, 0, 64);
-        final OreGenerator copperGen = new OreGenerator(ModBlock.oreCopper, 20, 6, 0, 64);
+        final OreGenerator copperGen = new OreGenerator(ModBlock.oreCopper, 20, 6, 64);
         oreGens.add(copperGen);
 
         final NiterOreGenerator niterGen = new NiterOreGenerator();
@@ -55,10 +59,10 @@ public enum WorldGen
         final SulfurOreGenerator sulfurGen = new SulfurOreGenerator();
         oreGens.add(sulfurGen);
 
-        final OreGenerator tinGen = new OreGenerator(ModBlock.oreTin, 20, 3, 0, 64);
+        final OreGenerator tinGen = new OreGenerator(ModBlock.oreTin, 20, 3, 64);
         oreGens.add(tinGen);
 
-        final OreGenerator zincGen = new OreGenerator(ModBlock.oreZinc, 20, 6, 0, 64);
+        final OreGenerator zincGen = new OreGenerator(ModBlock.oreZinc, 20, 6, 64);
         oreGens.add(zincGen);
 
         if (Settings.World.doRetroOreGen())
