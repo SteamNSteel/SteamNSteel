@@ -41,13 +41,14 @@ public class PipesRuinWallFeature implements IProceduralWallFeature
         boolean aboveValid2 = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above).offset(above), back));
         boolean belowValid2 = (ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below).offset(below), back));
 
-        if (aboveBlockIsClear && !(aboveBlockFeature instanceof PipesRuinWallFeature) && belowBlockIsClear && !(belowBlockFeature instanceof PipesRuinWallFeature) && belowValid2) {
+        if (aboveBlockIsClear && !(aboveBlockFeature instanceof PipesRuinWallFeature) && belowBlockIsClear && belowBlockFeature instanceof PipesRuinWallFeature && belowValid2) {
             return true;
         }
 
-        if (belowBlockIsClear && !(belowBlockFeature instanceof PipesRuinWallFeature)&& aboveBlockIsClear && !(aboveBlockFeature instanceof PipesRuinWallFeature) && aboveValid2) {
+        if (belowBlockIsClear && !(belowBlockFeature instanceof PipesRuinWallFeature)&& aboveBlockIsClear && aboveBlockFeature instanceof PipesRuinWallFeature && aboveValid2) {
             return true;
         }
+
 
         return false;
     }
