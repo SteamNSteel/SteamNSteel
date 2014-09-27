@@ -47,226 +47,218 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     }
 
     @Override
-    public Map<String, Integer[]> getIconMap()
+    protected void registerIcons(ITextureConditionSet textures)
     {
-
-        final Map<String, Integer[]> icons = ImmutableMap.<String, Integer[]>builder()
-                .put("ruinWallPlotonium", new Integer[]{
-                        DEFAULT,
-                        LEFT,
-                        RIGHT,
-                        LEFT | RIGHT,
-                        TOP | BOTTOM,
-                        FEATURE_PLATE,
+        textures.useTexture("ruinWallPlotonium")
+                .forCondition(DEFAULT)
+                .andCondition(LEFT)
+                .andCondition(RIGHT)
+                .andCondition(LEFT | RIGHT)
+                .andCondition(TOP | BOTTOM)
+                .andCondition(FEATURE_PLATE)
                         //Hacks around a hard to detect issue of two pipes spawning in a 1x4 stack.
                         //An alternative would be to replace these with a 1x1 texture.
-                        FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM,
-                        FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | RIGHT,
-                        FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT,
-                        FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT | RIGHT,
-                })
-                .put("Wall_DD1_PipeA", new Integer[]{
-                        FEATURE_PIPES | FEATURE_EDGE_TOP,
-                        LEFT | FEATURE_PIPES | FEATURE_EDGE_TOP,
-                        RIGHT | FEATURE_PIPES | FEATURE_EDGE_TOP,
-                        LEFT | RIGHT | FEATURE_PIPES | FEATURE_EDGE_TOP
-                })
-                .put("Wall_DDVent", new Integer[] {
-                        FEATURE_VENT,
-                        FEATURE_VENT | LEFT,
-                        FEATURE_VENT | RIGHT,
-                        FEATURE_VENT | LEFT | RIGHT
-                })
-                .put("Wall_DDScreen", new Integer[] {
-                        FEATURE_SCREEN,
-                        FEATURE_SCREEN | LEFT,
-                        FEATURE_SCREEN | RIGHT,
-                        FEATURE_SCREEN | LEFT | RIGHT
-                })
-                .put("Wall_DDValve", new Integer[] {
-                        FEATURE_VALVE,
-                        FEATURE_VALVE | LEFT,
-                        FEATURE_VALVE | RIGHT,
-                        FEATURE_VALVE | LEFT | RIGHT
-                })
-                .put("Wall_DDLongPipe_L", new Integer[] {
-                        FEATURE_METAL_TEAR_H | FEATURE_EDGE_LEFT
-                })
-                .put("Wall_DDLongPipe_M", new Integer[] {
-                        FEATURE_METAL_TEAR_H
-                })
-                .put("Wall_DDLongPipe_R", new Integer[] {
-                        FEATURE_METAL_TEAR_H | FEATURE_EDGE_RIGHT
-                })
-                .put("Wall_DD1_PipeB", new Integer[]{
-                        FEATURE_PIPES | FEATURE_EDGE_BOTTOM,
-                        LEFT | FEATURE_PIPES | FEATURE_EDGE_BOTTOM,
-                        RIGHT | FEATURE_PIPES | FEATURE_EDGE_BOTTOM,
-                        LEFT | RIGHT | FEATURE_PIPES | FEATURE_EDGE_BOTTOM
-                })
-                .put("Wall_DD2_PEdgeVL", new Integer[]{
-                        FEATURE_PLATE | FEATURE_EDGE_LEFT,
-                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT
-                })
-                .put("Wall_DD2_PEdgeVR", new Integer[]{
-                        FEATURE_PLATE | FEATURE_EDGE_RIGHT,
-                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT
-                })
-                .put("Wall_DD2_PEdgeHU", new Integer[]{
-                        FEATURE_PLATE | FEATURE_EDGE_TOP,
-                        FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP
-                })
-                .put("Wall_DD2_PEdgeHD", new Integer[]{
-                        FEATURE_PLATE | FEATURE_EDGE_BOTTOM,
-                        FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM
-                })
-                .put("Wall_DD2_PEdgeRDC", new Integer[]{
-                        FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM,
-                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM,
-                        FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER,
-                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER,
-                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BR_CORNER,
-                        FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER
-                })
-                .put("Wall_DD2_PEdgeRUC", new Integer[]{
-                        FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP,
-                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP,
-                        FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER,
-                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER,
-                        FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TR_CORNER,
-                        FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER
-                })
-                .put("Wall_DD2_PEdgeLDC", new Integer[]{
-                        FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM,
-                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM,
-                        FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER,
-                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER,
-                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BL_CORNER,
-                        FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER
-                })
-                .put("Wall_DD2_PEdgeLUC", new Integer[]{
-                        FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP,
-                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP,
-                        FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER,
-                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TL_CORNER,
-                        FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER,
-                        FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER,
-                        FEATURE_PLATE | FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER
-                })
-                .put("Wall_DD2_PEdgeInnerRDC_S", new Integer[]{
-                        FEATURE_PLATE | FEATURE_PLATE_BR_CORNER,
-                })
-                .put("Wall_DD2_PEdgeInnerRUC_S", new Integer[]{
-                        FEATURE_PLATE | FEATURE_PLATE_TR_CORNER,
-                })
-                .put("Wall_DD2_PEdgeInnerLDC_S", new Integer[]{
-                        FEATURE_PLATE | FEATURE_PLATE_BL_CORNER
-                })
-                .put("Wall_DD2_PEdgeInnerLUC_S", new Integer[]{
-                        FEATURE_PLATE | FEATURE_PLATE_TL_CORNER,
-                })
-                .put("Wall_DD2_PEdgeInnerLURDC_S", new Integer[]{
-                        FEATURE_PLATE | FEATURE_PLATE_TL_CORNER | FEATURE_PLATE_BR_CORNER
-                })
-                .put("Wall_DD2_PEdgeInnerLDRUC_S", new Integer[]{
-                        FEATURE_PLATE | FEATURE_PLATE_BL_CORNER | FEATURE_PLATE_TR_CORNER
-                })
-                .put("Wall_CrownM_EdgeL", new Integer[]{
-                        FEATURE_CROWN | TOP | LEFT,
-                        FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP,
-                        FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE
-                })
-                .put("Wall_CrownM_EdgeR", new Integer[]{
-                        FEATURE_CROWN | TOP | RIGHT,
-                        FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP,
-                        FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE
-                })
-                .put("Wall_CrownM_AllEdge", new Integer[]{
-                        FEATURE_CROWN | TOP | LEFT | RIGHT
-                })
-                .put("Wall_CrownM_Center", new Integer[]{
-                        FEATURE_CROWN | TOP,
-                        FEATURE_CROWN | TOP | FEATURE_PLATE | FEATURE_EDGE_TOP
-                })
-                .put("Wall_CrownM_DDPanelCL", new Integer[]{
-                        FEATURE_CROWN | TOP | FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP
-                })
-                .put("Wall_CrownM_DDPanelCR", new Integer[]{
-                        FEATURE_CROWN | TOP | FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP
-                })
-                .put("Wall_BaseM_EdgeL", new Integer[]{
-                        FEATURE_BASE | BOTTOM | LEFT,
-                        FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM
-                })
-                .put("Wall_BaseM_EdgeR", new Integer[]{
-                        FEATURE_BASE | BOTTOM | RIGHT,
-                        FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM
-                })
-                .put("Wall_BaseM_AllEdge", new Integer[]{
-                        FEATURE_BASE | BOTTOM | LEFT | RIGHT
-                })
-                .put("Wall_BaseM_Center", new Integer[]{
-                        FEATURE_BASE | BOTTOM,
-                        FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_BOTTOM
-                })
-                .put("Wall_BaseM_DDPanelCL", new Integer[]{
-                        FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT
-                })
-                .put("Wall_BaseM_DDPanelCR", new Integer[]{
-                        FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT
-                })
-                .put("Wall_CrownM_EdgeL_DDPanelCL_S", new Integer[]{
-                        FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT,
-                        FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER
-                })
-                .put("Wall_CrownM_EdgeL_DDPanelCR_S", new Integer[]{
-                        FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT
-                })
-                .put("Wall_CrownM_EdgeR_DDPanelCR_S", new Integer[]{
-                        FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT,
-                        FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER,
+                .andCondition(FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM)
+                .andCondition(FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | RIGHT)
+                .andCondition(FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT)
+                .andCondition(FEATURE_PIPES | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT | RIGHT);
 
-                })
-                .put("Wall_CrownM_EdgeR_DDPanelCL_S", new Integer[]{
-                        FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT
-                })
-                .put("Wall_CrownM_AllEdge_DDPanelCR_S", new Integer[]{
-                        FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT,
-                        FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER
-                })
-                .put("Wall_CrownM_AllEdge_DDPanelCL_S", new Integer[]{
-                        FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT,
-                        FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER
-                })
-                .put("Wall_BaseM_EdgeL_DDPanelCL_S", new Integer[]{
-                        FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT,
-                        FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER
-                })
-                .put("Wall_BaseM_EdgeL_DDPanelCR_S", new Integer[]{
-                        FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT
-                })
-                .put("Wall_BaseM_EdgeR_DDPanelCL_S", new Integer[]{
-                        FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT
-                })
-                .put("Wall_BaseM_EdgeR_DDPanelCR_S", new Integer[]{
-                        FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT,
-                        FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER
-                })
-                .put("Wall_BaseM_AllEdge_DDPanelCR_S", new Integer[]{
-                        FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT,
-                        //FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_BR_CORNER
-                        FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER
-                })
-                .put("Wall_BaseM_AllEdge_DDPanelCL_S", new Integer[]{
-                        FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT,
-                        //FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_BL_CORNER
-                        FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER
-                })
-                .build();
+        textures.useTexture("Wall_DD1_PipeA")
+                .forCondition(FEATURE_PIPES | FEATURE_EDGE_TOP)
+                .andCondition(LEFT | FEATURE_PIPES | FEATURE_EDGE_TOP)
+                .andCondition(RIGHT | FEATURE_PIPES | FEATURE_EDGE_TOP)
+                .andCondition(LEFT | RIGHT | FEATURE_PIPES | FEATURE_EDGE_TOP);
 
-        return icons;
+        textures.useTexture("Wall_DDVent")
+                .forCondition(FEATURE_VENT)
+                .andCondition(FEATURE_VENT | LEFT)
+                .andCondition(FEATURE_VENT | RIGHT)
+                .andCondition(FEATURE_VENT | LEFT | RIGHT);
+
+        textures.useTexture("Wall_DDScreen")
+                .forCondition(FEATURE_SCREEN)
+                .andCondition(FEATURE_SCREEN | LEFT)
+                .andCondition(FEATURE_SCREEN | RIGHT)
+                .andCondition(FEATURE_SCREEN | LEFT | RIGHT);
+
+        textures.useTexture("Wall_DDValve")
+                .forCondition(FEATURE_VALVE)
+                .andCondition(FEATURE_VALVE | LEFT)
+                .andCondition(FEATURE_VALVE | RIGHT)
+                .andCondition(FEATURE_VALVE | LEFT | RIGHT);
+
+        textures.useTexture("Wall_DDLongPipe_L")
+                .forCondition(FEATURE_METAL_TEAR_H | FEATURE_EDGE_LEFT);
+
+        textures.useTexture("Wall_DDLongPipe_M")
+                .forCondition(FEATURE_METAL_TEAR_H);
+
+        textures.useTexture("Wall_DDLongPipe_R")
+                .forCondition(FEATURE_METAL_TEAR_H | FEATURE_EDGE_RIGHT);
+
+        textures.useTexture("Wall_DD1_PipeB")
+                .forCondition(FEATURE_PIPES | FEATURE_EDGE_BOTTOM)
+                .andCondition(LEFT | FEATURE_PIPES | FEATURE_EDGE_BOTTOM)
+                .andCondition(RIGHT | FEATURE_PIPES | FEATURE_EDGE_BOTTOM)
+                .andCondition(LEFT | RIGHT | FEATURE_PIPES | FEATURE_EDGE_BOTTOM);
+
+        textures.useTexture("Wall_DD2_PEdgeVL")
+                .forCondition(FEATURE_PLATE | FEATURE_EDGE_LEFT)
+                .andCondition(FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT);
+
+        textures.useTexture("Wall_DD2_PEdgeVR")
+                .forCondition(FEATURE_PLATE | FEATURE_EDGE_RIGHT)
+                .andCondition(FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT);
+
+        textures.useTexture("Wall_DD2_PEdgeHU")
+                .forCondition(FEATURE_PLATE | FEATURE_EDGE_TOP)
+                .andCondition(FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP);
+
+        textures.useTexture("Wall_DD2_PEdgeHD")
+                .forCondition(FEATURE_PLATE | FEATURE_EDGE_BOTTOM)
+                .andCondition(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM);
+
+        textures.useTexture("Wall_DD2_PEdgeRDC")
+                .forCondition(FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
+                .andCondition(FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
+                .andCondition(FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
+                .andCondition(FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
+                .andCondition(FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BR_CORNER)
+                .andCondition(FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
+
+        textures.useTexture("Wall_DD2_PEdgeRUC")
+                .forCondition(FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
+                .andCondition(FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
+                .andCondition(FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
+                .andCondition(FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
+                .andCondition(FEATURE_PLATE | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TR_CORNER)
+                .andCondition(FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
+
+        textures.useTexture("Wall_DD2_PEdgeLDC")
+                .forCondition(FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
+                .andCondition(FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
+                .andCondition(FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
+                .andCondition(FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
+                .andCondition(FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BL_CORNER)
+                .andCondition(FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
+
+        textures.useTexture("Wall_DD2_PEdgeLUC")
+                .forCondition(FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
+                .andCondition(FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
+                .andCondition(FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
+                .andCondition(FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TL_CORNER)
+                .andCondition(FEATURE_PLATE | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
+                .andCondition(FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER)
+                .andCondition(FEATURE_PLATE | FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
+
+        textures.useTexture("Wall_DD2_PEdgeInnerRDC_S")
+                .forCondition(FEATURE_PLATE | FEATURE_PLATE_BR_CORNER);
+
+        textures.useTexture("Wall_DD2_PEdgeInnerRUC_S")
+                .forCondition(FEATURE_PLATE | FEATURE_PLATE_TR_CORNER);
+
+        textures.useTexture("Wall_DD2_PEdgeInnerLDC_S")
+                .forCondition(FEATURE_PLATE | FEATURE_PLATE_BL_CORNER);
+
+        textures.useTexture("Wall_DD2_PEdgeInnerLUC_S")
+                .forCondition(FEATURE_PLATE | FEATURE_PLATE_TL_CORNER);
+
+        textures.useTexture("Wall_DD2_PEdgeInnerLURDC_S")
+                .forCondition(FEATURE_PLATE | FEATURE_PLATE_TL_CORNER | FEATURE_PLATE_BR_CORNER);
+
+        textures.useTexture("Wall_DD2_PEdgeInnerLDRUC_S")
+                .forCondition(FEATURE_PLATE | FEATURE_PLATE_BL_CORNER | FEATURE_PLATE_TR_CORNER);
+
+        textures.useTexture("Wall_CrownM_EdgeL")
+                .forCondition(FEATURE_CROWN | TOP | LEFT)
+                .andCondition(FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP)
+                .andCondition(FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE);
+
+        textures.useTexture("Wall_CrownM_EdgeR")
+                .forCondition(FEATURE_CROWN | TOP | RIGHT)
+                .andCondition(FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP)
+                .andCondition(FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE);
+
+        textures.useTexture("Wall_CrownM_AllEdge")
+                .forCondition(FEATURE_CROWN | TOP | LEFT | RIGHT);
+
+        textures.useTexture("Wall_CrownM_Center")
+                .forCondition(FEATURE_CROWN | TOP)
+                .andCondition(FEATURE_CROWN | TOP | FEATURE_PLATE | FEATURE_EDGE_TOP);
+
+        textures.useTexture("Wall_CrownM_DDPanelCL")
+                .forCondition(FEATURE_CROWN | TOP | FEATURE_PLATE | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP);
+
+        textures.useTexture("Wall_CrownM_DDPanelCR")
+                .forCondition(FEATURE_CROWN | TOP | FEATURE_PLATE | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP);
+
+        textures.useTexture("Wall_BaseM_EdgeL")
+                .forCondition(FEATURE_BASE | BOTTOM | LEFT)
+                .andCondition(FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM);
+
+        textures.useTexture("Wall_BaseM_EdgeR")
+                .forCondition(FEATURE_BASE | BOTTOM | RIGHT)
+                .andCondition(FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM);
+
+        textures.useTexture("Wall_BaseM_AllEdge")
+                .forCondition(FEATURE_BASE | BOTTOM | LEFT | RIGHT);
+
+        textures.useTexture("Wall_BaseM_Center")
+                .forCondition(FEATURE_BASE | BOTTOM)
+                .andCondition(FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_BOTTOM);
+
+        textures.useTexture("Wall_BaseM_DDPanelCL")
+                .forCondition(FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
+
+        textures.useTexture("Wall_BaseM_DDPanelCR")
+                .forCondition(FEATURE_BASE | BOTTOM | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
+
+        textures.useTexture("Wall_CrownM_EdgeL_DDPanelCL_S")
+                .forCondition(FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
+                .andCondition(FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
+
+        textures.useTexture("Wall_CrownM_EdgeL_DDPanelCR_S")
+                .forCondition(FEATURE_CROWN | TOP | LEFT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT);
+
+        textures.useTexture("Wall_CrownM_EdgeR_DDPanelCR_S")
+                .forCondition(FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
+                .andCondition(FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER)        ;
+
+        textures.useTexture("Wall_CrownM_EdgeR_DDPanelCL_S")
+                .forCondition(FEATURE_CROWN | TOP | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT);
+
+        textures.useTexture("Wall_CrownM_AllEdge_DDPanelCR_S")
+                .forCondition(FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
+                .andCondition(FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
+
+        textures.useTexture("Wall_CrownM_AllEdge_DDPanelCL_S")
+                .forCondition(FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
+                .andCondition(FEATURE_CROWN | TOP | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
+
+        textures.useTexture("Wall_BaseM_EdgeL_DDPanelCL_S")
+                .forCondition(FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
+                .andCondition(FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
+
+        textures.useTexture("Wall_BaseM_EdgeL_DDPanelCR_S")
+                .forCondition(FEATURE_BASE | BOTTOM | LEFT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
+
+        textures.useTexture("Wall_BaseM_EdgeR_DDPanelCL_S")
+                .forCondition(FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
+
+        textures.useTexture("Wall_BaseM_EdgeR_DDPanelCR_S")
+                .forCondition(FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
+                .andCondition(FEATURE_BASE | BOTTOM | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
+
+        textures.useTexture("Wall_BaseM_AllEdge_DDPanelCR_S")
+                .forCondition(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
+                        //.andCondition(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_BR_CORNER
+                .andCondition(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
+
+        textures.useTexture("Wall_BaseM_AllEdge_DDPanelCL_S")
+                .forCondition(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
+                        //.andCondition(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_BL_CORNER
+                .andCondition(FEATURE_BASE | BOTTOM | LEFT | RIGHT | FEATURE_PLATE | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
     }
-
 
     protected int getTexturePropertiesForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
     {
@@ -372,7 +364,8 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         }
     }
 
-    private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord){
+    private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord)
+    {
         int x = worldBlockCoord.getX();
         int y = worldBlockCoord.getY();
         int z = worldBlockCoord.getZ();

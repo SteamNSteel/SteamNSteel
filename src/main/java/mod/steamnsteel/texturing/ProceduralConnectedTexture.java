@@ -39,45 +39,31 @@ public abstract class ProceduralConnectedTexture
     protected abstract HashMap<Integer, IProceduralWallFeature> getFeatures();
 
     final int MISSING_TEXTURE = Integer.MAX_VALUE;
-    private HashMap<Integer, IIcon> icons = new HashMap<Integer, IIcon>();
-
+    private TextureConditions textures;
     public void registerIcons(IIconRegister iconRegister)
     {
-        icons.clear();
+
         cachedNoiseGens.clear();
         cachedFeatures.clear();
-
-        final Map<String, Integer[]> iconMap = getIconMap();
-
-        for (Map.Entry<String, Integer[]> set : iconMap.entrySet())
-        {
-            for (Integer i : set.getValue())
-            {
-                addIcon(i, iconRegister.registerIcon(TheMod.MOD_ID + ":" + set.getKey()));
-            }
-        }
+        textures = new TextureConditions(iconRegister);
+        registerIcons(textures);
     }
 
-    protected abstract Map<String, Integer[]> getIconMap();
-
-    protected void addIcon(int fingerprint, IIcon icon)
-    {
-        icons.put(fingerprint, icon);
-    }
+    protected abstract void registerIcons(ITextureConditionSet textures);
 
     public IIcon getIconForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
     {
         int blockProperties = getTexturePropertiesForSide(blockAccess, worldBlockCoord, side);
 
-        if (!icons.containsKey(blockProperties))
+        IIcon icon = textures.getTextureFor(blockProperties);
+
+        if (icon == null)
         {
             String blockPropertiesDescription = describeTextureProperties(blockProperties);
 
             Logger.warning("Unknown texture: %d (%s) - %s @ (%s) - %d", blockProperties, Integer.toBinaryString(blockProperties), blockPropertiesDescription, worldBlockCoord, side);
-
-            blockProperties = MISSING_TEXTURE;
         }
-        return icons.get(blockProperties);
+        return icon;
     }
 
     protected abstract String describeTextureProperties(int blockProperties);
