@@ -3,6 +3,7 @@ package mod.steamnsteel.texturing;
 import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
 import mod.steamnsteel.texturing.feature.OneByOneRuinWallFeature;
+import mod.steamnsteel.texturing.feature.OneByThreeRuinWallFeature;
 import mod.steamnsteel.texturing.feature.PipesRuinWallFeature;
 import mod.steamnsteel.texturing.feature.PlateRuinWallFeature;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
@@ -22,8 +23,9 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     public static final int FEATURE_SCREEN = 1 << 16;
     public static final int FEATURE_VALVE = 1 << 17;
     public static final int FEATURE_PLATE = 1 << 18;
+    public static final int FEATURE_METAL_TEAR_H = 1 << 19;
 
-    final int FEATURE_MASK = FEATURE_PLATE | FEATURE_PIPES | FEATURE_SCREEN | FEATURE_VALVE | FEATURE_VENT;
+    final int FEATURE_MASK = FEATURE_PLATE | FEATURE_PIPES | FEATURE_SCREEN | FEATURE_VALVE | FEATURE_VENT | FEATURE_METAL_TEAR_H;
 
     public static final int FEATURE_PLATE_TL_CORNER = 1 << 8;
     public static final int FEATURE_PLATE_TR_CORNER = 1 << 9;
@@ -39,6 +41,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         features.put(FEATURE_VALVE, new OneByOneRuinWallFeature(this, FEATURE_VALVE));
         features.put(FEATURE_SCREEN, new OneByOneRuinWallFeature(this, FEATURE_SCREEN));
         features.put(FEATURE_PLATE, new PlateRuinWallFeature(this, FEATURE_PLATE));
+        features.put(FEATURE_METAL_TEAR_H, new OneByThreeRuinWallFeature(this, FEATURE_METAL_TEAR_H));
 
         return features;
     }
@@ -85,6 +88,15 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                         FEATURE_VALVE | LEFT,
                         FEATURE_VALVE | RIGHT,
                         FEATURE_VALVE | LEFT | RIGHT
+                })
+                .put("Wall_DDLongPipe_L", new Integer[] {
+                        FEATURE_METAL_TEAR_H | FEATURE_EDGE_LEFT
+                })
+                .put("Wall_DDLongPipe_M", new Integer[] {
+                        FEATURE_METAL_TEAR_H
+                })
+                .put("Wall_DDLongPipe_R", new Integer[] {
+                        FEATURE_METAL_TEAR_H | FEATURE_EDGE_RIGHT
                 })
                 .put("Wall_DD1_PipeB", new Integer[]{
                         FEATURE_PIPES | FEATURE_EDGE_BOTTOM,
@@ -406,6 +418,18 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         if ((blockProperties & FEATURE_VENT) == FEATURE_VENT)
         {
             sb.append("Vent,");
+        }
+        if ((blockProperties & FEATURE_SCREEN) == FEATURE_SCREEN)
+        {
+            sb.append("Screen,");
+        }
+        if ((blockProperties & FEATURE_VALVE) == FEATURE_VALVE)
+        {
+            sb.append("Valve,");
+        }
+        if ((blockProperties & FEATURE_METAL_TEAR_H) == FEATURE_METAL_TEAR_H)
+        {
+            sb.append("Metal Tear H,");
         }
 
         if ((blockProperties & TOP) == TOP)
