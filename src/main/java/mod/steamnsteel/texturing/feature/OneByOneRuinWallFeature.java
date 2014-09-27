@@ -72,7 +72,11 @@ public class OneByOneRuinWallFeature implements IProceduralWallFeature
     @Override
     public boolean canIntersect(IProceduralWallFeature feature)
     {
-        return true;
+        if (feature instanceof PlateRuinWallFeature)
+        {
+            return true;
+        }
+        return false;
     }
 
     @Override

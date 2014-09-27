@@ -31,13 +31,36 @@ public class OneByThreeRuinWallFeature implements IProceduralWallFeature
             return false;
         }
 
-        ForgeDirection below = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.BELOW, orientation);
-        ForgeDirection above = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.ABOVE, orientation);
+        ForgeDirection left = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.LEFT, orientation);
+        ForgeDirection right = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.RIGHT, orientation);
 
-        final boolean aboveBlockIsClear = ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(above), back);
-        final boolean belowBlockIsClear = ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(below), back);
+        IProceduralWallFeature blockFeature;
+        boolean blockIsValid;
+        blockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(left));
+        blockIsValid = ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(left), back);
+        final boolean leftBlockIsValid = blockIsValid && blockFeature instanceof OneByThreeRuinWallFeature && blockFeature.getFeatureId() == this.featureId;
 
-        if (aboveBlockIsClear && belowBlockIsClear) {
+        blockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(right));
+        blockIsValid = ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(right), back);
+        final boolean rightBlockIsValid = blockIsValid && blockFeature instanceof OneByThreeRuinWallFeature && blockFeature.getFeatureId() == this.featureId;
+
+        if (leftBlockIsValid && rightBlockIsValid) {
+            return true;
+        }
+
+        blockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(left).offset(left));
+        blockIsValid = ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(left).offset(left), back);
+        final boolean leftLeftBlockIsValid = blockIsValid && blockFeature instanceof OneByThreeRuinWallFeature && blockFeature.getFeatureId() == this.featureId;
+        if (leftBlockIsValid && leftLeftBlockIsValid)
+        {
+            return true;
+        }
+
+        blockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(right).offset(right));
+        blockIsValid = ruinWallTexture.checkRuinWallAndNotObscured(blockAccess, worldBlockCoord.offset(right).offset(right), back);
+        final boolean rightRightBlockIsValid = blockIsValid && blockFeature instanceof OneByThreeRuinWallFeature && blockFeature.getFeatureId() == this.featureId;
+        if (rightBlockIsValid && rightRightBlockIsValid)
+        {
             return true;
         }
         return false;
@@ -58,7 +81,12 @@ public class OneByThreeRuinWallFeature implements IProceduralWallFeature
             int yPos = random.nextInt(16);
             int zPos = random.nextInt(18) - 1;
 
-            features.add(new ProceduralConnectedTexture.FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 1, 1, 1));
+            if (random.nextBoolean())
+            {
+                features.add(new ProceduralConnectedTexture.FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 3, 1, 1));
+            } else {
+                features.add(new ProceduralConnectedTexture.FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 1, 1, 3));
+            }
         }
         return features;
     }
@@ -82,6 +110,26 @@ public class OneByThreeRuinWallFeature implements IProceduralWallFeature
     @Override
     public int getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
     {
-        return featureId;
+        ForgeDirection left = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.LEFT, orientation);
+        ForgeDirection right = BlockSideRotation.forOrientation(BlockSideRotation.TextureDirection.RIGHT, orientation);
+
+        int subProperties = featureId;
+        IProceduralWallFeature leftBlockFeature = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(left), orientation);
+        IProceduralWallFeature rightBlockFeature = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(right), orientation);
+
+        if (!(leftBlockFeature instanceof OneByThreeRuinWallFeature) || leftBlockFeature.getFeatureId() != featureId)
+        {
+            subProperties |= ruinWallTexture.FEATURE_EDGE_LEFT;
+        }
+        if (!(rightBlockFeature instanceof OneByThreeRuinWallFeature) || rightBlockFeature.getFeatureId() != featureId)
+        {
+            subProperties |= ruinWallTexture.FEATURE_EDGE_RIGHT;
+        }
+
+        final int FEATURE_EDGE_TOP_AND_BOTTOM = ruinWallTexture.FEATURE_EDGE_LEFT | ruinWallTexture.FEATURE_EDGE_RIGHT;
+
+        //Pipes are only a single block wide and must ignore LEFT | RIGHT edges
+        subProperties &= featureId | FEATURE_EDGE_TOP_AND_BOTTOM;
+         return subProperties;
     }
 }
