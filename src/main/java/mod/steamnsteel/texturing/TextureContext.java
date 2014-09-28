@@ -9,6 +9,7 @@ public class TextureContext
 {
     private final ForgeDirection orientation;
     private final Block[] blocks;
+    private final ForgeDirection[] directions;
 
     public ForgeDirection getForwardDirection()
     {
@@ -80,6 +81,14 @@ public class TextureContext
         blocks[TextureDirection.BELOW.ordinal()] = worldBlockCoord.offset(downDirection).getBlock(blockAccess);
         blocks[TextureDirection.BACKWARDS.ordinal()] = worldBlockCoord.offset(backDirection).getBlock(blockAccess);
         blocks[TextureDirection.FORWARD.ordinal()] = worldBlockCoord.offset(forwardDirection).getBlock(blockAccess);
+
+        directions = new ForgeDirection[6];
+        directions[TextureDirection.LEFT.ordinal()] = leftDirection;
+        directions[TextureDirection.RIGHT.ordinal()] = rightDirection;
+        directions[TextureDirection.ABOVE.ordinal()] = upDirection;
+        directions[TextureDirection.BELOW.ordinal()] = downDirection;
+        directions[TextureDirection.BACKWARDS.ordinal()] = backDirection;
+        directions[TextureDirection.FORWARD.ordinal()] = forwardDirection;
     }
 
     public ForgeDirection getOrientation()
@@ -90,5 +99,10 @@ public class TextureContext
     public Block getNearbyBlock(TextureDirection direction)
     {
         return blocks[direction.ordinal()];
+    }
+
+    public ForgeDirection getForgeDirection(TextureDirection textureDirection)
+    {
+        return directions[textureDirection.ordinal()];
     }
 }

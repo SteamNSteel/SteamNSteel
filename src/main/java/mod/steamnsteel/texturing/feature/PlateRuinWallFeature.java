@@ -17,29 +17,27 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
         this.ruinWallTexture = ruinWallTexture;
     }
 
-    public boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    public boolean isFeatureValid(TextureContext context)
     {
-        /*ForgeDirection back = BlockSideRotation.forOrientation(TextureDirection.BACKWARDS, orientation);
-
-        if (!ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord, back))
+        if (!ruinWallTexture.isBlockPartOfWallAndUnobstructed(context))
         {
             return false;
         }
 
-        ForgeDirection left = BlockSideRotation.forOrientation(TextureDirection.LEFT, orientation);
-        ForgeDirection right = BlockSideRotation.forOrientation(TextureDirection.RIGHT, orientation);
-        ForgeDirection below = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
-        ForgeDirection above = BlockSideRotation.forOrientation(TextureDirection.ABOVE, orientation);
+        boolean leftValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT) &&
+                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), PlateRuinWallFeature.class, TextureDirection.LEFT);
 
-        //check Left
-        boolean leftValid = (ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(left), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(left)) instanceof PlateRuinWallFeature);
-        boolean rightValid = (ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(right), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(right)) instanceof PlateRuinWallFeature);
+        boolean rightValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT) &&
+                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), PlateRuinWallFeature.class, TextureDirection.RIGHT);
+
         if (!leftValid && !rightValid)
         {
             return false;
         }
-        boolean aboveValid = (ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(above), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(above)) instanceof PlateRuinWallFeature);
-        boolean belowValid = (ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(below), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(below)) instanceof PlateRuinWallFeature);
+        boolean aboveValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE) &&
+                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), PlateRuinWallFeature.class, TextureDirection.ABOVE);
+        boolean belowValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW) &&
+                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), PlateRuinWallFeature.class, TextureDirection.BELOW);
 
         if (!aboveValid && !belowValid)
         {
@@ -48,25 +46,29 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 
         //check for a cluster of 4 - Automatically valid
         //check above and left
-        if (aboveValid && leftValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(above).offset(left), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(above).offset(left)) instanceof PlateRuinWallFeature)
+        if (aboveValid && leftValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE, TextureDirection.LEFT) &&
+                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), PlateRuinWallFeature.class, TextureDirection.ABOVE, TextureDirection.LEFT))
         {
             return true;
         }
         //check above and right
-        if (aboveValid && rightValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(above).offset(right), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(above).offset(right)) instanceof PlateRuinWallFeature)
+        if (aboveValid && rightValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE, TextureDirection.RIGHT) &&
+                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), PlateRuinWallFeature.class, TextureDirection.ABOVE, TextureDirection.RIGHT))
         {
             return true;
         }
         //check below and left
-        if (belowValid && leftValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(below).offset(left), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(below).offset(left)) instanceof PlateRuinWallFeature)
+        if (belowValid && leftValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW, TextureDirection.LEFT) &&
+                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), PlateRuinWallFeature.class, TextureDirection.BELOW, TextureDirection.LEFT))
         {
             return true;
         }
         //check below and right
-        if (belowValid && rightValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(below).offset(right), back) && ruinWallTexture.getFeatureAt(worldBlockCoord.offset(below).offset(right)) instanceof PlateRuinWallFeature)
+        if (belowValid && rightValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW, TextureDirection.RIGHT) &&
+                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), PlateRuinWallFeature.class, TextureDirection.BELOW, TextureDirection.RIGHT))
         {
             return true;
-        }*/
+        }
 
         //We have encountered an S or Z shape;
         return false;
@@ -105,38 +107,33 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    public long getSubProperties(TextureContext context)
     {
-        /*ForgeDirection left = BlockSideRotation.forOrientation(TextureDirection.LEFT, orientation);
-        ForgeDirection right = BlockSideRotation.forOrientation(TextureDirection.RIGHT, orientation);
-        ForgeDirection below = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
-        ForgeDirection above = BlockSideRotation.forOrientation(TextureDirection.ABOVE, orientation);
-
         long subProperties = getFeatureId();
-        IProceduralWallFeature leftBlockFeature = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(left), orientation, 1);
-        IProceduralWallFeature rightBlockFeature = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(right), orientation, 1);
-        IProceduralWallFeature aboveBlockFeature = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(above), orientation, 1);
-        IProceduralWallFeature belowBlockFeature = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(below), orientation, 1);
+        IProceduralWallFeature leftBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.LEFT);
+        IProceduralWallFeature rightBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.RIGHT);
+        IProceduralWallFeature aboveBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.ABOVE);
+        IProceduralWallFeature belowBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.BELOW);
 
         if (!(leftBlockFeature instanceof PlateRuinWallFeature))
         {
-            subProperties |= ruinWallTexture.FEATURE_EDGE_LEFT;
+            subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_LEFT;
         }
         if (!(rightBlockFeature instanceof PlateRuinWallFeature))
         {
-            subProperties |= ruinWallTexture.FEATURE_EDGE_RIGHT;
+            subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
         }
         if (!(aboveBlockFeature instanceof PlateRuinWallFeature))
         {
-            subProperties |= ruinWallTexture.FEATURE_EDGE_TOP;
+            subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_TOP;
         }
         if (!(belowBlockFeature instanceof PlateRuinWallFeature))
         {
-            subProperties |= ruinWallTexture.FEATURE_EDGE_BOTTOM;
+            subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_BOTTOM;
         }
 
-        final long FEATURE_EDGE_TOP_AND_BOTTOM = ruinWallTexture.FEATURE_EDGE_TOP | ruinWallTexture.FEATURE_EDGE_BOTTOM;
-        final long FEATURE_EDGE_LEFT_AND_RIGHT = ruinWallTexture.FEATURE_EDGE_LEFT | ruinWallTexture.FEATURE_EDGE_RIGHT;
+        final long FEATURE_EDGE_TOP_AND_BOTTOM = ProceduralConnectedTexture.FEATURE_EDGE_TOP | ProceduralConnectedTexture.FEATURE_EDGE_BOTTOM;
+        final long FEATURE_EDGE_LEFT_AND_RIGHT = ProceduralConnectedTexture.FEATURE_EDGE_LEFT | ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
 
         //Plates cannot be 1 high or 1 wide.
         if ((subProperties & FEATURE_EDGE_TOP_AND_BOTTOM) == FEATURE_EDGE_TOP_AND_BOTTOM)
@@ -151,7 +148,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 
         if (aboveBlockFeature instanceof PlateRuinWallFeature && leftBlockFeature instanceof PlateRuinWallFeature)
         {
-            IProceduralWallFeature corner = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(above).offset(left), orientation, 1);
+            IProceduralWallFeature corner = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.ABOVE, TextureDirection.LEFT);
             if (!(corner instanceof PlateRuinWallFeature))
             {
                 subProperties |= RuinWallTexture.FEATURE_PLATE_TL_CORNER;
@@ -159,7 +156,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
         }
         if (aboveBlockFeature instanceof PlateRuinWallFeature && rightBlockFeature instanceof PlateRuinWallFeature)
         {
-            IProceduralWallFeature corner = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(above).offset(right), orientation, 1);
+            IProceduralWallFeature corner = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.ABOVE, TextureDirection.RIGHT);
             if (!(corner instanceof PlateRuinWallFeature))
             {
                 subProperties |= RuinWallTexture.FEATURE_PLATE_TR_CORNER;
@@ -168,7 +165,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 
         if (belowBlockFeature instanceof PlateRuinWallFeature && leftBlockFeature instanceof PlateRuinWallFeature)
         {
-            IProceduralWallFeature corner = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(below).offset(left), orientation, 1);
+            IProceduralWallFeature corner = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.BELOW, TextureDirection.LEFT);
             if (!(corner instanceof PlateRuinWallFeature))
             {
                 subProperties |= RuinWallTexture.FEATURE_PLATE_BL_CORNER;
@@ -176,15 +173,14 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
         }
         if (belowBlockFeature instanceof PlateRuinWallFeature && rightBlockFeature instanceof PlateRuinWallFeature)
         {
-            IProceduralWallFeature corner = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(below).offset(right), orientation, 1);
+            IProceduralWallFeature corner = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.BELOW, TextureDirection.RIGHT);
             if (!(corner instanceof PlateRuinWallFeature))
             {
                 subProperties |= RuinWallTexture.FEATURE_PLATE_BR_CORNER;
             }
         }
 
-        return subProperties;*/
-        return 0;
+        return subProperties;
     }
 
     @Override

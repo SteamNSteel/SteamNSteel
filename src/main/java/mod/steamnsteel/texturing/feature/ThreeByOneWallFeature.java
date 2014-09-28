@@ -18,7 +18,7 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    public boolean isFeatureValid(TextureContext context)
     {
         /*ForgeDirection back = BlockSideRotation.forOrientation(TextureDirection.BACKWARDS, orientation);
 
@@ -100,7 +100,7 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    public long getSubProperties(TextureContext context)
     {
         /*ForgeDirection left = BlockSideRotation.forOrientation(TextureDirection.LEFT, orientation);
         ForgeDirection right = BlockSideRotation.forOrientation(TextureDirection.RIGHT, orientation);

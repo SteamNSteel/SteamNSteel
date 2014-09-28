@@ -18,7 +18,7 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    public boolean isFeatureValid(TextureContext context)
     {
         return false;
     }
@@ -36,7 +36,7 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    public long getSubProperties(TextureContext context)
     {
         return 0;
     }

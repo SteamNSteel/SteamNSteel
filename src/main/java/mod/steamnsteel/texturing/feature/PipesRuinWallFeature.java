@@ -19,7 +19,7 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    public boolean isFeatureValid(TextureContext context)
     {
         /*ForgeDirection back = BlockSideRotation.forOrientation(TextureDirection.BACKWARDS, orientation);
 
@@ -84,7 +84,7 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    public long getSubProperties(TextureContext context)
     {
         /*ForgeDirection below = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
         ForgeDirection above = BlockSideRotation.forOrientation(TextureDirection.ABOVE, orientation);

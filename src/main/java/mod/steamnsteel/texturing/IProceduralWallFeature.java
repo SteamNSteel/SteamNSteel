@@ -8,15 +8,13 @@ import java.util.Collection;
 
 public interface IProceduralWallFeature
 {
-    boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation);
-
     Collection<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord);
 
     long getFeatureId();
 
     boolean canIntersect(IProceduralWallFeature feature);
 
-    long getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation);
+    long getSubProperties(TextureContext context);
 
     void setFeatureId(long featureId);
 
@@ -25,4 +23,6 @@ public interface IProceduralWallFeature
     int getLayer();
 
     Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature);
+
+    boolean isFeatureValid(TextureContext context);
 }

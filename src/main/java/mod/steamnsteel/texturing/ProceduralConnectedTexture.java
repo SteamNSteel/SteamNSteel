@@ -1,5 +1,6 @@
 package mod.steamnsteel.texturing;
 
+import mod.steamnsteel.texturing.feature.PlateRuinWallFeature;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
@@ -113,7 +114,7 @@ public abstract class ProceduralConnectedTexture
             blockProperties |= RIGHT;
         }
 
-        blockProperties &= featureRegistry.getFeatureBits(context);
+        blockProperties |= featureRegistry.getFeatureBits(context);
 
         /*
         IProceduralWallFeature feature = getValidFeature(blockAccess, worldBlockCoord, orientation);
@@ -138,22 +139,55 @@ public abstract class ProceduralConnectedTexture
 
     }
 
-    public final boolean isBlockPartOfWallAndUnobstructed(TextureContext context, TextureDirection direction)
+    public final boolean isBlockPartOfWallAndUnobstructed(TextureContext context, TextureDirection... direction)
     {
-        if (!isCompatibleBlock(context, context.getNearbyBlock(direction)))
+        WorldBlockCoord coord = getOffsetCoordinate(context, direction);
+
+        if (!isCompatibleBlock(context, coord.getBlock(context.getBlockAccess())))
         {
             return false;
         }
 
-        if (context.getNearbyBlock(TextureDirection.BACKWARDS).getMaterial().isOpaque())
+        if (coord.offset(context.getBackwardDirection()).getBlock(context.getBlockAccess()).getMaterial().isOpaque())
         {
             return false;
         }
         return true;
+    }
 
+    private WorldBlockCoord getOffsetCoordinate(TextureContext context, TextureDirection[] direction)
+    {
+        WorldBlockCoord coord = context.getWorldBlockCoord();
+        for (TextureDirection textureDirection : direction)
+        {
+            coord = coord.offset(context.getForgeDirection(textureDirection));
+        }
+        return coord;
     }
 
     protected abstract boolean isCompatibleBlock(TextureContext context, Block block);
+
+    public boolean isFeatureAtCoordCompatibleWith(TextureContext context, int layer, Class<PlateRuinWallFeature> featureClass, TextureDirection... direction)
+    {
+        WorldBlockCoord coord = getOffsetCoordinate(context, direction);
+        return featureClass.isInstance(featureRegistry.getFeatureAt(coord, layer));
+    }
+
+    public IProceduralWallFeature getValidFeature(TextureContext context, int layer, TextureDirection... direction)
+    {
+        WorldBlockCoord coord = getOffsetCoordinate(context, direction);
+        IProceduralWallFeature desiredFeature = featureRegistry.getFeatureAt(coord, layer);
+        if (desiredFeature == null)
+        {
+            return null;
+        }
+
+        if (desiredFeature.isFeatureValid(context))
+        {
+            return desiredFeature;
+        }
+        return null;
+    }
 
     //protected abstract int getTexturePropertiesForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side);
 
@@ -207,17 +241,5 @@ public abstract class ProceduralConnectedTexture
         return featureRegistry;
     }*/
 
-    public IProceduralWallFeature getValidFeature(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int layer)
-    {
-        IProceduralWallFeature desiredFeature = featureRegistry.getFeatureAt(worldBlockCoord, layer);
-        if (desiredFeature == null)
-        {
-            return null;
-        }
-        if (desiredFeature.isFeatureValid(blockAccess, worldBlockCoord, orientation))
-        {
-            return desiredFeature;
-        }
-        return null;
-    }
+
 }
