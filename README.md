@@ -1,11 +1,11 @@
 ##Steam and Steel
 **CURRENTLY INDEVELOPMENT**
 
-*Note: This readme was based on [pahimar's version](https://github.com/pahimar/Equivalent-Exchange-3).*
+*Note: This readme was based on [pahimar's version](https://github.com/pahimar/Equivalent-Exchange-3/blob/master/README.md).*
 
 [Setting up the development environment](#setting-up-the-development-environment)
 
-[Compiling Steam and Steel](#compile)
+[Compiling Steam and Steel](#compile-this-project)
 
 [Contributing](#contributing)
 
@@ -21,7 +21,7 @@
 
 [Compile This Project](#compile-this-project)
 
-[Update Your Repository](#Update-your-repository)
+[Update Your Repository](#update-your-repository)
 
 ####Set Up Java
 The Java JDK is used to compile this project.
