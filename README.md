@@ -1,8 +1,6 @@
 ##Steam and Steel
 **CURRENTLY INDEVELOPMENT**
 
-*Note: This readme was based on [pahimar's version](https://github.com/pahimar/Equivalent-Exchange-3/blob/master/README.md).*
-
 [Setting up the development environment](#setting-up-the-development-environment)
 
 [Compiling Steam and Steel](#compile-this-project)
@@ -10,6 +8,8 @@
 [Contributing](#contributing)
 
 [Licensing](#licensing)
+
+*Note: This readme was based on [pahimar's version](https://github.com/pahimar/Equivalent-Exchange-3/blob/master/README.md).*
 
 ###Setting up the development environment
 ***
