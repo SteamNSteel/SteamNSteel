@@ -1,5 +1,5 @@
 ##Steam and Steel
-**CURRENTLY INDEVELOPMENT**
+**CURRENTLY IN DEVELOPMENT**
 
 [Setting up the development environment](#setting-up-the-development-environment)
 
