@@ -18,13 +18,4 @@ public class BlockSideRotation
         return ROTATION_MATRIX[orientation.ordinal()][direction.ordinal()];
     }
 
-    public enum TextureDirection
-    {
-        LEFT,
-        RIGHT,
-        BACK,
-        FORWARD,
-        BELOW,
-        ABOVE
-    }
 }

@@ -1,96 +1,180 @@
 package mod.steamnsteel.texturing;
 
-import mod.steamnsteel.TheMod;
 import mod.steamnsteel.utility.log.Logger;
-import mod.steamnsteel.utility.position.ChunkBlockCoord;
-import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public abstract class ProceduralConnectedTexture
 {
-    protected final int NO_FEATURE = -1;
+    public static final int NO_FEATURE = -1;
 
     protected final int DEFAULT = 0;
-    protected final int TOP = 1 << 0;
-    protected final int BOTTOM = 1 << 1;
-    protected final int LEFT = 1 << 2;
-    protected final int RIGHT = 1 << 3;
+    public static long TOP;
+    public static long BOTTOM;
+    public static long LEFT;
+    public static long RIGHT;
 
-    public static final int FEATURE_EDGE_TOP = 1 << 4;
-    public static final int FEATURE_EDGE_BOTTOM = 1 << 5;
-    public static final int FEATURE_EDGE_LEFT = 1 << 6;
-    public static final int FEATURE_EDGE_RIGHT = 1 << 7;
+    public static long FEATURE_EDGE_TOP;
+    public static long FEATURE_EDGE_BOTTOM;
+    public static long FEATURE_EDGE_LEFT;
+    public static long FEATURE_EDGE_RIGHT;
+    final int MISSING_TEXTURE = Integer.MAX_VALUE;
+    private FeatureRegistry featureRegistry;
 
-    private HashMap<Integer, IProceduralWallFeature> features;
+    //private HashMap<Integer, IProceduralWallFeature> featureRegistry;
+
+    private ProceduralTextureRegistry textures;
 
     protected ProceduralConnectedTexture()
     {
-        this.features = getFeatures();
+        registerFeatures();
     }
 
-    protected abstract HashMap<Integer, IProceduralWallFeature> getFeatures();
-
-    final int MISSING_TEXTURE = Integer.MAX_VALUE;
-    private TextureConditions textures;
     public void registerIcons(IIconRegister iconRegister)
     {
+        registerFeatures();
 
-        cachedNoiseGens.clear();
-        cachedFeatures.clear();
-        textures = new TextureConditions(iconRegister);
+        textures = new ProceduralTextureRegistry(iconRegister);
         registerIcons(textures);
     }
 
+    private void registerFeatures() {
+        featureRegistry = new FeatureRegistry();
+
+        registerInternalFeatureProperties(featureRegistry);
+        registerFeatures(featureRegistry);
+    }
+
+    private final void registerInternalFeatureProperties(IFeatureRegistry features)
+    {
+        TOP = features.registerFeatureProperty("T");
+        LEFT = features.registerFeatureProperty("L");
+        BOTTOM = features.registerFeatureProperty("B");
+        RIGHT = features.registerFeatureProperty("R");
+
+        FEATURE_EDGE_TOP = features.registerFeatureProperty("FE_T");
+        FEATURE_EDGE_LEFT = features.registerFeatureProperty("FE_L");
+        FEATURE_EDGE_BOTTOM = features.registerFeatureProperty("FE_B");
+        FEATURE_EDGE_RIGHT = features.registerFeatureProperty("FE_R");
+    }
+
+    protected abstract void registerFeatures(IFeatureRegistry features);
     protected abstract void registerIcons(ITextureConditionSet textures);
 
     public IIcon getIconForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
     {
-        int blockProperties = getTexturePropertiesForSide(blockAccess, worldBlockCoord, side);
+        TextureContext context = new TextureContext(blockAccess, worldBlockCoord, side);
+
+        int blockProperties = getTexturePropertiesForSide2(context);
 
         IIcon icon = textures.getTextureFor(blockProperties);
 
         if (icon == null)
         {
-            String blockPropertiesDescription = describeTextureProperties(blockProperties);
+            String blockPropertiesDescription = featureRegistry.describeSide(blockProperties);
 
             Logger.warning("Unknown texture: %d (%s) - %s @ (%s) - %d", blockProperties, Integer.toBinaryString(blockProperties), blockPropertiesDescription, worldBlockCoord, side);
         }
         return icon;
     }
 
-    protected abstract String describeTextureProperties(int blockProperties);
-
-    protected abstract int getTexturePropertiesForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side);
-
-    HashMap<ChunkCoord, int[]> cachedNoiseGens = new HashMap<ChunkCoord, int[]>();
-    HashMap<ChunkCoord, List<FeatureInstance>> cachedFeatures = new HashMap<ChunkCoord, List<FeatureInstance>>();
-
-    private List<FeatureInstance> getChunkFeatures(ChunkCoord chunkCoord)
+    private int getTexturePropertiesForSide2(TextureContext context)
     {
-        List<FeatureInstance> features = cachedFeatures.get(chunkCoord);
-        if (features != null)
+        int blockProperties = 0;
+        ForgeDirection orientation = context.getOrientation();
+        if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN)
         {
-            return features;
+            return DEFAULT;
         }
-        features = new ArrayList<FeatureInstance>();
 
-        for (IProceduralWallFeature wallFeature : this.features.values())
+        boolean leftIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT);
+        boolean rightIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT);
+        boolean aboveIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE);
+        boolean belowIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW);
+
+        if (!aboveIsRuinWallAndNotObscured)
+        {
+            blockProperties |= TOP;
+        }
+        if (!belowIsRuinWallAndNotObscured)
+        {
+            blockProperties |= BOTTOM;
+        }
+        if (!leftIsRuinWallAndNotObscured)
+        {
+            blockProperties |= LEFT;
+        }
+        if (!rightIsRuinWallAndNotObscured)
+        {
+            blockProperties |= RIGHT;
+        }
+
+        blockProperties &= featureRegistry.getFeatureBits(context);
+
+        /*
+        IProceduralWallFeature feature = getValidFeature(blockAccess, worldBlockCoord, orientation);
+        if (feature != null)
+        {
+            long subProperties = feature.getSubProperties(blockAccess, worldBlockCoord, orientation);
+
+            if ((subProperties & featureRegistry.getFeatureMask()) != 0)
+            {
+                blockProperties |= subProperties;
+            }
+        }*/
+        return blockProperties;
+    }
+
+    public final String describeTextureAt(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
+    {
+        TextureContext context = new TextureContext(blockAccess, worldBlockCoord, side);
+
+        int blockProperties = getTexturePropertiesForSide2(context);
+        return featureRegistry.describeSide(blockProperties);
+
+    }
+
+    public final boolean isBlockPartOfWallAndUnobstructed(TextureContext context, TextureDirection direction)
+    {
+        if (!isCompatibleBlock(context, context.getNearbyBlock(direction)))
+        {
+            return false;
+        }
+
+        if (context.getNearbyBlock(TextureDirection.BACKWARDS).getMaterial().isOpaque())
+        {
+            return false;
+        }
+        return true;
+
+    }
+
+    protected abstract boolean isCompatibleBlock(TextureContext context, Block block);
+
+    //protected abstract int getTexturePropertiesForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side);
+
+    /*private List<FeatureInstance> getChunkFeatures(ChunkCoord chunkCoord)
+    {
+        List<FeatureInstance> featureRegistry = cachedFeatures.get(chunkCoord);
+        if (featureRegistry != null)
+        {
+            return featureRegistry;
+        }
+        featureRegistry = new ArrayList<FeatureInstance>();
+
+        for (IProceduralWallFeature wallFeature : this.featureRegistry.values())
         {
 
             for (FeatureInstance feature : wallFeature.getFeatureAreasFor(chunkCoord))
             {
-                final IProceduralWallFeature ruinWallFeature = this.features.get(feature.featureId);
+                final IProceduralWallFeature ruinWallFeature = this.featureRegistry.get(feature.featureId);
                 final WorldBlockCoord blockCoord = feature.getBlockCoord();
                 boolean addFeature = true;
-                for (FeatureInstance otherFeature : features)
+                for (FeatureInstance otherFeature : featureRegistry)
                 {
 
                     final WorldBlockCoord otherFeatureBlockCoord = otherFeature.getBlockCoord();
@@ -111,21 +195,21 @@ public abstract class ProceduralConnectedTexture
                 }
                 if (addFeature)
                 {
-                    features.add(feature);
+                    featureRegistry.add(feature);
                 }
             }
 
-            features.addAll(wallFeature.getFeatureAreasFor(chunkCoord));
+            featureRegistry.addAll(wallFeature.getFeatureAreasFor(chunkCoord));
         }
 
-        cachedFeatures.put(chunkCoord, features);
+        cachedFeatures.put(chunkCoord, featureRegistry);
 
-        return features;
-    }
+        return featureRegistry;
+    }*/
 
-    public IProceduralWallFeature getValidFeature(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation)
+    public IProceduralWallFeature getValidFeature(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation, int layer)
     {
-        IProceduralWallFeature desiredFeature = getFeatureAt(worldBlockCoord);
+        IProceduralWallFeature desiredFeature = featureRegistry.getFeatureAt(worldBlockCoord, layer);
         if (desiredFeature == null)
         {
             return null;
@@ -135,100 +219,5 @@ public abstract class ProceduralConnectedTexture
             return desiredFeature;
         }
         return null;
-    }
-
-
-    public IProceduralWallFeature getFeatureAt(WorldBlockCoord worldBlockCoord)
-    {
-        final ChunkCoord chunkCoord = ChunkCoord.of(worldBlockCoord);
-        int[] noiseData = cachedNoiseGens.get(chunkCoord);
-        if (noiseData == null)
-        {
-            noiseData = new int[16 * 256 * 16];
-            cachedNoiseGens.put(chunkCoord, noiseData);
-        }
-        ChunkBlockCoord localCoord = ChunkBlockCoord.of(worldBlockCoord);
-        final int index = localCoord.getY() | localCoord.getZ() << 8 | localCoord.getX() << 12;
-        int featureId = noiseData[index];
-        if (featureId == 0)
-        {
-            int x = localCoord.getX();
-            int y = localCoord.getY() & 15;
-            int z = localCoord.getZ();
-            //-1 denotes processed, but needs special handling elsewhere then.
-            featureId = -1;
-            int offsetAmount = localCoord.getY() >> 4;
-            for (FeatureInstance feature : getChunkFeatures(chunkCoord))
-            {
-                final WorldBlockCoord featureBlockCoord = feature.getBlockCoord();
-                final int featureX = (featureBlockCoord.getX() + offsetAmount) & 15;
-                if (x >= featureX && x < featureX + feature.getWidth())
-                {
-                    final int featureZ = (featureBlockCoord.getZ() + offsetAmount) & 15;
-                    if (z >= featureZ && z < featureZ + feature.getDepth())
-                    {
-                        if (y >= featureBlockCoord.getY() && y < featureBlockCoord.getY() + feature.getHeight())
-                        {
-                            featureId = feature.getFeature().getFeatureId();
-                            break;
-                        }
-                    }
-                }
-            }
-            noiseData[index] = featureId;
-        }
-        return this.features.get(featureId);
-    }
-
-    public String describeTextureAt(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
-    {
-        int blockProperties = getTexturePropertiesForSide(blockAccess, worldBlockCoord, side);
-        return describeTextureProperties(blockProperties);
-
-    }
-
-
-    public static class FeatureInstance
-    {
-        private final IProceduralWallFeature featureId;
-        private final WorldBlockCoord blockCoord;
-        private final int width;
-        private final int height;
-        private final int depth;
-
-        public FeatureInstance(IProceduralWallFeature featureId, WorldBlockCoord blockCoord, int width, int height, int depth)
-        {
-
-            this.featureId = featureId;
-            this.blockCoord = blockCoord;
-            this.width = width;
-            this.height = height;
-            this.depth = depth;
-        }
-
-        public IProceduralWallFeature getFeature()
-        {
-            return featureId;
-        }
-
-        public WorldBlockCoord getBlockCoord()
-        {
-            return blockCoord;
-        }
-
-        public int getWidth()
-        {
-            return width;
-        }
-
-        public int getHeight()
-        {
-            return height;
-        }
-
-        public int getDepth()
-        {
-            return depth;
-        }
     }
 }

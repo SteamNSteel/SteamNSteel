@@ -10,11 +10,19 @@ public interface IProceduralWallFeature
 {
     boolean isFeatureValid(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation);
 
-    Collection<ProceduralConnectedTexture.FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord);
+    Collection<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord);
 
-    int getFeatureId();
+    long getFeatureId();
 
     boolean canIntersect(IProceduralWallFeature feature);
 
-    int getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation);
+    long getSubProperties(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, ForgeDirection orientation);
+
+    void setFeatureId(long featureId);
+
+    String getName();
+
+    int getLayer();
+
+    Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature);
 }
