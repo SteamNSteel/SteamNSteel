@@ -108,11 +108,11 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
     {
         long subProperties = getFeatureId();
 
-        if (texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT))
+        if (!texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT))
         {
             subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_LEFT;
         }
-        if (texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT))
+        if (!texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT))
         {
             subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
         }

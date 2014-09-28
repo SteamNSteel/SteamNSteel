@@ -8,6 +8,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 public class BottomBandWallFeature extends ProceduralWallFeatureBase
 {
@@ -42,7 +43,36 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     @Override
     public long getSubProperties(TextureContext context, long currentProperties)
     {
+        if (texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT, TextureDirection.BELOW))
+        {
+            currentProperties |= ProceduralConnectedTexture.LEFT;
+        }
+        if (texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT, TextureDirection.BELOW))
+        {
+            currentProperties |= ProceduralConnectedTexture.RIGHT;
+        }
+
+        //Break up the bases
+        if ((getCrownSplitOpportunity(context.getWorldBlockCoord()) & 14) == 0)
+        {
+            currentProperties |= ProceduralConnectedTexture.LEFT;
+        }
+        if ((getCrownSplitOpportunity(context.getWorldBlockCoord().offset(context.getRightDirection())) & 14) == 0)
+        {
+            currentProperties |= ProceduralConnectedTexture.RIGHT;
+        }
+
         return getFeatureId() | (currentProperties & ~ProceduralConnectedTexture.TOP);
+    }
+
+    private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord)
+    {
+        int x = worldBlockCoord.getX();
+        int y = worldBlockCoord.getY();
+        int z = worldBlockCoord.getZ();
+        //return (worldBlockCoord.getX() * 7) + (worldBlockCoord.getY() * (worldBlockCoord.getX() | worldBlockCoord.getZ())) + (~worldBlockCoord.getZ() * 31);
+        Random r = new Random(x * y * z * 31);
+        return r.nextInt();
     }
 
     @Override
@@ -53,4 +83,6 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
         }
         return Behaviour.COEXIST;
     }
+
+
 }

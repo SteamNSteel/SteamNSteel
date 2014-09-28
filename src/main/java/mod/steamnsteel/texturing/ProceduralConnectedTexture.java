@@ -70,7 +70,7 @@ public abstract class ProceduralConnectedTexture
     {
         TextureContext context = new TextureContext(blockAccess, worldBlockCoord, side);
 
-        int blockProperties = getTexturePropertiesForSide2(context);
+        long blockProperties = getTexturePropertiesForSide2(context);
 
         IIcon icon = textures.getTextureFor(blockProperties);
 
@@ -78,14 +78,14 @@ public abstract class ProceduralConnectedTexture
         {
             String blockPropertiesDescription = featureRegistry.describeSide(blockProperties);
 
-            Logger.warning("Unknown texture: %d (%s) - %s @ (%s) - %d", blockProperties, Integer.toBinaryString(blockProperties), blockPropertiesDescription, worldBlockCoord, side);
+            Logger.warning("Unknown texture: %d (%s) - %s @ (%s) - %d", blockProperties, Long.toBinaryString(blockProperties), blockPropertiesDescription, worldBlockCoord, side);
         }
         return icon;
     }
 
-    private int getTexturePropertiesForSide2(TextureContext context)
+    private long getTexturePropertiesForSide2(TextureContext context)
     {
-        int blockProperties = 0;
+        long blockProperties = 0;
         ForgeDirection orientation = context.getOrientation();
         if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN)
         {
@@ -114,7 +114,7 @@ public abstract class ProceduralConnectedTexture
             blockProperties |= RIGHT;
         }
 
-        blockProperties |= featureRegistry.getFeatureBits(context);
+        blockProperties = featureRegistry.getFeatureBits(context, blockProperties);
 
         /*
         IProceduralWallFeature feature = getValidFeature(blockAccess, worldBlockCoord, orientation);
@@ -134,7 +134,7 @@ public abstract class ProceduralConnectedTexture
     {
         TextureContext context = new TextureContext(blockAccess, worldBlockCoord, side);
 
-        int blockProperties = getTexturePropertiesForSide2(context);
+        long blockProperties = getTexturePropertiesForSide2(context);
         return featureRegistry.describeSide(blockProperties);
 
     }

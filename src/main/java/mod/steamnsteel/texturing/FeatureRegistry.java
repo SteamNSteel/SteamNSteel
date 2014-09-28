@@ -119,7 +119,7 @@ public class FeatureRegistry implements IFeatureRegistry
         return featureInstances;
     }
 
-    public long getFeatureBits(TextureContext context)
+    public long getFeatureBits(TextureContext context, long currentProperties)
     {
         List<IProceduralWallFeature> featureList = new LinkedList<IProceduralWallFeature>();
 
@@ -159,7 +159,7 @@ public class FeatureRegistry implements IFeatureRegistry
             }
         }
 
-        long featureBits = 0;
+        long featureBits = currentProperties;
 
         for (IProceduralWallFeature feature : featureList)
         {

@@ -8,6 +8,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 public class TopBandWallFeature extends ProceduralWallFeatureBase
 {
@@ -22,7 +23,7 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     @Override
     public boolean isFeatureValid(TextureContext context)
     {
-        return !context.getNearbyBlock(TextureDirection.ABOVE).getMaterial().isOpaque();
+        return !texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE);
     }
 
     @Override
@@ -39,11 +40,30 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
         return false;
     }
 
-    /*@Override
+    @Override
     public long getSubProperties(TextureContext context, long currentProperties)
     {
-        return getFeatureId();
-    }*/
+        if (texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT, TextureDirection.ABOVE))
+        {
+            currentProperties |= ProceduralConnectedTexture.LEFT;
+        }
+        if (texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT, TextureDirection.ABOVE))
+        {
+            currentProperties |= ProceduralConnectedTexture.RIGHT;
+        }
+
+        //Break up the bases
+        if ((getCrownSplitOpportunity(context.getWorldBlockCoord()) & 14) == 0)
+        {
+            currentProperties |= ProceduralConnectedTexture.LEFT;
+        }
+        if ((getCrownSplitOpportunity(context.getWorldBlockCoord().offset(context.getRightDirection())) & 14) == 0)
+        {
+            currentProperties |= ProceduralConnectedTexture.RIGHT;
+        }
+
+        return getFeatureId() | currentProperties;
+    }
 
     @Override
     public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
@@ -52,5 +72,15 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
             return Behaviour.CANNOT_EXIST;
         }
         return Behaviour.COEXIST;
+    }
+
+    private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord)
+    {
+        int x = worldBlockCoord.getX();
+        int y = worldBlockCoord.getY();
+        int z = worldBlockCoord.getZ();
+        //return (worldBlockCoord.getX() * 7) + (worldBlockCoord.getY() * (worldBlockCoord.getX() | worldBlockCoord.getZ())) + (~worldBlockCoord.getZ() * 31);
+        Random r = new Random(x * y * z * 31);
+        return r.nextInt();
     }
 }

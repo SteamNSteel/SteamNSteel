@@ -77,19 +77,19 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .andCondition(RIGHT | featurePipes.getFeatureId() | FEATURE_EDGE_TOP)
                 .andCondition(LEFT | RIGHT | featurePipes.getFeatureId() | FEATURE_EDGE_TOP);
 
-        textures.useTexture("Wall_DDVent")
+        textures.useTexture("Wall_DD3_Vent")
                 .forCondition(featureVent.getFeatureId())
                 .andCondition(featureVent.getFeatureId() | LEFT)
                 .andCondition(featureVent.getFeatureId() | RIGHT)
                 .andCondition(featureVent.getFeatureId() | LEFT | RIGHT);
 
-        textures.useTexture("Wall_DDScreen")
+        textures.useTexture("Wall_DD4_Screen")
                 .forCondition(featureScreen.getFeatureId())
                 .andCondition(featureScreen.getFeatureId() | LEFT)
                 .andCondition(featureScreen.getFeatureId() | RIGHT)
                 .andCondition(featureScreen.getFeatureId() | LEFT | RIGHT);
 
-        textures.useTexture("Wall_DDValve")
+        textures.useTexture("Wall_DD5_Valve")
                 .forCondition(featureValve.getFeatureId())
                 .andCondition(featureValve.getFeatureId() | LEFT)
                 .andCondition(featureValve.getFeatureId() | RIGHT)
