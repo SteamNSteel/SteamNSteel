@@ -62,6 +62,8 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
             currentProperties |= ProceduralConnectedTexture.RIGHT;
         }
 
+        currentProperties |= ProceduralConnectedTexture.BOTTOM;
+
         return getFeatureId() | (currentProperties & ~ProceduralConnectedTexture.TOP);
     }
 

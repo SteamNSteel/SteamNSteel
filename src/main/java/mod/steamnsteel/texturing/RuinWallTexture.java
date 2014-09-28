@@ -81,19 +81,22 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .forCondition(featureVent.getFeatureId())
                 .andCondition(featureVent.getFeatureId() | LEFT)
                 .andCondition(featureVent.getFeatureId() | RIGHT)
-                .andCondition(featureVent.getFeatureId() | LEFT | RIGHT);
+                .andCondition(featureVent.getFeatureId() | LEFT | RIGHT)
+                .andCondition(featureVent.getFeatureId() | featurePlate.getFeatureId());
 
         textures.useTexture("Wall_DD4_Screen")
                 .forCondition(featureScreen.getFeatureId())
                 .andCondition(featureScreen.getFeatureId() | LEFT)
                 .andCondition(featureScreen.getFeatureId() | RIGHT)
-                .andCondition(featureScreen.getFeatureId() | LEFT | RIGHT);
+                .andCondition(featureScreen.getFeatureId() | LEFT | RIGHT)
+                .andCondition(featureScreen.getFeatureId() | featurePlate.getFeatureId());
 
         textures.useTexture("Wall_DD5_Valve")
                 .forCondition(featureValve.getFeatureId())
                 .andCondition(featureValve.getFeatureId() | LEFT)
                 .andCondition(featureValve.getFeatureId() | RIGHT)
-                .andCondition(featureValve.getFeatureId() | LEFT | RIGHT);
+                .andCondition(featureValve.getFeatureId() | LEFT | RIGHT)
+                .andCondition(featureValve.getFeatureId() | featurePlate.getFeatureId());
 
         textures.useTexture("Wall_DDLongPipe_L")
                 .forCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_LEFT);

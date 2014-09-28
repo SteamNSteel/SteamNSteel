@@ -62,6 +62,8 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
             currentProperties |= ProceduralConnectedTexture.RIGHT;
         }
 
+        currentProperties |= ProceduralConnectedTexture.TOP;
+
         return getFeatureId() | currentProperties;
     }
 
