@@ -21,33 +21,29 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     @Override
     public boolean isFeatureValid(TextureContext context)
     {
-        /*ForgeDirection back = BlockSideRotation.forOrientation(TextureDirection.BACKWARDS, orientation);
-
-        if (!ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord, back))
+        if (!ruinWallTexture.isBlockPartOfWallAndUnobstructed(context))
         {
             return false;
         }
 
-        ForgeDirection below = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
-        ForgeDirection above = BlockSideRotation.forOrientation(TextureDirection.ABOVE, orientation);
+        final boolean aboveBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE);
+        final boolean aboveBlockFeatureIsCompatible = ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.ABOVE);
+        final boolean belowBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW);
+        final boolean belowBlockFeatureIsCompatible = ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.BELOW);
 
-        final boolean aboveBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(above), back);
-        final IProceduralWallFeature aboveBlockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(above));
-        final boolean belowBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(below), back);
-        final IProceduralWallFeature belowBlockFeature = ruinWallTexture.getFeatureAt(worldBlockCoord.offset(below));
+        boolean aboveValid2 = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE, TextureDirection.ABOVE);
+        boolean belowValid2 = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW, TextureDirection.BELOW);
 
-        boolean aboveValid2 = (ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(above).offset(above), back));
-        boolean belowValid2 = (ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(below).offset(below), back));
 
-        if (aboveBlockIsClear && !(aboveBlockFeature instanceof PipesRuinWallFeature) && belowBlockIsClear && belowBlockFeature instanceof PipesRuinWallFeature && belowValid2)
+        if (aboveBlockIsClear && !aboveBlockFeatureIsCompatible && belowBlockIsClear && belowBlockFeatureIsCompatible && belowValid2)
         {
             return true;
         }
 
-        if (belowBlockIsClear && !(belowBlockFeature instanceof PipesRuinWallFeature) && aboveBlockIsClear && aboveBlockFeature instanceof PipesRuinWallFeature && aboveValid2)
+        if (belowBlockIsClear && !belowBlockFeatureIsCompatible && aboveBlockIsClear && aboveBlockFeatureIsCompatible && aboveValid2)
         {
             return true;
-        }*/
+        }
 
 
         return false;
@@ -84,14 +80,14 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context)
+    public long getSubProperties(TextureContext context, long currentProperties)
     {
-        /*ForgeDirection below = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
-        ForgeDirection above = BlockSideRotation.forOrientation(TextureDirection.ABOVE, orientation);
+        //ForgeDirection below = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
+        //ForgeDirection above = BlockSideRotation.forOrientation(TextureDirection.ABOVE, orientation);
 
         long subProperties = getFeatureId();
-        IProceduralWallFeature aboveBlockFeature = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(above), orientation);
-        IProceduralWallFeature belowBlockFeature = ruinWallTexture.getValidFeature(blockAccess, worldBlockCoord.offset(below), orientation);
+        IProceduralWallFeature aboveBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.ABOVE);
+        IProceduralWallFeature belowBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.BELOW);
 
         if (!(aboveBlockFeature instanceof PipesRuinWallFeature))
         {
@@ -106,13 +102,15 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
 
         //Pipes are only a single block wide and must ignore LEFT | RIGHT edges
         subProperties &= getFeatureId() | FEATURE_EDGE_TOP_AND_BOTTOM;
-        return subProperties;*/
-        return 0;
+        return subProperties | currentProperties;
     }
 
     @Override
     public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
     {
+        if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature) {
+            return Behaviour.CANNOT_EXIST;
+        }
         return Behaviour.COEXIST;
     }
 }

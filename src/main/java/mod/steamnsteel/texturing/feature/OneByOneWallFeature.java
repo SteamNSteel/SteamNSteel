@@ -20,22 +20,17 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
     @Override
     public boolean isFeatureValid(TextureContext context)
     {
-        /*ForgeDirection back = BlockSideRotation.forOrientation(TextureDirection.BACKWARDS, orientation);
-
-        if (!ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord, back))
+        if (!ruinWallTexture.isBlockPartOfWallAndUnobstructed(context))
         {
             return false;
         }
 
-        ForgeDirection below = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
-        ForgeDirection above = BlockSideRotation.forOrientation(TextureDirection.ABOVE, orientation);
-
-        final boolean aboveBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(above), back);
-        final boolean belowBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(blockAccess, worldBlockCoord.offset(below), back);
+        final boolean aboveBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE);
+        final boolean belowBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW);
 
         if (aboveBlockIsClear && belowBlockIsClear) {
             return true;
-        }*/
+        }
         return false;
     }
 
@@ -70,14 +65,11 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context)
-    {
-        return 0;
-    }
-
-    @Override
     public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
     {
+        if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature) {
+            return Behaviour.CANNOT_EXIST;
+        }
         return Behaviour.COEXIST;
     }
 }

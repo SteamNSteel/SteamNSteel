@@ -167,10 +167,11 @@ public abstract class ProceduralConnectedTexture
 
     protected abstract boolean isCompatibleBlock(TextureContext context, Block block);
 
-    public boolean isFeatureAtCoordCompatibleWith(TextureContext context, int layer, Class<PlateRuinWallFeature> featureClass, TextureDirection... direction)
+    public boolean isFeatureAtCoordCompatibleWith(TextureContext context, int layer, IProceduralWallFeature feature, TextureDirection... direction)
     {
         WorldBlockCoord coord = getOffsetCoordinate(context, direction);
-        return featureClass.isInstance(featureRegistry.getFeatureAt(coord, layer));
+        final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
+        return featureAtCoord != null && feature.getFeatureId() == feature.getFeatureId();
     }
 
     public IProceduralWallFeature getValidFeature(TextureContext context, int layer, TextureDirection... direction)

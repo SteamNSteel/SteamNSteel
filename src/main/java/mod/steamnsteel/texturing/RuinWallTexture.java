@@ -9,14 +9,15 @@ import java.util.Random;
 
 public class RuinWallTexture extends ProceduralConnectedTexture
 {
-    public static final int FEATURE_PLATE_TL_CORNER = 1 << 8;
-    public static final int FEATURE_PLATE_TR_CORNER = 1 << 9;
-    public static final int FEATURE_PLATE_BL_CORNER = 1 << 10;
-    public static final int FEATURE_PLATE_BR_CORNER = 1 << 11;
+    public static long FEATURE_PLATE_TL_CORNER = 1 << 8;
+    public static long FEATURE_PLATE_TR_CORNER = 1 << 9;
+    public static long FEATURE_PLATE_BL_CORNER = 1 << 10;
+    public static long FEATURE_PLATE_BR_CORNER = 1 << 11;
 
     private static final int LAYER_PLATE = 1;
-    private static final int LAYER_CROWN_AND_BASE = 2;
-    private static final int LAYER_DOODADS = 3;
+    private static final int LAYER_BASE = 2;
+    private static final int LAYER_CROWN = 3;
+    private static final int LAYER_DOODADS = 4;
     private PlateRuinWallFeature featurePlate;
     private PipesRuinWallFeature featurePipes;
     private OneByOneWallFeature featureVent;
@@ -30,8 +31,8 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     protected void registerFeatures(IFeatureRegistry features)
     {
         featurePlate = new PlateRuinWallFeature(this, LAYER_PLATE);
-        featureCrown = new TopBandWallFeature(this, "Crown", LAYER_CROWN_AND_BASE);
-        featureBase = new BottomBandWallFeature(this, "Base", LAYER_CROWN_AND_BASE);
+        featureBase = new BottomBandWallFeature(this, "Base", LAYER_BASE);
+        featureCrown = new TopBandWallFeature(this, "Crown", LAYER_CROWN);
         featurePipes = new PipesRuinWallFeature(this, LAYER_DOODADS);
         featureVent = new OneByOneWallFeature(this, "Vent", LAYER_DOODADS);
         featureValve = new OneByOneWallFeature(this, "Valve", LAYER_DOODADS);
@@ -46,6 +47,11 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         features.registerFeature(featureValve);
         features.registerFeature(featureScreen);
         features.registerFeature(featureHorizontalMetalTear);
+
+        FEATURE_PLATE_TL_CORNER = features.registerFeatureProperty("Plate_TLC");
+        FEATURE_PLATE_TR_CORNER = features.registerFeatureProperty("Plate_TRC");
+        FEATURE_PLATE_BL_CORNER = features.registerFeatureProperty("Plate_BLC");
+        FEATURE_PLATE_BR_CORNER = features.registerFeatureProperty("Plate_BRC");
     }
 
     @Override

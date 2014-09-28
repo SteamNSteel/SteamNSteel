@@ -5,7 +5,9 @@ import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class BottomBandWallFeature extends ProceduralWallFeatureBase
 {
@@ -20,13 +22,15 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     @Override
     public boolean isFeatureValid(TextureContext context)
     {
-        return false;
+        return !texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW);
     }
 
     @Override
     public Collection<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord)
     {
-        return null;
+        List<FeatureInstance> oneInstance = new ArrayList<FeatureInstance>(1);
+        oneInstance.add(new FeatureInstance(this, WorldBlockCoord.of(0,0,0), 16, 256, 16));
+        return oneInstance;
     }
 
     @Override
@@ -36,14 +40,17 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context)
+    public long getSubProperties(TextureContext context, long currentProperties)
     {
-        return 0;
+        return getFeatureId() | (currentProperties & ~ProceduralConnectedTexture.TOP);
     }
 
     @Override
     public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
     {
-        return null;
+        if (otherLayerFeature instanceof TopBandWallFeature) {
+            return Behaviour.REPLACES;
+        }
+        return Behaviour.COEXIST;
     }
 }

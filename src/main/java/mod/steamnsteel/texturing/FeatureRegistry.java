@@ -71,6 +71,7 @@ public class FeatureRegistry implements IFeatureRegistry
         ChunkBlockCoord localCoord = ChunkBlockCoord.of(worldBlockCoord);
         final int index = localCoord.getY() | localCoord.getZ() << 8 | localCoord.getX() << 12;
         long featureId = featureMap[index];
+        featureId = 0;
         if (featureId == 0)
         {
             int x = localCoord.getX();
@@ -82,10 +83,12 @@ public class FeatureRegistry implements IFeatureRegistry
             for (FeatureInstance feature : getFeaturesIn(chunkCoord, layer))
             {
                 final WorldBlockCoord featureBlockCoord = feature.getBlockCoord();
-                final int featureX = (featureBlockCoord.getX() + offsetAmount) & 15;
+                //final int featureX = (featureBlockCoord.getX() + offsetAmount) & 15;
+                final int featureX = (featureBlockCoord.getX()) & 15;
                 if (x >= featureX && x < featureX + feature.getWidth())
                 {
-                    final int featureZ = (featureBlockCoord.getZ() + offsetAmount) & 15;
+                    //final int featureZ = (featureBlockCoord.getZ() + offsetAmount) & 15;
+                    final int featureZ = (featureBlockCoord.getZ()) & 15;
                     if (z >= featureZ && z < featureZ + feature.getDepth())
                     {
                         if (y >= featureBlockCoord.getY() && y < featureBlockCoord.getY() + feature.getHeight())
@@ -160,7 +163,7 @@ public class FeatureRegistry implements IFeatureRegistry
 
         for (IProceduralWallFeature feature : featureList)
         {
-             featureBits |= feature.getSubProperties(context);
+             featureBits = feature.getSubProperties(context, featureBits);
         }
 
         return featureBits;
