@@ -7,12 +7,20 @@ import java.util.*;
 
 public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
 {
+    private final long plateEdgeMask;
+    private final long FEATURE_EDGE_TOP_AND_BOTTOM;
     private ProceduralConnectedTexture texture;
 
     public ThreeByOneWallFeature(ProceduralConnectedTexture texture, String name, int layer)
     {
         super(name, layer);
         this.texture = texture;
+        plateEdgeMask = RuinWallTexture.FEATURE_PLATE_BL_CORNER | RuinWallTexture.FEATURE_PLATE_BR_CORNER |
+                RuinWallTexture.FEATURE_PLATE_TL_CORNER | RuinWallTexture.FEATURE_PLATE_TR_CORNER |
+                RuinWallTexture.FEATURE_EDGE_BOTTOM | RuinWallTexture.FEATURE_EDGE_LEFT |
+                RuinWallTexture.FEATURE_EDGE_RIGHT | RuinWallTexture.FEATURE_EDGE_TOP;
+
+        FEATURE_EDGE_TOP_AND_BOTTOM = ProceduralConnectedTexture.FEATURE_EDGE_LEFT | ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
     }
 
     @Override
@@ -23,27 +31,20 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
             return false;
         }
 
-        final boolean leftBlockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT) &&
-                texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT);
-
-        final boolean rightBlockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT) &&
-                texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT);
-
+        final boolean leftBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.LEFT);
+        final boolean rightBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.RIGHT);
         if (leftBlockIsValid && rightBlockIsValid)
         {
             return true;
         }
 
-        final boolean leftLeftBlockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT, TextureDirection.LEFT) &&
-                texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT, TextureDirection.LEFT);
-
+        final boolean leftLeftBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.LEFT, TextureDirection.LEFT);
         if (leftBlockIsValid && leftLeftBlockIsValid)
         {
             return true;
         }
 
-        final boolean rightRightBlockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT, TextureDirection.RIGHT) &&
-                texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT, TextureDirection.RIGHT);
+        final boolean rightRightBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.RIGHT, TextureDirection.RIGHT);
 
         if (rightBlockIsValid && rightRightBlockIsValid)
         {
@@ -79,14 +80,12 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context, long currentProperties)
+    public long getSubProperties(TextureContext context)
     {
-        long subProperties = getFeatureId();
+        long subProperties = 0;
 
-        boolean isLeftValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT) &&
-                texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT);
-        boolean isRightValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT) &&
-                texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT);
+        boolean isLeftValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.LEFT);
+        boolean isRightValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.RIGHT);
 
         if (!isLeftValid)
         {
@@ -97,17 +96,19 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
             subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
         }
 
-        final long FEATURE_EDGE_TOP_AND_BOTTOM = ProceduralConnectedTexture.FEATURE_EDGE_LEFT | ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
-
         //Pipes are only a single block wide and must ignore LEFT | RIGHT edges
         subProperties &= getFeatureId() | FEATURE_EDGE_TOP_AND_BOTTOM;
-        return subProperties | currentProperties;
+        return subProperties;
     }
 
     @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties)
     {
         if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature)
+        {
+            return Behaviour.CANNOT_EXIST;
+        }
+        if ((featureProperties & plateEdgeMask) != 0)
         {
             return Behaviour.CANNOT_EXIST;
         }

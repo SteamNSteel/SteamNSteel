@@ -8,12 +8,17 @@ import java.util.*;
 public class PipesRuinWallFeature extends ProceduralWallFeatureBase
 {
 
+    private final long featureMask;
     private RuinWallTexture ruinWallTexture;
 
     public PipesRuinWallFeature(RuinWallTexture ruinWallTexture, int layer)
     {
         super("Pipes", layer);
         this.ruinWallTexture = ruinWallTexture;
+        featureMask = RuinWallTexture.FEATURE_PLATE_BL_CORNER | RuinWallTexture.FEATURE_PLATE_BR_CORNER |
+                RuinWallTexture.FEATURE_PLATE_TL_CORNER | RuinWallTexture.FEATURE_PLATE_TR_CORNER |
+                RuinWallTexture.FEATURE_EDGE_BOTTOM | RuinWallTexture.FEATURE_EDGE_LEFT |
+                RuinWallTexture.FEATURE_EDGE_RIGHT | RuinWallTexture.FEATURE_EDGE_TOP;
     }
 
     @Override
@@ -68,9 +73,9 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context, long currentProperties)
+    public long getSubProperties(TextureContext context)
     {
-        long subProperties = getFeatureId();
+        long subProperties = 0;
         IProceduralWallFeature aboveBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.ABOVE);
         IProceduralWallFeature belowBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.BELOW);
 
@@ -86,15 +91,18 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
         final long FEATURE_EDGE_TOP_AND_BOTTOM = ruinWallTexture.FEATURE_EDGE_TOP | ruinWallTexture.FEATURE_EDGE_BOTTOM;
 
         //Pipes are only a single block wide and must ignore LEFT | RIGHT edges
-        subProperties &= getFeatureId() | FEATURE_EDGE_TOP_AND_BOTTOM;
-        return subProperties | currentProperties;
+        //subProperties &= getFeatureId() | FEATURE_EDGE_TOP_AND_BOTTOM;
+        return subProperties;// | currentProperties;
     }
 
     @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties)
     {
         if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature)
         {
+            return Behaviour.CANNOT_EXIST;
+        }
+        if ((featureProperties & featureMask) != 0) {
             return Behaviour.CANNOT_EXIST;
         }
         return Behaviour.COEXIST;

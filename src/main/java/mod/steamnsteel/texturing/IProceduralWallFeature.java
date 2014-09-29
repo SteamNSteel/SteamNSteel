@@ -12,7 +12,7 @@ public interface IProceduralWallFeature
 
     long getFeatureId();
 
-    long getSubProperties(TextureContext context, long currentProperties);
+    long getSubProperties(TextureContext context);
 
     void setFeatureId(long featureId);
 
@@ -20,7 +20,9 @@ public interface IProceduralWallFeature
 
     int getLayer();
 
-    Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature);
+    Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties);
 
     boolean isFeatureValid(TextureContext context);
+
+    long getIncompatibleProperties();
 }

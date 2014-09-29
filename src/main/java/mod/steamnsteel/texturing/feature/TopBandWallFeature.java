@@ -34,34 +34,35 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context, long currentProperties)
+    public long getSubProperties(TextureContext context)
     {
+        long properties = 0;
         if (texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT, TextureDirection.ABOVE))
         {
-            currentProperties |= ProceduralConnectedTexture.LEFT;
+            properties |= ProceduralConnectedTexture.LEFT;
         }
         if (texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT, TextureDirection.ABOVE))
         {
-            currentProperties |= ProceduralConnectedTexture.RIGHT;
+            properties |= ProceduralConnectedTexture.RIGHT;
         }
 
         //Break up the bases
         if ((getCrownSplitOpportunity(context.getWorldBlockCoord()) & 14) == 0)
         {
-            currentProperties |= ProceduralConnectedTexture.LEFT;
+            properties |= ProceduralConnectedTexture.LEFT;
         }
         if ((getCrownSplitOpportunity(context.getWorldBlockCoord().offset(context.getRightDirection())) & 14) == 0)
         {
-            currentProperties |= ProceduralConnectedTexture.RIGHT;
+            properties |= ProceduralConnectedTexture.RIGHT;
         }
 
-        currentProperties |= ProceduralConnectedTexture.TOP;
+        properties |= ProceduralConnectedTexture.TOP;
 
-        return getFeatureId() | currentProperties;
+        return properties;
     }
 
     @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties)
     {
         if (otherLayerFeature instanceof BottomBandWallFeature)
         {

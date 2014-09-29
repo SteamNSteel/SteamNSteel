@@ -8,7 +8,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TextureContext
 {
     private final ForgeDirection orientation;
-    private final Block[] blocks;
     private final ForgeDirection[] directions;
 
     public ForgeDirection getForwardDirection()
@@ -74,14 +73,6 @@ public class TextureContext
         downDirection = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
         forwardDirection = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
 
-        blocks = new Block[6];
-        blocks[TextureDirection.LEFT.ordinal()] = worldBlockCoord.offset(leftDirection).getBlock(blockAccess);
-        blocks[TextureDirection.RIGHT.ordinal()] = worldBlockCoord.offset(rightDirection).getBlock(blockAccess);
-        blocks[TextureDirection.ABOVE.ordinal()] = worldBlockCoord.offset(upDirection).getBlock(blockAccess);
-        blocks[TextureDirection.BELOW.ordinal()] = worldBlockCoord.offset(downDirection).getBlock(blockAccess);
-        blocks[TextureDirection.BACKWARDS.ordinal()] = worldBlockCoord.offset(backDirection).getBlock(blockAccess);
-        blocks[TextureDirection.FORWARD.ordinal()] = worldBlockCoord.offset(forwardDirection).getBlock(blockAccess);
-
         directions = new ForgeDirection[6];
         directions[TextureDirection.LEFT.ordinal()] = leftDirection;
         directions[TextureDirection.RIGHT.ordinal()] = rightDirection;
@@ -94,11 +85,6 @@ public class TextureContext
     public ForgeDirection getOrientation()
     {
         return orientation;
-    }
-
-    public Block getNearbyBlock(TextureDirection direction)
-    {
-        return blocks[direction.ordinal()];
     }
 
     public ForgeDirection getForgeDirection(TextureDirection textureDirection)

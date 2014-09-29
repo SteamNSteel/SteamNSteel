@@ -3,18 +3,21 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.*;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
 public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 {
+    private final long FEATURE_EDGE_TOP_AND_BOTTOM;
+    private final long FEATURE_EDGE_LEFT_AND_RIGHT;
     private RuinWallTexture ruinWallTexture;
 
     public PlateRuinWallFeature(RuinWallTexture ruinWallTexture, int layer)
     {
         super("Pipes", layer);
         this.ruinWallTexture = ruinWallTexture;
+
+        FEATURE_EDGE_TOP_AND_BOTTOM = ProceduralConnectedTexture.FEATURE_EDGE_TOP | ProceduralConnectedTexture.FEATURE_EDGE_BOTTOM;
+        FEATURE_EDGE_LEFT_AND_RIGHT = ProceduralConnectedTexture.FEATURE_EDGE_LEFT | ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
     }
 
     public boolean isFeatureValid(TextureContext context)
@@ -24,20 +27,15 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
             return false;
         }
 
-        boolean leftValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT);
-
-        boolean rightValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT);
+        boolean leftValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.LEFT);
+        boolean rightValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.RIGHT);
 
         if (!leftValid && !rightValid)
         {
             return false;
         }
-        boolean aboveValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.ABOVE);
-        boolean belowValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.BELOW);
+        boolean aboveValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.ABOVE);
+        boolean belowValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.ABOVE);
 
         if (!aboveValid && !belowValid)
         {
@@ -46,26 +44,26 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 
         //check for a cluster of 4 - Automatically valid
         //check above and left
-        if (aboveValid && leftValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE, TextureDirection.LEFT) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.ABOVE, TextureDirection.LEFT))
+        if (aboveValid && leftValid &&
+                ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.ABOVE, TextureDirection.LEFT))
         {
             return true;
         }
         //check above and right
-        if (aboveValid && rightValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE, TextureDirection.RIGHT) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.ABOVE, TextureDirection.RIGHT))
+        if (aboveValid && rightValid &&
+                ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.ABOVE, TextureDirection.RIGHT))
         {
             return true;
         }
         //check below and left
-        if (belowValid && leftValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW, TextureDirection.LEFT) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.BELOW, TextureDirection.LEFT))
+        if (belowValid && leftValid &&
+                ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.BELOW, TextureDirection.LEFT))
         {
             return true;
         }
         //check below and right
-        if (belowValid && rightValid && ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW, TextureDirection.RIGHT) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.BELOW, TextureDirection.RIGHT))
+        if (belowValid && rightValid &&
+                ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.BELOW, TextureDirection.RIGHT))
         {
             return true;
         }
@@ -101,18 +99,13 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context, long currentProperties)
+    public long getSubProperties(TextureContext context)
     {
-        long subProperties = getFeatureId();
-
-        boolean isLeftBlockValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT);
-        boolean isRightBlockValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT);
-        boolean isAboveBlockValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.ABOVE);
-        boolean isBelowBlockValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW) &&
-                ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.BELOW);
+        long subProperties = 0;
+        boolean isLeftBlockValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.LEFT);
+        boolean isRightBlockValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.RIGHT);
+        boolean isAboveBlockValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.ABOVE);
+        boolean isBelowBlockValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.BELOW);
 
         if (!isLeftBlockValid)
         {
@@ -132,8 +125,6 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
             subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_BOTTOM;
         }
 
-        final long FEATURE_EDGE_TOP_AND_BOTTOM = ProceduralConnectedTexture.FEATURE_EDGE_TOP | ProceduralConnectedTexture.FEATURE_EDGE_BOTTOM;
-        final long FEATURE_EDGE_LEFT_AND_RIGHT = ProceduralConnectedTexture.FEATURE_EDGE_LEFT | ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
 
         //Plates cannot be 1 high or 1 wide.
         if ((subProperties & FEATURE_EDGE_TOP_AND_BOTTOM) == FEATURE_EDGE_TOP_AND_BOTTOM)
@@ -148,8 +139,8 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 
         if (isAboveBlockValid && isLeftBlockValid)
         {
-            boolean isCornerValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE, TextureDirection.LEFT) &&
-                    ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.ABOVE, TextureDirection.LEFT);
+            boolean isCornerValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this,
+                    TextureDirection.ABOVE, TextureDirection.LEFT);
             if (!isCornerValid)
             {
                 subProperties |= RuinWallTexture.FEATURE_PLATE_TL_CORNER;
@@ -157,8 +148,8 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
         }
         if (isAboveBlockValid&& isRightBlockValid)
         {
-            boolean isCornerValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE, TextureDirection.RIGHT) &&
-                    ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.ABOVE, TextureDirection.RIGHT);
+            boolean isCornerValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this,
+                    TextureDirection.ABOVE, TextureDirection.RIGHT);
             if (!isCornerValid)
             {
                 subProperties |= RuinWallTexture.FEATURE_PLATE_TR_CORNER;
@@ -167,8 +158,8 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 
         if (isBelowBlockValid&& isLeftBlockValid)
         {
-            boolean isCornerValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW, TextureDirection.LEFT) &&
-                    ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.BELOW, TextureDirection.LEFT);
+            boolean isCornerValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this,
+                    TextureDirection.BELOW, TextureDirection.LEFT);
             if (!isCornerValid)
             {
                 subProperties |= RuinWallTexture.FEATURE_PLATE_BL_CORNER;
@@ -176,8 +167,9 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
         }
         if (isBelowBlockValid && isRightBlockValid)
         {
-            boolean isCornerValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW, TextureDirection.RIGHT) &&
-                    ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.BELOW, TextureDirection.RIGHT);
+            boolean isCornerValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this,
+                    TextureDirection.BELOW, TextureDirection.RIGHT);
+
             if (!isCornerValid)
             {
                 subProperties |= RuinWallTexture.FEATURE_PLATE_BR_CORNER;
@@ -194,7 +186,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties)
     {
         return Behaviour.COEXIST;
     }

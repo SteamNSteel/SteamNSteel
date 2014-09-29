@@ -35,8 +35,14 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     }
 
     @Override
-    public long getSubProperties(TextureContext context, long currentContext)
+    public long getSubProperties(TextureContext context)
     {
-        return getFeatureId() | currentContext;
+        return 0;
+    }
+
+    @Override
+    public long getIncompatibleProperties()
+    {
+        return 0;
     }
 }

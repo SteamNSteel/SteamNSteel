@@ -113,7 +113,7 @@ public class FeatureRegistry implements IFeatureRegistry
 
     public long getFeatureBits(TextureContext context, long currentProperties)
     {
-        List<IProceduralWallFeature> featureList = new LinkedList<IProceduralWallFeature>();
+        Map<IProceduralWallFeature, Long> featureList = new Hashtable<IProceduralWallFeature, Long>() {};
 
         for (int layer : featureLayers.keySet())
         {
@@ -130,16 +130,16 @@ public class FeatureRegistry implements IFeatureRegistry
 
             boolean add = true;
             List<IProceduralWallFeature> removeList = new LinkedList<IProceduralWallFeature>();
-            for (IProceduralWallFeature otherLayerFeature : featureList)
+            for (Map.Entry<IProceduralWallFeature, Long> otherLayerFeature : featureList.entrySet())
             {
-                Behaviour behaviour = currentLayerFeature.getBehaviourAgainst(otherLayerFeature);
+                Behaviour behaviour = currentLayerFeature.getBehaviourAgainst(otherLayerFeature.getKey(), otherLayerFeature.getValue());
                 switch (behaviour)
                 {
                     case CANNOT_EXIST:
                         add = false;
                         break;
                     case REPLACES:
-                        removeList.add(otherLayerFeature);
+                        removeList.add(otherLayerFeature.getKey());
                         break;
                     case COEXIST:
                         add = true;
@@ -154,18 +154,21 @@ public class FeatureRegistry implements IFeatureRegistry
 
             if (add)
             {
-                featureList.add(currentLayerFeature);
+                long featureBits = currentLayerFeature.getSubProperties(context);
+                featureList.put(currentLayerFeature, featureBits);
             }
         }
 
-        long featureBits = currentProperties;
+        //long featureBits = currentProperties;
 
-        for (IProceduralWallFeature feature : featureList)
+        for (Map.Entry<IProceduralWallFeature, Long> featureBit : featureList.entrySet())
         {
-            featureBits = feature.getSubProperties(context, featureBits);
+            currentProperties |= featureBit.getKey().getFeatureId();
+            currentProperties |= featureBit.getValue();
+            currentProperties &= ~featureBit.getKey().getIncompatibleProperties();
         }
 
-        return featureBits;
+        return currentProperties;
     }
 
     public String describeSide(long features)

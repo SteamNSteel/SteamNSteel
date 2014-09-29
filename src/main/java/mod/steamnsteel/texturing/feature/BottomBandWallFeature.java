@@ -33,30 +33,37 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context, long currentProperties)
+    public long getSubProperties(TextureContext context)
     {
+        long properties = 0;
         if (texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT, TextureDirection.BELOW))
         {
-            currentProperties |= ProceduralConnectedTexture.LEFT;
+            properties |= ProceduralConnectedTexture.LEFT;
         }
         if (texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT, TextureDirection.BELOW))
         {
-            currentProperties |= ProceduralConnectedTexture.RIGHT;
+            properties |= ProceduralConnectedTexture.RIGHT;
         }
 
         //Break up the bases
         if ((getCrownSplitOpportunity(context.getWorldBlockCoord()) & 14) == 0)
         {
-            currentProperties |= ProceduralConnectedTexture.LEFT;
+            properties |= ProceduralConnectedTexture.LEFT;
         }
         if ((getCrownSplitOpportunity(context.getWorldBlockCoord().offset(context.getRightDirection())) & 14) == 0)
         {
-            currentProperties |= ProceduralConnectedTexture.RIGHT;
+            properties |= ProceduralConnectedTexture.RIGHT;
         }
 
-        currentProperties |= ProceduralConnectedTexture.BOTTOM;
+        properties |= ProceduralConnectedTexture.BOTTOM;
+        return properties;
+        //return getFeatureId() | (currentProperties & ~ProceduralConnectedTexture.TOP);
+    }
 
-        return getFeatureId() | (currentProperties & ~ProceduralConnectedTexture.TOP);
+    @Override
+    public long getIncompatibleProperties()
+    {
+        return ProceduralConnectedTexture.TOP;
     }
 
     private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord)
@@ -69,7 +76,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties)
     {
         if (otherLayerFeature instanceof TopBandWallFeature)
         {

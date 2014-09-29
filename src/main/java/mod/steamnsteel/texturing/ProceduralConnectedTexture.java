@@ -1,5 +1,6 @@
 package mod.steamnsteel.texturing;
 
+import mod.steamnsteel.texturing.feature.PlateRuinWallFeature;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
@@ -174,5 +175,9 @@ public abstract class ProceduralConnectedTexture
             return desiredFeature;
         }
         return null;
+    }
+
+    public boolean isFeatureAtCoordVisibleAndCompatible(TextureContext context, int layer, IProceduralWallFeature wallFeature, TextureDirection... direction) {
+        return isBlockPartOfWallAndUnobstructed(context, direction) && isFeatureAtCoordCompatibleWith(context, layer, wallFeature, direction);
     }
 }
