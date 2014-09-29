@@ -11,11 +11,11 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     public static long FEATURE_PLATE_BL_CORNER = 1 << 10;
     public static long FEATURE_PLATE_BR_CORNER = 1 << 11;
 
-    private static final int LAYER_PLATE = 1;
-    private static final int LAYER_BASE = 2;
-    private static final int LAYER_CROWN = 3;
-    private static final int LAYER_DOODADS = 4;
-    private PlateRuinWallFeature featurePlate;
+    public static final int LAYER_PLATE = 1;
+    public static final int LAYER_BASE = 2;
+    public static final int LAYER_CROWN = 3;
+    public static final int LAYER_DOODADS = 4;
+    public PlateRuinWallFeature featurePlate;
     private PipesRuinWallFeature featurePipes;
     private OneByOneWallFeature featureVent;
     private OneByOneWallFeature featureValve;
@@ -70,42 +70,14 @@ public class RuinWallTexture extends ProceduralConnectedTexture
 
         textures.useTexture("Wall_DD1_PipeA")
                 .forCondition(featurePipes.getFeatureId() | FEATURE_EDGE_TOP)
+                .andCondition(featurePipes.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_TOP)
                 .andCondition(LEFT | featurePipes.getFeatureId() | FEATURE_EDGE_TOP)
                 .andCondition(RIGHT | featurePipes.getFeatureId() | FEATURE_EDGE_TOP)
                 .andCondition(LEFT | RIGHT | featurePipes.getFeatureId() | FEATURE_EDGE_TOP);
 
-        textures.useTexture("Wall_DD3_Vent")
-                .forCondition(featureVent.getFeatureId())
-                .andCondition(featureVent.getFeatureId() | LEFT)
-                .andCondition(featureVent.getFeatureId() | RIGHT)
-                .andCondition(featureVent.getFeatureId() | LEFT | RIGHT)
-                .andCondition(featureVent.getFeatureId() | featurePlate.getFeatureId());
-
-        textures.useTexture("Wall_DD4_Screen")
-                .forCondition(featureScreen.getFeatureId())
-                .andCondition(featureScreen.getFeatureId() | LEFT)
-                .andCondition(featureScreen.getFeatureId() | RIGHT)
-                .andCondition(featureScreen.getFeatureId() | LEFT | RIGHT)
-                .andCondition(featureScreen.getFeatureId() | featurePlate.getFeatureId());
-
-        textures.useTexture("Wall_DD5_Valve")
-                .forCondition(featureValve.getFeatureId())
-                .andCondition(featureValve.getFeatureId() | LEFT)
-                .andCondition(featureValve.getFeatureId() | RIGHT)
-                .andCondition(featureValve.getFeatureId() | LEFT | RIGHT)
-                .andCondition(featureValve.getFeatureId() | featurePlate.getFeatureId());
-
-        textures.useTexture("Wall_DDLongPipe_L")
-                .forCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_LEFT);
-
-        textures.useTexture("Wall_DDLongPipe_M")
-                .forCondition(featureHorizontalMetalTear.getFeatureId());
-
-        textures.useTexture("Wall_DDLongPipe_R")
-                .forCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_RIGHT);
-
         textures.useTexture("Wall_DD1_PipeB")
                 .forCondition(featurePipes.getFeatureId() | FEATURE_EDGE_BOTTOM)
+                .andCondition(featurePipes.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM)
                 .andCondition(LEFT | featurePipes.getFeatureId() | FEATURE_EDGE_BOTTOM)
                 .andCondition(RIGHT | featurePipes.getFeatureId() | FEATURE_EDGE_BOTTOM)
                 .andCondition(LEFT | RIGHT | featurePipes.getFeatureId() | FEATURE_EDGE_BOTTOM);
@@ -176,6 +148,41 @@ public class RuinWallTexture extends ProceduralConnectedTexture
 
         textures.useTexture("Wall_DD2_PEdgeInnerLDRUC_S")
                 .forCondition(featurePlate.getFeatureId() | FEATURE_PLATE_BL_CORNER | FEATURE_PLATE_TR_CORNER);
+
+        textures.useTexture("Wall_DD3_Vent")
+                .forCondition(featureVent.getFeatureId())
+                .andCondition(featureVent.getFeatureId() | LEFT)
+                .andCondition(featureVent.getFeatureId() | RIGHT)
+                .andCondition(featureVent.getFeatureId() | LEFT | RIGHT)
+                .andCondition(featureVent.getFeatureId() | featurePlate.getFeatureId());
+
+        textures.useTexture("Wall_DD4_Screen")
+                .forCondition(featureScreen.getFeatureId())
+                .andCondition(featureScreen.getFeatureId() | LEFT)
+                .andCondition(featureScreen.getFeatureId() | RIGHT)
+                .andCondition(featureScreen.getFeatureId() | LEFT | RIGHT)
+                .andCondition(featureScreen.getFeatureId() | featurePlate.getFeatureId());
+
+        textures.useTexture("Wall_DD5_Valve")
+                .forCondition(featureValve.getFeatureId())
+                .andCondition(featureValve.getFeatureId() | LEFT)
+                .andCondition(featureValve.getFeatureId() | RIGHT)
+                .andCondition(featureValve.getFeatureId() | LEFT | RIGHT)
+                .andCondition(featureValve.getFeatureId() | featurePlate.getFeatureId());
+
+        textures.useTexture("Wall_DDLongPipe_L")
+                .forCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_LEFT)
+                .andCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_LEFT | LEFT)
+                .andCondition(featureHorizontalMetalTear.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_LEFT);
+
+        textures.useTexture("Wall_DDLongPipe_M")
+                .forCondition(featureHorizontalMetalTear.getFeatureId())
+                .andCondition(featureHorizontalMetalTear.getFeatureId() | featurePlate.getFeatureId());
+
+        textures.useTexture("Wall_DDLongPipe_R")
+                .forCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_RIGHT)
+                .andCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_RIGHT | RIGHT)
+                .andCondition(featureHorizontalMetalTear.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT);
 
         textures.useTexture("Wall_CrownM_EdgeL")
                 .forCondition(featureCrown.getFeatureId() | TOP | LEFT)

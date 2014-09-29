@@ -35,7 +35,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
             return false;
         }
         boolean aboveValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.ABOVE);
-        boolean belowValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.ABOVE);
+        boolean belowValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.BELOW);
 
         if (!aboveValid && !belowValid)
         {
