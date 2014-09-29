@@ -30,9 +30,9 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
         }
 
         final boolean aboveBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE);
-        final boolean aboveBlockFeatureIsCompatible = ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.ABOVE);
+        final boolean aboveBlockFeatureIsCompatible = ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, false, TextureDirection.ABOVE);
         final boolean belowBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW);
-        final boolean belowBlockFeatureIsCompatible = ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.BELOW);
+        final boolean belowBlockFeatureIsCompatible = ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, false, TextureDirection.BELOW);
 
         boolean aboveValid2 = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE, TextureDirection.ABOVE);
         boolean belowValid2 = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW, TextureDirection.BELOW);

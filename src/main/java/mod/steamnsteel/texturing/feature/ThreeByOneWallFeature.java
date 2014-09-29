@@ -31,20 +31,20 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
             return false;
         }
 
-        final boolean leftBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.LEFT);
-        final boolean rightBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.RIGHT);
+        final boolean leftBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.LEFT);
+        final boolean rightBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.RIGHT);
         if (leftBlockIsValid && rightBlockIsValid)
         {
             return true;
         }
 
-        final boolean leftLeftBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.LEFT, TextureDirection.LEFT);
+        final boolean leftLeftBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.LEFT, TextureDirection.LEFT);
         if (leftBlockIsValid && leftLeftBlockIsValid)
         {
             return true;
         }
 
-        final boolean rightRightBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.RIGHT, TextureDirection.RIGHT);
+        final boolean rightRightBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
 
         if (rightBlockIsValid && rightRightBlockIsValid)
         {
@@ -84,8 +84,8 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
     {
         long subProperties = 0;
 
-        boolean isLeftValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.LEFT);
-        boolean isRightValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, TextureDirection.RIGHT);
+        boolean isLeftValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, true, TextureDirection.LEFT);
+        boolean isRightValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, true, TextureDirection.RIGHT);
 
         if (!isLeftValid)
         {

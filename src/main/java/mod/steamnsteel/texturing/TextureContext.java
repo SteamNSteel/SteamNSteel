@@ -7,8 +7,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TextureContext
 {
-    private final ForgeDirection orientation;
-    private final ForgeDirection[] directions;
+    private ForgeDirection orientation;
+    private ForgeDirection[] directions;
 
     public ForgeDirection getForwardDirection()
     {
@@ -16,7 +16,7 @@ public class TextureContext
     }
 
 
-    private final ForgeDirection forwardDirection;
+    private ForgeDirection forwardDirection;
 
     public ForgeDirection getLeftDirection()
     {
@@ -53,14 +53,15 @@ public class TextureContext
         return worldBlockCoord;
     }
 
-    private final ForgeDirection leftDirection;
-    private final ForgeDirection rightDirection;
-    private final ForgeDirection backDirection;
-    private final ForgeDirection upDirection;
-    private final ForgeDirection downDirection;
-    private final IBlockAccess blockAccess;
-    private final WorldBlockCoord worldBlockCoord;
+    private ForgeDirection leftDirection;
+    private ForgeDirection rightDirection;
+    private ForgeDirection backDirection;
+    private ForgeDirection upDirection;
+    private ForgeDirection downDirection;
+    private IBlockAccess blockAccess;
+    private WorldBlockCoord worldBlockCoord;
 
+    private TextureContext() {}
     public TextureContext(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
     {
         this.blockAccess = blockAccess;
@@ -80,6 +81,21 @@ public class TextureContext
         directions[TextureDirection.BELOW.ordinal()] = downDirection;
         directions[TextureDirection.BACKWARDS.ordinal()] = backDirection;
         directions[TextureDirection.FORWARD.ordinal()] = forwardDirection;
+    }
+
+    public TextureContext forLocation(WorldBlockCoord blockCoord) {
+        TextureContext newContext = new TextureContext();
+        newContext.blockAccess = blockAccess;
+        newContext.worldBlockCoord = blockCoord;
+        newContext.orientation = orientation;
+        newContext.leftDirection = leftDirection;
+        newContext.rightDirection = rightDirection;
+        newContext.backDirection = backDirection;
+        newContext.upDirection = upDirection;
+        newContext.downDirection = downDirection;
+        newContext.forwardDirection = forwardDirection;
+        newContext.directions = directions;
+        return newContext;
     }
 
     public ForgeDirection getOrientation()

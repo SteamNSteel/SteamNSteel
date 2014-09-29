@@ -1,6 +1,5 @@
 package mod.steamnsteel.texturing;
 
-import mod.steamnsteel.texturing.feature.PlateRuinWallFeature;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
@@ -154,11 +153,15 @@ public abstract class ProceduralConnectedTexture
 
     protected abstract boolean isCompatibleBlock(TextureContext context, Block block);
 
-    public boolean isFeatureAtCoordCompatibleWith(TextureContext context, int layer, IProceduralWallFeature feature, TextureDirection... direction)
+    public boolean isFeatureAtCoordCompatibleWith(TextureContext context, int layer, IProceduralWallFeature feature, boolean checkValidity, TextureDirection... direction)
     {
         WorldBlockCoord coord = getOffsetCoordinate(context, direction);
         final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
-        return featureAtCoord != null && featureAtCoord.getFeatureId() == feature.getFeatureId();
+        boolean result = featureAtCoord != null && featureAtCoord.getFeatureId() == feature.getFeatureId();
+        if (checkValidity && result) {
+            result &= featureAtCoord.isFeatureValid(context.forLocation(coord));
+        }
+        return result;
     }
 
     public IProceduralWallFeature getValidFeature(TextureContext context, int layer, TextureDirection... direction)
@@ -177,7 +180,7 @@ public abstract class ProceduralConnectedTexture
         return null;
     }
 
-    public boolean isFeatureAtCoordVisibleAndCompatible(TextureContext context, int layer, IProceduralWallFeature wallFeature, TextureDirection... direction) {
-        return isBlockPartOfWallAndUnobstructed(context, direction) && isFeatureAtCoordCompatibleWith(context, layer, wallFeature, direction);
+    public boolean isFeatureAtCoordVisibleAndCompatible(TextureContext context, int layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... direction) {
+        return isBlockPartOfWallAndUnobstructed(context, direction) && isFeatureAtCoordCompatibleWith(context, layer, wallFeature, checkValidity, direction);
     }
 }
