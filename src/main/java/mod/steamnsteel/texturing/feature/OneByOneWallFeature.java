@@ -3,8 +3,6 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.*;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
 public class OneByOneWallFeature extends ProceduralWallFeatureBase
@@ -28,7 +26,8 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
         final boolean aboveBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE);
         final boolean belowBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW);
 
-        if (aboveBlockIsClear && belowBlockIsClear) {
+        if (aboveBlockIsClear && belowBlockIsClear)
+        {
             return true;
         }
         return false;
@@ -55,19 +54,10 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean canIntersect(IProceduralWallFeature feature)
-    {
-        if (feature instanceof PlateRuinWallFeature)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
     {
-        if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature) {
+        if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature)
+        {
             return Behaviour.CANNOT_EXIST;
         }
         return Behaviour.COEXIST;

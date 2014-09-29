@@ -1,6 +1,5 @@
 package mod.steamnsteel.texturing;
 
-import mod.steamnsteel.texturing.feature.PlateRuinWallFeature;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
@@ -11,8 +10,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class ProceduralConnectedTexture
 {
-    public static final int NO_FEATURE = -1;
-
     protected final int DEFAULT = 0;
     public static long TOP;
     public static long BOTTOM;
@@ -23,10 +20,8 @@ public abstract class ProceduralConnectedTexture
     public static long FEATURE_EDGE_BOTTOM;
     public static long FEATURE_EDGE_LEFT;
     public static long FEATURE_EDGE_RIGHT;
-    final int MISSING_TEXTURE = Integer.MAX_VALUE;
-    private FeatureRegistry featureRegistry;
 
-    //private HashMap<Integer, IProceduralWallFeature> featureRegistry;
+    private FeatureRegistry featureRegistry;
 
     private ProceduralTextureRegistry textures;
 
@@ -43,7 +38,8 @@ public abstract class ProceduralConnectedTexture
         registerIcons(textures);
     }
 
-    private void registerFeatures() {
+    private void registerFeatures()
+    {
         featureRegistry = new FeatureRegistry();
 
         registerInternalFeatureProperties(featureRegistry);
@@ -64,6 +60,7 @@ public abstract class ProceduralConnectedTexture
     }
 
     protected abstract void registerFeatures(IFeatureRegistry features);
+
     protected abstract void registerIcons(ITextureConditionSet textures);
 
     public IIcon getIconForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
@@ -116,17 +113,6 @@ public abstract class ProceduralConnectedTexture
 
         blockProperties = featureRegistry.getFeatureBits(context, blockProperties);
 
-        /*
-        IProceduralWallFeature feature = getValidFeature(blockAccess, worldBlockCoord, orientation);
-        if (feature != null)
-        {
-            long subProperties = feature.getSubProperties(blockAccess, worldBlockCoord, orientation);
-
-            if ((subProperties & featureRegistry.getFeatureMask()) != 0)
-            {
-                blockProperties |= subProperties;
-            }
-        }*/
         return blockProperties;
     }
 
@@ -171,7 +157,7 @@ public abstract class ProceduralConnectedTexture
     {
         WorldBlockCoord coord = getOffsetCoordinate(context, direction);
         final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
-        return featureAtCoord != null && feature.getFeatureId() == feature.getFeatureId();
+        return featureAtCoord != null && featureAtCoord.getFeatureId() == feature.getFeatureId();
     }
 
     public IProceduralWallFeature getValidFeature(TextureContext context, int layer, TextureDirection... direction)
@@ -189,58 +175,4 @@ public abstract class ProceduralConnectedTexture
         }
         return null;
     }
-
-    //protected abstract int getTexturePropertiesForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side);
-
-    /*private List<FeatureInstance> getChunkFeatures(ChunkCoord chunkCoord)
-    {
-        List<FeatureInstance> featureRegistry = cachedFeatures.get(chunkCoord);
-        if (featureRegistry != null)
-        {
-            return featureRegistry;
-        }
-        featureRegistry = new ArrayList<FeatureInstance>();
-
-        for (IProceduralWallFeature wallFeature : this.featureRegistry.values())
-        {
-
-            for (FeatureInstance feature : wallFeature.getFeatureAreasFor(chunkCoord))
-            {
-                final IProceduralWallFeature ruinWallFeature = this.featureRegistry.get(feature.featureId);
-                final WorldBlockCoord blockCoord = feature.getBlockCoord();
-                boolean addFeature = true;
-                for (FeatureInstance otherFeature : featureRegistry)
-                {
-
-                    final WorldBlockCoord otherFeatureBlockCoord = otherFeature.getBlockCoord();
-                    if (blockCoord.getX() + feature.getWidth() >= otherFeatureBlockCoord.getX() &&
-                            blockCoord.getX() <= otherFeatureBlockCoord.getX() + otherFeature.getWidth() &&
-                            blockCoord.getY() + feature.getHeight() >= otherFeatureBlockCoord.getY() &&
-                            blockCoord.getY() <= otherFeatureBlockCoord.getY() + otherFeature.getHeight() &&
-                            blockCoord.getZ() + feature.getDepth() >= otherFeatureBlockCoord.getZ() &&
-                            blockCoord.getZ() <= otherFeatureBlockCoord.getZ() + otherFeature.getDepth()
-                            )
-                    {
-                        if (!feature.getFeature().canIntersect(otherFeature.getFeature()))
-                        {
-                            addFeature = false;
-                            break;
-                        }
-                    }
-                }
-                if (addFeature)
-                {
-                    featureRegistry.add(feature);
-                }
-            }
-
-            featureRegistry.addAll(wallFeature.getFeatureAreasFor(chunkCoord));
-        }
-
-        cachedFeatures.put(chunkCoord, featureRegistry);
-
-        return featureRegistry;
-    }*/
-
-
 }

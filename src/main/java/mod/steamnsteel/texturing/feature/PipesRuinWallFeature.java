@@ -3,8 +3,6 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.*;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
 public class PipesRuinWallFeature extends ProceduralWallFeatureBase
@@ -70,21 +68,8 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean canIntersect(IProceduralWallFeature feature)
-    {
-        if (feature instanceof PlateRuinWallFeature)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public long getSubProperties(TextureContext context, long currentProperties)
     {
-        //ForgeDirection below = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
-        //ForgeDirection above = BlockSideRotation.forOrientation(TextureDirection.ABOVE, orientation);
-
         long subProperties = getFeatureId();
         IProceduralWallFeature aboveBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.ABOVE);
         IProceduralWallFeature belowBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.BELOW);
@@ -108,7 +93,8 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     @Override
     public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
     {
-        if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature) {
+        if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature)
+        {
             return Behaviour.CANNOT_EXIST;
         }
         return Behaviour.COEXIST;

@@ -3,8 +3,6 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.*;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
 public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
@@ -20,47 +18,33 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
     @Override
     public boolean isFeatureValid(TextureContext context)
     {
-        //ForgeDirection back = BlockSideRotation.forOrientation(TextureDirection.BACKWARDS, orientation);
-
         if (!texture.isBlockPartOfWallAndUnobstructed(context))
         {
             return false;
         }
 
-        //ForgeDirection left = BlockSideRotation.forOrientation(TextureDirection.LEFT, orientation);
-        //ForgeDirection right = BlockSideRotation.forOrientation(TextureDirection.RIGHT, orientation);
-
-        IProceduralWallFeature blockFeature;
-        boolean blockIsValid;
-        //blockFeature = texture.getFeatureAt(worldBlockCoord.offset(left));
-        blockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT);
-        final boolean leftBlockIsValid = blockIsValid && //blockFeature instanceof ThreeByOneWallFeature && blockFeature.getFeatureId() == getFeatureId();
+        final boolean leftBlockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT) &&
                 texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT);
 
-        //blockIsValid = texture.isFeatureAtCoordUsableAndOfType(worldBlockCoord.offset(left), getFeatureId());
-
-        //blockFeature = texture.getFeatureAt(worldBlockCoord.offset(right));
-        blockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT);
-        final boolean rightBlockIsValid = blockIsValid && //blockFeature instanceof ThreeByOneWallFeature && blockFeature.getFeatureId() == getFeatureId();
+        final boolean rightBlockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT) &&
                 texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT);
 
-        if (leftBlockIsValid && rightBlockIsValid) {
+        if (leftBlockIsValid && rightBlockIsValid)
+        {
             return true;
         }
 
-        //blockFeature = texture.getFeatureAt(worldBlockCoord.offset(left).offset(left));
-        blockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT, TextureDirection.LEFT);
-        final boolean leftLeftBlockIsValid = blockIsValid && //blockFeature instanceof ThreeByOneWallFeature && blockFeature.getFeatureId() == getFeatureId();
+        final boolean leftLeftBlockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT, TextureDirection.LEFT) &&
                 texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT, TextureDirection.LEFT);
+
         if (leftBlockIsValid && leftLeftBlockIsValid)
         {
             return true;
         }
 
-        //blockFeature = texture.getFeatureAt(worldBlockCoord.offset(right).offset(right));
-        blockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT, TextureDirection.RIGHT);
-        final boolean rightRightBlockIsValid = blockIsValid && //blockFeature instanceof ThreeByOneWallFeature && blockFeature.getFeatureId() == getFeatureId();
+        final boolean rightRightBlockIsValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT, TextureDirection.RIGHT) &&
                 texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT, TextureDirection.RIGHT);
+
         if (rightBlockIsValid && rightRightBlockIsValid)
         {
             return true;
@@ -86,7 +70,8 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
             if (random.nextBoolean())
             {
                 features.add(new FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 3, 1, 1));
-            } else {
+            } else
+            {
                 features.add(new FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 1, 1, 3));
             }
         }
@@ -94,25 +79,20 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean canIntersect(IProceduralWallFeature feature)
-    {
-        if (feature instanceof PlateRuinWallFeature)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public long getSubProperties(TextureContext context, long currentProperties)
     {
         long subProperties = getFeatureId();
 
-        if (!texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT))
+        boolean isLeftValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT) &&
+                texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT);
+        boolean isRightValid = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT) &&
+                texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT);
+
+        if (!isLeftValid)
         {
             subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_LEFT;
         }
-        if (!texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.RIGHT))
+        if (!isRightValid)
         {
             subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
         }
@@ -121,13 +101,14 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
 
         //Pipes are only a single block wide and must ignore LEFT | RIGHT edges
         subProperties &= getFeatureId() | FEATURE_EDGE_TOP_AND_BOTTOM;
-         return subProperties | currentProperties;
+        return subProperties | currentProperties;
     }
 
     @Override
     public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
     {
-        if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature) {
+        if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature)
+        {
             return Behaviour.CANNOT_EXIST;
         }
         return Behaviour.COEXIST;

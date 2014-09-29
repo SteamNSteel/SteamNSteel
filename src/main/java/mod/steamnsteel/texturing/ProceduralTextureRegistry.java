@@ -5,22 +5,26 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import java.util.HashMap;
 
-class ProceduralTextureRegistry implements ITextureConditionSet, ITextureConditionOrNewSet, IAdditionalTextureConditionOrNewSet {
+class ProceduralTextureRegistry implements ITextureConditionSet, ITextureConditionOrNewSet, IAdditionalTextureConditionOrNewSet
+{
     private final IIconRegister iconRegister;
 
     private IIcon currentIcon = null;
     private HashMap<Long, IIcon> icons = new HashMap<Long, IIcon>();
 
-    public ProceduralTextureRegistry(IIconRegister iconRegister) {
+    public ProceduralTextureRegistry(IIconRegister iconRegister)
+    {
         this.iconRegister = iconRegister;
     }
 
-    public ITextureConditionOrNewSet useTexture(String textureName) {
+    public ITextureConditionOrNewSet useTexture(String textureName)
+    {
         currentIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + textureName);
         return this;
     }
 
-    public IAdditionalTextureConditionOrNewSet forCondition(long condition) {
+    public IAdditionalTextureConditionOrNewSet forCondition(long condition)
+    {
         icons.put(condition, currentIcon);
         return this;
     }

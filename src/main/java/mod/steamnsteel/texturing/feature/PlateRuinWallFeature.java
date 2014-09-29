@@ -101,16 +101,10 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean canIntersect(IProceduralWallFeature feature)
-    {
-        return true;
-    }
-
-    @Override
     public long getSubProperties(TextureContext context, long currentProperties)
     {
         long subProperties = getFeatureId();
-        //IProceduralWallFeature leftBlockFeature = ruinWallTexture.getValidFeature(context, getLayer(), TextureDirection.LEFT);
+
         boolean isLeftBlockValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT) &&
                 ruinWallTexture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, TextureDirection.LEFT);
         boolean isRightBlockValid = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT) &&

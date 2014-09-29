@@ -12,8 +12,6 @@ public interface IProceduralWallFeature
 
     long getFeatureId();
 
-    boolean canIntersect(IProceduralWallFeature feature);
-
     long getSubProperties(TextureContext context, long currentProperties);
 
     void setFeatureId(long featureId);

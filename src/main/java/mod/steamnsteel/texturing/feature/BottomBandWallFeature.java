@@ -3,8 +3,6 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.*;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,14 +28,8 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     public Collection<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord)
     {
         List<FeatureInstance> oneInstance = new ArrayList<FeatureInstance>(1);
-        oneInstance.add(new FeatureInstance(this, WorldBlockCoord.of(0,0,0), 16, 256, 16));
+        oneInstance.add(new FeatureInstance(this, WorldBlockCoord.of(0, 0, 0), 16, 256, 16));
         return oneInstance;
-    }
-
-    @Override
-    public boolean canIntersect(IProceduralWallFeature feature)
-    {
-        return false;
     }
 
     @Override
@@ -72,7 +64,6 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
         int x = worldBlockCoord.getX();
         int y = worldBlockCoord.getY();
         int z = worldBlockCoord.getZ();
-        //return (worldBlockCoord.getX() * 7) + (worldBlockCoord.getY() * (worldBlockCoord.getX() | worldBlockCoord.getZ())) + (~worldBlockCoord.getZ() * 31);
         Random r = new Random(x * y * z * 31);
         return r.nextInt();
     }
@@ -80,7 +71,8 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     @Override
     public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature)
     {
-        if (otherLayerFeature instanceof TopBandWallFeature) {
+        if (otherLayerFeature instanceof TopBandWallFeature)
+        {
             return Behaviour.REPLACES;
         }
         return Behaviour.COEXIST;

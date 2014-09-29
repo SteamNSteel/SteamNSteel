@@ -3,8 +3,6 @@ package mod.steamnsteel.texturing;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import java.util.*;
 
 public class FeatureRegistry implements IFeatureRegistry
@@ -15,24 +13,15 @@ public class FeatureRegistry implements IFeatureRegistry
     Map<Long, IProceduralWallFeature> features = new Hashtable<Long, IProceduralWallFeature>();
     Map<Long, String> descriptions = new Hashtable<Long, String>();
 
-    //HashMap<ChunkCoord, long[]> cachedNoiseGens = new HashMap<ChunkCoord, long[]>();
     HashMap<ChunkCoord, Map<Integer, long[]>> cachedLayerFeatures = new HashMap<ChunkCoord, Map<Integer, long[]>>();
     //HashMap<ChunkCoord, List<FeatureInstance>> cachedFeatures = new HashMap<ChunkCoord, List<FeatureInstance>>();
 
-    public IProceduralWallFeature getFeatureBy(int featureId)
-    {
-        return null;
-    }
-
-    public int getFeatureMask()
-    {
-        return featureMask;
-    }
-
     @Override
-    public void registerFeature(IProceduralWallFeature feature) {
+    public void registerFeature(IProceduralWallFeature feature)
+    {
         List<IProceduralWallFeature> featureList = featureLayers.get(feature.getLayer());
-        if (featureList == null) {
+        if (featureList == null)
+        {
             featureList = new ArrayList<IProceduralWallFeature>();
             featureLayers.put(feature.getLayer(), featureList);
         }
@@ -47,7 +36,8 @@ public class FeatureRegistry implements IFeatureRegistry
     }
 
     @Override
-    public long registerFeatureProperty(String description) {
+    public long registerFeatureProperty(String description)
+    {
         long featurePropertyId = 1 << currentBit;
         descriptions.put(featurePropertyId, description);
         currentBit++;
@@ -58,12 +48,14 @@ public class FeatureRegistry implements IFeatureRegistry
     {
         final ChunkCoord chunkCoord = ChunkCoord.of(worldBlockCoord);
         Map<Integer, long[]> layerFeatures = cachedLayerFeatures.get(chunkCoord);
-        if (layerFeatures == null) {
+        if (layerFeatures == null)
+        {
             layerFeatures = new Hashtable<Integer, long[]>();
             cachedLayerFeatures.put(chunkCoord, layerFeatures);
         }
         long[] featureMap = layerFeatures.get(layer);
-        if (featureMap == null) {
+        if (featureMap == null)
+        {
             featureMap = new long[16 * 256 * 16];
             layerFeatures.put(layer, featureMap);
         }
@@ -71,7 +63,6 @@ public class FeatureRegistry implements IFeatureRegistry
         ChunkBlockCoord localCoord = ChunkBlockCoord.of(worldBlockCoord);
         final int index = localCoord.getY() | localCoord.getZ() << 8 | localCoord.getX() << 12;
         long featureId = featureMap[index];
-        featureId = 0;
         if (featureId == 0)
         {
             int x = localCoord.getX();
@@ -107,7 +98,8 @@ public class FeatureRegistry implements IFeatureRegistry
     private List<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord, int layer)
     {
         List<FeatureInstance> featureInstances = new LinkedList<FeatureInstance>();
-        for (IProceduralWallFeature feature : featureLayers.get(layer)) {
+        for (IProceduralWallFeature feature : featureLayers.get(layer))
+        {
 
             final Collection<FeatureInstance> layerFeatureInstances = feature.getFeatureAreasFor(chunkCoord);
             if (layerFeatureInstances != null)
@@ -123,21 +115,26 @@ public class FeatureRegistry implements IFeatureRegistry
     {
         List<IProceduralWallFeature> featureList = new LinkedList<IProceduralWallFeature>();
 
-        for (int layer : featureLayers.keySet()) {
+        for (int layer : featureLayers.keySet())
+        {
             IProceduralWallFeature currentLayerFeature = getFeatureAt(context.getWorldBlockCoord(), layer);
-            if (currentLayerFeature == null) {
+            if (currentLayerFeature == null)
+            {
                 continue;
             }
 
-            if (!currentLayerFeature.isFeatureValid(context)) {
+            if (!currentLayerFeature.isFeatureValid(context))
+            {
                 continue;
             }
 
             boolean add = true;
             List<IProceduralWallFeature> removeList = new LinkedList<IProceduralWallFeature>();
-            for (IProceduralWallFeature otherLayerFeature : featureList) {
+            for (IProceduralWallFeature otherLayerFeature : featureList)
+            {
                 Behaviour behaviour = currentLayerFeature.getBehaviourAgainst(otherLayerFeature);
-                switch (behaviour) {
+                switch (behaviour)
+                {
                     case CANNOT_EXIST:
                         add = false;
                         break;
@@ -150,11 +147,13 @@ public class FeatureRegistry implements IFeatureRegistry
                 }
             }
 
-            for (IProceduralWallFeature removeFeature : removeList) {
+            for (IProceduralWallFeature removeFeature : removeList)
+            {
                 featureList.remove(removeFeature);
             }
 
-            if (add) {
+            if (add)
+            {
                 featureList.add(currentLayerFeature);
             }
         }
@@ -163,20 +162,23 @@ public class FeatureRegistry implements IFeatureRegistry
 
         for (IProceduralWallFeature feature : featureList)
         {
-             featureBits = feature.getSubProperties(context, featureBits);
+            featureBits = feature.getSubProperties(context, featureBits);
         }
 
         return featureBits;
     }
 
-    public String describeSide(long features) {
+    public String describeSide(long features)
+    {
         StringBuffer descriptionBuffer = new StringBuffer();
         boolean first = true;
         for (Map.Entry<Long, String> feature : descriptions.entrySet())
         {
             long featureMask = feature.getKey();
-            if ((features & featureMask) == featureMask) {
-                if (!first) {
+            if ((features & featureMask) == featureMask)
+            {
+                if (!first)
+                {
                     descriptionBuffer.append(", ");
                 }
 
