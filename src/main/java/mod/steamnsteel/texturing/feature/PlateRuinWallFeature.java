@@ -176,6 +176,14 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
             }
         }
 
+        final long topAndLeft = RuinWallTexture.FEATURE_EDGE_TOP | RuinWallTexture.FEATURE_EDGE_LEFT;
+        final long topAndRight = RuinWallTexture.FEATURE_EDGE_TOP | RuinWallTexture.FEATURE_EDGE_RIGHT;
+        if ((subProperties & topAndLeft) == topAndLeft || (subProperties & topAndRight) == topAndRight) {
+            if (context.useAlternateVersion(0.2f)) {
+                subProperties |= RuinWallTexture.ALTERNATE;
+            }
+        }
+
         return subProperties;
     }
 

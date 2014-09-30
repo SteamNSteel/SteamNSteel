@@ -5,13 +5,13 @@ import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import java.util.*;
 
-public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
+public class LongPipeRuinWallFeature extends ProceduralWallFeatureBase
 {
     private final long plateEdgeMask;
     private final long FEATURE_EDGE_TOP_AND_BOTTOM;
     private RuinWallTexture texture;
 
-    public ThreeByOneWallFeature(RuinWallTexture texture, String name, int layer)
+    public LongPipeRuinWallFeature(RuinWallTexture texture, String name, int layer)
     {
         super(name, layer);
         this.texture = texture;
@@ -106,16 +106,17 @@ public class ThreeByOneWallFeature extends ProceduralWallFeatureBase
         //Generate Pipe features
         for (int i = 0; i < featureCount; ++i)
         {
-            int xPos = random.nextInt(18) - 1;
+            int width = random.nextInt(14);
+            int xPos = random.nextInt(16 - width);
             int yPos = random.nextInt(16);
             int zPos = random.nextInt(18) - 1;
 
             if (random.nextBoolean())
             {
-                features.add(new FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 3, 1, 1));
+                features.add(new FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), width, 1, 1));
             } else
             {
-                features.add(new FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 1, 1, 3));
+                features.add(new FeatureInstance(this, WorldBlockCoord.of(zPos, yPos, xPos), 1, 1, width));
             }
         }
         return features;

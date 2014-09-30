@@ -63,7 +63,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     @Override
     public long getIncompatibleProperties()
     {
-        return ProceduralConnectedTexture.TOP;
+        return ProceduralConnectedTexture.TOP | RuinWallTexture.ALTERNATE;
     }
 
     private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord)

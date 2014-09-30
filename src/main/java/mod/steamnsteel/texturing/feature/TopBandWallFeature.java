@@ -71,6 +71,12 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
         return Behaviour.COEXIST;
     }
 
+    @Override
+    public long getIncompatibleProperties()
+    {
+        return RuinWallTexture.ALTERNATE;
+    }
+
     private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord)
     {
         int x = worldBlockCoord.getX();

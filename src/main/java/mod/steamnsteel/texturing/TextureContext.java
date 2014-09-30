@@ -4,6 +4,7 @@ import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import java.util.Random;
 
 public class TextureContext
 {
@@ -96,6 +97,15 @@ public class TextureContext
         newContext.forwardDirection = forwardDirection;
         newContext.directions = directions;
         return newContext;
+    }
+
+    public boolean useAlternateVersion(float probability)
+    {
+        int x = worldBlockCoord.getX();
+        int y = worldBlockCoord.getY();
+        int z = worldBlockCoord.getZ();
+        Random r = new Random(x * y * z * 31);
+        return probability > r.nextFloat();
     }
 
     public ForgeDirection getOrientation()

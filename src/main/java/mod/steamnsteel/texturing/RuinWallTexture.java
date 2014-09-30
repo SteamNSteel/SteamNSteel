@@ -6,23 +6,26 @@ import net.minecraft.block.Block;
 
 public class RuinWallTexture extends ProceduralConnectedTexture
 {
-    public static long FEATURE_PLATE_TL_CORNER = 1 << 8;
-    public static long FEATURE_PLATE_TR_CORNER = 1 << 9;
-    public static long FEATURE_PLATE_BL_CORNER = 1 << 10;
-    public static long FEATURE_PLATE_BR_CORNER = 1 << 11;
+    public static long FEATURE_PLATE_TL_CORNER;
+    public static long FEATURE_PLATE_TR_CORNER;
+    public static long FEATURE_PLATE_BL_CORNER;
+    public static long FEATURE_PLATE_BR_CORNER;
+    public static long ALTERNATE;
 
     public static final int LAYER_PLATE = 1;
     public static final int LAYER_BASE = 2;
     public static final int LAYER_CROWN = 3;
     public static final int LAYER_DOODADS = 4;
+
     public PlateRuinWallFeature featurePlate;
     private PipesRuinWallFeature featurePipes;
     private OneByOneWallFeature featureVent;
     private OneByOneWallFeature featureValve;
     private OneByOneWallFeature featureScreen;
-    private ThreeByOneWallFeature featureHorizontalMetalTear;
+    private HorizontalMetalTearRuinWallFeature featureHorizontalMetalTear;
     private TopBandWallFeature featureCrown;
     private BottomBandWallFeature featureBase;
+    private LongPipeRuinWallFeature featureLongPipe;
 
     @Override
     protected void registerFeatures(IFeatureRegistry features)
@@ -34,7 +37,8 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         featureVent = new OneByOneWallFeature(this, "Vent", LAYER_DOODADS);
         featureValve = new OneByOneWallFeature(this, "Valve", LAYER_DOODADS);
         featureScreen = new OneByOneWallFeature(this, "Screen", LAYER_DOODADS);
-        featureHorizontalMetalTear = new ThreeByOneWallFeature(this, "HorizontalMetalTear", LAYER_DOODADS);
+        featureHorizontalMetalTear = new HorizontalMetalTearRuinWallFeature(this, "HorizontalMetalTear", LAYER_DOODADS);
+        featureLongPipe = new LongPipeRuinWallFeature(this, "LongPipe", LAYER_DOODADS);
 
         features.registerFeature(featurePlate);
         features.registerFeature(featureCrown);
@@ -44,11 +48,14 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         features.registerFeature(featureValve);
         features.registerFeature(featureScreen);
         features.registerFeature(featureHorizontalMetalTear);
+        features.registerFeature(featureLongPipe);
 
         FEATURE_PLATE_TL_CORNER = features.registerFeatureProperty("Plate_TLC");
         FEATURE_PLATE_TR_CORNER = features.registerFeatureProperty("Plate_TRC");
         FEATURE_PLATE_BL_CORNER = features.registerFeatureProperty("Plate_BLC");
         FEATURE_PLATE_BR_CORNER = features.registerFeatureProperty("Plate_BRC");
+
+        ALTERNATE = features.registerFeatureProperty("Alternate");
     }
 
     @Override
@@ -113,6 +120,14 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .andCondition(featurePlate.getFeatureId() | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
                 .andCondition(featurePlate.getFeatureId() | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TR_CORNER)
                 .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
+
+        textures.useTexture("Wall_DD2_PEdgeRUCbent")
+                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE)
+                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE | RIGHT);
+
+        textures.useTexture("Wall_DD2_PEdgeLUCbent")
+                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE)
+                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE | LEFT);
 
         textures.useTexture("Wall_DD2_PEdgeLDC")
                 .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
@@ -183,6 +198,20 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .forCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_RIGHT)
                 .andCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_RIGHT | RIGHT)
                 .andCondition(featureHorizontalMetalTear.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT);
+
+        textures.useTexture("Wall_DD6_PipeCapL")
+                .forCondition(featureLongPipe.getFeatureId() | FEATURE_EDGE_LEFT)
+                .andCondition(featureLongPipe.getFeatureId() | FEATURE_EDGE_LEFT | LEFT)
+                .andCondition(featureLongPipe.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_LEFT);
+
+        textures.useTexture("Wall_DD6_PipeSec1")
+                .forCondition(featureLongPipe.getFeatureId())
+                .andCondition(featureLongPipe.getFeatureId() | featurePlate.getFeatureId());
+
+        textures.useTexture("Wall_DD6_PipeCapR")
+                .forCondition(featureLongPipe.getFeatureId() | FEATURE_EDGE_RIGHT)
+                .andCondition(featureLongPipe.getFeatureId() | FEATURE_EDGE_RIGHT | RIGHT)
+                .andCondition(featureLongPipe.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT);
 
         textures.useTexture("Wall_CrownM_EdgeL")
                 .forCondition(featureCrown.getFeatureId() | TOP | LEFT)
