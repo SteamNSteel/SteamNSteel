@@ -26,7 +26,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public Collection<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord)
+    public Collection<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord)
     {
         List<FeatureInstance> oneInstance = new ArrayList<FeatureInstance>(1);
         oneInstance.add(new FeatureInstance(this, WorldBlockCoord.of(0, 0, 0), 16, 256, 16));

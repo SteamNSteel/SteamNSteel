@@ -1,5 +1,6 @@
 package mod.steamnsteel.texturing;
 
+import com.google.common.collect.Iterables;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
@@ -14,7 +15,6 @@ public class FeatureRegistry implements IFeatureRegistry
     Map<Long, String> descriptions = new Hashtable<Long, String>();
 
     HashMap<ChunkCoord, Map<Integer, long[]>> cachedLayerFeatures = new HashMap<ChunkCoord, Map<Integer, long[]>>();
-    //HashMap<ChunkCoord, List<FeatureInstance>> cachedFeatures = new HashMap<ChunkCoord, List<FeatureInstance>>();
 
     @Override
     public void registerFeature(IProceduralWallFeature feature)
@@ -75,11 +75,11 @@ public class FeatureRegistry implements IFeatureRegistry
             {
                 final WorldBlockCoord featureBlockCoord = feature.getBlockCoord();
                 //final int featureX = (featureBlockCoord.getX() + offsetAmount) & 15;
-                final int featureX = (featureBlockCoord.getX()) & 15;
+                final int featureX = (featureBlockCoord.getX());
                 if (x >= featureX && x < featureX + feature.getWidth())
                 {
                     //final int featureZ = (featureBlockCoord.getZ() + offsetAmount) & 15;
-                    final int featureZ = (featureBlockCoord.getZ()) & 15;
+                    final int featureZ = (featureBlockCoord.getZ());
                     if (z >= featureZ && z < featureZ + feature.getDepth())
                     {
                         if (y >= featureBlockCoord.getY() && y < featureBlockCoord.getY() + feature.getHeight())
@@ -95,16 +95,16 @@ public class FeatureRegistry implements IFeatureRegistry
         return features.get(featureId);
     }
 
-    private List<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord, int layer)
+    private Iterable<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord, int layer)
     {
-        List<FeatureInstance> featureInstances = new LinkedList<FeatureInstance>();
+        Iterable<FeatureInstance> featureInstances = new LinkedList<FeatureInstance>();
+
         for (IProceduralWallFeature feature : featureLayers.get(layer))
         {
-
-            final Collection<FeatureInstance> layerFeatureInstances = feature.getFeatureAreasFor(chunkCoord);
+            final Iterable<FeatureInstance> layerFeatureInstances = feature.getFeatureAreasFor(chunkCoord);
             if (layerFeatureInstances != null)
             {
-                featureInstances.addAll(layerFeatureInstances);
+                featureInstances = Iterables.concat(featureInstances, layerFeatureInstances);
             }
         }
 

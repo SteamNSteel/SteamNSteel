@@ -83,7 +83,7 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public Collection<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord)
+    public Collection<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord)
     {
         Random random = new Random(Objects.hash(chunkCoord, getFeatureId(), 6));
 

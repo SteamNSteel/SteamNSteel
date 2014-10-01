@@ -74,7 +74,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public Collection<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord)
+    public Collection<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord)
     {
         final int featureCount = 64;
 
