@@ -10,11 +10,12 @@ public class FeatureRegistry implements IFeatureRegistry
 {
     private int featureMask = 0;
     private int currentBit = 0;
-    Map<Integer, List<IProceduralWallFeature>> featureLayers = new TreeMap<Integer, List<IProceduralWallFeature>>();
+    private int currentLayer = 0;
+    Map<Layer, List<IProceduralWallFeature>> featureLayers = new TreeMap<Layer, List<IProceduralWallFeature>>();
     Map<Long, IProceduralWallFeature> features = new Hashtable<Long, IProceduralWallFeature>();
     Map<Long, String> descriptions = new Hashtable<Long, String>();
 
-    HashMap<ChunkCoord, Map<Integer, long[]>> cachedLayerFeatures = new HashMap<ChunkCoord, Map<Integer, long[]>>();
+    HashMap<ChunkCoord, Map<Layer, long[]>> cachedLayerFeatures = new HashMap<ChunkCoord, Map<Layer, long[]>>();
 
     @Override
     public void registerFeature(IProceduralWallFeature feature)
@@ -35,6 +36,12 @@ public class FeatureRegistry implements IFeatureRegistry
         currentBit++;
     }
 
+    public Layer registerLayer(String name, boolean allowRandomization) {
+        Layer layer = new Layer(currentLayer, name, allowRandomization);
+        currentLayer++;
+        return layer;
+    }
+
     @Override
     public long registerFeatureProperty(String description)
     {
@@ -44,13 +51,13 @@ public class FeatureRegistry implements IFeatureRegistry
         return featurePropertyId;
     }
 
-    public IProceduralWallFeature getFeatureAt(WorldBlockCoord worldBlockCoord, int layer)
+    public IProceduralWallFeature getFeatureAt(WorldBlockCoord worldBlockCoord, Layer layer)
     {
         final ChunkCoord chunkCoord = ChunkCoord.of(worldBlockCoord);
-        Map<Integer, long[]> layerFeatures = cachedLayerFeatures.get(chunkCoord);
+        Map<Layer, long[]> layerFeatures = cachedLayerFeatures.get(chunkCoord);
         if (layerFeatures == null)
         {
-            layerFeatures = new Hashtable<Integer, long[]>();
+            layerFeatures = new Hashtable<Layer, long[]>();
             cachedLayerFeatures.put(chunkCoord, layerFeatures);
         }
         long[] featureMap = layerFeatures.get(layer);
@@ -70,16 +77,16 @@ public class FeatureRegistry implements IFeatureRegistry
             int z = localCoord.getZ();
 
             featureId = -1;
-            int offsetAmount = localCoord.getY() >> 4;
+            int offsetAmount = layer.allowRandomization() ? (localCoord.getY() >> 4) : 0;
             for (FeatureInstance feature : getFeaturesIn(chunkCoord, layer))
             {
                 final WorldBlockCoord featureBlockCoord = feature.getBlockCoord();
-                //final int featureX = (featureBlockCoord.getX() + offsetAmount) & 15;
-                final int featureX = (featureBlockCoord.getX());
+                final int featureX = (featureBlockCoord.getX() + offsetAmount);//& 15;
+                //final int featureX = (featureBlockCoord.getX());
                 if (x >= featureX && x < featureX + feature.getWidth())
                 {
-                    //final int featureZ = (featureBlockCoord.getZ() + offsetAmount) & 15;
-                    final int featureZ = (featureBlockCoord.getZ());
+                    final int featureZ = (featureBlockCoord.getZ() + offsetAmount);// & 15;
+                    //final int featureZ = (featureBlockCoord.getZ());
                     if (z >= featureZ && z < featureZ + feature.getDepth())
                     {
                         if (y >= featureBlockCoord.getY() && y < featureBlockCoord.getY() + feature.getHeight())
@@ -95,7 +102,7 @@ public class FeatureRegistry implements IFeatureRegistry
         return features.get(featureId);
     }
 
-    private Iterable<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord, int layer)
+    private Iterable<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord, Layer layer)
     {
         Iterable<FeatureInstance> featureInstances = new LinkedList<FeatureInstance>();
 
@@ -115,7 +122,7 @@ public class FeatureRegistry implements IFeatureRegistry
     {
         Map<IProceduralWallFeature, Long> featureList = new Hashtable<IProceduralWallFeature, Long>() {};
 
-        for (int layer : featureLayers.keySet())
+        for (Layer layer : featureLayers.keySet())
         {
             IProceduralWallFeature currentLayerFeature = getFeatureAt(context.getWorldBlockCoord(), layer);
             if (currentLayerFeature == null)

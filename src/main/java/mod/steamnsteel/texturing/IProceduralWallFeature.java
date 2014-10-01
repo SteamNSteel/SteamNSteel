@@ -18,7 +18,7 @@ public interface IProceduralWallFeature
 
     String getName();
 
-    int getLayer();
+    Layer getLayer();
 
     Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties);
 

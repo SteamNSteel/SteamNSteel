@@ -1,10 +1,7 @@
 package mod.steamnsteel.texturing.wall;
 
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
-import mod.steamnsteel.texturing.IFeatureRegistry;
-import mod.steamnsteel.texturing.ITextureConditionSet;
-import mod.steamnsteel.texturing.ProceduralConnectedTexture;
-import mod.steamnsteel.texturing.TextureContext;
+import mod.steamnsteel.texturing.*;
 import mod.steamnsteel.texturing.feature.*;
 import net.minecraft.block.Block;
 
@@ -16,10 +13,10 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     public static long FEATURE_PLATE_BR_CORNER;
     public static long ALTERNATE;
 
-    public static final int LAYER_PLATE = 1;
-    public static final int LAYER_BASE = 2;
-    public static final int LAYER_CROWN = 3;
-    public static final int LAYER_DOODADS = 4;
+    public static Layer LAYER_PLATE;
+    public static Layer LAYER_BASE;
+    public static Layer LAYER_CROWN;
+    public static Layer LAYER_DOODADS;
 
     public PlateRuinWallFeature featurePlate;
     private PipesRuinWallFeature featurePipes;
@@ -34,6 +31,11 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     @Override
     protected void registerFeatures(IFeatureRegistry features)
     {
+        LAYER_PLATE = features.registerLayer("Plate", true);
+        LAYER_BASE = features.registerLayer("Base", false);
+        LAYER_CROWN = features.registerLayer("Crown", false);
+        LAYER_DOODADS = features.registerLayer("Doodads", true);
+
         featurePlate = new PlateRuinWallFeature(this, LAYER_PLATE);
         featureBase = new BottomBandWallFeature(this, "Base", LAYER_BASE);
         featureCrown = new TopBandWallFeature(this, "Crown", LAYER_CROWN);

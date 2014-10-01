@@ -13,7 +13,7 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
 {
     private final ProceduralConnectedTexture texture;
 
-    public TopBandWallFeature(ProceduralConnectedTexture texture, String name, int layer)
+    public TopBandWallFeature(ProceduralConnectedTexture texture, String name, Layer layer)
     {
 
         super(name, layer);

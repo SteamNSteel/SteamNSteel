@@ -12,7 +12,7 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     private final long featureMask;
     private RuinWallTexture texture;
 
-    public PipesRuinWallFeature(RuinWallTexture texture, int layer)
+    public PipesRuinWallFeature(RuinWallTexture texture, Layer layer)
     {
         super("Pipes", layer);
         this.texture = texture;

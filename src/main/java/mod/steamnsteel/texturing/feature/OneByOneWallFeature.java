@@ -11,7 +11,7 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
     private final long featureMask;
     private RuinWallTexture ruinWallTexture;
 
-    public OneByOneWallFeature(RuinWallTexture ruinWallTexture, String name, int layer)
+    public OneByOneWallFeature(RuinWallTexture ruinWallTexture, String name, Layer layer)
     {
         super(name, layer);
         this.ruinWallTexture = ruinWallTexture;

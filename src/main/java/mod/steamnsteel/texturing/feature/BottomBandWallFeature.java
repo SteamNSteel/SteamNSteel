@@ -13,7 +13,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
 {
     private final ProceduralConnectedTexture texture;
 
-    public BottomBandWallFeature(ProceduralConnectedTexture texture, String name, int layer)
+    public BottomBandWallFeature(ProceduralConnectedTexture texture, String name, Layer layer)
     {
         super(name, layer);
         this.texture = texture;

@@ -12,7 +12,7 @@ public class LongPipeRuinWallFeature extends ProceduralWallFeatureBase
     private final long FEATURE_EDGE_TOP_AND_BOTTOM;
     private RuinWallTexture texture;
 
-    public LongPipeRuinWallFeature(RuinWallTexture texture, String name, int layer)
+    public LongPipeRuinWallFeature(RuinWallTexture texture, String name, Layer layer)
     {
         super(name, layer);
         this.texture = texture;

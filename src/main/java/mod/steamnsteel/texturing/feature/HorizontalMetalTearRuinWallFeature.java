@@ -12,7 +12,7 @@ public class HorizontalMetalTearRuinWallFeature extends ProceduralWallFeatureBas
     private final long FEATURE_EDGE_TOP_AND_BOTTOM;
     private RuinWallTexture texture;
 
-    public HorizontalMetalTearRuinWallFeature(RuinWallTexture texture, String name, int layer)
+    public HorizontalMetalTearRuinWallFeature(RuinWallTexture texture, String name, Layer layer)
     {
         super(name, layer);
         this.texture = texture;

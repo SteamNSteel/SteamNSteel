@@ -12,7 +12,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     private final long FEATURE_EDGE_LEFT_AND_RIGHT;
     private RuinWallTexture ruinWallTexture;
 
-    public PlateRuinWallFeature(RuinWallTexture ruinWallTexture, int layer)
+    public PlateRuinWallFeature(RuinWallTexture ruinWallTexture, Layer layer)
     {
         super("Pipes", layer);
         this.ruinWallTexture = ruinWallTexture;

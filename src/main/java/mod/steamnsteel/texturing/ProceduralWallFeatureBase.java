@@ -1,21 +1,22 @@
 package mod.steamnsteel.texturing;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import mod.steamnsteel.utility.position.ChunkCoord;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 public abstract class ProceduralWallFeatureBase implements IProceduralWallFeature
 {
     private final String name;
-    private final int layer;
+    private final Layer layer;
     private long featureId;
 
     HashMap<ChunkCoord, Collection<FeatureInstance>> cachedFeatures = new HashMap<ChunkCoord, Collection<FeatureInstance>>();
 
-    protected ProceduralWallFeatureBase(String name, int layer)
+    protected ProceduralWallFeatureBase(String name, Layer layer)
     {
         this.name = name;
         this.layer = layer;
@@ -33,7 +34,7 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
         this.featureId = featureId;
     }
 
-    public int getLayer()
+    public Layer getLayer()
     {
         return layer;
     }
@@ -56,22 +57,51 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     }
 
     @Override
-    public Iterable<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord) {
-        Iterable<FeatureInstance> featureResults = new ArrayList<FeatureInstance>();
+    public Iterable<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord)
+    {
+        Iterable<FeatureInstance> featureResults;
 
         featureResults = Iterables.concat(
                 getCachedFeatures(chunkCoord),
-                getCachedFeatures(ChunkCoord.of(chunkCoord.getX()-1, chunkCoord.getZ())),
-                getCachedFeatures(ChunkCoord.of(chunkCoord.getX(), chunkCoord.getZ()-1)),
-                getCachedFeatures(ChunkCoord.of(chunkCoord.getX()-1, chunkCoord.getZ()-1))
+                Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX() - 1, chunkCoord.getZ())), new FeatureTransformerFunction(-1, 0)),
+                Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX(), chunkCoord.getZ() - 1)), new FeatureTransformerFunction(0, -1)),
+                Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX() - 1, chunkCoord.getZ() - 1)), new FeatureTransformerFunction(-1, -1))
         );
 
         return featureResults;
     }
 
-    private Collection<FeatureInstance> getCachedFeatures(ChunkCoord chunkCoord) {
+    private class FeatureTransformerFunction implements Function<FeatureInstance, FeatureInstance>
+    {
+
+        private final int offsetX;
+        private final int offsetZ;
+
+        public FeatureTransformerFunction(int chunksX, int chunksZ)
+        {
+            offsetX = chunksX << 4;
+            offsetZ = chunksZ << 4;
+        }
+
+        @Override
+        public FeatureInstance apply(FeatureInstance input)
+        {
+            return new FeatureInstance(input.getFeature(),
+                    WorldBlockCoord.of(
+                            input.getBlockCoord().getX() + offsetX,
+                            input.getBlockCoord().getY(),
+                            input.getBlockCoord().getZ() + offsetZ),
+                    input.getWidth(),
+                    input.getHeight(),
+                    input.getDepth());
+        }
+    }
+
+    private Collection<FeatureInstance> getCachedFeatures(ChunkCoord chunkCoord)
+    {
         Collection<FeatureInstance> result = cachedFeatures.get(chunkCoord);
-        if (result == null) {
+        if (result == null)
+        {
             result = getFeaturesIn(chunkCoord);
             cachedFeatures.put(chunkCoord, result);
         }

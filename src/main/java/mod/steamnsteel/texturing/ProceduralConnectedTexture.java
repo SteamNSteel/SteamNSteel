@@ -153,7 +153,7 @@ public abstract class ProceduralConnectedTexture
 
     protected abstract boolean isCompatibleBlock(TextureContext context, Block block);
 
-    public boolean isFeatureAtCoordCompatibleWith(TextureContext context, int layer, IProceduralWallFeature feature, boolean checkValidity, TextureDirection... direction)
+    public boolean isFeatureAtCoordCompatibleWith(TextureContext context, Layer layer, IProceduralWallFeature feature, boolean checkValidity, TextureDirection... direction)
     {
         WorldBlockCoord coord = getOffsetCoordinate(context, direction);
         final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
@@ -164,7 +164,7 @@ public abstract class ProceduralConnectedTexture
         return result;
     }
 
-    public IProceduralWallFeature getValidFeature(TextureContext context, int layer, TextureDirection... direction)
+    public IProceduralWallFeature getValidFeature(TextureContext context, Layer layer, TextureDirection... direction)
     {
         WorldBlockCoord coord = getOffsetCoordinate(context, direction);
         IProceduralWallFeature desiredFeature = featureRegistry.getFeatureAt(coord, layer);
@@ -180,7 +180,7 @@ public abstract class ProceduralConnectedTexture
         return null;
     }
 
-    public boolean isFeatureAtCoordVisibleAndCompatible(TextureContext context, int layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... direction) {
+    public boolean isFeatureAtCoordVisibleAndCompatible(TextureContext context, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... direction) {
         return isBlockPartOfWallAndUnobstructed(context, direction) && isFeatureAtCoordCompatibleWith(context, layer, wallFeature, checkValidity, direction);
     }
 }
