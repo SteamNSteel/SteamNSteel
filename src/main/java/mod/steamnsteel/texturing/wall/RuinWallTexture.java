@@ -65,247 +65,258 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     @Override
     protected void registerIcons(ITextureConditionSet textures)
     {
+        final long pipesFeatureId = featurePipes.getFeatureId();
+        final long plateFeatureId = featurePlate.getFeatureId();
+        final long crownFeatureId = featureCrown.getFeatureId();
+        final long ventFeatureId = featureVent.getFeatureId();
+        final long screenFeatureId = featureScreen.getFeatureId();
+        final long valveFeatureId = featureValve.getFeatureId();
+        final long baseFeatureId = featureBase.getFeatureId();
+        final long horizontalMetalTearFeatureId = featureHorizontalMetalTear.getFeatureId();
+        final long longPipeFeatureId = featureLongPipe.getFeatureId();
+
         textures.useTexture("ruinWallPlotonium")
                 .forCondition(DEFAULT)
                 .andCondition(LEFT)
                 .andCondition(RIGHT)
                 .andCondition(LEFT | RIGHT)
                 .andCondition(TOP | BOTTOM)
-                .andCondition(featurePlate.getFeatureId())
+                .andCondition(plateFeatureId)
                         //Hacks around a hard to detect issue of two pipes spawning in a 1x4 stack.
                         //An alternative would be to replace these with a 1x1 texture.
-                .andCondition(featurePipes.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM)
-                .andCondition(featurePipes.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | RIGHT)
-                .andCondition(featurePipes.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT)
-                .andCondition(featurePipes.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT | RIGHT);
+                .andCondition(pipesFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM)
+                .andCondition(pipesFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | RIGHT)
+                .andCondition(pipesFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT)
+                .andCondition(pipesFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT | RIGHT);
 
         textures.useTexture("Wall_DD1_PipeA")
-                .forCondition(featurePipes.getFeatureId() | FEATURE_EDGE_TOP)
-                .andCondition(featurePipes.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_TOP)
-                .andCondition(LEFT | featurePipes.getFeatureId() | FEATURE_EDGE_TOP)
-                .andCondition(RIGHT | featurePipes.getFeatureId() | FEATURE_EDGE_TOP)
-                .andCondition(LEFT | RIGHT | featurePipes.getFeatureId() | FEATURE_EDGE_TOP);
+                .forCondition(pipesFeatureId | FEATURE_EDGE_TOP)
+                .andCondition(pipesFeatureId | plateFeatureId | FEATURE_EDGE_TOP)
+                .andCondition(LEFT | pipesFeatureId | FEATURE_EDGE_TOP)
+                .andCondition(RIGHT | pipesFeatureId | FEATURE_EDGE_TOP)
+                .andCondition(LEFT | RIGHT | pipesFeatureId | FEATURE_EDGE_TOP);
 
         textures.useTexture("Wall_DD1_PipeB")
-                .forCondition(featurePipes.getFeatureId() | FEATURE_EDGE_BOTTOM)
-                .andCondition(featurePipes.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM)
-                .andCondition(LEFT | featurePipes.getFeatureId() | FEATURE_EDGE_BOTTOM)
-                .andCondition(RIGHT | featurePipes.getFeatureId() | FEATURE_EDGE_BOTTOM)
-                .andCondition(LEFT | RIGHT | featurePipes.getFeatureId() | FEATURE_EDGE_BOTTOM);
+                .forCondition(pipesFeatureId | FEATURE_EDGE_BOTTOM)
+                .andCondition(pipesFeatureId | plateFeatureId | FEATURE_EDGE_BOTTOM)
+                .andCondition(LEFT | pipesFeatureId | FEATURE_EDGE_BOTTOM)
+                .andCondition(RIGHT | pipesFeatureId | FEATURE_EDGE_BOTTOM)
+                .andCondition(LEFT | RIGHT | pipesFeatureId | FEATURE_EDGE_BOTTOM);
 
         textures.useTexture("Wall_DD2_PEdgeVL")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_LEFT)
-                .andCondition(featurePlate.getFeatureId() | LEFT | FEATURE_EDGE_LEFT);
+                .forCondition(plateFeatureId | FEATURE_EDGE_LEFT)
+                .andCondition(plateFeatureId | LEFT | FEATURE_EDGE_LEFT);
 
         textures.useTexture("Wall_DD2_PEdgeVR")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT)
-                .andCondition(featurePlate.getFeatureId() | RIGHT | FEATURE_EDGE_RIGHT);
+                .forCondition(plateFeatureId | FEATURE_EDGE_RIGHT)
+                .andCondition(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT);
 
         textures.useTexture("Wall_DD2_PEdgeHU")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_TOP)
-                .andCondition(featureCrown.getFeatureId() | TOP | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP);
+                .forCondition(plateFeatureId | FEATURE_EDGE_TOP)
+                .andCondition(crownFeatureId | TOP | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_TOP);
 
         textures.useTexture("Wall_DD2_PEdgeHD")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM)
-                .andCondition(featureBase.getFeatureId() | BOTTOM | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM);
+                .forCondition(plateFeatureId | FEATURE_EDGE_BOTTOM)
+                .andCondition(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM);
 
         textures.useTexture("Wall_DD2_PEdgeRDC")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
-                .andCondition(featurePlate.getFeatureId() | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
-                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
-                .andCondition(featurePlate.getFeatureId() | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
-                .andCondition(featurePlate.getFeatureId() | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BR_CORNER)
-                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
+                .forCondition(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
+                .andCondition(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
+                .andCondition(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
+                .andCondition(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
+                .andCondition(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BR_CORNER)
+                .andCondition(plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
 
         textures.useTexture("Wall_DD2_PEdgeRUC")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
-                .andCondition(featurePlate.getFeatureId() | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
-                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
-                .andCondition(featurePlate.getFeatureId() | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
-                .andCondition(featurePlate.getFeatureId() | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TR_CORNER)
-                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
+                .forCondition(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
+                .andCondition(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
+                .andCondition(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
+                .andCondition(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
+                .andCondition(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TR_CORNER)
+                .andCondition(plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
 
         textures.useTexture("Wall_DD2_PEdgeRUCbent")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE)
-                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE | RIGHT);
+                .forCondition(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE)
+                .andCondition(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE | RIGHT);
 
         textures.useTexture("Wall_DD2_PEdgeLUCbent")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE)
-                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE | LEFT);
+                .forCondition(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE)
+                .andCondition(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE | LEFT);
 
         textures.useTexture("Wall_DD2_PEdgeLDC")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
-                .andCondition(featurePlate.getFeatureId() | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
-                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
-                .andCondition(featurePlate.getFeatureId() | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
-                .andCondition(featurePlate.getFeatureId() | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BL_CORNER)
-                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
+                .forCondition(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
+                .andCondition(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
+                .andCondition(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
+                .andCondition(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
+                .andCondition(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BL_CORNER)
+                .andCondition(plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
 
         textures.useTexture("Wall_DD2_PEdgeLUC")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
-                .andCondition(featurePlate.getFeatureId() | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
-                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
-                .andCondition(featurePlate.getFeatureId() | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TL_CORNER)
-                .andCondition(featurePlate.getFeatureId() | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
-                .andCondition(featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER)
-                .andCondition(featurePlate.getFeatureId() | featureCrown.getFeatureId() | TOP | LEFT | RIGHT | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
+                .forCondition(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
+                .andCondition(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
+                .andCondition(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
+                .andCondition(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TL_CORNER)
+                .andCondition(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
+                .andCondition(plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER)
+                .andCondition(plateFeatureId | crownFeatureId | TOP | LEFT | RIGHT | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
 
         textures.useTexture("Wall_DD2_PEdgeInnerRDC_S")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_PLATE_BR_CORNER);
+                .forCondition(plateFeatureId | FEATURE_PLATE_BR_CORNER);
 
         textures.useTexture("Wall_DD2_PEdgeInnerRUC_S")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_PLATE_TR_CORNER);
+                .forCondition(plateFeatureId | FEATURE_PLATE_TR_CORNER);
 
         textures.useTexture("Wall_DD2_PEdgeInnerLDC_S")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_PLATE_BL_CORNER);
+                .forCondition(plateFeatureId | FEATURE_PLATE_BL_CORNER);
 
         textures.useTexture("Wall_DD2_PEdgeInnerLUC_S")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_PLATE_TL_CORNER);
+                .forCondition(plateFeatureId | FEATURE_PLATE_TL_CORNER);
 
         textures.useTexture("Wall_DD2_PEdgeInnerLURDC_S")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_PLATE_TL_CORNER | FEATURE_PLATE_BR_CORNER);
+                .forCondition(plateFeatureId | FEATURE_PLATE_TL_CORNER | FEATURE_PLATE_BR_CORNER);
 
         textures.useTexture("Wall_DD2_PEdgeInnerLDRUC_S")
-                .forCondition(featurePlate.getFeatureId() | FEATURE_PLATE_BL_CORNER | FEATURE_PLATE_TR_CORNER);
+                .forCondition(plateFeatureId | FEATURE_PLATE_BL_CORNER | FEATURE_PLATE_TR_CORNER);
 
         textures.useTexture("Wall_DD3_Vent")
-                .forCondition(featureVent.getFeatureId())
-                .andCondition(featureVent.getFeatureId() | LEFT)
-                .andCondition(featureVent.getFeatureId() | RIGHT)
-                .andCondition(featureVent.getFeatureId() | LEFT | RIGHT)
-                .andCondition(featureVent.getFeatureId() | featurePlate.getFeatureId());
+                .forCondition(ventFeatureId)
+                .andCondition(ventFeatureId | LEFT)
+                .andCondition(ventFeatureId | RIGHT)
+                .andCondition(ventFeatureId | LEFT | RIGHT)
+                .andCondition(ventFeatureId | plateFeatureId);
 
         textures.useTexture("Wall_DD4_Screen")
-                .forCondition(featureScreen.getFeatureId())
-                .andCondition(featureScreen.getFeatureId() | LEFT)
-                .andCondition(featureScreen.getFeatureId() | RIGHT)
-                .andCondition(featureScreen.getFeatureId() | LEFT | RIGHT)
-                .andCondition(featureScreen.getFeatureId() | featurePlate.getFeatureId());
+                .forCondition(screenFeatureId)
+                .andCondition(screenFeatureId | LEFT)
+                .andCondition(screenFeatureId | RIGHT)
+                .andCondition(screenFeatureId | LEFT | RIGHT)
+                .andCondition(screenFeatureId | plateFeatureId);
 
         textures.useTexture("Wall_DD5_Valve")
-                .forCondition(featureValve.getFeatureId())
-                .andCondition(featureValve.getFeatureId() | LEFT)
-                .andCondition(featureValve.getFeatureId() | RIGHT)
-                .andCondition(featureValve.getFeatureId() | LEFT | RIGHT)
-                .andCondition(featureValve.getFeatureId() | featurePlate.getFeatureId());
+                .forCondition(valveFeatureId)
+                .andCondition(valveFeatureId | LEFT)
+                .andCondition(valveFeatureId | RIGHT)
+                .andCondition(valveFeatureId | LEFT | RIGHT)
+                .andCondition(valveFeatureId | plateFeatureId);
+
 
         textures.useTexture("Wall_DDLongPipe_L")
-                .forCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_LEFT)
-                .andCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_LEFT | LEFT)
-                .andCondition(featureHorizontalMetalTear.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_LEFT);
+                .forCondition(horizontalMetalTearFeatureId | FEATURE_EDGE_LEFT)
+                .andCondition(horizontalMetalTearFeatureId | FEATURE_EDGE_LEFT | LEFT)
+                .andCondition(horizontalMetalTearFeatureId | plateFeatureId | FEATURE_EDGE_LEFT);
 
         textures.useTexture("Wall_DDLongPipe_M")
-                .forCondition(featureHorizontalMetalTear.getFeatureId())
-                .andCondition(featureHorizontalMetalTear.getFeatureId() | featurePlate.getFeatureId());
+                .forCondition(horizontalMetalTearFeatureId)
+                .andCondition(horizontalMetalTearFeatureId | plateFeatureId);
 
         textures.useTexture("Wall_DDLongPipe_R")
-                .forCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_RIGHT)
-                .andCondition(featureHorizontalMetalTear.getFeatureId() | FEATURE_EDGE_RIGHT | RIGHT)
-                .andCondition(featureHorizontalMetalTear.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT);
+                .forCondition(horizontalMetalTearFeatureId | FEATURE_EDGE_RIGHT)
+                .andCondition(horizontalMetalTearFeatureId | FEATURE_EDGE_RIGHT | RIGHT)
+                .andCondition(horizontalMetalTearFeatureId | plateFeatureId | FEATURE_EDGE_RIGHT);
 
         textures.useTexture("Wall_DD6_PipeCapL")
-                .forCondition(featureLongPipe.getFeatureId() | FEATURE_EDGE_LEFT)
-                .andCondition(featureLongPipe.getFeatureId() | FEATURE_EDGE_LEFT | LEFT)
-                .andCondition(featureLongPipe.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_LEFT);
+                .forCondition(longPipeFeatureId | FEATURE_EDGE_LEFT)
+                .andCondition(longPipeFeatureId | FEATURE_EDGE_LEFT | LEFT)
+                .andCondition(longPipeFeatureId | plateFeatureId | FEATURE_EDGE_LEFT);
 
         textures.useTexture("Wall_DD6_PipeSec1")
-                .forCondition(featureLongPipe.getFeatureId())
-                .andCondition(featureLongPipe.getFeatureId() | featurePlate.getFeatureId());
+                .forCondition(longPipeFeatureId)
+                .andCondition(longPipeFeatureId | plateFeatureId);
 
         textures.useTexture("Wall_DD6_PipeCapR")
-                .forCondition(featureLongPipe.getFeatureId() | FEATURE_EDGE_RIGHT)
-                .andCondition(featureLongPipe.getFeatureId() | FEATURE_EDGE_RIGHT | RIGHT)
-                .andCondition(featureLongPipe.getFeatureId() | featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT);
+                .forCondition(longPipeFeatureId | FEATURE_EDGE_RIGHT)
+                .andCondition(longPipeFeatureId | FEATURE_EDGE_RIGHT | RIGHT)
+                .andCondition(longPipeFeatureId | plateFeatureId | FEATURE_EDGE_RIGHT);
 
         textures.useTexture("Wall_CrownM_EdgeL")
-                .forCondition(featureCrown.getFeatureId() | TOP | LEFT)
-                .andCondition(featureCrown.getFeatureId() | TOP | LEFT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP)
-                .andCondition(featureCrown.getFeatureId() | TOP | LEFT | featurePlate.getFeatureId());
+                .forCondition(crownFeatureId | TOP | LEFT)
+                .andCondition(crownFeatureId | TOP | LEFT | plateFeatureId | FEATURE_EDGE_TOP)
+                .andCondition(crownFeatureId | TOP | LEFT | plateFeatureId);
 
         textures.useTexture("Wall_CrownM_EdgeR")
-                .forCondition(featureCrown.getFeatureId() | TOP | RIGHT)
-                .andCondition(featureCrown.getFeatureId() | TOP | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP)
-                .andCondition(featureCrown.getFeatureId() | TOP | RIGHT | featurePlate.getFeatureId());
+                .forCondition(crownFeatureId | TOP | RIGHT)
+                .andCondition(crownFeatureId | TOP | RIGHT | plateFeatureId | FEATURE_EDGE_TOP)
+                .andCondition(crownFeatureId | TOP | RIGHT | plateFeatureId);
 
         textures.useTexture("Wall_CrownM_AllEdge")
-                .forCondition(featureCrown.getFeatureId() | TOP | LEFT | RIGHT);
+                .forCondition(crownFeatureId | TOP | LEFT | RIGHT);
 
         textures.useTexture("Wall_CrownM_Center")
-                .forCondition(featureCrown.getFeatureId() | TOP)
-                .andCondition(featureCrown.getFeatureId() | TOP | featurePlate.getFeatureId() | FEATURE_EDGE_TOP);
+                .forCondition(crownFeatureId | TOP)
+                .andCondition(crownFeatureId | TOP | plateFeatureId | FEATURE_EDGE_TOP);
 
         textures.useTexture("Wall_CrownM_DDPanelCL")
-                .forCondition(featureCrown.getFeatureId() | TOP | featurePlate.getFeatureId() | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP);
+                .forCondition(crownFeatureId | TOP | plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP);
 
         textures.useTexture("Wall_CrownM_DDPanelCR")
-                .forCondition(featureCrown.getFeatureId() | TOP | featurePlate.getFeatureId() | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP);
+                .forCondition(crownFeatureId | TOP | plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP);
 
         textures.useTexture("Wall_BaseM_EdgeL")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | LEFT)
-                .andCondition(featureBase.getFeatureId() | BOTTOM | LEFT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM);
+                .forCondition(baseFeatureId | BOTTOM | LEFT)
+                .andCondition(baseFeatureId | BOTTOM | LEFT | plateFeatureId | FEATURE_EDGE_BOTTOM);
 
         textures.useTexture("Wall_BaseM_EdgeR")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | RIGHT)
-                .andCondition(featureBase.getFeatureId() | BOTTOM | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM);
+                .forCondition(baseFeatureId | BOTTOM | RIGHT)
+                .andCondition(baseFeatureId | BOTTOM | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM);
 
         textures.useTexture("Wall_BaseM_AllEdge")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | LEFT | RIGHT);
+                .forCondition(baseFeatureId | BOTTOM | LEFT | RIGHT);
 
         textures.useTexture("Wall_BaseM_Center")
-                .forCondition(featureBase.getFeatureId() | BOTTOM)
-                .andCondition(featureBase.getFeatureId() | BOTTOM | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM);
+                .forCondition(baseFeatureId | BOTTOM)
+                .andCondition(baseFeatureId | BOTTOM | plateFeatureId | FEATURE_EDGE_BOTTOM);
 
         textures.useTexture("Wall_BaseM_DDPanelCL")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
+                .forCondition(baseFeatureId | BOTTOM | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
 
         textures.useTexture("Wall_BaseM_DDPanelCR")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
+                .forCondition(baseFeatureId | BOTTOM | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
 
         textures.useTexture("Wall_CrownM_EdgeL_DDPanelCL_S")
-                .forCondition(featureCrown.getFeatureId() | TOP | LEFT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
-                .andCondition(featureCrown.getFeatureId() | TOP | LEFT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
+                .forCondition(crownFeatureId | TOP | LEFT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
+                .andCondition(crownFeatureId | TOP | LEFT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
 
         textures.useTexture("Wall_CrownM_EdgeL_DDPanelCR_S")
-                .forCondition(featureCrown.getFeatureId() | TOP | LEFT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT);
+                .forCondition(crownFeatureId | TOP | LEFT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT);
 
         textures.useTexture("Wall_CrownM_EdgeR_DDPanelCR_S")
-                .forCondition(featureCrown.getFeatureId() | TOP | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
-                .andCondition(featureCrown.getFeatureId() | TOP | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
+                .forCondition(crownFeatureId | TOP | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
+                .andCondition(crownFeatureId | TOP | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
 
         textures.useTexture("Wall_CrownM_EdgeR_DDPanelCL_S")
-                .forCondition(featureCrown.getFeatureId() | TOP | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT);
+                .forCondition(crownFeatureId | TOP | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT);
 
         textures.useTexture("Wall_CrownM_AllEdge_DDPanelCR_S")
-                .forCondition(featureCrown.getFeatureId() | TOP | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
-                .andCondition(featureCrown.getFeatureId() | TOP | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
+                .forCondition(crownFeatureId | TOP | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
+                .andCondition(crownFeatureId | TOP | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
 
         textures.useTexture("Wall_CrownM_AllEdge_DDPanelCL_S")
-                .forCondition(featureCrown.getFeatureId() | TOP | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
-                .andCondition(featureCrown.getFeatureId() | TOP | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
+                .forCondition(crownFeatureId | TOP | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
+                .andCondition(crownFeatureId | TOP | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
 
         textures.useTexture("Wall_BaseM_EdgeL_DDPanelCL_S")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | LEFT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
-                .andCondition(featureBase.getFeatureId() | BOTTOM | LEFT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
+                .forCondition(baseFeatureId | BOTTOM | LEFT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
+                .andCondition(baseFeatureId | BOTTOM | LEFT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
 
         textures.useTexture("Wall_BaseM_EdgeL_DDPanelCR_S")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | LEFT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
+                .forCondition(baseFeatureId | BOTTOM | LEFT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
 
         textures.useTexture("Wall_BaseM_EdgeR_DDPanelCL_S")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
+                .forCondition(baseFeatureId | BOTTOM | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
 
         textures.useTexture("Wall_BaseM_EdgeR_DDPanelCR_S")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
-                .andCondition(featureBase.getFeatureId() | BOTTOM | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
+                .forCondition(baseFeatureId | BOTTOM | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
+                .andCondition(baseFeatureId | BOTTOM | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
 
         textures.useTexture("Wall_BaseM_AllEdge_DDPanelCR_S")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
+                .forCondition(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
                         //.andCondition(featureBase.getFeatureId() | BOTTOM | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_BR_CORNER
-                .andCondition(featureBase.getFeatureId() | BOTTOM | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
+                .andCondition(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
 
         textures.useTexture("Wall_BaseM_AllEdge_DDPanelCL_S")
-                .forCondition(featureBase.getFeatureId() | BOTTOM | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
+                .forCondition(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
                         //.andCondition(featureBase.getFeatureId() | BOTTOM | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_BL_CORNER
-                .andCondition(featureBase.getFeatureId() | BOTTOM | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
+                .andCondition(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
     }
 
     @Override
