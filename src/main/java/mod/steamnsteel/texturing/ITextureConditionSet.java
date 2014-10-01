@@ -1,6 +1,6 @@
 package mod.steamnsteel.texturing;
 
-interface ITextureConditionSet
+public interface ITextureConditionSet
 {
     ITextureConditionOrNewSet useTexture(String textureName);
 }

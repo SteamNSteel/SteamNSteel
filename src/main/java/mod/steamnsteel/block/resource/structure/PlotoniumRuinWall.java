@@ -18,7 +18,7 @@ package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.texturing.ProceduralConnectedTexture;
-import mod.steamnsteel.texturing.RuinWallTexture;
+import mod.steamnsteel.texturing.wall.RuinWallTexture;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
