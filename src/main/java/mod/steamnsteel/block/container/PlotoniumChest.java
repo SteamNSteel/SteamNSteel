@@ -21,6 +21,7 @@ import mod.steamnsteel.tileentity.PlotoniumChestTE;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
@@ -62,5 +63,11 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
     public TileEntity createNewTileEntity(World world, int metadata)
     {
         return new PlotoniumChestTE();
+    }
+
+    @Override
+    public void registerBlockIcons(IIconRegister iconRegister)
+    {
+        blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
     }
 }

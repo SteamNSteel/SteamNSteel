@@ -27,9 +27,11 @@ import mod.steamnsteel.utility.Orientation;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import java.util.Random;
@@ -37,6 +39,10 @@ import java.util.Random;
 public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
     public static final String NAME = "cupola";
+
+    private static final int flagSlave = 1<<2;
+    private IIcon iconMaster = null;
+    private IIcon iconSlave = null;
 
     public CupolaBlock()
     {
@@ -177,7 +183,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         super.onPostBlockPlaced(world, x, y, z, metadata);
 
         final int fillerY = y + 1;
-        world.setBlock(x, fillerY, z, ModBlock.cupola, 0, 2);
+        world.setBlock(x, fillerY, z, ModBlock.cupola, flagSlave, 2);
 
         final TileEntity te = world.getTileEntity(x, fillerY, z);
         ((CupolaTE) te).setSlave();
@@ -214,4 +220,22 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 
         return super.removedByPlayer(world, player, x, y, z, willHarvest);
     }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister iconRegister)
+    {
+        final String objName = getUnwrappedUnlocalizedName(getUnlocalizedName());
+
+        iconMaster = iconRegister.registerIcon(objName + "/tSide");
+        iconSlave = iconRegister.registerIcon(objName + "/bSide");
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side, int meta)
+    {
+        return (meta & flagSlave) == 0 ? iconSlave : iconMaster;
+    }
 }
+
