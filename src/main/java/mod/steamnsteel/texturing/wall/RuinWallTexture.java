@@ -27,6 +27,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     private TopBandWallFeature featureCrown;
     private BottomBandWallFeature featureBase;
     private LongPipeRuinWallFeature featureLongPipe;
+    private VerticalMetalTearRuinWallFeature featureVerticalMetalTear;
 
     @Override
     protected void registerFeatures(IFeatureRegistry features)
@@ -44,6 +45,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         featureValve = new OneByOneWallFeature(this, "Valve", LAYER_DOODADS);
         featureScreen = new OneByOneWallFeature(this, "Screen", LAYER_DOODADS);
         featureHorizontalMetalTear = new HorizontalMetalTearRuinWallFeature(this, "HorizontalMetalTear", LAYER_DOODADS);
+        featureVerticalMetalTear = new VerticalMetalTearRuinWallFeature(this, "VerticalMetalTear", LAYER_DOODADS);
         featureLongPipe = new LongPipeRuinWallFeature(this, "LongPipe", LAYER_DOODADS);
 
         features.registerFeature(featurePlate);
@@ -54,6 +56,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         features.registerFeature(featureValve);
         features.registerFeature(featureScreen);
         features.registerFeature(featureHorizontalMetalTear);
+        features.registerFeature(featureVerticalMetalTear);
         features.registerFeature(featureLongPipe);
 
         FEATURE_PLATE_TL_CORNER = features.registerFeatureProperty("Plate_TLC");
@@ -75,6 +78,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         final long valveFeatureId = featureValve.getFeatureId();
         final long baseFeatureId = featureBase.getFeatureId();
         final long horizontalMetalTearFeatureId = featureHorizontalMetalTear.getFeatureId();
+        final long verticalMetalTearFeatureId = featureVerticalMetalTear.getFeatureId();
         final long longPipeFeatureId = featureLongPipe.getFeatureId();
 
         textures.useTexture("ruinWallPlotonium")
@@ -215,6 +219,31 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .forCondition(horizontalMetalTearFeatureId | FEATURE_EDGE_RIGHT)
                 .andCondition(horizontalMetalTearFeatureId | FEATURE_EDGE_RIGHT | RIGHT)
                 .andCondition(horizontalMetalTearFeatureId | plateFeatureId | FEATURE_EDGE_RIGHT);
+
+        textures.useTexture("Wall_DDLongPipe_U")
+                .forCondition(verticalMetalTearFeatureId | FEATURE_EDGE_TOP)
+                .andCondition(verticalMetalTearFeatureId | FEATURE_EDGE_TOP | TOP)
+                .andCondition(verticalMetalTearFeatureId | FEATURE_EDGE_TOP | LEFT)
+                .andCondition(verticalMetalTearFeatureId | FEATURE_EDGE_TOP | RIGHT)
+                .andCondition(verticalMetalTearFeatureId | FEATURE_EDGE_TOP | LEFT | RIGHT)
+                .andCondition(verticalMetalTearFeatureId | plateFeatureId | FEATURE_EDGE_TOP);
+
+        textures.useTexture("Wall_DDLongPipe_M2")
+                .forCondition(verticalMetalTearFeatureId)
+                .andCondition(verticalMetalTearFeatureId | LEFT)
+                .andCondition(verticalMetalTearFeatureId | RIGHT)
+                .andCondition(verticalMetalTearFeatureId | LEFT | RIGHT)
+                .andCondition(verticalMetalTearFeatureId | plateFeatureId);
+
+        textures.useTexture("Wall_DDLongPipe_D")
+                .forCondition(verticalMetalTearFeatureId | FEATURE_EDGE_BOTTOM)
+                .andCondition(verticalMetalTearFeatureId | FEATURE_EDGE_BOTTOM | BOTTOM)
+                .andCondition(verticalMetalTearFeatureId | FEATURE_EDGE_BOTTOM | LEFT)
+                .andCondition(verticalMetalTearFeatureId | FEATURE_EDGE_BOTTOM | RIGHT)
+                .andCondition(verticalMetalTearFeatureId | FEATURE_EDGE_BOTTOM | LEFT | RIGHT)
+
+
+                .andCondition(verticalMetalTearFeatureId | plateFeatureId | FEATURE_EDGE_BOTTOM);
 
         textures.useTexture("Wall_DD6_PipeCapL")
                 .forCondition(longPipeFeatureId | FEATURE_EDGE_LEFT)

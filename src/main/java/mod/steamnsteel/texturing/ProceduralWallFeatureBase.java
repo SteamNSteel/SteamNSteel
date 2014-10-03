@@ -62,10 +62,10 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
         Iterable<FeatureInstance> featureResults;
 
         featureResults = Iterables.concat(
-                getCachedFeatures(chunkCoord),
-                Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX() - 1, chunkCoord.getZ())), new FeatureTransformerFunction(-1, 0)),
-                Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX(), chunkCoord.getZ() - 1)), new FeatureTransformerFunction(0, -1)),
-                Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX() - 1, chunkCoord.getZ() - 1)), new FeatureTransformerFunction(-1, -1))
+                getCachedFeatures(chunkCoord)
+                //Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX() - 1, chunkCoord.getZ())), new FeatureTransformerFunction(-1, 0)),
+                //Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX(), chunkCoord.getZ() - 1)), new FeatureTransformerFunction(0, -1)),
+                //Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX() - 1, chunkCoord.getZ() - 1)), new FeatureTransformerFunction(-1, -1))
         );
 
         return featureResults;

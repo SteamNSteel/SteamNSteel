@@ -84,7 +84,7 @@ public abstract class ProceduralConnectedTexture
     {
         long blockProperties = 0;
         ForgeDirection orientation = context.getOrientation();
-        if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN)
+        if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN || isBlockPartOfWallAndUnobstructed(context, TextureDirection.BACKWARDS))
         {
             return DEFAULT;
         }

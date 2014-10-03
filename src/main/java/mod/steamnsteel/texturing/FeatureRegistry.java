@@ -81,12 +81,10 @@ public class FeatureRegistry implements IFeatureRegistry
             for (FeatureInstance feature : getFeaturesIn(chunkCoord, layer))
             {
                 final WorldBlockCoord featureBlockCoord = feature.getBlockCoord();
-                final int featureX = (featureBlockCoord.getX() + offsetAmount);//& 15;
-                //final int featureX = (featureBlockCoord.getX());
+                final int featureX = (featureBlockCoord.getX() + offsetAmount) & 15;
                 if (x >= featureX && x < featureX + feature.getWidth())
                 {
-                    final int featureZ = (featureBlockCoord.getZ() + offsetAmount);// & 15;
-                    //final int featureZ = (featureBlockCoord.getZ());
+                    final int featureZ = (featureBlockCoord.getZ() + offsetAmount) & 15;
                     if (z >= featureZ && z < featureZ + feature.getDepth())
                     {
                         if (y >= featureBlockCoord.getY() && y < featureBlockCoord.getY() + feature.getHeight())
@@ -168,12 +166,16 @@ public class FeatureRegistry implements IFeatureRegistry
 
         //long featureBits = currentProperties;
 
+        long incompatibleBits = 0;
+
         for (Map.Entry<IProceduralWallFeature, Long> featureBit : featureList.entrySet())
         {
             currentProperties |= featureBit.getKey().getFeatureId();
             currentProperties |= featureBit.getValue();
-            currentProperties &= ~featureBit.getKey().getIncompatibleProperties();
+            incompatibleBits |= featureBit.getKey().getIncompatibleProperties();
         }
+
+        currentProperties &= ~incompatibleBits;
 
         return currentProperties;
     }
