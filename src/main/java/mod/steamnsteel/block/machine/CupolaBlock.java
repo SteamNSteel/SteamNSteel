@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.block.machine;
 
+import com.google.common.base.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
@@ -41,12 +42,26 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     public static final String NAME = "cupola";
 
     private static final int flagSlave = 1<<2;
-    private IIcon iconMaster = null;
-    private IIcon iconSlave = null;
+    private Optional<IIcon> iconMaster = Optional.absent();
+    private Optional<IIcon> iconSlave = Optional.absent();
 
     public CupolaBlock()
     {
         setBlockName(NAME);
+    }
+
+    @Override
+    public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z)
+    {
+        final int meta = block.getBlockMetadata(x,y,z);
+
+        if ((meta & flagSlave) == 0) {
+            maxY = 2;   //is Master
+            minY = 0;
+        } else {
+            maxY = 1;   //is Slave
+            minY = -1;
+        }
     }
 
     private static void renderSmokeOnTop(World world, int x, int y, int z, Random rng)
@@ -227,15 +242,15 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     {
         final String objName = getUnwrappedUnlocalizedName(getUnlocalizedName());
 
-        iconMaster = iconRegister.registerIcon(objName + "/tSide");
-        iconSlave = iconRegister.registerIcon(objName + "/bSide");
+        if (!iconMaster.isPresent()) iconMaster = Optional.of(iconRegister.registerIcon(objName + "/bSide"));
+        if (!iconSlave.isPresent()) iconSlave = Optional.of(iconRegister.registerIcon(objName + "/tSide"));
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta)
     {
-        return (meta & flagSlave) == 0 ? iconSlave : iconMaster;
+        return (meta & flagSlave) == 0 ? iconMaster.get() : iconSlave.get();
     }
 }
 

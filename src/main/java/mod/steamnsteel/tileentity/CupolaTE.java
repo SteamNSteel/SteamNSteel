@@ -32,11 +32,14 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
 @SuppressWarnings("ClassWithTooManyMethods")
 public class CupolaTE extends SteamNSteelTE implements ISidedInventory
 {
+    private Optional<AxisAlignedBB> renderBounds = Optional.absent();
+
     public static final int INPUT_LEFT = 0;
     public static final int INPUT_RIGHT = 1;
     public static final int INPUT_FUEL = 2;
@@ -455,6 +458,19 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox() {
+        if (!isSlave){
+            if (!renderBounds.isPresent())
+                renderBounds = Optional.of(AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord, zCoord - 1, xCoord + 1, yCoord + 2, zCoord + 1));
+
+            return renderBounds.get();
+        }
+
+        return super.getRenderBoundingBox();
+    }
+
+    @Override
     public String toString()
     {
         return Objects.toStringHelper(this)
@@ -465,6 +481,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
                 .add("itemCookTime", itemCookTime)
                 .add("isActive", isActive)
                 .add("isSlave", isSlave)
+                .add("renderBounds", renderBounds)
                 .toString();
     }
 }
