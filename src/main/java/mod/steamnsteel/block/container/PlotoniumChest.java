@@ -31,7 +31,10 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
 {
     public static final String NAME = "chestPlotonium";
 
-    public PlotoniumChest() { setBlockName(NAME); }
+    public PlotoniumChest() {
+        setBlockName(NAME);
+        setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+    }
 
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
