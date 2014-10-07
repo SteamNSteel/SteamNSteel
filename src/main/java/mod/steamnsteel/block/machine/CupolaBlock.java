@@ -41,27 +41,13 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 {
     public static final String NAME = "cupola";
 
-    private static final int flagSlave = 1<<2;
+    private static final int flagSlave = 1 << 2;
     private Optional<IIcon> iconMaster = Optional.absent();
     private Optional<IIcon> iconSlave = Optional.absent();
 
     public CupolaBlock()
     {
         setBlockName(NAME);
-    }
-
-    @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z)
-    {
-        final int meta = block.getBlockMetadata(x,y,z);
-
-        if ((meta & flagSlave) == 0) {
-            maxY = 2;   //is Master
-            minY = 0;
-        } else {
-            maxY = 1;   //is Slave
-            minY = -1;
-        }
     }
 
     private static void renderSmokeOnTop(World world, int x, int y, int z, Random rng)
@@ -79,6 +65,23 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     public TileEntity createNewTileEntity(World world, int metadata)
     {
         return new CupolaTE();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister iconRegister)
+    {
+        final String objName = getUnwrappedUnlocalizedName(getUnlocalizedName());
+
+        if (!iconMaster.isPresent()) iconMaster = Optional.of(iconRegister.registerIcon(objName + "/bSide"));
+        if (!iconSlave.isPresent()) iconSlave = Optional.of(iconRegister.registerIcon(objName + "/tSide"));
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side, int meta)
+    {
+        return (meta & flagSlave) == 0 ? iconMaster.get() : iconSlave.get();
     }
 
     @SideOnly(Side.CLIENT)
@@ -185,11 +188,26 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     {
         int y1 = y;
         final TileEntity te = world.getTileEntity(x, y1, z);
-        if (((CupolaTE) te).isSlave())
-            y1--;
+        if (((CupolaTE) te).isSlave()) y1--;
 
         player.openGui(TheMod.instance, ModGuis.CUPOLA.getID(), world, x, y1, z);
         return true;
+    }
+
+    @Override
+    public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z)
+    {
+        final int meta = block.getBlockMetadata(x, y, z);
+
+        if ((meta & flagSlave) == 0)
+        {
+            maxY = 2;   //is Master
+            minY = 0;
+        } else
+        {
+            maxY = 1;   //is Slave
+            minY = -1;
+        }
     }
 
     @Override
@@ -214,8 +232,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
             te = world.getTileEntity(x, y - 1, z);
         }
 
-        if (te != null && ((CupolaTE) te).isActive())
-            return 15;
+        if (te != null && ((CupolaTE) te).isActive()) return 15;
 
         return super.getLightValue(world, x, y, z);
     }
@@ -234,23 +251,6 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         }
 
         return super.removedByPlayer(world, player, x, y, z, willHarvest);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        final String objName = getUnwrappedUnlocalizedName(getUnlocalizedName());
-
-        if (!iconMaster.isPresent()) iconMaster = Optional.of(iconRegister.registerIcon(objName + "/bSide"));
-        if (!iconSlave.isPresent()) iconSlave = Optional.of(iconRegister.registerIcon(objName + "/tSide"));
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta)
-    {
-        return (meta & flagSlave) == 0 ? iconMaster.get() : iconSlave.get();
     }
 }
 
