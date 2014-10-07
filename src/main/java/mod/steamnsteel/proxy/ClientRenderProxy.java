@@ -19,11 +19,14 @@ package mod.steamnsteel.proxy;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import mod.steamnsteel.client.renderer.item.CupolaItemRenderer;
+import mod.steamnsteel.client.renderer.item.PipeItemRenderer;
 import mod.steamnsteel.client.renderer.item.PlotoniumChestItemRenderer;
 import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
+import mod.steamnsteel.client.renderer.tileentity.PipeTESR;
 import mod.steamnsteel.client.renderer.tileentity.PlotoniumChestTESR;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
+import mod.steamnsteel.tileentity.PipeTE;
 import mod.steamnsteel.tileentity.PlotoniumChestTE;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -47,12 +50,14 @@ public class ClientRenderProxy extends RenderProxy
     private void registerItemRenderers()
     {
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.cupola), new CupolaItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipe), new PipeItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.chestPlotonium), new PlotoniumChestItemRenderer());
     }
 
     private void registerTESRs()
     {
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupbolaTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PlotoniumChestTE.class, new PlotoniumChestTESR());
     }
 }
