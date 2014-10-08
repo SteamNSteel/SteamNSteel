@@ -65,10 +65,9 @@ public class PipeItemRenderer implements IItemRenderer
         GL11.glPushMatrix();
         GL11.glScalef(SCALE.left, SCALE.middle, SCALE.right);
         GL11.glTranslatef(offset.left, offset.middle, offset.right);
-
         FMLClientHandler.instance().getClient().renderEngine.bindTexture(PipeTESR.TEXTURE);
 
-        model.render();
+        model.renderPipe2xC();
 
         GL11.glPopMatrix();
     }

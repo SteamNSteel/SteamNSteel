@@ -18,6 +18,7 @@ package mod.steamnsteel.proxy;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import mod.steamnsteel.block.machine.PipeBlock;
 import mod.steamnsteel.client.renderer.item.CupolaItemRenderer;
 import mod.steamnsteel.client.renderer.item.PipeItemRenderer;
 import mod.steamnsteel.client.renderer.item.PlotoniumChestItemRenderer;
@@ -56,6 +57,8 @@ public class ClientRenderProxy extends RenderProxy
 
     private void registerTESRs()
     {
+        PipeBlock.RenderId = RenderingRegistry.getNextAvailableRenderId();
+
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupbolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PlotoniumChestTE.class, new PlotoniumChestTESR());
