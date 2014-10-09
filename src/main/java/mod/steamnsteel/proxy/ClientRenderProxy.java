@@ -19,14 +19,18 @@ package mod.steamnsteel.proxy;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import mod.steamnsteel.block.machine.PipeBlock;
+import mod.steamnsteel.block.machine.PipeJunctionBlock;
 import mod.steamnsteel.client.renderer.item.CupolaItemRenderer;
 import mod.steamnsteel.client.renderer.item.PipeItemRenderer;
+import mod.steamnsteel.client.renderer.item.PipeJunctionItemRenderer;
 import mod.steamnsteel.client.renderer.item.PlotoniumChestItemRenderer;
 import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
+import mod.steamnsteel.client.renderer.tileentity.PipeJunctionTESR;
 import mod.steamnsteel.client.renderer.tileentity.PipeTESR;
 import mod.steamnsteel.client.renderer.tileentity.PlotoniumChestTESR;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
+import mod.steamnsteel.tileentity.PipeJunctionTE;
 import mod.steamnsteel.tileentity.PipeTE;
 import mod.steamnsteel.tileentity.PlotoniumChestTE;
 import net.minecraft.item.Item;
@@ -52,15 +56,18 @@ public class ClientRenderProxy extends RenderProxy
     {
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.cupola), new CupolaItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipe), new PipeItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeJunction), new PipeJunctionItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.chestPlotonium), new PlotoniumChestItemRenderer());
     }
 
     private void registerTESRs()
     {
         PipeBlock.RenderId = RenderingRegistry.getNextAvailableRenderId();
+        PipeJunctionBlock.RenderId = RenderingRegistry.getNextAvailableRenderId();
 
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupbolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(PipeJunctionTE.class, new PipeJunctionTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PlotoniumChestTE.class, new PlotoniumChestTESR());
     }
 }

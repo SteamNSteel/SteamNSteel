@@ -56,51 +56,107 @@ public class PipeTESR extends SteamNSteelTESR
 
         // Inherent adjustments to model
 
+        final ForgeDirection endA = te.getEndA();
+        final ForgeDirection endB = te.getEndB();
 
         // Orient the model to match the placement
-        final ForgeDirection orientation = te.getRenderOrientation();
+        int renderType = te.getRenderType();
+        if (renderType != 3)
+        {
+            GL11.glTranslatef(0f, 0.5f, 0f);
+            GL11.glTranslatef(OFFSET.getLeft(), OFFSET.getMiddle(), OFFSET.getRight());
 
-        GL11.glTranslatef(OFFSET.getLeft(), OFFSET.getMiddle(), OFFSET.getRight());
-        switch (orientation) {
-            case EAST:
-                GL11.glRotatef(90, 0.0f, 0.0f, 1.0f);
-                GL11.glRotatef(180, 1.0F, 0.0F, 0.0F);
-                break;
-            case WEST:
-                GL11.glRotatef(-90, 0.0f, 0.0f, 1.0f);
-                GL11.glRotatef(-180, 1.0F, 0.0F, 0.0F);
-                break;
-            case NORTH:
-                GL11.glRotatef(90, 0.0f, 0.0f, 1.0f);
-                GL11.glRotatef(-90, 1.0F, 0.0F, 0.0F);
-                break;
-            case SOUTH:
-                GL11.glRotatef(-90, 0.0f, 0.0f, 1.0f);
-                GL11.glRotatef(90, 1.0F, 0.0F, 0.0F);
-                break;
+            switch (endA)
+            {
+                case EAST:
+                    GL11.glRotatef(90, 0.0f, 0.0f, 1.0f);
+                    GL11.glRotatef(180, 1.0F, 0.0F, 0.0F);
+                    break;
+                case WEST:
+                    GL11.glRotatef(-90, 0.0f, 0.0f, 1.0f);
+                    GL11.glRotatef(-180, 1.0F, 0.0F, 0.0F);
+                    break;
+                case NORTH:
+                    GL11.glRotatef(90, 0.0f, 0.0f, 1.0f);
+                    GL11.glRotatef(-90, 1.0F, 0.0F, 0.0F);
+                    break;
+                case SOUTH:
+                    GL11.glRotatef(-90, 0.0f, 0.0f, 1.0f);
+                    GL11.glRotatef(90, 1.0F, 0.0F, 0.0F);
+                    break;
+            }
+            GL11.glTranslatef(0f, -0.5f, 0f);
+        } else {
+            GL11.glTranslatef(0f, 0.5f, 0f);
+            GL11.glTranslatef(OFFSET.getLeft(), OFFSET.getMiddle(), OFFSET.getRight());
+            if (endA == ForgeDirection.NORTH || endA == ForgeDirection.DOWN || endA == ForgeDirection.WEST) {
+                GL11.glRotatef(180, endB.offsetX, endB.offsetY, endB.offsetZ);
+            }
+
+            if (endA == ForgeDirection.UP || endA == ForgeDirection.DOWN)
+            {
+                switch (endB)
+                {
+                    case NORTH:
+                        GL11.glRotatef(180, 0f, 1f, 0f);
+                        break;
+                    case SOUTH:
+                        GL11.glRotatef(0, 0f, 1f, 0f);
+                        //NoOp
+                        break;
+                    case EAST:
+                        GL11.glRotatef(90, 0f, 1f, 0f);
+                        break;
+                    case WEST:
+                        GL11.glRotatef(270, 0f, 1f, 0f);
+                        break;
+                }
+            } else if (endA == ForgeDirection.EAST || endA == ForgeDirection.WEST) {
+                switch (endB) {
+                    case UP:
+                        GL11.glRotatef(0, 0f, 0f, 0f);
+                        break;
+                    case DOWN:
+                        GL11.glRotatef(180, 1f, 0f, 0f);
+                        break;
+                    case NORTH:
+                        GL11.glRotatef(90, 1f, 0f, 0f);
+                        break;
+                    case SOUTH:
+                        GL11.glRotatef(270, 1f, 0f, 0f);
+                }
+            } else if (endA == ForgeDirection.SOUTH || endA == ForgeDirection.NORTH) {
+                switch (endB) {
+                    case UP:
+                        GL11.glRotatef(0, 0f, 0f, 0f);
+                        break;
+                    case DOWN:
+                        GL11.glRotatef(180, 0f, 0f, 1f);
+                        break;
+                    case EAST:
+                        GL11.glRotatef(270, 0f, 0f, 1f);
+                        break;
+                    case WEST:
+                        GL11.glRotatef(90, 0f, 0f, 1f);
+                }
+            }
+            GL11.glTranslatef(0f, -0.5f, 0f);
+
+
         }
-        GL11.glTranslatef(0f, -0.5f, 0f);
-
-        switch (te.getRenderState()) {
+        bindTexture(TEXTURE);
+        switch (te.getRenderType()) {
             case 0:
-                bindTexture(TEXTURE);
                 model.renderPipe2xC();
                 break;
             case 1:
-                bindTexture(TEXTURE);
                 model.renderPipe1xC();
                 break;
             case 2:
-                bindTexture(TEXTURE);
                 model.renderPipe0C();
                 break;
             case 3:
-                bindTexture(TEXTURE);
                 model.renderPipe1xCrnr();
-                break;
-            case 4:
-                bindTexture(TEXTURE_JUNCTION_BOX);
-                model.renderJunctionBox();
                 break;
         }
 
