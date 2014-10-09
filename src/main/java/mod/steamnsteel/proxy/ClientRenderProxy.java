@@ -20,7 +20,7 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import mod.steamnsteel.client.renderer.item.CupolaItemRenderer;
 import mod.steamnsteel.client.renderer.item.PlotoniumChestItemRenderer;
-import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
+import mod.steamnsteel.client.renderer.tileentity.CupolaTESR;
 import mod.steamnsteel.client.renderer.tileentity.PlotoniumChestTESR;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
@@ -52,7 +52,7 @@ public class ClientRenderProxy extends RenderProxy
 
     private void registerTESRs()
     {
-        ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupbolaTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PlotoniumChestTE.class, new PlotoniumChestTESR());
     }
 }
