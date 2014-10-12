@@ -84,6 +84,9 @@ public class PipeTESR extends SteamNSteelTESR
                     GL11.glRotatef(-90, 0.0f, 0.0f, 1.0f);
                     GL11.glRotatef(90, 1.0F, 0.0F, 0.0F);
                     break;
+                case DOWN:
+                    GL11.glRotatef(180, 0.0f, 0.0f, 1.0f);
+                    break;
             }
             GL11.glTranslatef(0f, -0.5f, 0f);
         } else {
