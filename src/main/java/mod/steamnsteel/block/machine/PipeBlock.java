@@ -23,6 +23,9 @@ import mod.steamnsteel.tileentity.SteamNSteelTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -67,5 +70,26 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
     {
         SteamNSteelTE entity = (SteamNSteelTE)world.getTileEntity(x, y, z);
         entity.updateEntity();
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float u, float v, float w)
+    {
+        try {
+            if (player != null) {
+                ItemStack itemInUse = player.inventory.mainInventory[player.inventory.currentItem];
+                if (itemInUse != null && itemInUse.getItem() == Items.bone)
+                {
+                    PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
+                    entity.rotatePipe();
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (Exception e) {
+
+        }
+        return false;
     }
 }

@@ -56,8 +56,10 @@ public class PipeTESR extends SteamNSteelTESR
 
         // Inherent adjustments to model
 
-        final ForgeDirection endA = te.getEndA();
-        final ForgeDirection endB = te.getEndB();
+        ForgeDirection endA = te.getEndA();
+        if (endA == null) endA = ForgeDirection.EAST;
+
+        ForgeDirection endB = te.getEndB();
 
         // Orient the model to match the placement
         int renderType = te.getRenderType();
