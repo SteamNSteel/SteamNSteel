@@ -55,7 +55,6 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
     @Override
     public int getRenderType()
     {
-        //return super.getRenderType();
         return RenderId;
     }
 
@@ -68,28 +67,23 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block newBlockType)
     {
-        SteamNSteelTE entity = (SteamNSteelTE)world.getTileEntity(x, y, z);
+        PipeTE entity = (PipeTE)world.getTileEntity(x, y, z);
         entity.updateEntity();
     }
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float u, float v, float w)
     {
-        try {
-            if (player != null) {
-                ItemStack itemInUse = player.inventory.mainInventory[player.inventory.currentItem];
-                if (itemInUse != null && itemInUse.getItem() == Items.bone)
-                {
-                    PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
-                    entity.rotatePipe();
-                    return true;
-                }
+        if (player != null) {
+            ItemStack itemInUse = player.inventory.mainInventory[player.inventory.currentItem];
+            if (itemInUse != null && itemInUse.getItem() == Items.bone)
+            {
+                PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
+                entity.rotatePipe();
+                return true;
             }
-
-            return false;
-        } catch (Exception e) {
-
         }
+
         return false;
     }
 }

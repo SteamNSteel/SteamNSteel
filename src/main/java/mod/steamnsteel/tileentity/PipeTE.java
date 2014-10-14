@@ -4,7 +4,12 @@ import mod.steamnsteel.block.machine.PipeBlock;
 import mod.steamnsteel.block.machine.PipeJunctionBlock;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.util.ArrayList;
@@ -12,6 +17,9 @@ import java.util.List;
 
 public class PipeTE extends SteamNSteelTE
 {
+    private static final String NBT_END_A = "endA";
+    private static final String NBT_END_B = "endB";
+
     private int renderType;
 
     public ForgeDirection getEndA()
@@ -60,7 +68,6 @@ public class PipeTE extends SteamNSteelTE
         boolean currentEndsAreValid = false;
         ForgeDirection firstValidEndA = null;
         ForgeDirection firstValidEndB = null;
-
 
         for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i) {
             final ForgeDirection endADirection = ForgeDirection.VALID_DIRECTIONS[i];
@@ -125,6 +132,47 @@ public class PipeTE extends SteamNSteelTE
             ends = 3;
         }
         renderType = ends;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+
+        endA = nbt.hasKey(NBT_END_A) ? ForgeDirection.getOrientation(nbt.getByte(NBT_END_A)) : null;
+        endB = nbt.hasKey(NBT_END_B) ? ForgeDirection.getOrientation(nbt.getByte(NBT_END_B)) : null;
+        if (endA == ForgeDirection.UNKNOWN) {
+            endA = null;
+        }
+        if (endB == ForgeDirection.UNKNOWN) {
+            endB = null;
+        }
+    }
+
+
+
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        final NBTTagCompound nbt = new NBTTagCompound();
+        writeToNBT(nbt);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
+    }
+
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+    {
+        readFromNBT(packet.func_148857_g());
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        //Persist null as unknown.
+        nbt.setByte(NBT_END_A, (byte)(endA != null ? endA : ForgeDirection.UNKNOWN).ordinal());
+        nbt.setByte(NBT_END_B, (byte)(endB != null ? endB : ForgeDirection.UNKNOWN).ordinal());
     }
 
     public int getRenderType()
