@@ -17,6 +17,7 @@
 package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.tileentity.PipeTE;
 import mod.steamnsteel.tileentity.SteamNSteelTE;
@@ -32,7 +33,7 @@ import net.minecraft.world.World;
 public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
 {
     public static final String NAME = "pipe";
-    public static int RenderId;
+    private static int RenderId;
 
     public PipeBlock()
     {
@@ -58,6 +59,8 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
         return RenderId;
     }
 
+    public static void setRenderType(int renderId) { RenderId = renderId; }
+
     @Override
     public boolean isOpaqueCube()
     {
@@ -68,7 +71,7 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
     public void onNeighborBlockChange(World world, int x, int y, int z, Block newBlockType)
     {
         PipeTE entity = (PipeTE)world.getTileEntity(x, y, z);
-        entity.updateEntity();
+        entity.checkEnds();
     }
 
     @Override
@@ -85,5 +88,18 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
         }
 
         return false;
+    }
+
+    @Override
+    public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metadata)
+    {
+        world.notifyBlocksOfNeighborChange(x, y, z, this);
+    }
+
+    @Override
+    public void onPostBlockPlaced(World world, int x, int y, int z, int metadata)
+    {
+        final TileEntity te = world.getTileEntity(x, y, z);
+        ((PipeTE)te).checkEnds();
     }
 }

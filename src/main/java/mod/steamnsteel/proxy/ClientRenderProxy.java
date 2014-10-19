@@ -62,8 +62,8 @@ public class ClientRenderProxy extends RenderProxy
 
     private void registerTESRs()
     {
-        PipeBlock.RenderId = RenderingRegistry.getNextAvailableRenderId();
-        PipeJunctionBlock.RenderId = RenderingRegistry.getNextAvailableRenderId();
+        PipeBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
+        PipeJunctionBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
 
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupbolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());

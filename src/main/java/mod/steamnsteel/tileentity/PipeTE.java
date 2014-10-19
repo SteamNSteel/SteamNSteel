@@ -1,7 +1,9 @@
 package mod.steamnsteel.tileentity;
 
+import com.google.common.base.Objects;
 import mod.steamnsteel.block.machine.PipeBlock;
 import mod.steamnsteel.block.machine.PipeJunctionBlock;
+import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,33 +38,9 @@ public class PipeTE extends SteamNSteelTE
     private ForgeDirection endB;
 
     List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = new ArrayList<ImmutablePair<ForgeDirection, ForgeDirection>>();
-    //List<ImmutablePair<ForgeDirection, ForgeDirection>> potentialValidDirections = new ArrayList<ImmutablePair<ForgeDirection, ForgeDirection>>();
 
-    @Override
-    public void updateEntity()
+    public void checkEnds()
     {
-        /*potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.UP, ForgeDirection.DOWN));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.NORTH, ForgeDirection.SOUTH));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.EAST, ForgeDirection.WEST));
-
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.NORTH, ForgeDirection.EAST));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.EAST, ForgeDirection.SOUTH));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.SOUTH, ForgeDirection.WEST));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.WEST, ForgeDirection.NORTH));
-
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.UP, ForgeDirection.NORTH));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.UP, ForgeDirection.EAST));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.UP, ForgeDirection.SOUTH));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.UP, ForgeDirection.WEST));
-
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.DOWN, ForgeDirection.NORTH));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.DOWN, ForgeDirection.EAST));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.DOWN, ForgeDirection.SOUTH));
-        potentialValidDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.DOWN, ForgeDirection.WEST));*/
-
-
-        WorldBlockCoord worldBlockCoord = WorldBlockCoord.of(xCoord, yCoord, zCoord);
-
         validDirections.clear();
 
         boolean currentEndsAreValid = false;
@@ -71,7 +49,7 @@ public class PipeTE extends SteamNSteelTE
 
         for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i) {
             final ForgeDirection endADirection = ForgeDirection.VALID_DIRECTIONS[i];
-            WorldBlockCoord neighbour = worldBlockCoord.offset(endADirection);
+            WorldBlockCoord neighbour = getWorldBlockCoord().offset(endADirection);
             final Block block = neighbour.getBlock(worldObj);
             boolean isMatch = block instanceof PipeBlock || block instanceof PipeJunctionBlock;
             if (isMatch) {
@@ -82,7 +60,7 @@ public class PipeTE extends SteamNSteelTE
                 //{endA = NORTH, endB = EAST} and {endA = EAST, endB = NORTH} are functionally and visually equivalent.
                 for (int j = i + 1; j < ForgeDirection.VALID_DIRECTIONS.length; ++j) {
                     final ForgeDirection endBDirection = ForgeDirection.VALID_DIRECTIONS[j];
-                    WorldBlockCoord neighbourB = worldBlockCoord.offset(endBDirection);
+                    WorldBlockCoord neighbourB = getWorldBlockCoord().offset(endBDirection);
                     final Block blockB = neighbourB.getBlock(worldObj);
                     isMatch = blockB instanceof PipeBlock || blockB instanceof PipeJunctionBlock;
                     if (isMatch) {
@@ -98,31 +76,46 @@ public class PipeTE extends SteamNSteelTE
             }
         }
 
-        if (!currentEndsAreValid) {
+        if (!currentEndsAreValid && !(endA == firstValidEndA && endB == firstValidEndB)) {
+            //Logger.info("Changing ends: endA:%s endB:%s, %s", firstValidEndA, firstValidEndB, worldObj.isRemote ? "client" : "server");
+            Logger.info("%s - Updating block - %s - endA:%s endB:%s", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), firstValidEndA, firstValidEndB);
             endA = firstValidEndA;
             endB = firstValidEndB;
+            sendUpdate();
+        } else {
+            Logger.info("%s - Updating block - %s - No Change", worldObj.isRemote ? "client" : "server", getWorldBlockCoord());
         }
 
+        if (worldObj.isRemote) {
+            recalculateVisuals();
+        }
+    }
+
+    private void recalculateVisuals()
+    {
         int ends = 0;
 
+        PipeTE endAPipe = null;
+
         if (endA != null) {
-            TileEntity te = worldBlockCoord.offset(endA).getTileEntity(worldObj);
+            TileEntity te = getWorldBlockCoord().offset(endA).getTileEntity(worldObj);
             if (te != null && te instanceof PipeTE) {
-                final PipeTE pipeTE = (PipeTE) te;
+                endAPipe = (PipeTE) te;
                 final ForgeDirection endAOpposite = endA.getOpposite();
-                if (pipeTE.endA == endAOpposite || pipeTE.endB == endAOpposite) {
+                if (endAPipe.endA == endAOpposite || endAPipe.endB == endAOpposite) {
                     ends++;
                 }
             }
         }
 
+        PipeTE endBPipe = null;
         if (endB != null)
         {
-            TileEntity te = worldBlockCoord.offset(endB).getTileEntity(worldObj);
+            TileEntity te = getWorldBlockCoord().offset(endB).getTileEntity(worldObj);
             if (te != null && te instanceof PipeTE) {
-                final PipeTE pipeTE = (PipeTE) te;
+                endBPipe = (PipeTE) te;
                 final ForgeDirection endBOpposite = endB.getOpposite();
-                if (pipeTE.endA == endBOpposite || pipeTE.endB == endBOpposite) {
+                if (endBPipe.endA == endBOpposite || endBPipe.endB == endBOpposite) {
                     ends++;
                 }
             }
@@ -131,7 +124,19 @@ public class PipeTE extends SteamNSteelTE
         if (ends == 2 && endB != endA.getOpposite()) {
             ends = 3;
         }
-        renderType = ends;
+
+        if (renderType != ends) {
+            renderType = ends;
+            if (endAPipe != null) {
+                endAPipe.recalculateVisuals();
+            }
+            if (endBPipe != null) {
+                endBPipe.recalculateVisuals();
+            }
+        }
+
+
+        Logger.info("%s - Recalculating Visuals - %s - endA:%s, endB:%s, renderType:%d", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endB, renderType);
     }
 
     @Override
@@ -147,8 +152,21 @@ public class PipeTE extends SteamNSteelTE
         if (endB == ForgeDirection.UNKNOWN) {
             endB = null;
         }
+        Logger.info("%s - Read from NBT - %s - endA:%s, endB:%s", worldObj == null ? "worldObj not available" : worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endB);
+        if (worldObj != null && worldObj.isRemote)
+        {
+            recalculateVisuals();
+        }
+
     }
 
+    private void sendUpdate()
+    {
+        markDirty();
+        Logger.info("%s - Notifying Block Change - %s - endA:%s endB:%s", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endB);
+        worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
 
 
     @Override
@@ -173,6 +191,7 @@ public class PipeTE extends SteamNSteelTE
         //Persist null as unknown.
         nbt.setByte(NBT_END_A, (byte)(endA != null ? endA : ForgeDirection.UNKNOWN).ordinal());
         nbt.setByte(NBT_END_B, (byte)(endB != null ? endB : ForgeDirection.UNKNOWN).ordinal());
+        Logger.info("%s - Wrote to NBT - %s - endA:%s, endB:%s", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endB);
     }
 
     public int getRenderType()
@@ -183,7 +202,7 @@ public class PipeTE extends SteamNSteelTE
     public void rotatePipe()
     {
         int length = validDirections.size();
-        if (length == 0) {return;}
+        if (length <= 1) {return;}
 
         int i = 0;
         for (i = 0; i < length; ++i) {
@@ -196,7 +215,59 @@ public class PipeTE extends SteamNSteelTE
         i = (++i) % length;
 
         ImmutablePair<ForgeDirection, ForgeDirection> selectedEnds = validDirections.get(i);
-        endA = selectedEnds.getLeft();
-        endB = selectedEnds.getRight();
+        ForgeDirection newEndA = selectedEnds.getLeft();
+        ForgeDirection newEndB = selectedEnds.getRight();
+
+        Logger.info("%s - Rotating Block - %s - old(A:%s, B:%s) - new(A:%s, B:%s)", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endB, newEndA, newEndB);
+
+        PipeTE prevEndATE = null;
+        PipeTE newEndATE = null;
+
+        prevEndATE = getPipeTEAtOffset(endA);
+        newEndATE = getPipeTEAtOffset(newEndA);
+
+        PipeTE prevEndBTE = getPipeTEAtOffset(endB);
+        PipeTE newEndBTE = getPipeTEAtOffset(newEndB);
+
+        boolean endAChanged = endA != newEndA;
+        boolean endBChanged = endB != newEndB;
+
+        endA = newEndA;
+        endB = newEndB;
+
+        if (endAChanged && prevEndATE != null) {
+            prevEndATE.recalculateVisuals();
+        }
+        if (endBChanged && prevEndBTE != null) {
+            prevEndBTE.recalculateVisuals();
+        }
+        if (endAChanged && newEndATE != null) {
+            newEndATE.recalculateVisuals();
+        }
+        if (endBChanged && newEndBTE != null) {
+            newEndBTE.recalculateVisuals();
+        }
+
+        sendUpdate();
+    }
+
+    private PipeTE getPipeTEAtOffset(ForgeDirection offset ) {
+        TileEntity te = getWorldBlockCoord().offset(offset).getTileEntity(worldObj);
+        if (te instanceof PipeTE) {
+            return (PipeTE)te;
+        }
+        return null;
+    }
+
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this)
+                .add("endA", endA)
+                .add("endB", endB)
+                .add("renderType", renderType)
+                .add("worldBlockCoord", this.getWorldBlockCoord())
+                .toString();
     }
 }

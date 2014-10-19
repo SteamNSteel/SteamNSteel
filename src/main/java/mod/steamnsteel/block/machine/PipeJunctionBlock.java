@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class PipeJunctionBlock extends SteamNSteelBlock implements ITileEntityProvider
 {
     public static final String NAME = "pipeJunction";
-    public static int RenderId;
+    private static int RenderId;
 
     public PipeJunctionBlock()
     {
@@ -37,8 +37,11 @@ public class PipeJunctionBlock extends SteamNSteelBlock implements ITileEntityPr
     @Override
     public int getRenderType()
     {
-        //return super.getRenderType();
         return RenderId;
+    }
+
+    public static void setRenderType(int renderId) {
+        RenderId = renderId;
     }
 
     @Override
