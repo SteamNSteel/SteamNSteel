@@ -93,6 +93,8 @@ public class PipeTE extends SteamNSteelTE
 
     private void recalculateVisuals()
     {
+        if (worldObj != null && !worldObj.isRemote) return;
+
         int ends = 0;
 
         PipeTE endAPipe = null;
@@ -157,7 +159,6 @@ public class PipeTE extends SteamNSteelTE
         {
             recalculateVisuals();
         }
-
     }
 
     private void sendUpdate()
