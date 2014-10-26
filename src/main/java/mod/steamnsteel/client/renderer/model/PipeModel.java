@@ -20,22 +20,20 @@ public class PipeModel extends SteamNSteelModel
         model.renderAll();
     }
 
-    public void renderPipe2xC() {
-        model.renderPart("Pipe2xC");
-    }
-
-    public void renderPipe1xC() {
-        model.renderPart("Pipe1xC");
-    }
-
-    public void renderPipe0C() {
-        model.renderPart("Pipe0C");
-    }
-
-    public void renderPipe1xCrnr() {
+    public void renderPipeCorner() {
         model.renderPart("Pipe1xCrnr");
     }
 
+    public void renderPipeStraight() { model.renderPart("Pipe0C"); }
+
+    /**
+     * Used for where a pipe connects to a machine or junction
+     */
+    public void renderPipeOpening() { model.renderPart("PipeOpening"); }
+
+    /**
+     * Used where a pipe ends.
+     */
     public void renderPipeCap() {
         model.renderPart("PipeCap");
     }
