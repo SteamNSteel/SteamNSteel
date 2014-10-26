@@ -196,11 +196,11 @@ public class PipeTESR extends SteamNSteelTESR
                 GL11.glRotatef(90, 0.0f, 0.0f, 1.0f);
                 GL11.glRotatef(-180, 1.0F, 0.0F, 0.0F);
                 break;
-            case NORTH:
+            case SOUTH:
                 GL11.glRotatef(-90, 0.0f, 0.0f, 1.0f);
                 GL11.glRotatef(-90, 1.0F, 0.0F, 0.0F);
                 break;
-            case SOUTH:
+            case NORTH:
                 GL11.glRotatef(90, 0.0f, 0.0f, 1.0f);
                 GL11.glRotatef(90, 1.0F, 0.0F, 0.0F);
                 break;
@@ -212,6 +212,7 @@ public class PipeTESR extends SteamNSteelTESR
                 break;
         }
         GL11.glTranslatef(0f, -0.5f, 0f);
+        GL11.glTranslatef(0f, -(3f * (1f / 16f)), 0f);
         model.renderPipeCap();
     }
 }

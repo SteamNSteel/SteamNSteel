@@ -23,4 +23,10 @@ public class PipeJunctionTE extends SteamNSteelTE implements IPipeTileEntity
     {
         return false;
     }
+
+    @Override
+    public boolean canConnect(ForgeDirection opposite)
+    {
+        return false;
+    }
 }

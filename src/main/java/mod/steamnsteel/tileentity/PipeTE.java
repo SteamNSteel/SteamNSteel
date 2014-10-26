@@ -50,74 +50,63 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
 
     public void checkEnds()
     {
-        validDirections.clear();
+        TileEntity tileEntity;
+        IPipeTileEntity pipeEntity;
+        boolean changed = false;
 
-        ForgeDirection firstValidEndA = null;
-        IPipeTileEntity firstValidEndATileEntity = null;
-        ForgeDirection firstValidEndB = null;
-        IPipeTileEntity firstValidEndBTileEntity = null;
+        calculateValidDirections();
 
-        for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i) {
-            final ForgeDirection endADirection = ForgeDirection.VALID_DIRECTIONS[i];
-            WorldBlockCoord neighbour = getWorldBlockCoord().offset(endADirection);
-            final TileEntity block = neighbour.getTileEntity(worldObj);
-            boolean isMatch = block instanceof IPipeTileEntity;
-            if (isMatch) {
-                if (firstValidEndA == null) {
-                    firstValidEndA = endADirection;
-                    firstValidEndATileEntity = (IPipeTileEntity)block;
+        if (validDirections.size() > 0)
+        {
+            for (ImmutablePair<ForgeDirection, ForgeDirection> pair : validDirections)
+            {
+                final ForgeDirection left = pair.getLeft();
+                final ForgeDirection right = pair.getRight();
+                IPipeTileEntity teA = (IPipeTileEntity) getWorldBlockCoord().offset(left).getTileEntity(worldObj);
+                IPipeTileEntity teB = (IPipeTileEntity) getWorldBlockCoord().offset(right).getTileEntity(worldObj);
+
+                if (teA.canConnect(left.getOpposite()) && teB.canConnect(right.getOpposite()))
+                {
+                    teA.tryConnect(left.getOpposite());
+                    teB.tryConnect(right.getOpposite());
+
+                    endA = left;
+                    endB = right;
+                    break;
                 }
-                //Looping from i+1 to VALID_DIRECTIONS.length removes duplicate entries, since
-                //{endA = NORTH, endB = EAST} and {endA = EAST, endB = NORTH} are functionally and visually equivalent.
-                for (int j = i + 1; j < ForgeDirection.VALID_DIRECTIONS.length; ++j) {
-                    final ForgeDirection endBDirection = ForgeDirection.VALID_DIRECTIONS[j];
-                    WorldBlockCoord neighbourB = getWorldBlockCoord().offset(endBDirection);
-                    final TileEntity blockB = neighbourB.getTileEntity(worldObj);
-                    isMatch = blockB instanceof IPipeTileEntity;
-                    if (isMatch) {
-                        if (firstValidEndB == null) {
-                            firstValidEndB = endBDirection;
-                            firstValidEndBTileEntity = (IPipeTileEntity)blockB;
-                        }
-                        validDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(endADirection, endBDirection));
+            }
+        } else {
+            for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i) {
+                final ForgeDirection direction = ForgeDirection.VALID_DIRECTIONS[i];
+                TileEntity block = getWorldBlockCoord().offset(direction).getTileEntity(worldObj);
+                if (block instanceof IPipeTileEntity)
+                {
+                    IPipeTileEntity pipeTE = (IPipeTileEntity)block;
+                    if (pipeTE.canConnect(direction.getOpposite())) {
+                        pipeTE.tryConnect(direction.getOpposite());
+
+                        endA = direction;
+                        endB = direction.getOpposite();
+                        break;
                     }
                 }
             }
         }
 
-        if (firstValidEndB == endA || firstValidEndA == endB) {
-            ForgeDirection temp = firstValidEndA;
-            firstValidEndA = firstValidEndB;
-            firstValidEndB = temp;
+        boolean endAIsConnected = false;
+        boolean endBIsConnected = false;
 
-            IPipeTileEntity temp2 = firstValidEndATileEntity;
-            firstValidEndATileEntity = firstValidEndBTileEntity;
-            firstValidEndBTileEntity = temp2;
-        }
-
-        boolean changed = false;
-        if (!endAIsConnected && firstValidEndATileEntity != null && firstValidEndATileEntity.isDirectionConnected(firstValidEndA.getOpposite())) {
-            endA = firstValidEndA;
-            firstValidEndATileEntity.tryConnect(firstValidEndA.getOpposite());
-            changed = true;
-        }
-
-        if (!endBIsConnected && firstValidEndBTileEntity != null && firstValidEndBTileEntity.isDirectionConnected(firstValidEndB.getOpposite())) {
-            endB = firstValidEndB;
-            firstValidEndBTileEntity.tryConnect(firstValidEndB.getOpposite());
-            changed = true;
-        }
-
-        if (endA == endB) {
-            endB = endA.getOpposite();
-            changed = true;
-        }
-
-        TileEntity tileEntity;
         tileEntity = getWorldBlockCoord().offset(endA).getTileEntity(worldObj);
-        boolean endAIsConnected = tileEntity instanceof IPipeTileEntity && ((IPipeTileEntity) tileEntity).isDirectionConnected(endA.getOpposite());
+        if (tileEntity instanceof IPipeTileEntity) {
+            pipeEntity = (IPipeTileEntity) tileEntity;
+            endAIsConnected = pipeEntity.tryConnect(endA.getOpposite());
+        }
+
         tileEntity = getWorldBlockCoord().offset(endB).getTileEntity(worldObj);
-        boolean endBIsConnected = tileEntity instanceof IPipeTileEntity && ((IPipeTileEntity) tileEntity).isDirectionConnected(endB.getOpposite());
+        if (tileEntity instanceof IPipeTileEntity) {
+            pipeEntity = (IPipeTileEntity) tileEntity;
+            endBIsConnected = pipeEntity.tryConnect(endB.getOpposite());
+        }
 
         if (this.endAIsConnected != endAIsConnected || this.endBIsConnected != endBIsConnected) {
             changed = true;
@@ -126,15 +115,35 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         }
 
         if (changed) {
-            Logger.info("%s - Updating block - %s - endA:%s,%s endB:%s,%s", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), firstValidEndA, endAIsConnected, firstValidEndB, endBIsConnected);
+            Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());
             sendUpdate();
         } else {
-            Logger.info("%s - Updating block - %s - No Change", worldObj.isRemote ? "client" : "server", getWorldBlockCoord());
+            Logger.info("%s - Updating block         - %s", worldObj.isRemote ? "client" : "server", toString());
         }
 
         if (worldObj.isRemote) {
             recalculateVisuals();
         }
+    }
+
+    private void calculateValidDirections()
+    {
+        validDirections.clear();
+
+        for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i) {
+            TileEntity block = getWorldBlockCoord().offset(ForgeDirection.VALID_DIRECTIONS[i]).getTileEntity(worldObj);
+            if (block instanceof IPipeTileEntity)
+            {
+                for (int j = i + 1; j < ForgeDirection.VALID_DIRECTIONS.length; ++j)
+                {
+                    block = getWorldBlockCoord().offset(ForgeDirection.VALID_DIRECTIONS[j]).getTileEntity(worldObj);
+                    if (block instanceof IPipeTileEntity) {
+                        validDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.VALID_DIRECTIONS[i], ForgeDirection.VALID_DIRECTIONS[j]));
+                    }
+                }
+            }
+        }
+
     }
 
     private void recalculateVisuals()
@@ -168,7 +177,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         }
 
 
-        Logger.info("%s - Recalculating Visuals - %s - endA:%s, endB:%s, shouldRenderAsCorner:%b", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endB, shouldRenderAsCorner);
+        Logger.info("%s - Recalculating Visuals  - %s", worldObj.isRemote ? "client" : "server", toString());
     }
 
     @Override
@@ -187,7 +196,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         if (endB == ForgeDirection.UNKNOWN) {
             endB = ForgeDirection.WEST;
         }
-        Logger.info("%s - Read from NBT - %s - endA:%s, endB:%s", worldObj == null ? "worldObj not available" : worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endB);
+        Logger.info("%s - Read from NBT          - %s", worldObj == null ? "worldObj not available" : worldObj.isRemote ? "client" : "server", toString());
         if (worldObj != null && worldObj.isRemote)
         {
             recalculateVisuals();
@@ -197,7 +206,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
     private void sendUpdate()
     {
         markDirty();
-        Logger.info("%s - Notifying Block Change - %s - endA:%s endB:%s", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endB);
+        Logger.info("%s - Notifying Block Change - %s", worldObj.isRemote ? "client" : "server", toString());
         worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
@@ -227,7 +236,8 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         nbt.setBoolean(NBT_END_A_CONNECTED, endAIsConnected);
         nbt.setByte(NBT_END_B, (byte) (endB != null ? endB : ForgeDirection.UNKNOWN).ordinal());
         nbt.setBoolean(NBT_END_B_CONNECTED, endBIsConnected);
-        Logger.info("%s - Wrote to NBT - %s - endA:%s, endB:%s", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endB);
+//        Logger.info("%s - Wrote to NBT - %s - endA:%s%s, endB:%s%s", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endAIsConnected ? "+" : "-", endB, endBIsConnected ? "+" : "-");
+        Logger.info("%s - Wrote to NBT           - %s", worldObj.isRemote ? "client" : "server", this.toString());
     }
 
     public boolean shouldRenderAsCorner()
@@ -299,14 +309,19 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
     @Override
     public String toString()
     {
-        return Objects.toStringHelper(this)
+        Objects.ToStringHelper stringHelper = Objects.toStringHelper(this)
+                .add("worldBlockCoord", this.getWorldBlockCoord())
                 .add("endA", endA)
                 .add("endAConnected", endAIsConnected)
                 .add("endB", endB)
-                .add("endBConnected", endBIsConnected)
-                .add("shouldRenderAsCorner", shouldRenderAsCorner)
-                .add("worldBlockCoord", this.getWorldBlockCoord())
-                .toString();
+                .add("endBConnected", endBIsConnected);
+
+        if (worldObj != null && worldObj.isRemote) {
+            stringHelper = stringHelper
+                    .add("shouldRenderAsCorner", shouldRenderAsCorner);
+        }
+
+        return stringHelper.toString();
     }
 
     @Override
@@ -318,22 +333,40 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
     @Override
     public boolean tryConnect(ForgeDirection direction)
     {
+        ForgeDirection previousEndA = endA;
+        ForgeDirection previousEndB = endB;
+        boolean previousEndAConnected = endAIsConnected;
+        boolean previousEndBConnected = endBIsConnected;
+
+        boolean connected = false;
         if (endA == direction) {
             endAIsConnected = true;
-            return true;
+            connected = true;
         } else if (!endAIsConnected && endB != direction) {
             endA = direction;
             endAIsConnected = true;
-            return true;
+            connected = true;
         } else if (endB == direction) {
             endBIsConnected = true;
-            return true;
+            connected = true;
         } else if (!endBIsConnected) {
             endB = direction;
             endBIsConnected = true;
-            return true;
+            connected = true;
         }
-        return false;
+
+        if (endA != previousEndA || endB != previousEndB || endAIsConnected != previousEndAConnected || endBIsConnected != previousEndBConnected) {
+            sendUpdate();
+        }
+
+
+        return connected;
+    }
+
+    @Override
+    public boolean canConnect(ForgeDirection opposite)
+    {
+        return !endAIsConnected || !endBIsConnected || endA == opposite || endB == opposite;
     }
 
     public void setOrientation(ForgeDirection orientation)
