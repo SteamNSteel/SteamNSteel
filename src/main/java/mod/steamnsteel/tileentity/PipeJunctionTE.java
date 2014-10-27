@@ -35,4 +35,10 @@ public class PipeJunctionTE extends SteamNSteelTE implements IPipeTileEntity
     {
 
     }
+
+    @Override
+    public void disconnect(ForgeDirection opposite)
+    {
+
+    }
 }

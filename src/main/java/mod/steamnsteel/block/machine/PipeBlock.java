@@ -92,15 +92,33 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
                 }
                 return true;
             }
+            if (itemInUse != null && itemInUse.getItem() == Items.name_tag) {
+                PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
+                Logger.info("%s - Entity Check - %s", world.isRemote ? "client" : "server", entity.toString());
+            }
         }
 
         return false;
     }
 
     @Override
+    public void onBlockPreDestroy(World world, int x, int y, int z, int metadata)
+    {
+        if (!world.isRemote) {
+            PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
+            if (entity != null)
+            {
+                entity.detach();
+            }
+        }
+    }
+
+    @Override
     public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metadata)
     {
-        world.notifyBlocksOfNeighborChange(x, y, z, this);
+
+        //world.notifyBlocksOfNeighborChange(x, y, z, this);
+
     }
 
     @Override

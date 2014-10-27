@@ -145,6 +145,20 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
     }
 
     @Override
+    public void disconnect(ForgeDirection opposite)
+    {
+        if (endA == opposite) {
+            endA = null;
+            endAIsConnected = false;
+            sendUpdate();
+        } else if (endB == opposite) {
+            endB = null;
+            endBIsConnected = false;
+            sendUpdate();
+        }
+    }
+
+    @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
@@ -344,5 +358,18 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         this.endB = orientation.getOpposite();
         tileEntity = getWorldBlockCoord().offset(endB).getTileEntity(worldObj);
         endBIsConnected = tileEntity instanceof IPipeTileEntity && ((IPipeTileEntity) tileEntity).isDirectionConnected(endB.getOpposite());
+    public void detach()
+    {
+        IPipeTileEntity tileEntity;
+
+        tileEntity = getPipeTileEntityInDirection(endA);
+        if (endAIsConnected && tileEntity != null) {
+            tileEntity.disconnect(endA.getOpposite());
+        }
+
+        tileEntity = getPipeTileEntityInDirection(endB);
+        if (endBIsConnected && tileEntity != null) {
+            tileEntity.disconnect(endB.getOpposite());
+        }
     }
 }

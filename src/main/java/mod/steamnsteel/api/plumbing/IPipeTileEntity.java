@@ -11,4 +11,6 @@ public interface IPipeTileEntity
     boolean canConnect(ForgeDirection opposite);
 
     void recalculateVisuals();
+
+    void disconnect(ForgeDirection opposite);
 }
