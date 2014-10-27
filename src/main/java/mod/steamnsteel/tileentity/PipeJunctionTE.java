@@ -29,4 +29,10 @@ public class PipeJunctionTE extends SteamNSteelTE implements IPipeTileEntity
     {
         return false;
     }
+
+    @Override
+    public void recalculateVisuals()
+    {
+
+    }
 }

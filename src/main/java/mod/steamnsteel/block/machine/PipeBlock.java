@@ -86,8 +86,10 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
             ItemStack itemInUse = player.inventory.mainInventory[player.inventory.currentItem];
             if (itemInUse != null && itemInUse.getItem() == Items.bone)
             {
-                PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
-                entity.rotatePipe();
+                if (!world.isRemote) {
+                    PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
+                    entity.rotatePipe();
+                }
                 return true;
             }
         }

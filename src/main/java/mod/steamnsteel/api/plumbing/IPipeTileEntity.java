@@ -9,4 +9,6 @@ public interface IPipeTileEntity
     boolean tryConnect(ForgeDirection opposite);
 
     boolean canConnect(ForgeDirection opposite);
+
+    void recalculateVisuals();
 }
