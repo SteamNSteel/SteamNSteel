@@ -349,15 +349,17 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
 
     public void setOrientation(ForgeDirection orientation)
     {
-        TileEntity tileEntity;
+        IPipeTileEntity tileEntity;
 
         this.endA = orientation;
-        tileEntity = getWorldBlockCoord().offset(endA).getTileEntity(worldObj);
-        endAIsConnected = tileEntity instanceof IPipeTileEntity && ((IPipeTileEntity) tileEntity).isDirectionConnected(endA.getOpposite());
+        tileEntity = getPipeTileEntityInDirection(endA);
+        endAIsConnected = tileEntity != null && tileEntity.isDirectionConnected(endA.getOpposite());
 
         this.endB = orientation.getOpposite();
-        tileEntity = getWorldBlockCoord().offset(endB).getTileEntity(worldObj);
-        endBIsConnected = tileEntity instanceof IPipeTileEntity && ((IPipeTileEntity) tileEntity).isDirectionConnected(endB.getOpposite());
+        tileEntity = getPipeTileEntityInDirection(endB);
+        endBIsConnected = tileEntity != null && tileEntity.isDirectionConnected(endB.getOpposite());
+    }
+
     public void detach()
     {
         IPipeTileEntity tileEntity;
