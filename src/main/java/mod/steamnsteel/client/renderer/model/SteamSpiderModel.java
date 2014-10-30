@@ -32,11 +32,6 @@ public class SteamSpiderModel extends ModelBase
         GL11.glPushMatrix();
         GL11.glRotatef(180F, 1.0F, 0.0F, 0.0F);
         GL11.glTranslatef(0.0F, -1.0F, 0.0F);
-        GL11.glEnable(GL11.GL_BLEND);
-        OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        //Render main parts apart from legs
-        model.renderAllExcept("SSS_LegRF", "SSS_LegRB", "SSS_LegLF", "SSS_LegLB");
-        GL11.glDisable(GL11.GL_BLEND);
 
         //The translate, rotate, translate back is so we rotate from where the legs joins the body instead of from the
         //center point. Basically we move to a rotation point but gotta move back before rendering
@@ -67,6 +62,14 @@ public class SteamSpiderModel extends ModelBase
         GL11.glTranslatef(-0.12F, 0.0F, 0.112F);
         model.renderPart("SSS_LegLB");
         GL11.glPopMatrix();
+
+        GL11.glEnable(GL11.GL_BLEND);
+        OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GL11.glTranslated(0.0D, Math.cos(entity.ticksExisted) / 200F, 0.0D);
+        //Render main parts apart from legs
+        model.renderAllExcept("SSS_LegRF", "SSS_LegRB", "SSS_LegLF", "SSS_LegLB");
+        GL11.glDisable(GL11.GL_BLEND);
+
 
         GL11.glPopMatrix();
     }

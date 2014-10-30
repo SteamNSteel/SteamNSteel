@@ -1,5 +1,7 @@
 package mod.steamnsteel.entity;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -18,7 +20,7 @@ public class SteamSpiderEntity extends EntityCreature
         tasks.addTask(0, new EntityAISwimming(this));
         tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
         tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class, 1.0D, true));
-        tasks.addTask(7, new EntityAIWander(this, 1.0D));
+        //tasks.addTask(7, new EntityAIWander(this, 1.0D));
         //tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         //tasks.addTask(8, new EntityAILookIdle(this));
         targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
@@ -40,5 +42,18 @@ public class SteamSpiderEntity extends EntityCreature
     protected boolean isAIEnabled()
     {
         return true;
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (worldObj.isRemote) {
+            //Position of point on a circle. Used to calculate where the exit pipes are for smoke/steam
+            double rot = Math.toRadians(renderYawOffset - 90F + (rand.nextBoolean() ? 12F : -12F));
+            double radius = 0.27D;
+            double x = posX + (radius * Math.cos(rot));
+            double z = posZ + (radius * Math.sin(rot));
+            Minecraft.getMinecraft().effectRenderer.addEffect(new EntitySmokeFX(worldObj, x, posY + 0.61, z, 0, 0, 0, 0.5F));
+        }
     }
 }
