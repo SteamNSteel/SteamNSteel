@@ -1,6 +1,7 @@
 package mod.steamnsteel.entity;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityBubbleFX;
 import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -53,7 +54,7 @@ public class SteamSpiderEntity extends EntityCreature
             double radius = 0.27D;
             double x = posX + (radius * Math.cos(rot));
             double z = posZ + (radius * Math.sin(rot));
-            Minecraft.getMinecraft().effectRenderer.addEffect(new EntitySmokeFX(worldObj, x, posY + 0.61, z, 0, 0, 0, 0.5F));
+            Minecraft.getMinecraft().effectRenderer.addEffect(isInWater() ? new EntityBubbleFX(worldObj, x, posY + 0.61, z, 0, 0, 0) : new EntitySmokeFX(worldObj, x, posY + 0.61, z, 0, 0, 0, 0.5F));
         }
     }
 }

@@ -27,39 +27,37 @@ public class SteamSpiderModel extends ModelBase
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_)
     {
-        double angle = Math.toDegrees(MathHelper.cos(limbSwing * 1.5F) * 0.3F * limbSwingAmount); //First param is speed, second is max angle
-        double angle2 = Math.toDegrees(MathHelper.cos(limbSwing * 1.5F  + (float)Math.PI) * 0.3F * limbSwingAmount);
+        double angle = Math.toDegrees(MathHelper.cos(limbSwing * 1.5F) * 0.4F * limbSwingAmount); //First param is speed, second is max angle
+        double angle2 = Math.toDegrees(MathHelper.cos(limbSwing * 1.5F  + (float)Math.PI) * 0.4F * limbSwingAmount);
         GL11.glPushMatrix();
-        GL11.glRotatef(180F, 1.0F, 0.0F, 0.0F);
-        GL11.glTranslatef(0.0F, -1.0F, 0.0F);
 
         //The translate, rotate, translate back is so we rotate from where the legs joins the body instead of from the
         //center point. Basically we move to a rotation point but gotta move back before rendering
         GL11.glPushMatrix();
-        GL11.glTranslatef(-0.12F, 0.0F, 0.112F);
-        GL11.glRotated(angle - 15.0D, 0.0D, 1.0D, 0.0D);
-        GL11.glTranslatef(0.12F, 0.0F, -0.112F);
+        GL11.glTranslatef(-0.1F, 0.0F, -0.1F);
+        GL11.glRotated(angle, 0.0D, 1.0D, 0.0D);
+        GL11.glTranslatef(0.1F, 0.0F, 0.1F);
         model.renderPart("SSS_LegRF");
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
-        GL11.glTranslatef(-0.12F, 0.0F, -0.112F);
-        GL11.glRotated(angle2 + 15.0D, 0.0D, 1.0D, 0.0D);
-        GL11.glTranslatef(0.12F, 0.0F, 0.112F);
+        GL11.glTranslatef(-0.1F, 0.0F, 0.1F);
+        GL11.glRotated(angle2, 0.0D, 1.0D, 0.0D);
+        GL11.glTranslatef(0.1F, 0.0F, -0.1F);
         model.renderPart("SSS_LegRB");
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
-        GL11.glTranslatef(0.12F, 0.0F, 0.112F);
-        GL11.glRotated(angle2 + 15.0D, 0.0D, 1.0D, 0.0D);
-        GL11.glTranslatef(-0.12F, 0.0F, -0.112F);
+        GL11.glTranslatef(0.1F, 0.0F, -0.1F);
+        GL11.glRotated(angle2, 0.0D, 1.0D, 0.0D);
+        GL11.glTranslatef(-0.1F, 0.0F, 0.1F);
         model.renderPart("SSS_LegLF");
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
-        GL11.glTranslatef(0.12F, 0.0F, -0.112F);
-        GL11.glRotated(angle - 15.0D, 0.0D, 1.0D, 0.0D);
-        GL11.glTranslatef(-0.12F, 0.0F, 0.112F);
+        GL11.glTranslatef(0.1F, 0.0F, 0.1F);
+        GL11.glRotated(angle, 0.0D, 1.0D, 0.0D);
+        GL11.glTranslatef(-0.1F, 0.0F, -0.1F);
         model.renderPart("SSS_LegLB");
         GL11.glPopMatrix();
 
