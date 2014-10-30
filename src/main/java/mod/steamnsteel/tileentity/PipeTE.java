@@ -113,8 +113,24 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
             Logger.info("%s - Updating block         - %s", worldObj.isRemote ? "client" : "server", toString());
         }
 
+        validateEnds();
         if (worldObj.isRemote) {
             recalculateVisuals();
+        }
+    }
+
+    private void validateEnds()
+    {
+        if (endB != null && (endA == null || endB.ordinal() < endA.ordinal())) {
+            Logger.info("%s - Swapping ends          - w%s A:%s-%d and B:%s-%d", worldObj.isRemote ? "client" : "server", toString(), endA, endA == null ? -1 : endA.ordinal(), endB, endB.ordinal());
+            ForgeDirection endSwap = endA;
+            endA = endB;
+            endB = endSwap;
+
+            boolean isConnectedSwap = endAIsConnected;
+            endAIsConnected = endBIsConnected;
+            endBIsConnected = isConnectedSwap;
+            Logger.info("%s - Swapping ends          - w%s A:%s-%d and B:%s-%d", worldObj.isRemote ? "client" : "server", toString(), endA, endA.ordinal(), endB, endB == null ? -1 : endB.ordinal());
         }
     }
 
@@ -150,10 +166,12 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         if (endA == opposite) {
             endA = null;
             endAIsConnected = false;
+            validateEnds();
             sendUpdate();
         } else if (endB == opposite) {
             endB = null;
             endBIsConnected = false;
+            validateEnds();
             sendUpdate();
         }
     }
@@ -259,6 +277,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
 
         endA = newEndA;
         endB = newEndB;
+        validateEnds();
 
         if (endAChanged && prevEndATE != null) {
             prevEndATE.recalculateVisuals();
@@ -277,6 +296,9 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
     }
 
     private IPipeTileEntity getPipeTileEntityInDirection(ForgeDirection offset) {
+        if (offset == null) {
+            return null;
+        }
         TileEntity te = getWorldBlockCoord().offset(offset).getTileEntity(worldObj);
         if (te instanceof IPipeTileEntity) {
             return (IPipeTileEntity)te;
@@ -335,6 +357,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         }
 
         if (endA != previousEndA || endB != previousEndB || endAIsConnected != previousEndAConnected || endBIsConnected != previousEndBConnected) {
+            validateEnds();
             sendUpdate();
         }
 
@@ -358,6 +381,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         this.endB = orientation.getOpposite();
         tileEntity = getPipeTileEntityInDirection(endB);
         endBIsConnected = tileEntity != null && tileEntity.isDirectionConnected(endB.getOpposite());
+        validateEnds();
     }
 
     public void detach()
