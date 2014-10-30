@@ -30,6 +30,7 @@ import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.gui.GuiHandler;
 import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.library.ModEntity;
 import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.proxy.Proxies;
 import mod.steamnsteel.world.WorldGen;
@@ -70,6 +71,7 @@ public class TheMod
 
         ModItem.init();
         ModBlock.init();
+        ModEntity.init();
     }
 
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")

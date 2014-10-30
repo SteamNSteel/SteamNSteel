@@ -18,10 +18,12 @@ package mod.steamnsteel.proxy;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import mod.steamnsteel.client.renderer.entity.SteamSpiderLivingRender;
 import mod.steamnsteel.client.renderer.item.CupolaItemRenderer;
 import mod.steamnsteel.client.renderer.item.PlotoniumChestItemRenderer;
 import mod.steamnsteel.client.renderer.tileentity.CupolaTESR;
 import mod.steamnsteel.client.renderer.tileentity.PlotoniumChestTESR;
+import mod.steamnsteel.entity.SteamSpiderEntity;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.tileentity.PlotoniumChestTE;
@@ -34,6 +36,7 @@ public class ClientRenderProxy extends RenderProxy
     @Override
     public void init()
     {
+        registerEntityRenderers();
         registerItemRenderers();
         registerTESRs();
     }
@@ -54,5 +57,10 @@ public class ClientRenderProxy extends RenderProxy
     {
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PlotoniumChestTE.class, new PlotoniumChestTESR());
+    }
+
+    private void registerEntityRenderers()
+    {
+        RenderingRegistry.registerEntityRenderingHandler(SteamSpiderEntity.class, new SteamSpiderLivingRender());
     }
 }
