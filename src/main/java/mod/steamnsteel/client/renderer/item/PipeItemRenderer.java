@@ -16,9 +16,9 @@ public class PipeItemRenderer implements IItemRenderer
     private static final ImmutableTriple<Float, Float, Float> ENTITY_OFFSET = ImmutableTriple.of(0.0f, -1.0f, 0.0f);
     private static final ImmutableTriple<Float, Float, Float> EQUIPPED_OFFSET = ImmutableTriple.of(1.0f, 0.0f, 1.5f);
     private static final ImmutableTriple<Float, Float, Float> FIRST_PERSON_OFFSET = ImmutableTriple.of(-0.0f, 0.0f, 0.0f);
-    private static final ImmutableTriple<Float, Float, Float> INVENTORY_OFFSET = ImmutableTriple.of(-0.0f, -1.0f, 0.0f);
+    private static final ImmutableTriple<Float, Float, Float> INVENTORY_OFFSET = ImmutableTriple.of(-0.0f, -0.5f, 0.0f);
 
-    private static final ImmutableTriple<Float, Float, Float> SCALE = ImmutableTriple.of(0.666667f, 0.666667f, 0.666667f);
+    private static final ImmutableTriple<Float, Float, Float> SCALE = ImmutableTriple.of(1f, 1f, 1f);
 
     private final PipeModel model;
 
@@ -63,11 +63,26 @@ public class PipeItemRenderer implements IItemRenderer
     private void renderPipe(ImmutableTriple<Float, Float, Float> offset)
     {
         GL11.glPushMatrix();
-        GL11.glScalef(SCALE.left, SCALE.middle, SCALE.right);
+        //GL11.glScalef(SCALE.left, SCALE.middle, SCALE.right);
         GL11.glTranslatef(offset.left, offset.middle, offset.right);
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(PipeTESR.TEXTURE);
 
+        FMLClientHandler.instance().getClient().renderEngine.bindTexture(PipeTESR.TEXTURE);
+        GL11.glPushMatrix();
         model.renderPipeStraight();
+        GL11.glPopMatrix();
+
+        GL11.glPushMatrix();
+        //GL11.glTranslatef(0f, -0.5f, 0f);
+        GL11.glScalef(1.1f, 1.1f, 1.1f);
+        model.renderPipeCap();
+        GL11.glPopMatrix();
+
+        GL11.glPushMatrix();
+        GL11.glRotatef(-180, 0.0f, 0.0f, 1.0f);
+        GL11.glTranslatef(0f, -1f, 0f);
+        GL11.glScalef(1.1f, 1.1f, 1.1f);
+        model.renderPipeCap();
+        GL11.glPopMatrix();
 
         GL11.glPopMatrix();
     }
