@@ -106,6 +106,8 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
             this.endBIsConnected = endBIsConnected;
         }
 
+        changed |= validateEnds();
+
         if (changed) {
             Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());
             sendUpdate();
@@ -113,25 +115,27 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
             Logger.info("%s - Updating block         - %s", worldObj.isRemote ? "client" : "server", toString());
         }
 
-        validateEnds();
         if (worldObj.isRemote) {
             recalculateVisuals();
         }
     }
 
-    private void validateEnds()
+    private boolean validateEnds()
     {
-        if (endB != null && (endA == null || endB.ordinal() < endA.ordinal())) {
-            Logger.info("%s - Swapping ends          - w%s A:%s-%d and B:%s-%d", worldObj.isRemote ? "client" : "server", toString(), endA, endA == null ? -1 : endA.ordinal(), endB, endB.ordinal());
-            ForgeDirection endSwap = endA;
-            endA = endB;
-            endB = endSwap;
-
-            boolean isConnectedSwap = endAIsConnected;
-            endAIsConnected = endBIsConnected;
-            endBIsConnected = isConnectedSwap;
-            Logger.info("%s - Swapping ends          - w%s A:%s-%d and B:%s-%d", worldObj.isRemote ? "client" : "server", toString(), endA, endA.ordinal(), endB, endB == null ? -1 : endB.ordinal());
+        if (endB == null || (endA != null && endB.ordinal() >= endA.ordinal())) {
+            return false;
         }
+
+        Logger.info("%s - Swapping ends          - w%s A:%s-%d and B:%s-%d", worldObj.isRemote ? "client" : "server", toString(), endA, endA == null ? -1 : endA.ordinal(), endB, endB.ordinal());
+        ForgeDirection endSwap = endA;
+        endA = endB;
+        endB = endSwap;
+
+        boolean isConnectedSwap = endAIsConnected;
+        endAIsConnected = endBIsConnected;
+        endBIsConnected = isConnectedSwap;
+        Logger.info("%s - Swapping ends          - w%s A:%s-%d and B:%s-%d", worldObj.isRemote ? "client" : "server", toString(), endA, endA.ordinal(), endB, endB == null ? -1 : endB.ordinal());
+        return true;
     }
 
     private void calculateValidDirections()
@@ -250,18 +254,33 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         int i;
         for (i = 0; i < length; ++i) {
             ImmutablePair<ForgeDirection, ForgeDirection> pipeEnds = validDirections.get(i);
-            if (pipeEnds.getLeft() == this.endA && pipeEnds.getRight() == this.endB)
+            if (pipeEnds.left == this.endA && pipeEnds.right == this.endB)
             {
                 break;
             }
         }
-        i = (++i) % length;
+        int stop = i % length;
+        ImmutablePair<ForgeDirection, ForgeDirection> selectedEnds = null;
+        while ((i = (++i) % length) != stop) {
+            ImmutablePair<ForgeDirection, ForgeDirection> pipeEnds = validDirections.get(i);
+            IPipeTileEntity pipe = getPipeTileEntityInDirection(pipeEnds.left);
+            if (pipe == null || pipe.canConnect(pipeEnds.left.getOpposite())) {
+                pipe = getPipeTileEntityInDirection(pipeEnds.right);
+                if (pipe == null || pipe.canConnect(pipeEnds.right.getOpposite())) {
+                    selectedEnds = pipeEnds;
+                    break;
+                }
+            }
+        }
 
-        ImmutablePair<ForgeDirection, ForgeDirection> selectedEnds = validDirections.get(i);
+        if (selectedEnds == null) {
+            Logger.info("%s - Rotating Block Fail - %s", worldObj.isRemote ? "client" : "server", toString());
+            return;
+        }
         ForgeDirection newEndA = selectedEnds.getLeft();
         ForgeDirection newEndB = selectedEnds.getRight();
 
-        Logger.info("%s - Rotating Block - %s - old(A:%s, B:%s) - new(A:%s, B:%s)", worldObj.isRemote ? "client" : "server", getWorldBlockCoord(), endA, endB, newEndA, newEndB);
+        Logger.info("%s - Rotating Block - %s - new(A:%s, B:%s)", worldObj.isRemote ? "client" : "server", toString(), newEndA, newEndB);
 
         IPipeTileEntity prevEndATE;
         IPipeTileEntity newEndATE;
