@@ -2,6 +2,9 @@ package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
 import mod.steamnsteel.api.plumbing.IPipeTileEntity;
+import mod.steamnsteel.utility.blockParts.BlockPartConfiguration;
+import mod.steamnsteel.utility.blockParts.ITileEntityWithParts;
+import mod.steamnsteel.utility.PartSets;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -13,7 +16,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
+public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntityWithParts
 {
     private static final String NBT_END_A = "endA";
     private static final String NBT_END_A_CONNECTED = "endAConnected";
@@ -21,6 +24,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
     private static final String NBT_END_B_CONNECTED = "endBConnected";
 
     private boolean shouldRenderAsCorner;
+    private BlockPartConfiguration blockPartConfiguration = new BlockPartConfiguration(PartSets.Pipe);
 
     public ForgeDirection getEndADirection()
     {
@@ -416,5 +420,10 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         if (endBIsConnected && tileEntity != null) {
             tileEntity.disconnect(endB.getOpposite());
         }
+    }
+
+    @Override
+    public BlockPartConfiguration getBlockPartConfiguration() {
+        return blockPartConfiguration;
     }
 }

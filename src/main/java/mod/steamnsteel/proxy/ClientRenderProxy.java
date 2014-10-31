@@ -33,8 +33,11 @@ import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.tileentity.PipeJunctionTE;
 import mod.steamnsteel.tileentity.PipeTE;
 import mod.steamnsteel.tileentity.PlotoniumChestTE;
+import mod.steamnsteel.utility.blockParts.BlockHighlightEventListener;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends RenderProxy
@@ -44,6 +47,7 @@ public class ClientRenderProxy extends RenderProxy
     {
         registerItemRenderers();
         registerTESRs();
+        registerEventHandlers();
     }
 
     @Override
@@ -69,5 +73,9 @@ public class ClientRenderProxy extends RenderProxy
         ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeJunctionTE.class, new PipeJunctionTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PlotoniumChestTE.class, new PlotoniumChestTESR());
+    }
+
+    private void registerEventHandlers() {
+        MinecraftForge.EVENT_BUS.register(BlockHighlightEventListener.getInstance());
     }
 }
