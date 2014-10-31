@@ -40,6 +40,13 @@ public class SteamSpiderEntity extends EntityCreature
     }
 
     @Override
+    protected void entityInit()
+    {
+        super.entityInit();
+        this.getDataWatcher().addObject(12, (byte) 0); //Hostile status
+    }
+
+    @Override
     protected boolean isAIEnabled()
     {
         return true;
