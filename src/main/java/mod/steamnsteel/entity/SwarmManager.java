@@ -1,5 +1,7 @@
 package mod.steamnsteel.entity;
 
+import mod.steamnsteel.utility.position.ChunkCoord;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
@@ -15,7 +17,7 @@ public class SwarmManager extends WorldSavedData
 
     private World world;
     private int tickCounter;
-    private final List<Swarm> swarmList = new ArrayList<Swarm>();
+    private final List<Swarm<?>> swarmList = new ArrayList<Swarm<?>>();
 
     public SwarmManager()
     {
@@ -64,6 +66,35 @@ public class SwarmManager extends WorldSavedData
         {
             markDirty();
         }
+    }
+
+    /**
+     * Returns the nearest {@link mod.steamnsteel.entity.Swarm} for the provided entity and it's class.
+     * @param entity The entity
+     * @param clazz The class
+     * @param maxDistance Max distance the swarm can be away
+     * @param <T> The type
+     * @return The swarm
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends EntityLiving & ISwarmer> Swarm<T> getNearestSwarm(T entity, Class<T> clazz, int maxDistance)
+    {
+        Swarm<T> nearestSwarm = null;
+        double distance = Float.MAX_VALUE;
+        for (Swarm<?> swarm : swarmList)
+        {
+            if (swarm.clazz == clazz)
+            {
+                ChunkCoord coord = swarm.getHomeChunkCoord();
+                double dis = entity.getDistanceSq(coord.getX() + 8, swarm.getHomeBlockCoord().getY(), swarm.getHomeChunkCoord().getZ() + 8);
+                if ((nearestSwarm == null || dis < distance) && dis <= maxDistance)
+                {
+                    nearestSwarm = (Swarm<T>) swarm;
+                    distance = dis;
+                }
+            }
+        }
+        return nearestSwarm;
     }
 
     @Override
