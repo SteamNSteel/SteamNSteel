@@ -5,39 +5,40 @@ import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.*;
 
-//TODO saving/serialising
 public class Swarm<T extends EntityLiving & ISwarmer>
 {
+    Class<T> clazz; //We need this for comparisons
     private World world;
     //private WeakReference<Object> spiderFactory; //TODO implement
     private final Multiset<String> threatCount = HashMultiset.create();
     private final Set<T> swarmerEntities = Collections.newSetFromMap(new WeakHashMap<T, Boolean>());
-    private final ChunkCoord homeChunkCoord;
-    private final ChunkBlockCoord homeBlockCoord; //This could be replaced with the spiderFactory in the future
+    private ChunkCoord homeChunkCoord;
+    private ChunkBlockCoord homeBlockCoord; //This could be replaced with the spiderFactory in the future
     private ChunkCoord currPosition;
 
-    public Swarm(World world, ChunkCoord homeChunkCoord, ChunkBlockCoord homeBlockCoord)
+    public Swarm(World world, ChunkCoord homeChunkCoord, ChunkBlockCoord homeBlockCoord, Class<T> clazz)
     {
         this.world = world;
         this.homeChunkCoord = homeChunkCoord;
         this.homeBlockCoord = homeBlockCoord;
         this.currPosition = homeChunkCoord;
+        this.clazz = clazz;
     }
 
     public void update()
     {
-
         @SuppressWarnings("unchecked")
         List<EntityPlayer> playerList = world.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(
                 homeChunkCoord.getX(), homeBlockCoord.getY() - 16, homeChunkCoord.getZ(), homeChunkCoord.getX() + 16,
@@ -122,7 +123,7 @@ public class Swarm<T extends EntityLiving & ISwarmer>
     public void changeThreatCount(String name, int valueChange)
     {
         int newValue = MathHelper.clamp_int(getThreatValue(name) + valueChange, 0, 100);
-        threatCount.setCount(name, valueChange);
+        threatCount.setCount(name, newValue);
     }
 
     public int getThreatValue(String name)
@@ -142,5 +143,58 @@ public class Swarm<T extends EntityLiving & ISwarmer>
     public boolean isValid()
     {
         return swarmerEntities.size() > 0;
+    }
+
+    public void readFromNBT(NBTTagCompound nbtTagCompound)
+    {
+        homeChunkCoord = ChunkCoord.of(nbtTagCompound.getInteger("HomeChunkX"), nbtTagCompound.getInteger("HomeChunkY"));
+        homeBlockCoord = ChunkBlockCoord.of(nbtTagCompound.getInteger("HomeBlockX"), nbtTagCompound.getInteger("HomeBlockY"), nbtTagCompound.getInteger("HomeBlockX"));
+
+        //Load threat list
+        NBTTagList threatTagList = nbtTagCompound.getTagList("Threat", 10);
+        for (int j = 0; j < threatTagList.tagCount(); ++j)
+        {
+            NBTTagCompound tagListEntry = threatTagList.getCompoundTagAt(j);
+            threatCount.setCount(tagListEntry.getString("Name"), tagListEntry.getInteger("Count"));
+        }
+        buildSwarmEntitiesList(clazz);
+    }
+
+    public void writeToNBT(NBTTagCompound nbtTagCompound)
+    {
+        nbtTagCompound.setInteger("HomeChunkX", homeChunkCoord.getX());
+        nbtTagCompound.setInteger("HomeChunkZ", homeChunkCoord.getZ());
+        nbtTagCompound.setInteger("HomeBlockX", homeBlockCoord.getX());
+        nbtTagCompound.setInteger("HomeBlockY", homeBlockCoord.getY());
+        nbtTagCompound.setInteger("HomeBlockZ", homeBlockCoord.getZ());
+
+        //Save threat list
+        NBTTagList threatTagList = new NBTTagList();
+        for (Multiset.Entry<String> entry : threatCount.entrySet())
+        {
+            NBTTagCompound threatEntry = new NBTTagCompound();
+            threatEntry.setString("Name", entry.getElement());
+            threatEntry.setInteger("Count", entry.getCount());
+        }
+        nbtTagCompound.setTag("Threat", threatTagList);
+    }
+
+    /**
+     * Builds up a list of entities that is within the home region for this swarm.
+     * TODO This isn't exactly ideal as if a swarm is moving, the entities that are part of it could be lost. Maybe have ISwarmers save the home coords of the swarm and try and load it that way?
+     */
+    private void buildSwarmEntitiesList(final Class<T> clazz)
+    {
+        @SuppressWarnings("unchecked")
+        List<T> entityList = world.selectEntitiesWithinAABB(ISwarmer.class, AxisAlignedBB.getBoundingBox(homeChunkCoord.getX(), homeBlockCoord.getY() - 16, homeChunkCoord.getZ(),
+                homeChunkCoord.getX() + 16, homeBlockCoord.getY() + 16, homeChunkCoord.getZ() + 16), new IEntitySelector()
+        {
+            @Override
+            public boolean isEntityApplicable(Entity entity)
+            {
+                return (entity.getClass().isAssignableFrom(clazz) && ((ISwarmer)entity).getSwarm() == null);
+            }
+        });
+        swarmerEntities.addAll(entityList);
     }
 }

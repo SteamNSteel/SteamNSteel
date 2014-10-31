@@ -1,20 +1,12 @@
 package mod.steamnsteel.utility.event;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import mod.steamnsteel.entity.SwarmManager;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class ServerEventHandler
 {
-    static {
-        ServerEventHandler serverEventHandler = new ServerEventHandler();
-        FMLCommonHandler.instance().bus().register(serverEventHandler);
-        MinecraftForge.EVENT_BUS.register(serverEventHandler);
-    }
-
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event)
     {

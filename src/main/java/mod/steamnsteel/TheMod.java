@@ -22,6 +22,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import mod.steamnsteel.api.crafting.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
@@ -33,9 +34,11 @@ import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModEntity;
 import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.proxy.Proxies;
+import mod.steamnsteel.utility.event.ServerEventHandler;
 import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 
 @SuppressWarnings({"WeakerAccess", "MethodMayBeStatic"})
 @Mod(modid = TheMod.MOD_ID, name = TheMod.MOD_NAME, version = TheMod.MOD_VERSION, useMetadata = true, guiFactory = TheMod.MOD_GUI_FACTORY)
@@ -72,6 +75,10 @@ public class TheMod
         ModItem.init();
         ModBlock.init();
         ModEntity.init();
+
+        ServerEventHandler serverEventHandler = new ServerEventHandler();
+        FMLCommonHandler.instance().bus().register(serverEventHandler);
+        MinecraftForge.EVENT_BUS.register(serverEventHandler);
     }
 
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
@@ -98,5 +105,11 @@ public class TheMod
     public void onFMLPostInitialization(FMLPostInitializationEvent event)
     {
         // TODO: Handle interaction with other mods, complete your setup based on this.
+    }
+
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent e)
+    {
+        e.registerServerCommand(new CommandSpawnEntity());
     }
 }

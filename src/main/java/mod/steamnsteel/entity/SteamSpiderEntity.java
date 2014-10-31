@@ -74,4 +74,10 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer
     {
         return swarm;
     }
+
+    @Override
+    public void setSwarm(Swarm swarm)
+    {
+        this.swarm = swarm;
+    }
 }

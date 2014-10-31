@@ -10,4 +10,10 @@ public interface ISwarmer
      * @return The swarm
      */
     public Swarm getSwarm();
+
+    /**
+     * Sets the swarm for the entity
+     * @param swarm The swarm
+     */
+    public void setSwarm(Swarm swarm);
 }
