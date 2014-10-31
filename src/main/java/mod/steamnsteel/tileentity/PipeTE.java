@@ -106,7 +106,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
             this.endBIsConnected = endBIsConnected;
         }
 
-        changed |= validateEnds();
+        changed |= orderEnds();
 
         if (changed) {
             Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());
@@ -120,7 +120,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         }
     }
 
-    private boolean validateEnds()
+    private boolean orderEnds()
     {
         if (endB == null || (endA != null && endB.ordinal() >= endA.ordinal())) {
             return false;
@@ -170,12 +170,12 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         if (endA == opposite) {
             endA = null;
             endAIsConnected = false;
-            validateEnds();
+            orderEnds();
             sendUpdate();
         } else if (endB == opposite) {
             endB = null;
             endBIsConnected = false;
-            validateEnds();
+            orderEnds();
             sendUpdate();
         }
     }
@@ -296,7 +296,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
 
         endA = newEndA;
         endB = newEndB;
-        validateEnds();
+        orderEnds();
 
         if (endAChanged && prevEndATE != null) {
             prevEndATE.recalculateVisuals();
@@ -376,7 +376,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         }
 
         if (endA != previousEndA || endB != previousEndB || endAIsConnected != previousEndAConnected || endBIsConnected != previousEndBConnected) {
-            validateEnds();
+            orderEnds();
             sendUpdate();
         }
 
@@ -400,7 +400,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity
         this.endB = orientation.getOpposite();
         tileEntity = getPipeTileEntityInDirection(endB);
         endBIsConnected = tileEntity != null && tileEntity.isDirectionConnected(endB.getOpposite());
-        validateEnds();
+        orderEnds();
     }
 
     public void detach()
