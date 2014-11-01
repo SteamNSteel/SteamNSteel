@@ -73,15 +73,14 @@ public class PipeItemRenderer implements IItemRenderer
 
         GL11.glPushMatrix();
         //GL11.glTranslatef(0f, -0.5f, 0f);
-        GL11.glScalef(1.1f, 1.1f, 1.1f);
-        model.renderPipeCap();
+        GL11.glRotatef(-180, 0.0f, 0.0f, 1.0f);
+        model.renderPipeOpening();
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
-        GL11.glRotatef(-180, 0.0f, 0.0f, 1.0f);
-        GL11.glTranslatef(0f, -1f, 0f);
-        GL11.glScalef(1.1f, 1.1f, 1.1f);
-        model.renderPipeCap();
+        GL11.glRotatef(-0, 0.0f, 0.0f, 1.0f);
+        GL11.glTranslatef(0f,  (13f * (1f / 16f)), 0f);
+        model.renderPipeOpening();
         GL11.glPopMatrix();
 
         GL11.glPopMatrix();
