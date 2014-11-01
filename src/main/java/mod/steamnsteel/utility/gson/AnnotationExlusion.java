@@ -5,6 +5,10 @@ import com.google.gson.FieldAttributes;
 
 public class AnnotationExlusion implements ExclusionStrategy
 {
+    public static final AnnotationExlusion INSTANCE = new AnnotationExlusion();
+
+    private AnnotationExlusion() {}
+
     @Override
     public boolean shouldSkipField(FieldAttributes field)
     {

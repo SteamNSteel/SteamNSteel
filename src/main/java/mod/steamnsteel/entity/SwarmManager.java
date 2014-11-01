@@ -3,6 +3,7 @@ package mod.steamnsteel.entity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import mod.steamnsteel.utility.gson.AnnotationExlusion;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,7 +14,7 @@ import java.util.*;
 
 public class SwarmManager extends WorldSavedData
 {
-    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+    private static final Gson gson = new GsonBuilder().setExclusionStrategies(AnnotationExlusion.INSTANCE).create();
     public static final Map<World, SwarmManager> swarmManagers = new HashMap<World, SwarmManager>();
 
     private World world;
