@@ -43,7 +43,7 @@ public class BlockHighlightEventListener {
 
 
 
-                Iterable<BlockPart> parts = partConfiguration.getBlockPartsIntersecting(tileEntity, posVec, lookVec);
+                Iterable<BlockPart> parts = partConfiguration.getBlockPartsIntersecting(tileEntity, posVec, vec);
                 for(BlockPart part : parts) {
                     part.renderBoundingBox(highlightEvent.player, tileEntity, highlightEvent.partialTicks);
                 }
