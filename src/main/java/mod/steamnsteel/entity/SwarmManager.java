@@ -1,37 +1,38 @@
 package mod.steamnsteel.entity;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SwarmManager extends WorldSavedData
 {
+    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
     public static final Map<World, SwarmManager> swarmManagers = new HashMap<World, SwarmManager>();
 
     private World world;
     private int tickCounter;
-    private final List<Swarm<?>> swarmList = new ArrayList<Swarm<?>>();
+    private final List<Swarm<? extends ISwarmer>> swarmList = new ArrayList<Swarm<? extends ISwarmer>>();
 
-    public SwarmManager()
+    public SwarmManager(String string)
     {
-        super("swarms");
+        super(string);
     }
 
     public SwarmManager(World world)
     {
-        this();
+        this("swarms");
         this.world = world;
         markDirty();
     }
 
-    public void addSwarm(Swarm swarm)
+    public <T extends EntityLiving & ISwarmer> void addSwarm(Swarm<T> swarm)
     {
         swarmList.add(swarm);
     }
@@ -49,13 +50,16 @@ public class SwarmManager extends WorldSavedData
     {
         world.theProfiler.startSection("swarmUpdate");
         tickCounter++;
-        for (Swarm swarm : swarmList)
+        Iterator<Swarm<? extends ISwarmer>> iterator = swarmList.iterator();
+        while (iterator.hasNext())
         {
+            Swarm swarm = iterator.next();
+            swarm.buildSwarmEntitiesList();
             world.theProfiler.startSection("swarmX" + swarm.getHomeChunkCoord().getX() + ":Z" + swarm.getHomeChunkCoord().getZ());
-            swarm.update();
-            if (swarm.isValid())
+            swarm.update(tickCounter);
+            if (!swarm.isValid())
             {
-                swarmList.remove(swarm);
+                iterator.remove();
             }
             world.theProfiler.endSection();
         }
@@ -77,12 +81,13 @@ public class SwarmManager extends WorldSavedData
      * @return The swarm
      */
     @SuppressWarnings("unchecked")
-    public <T extends EntityLiving & ISwarmer> Swarm<T> getNearestSwarm(T entity, Class<T> clazz, int maxDistance)
+    public <T extends EntityLiving & ISwarmer> Swarm<T> getNearestSwarmToEntity(T entity, Class<T> clazz, int maxDistance)
     {
         Swarm<T> nearestSwarm = null;
         double distance = Float.MAX_VALUE;
-        for (Swarm<?> swarm : swarmList)
+        for (Swarm<? extends ISwarmer> swarm : swarmList)
         {
+            //Has to exact match
             if (swarm.clazz == clazz)
             {
                 ChunkCoord coord = swarm.getHomeChunkCoord();
@@ -100,11 +105,13 @@ public class SwarmManager extends WorldSavedData
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound)
     {
+        //Load swarm list
         NBTTagList nbttaglist = nbtTagCompound.getTagList("Swarms", 10);
         for (int i = 0; i < nbttaglist.tagCount(); ++i)
         {
             NBTTagCompound tagCompound = nbttaglist.getCompoundTagAt(i);
-            Swarm swarm = new Swarm<SteamSpiderEntity>(null, null, null, SteamSpiderEntity.class); //TODO this a temp and horrible solution
+            SwarmType swarmType = SwarmType.values()[tagCompound.getInteger("SwarmType")];
+            Swarm swarm = gson.fromJson(tagCompound.getString("Data"), swarmType.typeToken.getType());
             swarm.readFromNBT(tagCompound);
             addSwarm(swarm);
         }
@@ -113,13 +120,30 @@ public class SwarmManager extends WorldSavedData
     @Override
     public void writeToNBT(NBTTagCompound nbtTagCompound)
     {
+        //Save swarm list
         NBTTagList nbtTagList = new NBTTagList();
         for (Swarm swarm : swarmList)
         {
-            NBTTagCompound swarmNBT = new NBTTagCompound();
-            swarm.writeToNBT(swarmNBT);
-            nbtTagList.appendTag(swarmNBT);
+            if (swarm.shouldPersist())
+            {
+                NBTTagCompound swarmNBT = new NBTTagCompound();
+                swarmNBT.setInteger("SwarmType", swarm.getSwarmType().ordinal());
+                swarmNBT.setString("Data", gson.toJson(swarm));
+                nbtTagList.appendTag(swarmNBT);
+            }
         }
         nbtTagCompound.setTag("Swarms", nbtTagList);
+    }
+
+    public enum SwarmType
+    {
+        STEAMSPIDERSWARM(new TypeToken<Swarm<SteamSpiderEntity>>(){});
+
+        public final TypeToken typeToken;
+
+        SwarmType(TypeToken type)
+        {
+            this.typeToken = type;
+        }
     }
 }
