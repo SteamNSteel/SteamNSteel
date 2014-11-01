@@ -3,6 +3,7 @@ package mod.steamnsteel.entity;
 import mod.steamnsteel.entity.ai.AISwarmDefendHome;
 import mod.steamnsteel.entity.ai.AISwarmOnHurt;
 import mod.steamnsteel.entity.ai.AISwarmReturnHome;
+import mod.steamnsteel.entity.ai.AISwarmSeek;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityBubbleFX;
 import net.minecraft.client.particle.EntitySmokeFX;
@@ -28,6 +29,7 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer
         //tasks.addTask(7, new EntityAIWander(this, 1.0D));
         //tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         //tasks.addTask(8, new EntityAILookIdle(this));
+        tasks.addTask(8, new AISwarmSeek<SteamSpiderEntity>(this, 0, 50, 100, 3, 1200, false)); //This should be removed if we want spiders to become "dumb" when their host is killed
         targetTasks.addTask(1, new AISwarmOnHurt<SteamSpiderEntity>(this));
         targetTasks.addTask(2, new AISwarmDefendHome<SteamSpiderEntity>(this, 16));
         setSize(0.35F, 0.8F);

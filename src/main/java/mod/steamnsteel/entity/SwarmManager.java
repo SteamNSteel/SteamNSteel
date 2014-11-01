@@ -89,7 +89,7 @@ public class SwarmManager extends WorldSavedData
         for (Swarm<? extends ISwarmer> swarm : swarmList)
         {
             //Has to exact match
-            if (swarm.clazz == clazz)
+            if (swarm.entityClass == clazz)
             {
                 ChunkCoord coord = swarm.getHomeChunkCoord();
                 double dis = entity.getDistanceSq(coord.getX() + 8, swarm.getHomeBlockCoord().getY(), swarm.getHomeChunkCoord().getZ() + 8);
@@ -101,6 +101,16 @@ public class SwarmManager extends WorldSavedData
             }
         }
         return nearestSwarm;
+    }
+
+    public <T extends EntityLiving & ISwarmer> Swarm<T> getSwarmForClass(Class<T> entityClass)
+    {
+        //TODO remove hardcode? subclasses?
+        if (entityClass == SteamSpiderEntity.class)
+        {
+            return new Swarm<T>(world, entityClass);
+        }
+        return null;
     }
 
     @Override

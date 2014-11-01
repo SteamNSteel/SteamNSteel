@@ -23,7 +23,7 @@ import java.util.WeakHashMap;
 
 public class Swarm<T extends EntityLiving & ISwarmer>
 {
-    @Exclude Class<T> clazz; //We need this for comparisons
+    @Exclude Class<T> entityClass; //We need this for comparisons
     @Exclude private World world;
     //private WeakReference<Object> spiderFactory; //TODO implement
     private final Multiset<String> threatCount = HashMultiset.create();
@@ -32,15 +32,15 @@ public class Swarm<T extends EntityLiving & ISwarmer>
     private ChunkBlockCoord homeBlockCoord; //This could be replaced with the spiderFactory in the future
     private ChunkCoord currPosition;
 
-    public Swarm(World world, Class<T> clazz)
+    public Swarm(World world, Class<T> entityClass)
     {
         this.world = world;
-        this.clazz = clazz;
+        this.entityClass = entityClass;
     }
 
-    public Swarm(World world, ChunkCoord homeChunkCoord, ChunkBlockCoord homeBlockCoord, Class<T> clazz)
+    public Swarm(World world, ChunkCoord homeChunkCoord, ChunkBlockCoord homeBlockCoord, Class<T> entityClass)
     {
-        this(world, clazz);
+        this(world, entityClass);
         this.homeChunkCoord = homeChunkCoord;
         this.homeBlockCoord = homeBlockCoord;
         this.currPosition = homeChunkCoord;
@@ -210,7 +210,7 @@ public class Swarm<T extends EntityLiving & ISwarmer>
     public void buildSwarmEntitiesList()
     {
         @SuppressWarnings("unchecked")
-        List<T> entityList = world.selectEntitiesWithinAABB(clazz, AxisAlignedBB.getBoundingBox(homeChunkCoord.getX(), homeBlockCoord.getY(), homeChunkCoord.getZ(),
+        List<T> entityList = world.selectEntitiesWithinAABB(entityClass, AxisAlignedBB.getBoundingBox(homeChunkCoord.getX(), homeBlockCoord.getY(), homeChunkCoord.getZ(),
                 homeChunkCoord.getX() + 16, homeBlockCoord.getY() + 16, homeChunkCoord.getZ() + 16), new IEntitySelector()
         {
             @Override
