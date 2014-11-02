@@ -41,6 +41,8 @@ public class SteamSpiderModel extends ModelBase
 
         Tessellator tessellator = Tessellator.instance;
         Tessellator.instance.startDrawing(GL11.GL_TRIANGLES);
+        //Disable colour if taking damage to allow it to properly show damage effect
+        if (((EntityLivingBase) entity).hurtTime > 0 || ((EntityLivingBase) entity).deathTime > 0) tessellator.disableColor();
 
         float bob = (float) Math.cos(entity.ticksExisted) / 200F;
         tessellator.addTranslation(0F, bob, 0F);
