@@ -50,7 +50,7 @@ public class SteamSpiderModel extends ModelBase
         model.tessellateAllExcept(tessellator, "SSS_LegRF", "SSS_LegRB", "SSS_LegLF", "SSS_LegLB", "SSS_Bulb", "SSS_Filiment");
         if (entity.getDataWatcher().getWatchableObjectByte(12) == 1)
         {
-            tessellator.setColorRGBA(255, 75, 106, 255);
+            tessellator.setColorRGBA(255, 75, 50, 255);
         }
         model.tessellateOnly(tessellator, "SSS_Bulb", "SSS_Filiment");
         tessellator.setColorRGBA(255, 255, 255, 255);
