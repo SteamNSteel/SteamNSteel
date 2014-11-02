@@ -10,6 +10,7 @@ import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -26,6 +27,7 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer
         tasks.addTask(0, new EntityAISwimming(this));
         tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
         tasks.addTask(3, new AISwarmReturnHome<SteamSpiderEntity>(this, 32, 1.2F, true));
+        tasks.addTask(4, new EntityAILeapAtTarget(this, 0.5F));
         //tasks.addTask(7, new EntityAIWander(this, 1.0D));
         //tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         //tasks.addTask(8, new EntityAILookIdle(this));
@@ -40,9 +42,9 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer
     {
         //TODO attributes
         super.applyEntityAttributes();
-        //getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0D);
+        getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
         getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.35D); //Same speed as player walking
-        //getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0D);
+        getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0D);
     }
 
     @Override
@@ -61,7 +63,9 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (worldObj.isRemote) {
+        //Steam particles
+        if (worldObj.isRemote)
+        {
             //Position of point on a circle. Used to calculate where the exit pipes are for smoke/steam
             double rot = Math.toRadians(renderYawOffset - 90F + (rand.nextBoolean() ? 12F : -12F));
             double radius = 0.27D;
