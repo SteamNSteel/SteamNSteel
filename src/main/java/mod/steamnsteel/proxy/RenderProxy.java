@@ -16,9 +16,13 @@
 
 package mod.steamnsteel.proxy;
 
+import net.minecraft.world.World;
+
 public class RenderProxy
 {
     public void init() { }
+
+    public void spawnParticle(String name, World world, double x, double y, double z, double motionX, double motionY, double motionZ, float scale) { }
 
     public int addNewArmourRenderers(String armor)
     {

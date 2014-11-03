@@ -1,21 +1,16 @@
 package mod.steamnsteel.entity;
 
-import mod.steamnsteel.entity.ai.AISwarmDefendHome;
-import mod.steamnsteel.entity.ai.AISwarmOnHurt;
-import mod.steamnsteel.entity.ai.AISwarmReturnHome;
-import mod.steamnsteel.entity.ai.AISwarmSeek;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityBubbleFX;
-import net.minecraft.client.particle.EntitySmokeFX;
+import mod.steamnsteel.entity.ai.*;
+import mod.steamnsteel.proxy.Proxies;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class SteamSpiderEntity extends EntityCreature implements ISwarmer
+public class SteamSpiderEntity extends EntityCreature implements ISwarmer, IRangedAttackMob
 {
     public static final String NAME = "steamSpider";
     private Swarm swarm;
@@ -25,9 +20,10 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer
         super(world);
         //TODO Proper AI tasks
         tasks.addTask(0, new EntityAISwimming(this));
-        tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
+        //tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
         tasks.addTask(3, new AISwarmReturnHome<SteamSpiderEntity>(this, 32, 1.2F, true));
-        tasks.addTask(4, new EntityAILeapAtTarget(this, 0.5F));
+        //tasks.addTask(4, new EntityAILeapAtTarget(this, 0.5F));
+        tasks.addTask(2, new AIRangeAttack<SteamSpiderEntity>(this, 1.2D, 1, 1, 4F, 6F));
         //tasks.addTask(7, new EntityAIWander(this, 1.0D));
         //tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         //tasks.addTask(8, new EntityAILookIdle(this));
@@ -63,6 +59,14 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer
     @Override
     public void onUpdate() {
         super.onUpdate();
+        //Weird stuff to actually get us to face in the correct directions
+        renderYawOffset = rotationYaw;
+        rotationPitch = 0; //0 pitch cause we can't actually look "up"
+        if (getAttackTarget() != null)
+        {
+            faceEntity(getAttackTarget(), 10F, 0F);
+        }
+
         //Steam particles
         if (worldObj.isRemote)
         {
@@ -71,8 +75,20 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer
             double radius = 0.27D;
             double x = posX + (radius * Math.cos(rot));
             double z = posZ + (radius * Math.sin(rot));
-            Minecraft.getMinecraft().effectRenderer.addEffect(isInWater() ? new EntityBubbleFX(worldObj, x, posY + 0.61, z, 0, 0, 0) : new EntitySmokeFX(worldObj, x, posY + 0.61, z, 0, 0, 0, 0.5F));
+            if (isInWater())
+            {
+                worldObj.spawnParticle("bubble", x, posY + 0.61, z, 0, 0, 0);
+            }
+            else
+            {
+                Proxies.render.spawnParticle("smoke", worldObj, x, posY + 0.61, z, 0, 0, 0, 0.5F);
+            }
         }
+    }
+
+    public float getEyeHeight()
+    {
+        return 0.2F;
     }
 
     @Override
@@ -85,5 +101,29 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer
     public void setSwarm(Swarm swarm)
     {
         this.swarm = swarm;
+    }
+
+    @Override
+    public void attackEntityWithRangedAttack(EntityLivingBase targetEntity, float range)
+    {
+        if (worldObj.getTotalWorldTime() % 1 == 0)
+        {
+            //TODO reduce number of SteamProjectileEntity spawns. Two every two ticks is not ideal
+            double rot;
+            double radius = 0.325;
+            SteamProjectileEntity steamProj = new SteamProjectileEntity(worldObj, this, 0.9F + MathHelper.randomFloatClamp(getRNG(), -0.2F, 0.1F));
+            rot = Math.toRadians(renderYawOffset + 90F + 12F);
+            steamProj.setPosition(posX + (radius * Math.cos(rot)), posY + getEyeHeight(), posZ + (radius * Math.sin(rot)));
+            steamProj.motionX += MathHelper.getRandomDoubleInRange(rand, -0.2D, 0.2D);
+            steamProj.motionZ += MathHelper.getRandomDoubleInRange(rand, -0.2D, 0.2D);
+            worldObj.spawnEntityInWorld(steamProj);
+
+            steamProj = new SteamProjectileEntity(worldObj, this, 0.9F + MathHelper.randomFloatClamp(getRNG(), -0.2F, 0.1F));
+            rot = Math.toRadians(renderYawOffset + 90F - 12F);
+            steamProj.setPosition(posX + (radius * Math.cos(rot)), posY + getEyeHeight(), posZ + (radius * Math.sin(rot)));
+            steamProj.motionX += MathHelper.getRandomDoubleInRange(rand, -0.2D, 0.2D);
+            steamProj.motionZ += MathHelper.getRandomDoubleInRange(rand, -0.2D, 0.2D);
+            worldObj.spawnEntityInWorld(steamProj);
+        }
     }
 }
