@@ -2,6 +2,7 @@ package mod.steamnsteel.entity;
 
 import mod.steamnsteel.entity.ai.*;
 import mod.steamnsteel.proxy.Proxies;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
@@ -23,7 +24,7 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer, IRang
         //tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
         tasks.addTask(3, new AISwarmReturnHome<SteamSpiderEntity>(this, 32, 1.2F, true));
         //tasks.addTask(4, new EntityAILeapAtTarget(this, 0.5F));
-        tasks.addTask(2, new AIRangeAttack<SteamSpiderEntity>(this, 1.2D, 1, 1, 4F, 6F));
+        tasks.addTask(2, new AIRangeBurstAttack<SteamSpiderEntity>(this, 1.2D, 4F, 40, 1200));
         //tasks.addTask(7, new EntityAIWander(this, 1.0D));
         //tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         //tasks.addTask(8, new EntityAILookIdle(this));
@@ -84,6 +85,7 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer, IRang
                 Proxies.render.spawnParticle("smoke", worldObj, x, posY + 0.61, z, 0, 0, 0, 0.5F);
             }
         }
+        setAttackTarget(Minecraft.getMinecraft().thePlayer);
     }
 
     public float getEyeHeight()

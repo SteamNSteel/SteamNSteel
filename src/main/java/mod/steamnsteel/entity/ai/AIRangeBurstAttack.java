@@ -6,33 +6,42 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.MathHelper;
 
-public class AIRangeAttack<T extends EntityLiving & IRangedAttackMob> extends EntityAIBase
+public class AIRangeBurstAttack<T extends EntityLiving & IRangedAttackMob> extends EntityAIBase
 {
     private final T entity;
     private final double chaseSpeed;
-    private final int maxRangeAttackRate;
-    private final int minRangeAttackRate;
     private final float attackRange;
-    private final float maxAttackRange;
+    private final int maxAttackTime;
+    private final int cooldown;
 
     private EntityLivingBase attackTarget;
     private int seeTime;
-    private int rangedAttackTime;
+    private int attackingTime;
+    private long lastAttackTime;
 
-    public AIRangeAttack(T entity, double chaseSpeed, int minRangeAttackRate, int maxRangeAttackRate, float attackRange, float maxAttackRange)
+    /**
+     * Creates an AI task for attacking with a burst range attack. This means a range attack that fires at 1 per tick
+     * for {@link #maxAttackTime} then goes onto a cooldown as specified by cooldown. This is mostly
+     * for quick, sharp attacks.
+     * @param entity The entity
+     * @param chaseSpeed The chasing speed
+     * @param attackRange The range when this entity will start attacking
+     * @param maxAttackTime The max time the entity will attack for
+     * @param cooldown The cooldown between attacks
+     */
+    public AIRangeBurstAttack(T entity, double chaseSpeed, float attackRange, int maxAttackTime, int cooldown)
     {
         this.entity = entity;
         this.chaseSpeed = chaseSpeed;
-        this.minRangeAttackRate = minRangeAttackRate;
-        this.maxRangeAttackRate = maxRangeAttackRate;
         this.attackRange = attackRange;
-        this.maxAttackRange = maxAttackRange;
+        this.maxAttackTime = maxAttackTime;
+        this.cooldown = cooldown;
     }
 
     @Override
     public boolean shouldExecute()
     {
-        return entity.getAttackTarget() != null;
+        return entity.getAttackTarget() != null && lastAttackTime + cooldown < entity.worldObj.getTotalWorldTime();
     }
 
     @Override
@@ -44,7 +53,7 @@ public class AIRangeAttack<T extends EntityLiving & IRangedAttackMob> extends En
     @Override
     public boolean continueExecuting()
     {
-        return shouldExecute() || !entity.getNavigator().noPath();
+        return (shouldExecute() || !entity.getNavigator().noPath()) && attackingTime < maxAttackTime;
     }
 
     @Override
@@ -55,7 +64,7 @@ public class AIRangeAttack<T extends EntityLiving & IRangedAttackMob> extends En
 
         seeTime = canSee ? seeTime + 1 : 0;
 
-        if (distanceToTarget <= (double)(attackRange * attackRange) && seeTime >= 20)
+        if (distanceToTarget <= (double)(attackRange * attackRange) && seeTime >= 10)
         {
             entity.getNavigator().clearPathEntity();
         }
@@ -67,9 +76,9 @@ public class AIRangeAttack<T extends EntityLiving & IRangedAttackMob> extends En
         entity.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
         float f;
 
-        if (--rangedAttackTime == 0)
+        if (MathHelper.sqrt_double(distanceToTarget) < attackRange)
         {
-            if (distanceToTarget > (double)(maxAttackRange * maxAttackRange) || !canSee)
+            if (distanceToTarget > (double)(attackRange * attackRange) || !canSee)
             {
                 return;
             }
@@ -78,12 +87,7 @@ public class AIRangeAttack<T extends EntityLiving & IRangedAttackMob> extends En
             float f1 = MathHelper.clamp_float(f, 0.1F, 1.0F);
 
             entity.attackEntityWithRangedAttack(attackTarget, f1);
-            rangedAttackTime = MathHelper.floor_float(f * (float)(maxRangeAttackRate - minRangeAttackRate) + (float)minRangeAttackRate);
-        }
-        else if (rangedAttackTime < 0)
-        {
-            f = MathHelper.sqrt_double(distanceToTarget) / attackRange;
-            rangedAttackTime = MathHelper.floor_float(f * (float)(maxRangeAttackRate - minRangeAttackRate) + (float)minRangeAttackRate);
+            attackingTime++;
         }
     }
 
@@ -92,6 +96,7 @@ public class AIRangeAttack<T extends EntityLiving & IRangedAttackMob> extends En
     {
         attackTarget = null;
         seeTime = 0;
-        rangedAttackTime = -1;
+        attackingTime = 0;
+        lastAttackTime = entity.worldObj.getTotalWorldTime();
     }
 }
