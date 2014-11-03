@@ -199,14 +199,14 @@ public class PipeTESR extends SteamNSteelTESR
         GL11.glPopMatrix();
 
 
-        if (endA != null && (!te.isEndAConnected() || te.isRenderEndAAsSeparatePipe()))
+        if (endA != null && !te.isEndAConnected())
         {
             GL11.glPushMatrix();
             renderCap(endA);
             GL11.glPopMatrix();
         }
 
-        if (endB != null && (!te.isEndBConnected() || te.isRenderEndBAsSeparatePipe()))
+        if (endB != null && !te.isEndBConnected())
         {
             GL11.glPushMatrix();
             renderCap(endB);

@@ -1,13 +1,11 @@
 package mod.steamnsteel.utility.blockParts;
 
-import com.google.common.base.Objects;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -15,15 +13,11 @@ import org.lwjgl.opengl.GL11;
  */
 public class BlockPart {
 
-    private final String name;
     private final PartSet partSet;
     private AxisAlignedBB boundingBox;
     public final int index;
-    public Object metadata;
-    private boolean enabledByDefault = false;
 
-    public BlockPart(String name, PartSet partSet, int index) {
-        this.name = name;
+    public BlockPart(PartSet partSet, int index) {
         this.partSet = partSet;
         this.index = index;
     }
@@ -58,39 +52,7 @@ public class BlockPart {
         RenderGlobal.drawOutlinedBoundingBox(drawBoundingBox.expand(e, e, e).getOffsetBoundingBox(-playerX, -playerY, -playerZ), -1);
     }
 
-    public BlockPart setBoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+    public void setBoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
         this.boundingBox = AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
-        return this;
-    }
-
-    public BlockPart setMetadata(final Object metadata)
-    {
-        this.metadata = metadata;
-        return this;
-    }
-
-    public Object getMetadata() {
-        return metadata;
-    }
-
-    public BlockPart enabledByDefault()
-    {
-        this.enabledByDefault = true;
-        return this;
-    }
-
-    public boolean isEnabledByDefault() {
-        return enabledByDefault;
-    }
-
-    @Override
-    public String toString()
-    {
-        return Objects.toStringHelper(this)
-                .add("name", this.name)
-                .add("index", this.index)
-                .add("metadata", this.metadata)
-                .add("enabledByDefault", this.enabledByDefault)
-                .toString();
     }
 }
