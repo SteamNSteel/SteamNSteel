@@ -2,7 +2,8 @@ package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
 import mod.steamnsteel.api.plumbing.IPipeTileEntity;
-import mod.steamnsteel.utility.blockParts.BlockPartConfiguration;
+import mod.steamnsteel.utility.blockParts.BlockPart;
+import mod.steamnsteel.utility.blockParts.TileEntityBlockPartState;
 import mod.steamnsteel.utility.blockParts.ITileEntityWithParts;
 import mod.steamnsteel.utility.PartSets;
 import mod.steamnsteel.utility.log.Logger;
@@ -24,7 +25,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
     private static final String NBT_END_B_CONNECTED = "endBConnected";
 
     private boolean shouldRenderAsCorner;
-    private BlockPartConfiguration blockPartConfiguration = new BlockPartConfiguration(PartSets.Pipe);
+    private TileEntityBlockPartState tileEntityBlockPartState = new TileEntityBlockPartState(this, PartSets.Pipe);
 
     public ForgeDirection getEndADirection()
     {
@@ -47,7 +48,9 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
     private ForgeDirection endB = ForgeDirection.WEST;
 
     private boolean endAIsConnected;
+    private boolean renderEndAAsSeparatePipe;
     private boolean endBIsConnected;
+    private boolean renderEndBAsSeparatePipe;
 
     List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = new ArrayList<ImmutablePair<ForgeDirection, ForgeDirection>>();
 
@@ -110,14 +113,17 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
             this.endBIsConnected = endBIsConnected;
         }
 
-        changed |= orderEnds();
-
         if (changed) {
             Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());
             sendUpdate();
         } else {
             Logger.info("%s - Updating block         - %s", worldObj.isRemote ? "client" : "server", toString());
         }
+
+        /*if (orderEnds()) {
+            markDirty();
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        }*/
 
         if (worldObj.isRemote) {
             recalculateVisuals();
@@ -147,14 +153,17 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         validDirections.clear();
 
         for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i) {
-            IPipeTileEntity tileEntity = getPipeTileEntityInDirection(ForgeDirection.VALID_DIRECTIONS[i]);
+            final ForgeDirection direction = ForgeDirection.VALID_DIRECTIONS[i];
+            IPipeTileEntity tileEntity = getPipeTileEntityInDirection(direction);
+            BlockPart part = tileEntityBlockPartState.getBlockPartByMetadata(direction);
+            tileEntityBlockPartState.setEnabled(part, tileEntity != null);
             if (tileEntity != null)
             {
                 for (int j = i + 1; j < ForgeDirection.VALID_DIRECTIONS.length; ++j)
                 {
                     tileEntity = getPipeTileEntityInDirection(ForgeDirection.VALID_DIRECTIONS[j]);
                     if (tileEntity != null) {
-                        validDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.VALID_DIRECTIONS[i], ForgeDirection.VALID_DIRECTIONS[j]));
+                        validDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(direction, ForgeDirection.VALID_DIRECTIONS[j]));
                     }
                 }
             }
@@ -165,6 +174,23 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
     {
         if (worldObj == null || !worldObj.isRemote) return;
         this.shouldRenderAsCorner = endB != endA.getOpposite();
+
+        IPipeTileEntity pipe;
+        PipeTE pipeTE;
+
+        int thisPipeDirection = endA.ordinal() - endB.ordinal();
+        pipe = getPipeTileEntityInDirection(endA);
+        if (pipe instanceof PipeTE) {
+            pipeTE = (PipeTE)pipe;
+            int otherPipeDirection = pipeTE.endA.ordinal() - pipeTE.endB.ordinal();
+            renderEndAAsSeparatePipe = (thisPipeDirection < 0 && otherPipeDirection > 0) || (thisPipeDirection > 0 && otherPipeDirection < 0);
+        }
+        pipe = getPipeTileEntityInDirection(endB);
+        if (pipe instanceof PipeTE) {
+            pipeTE = (PipeTE)pipe;
+            int otherPipeDirection = pipeTE.endA.ordinal() - pipeTE.endB.ordinal();
+            renderEndBAsSeparatePipe = (thisPipeDirection < 0 && otherPipeDirection > 0) || (thisPipeDirection > 0 && otherPipeDirection < 0);
+        }
         Logger.info("%s - Recalculating Visuals  - %s", "client", toString());
     }
 
@@ -174,12 +200,12 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         if (endA == opposite) {
             endA = null;
             endAIsConnected = false;
-            orderEnds();
+            //orderEnds();
             sendUpdate();
         } else if (endB == opposite) {
             endB = null;
             endBIsConnected = false;
-            orderEnds();
+            //orderEnds();
             sendUpdate();
         }
     }
@@ -300,7 +326,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
 
         endA = newEndA;
         endB = newEndB;
-        orderEnds();
+        //orderEnds();
 
         if (endAChanged && prevEndATE != null) {
             prevEndATE.recalculateVisuals();
@@ -380,7 +406,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         }
 
         if (endA != previousEndA || endB != previousEndB || endAIsConnected != previousEndAConnected || endBIsConnected != previousEndBConnected) {
-            orderEnds();
+            //orderEnds();
             sendUpdate();
         }
 
@@ -404,7 +430,8 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         this.endB = orientation.getOpposite();
         tileEntity = getPipeTileEntityInDirection(endB);
         endBIsConnected = tileEntity != null && tileEntity.isDirectionConnected(endB.getOpposite());
-        orderEnds();
+        //orderEnds();
+        //FIXME: Orient to existing pipes.
     }
 
     public void detach()
@@ -423,7 +450,17 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
     }
 
     @Override
-    public BlockPartConfiguration getBlockPartConfiguration() {
-        return blockPartConfiguration;
+    public TileEntityBlockPartState getTileEntityBlockPartState() {
+        return tileEntityBlockPartState;
+    }
+
+    public boolean isRenderEndAAsSeparatePipe()
+    {
+        return renderEndAAsSeparatePipe;
+    }
+
+    public boolean isRenderEndBAsSeparatePipe()
+    {
+        return renderEndBAsSeparatePipe;
     }
 }

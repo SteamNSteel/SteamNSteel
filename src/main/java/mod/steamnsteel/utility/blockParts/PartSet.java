@@ -1,5 +1,6 @@
 package mod.steamnsteel.utility.blockParts;
 
+import com.google.common.base.Objects;
 import java.util.HashMap;
 
 /**
@@ -9,6 +10,7 @@ public class PartSet {
     private final String name;
     private final int partSetId;
     private final HashMap<Integer, BlockPart> blockParts = new HashMap<Integer, BlockPart>();
+    private final HashMap<Object, BlockPart> blockPartsByMetadata = new HashMap<Object, BlockPart>();
     private int nextBlockPartId = 0;
 
     public PartSet(String name, int partSetId) {
@@ -23,13 +25,37 @@ public class PartSet {
 
     public boolean[] getEnabledFlags() {
 
-        return new boolean[blockParts.size()];
+        final boolean[] enabledFlags = new boolean[blockParts.size()];
+        for (BlockPart part : blockParts.values()) {
+            enabledFlags[part.index] = part.isEnabledByDefault();
+        }
+        return enabledFlags;
     }
 
-    public BlockPart createBlockPart(String s) {
+    public BlockPart createBlockPart(String name) {
         int blockPartId = nextBlockPartId++;
-        BlockPart blockPart = new BlockPart(this, blockPartId);
+        BlockPart blockPart = new BlockPart(name, this, blockPartId);
         blockParts.put(blockPartId, blockPart);
         return blockPart;
+    }
+
+    public BlockPart getByMetadata(Object metadata)
+    {
+        blockPartsByMetadata.clear();
+        if (blockPartsByMetadata.size() != blockParts.size()) {
+            for (BlockPart part : blockParts.values()) {
+                blockPartsByMetadata.put(part.getMetadata(), part);
+            }
+        }
+        return blockPartsByMetadata.get(metadata);
+    }
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this)
+                .add("name", this.name)
+                .add("parts", this.blockParts.size())
+                .toString();
     }
 }

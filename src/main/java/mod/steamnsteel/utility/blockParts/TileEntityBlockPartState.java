@@ -10,12 +10,15 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 /**
- * Created by steblo on 31/10/2014.
+ * Tracks the state of BlockParts for a TileEntity instance.
+ *
+ * It also acts as the registry for BlockParts.
  */
-public class BlockPartConfiguration
+public class TileEntityBlockPartState
 {
     private final PartSet partSet;
     private final boolean[] enabledFlags;
+    private final TileEntity tileEntity;
     private Predicate<PartSelectionHelper> enabledPartFilter = new Predicate<PartSelectionHelper>()
     {
         @Override
@@ -32,22 +35,24 @@ public class BlockPartConfiguration
             return partSelectionHelper.blockPart;
         }
     };
-    private Comparator<PartSelectionHelper> distanceComparator = distanceComparator = new Comparator<PartSelectionHelper>()
+    private Comparator<PartSelectionHelper> distanceComparator = new Comparator<PartSelectionHelper>()
     {
         @Override
-        public int compare(PartSelectionHelper partSelectionHelper, PartSelectionHelper partSelectionHelper2)
+        public int compare(PartSelectionHelper a, PartSelectionHelper b)
         {
-            return Double.compare(partSelectionHelper.distance, partSelectionHelper2.distance);
+            return Double.compare(a.distance, b.distance);
         }
     };
 
-    public BlockPartConfiguration(int partSetId)
+
+    public TileEntityBlockPartState(final TileEntity tileEntity, final int partSetId)
     {
+        this.tileEntity = tileEntity;
         this.partSet = partSets.get(partSetId);
         enabledFlags = partSet.getEnabledFlags();
     }
 
-    public Iterable<BlockPart> getBlockPartsIntersecting(TileEntity tileEntity, final Vec3 posVec, final Vec3 lookVec)
+    public Iterable<BlockPart> getBlockPartsIntersecting(final Vec3 posVec, final Vec3 lookVec)
     {
         return FluentIterable.from(
                 FluentIterable.from(
@@ -56,13 +61,11 @@ public class BlockPartConfiguration
                             @Override
                             public PartSelectionHelper apply(BlockPart blockPart)
                             {
-                                Vec3 pos = posVec;
-                                Vec3 look = lookVec;
 
-                                MovingObjectPosition intercept = blockPart.getBoundingBox().calculateIntercept(pos, look);
+                                MovingObjectPosition intercept = blockPart.getBoundingBox().calculateIntercept(posVec, lookVec);
 
-                                boolean highlighted = intercept != null;
-                                double distance = highlighted ? intercept.hitVec.squareDistanceTo(pos) : Double.MAX_VALUE;
+                                boolean highlighted = intercept != null && enabledFlags[blockPart.index];
+                                double distance = highlighted ? intercept.hitVec.squareDistanceTo(posVec) : Double.MAX_VALUE;
                                 return new PartSelectionHelper(blockPart, distance, highlighted);
                             }
                         })
@@ -73,20 +76,13 @@ public class BlockPartConfiguration
                 .limit(1);
     }
 
-    public boolean isEnabled(BlockPart part)
+    public void setEnabled(final BlockPart blockPart, final boolean b)
     {
-        return false;
+        enabledFlags[blockPart.index] = b;
     }
 
-    private static HashMap<Integer, PartSet> partSets = new HashMap<Integer, PartSet>();
-    private static int nextPartSetId = 0;
-
-    public static PartSet registerPartSet(String name)
-    {
-        int partSetId = (nextPartSetId++);
-        PartSet partSet = new PartSet(name, partSetId);
-        partSets.put(partSetId, partSet);
-        return partSet;
+    public BlockPart getBlockPartByMetadata(Object metadata){
+        return partSet.getByMetadata(metadata);
     }
 
     private class PartSelectionHelper
@@ -103,5 +99,16 @@ public class BlockPartConfiguration
             this.distance = distance;
             this.highlighted = highlighted;
         }
+    }
+
+    private static HashMap<Integer, PartSet> partSets = new HashMap<Integer, PartSet>();
+    private static int nextPartSetId = 0;
+
+    public static PartSet registerPartSet(String name)
+    {
+        int partSetId = (nextPartSetId++);
+        PartSet partSet = new PartSet(name, partSetId);
+        partSets.put(partSetId, partSet);
+        return partSet;
     }
 }
