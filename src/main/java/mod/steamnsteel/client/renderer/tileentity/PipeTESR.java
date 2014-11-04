@@ -53,6 +53,13 @@ public class PipeTESR extends SteamNSteelTESR
         ForgeDirection endA = te.getEndADirection();
         ForgeDirection endB = te.getEndBConnected();
 
+        final int NORTH_WEST = 1;
+        final int NORTH_EAST = 2;
+        final int SOUTH_WEST = 3;
+        final int SOUTH_EAST = 4;
+
+        int renderType = 0;
+
         // Orient the model to match the placement
         boolean renderCorner = te.shouldRenderAsCorner();
         if (!renderCorner)
@@ -88,101 +95,118 @@ public class PipeTESR extends SteamNSteelTESR
                     switch (endB)
                     {
                         case NORTH:
-                            GL11.glRotatef(90, 1f, 0f, 0f);
                             break;
                         case SOUTH:
-                            GL11.glRotatef(270, 1f, 0f, 0f);
                             break;
                         case UP:
                             break;
                         case DOWN:
-                            GL11.glRotatef(180, 1f, 0f, 0f);
                             break;
                     }
-                    GL11.glRotatef(270, 0f, 1f, 0f);
                     break;
                 case EAST:
                     switch (endB)
                     {
                         case NORTH:
-                            GL11.glRotatef(90, 1f, 0f, 0f);
                             break;
                         case SOUTH:
-                            GL11.glRotatef(270, 1f, 0f, 0f);
                             break;
                         case UP:
                             break;
                         case DOWN:
-                            GL11.glRotatef(180, 1f, 0f, 0f);
                             break;
                     }
-                    GL11.glRotatef(90, 0f, 1f, 0f);
                     break;
                 case NORTH:
                     switch (endB)
                     {
                         case WEST:
+                            GL11.glRotatef(-90, 0f, 1f, 0f);
                             GL11.glRotatef(90, 0f, 0f, 1f);
+                            renderType = NORTH_WEST;
                             break;
                         case EAST:
-                            GL11.glRotatef(270, 0f, 0f, 1f);
+                            GL11.glRotatef(90, 0f, 1f, 0f);
+                            GL11.glRotatef(-90, 0f, 0f, 1f);
+                            renderType = NORTH_EAST;
                             break;
-                        case UP:
+/*                        case UP:
                             break;
                         case DOWN:
-                            GL11.glRotatef(180, 0f, 0f, 1f);
-                            break;
+                            break;*/
                     }
-                    GL11.glRotatef(180, 0f, 1f, 0f);
+
                     break;
                 case SOUTH:
                     switch (endB)
                     {
                         case WEST:
                             GL11.glRotatef(90, 0f, 0f, 1f);
+                            GL11.glRotatef(0, 0f, 0f, 1f);
+                            renderType = SOUTH_WEST;
                             break;
                         case EAST:
-                            GL11.glRotatef(270, 0f, 0f, 1f);
+                            GL11.glRotatef(90, 0f, 1f, 0f);
+                            GL11.glRotatef(90, 0f, 0f, 1f);
+                            renderType = SOUTH_EAST;
                             break;
-                        case UP:
+/*                        case UP:
                             break;
                         case DOWN:
-                            GL11.glRotatef(180, 0f, 0f, 1f);
-                            break;
+                            break;*/
                     }
                     break;
                 case DOWN:
+
                     switch (endB) {
                         case SOUTH:
-                            GL11.glRotatef(180, 0f, 1f, 0f);
+                            GL11.glRotatef(180, 0f, 0f, 1f);
+                            renderType = SOUTH_WEST;
                             break;
                         case NORTH:
-
+                            GL11.glRotatef(180, 1f, 0f, 0f);
+                            renderType = SOUTH_EAST;
                             break;
                         case EAST:
-                            GL11.glRotatef(270, 0f, 1f, 0f);
+                            GL11.glRotatef(90, 1f, 0f, 0f);
+                            GL11.glRotatef(90, 0f, 1f, 0f);
+                            GL11.glRotatef(90, 0f, 0f, 1f);
+                            renderType = SOUTH_EAST;
                             break;
                         case WEST:
-                            GL11.glRotatef(90, 0f, 1f, 0f);
+                            GL11.glRotatef(90, 1f, 0f, 0f);
+                            GL11.glRotatef(90, 0f, 0f, 1f);
+                            GL11.glRotatef(0, 0f, 0f, 1f);
+                            renderType = SOUTH_WEST;
                             break;
                     }
-                    GL11.glRotatef(180, 1f, 0f, 0f);
                     break;
-
                 case UP:
                     switch (endB) {
                         case SOUTH:
+                            GL11.glRotatef(180, 0f, 1f, 0f);
+                            GL11.glRotatef(-90, 1f, 0f, 0f);
+                            renderType = SOUTH_EAST;
                             break;
                         case NORTH:
-                            GL11.glRotatef(180, 0f, 1f, 0f);
+                            renderType = NORTH_EAST;
+                            GL11.glRotatef(-90, 1f, 0f, 0f);
+                            GL11.glRotatef(0, 0f, 1f, 0f);
                             break;
                         case EAST:
+                            renderType = NORTH_EAST;
+                            GL11.glRotatef(90, 1f, 0f, 0f);
                             GL11.glRotatef(90, 0f, 1f, 0f);
+                            GL11.glRotatef(-90, 0f, 0f, 1f);
                             break;
                         case WEST:
-                            GL11.glRotatef(270, 0f, 1f, 0f);
+                            GL11.glRotatef(90, 1f, 0f, 0f);
+                            GL11.glRotatef(-90, 0f, 1f, 0f);
+                            GL11.glRotatef(90, 0f, 0f, 1f);
+                            renderType = NORTH_WEST;
                             break;
                     }
+
                     break;
             }
         }
@@ -190,7 +214,25 @@ public class PipeTESR extends SteamNSteelTESR
         bindTexture(TEXTURE);
         if (renderCorner)
         {
-            model.renderPipeCorner();
+            switch (renderType) {
+                case 1: // NORTH_WEST
+                    model.renderPipeCornerNW();
+                    break;
+                case 2: // NORTH EAST
+                    model.renderPipeCornerNE();
+                    break;
+                case 3: // SOUTH WEST
+                    model.renderPipeCornerSW();
+                    break;
+                case 4:
+                    model.renderPipeCornerSE();
+                    break;
+                default:
+                    model.renderJunctionBox();
+                    break;
+            }
+
+            //model.renderPipeCorner();
         } else
         {
             model.renderPipeStraight();

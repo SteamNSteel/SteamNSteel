@@ -20,8 +20,17 @@ public class PipeModel extends SteamNSteelModel
         model.renderAll();
     }
 
-    public void renderPipeCorner() {
-        model.renderPart("Pipe1xCrnr");
+    public void renderPipeCornerNE() {
+        model.renderPart("PipeCrnrNE");
+    }
+    public void renderPipeCornerNW() {
+        model.renderPart("PipeCrnrNW");
+    }
+    public void renderPipeCornerSE() {
+        model.renderPart("PipeCrnrSE");
+    }
+    public void renderPipeCornerSW() {
+        model.renderPart("PipeCrnrSW");
     }
 
     public void renderPipeStraight() { model.renderPart("Pipe0C"); }
