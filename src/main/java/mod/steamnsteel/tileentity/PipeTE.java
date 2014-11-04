@@ -172,12 +172,12 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
     public void disconnect(ForgeDirection opposite)
     {
         if (endA == opposite) {
-            endA = null;
+            endA = endB.getOpposite();
             endAIsConnected = false;
             orderEnds();
             sendUpdate();
         } else if (endB == opposite) {
-            endB = null;
+            endB = endA.getOpposite();
             endBIsConnected = false;
             orderEnds();
             sendUpdate();
