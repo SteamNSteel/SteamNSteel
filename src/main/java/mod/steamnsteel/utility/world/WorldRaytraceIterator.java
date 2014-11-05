@@ -11,12 +11,23 @@ public class WorldRaytraceIterator
     private final World world;
     private final Vec3 location;
     private final Vec3 position;
+    private boolean valid;
 
     public WorldRaytraceIterator(World world, Vec3 location, Vec3 position)
     {
         this.world = world;
         this.location = location;
         this.position = position;
+
+
+        if (Double.isNaN(location.xCoord) || Double.isNaN(location.yCoord) || Double.isNaN(location.zCoord))
+        {
+            valid = false;
+        }
+        if (Double.isNaN(position.xCoord) || Double.isNaN(position.yCoord) || Double.isNaN(position.zCoord))
+        {
+            valid = false;
+        }
     }
 
     public MovingObjectPosition findNextBlock()
@@ -25,15 +36,7 @@ public class WorldRaytraceIterator
         boolean p_147447_4_ = false;
         boolean p_147447_5_ = false;
 
-        if (Double.isNaN(location.xCoord) || Double.isNaN(location.yCoord) || Double.isNaN(location.zCoord))
-        {
-            return null;
-        }
-        if (Double.isNaN(position.xCoord) || Double.isNaN(position.yCoord) || Double.isNaN(position.zCoord))
-        {
-            return null;
-        }
-        
+
         int i = MathHelper.floor_double(position.xCoord);
         int j = MathHelper.floor_double(position.yCoord);
         int k = MathHelper.floor_double(position.zCoord);
@@ -41,9 +44,9 @@ public class WorldRaytraceIterator
         int i1 = MathHelper.floor_double(location.yCoord);
         int j1 = MathHelper.floor_double(location.zCoord);
         Block block = world.getBlock(l, i1, j1);
-        int k1 = world.getBlockMetadata(l, i1, j1);
+        int metadata = world.getBlockMetadata(l, i1, j1);
 
-        if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null) && block.canCollideCheck(k1, p_147447_3_))
+        if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null) && block.canCollideCheck(metadata, p_147447_3_))
         {
             MovingObjectPosition movingobjectposition = block.collisionRayTrace(world, l, i1, j1, location, position);
 
@@ -54,9 +57,9 @@ public class WorldRaytraceIterator
         }
 
         MovingObjectPosition movingobjectposition2 = null;
-        k1 = 200;
+        int blockLimit = 200;
 
-        while (k1-- >= 0)
+        while (blockLimit-- >= 0)
         {
             if (Double.isNaN(location.xCoord) || Double.isNaN(location.yCoord) || Double.isNaN(location.zCoord))
             {
