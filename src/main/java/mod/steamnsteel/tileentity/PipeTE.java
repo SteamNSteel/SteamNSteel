@@ -13,7 +13,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntityWithParts
@@ -49,14 +49,17 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
     private boolean endAIsConnected;
     private boolean endBIsConnected;
 
-    List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = new ArrayList<ImmutablePair<ForgeDirection, ForgeDirection>>();
+    @Override
+    public BlockPartConfiguration getBlockPartConfiguration() {
+        return blockPartConfiguration;
+    }
 
     public void checkEnds()
     {
         IPipeTileEntity pipeEntity;
         boolean changed = false;
 
-        calculateValidDirections();
+        List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = recalculateValidDirections();
         ImmutablePair<ForgeDirection, ForgeDirection> connectionToMake = null;
 
         for (ImmutablePair<ForgeDirection, ForgeDirection> pair : validDirections)
@@ -100,8 +103,12 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
                 endBIsConnected = pipeEntity.tryConnect(right.getOpposite());
             }
 
-            endA = left;
-            endB = right;
+            if (endA != left || endB != right)
+            {
+                changed = true;
+                endA = left;
+                endB = right;
+            }
         }
 
         if (this.endAIsConnected != endAIsConnected || this.endBIsConnected != endBIsConnected) {
@@ -142,25 +149,46 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         return true;
     }
 
-    private void calculateValidDirections()
-    {
-        validDirections.clear();
+    private static final List<ImmutablePair<ForgeDirection, ForgeDirection>> PIPE_ROTATIONS = new LinkedList<ImmutablePair<ForgeDirection, ForgeDirection>>();
 
-        for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i) {
-            IPipeTileEntity tileEntity = getPipeTileEntityInDirection(ForgeDirection.VALID_DIRECTIONS[i]);
-            if (tileEntity != null)
+    private synchronized static void calculatePipeRotations() {
+        if (PIPE_ROTATIONS.isEmpty())
+        {
+            for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i)
             {
                 for (int j = i + 1; j < ForgeDirection.VALID_DIRECTIONS.length; ++j)
                 {
-                    tileEntity = getPipeTileEntityInDirection(ForgeDirection.VALID_DIRECTIONS[j]);
-                    if (tileEntity != null) {
-                        validDirections.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.VALID_DIRECTIONS[i], ForgeDirection.VALID_DIRECTIONS[j]));
-                    }
+                    PIPE_ROTATIONS.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.VALID_DIRECTIONS[i], ForgeDirection.VALID_DIRECTIONS[j]));
                 }
             }
         }
     }
 
+
+    /**
+     * Calculates a list of valid directions a pipe could potentially be facing.
+     * @return A list of ends which are valid for the pipe.
+     */
+    private List<ImmutablePair<ForgeDirection, ForgeDirection>> recalculateValidDirections()
+    {
+        if (PIPE_ROTATIONS.isEmpty()) {
+            calculatePipeRotations();
+        }
+
+        List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = new LinkedList<ImmutablePair<ForgeDirection, ForgeDirection>>();
+        for (ImmutablePair<ForgeDirection, ForgeDirection> pair : PIPE_ROTATIONS)
+        {
+            if (getPipeTileEntityInDirection(pair.left) != null && getPipeTileEntityInDirection(pair.right) != null) {
+                validDirections.add(pair);
+            }
+        }
+
+        return validDirections;
+    }
+
+    /**
+     * Recalculates any properties used in the rendering process. This is used only by the client.
+     */
     public void recalculateVisuals()
     {
         if (worldObj == null || !worldObj.isRemote) return;
@@ -171,77 +199,30 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
     @Override
     public void disconnect(ForgeDirection opposite)
     {
+        boolean updated = false;
+
         if (endA == opposite) {
             endA = endB.getOpposite();
             endAIsConnected = false;
-            orderEnds();
-            sendUpdate();
+            updated = true;
         } else if (endB == opposite) {
             endB = endA.getOpposite();
             endBIsConnected = false;
+            updated = true;
+        }
+
+        if (updated) {
             orderEnds();
             sendUpdate();
-        }
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbt)
-    {
-        super.readFromNBT(nbt);
-
-        endA = nbt.hasKey(NBT_END_A) ? ForgeDirection.getOrientation(nbt.getByte(NBT_END_A)) : ForgeDirection.EAST;
-        endAIsConnected = nbt.hasKey(NBT_END_A_CONNECTED) && nbt.getBoolean(NBT_END_A_CONNECTED);
-        endB = nbt.hasKey(NBT_END_B) ? ForgeDirection.getOrientation(nbt.getByte(NBT_END_B)) : ForgeDirection.WEST;
-        endBIsConnected = nbt.hasKey(NBT_END_B_CONNECTED) && nbt.getBoolean(NBT_END_B_CONNECTED);
-
-        if (endA == ForgeDirection.UNKNOWN) {
-            endA = ForgeDirection.EAST;
-        }
-        if (endB == ForgeDirection.UNKNOWN) {
-            endB = ForgeDirection.WEST;
-        }
-        Logger.info("%s - Read from NBT          - %s", worldObj == null ? "worldObj not available" : worldObj.isRemote ? "client" : "server", toString());
-        if (worldObj != null && worldObj.isRemote)
-        {
-            recalculateVisuals();
         }
     }
 
     private void sendUpdate()
     {
-        markDirty();
         Logger.info("%s - Notifying Block Change - %s", worldObj.isRemote ? "client" : "server", toString());
+        markDirty();
         worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-    }
-
-
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        final NBTTagCompound nbt = new NBTTagCompound();
-        writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
-    }
-
-
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
-    {
-        readFromNBT(packet.func_148857_g());
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound nbt)
-    {
-        super.writeToNBT(nbt);
-        //Persist null as unknown.
-        nbt.setByte(NBT_END_A, (byte)(endA != null ? endA : ForgeDirection.UNKNOWN).ordinal());
-        nbt.setBoolean(NBT_END_A_CONNECTED, endAIsConnected);
-        nbt.setByte(NBT_END_B, (byte) (endB != null ? endB : ForgeDirection.UNKNOWN).ordinal());
-        nbt.setBoolean(NBT_END_B_CONNECTED, endBIsConnected);
-
-        Logger.info("%s - Wrote to NBT           - %s", worldObj.isRemote ? "client" : "server", this.toString());
     }
 
     public boolean shouldRenderAsCorner()
@@ -251,7 +232,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
 
     public void rotatePipe()
     {
-        calculateValidDirections();
+        List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = recalculateValidDirections();
         int length = validDirections.size();
         if (length <= 1) {return;}
 
@@ -405,6 +386,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         tileEntity = getPipeTileEntityInDirection(endB);
         endBIsConnected = tileEntity != null && tileEntity.isDirectionConnected(endB.getOpposite());
         orderEnds();
+        sendUpdate();
     }
 
     public void detach()
@@ -423,7 +405,46 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
     }
 
     @Override
-    public BlockPartConfiguration getBlockPartConfiguration() {
-        return blockPartConfiguration;
+    public Packet getDescriptionPacket()
+    {
+        final NBTTagCompound nbt = new NBTTagCompound();
+        writeToNBT(nbt);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
+    }
+
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+    {
+        readFromNBT(packet.func_148857_g());
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        nbt.setByte(NBT_END_A, (byte)endA.ordinal());
+        nbt.setBoolean(NBT_END_A_CONNECTED, endAIsConnected);
+        nbt.setByte(NBT_END_B, (byte)endB.ordinal());
+        nbt.setBoolean(NBT_END_B_CONNECTED, endBIsConnected);
+
+        Logger.info("%s - Wrote to NBT           - %s", worldObj.isRemote ? "client" : "server", this.toString());
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+
+        endA = ForgeDirection.getOrientation(nbt.getByte(NBT_END_A));
+        endAIsConnected = nbt.getBoolean(NBT_END_A_CONNECTED);
+        endB = ForgeDirection.getOrientation(nbt.getByte(NBT_END_B));
+        endBIsConnected = nbt.getBoolean(NBT_END_B_CONNECTED);
+
+        Logger.info("%s - Read from NBT          - %s", worldObj == null ? "worldObj not available" : worldObj.isRemote ? "client" : "server", toString());
+        if (worldObj != null && worldObj.isRemote)
+        {
+            recalculateVisuals();
+        }
     }
 }
