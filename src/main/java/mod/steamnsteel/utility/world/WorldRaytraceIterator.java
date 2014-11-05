@@ -11,7 +11,15 @@ public class WorldRaytraceIterator
     private final World world;
     private final Vec3 location;
     private final Vec3 position;
+    private final MovingObjectPosition currentBlock;
+    private int i;
+    private int j;
+    private int k;
+    private int l;
+    private int i1;
+    private int j1;
     private boolean valid;
+    private int blockLimit;
 
     public WorldRaytraceIterator(World world, Vec3 location, Vec3 position)
     {
@@ -28,21 +36,24 @@ public class WorldRaytraceIterator
         {
             valid = false;
         }
+
+        i = MathHelper.floor_double(position.xCoord);
+        j = MathHelper.floor_double(position.yCoord);
+        k = MathHelper.floor_double(position.zCoord);
+        l = MathHelper.floor_double(location.xCoord);
+        i1 = MathHelper.floor_double(location.yCoord);
+        j1 = MathHelper.floor_double(location.zCoord);
+
+        blockLimit = 200;
+
+        currentBlock = getInitialBlock();
     }
 
-    public MovingObjectPosition findNextBlock()
-    {
+    private MovingObjectPosition getInitialBlock() {
+
         boolean p_147447_3_ = false;
         boolean p_147447_4_ = false;
-        boolean p_147447_5_ = false;
 
-
-        int i = MathHelper.floor_double(position.xCoord);
-        int j = MathHelper.floor_double(position.yCoord);
-        int k = MathHelper.floor_double(position.zCoord);
-        int l = MathHelper.floor_double(location.xCoord);
-        int i1 = MathHelper.floor_double(location.yCoord);
-        int j1 = MathHelper.floor_double(location.zCoord);
         Block block = world.getBlock(l, i1, j1);
         int metadata = world.getBlockMetadata(l, i1, j1);
 
@@ -55,9 +66,15 @@ public class WorldRaytraceIterator
                 return movingobjectposition;
             }
         }
+    }
+
+    public MovingObjectPosition findNextBlock()
+    {
+        boolean p_147447_3_ = false;
+        boolean p_147447_4_ = false;
+        boolean p_147447_5_ = false;
 
         MovingObjectPosition movingobjectposition2 = null;
-        int blockLimit = 200;
 
         while (blockLimit-- >= 0)
         {
