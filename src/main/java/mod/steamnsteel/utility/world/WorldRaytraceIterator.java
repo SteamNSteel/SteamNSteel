@@ -5,62 +5,84 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import java.util.Iterator;
 
-public class WorldRaytraceIterator
+public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
 {
-    private final World world;
-    private final Vec3 startLocation;
-    private final Vec3 direction;
-    private final MovingObjectPosition currentBlock;
-    private int currentLocationX;
-    private int currentLocationY;
-    private int currentLocationZ;
-    private int locationX;
-    private int locationY;
-    private int locationZ;
-    private boolean valid;
-    private int blockLimit;
+    private final World _world;
+    private final Vec3 _startLocation;
+    private final Vec3 _direction;
+    private final MovingObjectPosition _currentBlock;
+    private int _currentLocationX;
+    private int _currentLocationY;
+    private int _currentLocationZ;
+    private int _locationX;
+    private int _locationY;
+    private int _locationZ;
+    private boolean _valid;
+    private int _blockLimit;
 
     public WorldRaytraceIterator(World world, Vec3 location, Vec3 direction)
     {
-        this.world = world;
-        this.startLocation = location;
-        this.direction = direction;
+        this._world = world;
+        this._startLocation = location;
+        this._direction = direction;
 
 
         if (Double.isNaN(location.xCoord) || Double.isNaN(location.yCoord) || Double.isNaN(location.zCoord))
         {
-            valid = false;
+            _valid = false;
         }
         if (Double.isNaN(direction.xCoord) || Double.isNaN(direction.yCoord) || Double.isNaN(direction.zCoord))
         {
-            valid = false;
+            _valid = false;
         }
 
-        currentLocationX = MathHelper.floor_double(direction.xCoord);
-        currentLocationY = MathHelper.floor_double(direction.yCoord);
-        currentLocationZ = MathHelper.floor_double(direction.zCoord);
-        locationX = MathHelper.floor_double(location.xCoord);
-        locationY = MathHelper.floor_double(location.yCoord);
-        locationZ = MathHelper.floor_double(location.zCoord);
+        _currentLocationX = MathHelper.floor_double(direction.xCoord);
+        _currentLocationY = MathHelper.floor_double(direction.yCoord);
+        _currentLocationZ = MathHelper.floor_double(direction.zCoord);
+        _locationX = MathHelper.floor_double(location.xCoord);
+        _locationY = MathHelper.floor_double(location.yCoord);
+        _locationZ = MathHelper.floor_double(location.zCoord);
 
-        blockLimit = 200;
+        _blockLimit = 200;
 
-        currentBlock = getInitialBlock();
-        if (currentBlock == null) valid = false;
+        _currentBlock = getInitialBlock();
+        if (_currentBlock == null) _valid = false;
     }
 
-    private MovingObjectPosition getInitialBlock() {
+    @Override
+    public boolean hasNext()
+    {
+        return _valid && _blockLimit >= 0;
+    }
+
+    @Override
+    public MovingObjectPosition next()
+    {
+        _blockLimit--;
+        return _currentBlock;
+    }
+
+    private MovingObjectPosition getInitialBlock()
+    {
 
         boolean p_147447_3_ = false;
         boolean p_147447_4_ = false;
 
-        Block block = world.getBlock(locationX, locationY, locationZ);
-        int metadata = world.getBlockMetadata(locationX, locationY, locationZ);
+        Block block = _world.getBlock(_locationX, _locationY, _locationZ);
+        int metadata = _world.getBlockMetadata(_locationX, _locationY, _locationZ);
+
         MovingObjectPosition movingobjectposition = null;
-        if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, locationX, locationY, locationZ) != null) && block.canCollideCheck(metadata, p_147447_3_))
+        if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(_world, _locationX, _locationY, _locationZ) != null) && block.canCollideCheck(metadata, p_147447_3_))
         {
-            movingobjectposition = block.collisionRayTrace(world, locationX, locationY, locationZ, startLocation, direction);
+            movingobjectposition = block.collisionRayTrace(_world, _locationX, _locationY, _locationZ, _startLocation, _direction);
+
+            if (movingobjectposition != null)
+            {
+                return movingobjectposition;
+            }
+
         }
 
         return movingobjectposition;
@@ -72,152 +94,148 @@ public class WorldRaytraceIterator
         boolean p_147447_4_ = false;
         boolean p_147447_5_ = false;
 
-        MovingObjectPosition movingobjectposition2 = null;
+        MovingObjectPosition movingObjectPosition = null;
 
-        while (blockLimit-- >= 0)
+        if (_blockLimit < 0) return null;
+        if (Double.isNaN(_startLocation.xCoord) || Double.isNaN(_startLocation.yCoord) || Double.isNaN(_startLocation.zCoord))
         {
-            if (Double.isNaN(startLocation.xCoord) || Double.isNaN(startLocation.yCoord) || Double.isNaN(startLocation.zCoord))
-            {
-                return null;
-            }
+            return null;
+        }
 
-            if (locationX == currentLocationX && locationY == currentLocationY && locationZ == currentLocationZ)
-            {
-                return p_147447_5_ ? movingobjectposition2 : null;
-            }
+        if (_locationX == _currentLocationX && _locationY == _currentLocationY && _locationZ == _currentLocationZ)
+        {
+            return p_147447_5_ ? movingObjectPosition : null;
+        }
 
-            boolean movingInDirectionX = true;
-            boolean movingInDirectionY = true;
-            boolean movingInDirectionZ = true;
-            double d0 = 999.0D;
-            double d1 = 999.0D;
-            double d2 = 999.0D;
+        boolean movingInDirectionX = true;
+        boolean movingInDirectionY = true;
+        boolean movingInDirectionZ = true;
+        double d0 = 999.0D;
+        double d1 = 999.0D;
+        double d2 = 999.0D;
 
-            if (currentLocationX > locationX)
-            {
-                d0 = (double) locationX + 1.0D;
-            }
-            else if (currentLocationX < locationX)
-            {
-                d0 = (double) locationX;
-            }
-            else
-            {
-                movingInDirectionX = false;
-            }
+        if (_currentLocationX > _locationX)
+        {
+            d0 = (double) _locationX + 1.0D;
+        } else if (_currentLocationX < _locationX)
+        {
+            d0 = (double) _locationX;
+        } else
+        {
+            movingInDirectionX = false;
+        }
 
-            if (currentLocationY > locationY)
+        if (_currentLocationY > _locationY)
+        {
+            d1 = (double) _locationY + 1.0D;
+        } else if (_currentLocationY < _locationY)
+        {
+            d1 = (double) _locationY;
+        } else
+        {
+            movingInDirectionY = false;
+        }
+
+        if (_currentLocationZ > _locationZ)
+        {
+            d2 = (double) _locationZ + 1.0D;
+        } else if (_currentLocationZ < _locationZ)
+        {
+            d2 = (double) _locationZ;
+        } else
+        {
+            movingInDirectionZ = false;
+        }
+
+        double d3 = 999.0D;
+        double d4 = 999.0D;
+        double d5 = 999.0D;
+        double d6 = _direction.xCoord - _startLocation.xCoord;
+        double d7 = _direction.yCoord - _startLocation.yCoord;
+        double d8 = _direction.zCoord - _startLocation.zCoord;
+
+        if (movingInDirectionX)
+        {
+            d3 = (d0 - _startLocation.xCoord) / d6;
+        }
+
+        if (movingInDirectionY)
+        {
+            d4 = (d1 - _startLocation.yCoord) / d7;
+        }
+
+        if (movingInDirectionZ)
+        {
+            d5 = (d2 - _startLocation.zCoord) / d8;
+        }
+
+        byte hitSide;
+
+        if (d3 < d4 && d3 < d5)
+        {
+            hitSide = _currentLocationX > _locationX ? (byte) 4 : 5;
+
+            _startLocation.xCoord = d0;
+            _startLocation.yCoord += d7 * d3;
+            _startLocation.zCoord += d8 * d3;
+        } else if (d4 < d5)
+        {
+            hitSide = _currentLocationY > _locationY ? (byte) 0 : 1;
+
+            _startLocation.xCoord += d6 * d4;
+            _startLocation.yCoord = d1;
+            _startLocation.zCoord += d8 * d4;
+        } else
+        {
+            hitSide = _currentLocationZ > _locationZ ? (byte) 2 : 3;
+
+            _startLocation.xCoord += d6 * d5;
+            _startLocation.yCoord += d7 * d5;
+            _startLocation.zCoord = d2;
+        }
+
+        _locationX = (int) (double) MathHelper.floor_double(_startLocation.xCoord);
+        _locationY = (int) (double) MathHelper.floor_double(_startLocation.yCoord);
+        _locationZ = (int) (double) MathHelper.floor_double(_startLocation.zCoord);
+
+        switch (hitSide)
+        {
+            case 5:
+                --_locationX;
+                break;
+            case 1:
+                --_locationY;
+                break;
+            case 3:
+                --_locationZ;
+                break;
+        }
+
+        Block block = _world.getBlock(_locationX, _locationY, _locationZ);
+        int metadata = _world.getBlockMetadata(_locationX, _locationY, _locationZ);
+
+        if (!p_147447_4_ || block.getCollisionBoundingBoxFromPool(_world, _locationX, _locationY, _locationZ) != null)
+        {
+            if (block.canCollideCheck(metadata, p_147447_3_))
             {
-                d1 = (double) locationY + 1.0D;
-            }
-            else if (currentLocationY < locationY)
-            {
-                d1 = (double) locationY;
-            }
-            else
-            {
-                movingInDirectionY = false;
-            }
+                movingObjectPosition = block.collisionRayTrace(_world, _locationX, _locationY, _locationZ, _startLocation, _direction);
 
-            if (currentLocationZ > locationZ)
-            {
-                d2 = (double) locationZ + 1.0D;
-            }
-            else if (currentLocationZ < locationZ)
-            {
-                d2 = (double) locationZ;
-            }
-            else
-            {
-                movingInDirectionZ = false;
-            }
-
-            double d3 = 999.0D;
-            double d4 = 999.0D;
-            double d5 = 999.0D;
-            double d6 = direction.xCoord - startLocation.xCoord;
-            double d7 = direction.yCoord - startLocation.yCoord;
-            double d8 = direction.zCoord - startLocation.zCoord;
-
-            if (movingInDirectionX)
-            {
-                d3 = (d0 - startLocation.xCoord) / d6;
-            }
-
-            if (movingInDirectionY)
-            {
-                d4 = (d1 - startLocation.yCoord) / d7;
-            }
-
-            if (movingInDirectionZ)
-            {
-                d5 = (d2 - startLocation.zCoord) / d8;
-            }
-
-            byte hitSide;
-
-            if (d3 < d4 && d3 < d5)
-            {
-                hitSide = currentLocationX > locationX ? (byte)4 : 5;
-
-                startLocation.xCoord = d0;
-                startLocation.yCoord += d7 * d3;
-                startLocation.zCoord += d8 * d3;
-            }
-            else if (d4 < d5)
-            {
-                hitSide = currentLocationY > locationY ? (byte)0 : 1;
-
-                startLocation.xCoord += d6 * d4;
-                startLocation.yCoord = d1;
-                startLocation.zCoord += d8 * d4;
-            }
-            else
-            {
-                hitSide = currentLocationZ > locationZ ? (byte)2 : 3;
-
-                startLocation.xCoord += d6 * d5;
-                startLocation.yCoord += d7 * d5;
-                startLocation.zCoord = d2;
-            }
-
-            locationX = (int) (double)MathHelper.floor_double(startLocation.xCoord);
-            locationY = (int) (double)MathHelper.floor_double(startLocation.yCoord);
-            locationZ = (int) (double)MathHelper.floor_double(startLocation.zCoord);
-
-            switch (hitSide) {
-                case 5:
-                    --locationX;
-                    break;
-                case 1:
-                    --locationY;
-                    break;
-                case 3:
-                    --locationZ;
-                    break;
-            }
-
-            Block block = world.getBlock(locationX, locationY, locationZ);
-            int metadata = world.getBlockMetadata(locationX, locationY, locationZ);
-
-            if (!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, locationX, locationY, locationZ) != null)
-            {
-                if (block.canCollideCheck(metadata, p_147447_3_))
+                if (movingObjectPosition != null)
                 {
-                    MovingObjectPosition movingobjectposition1 = block.collisionRayTrace(world, locationX, locationY, locationZ, startLocation, direction);
-
-                    if (movingobjectposition1 != null)
-                    {
-                        return movingobjectposition1;
-                    }
+                    return movingObjectPosition;
                 }
-                else
-                {
-                    movingobjectposition2 = new MovingObjectPosition(locationX, locationY, locationZ, hitSide, startLocation, false);
-                }
+            } else
+            {
+                movingObjectPosition = new MovingObjectPosition(_locationX, _locationY, _locationZ, hitSide, _startLocation, false);
             }
         }
 
-        return p_147447_5_ ? movingobjectposition2 : null;
+        return p_147447_5_ ? movingObjectPosition : null;
+    }
+
+    @Override
+    public void remove()
+    {
+
     }
 }
