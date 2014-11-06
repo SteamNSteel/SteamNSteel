@@ -47,6 +47,7 @@ public class WorldRaytraceIterator
         blockLimit = 200;
 
         currentBlock = getInitialBlock();
+        if (currentBlock == null) valid = false;
     }
 
     private MovingObjectPosition getInitialBlock() {
@@ -56,16 +57,13 @@ public class WorldRaytraceIterator
 
         Block block = world.getBlock(l, i1, j1);
         int metadata = world.getBlockMetadata(l, i1, j1);
-
+        MovingObjectPosition movingobjectposition = null;
         if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null) && block.canCollideCheck(metadata, p_147447_3_))
         {
-            MovingObjectPosition movingobjectposition = block.collisionRayTrace(world, l, i1, j1, location, position);
-
-            if (movingobjectposition != null)
-            {
-                return movingobjectposition;
-            }
+            movingobjectposition = block.collisionRayTrace(world, l, i1, j1, location, position);
         }
+
+        return movingobjectposition;
     }
 
     public MovingObjectPosition findNextBlock()
