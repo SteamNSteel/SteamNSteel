@@ -86,9 +86,9 @@ public class WorldRaytraceIterator
                 return p_147447_5_ ? movingobjectposition2 : null;
             }
 
-            boolean flag6 = true;
-            boolean flag3 = true;
-            boolean flag4 = true;
+            boolean movingInDirectionX = true;
+            boolean movingInDirectionY = true;
+            boolean movingInDirectionZ = true;
             double d0 = 999.0D;
             double d1 = 999.0D;
             double d2 = 999.0D;
@@ -99,11 +99,11 @@ public class WorldRaytraceIterator
             }
             else if (currentLocationX < locationX)
             {
-                d0 = (double) locationX + 0.0D;
+                d0 = (double) locationX;
             }
             else
             {
-                flag6 = false;
+                movingInDirectionX = false;
             }
 
             if (currentLocationY > locationY)
@@ -112,11 +112,11 @@ public class WorldRaytraceIterator
             }
             else if (currentLocationY < locationY)
             {
-                d1 = (double) locationY + 0.0D;
+                d1 = (double) locationY;
             }
             else
             {
-                flag3 = false;
+                movingInDirectionY = false;
             }
 
             if (currentLocationZ > locationZ)
@@ -125,11 +125,11 @@ public class WorldRaytraceIterator
             }
             else if (currentLocationZ < locationZ)
             {
-                d2 = (double) locationZ + 0.0D;
+                d2 = (double) locationZ;
             }
             else
             {
-                flag4 = false;
+                movingInDirectionZ = false;
             }
 
             double d3 = 999.0D;
@@ -139,17 +139,17 @@ public class WorldRaytraceIterator
             double d7 = direction.yCoord - startLocation.yCoord;
             double d8 = direction.zCoord - startLocation.zCoord;
 
-            if (flag6)
+            if (movingInDirectionX)
             {
                 d3 = (d0 - startLocation.xCoord) / d6;
             }
 
-            if (flag3)
+            if (movingInDirectionY)
             {
                 d4 = (d1 - startLocation.yCoord) / d7;
             }
 
-            if (flag4)
+            if (movingInDirectionZ)
             {
                 d5 = (d2 - startLocation.zCoord) / d8;
             }
@@ -180,7 +180,7 @@ public class WorldRaytraceIterator
                 startLocation.yCoord += d7 * d5;
                 startLocation.zCoord = d2;
             }
-            
+
             locationX = (int) (double)MathHelper.floor_double(startLocation.xCoord);
             locationY = (int) (double)MathHelper.floor_double(startLocation.yCoord);
             locationZ = (int) (double)MathHelper.floor_double(startLocation.zCoord);
