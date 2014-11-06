@@ -54,7 +54,25 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
     @Override
     public boolean hasNext()
     {
-        return _valid && _blockLimit >= 0;
+        if (_valid && _blockLimit >= 0) return false;
+
+        int currentLocationX = _currentLocationX;
+        int currentLocationY = _currentLocationY;
+        int currentLocationZ = _currentLocationZ;
+        int locationX = _locationX;
+        int locationY = _locationY;
+        int locationZ = _locationZ;
+
+        MovingObjectPosition nextBlock = findNextBlock();
+
+        _currentLocationX = currentLocationX;
+        _currentLocationY = currentLocationY;
+        _currentLocationZ = currentLocationZ;
+        _locationX = locationX;
+        _locationY = locationY;
+        _locationZ = locationZ;
+
+        return nextBlock != null;
     }
 
     @Override
@@ -194,9 +212,9 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
             _startLocation.zCoord = d2;
         }
 
-        _locationX = (int) (double) MathHelper.floor_double(_startLocation.xCoord);
-        _locationY = (int) (double) MathHelper.floor_double(_startLocation.yCoord);
-        _locationZ = (int) (double) MathHelper.floor_double(_startLocation.zCoord);
+        _locationX = MathHelper.floor_double(_startLocation.xCoord);
+        _locationY = MathHelper.floor_double(_startLocation.yCoord);
+        _locationZ = MathHelper.floor_double(_startLocation.zCoord);
 
         switch (hitSide)
         {
