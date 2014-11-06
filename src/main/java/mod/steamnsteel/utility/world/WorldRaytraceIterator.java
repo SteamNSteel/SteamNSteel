@@ -9,40 +9,40 @@ import net.minecraft.world.World;
 public class WorldRaytraceIterator
 {
     private final World world;
-    private final Vec3 location;
-    private final Vec3 position;
+    private final Vec3 startLocation;
+    private final Vec3 direction;
     private final MovingObjectPosition currentBlock;
-    private int i;
-    private int j;
-    private int k;
-    private int l;
-    private int i1;
-    private int j1;
+    private int currentLocationX;
+    private int currentLocationY;
+    private int currentLocationZ;
+    private int locationX;
+    private int locationY;
+    private int locationZ;
     private boolean valid;
     private int blockLimit;
 
-    public WorldRaytraceIterator(World world, Vec3 location, Vec3 position)
+    public WorldRaytraceIterator(World world, Vec3 location, Vec3 direction)
     {
         this.world = world;
-        this.location = location;
-        this.position = position;
+        this.startLocation = location;
+        this.direction = direction;
 
 
         if (Double.isNaN(location.xCoord) || Double.isNaN(location.yCoord) || Double.isNaN(location.zCoord))
         {
             valid = false;
         }
-        if (Double.isNaN(position.xCoord) || Double.isNaN(position.yCoord) || Double.isNaN(position.zCoord))
+        if (Double.isNaN(direction.xCoord) || Double.isNaN(direction.yCoord) || Double.isNaN(direction.zCoord))
         {
             valid = false;
         }
 
-        i = MathHelper.floor_double(position.xCoord);
-        j = MathHelper.floor_double(position.yCoord);
-        k = MathHelper.floor_double(position.zCoord);
-        l = MathHelper.floor_double(location.xCoord);
-        i1 = MathHelper.floor_double(location.yCoord);
-        j1 = MathHelper.floor_double(location.zCoord);
+        currentLocationX = MathHelper.floor_double(direction.xCoord);
+        currentLocationY = MathHelper.floor_double(direction.yCoord);
+        currentLocationZ = MathHelper.floor_double(direction.zCoord);
+        locationX = MathHelper.floor_double(location.xCoord);
+        locationY = MathHelper.floor_double(location.yCoord);
+        locationZ = MathHelper.floor_double(location.zCoord);
 
         blockLimit = 200;
 
@@ -55,12 +55,12 @@ public class WorldRaytraceIterator
         boolean p_147447_3_ = false;
         boolean p_147447_4_ = false;
 
-        Block block = world.getBlock(l, i1, j1);
-        int metadata = world.getBlockMetadata(l, i1, j1);
+        Block block = world.getBlock(locationX, locationY, locationZ);
+        int metadata = world.getBlockMetadata(locationX, locationY, locationZ);
         MovingObjectPosition movingobjectposition = null;
-        if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null) && block.canCollideCheck(metadata, p_147447_3_))
+        if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, locationX, locationY, locationZ) != null) && block.canCollideCheck(metadata, p_147447_3_))
         {
-            movingobjectposition = block.collisionRayTrace(world, l, i1, j1, location, position);
+            movingobjectposition = block.collisionRayTrace(world, locationX, locationY, locationZ, startLocation, direction);
         }
 
         return movingobjectposition;
@@ -76,12 +76,12 @@ public class WorldRaytraceIterator
 
         while (blockLimit-- >= 0)
         {
-            if (Double.isNaN(location.xCoord) || Double.isNaN(location.yCoord) || Double.isNaN(location.zCoord))
+            if (Double.isNaN(startLocation.xCoord) || Double.isNaN(startLocation.yCoord) || Double.isNaN(startLocation.zCoord))
             {
                 return null;
             }
 
-            if (l == i && i1 == j && j1 == k)
+            if (locationX == currentLocationX && locationY == currentLocationY && locationZ == currentLocationZ)
             {
                 return p_147447_5_ ? movingobjectposition2 : null;
             }
@@ -93,39 +93,39 @@ public class WorldRaytraceIterator
             double d1 = 999.0D;
             double d2 = 999.0D;
 
-            if (i > l)
+            if (currentLocationX > locationX)
             {
-                d0 = (double)l + 1.0D;
+                d0 = (double) locationX + 1.0D;
             }
-            else if (i < l)
+            else if (currentLocationX < locationX)
             {
-                d0 = (double)l + 0.0D;
+                d0 = (double) locationX + 0.0D;
             }
             else
             {
                 flag6 = false;
             }
 
-            if (j > i1)
+            if (currentLocationY > locationY)
             {
-                d1 = (double)i1 + 1.0D;
+                d1 = (double) locationY + 1.0D;
             }
-            else if (j < i1)
+            else if (currentLocationY < locationY)
             {
-                d1 = (double)i1 + 0.0D;
+                d1 = (double) locationY + 0.0D;
             }
             else
             {
                 flag3 = false;
             }
 
-            if (k > j1)
+            if (currentLocationZ > locationZ)
             {
-                d2 = (double)j1 + 1.0D;
+                d2 = (double) locationZ + 1.0D;
             }
-            else if (k < j1)
+            else if (currentLocationZ < locationZ)
             {
-                d2 = (double)j1 + 0.0D;
+                d2 = (double) locationZ + 0.0D;
             }
             else
             {
@@ -135,106 +135,106 @@ public class WorldRaytraceIterator
             double d3 = 999.0D;
             double d4 = 999.0D;
             double d5 = 999.0D;
-            double d6 = position.xCoord - location.xCoord;
-            double d7 = position.yCoord - location.yCoord;
-            double d8 = position.zCoord - location.zCoord;
+            double d6 = direction.xCoord - startLocation.xCoord;
+            double d7 = direction.yCoord - startLocation.yCoord;
+            double d8 = direction.zCoord - startLocation.zCoord;
 
             if (flag6)
             {
-                d3 = (d0 - location.xCoord) / d6;
+                d3 = (d0 - startLocation.xCoord) / d6;
             }
 
             if (flag3)
             {
-                d4 = (d1 - location.yCoord) / d7;
+                d4 = (d1 - startLocation.yCoord) / d7;
             }
 
             if (flag4)
             {
-                d5 = (d2 - location.zCoord) / d8;
+                d5 = (d2 - startLocation.zCoord) / d8;
             }
 
-            byte b0;
+            byte hitSide;
 
             if (d3 < d4 && d3 < d5)
             {
-                if (i > l)
+                if (currentLocationX > locationX)
                 {
-                    b0 = 4;
+                    hitSide = 4;
                 }
                 else
                 {
-                    b0 = 5;
+                    hitSide = 5;
                 }
 
-                location.xCoord = d0;
-                location.yCoord += d7 * d3;
-                location.zCoord += d8 * d3;
+                startLocation.xCoord = d0;
+                startLocation.yCoord += d7 * d3;
+                startLocation.zCoord += d8 * d3;
             }
             else if (d4 < d5)
             {
-                if (j > i1)
+                if (currentLocationY > locationY)
                 {
-                    b0 = 0;
+                    hitSide = 0;
                 }
                 else
                 {
-                    b0 = 1;
+                    hitSide = 1;
                 }
 
-                location.xCoord += d6 * d4;
-                location.yCoord = d1;
-                location.zCoord += d8 * d4;
+                startLocation.xCoord += d6 * d4;
+                startLocation.yCoord = d1;
+                startLocation.zCoord += d8 * d4;
             }
             else
             {
-                if (k > j1)
+                if (currentLocationZ > locationZ)
                 {
-                    b0 = 2;
+                    hitSide = 2;
                 }
                 else
                 {
-                    b0 = 3;
+                    hitSide = 3;
                 }
 
-                location.xCoord += d6 * d5;
-                location.yCoord += d7 * d5;
-                location.zCoord = d2;
+                startLocation.xCoord += d6 * d5;
+                startLocation.yCoord += d7 * d5;
+                startLocation.zCoord = d2;
             }
 
-            Vec3 vec32 = Vec3.createVectorHelper(location.xCoord, location.yCoord, location.zCoord);
-            l = (int)(vec32.xCoord = (double)MathHelper.floor_double(location.xCoord));
+            Vec3 vec32 = Vec3.createVectorHelper(startLocation.xCoord, startLocation.yCoord, startLocation.zCoord);
+            locationX = (int)(vec32.xCoord = (double)MathHelper.floor_double(startLocation.xCoord));
 
-            if (b0 == 5)
+            if (hitSide == 5)
             {
-                --l;
+                --locationX;
                 ++vec32.xCoord;
             }
 
-            i1 = (int)(vec32.yCoord = (double)MathHelper.floor_double(location.yCoord));
+            locationY = (int)(vec32.yCoord = (double)MathHelper.floor_double(startLocation.yCoord));
 
-            if (b0 == 1)
+            if (hitSide == 1)
             {
-                --i1;
+                --locationY;
                 ++vec32.yCoord;
             }
 
-            j1 = (int)(vec32.zCoord = (double)MathHelper.floor_double(location.zCoord));
+            locationZ = (int)(vec32.zCoord = (double)MathHelper.floor_double(startLocation.zCoord));
 
-            if (b0 == 3)
+            if (hitSide == 3)
             {
-                --j1;
+                --locationZ;
                 ++vec32.zCoord;
             }
 
-            Block block1 = world.getBlock(l, i1, j1);
-            int l1 = world.getBlockMetadata(l, i1, j1);
+            Block block1 = world.getBlock(locationX, locationY, locationZ);
+            int l1 = world.getBlockMetadata(locationX, locationY, locationZ);
 
-            if (!p_147447_4_ || block1.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null)
+            if (!p_147447_4_ || block1.getCollisionBoundingBoxFromPool(world, locationX, locationY, locationZ) != null)
             {
                 if (block1.canCollideCheck(l1, p_147447_3_))
                 {
-                    MovingObjectPosition movingobjectposition1 = block1.collisionRayTrace(world, l, i1, j1, location, position);
+                    MovingObjectPosition movingobjectposition1 = block1.collisionRayTrace(world, locationX, locationY, locationZ, startLocation, direction);
 
                     if (movingobjectposition1 != null)
                     {
@@ -243,7 +243,7 @@ public class WorldRaytraceIterator
                 }
                 else
                 {
-                    movingobjectposition2 = new MovingObjectPosition(l, i1, j1, b0, location, false);
+                    movingobjectposition2 = new MovingObjectPosition(locationX, locationY, locationZ, hitSide, startLocation, false);
                 }
             }
         }
