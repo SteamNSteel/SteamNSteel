@@ -158,14 +158,7 @@ public class WorldRaytraceIterator
 
             if (d3 < d4 && d3 < d5)
             {
-                if (currentLocationX > locationX)
-                {
-                    hitSide = 4;
-                }
-                else
-                {
-                    hitSide = 5;
-                }
+                hitSide = currentLocationX > locationX ? (byte)4 : 5;
 
                 startLocation.xCoord = d0;
                 startLocation.yCoord += d7 * d3;
@@ -173,14 +166,7 @@ public class WorldRaytraceIterator
             }
             else if (d4 < d5)
             {
-                if (currentLocationY > locationY)
-                {
-                    hitSide = 0;
-                }
-                else
-                {
-                    hitSide = 1;
-                }
+                hitSide = currentLocationY > locationY ? (byte)0 : 1;
 
                 startLocation.xCoord += d6 * d4;
                 startLocation.yCoord = d1;
@@ -188,53 +174,37 @@ public class WorldRaytraceIterator
             }
             else
             {
-                if (currentLocationZ > locationZ)
-                {
-                    hitSide = 2;
-                }
-                else
-                {
-                    hitSide = 3;
-                }
+                hitSide = currentLocationZ > locationZ ? (byte)2 : 3;
 
                 startLocation.xCoord += d6 * d5;
                 startLocation.yCoord += d7 * d5;
                 startLocation.zCoord = d2;
             }
+            
+            locationX = (int) (double)MathHelper.floor_double(startLocation.xCoord);
+            locationY = (int) (double)MathHelper.floor_double(startLocation.yCoord);
+            locationZ = (int) (double)MathHelper.floor_double(startLocation.zCoord);
 
-            Vec3 vec32 = Vec3.createVectorHelper(startLocation.xCoord, startLocation.yCoord, startLocation.zCoord);
-            locationX = (int)(vec32.xCoord = (double)MathHelper.floor_double(startLocation.xCoord));
-
-            if (hitSide == 5)
-            {
-                --locationX;
-                ++vec32.xCoord;
+            switch (hitSide) {
+                case 5:
+                    --locationX;
+                    break;
+                case 1:
+                    --locationY;
+                    break;
+                case 3:
+                    --locationZ;
+                    break;
             }
 
-            locationY = (int)(vec32.yCoord = (double)MathHelper.floor_double(startLocation.yCoord));
+            Block block = world.getBlock(locationX, locationY, locationZ);
+            int metadata = world.getBlockMetadata(locationX, locationY, locationZ);
 
-            if (hitSide == 1)
+            if (!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, locationX, locationY, locationZ) != null)
             {
-                --locationY;
-                ++vec32.yCoord;
-            }
-
-            locationZ = (int)(vec32.zCoord = (double)MathHelper.floor_double(startLocation.zCoord));
-
-            if (hitSide == 3)
-            {
-                --locationZ;
-                ++vec32.zCoord;
-            }
-
-            Block block1 = world.getBlock(locationX, locationY, locationZ);
-            int l1 = world.getBlockMetadata(locationX, locationY, locationZ);
-
-            if (!p_147447_4_ || block1.getCollisionBoundingBoxFromPool(world, locationX, locationY, locationZ) != null)
-            {
-                if (block1.canCollideCheck(l1, p_147447_3_))
+                if (block.canCollideCheck(metadata, p_147447_3_))
                 {
-                    MovingObjectPosition movingobjectposition1 = block1.collisionRayTrace(world, locationX, locationY, locationZ, startLocation, direction);
+                    MovingObjectPosition movingobjectposition1 = block.collisionRayTrace(world, locationX, locationY, locationZ, startLocation, direction);
 
                     if (movingobjectposition1 != null)
                     {
