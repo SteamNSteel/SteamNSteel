@@ -12,7 +12,7 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
     private final World _world;
     private final Vec3 _startLocation;
     private final Vec3 _direction;
-    private final MovingObjectPosition _currentBlock;
+    //private MovingObjectPosition _currentBlock;
     private int _currentLocationX;
     private int _currentLocationY;
     private int _currentLocationZ;
@@ -21,6 +21,7 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
     private int _locationZ;
     private boolean _valid;
     private int _blockLimit;
+    private boolean _isFirstBlock = true;
 
     public WorldRaytraceIterator(World world, Vec3 location, Vec3 direction)
     {
@@ -47,14 +48,18 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
 
         _blockLimit = 200;
 
-        _currentBlock = getInitialBlock();
-        if (_currentBlock == null) _valid = false;
+        //_currentBlock = getInitialBlock();
+        //if (_currentBlock == null) _valid = false;
     }
 
     @Override
     public boolean hasNext()
     {
         if (_valid && _blockLimit >= 0) return false;
+
+        if (_isFirstBlock && getInitialBlock() != null) {
+            return true;
+        }
 
         int currentLocationX = _currentLocationX;
         int currentLocationY = _currentLocationY;
@@ -79,7 +84,17 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
     public MovingObjectPosition next()
     {
         _blockLimit--;
-        return _currentBlock;
+        MovingObjectPosition currentBlock;
+        if (_isFirstBlock) {
+            currentBlock = getInitialBlock();
+            _isFirstBlock = false;
+            if (currentBlock != null) {
+                return currentBlock;
+            }
+        }
+        currentBlock = findNextBlock();
+
+        return currentBlock;
     }
 
     private MovingObjectPosition getInitialBlock()
@@ -110,7 +125,7 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
     {
         boolean p_147447_3_ = false;
         boolean p_147447_4_ = false;
-        boolean p_147447_5_ = false;
+        boolean p_147447_5_ = true;
 
         MovingObjectPosition movingObjectPosition = null;
 
