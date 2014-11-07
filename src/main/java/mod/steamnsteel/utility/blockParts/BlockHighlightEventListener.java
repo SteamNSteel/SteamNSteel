@@ -3,6 +3,7 @@ package mod.steamnsteel.utility.blockParts;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mod.steamnsteel.tileentity.SteamNSteelTE;
 import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.utility.world.BadWorldRaytraceIterator;
 import mod.steamnsteel.utility.world.WorldRaytraceIterator;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -44,21 +45,23 @@ public class BlockHighlightEventListener {
             Vec3 vec31 = player.getLook(partialTicks);
             Vec3 vec32 = vec3.addVector(vec31.xCoord * partialTicks, vec31.yCoord * partialTicks, vec31.zCoord * partialTicks);
 
-            WorldRaytraceIterator worldRaytraceIterator = new WorldRaytraceIterator(world, vec3, vec32);
+            //WorldRaytraceIterator worldRaytraceIterator = new WorldRaytraceIterator(world, vec3, vec32);
+            BadWorldRaytraceIterator worldRaytraceIterator = new BadWorldRaytraceIterator(world, vec3, vec32);
             int blockCount = 0;
             final Minecraft minecraft = Minecraft.getMinecraft();
             //while ()
 
-            while(worldRaytraceIterator.hasNext() && (blockCount++) < 5)
+            //while(worldRaytraceIterator.hasNext() && (blockCount++) < 5)
+            for (MovingObjectPosition mop : worldRaytraceIterator)
             {
-                MovingObjectPosition mop = worldRaytraceIterator.next();
+                //MovingObjectPosition mop = worldRaytraceIterator.next();
                 if (mop != null)
                 {
                     //mop.typeOfHit = MovingObjectPosition.MovingObjectType.BLOCK;
                     drawSelectionBox(world, player, mop, 0, partialTicks);
                 }
             }
-            highlightEvent.setCanceled(true);
+            //highlightEvent.setCanceled(true);
             /*TileEntity tileEntity = world.getTileEntity(target.blockX, target.blockY, target.blockZ);
             if (tileEntity instanceof ITileEntityWithParts) {
                 ITileEntityWithParts tileEntityWithParts = (ITileEntityWithParts)tileEntity;
