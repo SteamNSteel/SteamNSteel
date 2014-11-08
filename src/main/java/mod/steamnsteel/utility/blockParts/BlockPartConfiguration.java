@@ -60,15 +60,11 @@ public class BlockPartConfiguration
                             @Override
                             public PartSelectionHelper apply(BlockPart blockPart)
                             {
-                                Vec3 pos = posVec;
-                                Vec3 look = lookVec;
-
                                 final AxisAlignedBB boundingBox = blockPart.getBoundingBox();
-                                final Vec3 normalize = look.normalize();
-                                MovingObjectPosition intercept = boundingBox.calculateIntercept(pos, normalize);
+                                MovingObjectPosition intercept = boundingBox.calculateIntercept(posVec, lookVec);
 
-                                boolean highlighted = intercept != null;
-                                double distance = highlighted ? intercept.hitVec.squareDistanceTo(pos) : Double.MAX_VALUE;
+                                boolean highlighted = intercept != null && enabledFlags[blockPart.index];
+                                double distance = highlighted ? intercept.hitVec.squareDistanceTo(posVec) : Double.MAX_VALUE;
                                 return new PartSelectionHelper(blockPart, distance, highlighted);
                             }
                         })

@@ -27,6 +27,7 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
 
     private boolean shouldRenderAsCorner;
     private BlockPartConfiguration blockPartConfiguration = new BlockPartConfiguration(PartSets.Pipe);
+    private boolean useAlternateModel;
 
     public ForgeDirection getEndADirection()
     {
@@ -204,6 +205,18 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
     {
         if (worldObj == null || !worldObj.isRemote) return;
         this.shouldRenderAsCorner = endB != endA.getOpposite();
+        useAlternateModel = false;
+        if (endA == ForgeDirection.NORTH && endB == ForgeDirection.WEST) {
+            final IPipeTileEntity pipeTileEntity = getPipeTileEntityInDirection(ForgeDirection.NORTH);
+            if (pipeTileEntity instanceof PipeTE) {
+                final PipeTE pipeTE = (PipeTE)pipeTileEntity;
+                if (pipeTE.endA == ForgeDirection.NORTH && pipeTE.endB == ForgeDirection.SOUTH) {
+                    useAlternateModel = true;
+                }
+            }
+        } else if (endA == ForgeDirection.SOUTH && endB == ForgeDirection.EAST) {
+
+        }
         Logger.info("%s - Recalculating Visuals  - %s", "client", toString());
     }
 
@@ -457,5 +470,10 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         {
             recalculateVisuals();
         }
+    }
+
+    public boolean shouldUseAlternateModel()
+    {
+        return useAlternateModel;
     }
 }

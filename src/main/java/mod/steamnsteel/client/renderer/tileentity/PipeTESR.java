@@ -1,6 +1,7 @@
 package mod.steamnsteel.client.renderer.tileentity;
 
 import mod.steamnsteel.block.machine.PipeBlock;
+import mod.steamnsteel.client.renderer.model.PipeAlternateModel;
 import mod.steamnsteel.client.renderer.model.PipeModel;
 import mod.steamnsteel.tileentity.PipeTE;
 import net.minecraft.tileentity.TileEntity;
@@ -13,9 +14,11 @@ import org.lwjgl.opengl.GL11;
 public class PipeTESR extends SteamNSteelTESR
 {
     public static ResourceLocation TEXTURE = getResourceLocation(PipeBlock.NAME);
+    public static ResourceLocation TEXTURE_ALTERNATE = getResourceLocation(PipeBlock.NAME + "-alt");
     public static ResourceLocation TEXTURE_CAP = getResourceLocation(PipeBlock.NAME + "_cap");
     public static ResourceLocation TEXTURE_JUNCTION_BOX = getResourceLocation(PipeBlock.NAME + "_junctionbox");
     private final PipeModel model = new PipeModel();
+    private final PipeAlternateModel alternateModel = new PipeAlternateModel();
     private static final ImmutableTriple<Float, Float, Float> SCALE = ImmutableTriple.of(1.0f, 1.0f, 1.0f);
     private static final ImmutableTriple<Float, Float, Float> OFFSET = ImmutableTriple.of(0.5f, 0.0f, 0.5f);
 
@@ -211,23 +214,41 @@ public class PipeTESR extends SteamNSteelTESR
             }
         }
         GL11.glTranslatef(0f, -0.5f, 0f);
-        bindTexture(TEXTURE);
         if (renderCorner)
         {
             switch (renderType) {
                 case 1: // NORTH_WEST
-                    model.renderPipeCornerNW();
+                    if (!te.shouldUseAlternateModel())
+                    {
+                        bindTexture(TEXTURE);
+                        model.renderPipeCornerNW();
+                    } else
+                    {
+                        bindTexture(TEXTURE_ALTERNATE);
+                        alternateModel.renderPipeCornerNW();
+                    }
                     break;
                 case 2: // NORTH EAST
+                    bindTexture(TEXTURE);
                     model.renderPipeCornerNE();
                     break;
                 case 3: // SOUTH WEST
+                    bindTexture(TEXTURE);
                     model.renderPipeCornerSW();
                     break;
                 case 4:
-                    model.renderPipeCornerSE();
+                    if (!te.shouldUseAlternateModel())
+                    {
+                        bindTexture(TEXTURE);
+                        model.renderPipeCornerSE();
+                    } else
+                    {
+                        //bindTexture(TEXTURE_ALTERNATE);
+                        //alternateModel.renderPipeCornerSE();
+                    }
                     break;
                 default:
+                    bindTexture(TEXTURE_JUNCTION_BOX);
                     model.renderJunctionBox();
                     break;
             }
@@ -235,6 +256,7 @@ public class PipeTESR extends SteamNSteelTESR
             //model.renderPipeCorner();
         } else
         {
+            bindTexture(TEXTURE);
             model.renderPipeStraight();
         }
 

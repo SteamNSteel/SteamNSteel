@@ -55,12 +55,14 @@ public class BlockHighlightEventListener {
                     if (tileEntity instanceof ITileEntityWithParts) {
                         ITileEntityWithParts tileEntityWithParts = (ITileEntityWithParts)tileEntity;
 
+                        Vec3 targetBlockVec = Vec3.createVectorHelper(mop.blockX, mop.blockY, mop.blockZ);
+                        Vec3 vec = targetBlockVec.subtract(mop.hitVec);
                         Vec3 lookVec = player.getLookVec();
 
                         //Should this be taking into account the player???
 
                         BlockPartConfiguration partConfiguration = tileEntityWithParts.getBlockPartConfiguration();
-                        Iterable<BlockPart> parts = partConfiguration.getBlockPartsIntersecting(tileEntity, vec3, vec32);
+                        Iterable<BlockPart> parts = partConfiguration.getBlockPartsIntersecting(tileEntity, vec, lookVec);
                         for(BlockPart part : parts) {
                             part.renderBoundingBox(highlightEvent.player, tileEntity, highlightEvent.partialTicks);
                         }
