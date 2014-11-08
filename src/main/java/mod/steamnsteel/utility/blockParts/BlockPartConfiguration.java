@@ -1,11 +1,15 @@
 package mod.steamnsteel.utility.blockParts;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.common.util.ForgeDirection;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 
@@ -59,7 +63,9 @@ public class BlockPartConfiguration
                                 Vec3 pos = posVec;
                                 Vec3 look = lookVec;
 
-                                MovingObjectPosition intercept = blockPart.getBoundingBox().calculateIntercept(pos, look);
+                                final AxisAlignedBB boundingBox = blockPart.getBoundingBox();
+                                final Vec3 normalize = look.normalize();
+                                MovingObjectPosition intercept = boundingBox.calculateIntercept(pos, normalize);
 
                                 boolean highlighted = intercept != null;
                                 double distance = highlighted ? intercept.hitVec.squareDistanceTo(pos) : Double.MAX_VALUE;
@@ -75,7 +81,7 @@ public class BlockPartConfiguration
 
     public boolean isEnabled(BlockPart part)
     {
-        return false;
+        return enabledFlags[part.index];
     }
 
     private static HashMap<Integer, PartSet> partSets = new HashMap<Integer, PartSet>();
@@ -87,6 +93,16 @@ public class BlockPartConfiguration
         PartSet partSet = new PartSet(name, partSetId);
         partSets.put(partSetId, partSet);
         return partSet;
+    }
+
+    public void setEnabled(BlockPart part, boolean enabled)
+    {
+        enabledFlags[part.index] = enabled;
+    }
+
+    public BlockPart getBlockPartByKey(Object key)
+    {
+        return partSet.getBlockPartByKey(key);
     }
 
     private class PartSelectionHelper

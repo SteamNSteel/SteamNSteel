@@ -2,6 +2,7 @@ package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
 import mod.steamnsteel.api.plumbing.IPipeTileEntity;
+import mod.steamnsteel.utility.blockParts.BlockPart;
 import mod.steamnsteel.utility.blockParts.BlockPartConfiguration;
 import mod.steamnsteel.utility.blockParts.ITileEntityWithParts;
 import mod.steamnsteel.utility.PartSets;
@@ -13,6 +14,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import java.awt.font.FontRenderContext;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -118,6 +120,15 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         }
 
         changed |= orderEnds();
+
+        for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i) {
+            final ForgeDirection direction = ForgeDirection.VALID_DIRECTIONS[i];
+            BlockPart part = blockPartConfiguration.getBlockPartByKey(direction);
+
+            IPipeTileEntity tileEntity = getPipeTileEntityInDirection(direction);
+
+            blockPartConfiguration.setEnabled(part, tileEntity != null);
+        }
 
         if (changed) {
             Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());

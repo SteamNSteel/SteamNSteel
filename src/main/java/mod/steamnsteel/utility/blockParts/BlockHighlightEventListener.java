@@ -35,34 +35,43 @@ public class BlockHighlightEventListener {
     public void onBlockHighlightEvent(DrawBlockHighlightEvent highlightEvent) {
         MovingObjectPosition target = highlightEvent.target;
         if (target.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            final Minecraft minecraft = Minecraft.getMinecraft();
             EntityPlayer player = highlightEvent.player;
+            double blockReachDistance = (double)minecraft.playerController.getBlockReachDistance();
             World world = highlightEvent.player.worldObj;
-            Vec3 targetBlockVec = Vec3.createVectorHelper(target.blockX, target.blockY, target.blockZ);
-            Vec3 vec = targetBlockVec.subtract(target.hitVec);
 
             final float partialTicks = highlightEvent.partialTicks;
             Vec3 vec3 = player.getPosition(partialTicks);
             Vec3 vec31 = player.getLook(partialTicks);
-            Vec3 vec32 = vec3.addVector(vec31.xCoord * partialTicks, vec31.yCoord * partialTicks, vec31.zCoord * partialTicks);
+            Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
 
-            //WorldRaytraceIterator worldRaytraceIterator = new WorldRaytraceIterator(world, vec3, vec32);
-            BadWorldRaytraceIterator worldRaytraceIterator = new BadWorldRaytraceIterator(world, vec3, vec32);
-            int blockCount = 0;
-            final Minecraft minecraft = Minecraft.getMinecraft();
-            //while ()
-
-            //while(worldRaytraceIterator.hasNext() && (blockCount++) < 5)
-            for (MovingObjectPosition mop : worldRaytraceIterator)
+            WorldRaytraceIterator worldRaytraceIterator = new WorldRaytraceIterator(world, vec3, vec32);
+            while(worldRaytraceIterator.hasNext() )
             {
-                //MovingObjectPosition mop = worldRaytraceIterator.next();
-                if (mop != null)
+                MovingObjectPosition mop = worldRaytraceIterator.next();
+                if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
                 {
-                    //mop.typeOfHit = MovingObjectPosition.MovingObjectType.BLOCK;
-                    drawSelectionBox(world, player, mop, 0, partialTicks);
+                    TileEntity tileEntity = world.getTileEntity(mop.blockX, mop.blockY, mop.blockZ);
+                    if (tileEntity instanceof ITileEntityWithParts) {
+                        ITileEntityWithParts tileEntityWithParts = (ITileEntityWithParts)tileEntity;
+
+                        Vec3 lookVec = player.getLookVec();
+
+                        //Should this be taking into account the player???
+
+                        BlockPartConfiguration partConfiguration = tileEntityWithParts.getBlockPartConfiguration();
+                        Iterable<BlockPart> parts = partConfiguration.getBlockPartsIntersecting(tileEntity, vec3, vec32);
+                        for(BlockPart part : parts) {
+                            part.renderBoundingBox(highlightEvent.player, tileEntity, highlightEvent.partialTicks);
+                        }
+                        highlightEvent.setCanceled(true);
+                        break;
+                    }
+//                    drawSelectionBox(world, player, mop, 0, partialTicks);
                 }
             }
-            //highlightEvent.setCanceled(true);
-            /*TileEntity tileEntity = world.getTileEntity(target.blockX, target.blockY, target.blockZ);
+//            highlightEvent.setCanceled(true);
+            /*
             if (tileEntity instanceof ITileEntityWithParts) {
                 ITileEntityWithParts tileEntityWithParts = (ITileEntityWithParts)tileEntity;
 
