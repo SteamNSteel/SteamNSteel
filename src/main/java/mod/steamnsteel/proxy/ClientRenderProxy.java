@@ -20,19 +20,12 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import mod.steamnsteel.block.machine.PipeBlock;
 import mod.steamnsteel.block.machine.PipeJunctionBlock;
-import mod.steamnsteel.client.renderer.item.CupolaItemRenderer;
-import mod.steamnsteel.client.renderer.item.PipeItemRenderer;
-import mod.steamnsteel.client.renderer.item.PipeJunctionItemRenderer;
-import mod.steamnsteel.client.renderer.item.PlotoniumChestItemRenderer;
-import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
-import mod.steamnsteel.client.renderer.tileentity.PipeJunctionTESR;
-import mod.steamnsteel.client.renderer.tileentity.PipeTESR;
-import mod.steamnsteel.client.renderer.tileentity.PlotoniumChestTESR;
+import mod.steamnsteel.block.machine.PipeRedstoneValveBlock;
+import mod.steamnsteel.block.machine.PipeValveBlock;
+import mod.steamnsteel.client.renderer.item.*;
+import mod.steamnsteel.client.renderer.tileentity.*;
 import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.tileentity.CupolaTE;
-import mod.steamnsteel.tileentity.PipeJunctionTE;
-import mod.steamnsteel.tileentity.PipeTE;
-import mod.steamnsteel.tileentity.PlotoniumChestTE;
+import mod.steamnsteel.tileentity.*;
 import mod.steamnsteel.utility.blockParts.BlockHighlightEventListener;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -60,6 +53,8 @@ public class ClientRenderProxy extends RenderProxy
     {
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.cupola), new CupolaItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipe), new PipeItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeValve), new PipeValveItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeRedstoneValve), new PipeRedstoneValveItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeJunction), new PipeJunctionItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.chestPlotonium), new PlotoniumChestItemRenderer());
     }
@@ -67,10 +62,14 @@ public class ClientRenderProxy extends RenderProxy
     private void registerTESRs()
     {
         PipeBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
+        PipeValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
+        PipeRedstoneValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
         PipeJunctionBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
 
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupbolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(PipeValveTE.class, new PipeValveTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(PipeRedstoneValveTE.class, new PipeRedstoneValveTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeJunctionTE.class, new PipeJunctionTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PlotoniumChestTE.class, new PlotoniumChestTESR());
     }

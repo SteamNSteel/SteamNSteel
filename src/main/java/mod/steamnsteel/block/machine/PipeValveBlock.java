@@ -17,30 +17,24 @@
 package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.tileentity.CupolaTE;
-import mod.steamnsteel.tileentity.PipeTE;
-import mod.steamnsteel.tileentity.SteamNSteelTE;
+import mod.steamnsteel.tileentity.PipeValveTE;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
+public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvider
 {
-    public static final String NAME = "pipe";
+    public static final String NAME = "pipeValve";
     private static int RenderId;
 
-    public PipeBlock()
+    public PipeValveBlock()
     {
         super(Material.circuits, true);
         setBlockName(NAME);
@@ -49,7 +43,7 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
-        return new PipeTE();
+        return new PipeValveTE();
     }
 
     @Override
@@ -72,7 +66,7 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
         return false;
     }
 
-    @Override
+    /*@Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block newBlockType)
     {
         PipeTE entity = (PipeTE)world.getTileEntity(x, y, z);
@@ -111,15 +105,15 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
                 entity.detach();
             }
         }
-    }
+    }*/
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
     {
         final TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if (tileEntity instanceof PipeTE)
+        if (tileEntity instanceof PipeValveTE)
         {
-            PipeTE te = (PipeTE)tileEntity;
+            PipeValveTE te = (PipeValveTE)tileEntity;
 
             ForgeDirection direction = ForgeDirection.EAST;
             int facing = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
@@ -134,17 +128,17 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
             }
             else if (facing == 2)
             {
-                direction = ForgeDirection.SOUTH;
+                direction = ForgeDirection.NORTH;
             }
             else if (facing == 3)
             {
-                direction = ForgeDirection.WEST;
+                direction = ForgeDirection.EAST;
             }
 
             Logger.info("%s - Block Placed by - %s - %s - orientation:%s", world.isRemote ? "client" : "server", entityLiving.toString(), WorldBlockCoord.of(x, y, z), direction);
-
             te.setOrientation(direction);
-            te.checkEnds();
+            //te.setOrientation(direction);
+            //te.checkEnds();
         }
     }
 }
