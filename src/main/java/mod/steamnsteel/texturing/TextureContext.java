@@ -6,11 +6,17 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.Random;
 
+/**
+ * The texture context is used to pass around many common properties required to calculate a feature set.
+ */
 public class TextureContext
 {
     private ForgeDirection orientation;
     private ForgeDirection[] directions;
 
+    /**
+     * @return the ForgeDirection that corresponds to moving forward
+     */
     public ForgeDirection getForwardDirection()
     {
         return forwardDirection;
@@ -19,36 +25,57 @@ public class TextureContext
 
     private ForgeDirection forwardDirection;
 
+    /**
+     * @return the ForgeDirection that corresponds to moving left
+     */
     public ForgeDirection getLeftDirection()
     {
         return leftDirection;
     }
 
+    /**
+     * @return the ForgeDirection that corresponds to moving right
+     */
     public ForgeDirection getRightDirection()
     {
         return rightDirection;
     }
 
+    /**
+     * @return the ForgeDirection that corresponds to moving backwards
+     */
     public ForgeDirection getBackwardDirection()
     {
         return backDirection;
     }
 
+    /**
+     * @return the ForgeDirection that corresponds to moving upwards
+     */
     public ForgeDirection getUpDirection()
     {
         return upDirection;
     }
 
+    /**
+     * @return the ForgeDirection that corresponds to moving downwards
+     */
     public ForgeDirection getDownDirection()
     {
         return downDirection;
     }
 
+    /**
+     * @return the the object that cab be used to access blocks in the world.
+     */
     public IBlockAccess getBlockAccess()
     {
         return blockAccess;
     }
 
+    /**
+     * @return the coordinate of the block being studied.
+     */
     public WorldBlockCoord getWorldBlockCoord()
     {
         return worldBlockCoord;
@@ -63,6 +90,7 @@ public class TextureContext
     private WorldBlockCoord worldBlockCoord;
 
     private TextureContext() {}
+
     public TextureContext(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
     {
         this.blockAccess = blockAccess;
@@ -84,6 +112,11 @@ public class TextureContext
         directions[TextureDirection.FORWARD.ordinal()] = forwardDirection;
     }
 
+    /**
+     * Creates a new context for a related location. Directions are maintained.
+     * @param blockCoord the new coordinate to relate to
+     * @return a new TextureContext for that location
+     */
     public TextureContext forLocation(WorldBlockCoord blockCoord) {
         TextureContext newContext = new TextureContext();
         newContext.blockAccess = blockAccess;
@@ -99,6 +132,11 @@ public class TextureContext
         return newContext;
     }
 
+    /**
+     * a common method for calculating the probability of an alternate version of a feature.
+     * @param probability the chance that the feature will be selected.
+     * @return true if the alternate version should be used.
+     */
     public boolean useAlternateVersion(float probability)
     {
         int x = worldBlockCoord.getX();
@@ -108,11 +146,19 @@ public class TextureContext
         return probability > r.nextFloat();
     }
 
+    /**
+     * @return the ForgeDirection of the side.
+     */
     public ForgeDirection getOrientation()
     {
         return orientation;
     }
 
+    /**
+     * returns the corresponding ForgeDirection for a TextureDirection within this context.
+     * @param textureDirection the TextureDirection to convert
+     * @return the correlated ForgeDirection
+     */
     public ForgeDirection getForgeDirection(TextureDirection textureDirection)
     {
         return directions[textureDirection.ordinal()];

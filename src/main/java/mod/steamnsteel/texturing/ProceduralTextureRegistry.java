@@ -5,6 +5,9 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import java.util.HashMap;
 
+/**
+ * A Fluent Interface for registering IIcons for use in a procedural texture
+ */
 class ProceduralTextureRegistry implements ITextureConditionSet, ITextureConditionOrNewSet, IAdditionalTextureConditionOrNewSet
 {
     private final IIconRegister iconRegister;

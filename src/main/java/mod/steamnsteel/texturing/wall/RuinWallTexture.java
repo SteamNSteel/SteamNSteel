@@ -5,6 +5,9 @@ import mod.steamnsteel.texturing.*;
 import mod.steamnsteel.texturing.feature.*;
 import net.minecraft.block.Block;
 
+/**
+ * Defines the Ruin wall texture.
+ */
 public class RuinWallTexture extends ProceduralConnectedTexture
 {
     public static long FEATURE_PLATE_TL_CORNER;
@@ -341,14 +344,13 @@ public class RuinWallTexture extends ProceduralConnectedTexture
 
         textures.useTexture("Wall_BaseM_AllEdge_DDPanelCR_S")
                 .forCondition(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
-                        //.andCondition(featureBase.getFeatureId() | BOTTOM | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_BR_CORNER
                 .andCondition(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
 
         textures.useTexture("Wall_BaseM_AllEdge_DDPanelCL_S")
                 .forCondition(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
-                        //.andCondition(featureBase.getFeatureId() | BOTTOM | LEFT | RIGHT | featurePlate.getFeatureId() | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_BL_CORNER
                 .andCondition(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
     }
+
 
     @Override
     protected boolean isCompatibleBlock(TextureContext context, Block block)
