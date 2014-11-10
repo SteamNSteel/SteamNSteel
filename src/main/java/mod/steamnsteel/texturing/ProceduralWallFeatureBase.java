@@ -14,6 +14,7 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     private final Layer layer;
     private long featureId;
 
+    //TODO: Find a proper caching object to do this.
     HashMap<ChunkCoord, Collection<FeatureInstance>> cachedFeatures = new HashMap<ChunkCoord, Collection<FeatureInstance>>();
 
     protected ProceduralWallFeatureBase(String name, Layer layer)
@@ -22,79 +23,64 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
         this.layer = layer;
     }
 
+    /**
+     * @return the Id of this feature
+     */
+
     @Override
-    public long getFeatureId()
+    public final long getFeatureId()
     {
         return featureId;
     }
 
+    /**
+     * @param featureId The Id of this feature.
+     */
     @Override
-    public void setFeatureId(long featureId)
+    public final void setFeatureId(long featureId)
     {
         this.featureId = featureId;
     }
 
-    public Layer getLayer()
+    public final Layer getLayer()
     {
         return layer;
     }
 
-    public String getName()
+    public final String getName()
     {
         return name;
     }
 
+    /**
+     * TODO: Comment this!
+     * @param context
+     * @return
+     */
     @Override
     public long getSubProperties(TextureContext context)
     {
         return 0;
     }
 
+    /**
+     * @return a bit mask of features that are incompatible with this feature. I.e, a monitor and a valve can't co-exist.
+     */
     @Override
     public long getIncompatibleProperties()
     {
         return 0;
     }
 
+    /**
+     * Retrieves a set of Feature Instances for the specified chunk
+     * @param chunkCoord
+     * @return
+     */
     @Override
-    public Iterable<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord)
+    public Iterable<FeatureInstance> getFeatureInstancesFor(ChunkCoord chunkCoord)
     {
-        Iterable<FeatureInstance> featureResults;
-
-        featureResults = Iterables.concat(
-                getCachedFeatures(chunkCoord)
-                //Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX() - 1, chunkCoord.getZ())), new FeatureTransformerFunction(-1, 0)),
-                //Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX(), chunkCoord.getZ() - 1)), new FeatureTransformerFunction(0, -1)),
-                //Iterables.transform(getCachedFeatures(ChunkCoord.of(chunkCoord.getX() - 1, chunkCoord.getZ() - 1)), new FeatureTransformerFunction(-1, -1))
-        );
-
-        return featureResults;
-    }
-
-    private class FeatureTransformerFunction implements Function<FeatureInstance, FeatureInstance>
-    {
-
-        private final int offsetX;
-        private final int offsetZ;
-
-        public FeatureTransformerFunction(int chunksX, int chunksZ)
-        {
-            offsetX = chunksX << 4;
-            offsetZ = chunksZ << 4;
-        }
-
-        @Override
-        public FeatureInstance apply(FeatureInstance input)
-        {
-            return new FeatureInstance(input.getFeature(),
-                    WorldBlockCoord.of(
-                            input.getBlockCoord().getX() + offsetX,
-                            input.getBlockCoord().getY(),
-                            input.getBlockCoord().getZ() + offsetZ),
-                    input.getWidth(),
-                    input.getHeight(),
-                    input.getDepth());
-        }
+        return getCachedFeatures(chunkCoord);
     }
 
     private Collection<FeatureInstance> getCachedFeatures(ChunkCoord chunkCoord)
@@ -109,6 +95,11 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     }
 
 
+    /**
+     * Implementers of this method should provide a set of feature instances for a given 16x16 chunk.
+     * @param chunkCoord
+     * @return
+     */
     protected abstract Collection<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord);
 
 

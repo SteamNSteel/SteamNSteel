@@ -14,7 +14,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 
     public PlateRuinWallFeature(RuinWallTexture ruinWallTexture, Layer layer)
     {
-        super("Pipes", layer);
+        super("Plate", layer);
         this.ruinWallTexture = ruinWallTexture;
 
         FEATURE_EDGE_TOP_AND_BOTTOM = ProceduralConnectedTexture.FEATURE_EDGE_TOP | ProceduralConnectedTexture.FEATURE_EDGE_BOTTOM;
@@ -147,7 +147,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
                 subProperties |= RuinWallTexture.FEATURE_PLATE_TL_CORNER;
             }
         }
-        if (isAboveBlockValid&& isRightBlockValid)
+        if (isAboveBlockValid && isRightBlockValid)
         {
             boolean isCornerValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this,
                     true, TextureDirection.ABOVE, TextureDirection.RIGHT);
@@ -157,7 +157,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
             }
         }
 
-        if (isBelowBlockValid&& isLeftBlockValid)
+        if (isBelowBlockValid && isLeftBlockValid)
         {
             boolean isCornerValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this,
                     true, TextureDirection.BELOW, TextureDirection.LEFT);
@@ -179,19 +179,15 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 
         final long topAndLeft = RuinWallTexture.FEATURE_EDGE_TOP | RuinWallTexture.FEATURE_EDGE_LEFT;
         final long topAndRight = RuinWallTexture.FEATURE_EDGE_TOP | RuinWallTexture.FEATURE_EDGE_RIGHT;
-        if ((subProperties & topAndLeft) == topAndLeft || (subProperties & topAndRight) == topAndRight) {
-            if (context.useAlternateVersion(0.2f)) {
+        if ((subProperties & topAndLeft) == topAndLeft || (subProperties & topAndRight) == topAndRight)
+        {
+            if (context.useAlternateVersion(0.2f))
+            {
                 subProperties |= RuinWallTexture.ALTERNATE;
             }
         }
 
         return subProperties;
-    }
-
-    @Override
-    public String getName()
-    {
-        return "Plate";
     }
 
     @Override

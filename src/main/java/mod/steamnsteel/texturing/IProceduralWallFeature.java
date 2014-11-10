@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public interface IProceduralWallFeature
 {
-    Iterable<FeatureInstance> getFeatureAreasFor(ChunkCoord chunkCoord);
+    Iterable<FeatureInstance> getFeatureInstancesFor(ChunkCoord chunkCoord);
 
     long getFeatureId();
 

@@ -8,7 +8,6 @@ import java.util.*;
 
 public class FeatureRegistry implements IFeatureRegistry
 {
-    private int featureMask = 0;
     private int currentBit = 0;
     private int currentLayer = 0;
     Map<Layer, List<IProceduralWallFeature>> featureLayers = new TreeMap<Layer, List<IProceduralWallFeature>>();
@@ -17,6 +16,10 @@ public class FeatureRegistry implements IFeatureRegistry
 
     HashMap<ChunkCoord, Map<Layer, long[]>> cachedLayerFeatures = new HashMap<ChunkCoord, Map<Layer, long[]>>();
 
+    /**
+     * Registers a feature
+     * @param feature
+     */
     @Override
     public void registerFeature(IProceduralWallFeature feature)
     {
@@ -29,19 +32,29 @@ public class FeatureRegistry implements IFeatureRegistry
         featureList.add(feature);
 
         long featureId = 1 << currentBit;
-        featureMask &= featureId;
         feature.setFeatureId(featureId);
         features.put(featureId, feature);
         descriptions.put(featureId, feature.getName());
         currentBit++;
     }
 
+    /**
+     * Registers a new layer
+     * @param name The name of the layer
+     * @param allowRandomization true, if the layer should be randomized
+     * @return The created layer
+     */
     public Layer registerLayer(String name, boolean allowRandomization) {
         Layer layer = new Layer(currentLayer, name, allowRandomization);
         currentLayer++;
         return layer;
     }
 
+    /**
+     * Registers a feature property, that is, a condition that affects the design of a feature.
+     * @param description
+     * @return
+     */
     @Override
     public long registerFeatureProperty(String description)
     {
@@ -51,6 +64,12 @@ public class FeatureRegistry implements IFeatureRegistry
         return featurePropertyId;
     }
 
+    /**
+     * Requests the feature in place on a given layer at a given world coordinate.
+     * @param worldBlockCoord The coordinate of the feature
+     * @param layer The layer the feature appears on
+     * @return The feature present at that location on the layer.
+     */
     public IProceduralWallFeature getFeatureAt(WorldBlockCoord worldBlockCoord, Layer layer)
     {
         final ChunkCoord chunkCoord = ChunkCoord.of(worldBlockCoord);
@@ -106,7 +125,7 @@ public class FeatureRegistry implements IFeatureRegistry
 
         for (IProceduralWallFeature feature : featureLayers.get(layer))
         {
-            final Iterable<FeatureInstance> layerFeatureInstances = feature.getFeatureAreasFor(chunkCoord);
+            final Iterable<FeatureInstance> layerFeatureInstances = feature.getFeatureInstancesFor(chunkCoord);
             if (layerFeatureInstances != null)
             {
                 featureInstances = Iterables.concat(featureInstances, layerFeatureInstances);
@@ -116,6 +135,13 @@ public class FeatureRegistry implements IFeatureRegistry
         return featureInstances;
     }
 
+    /**
+     * Calculates the final condition for a given TextureContext.
+     * Part of the condition is already calculated at this point, but it can be overriden by features.
+     * @param context The Texture Condition
+     * @param currentProperties The preselected conditions, such as (LEFT, RIGHT, TOP, BOTTOM) that are already calculated
+     * @return the condition.
+     */
     public long getFeatureBits(TextureContext context, long currentProperties)
     {
         Map<IProceduralWallFeature, Long> featureList = new Hashtable<IProceduralWallFeature, Long>() {};
@@ -164,8 +190,6 @@ public class FeatureRegistry implements IFeatureRegistry
             }
         }
 
-        //long featureBits = currentProperties;
-
         long incompatibleBits = 0;
 
         for (Map.Entry<IProceduralWallFeature, Long> featureBit : featureList.entrySet())
@@ -180,9 +204,14 @@ public class FeatureRegistry implements IFeatureRegistry
         return currentProperties;
     }
 
+    /**
+     * Describes a condition according to the names of features.
+     * @param features The condition to describe.
+     * @return A textual representation of the condition
+     */
     public String describeSide(long features)
     {
-        StringBuffer descriptionBuffer = new StringBuffer();
+        StringBuilder descriptionBuffer = new StringBuilder();
         boolean first = true;
         for (Map.Entry<Long, String> feature : descriptions.entrySet())
         {

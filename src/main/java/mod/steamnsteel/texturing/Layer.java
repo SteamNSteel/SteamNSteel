@@ -1,7 +1,6 @@
 package mod.steamnsteel.texturing;
 
 public class Layer implements Comparable<Layer>
-
 {
     private final int layerId;
     private final String name;
@@ -13,16 +12,25 @@ public class Layer implements Comparable<Layer>
         this.allowRandomization = allowRandomization;
     }
 
+    /**
+     * @return the Id of the Layer
+     */
     public int getLayerId()
     {
         return layerId;
     }
 
+    /**
+     * @return the name of the Layer
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * @return returns true if features on this layer should be randomized.
+     */
     public boolean allowRandomization()
     {
         return allowRandomization;
