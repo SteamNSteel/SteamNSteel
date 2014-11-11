@@ -1,4 +1,4 @@
-package mod.steamnsteel.texturing.api;
+package mod.steamnsteel.texturing.api.iconregistry;
 
 /**
  * Applies an additional condition to a texture

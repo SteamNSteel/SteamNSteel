@@ -1,4 +1,7 @@
-package mod.steamnsteel.texturing.api;
+package mod.steamnsteel.texturing.api.traitregistry;
+
+import mod.steamnsteel.texturing.api.IProceduralWallFeature;
+import mod.steamnsteel.texturing.api.Layer;
 
 public interface IFeatureRegistry
 {

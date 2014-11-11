@@ -1,4 +1,4 @@
-package mod.steamnsteel.texturing.api;
+package mod.steamnsteel.texturing.api.iconregistry;
 
 /**
  * Starts a declaration of a new texture

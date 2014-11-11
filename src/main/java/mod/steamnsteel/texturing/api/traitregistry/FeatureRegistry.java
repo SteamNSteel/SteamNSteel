@@ -1,6 +1,7 @@
-package mod.steamnsteel.texturing.api;
+package mod.steamnsteel.texturing.api.traitregistry;
 
 import com.google.common.collect.Iterables;
+import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
