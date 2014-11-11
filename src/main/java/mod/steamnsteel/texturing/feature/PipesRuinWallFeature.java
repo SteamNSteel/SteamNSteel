@@ -31,9 +31,9 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
         }
 
         final boolean aboveBlockIsClear = texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.ABOVE);
-        final boolean aboveBlockFeatureIsCompatible = texture.isFeatureAtCoordCompatibleWith(request, getLayer(), this, false, TextureDirection.ABOVE);
+        final boolean aboveBlockFeatureIsCompatible = texture.isFeatureAtOffsetOfType(request, getLayer(), this, false, TextureDirection.ABOVE);
         final boolean belowBlockIsClear = texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.BELOW);
-        final boolean belowBlockFeatureIsCompatible = texture.isFeatureAtCoordCompatibleWith(request, getLayer(), this, false, TextureDirection.BELOW);
+        final boolean belowBlockFeatureIsCompatible = texture.isFeatureAtOffsetOfType(request, getLayer(), this, false, TextureDirection.BELOW);
 
         //boolean aboveValid2 = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE, TextureDirection.ABOVE);
         //boolean belowValid2 = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW, TextureDirection.BELOW);
@@ -42,11 +42,11 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
 
         if (aboveBlockIsClear && !aboveBlockFeatureIsCompatible && belowBlockIsClear && belowBlockFeatureIsCompatible)
         {
-            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
-            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            plateCIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
-            plateDIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
-            boolean finalCheck = texture.isFeatureAtCoordCompatibleWith(request, getLayer(), this, false, TextureDirection.BELOW, TextureDirection.BELOW);
+            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
+            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            plateCIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
+            plateDIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
+            boolean finalCheck = texture.isFeatureAtOffsetOfType(request, getLayer(), this, false, TextureDirection.BELOW, TextureDirection.BELOW);
 
             if (!finalCheck && plateAIsPresent && plateBIsPresent && plateCIsPresent && plateDIsPresent)
             {
@@ -62,12 +62,12 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
 
         if (belowBlockIsClear && !belowBlockFeatureIsCompatible && aboveBlockIsClear && aboveBlockFeatureIsCompatible)
         {
-            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
-            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
-            plateCIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            plateDIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
+            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
+            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
+            plateCIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            plateDIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
 
-            boolean finalCheck = texture.isFeatureAtCoordCompatibleWith(request, getLayer(), this, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
+            boolean finalCheck = texture.isFeatureAtOffsetOfType(request, getLayer(), this, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
 
 
             if (!finalCheck && plateAIsPresent && plateBIsPresent && plateCIsPresent && plateDIsPresent)

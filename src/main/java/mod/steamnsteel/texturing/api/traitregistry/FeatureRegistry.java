@@ -151,7 +151,7 @@ public class FeatureRegistry implements IFeatureRegistry
      *                          calculated
      * @return the Trait Set.
      */
-    public long getFeatureBits(IconRequest request, long currentTraits)
+    public long getTraitSet(IconRequest request, long currentTraits)
     {
         Map<IProceduralWallFeature, Long> featuresToApply = new Hashtable<IProceduralWallFeature, Long>() {};
 

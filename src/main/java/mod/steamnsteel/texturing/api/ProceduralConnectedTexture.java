@@ -118,7 +118,7 @@ public abstract class ProceduralConnectedTexture
     {
         IconRequest request = new IconRequest(blockAccess, worldBlockCoord, side);
 
-        long blockProperties = getTexturePropertiesForSide(request);
+        long blockProperties = getTraitSetForSide(request);
 
         IIcon icon = textures.getTextureFor(blockProperties);
 
@@ -137,9 +137,9 @@ public abstract class ProceduralConnectedTexture
      * @param request The Icon Request
      * @return the feature mask
      */
-    private long getTexturePropertiesForSide(IconRequest request)
+    private long getTraitSetForSide(IconRequest request)
     {
-        long blockProperties = 0;
+        long initialTraits = 0;
         ForgeDirection orientation = request.getOrientation();
         if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN || isBlockPartOfWallAndUnobstructed(request, TextureDirection.BACKWARDS))
         {
@@ -153,24 +153,24 @@ public abstract class ProceduralConnectedTexture
 
         if (!aboveIsRuinWallAndNotObscured)
         {
-            blockProperties |= TOP;
+            initialTraits |= TOP;
         }
         if (!belowIsRuinWallAndNotObscured)
         {
-            blockProperties |= BOTTOM;
+            initialTraits |= BOTTOM;
         }
         if (!leftIsRuinWallAndNotObscured)
         {
-            blockProperties |= LEFT;
+            initialTraits |= LEFT;
         }
         if (!rightIsRuinWallAndNotObscured)
         {
-            blockProperties |= RIGHT;
+            initialTraits |= RIGHT;
         }
 
-        blockProperties = featureRegistry.getFeatureBits(request, blockProperties);
+        long traitSet = featureRegistry.getTraitSet(request, initialTraits);
 
-        return blockProperties;
+        return traitSet;
     }
 
     /**
@@ -185,30 +185,8 @@ public abstract class ProceduralConnectedTexture
     {
         IconRequest request = new IconRequest(blockAccess, worldBlockCoord, side);
 
-        long blockProperties = getTexturePropertiesForSide(request);
+        long blockProperties = getTraitSetForSide(request);
         return featureRegistry.describeTraitSet(blockProperties);
-
-    }
-
-    /**
-     * Checks if a block offset from the request is part of the wall and is not obstructed by an opaque block
-     *
-     * @param request   The Icon Request
-     * @param direction The directions to apply
-     * @return true if the block is part of the wall and can be seen.
-     */
-    public final boolean isBlockPartOfWallAndUnobstructed(IconRequest request, TextureDirection... direction)
-    {
-        WorldBlockCoord coord = getOffsetCoordinate(request, direction);
-
-        if (!isCompatibleBlock(request, coord.getBlock(request.getBlockAccess())))
-        {
-            return false;
-        }
-
-        final Block obscuringBlock = coord.offset(request.getBackwardDirection()).getBlock(request.getBlockAccess());
-
-        return !canBlockObscure(request, obscuringBlock);
 
     }
 
@@ -250,18 +228,6 @@ public abstract class ProceduralConnectedTexture
      */
     protected abstract boolean isCompatibleBlock(IconRequest request, Block block);
 
-    public boolean isFeatureAtCoordCompatibleWith(IconRequest request, Layer layer, IProceduralWallFeature feature, boolean checkValidity, TextureDirection... direction)
-    {
-        WorldBlockCoord coord = getOffsetCoordinate(request, direction);
-        final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
-        boolean result = featureAtCoord != null && featureAtCoord.getFeatureTraitId() == feature.getFeatureTraitId();
-        if (checkValidity && result)
-        {
-            result = featureAtCoord.isFeatureValid(request.forLocation(coord));
-        }
-        return result;
-    }
-
     /**
      * gets a wall feature present on a given layer at a given location, or null if no feature found.
      *
@@ -293,11 +259,44 @@ public abstract class ProceduralConnectedTexture
      * @param layer         The layer of the feature
      * @param wallFeature   The feature to check
      * @param checkValidity when true, this call will also check that the feature is valid
-     * @param direction     A series of offsets to apply
+     * @param offsets     A series of offsets to apply
      * @return true if the feature is valid at the requested location.
      */
-    public boolean isFeatureAtCoordVisibleAndCompatible(IconRequest request, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... direction)
+    public boolean isFeatureAtOffsetPartOfWallUnobstructedAndOfType(IconRequest request, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... offsets)
     {
-        return isBlockPartOfWallAndUnobstructed(request, direction) && isFeatureAtCoordCompatibleWith(request, layer, wallFeature, checkValidity, direction);
+        return isBlockPartOfWallAndUnobstructed(request, offsets) && isFeatureAtOffsetOfType(request, layer, wallFeature, checkValidity, offsets);
+    }
+
+    public boolean isFeatureAtOffsetOfType(IconRequest request, Layer layer, IProceduralWallFeature feature, boolean checkValidity, TextureDirection... offsets)
+    {
+        WorldBlockCoord coord = getOffsetCoordinate(request, offsets);
+        final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
+        boolean result = featureAtCoord != null && featureAtCoord.getFeatureTraitId() == feature.getFeatureTraitId();
+        if (checkValidity && result)
+        {
+            result = featureAtCoord.isFeatureValid(request.forLocation(coord));
+        }
+        return result;
+    }
+
+    /**
+     * Checks if a block offset from the request is part of the wall and is not obstructed by an opaque block
+     *
+     * @param request   The Icon Request
+     * @param direction The directions to apply
+     * @return true if the block is part of the wall and can be seen.
+     */
+    public final boolean isBlockPartOfWallAndUnobstructed(IconRequest request, TextureDirection... direction)
+    {
+        WorldBlockCoord coord = getOffsetCoordinate(request, direction);
+
+        if (!isCompatibleBlock(request, coord.getBlock(request.getBlockAccess())))
+        {
+            return false;
+        }
+
+        final Block obscuringBlock = coord.offset(request.getBackwardDirection()).getBlock(request.getBlockAccess());
+
+        return !canBlockObscure(request, obscuringBlock);
     }
 }

@@ -32,8 +32,8 @@ public class LongPipeRuinWallFeature extends ProceduralWallFeatureBase
             return false;
         }
 
-        boolean leftBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, false, TextureDirection.LEFT);
-        boolean rightBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, false, TextureDirection.RIGHT);
+        boolean leftBlockIsValid = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, getLayer(), this, false, TextureDirection.LEFT);
+        boolean rightBlockIsValid = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, getLayer(), this, false, TextureDirection.RIGHT);
         boolean plateAIsPresent;
         boolean plateBIsPresent;
         boolean placeCIsPresent;
@@ -42,11 +42,11 @@ public class LongPipeRuinWallFeature extends ProceduralWallFeatureBase
 
         if (leftBlockIsValid && rightBlockIsValid)
         {
-            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT);
-            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
-            placeCIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
-            plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
+            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT);
+            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
+            placeCIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            plateDIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
+            plateEIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
 
             if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
             {
@@ -59,14 +59,14 @@ public class LongPipeRuinWallFeature extends ProceduralWallFeatureBase
             return false;
         }
 
-        final boolean leftLeftBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, false, TextureDirection.LEFT, TextureDirection.LEFT);
+        final boolean leftLeftBlockIsValid = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, getLayer(), this, false, TextureDirection.LEFT, TextureDirection.LEFT);
         if (leftBlockIsValid && leftLeftBlockIsValid)
         {
-            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT, TextureDirection.LEFT);
-            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT);
-            placeCIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
-            plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
+            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT, TextureDirection.LEFT);
+            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT);
+            placeCIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
+            plateDIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            plateEIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
 
             if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
             {
@@ -79,15 +79,15 @@ public class LongPipeRuinWallFeature extends ProceduralWallFeatureBase
             return false;
         }
 
-        final boolean rightRightBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
+        final boolean rightRightBlockIsValid = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, getLayer(), this, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
 
         if (rightBlockIsValid && rightRightBlockIsValid)
         {
-            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
-            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            placeCIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
-            plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
-            plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT, TextureDirection.RIGHT);
+            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
+            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            placeCIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
+            plateDIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
+            plateEIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT, TextureDirection.RIGHT);
 
             if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
             {
@@ -134,8 +134,8 @@ public class LongPipeRuinWallFeature extends ProceduralWallFeatureBase
     {
         long subProperties = 0;
 
-        boolean isLeftValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, true, TextureDirection.LEFT);
-        boolean isRightValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, true, TextureDirection.RIGHT);
+        boolean isLeftValid = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, getLayer(), this, true, TextureDirection.LEFT);
+        boolean isRightValid = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, getLayer(), this, true, TextureDirection.RIGHT);
 
         if (!isLeftValid)
         {
