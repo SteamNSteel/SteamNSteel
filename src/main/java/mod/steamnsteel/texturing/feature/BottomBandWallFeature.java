@@ -58,7 +58,6 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
 
         properties |= ProceduralConnectedTexture.BOTTOM;
         return properties;
-        //return getTraitId() | (currentProperties & ~ProceduralConnectedTexture.TOP);
     }
 
     @Override
@@ -69,6 +68,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
 
     private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord)
     {
+        //I duplicated this because it's currently inconvenient to create a new IconRequest for the offset.
         int x = worldBlockCoord.getX();
         int y = worldBlockCoord.getY();
         int z = worldBlockCoord.getZ();
@@ -77,7 +77,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties)
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long traits)
     {
         if (otherLayerFeature instanceof TopBandWallFeature)
         {

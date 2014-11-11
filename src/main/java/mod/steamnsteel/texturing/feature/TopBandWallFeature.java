@@ -63,7 +63,7 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties)
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long traits)
     {
         if (otherLayerFeature instanceof BottomBandWallFeature)
         {

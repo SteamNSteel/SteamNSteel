@@ -34,7 +34,7 @@ public class FeatureRegistry implements IFeatureRegistry
         featureList.add(feature);
 
         long featureTraitId = 1 << currentTraitIdBit;
-        feature.setFeatureId(featureTraitId);
+        feature.setFeatureTraitId(featureTraitId);
         features.put(featureTraitId, feature);
         descriptions.put(featureTraitId, feature.getName());
         currentTraitIdBit++;
@@ -115,7 +115,7 @@ public class FeatureRegistry implements IFeatureRegistry
                     {
                         if (y >= featureBlockCoord.getY() && y < featureBlockCoord.getY() + feature.getHeight())
                         {
-                            featureTraitId = feature.getFeature().getTraitId();
+                            featureTraitId = feature.getFeature().getFeatureTraitId();
                             break;
                         }
                     }
@@ -203,7 +203,7 @@ public class FeatureRegistry implements IFeatureRegistry
 
         for (Map.Entry<IProceduralWallFeature, Long> feature : featuresToApply.entrySet())
         {
-            currentTraits |= feature.getKey().getTraitId();
+            currentTraits |= feature.getKey().getFeatureTraitId();
             currentTraits |= feature.getValue();
             incompatibleTraits |= feature.getKey().getIncompatibleTraits();
         }

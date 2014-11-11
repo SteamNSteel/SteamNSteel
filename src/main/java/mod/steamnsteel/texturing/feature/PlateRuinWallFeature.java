@@ -78,7 +78,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     {
         final int featureCount = 64;
 
-        Random random = new Random(Objects.hash(chunkCoord, getTraitId(), 6));
+        Random random = new Random(Objects.hash(chunkCoord, getFeatureTraitId(), 6));
 
         List<FeatureInstance> features = new ArrayList<FeatureInstance>(featureCount);
 
@@ -191,7 +191,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties)
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long traits)
     {
         return Behaviour.COEXIST;
     }

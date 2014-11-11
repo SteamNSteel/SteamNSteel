@@ -254,7 +254,7 @@ public abstract class ProceduralConnectedTexture
     {
         WorldBlockCoord coord = getOffsetCoordinate(request, direction);
         final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
-        boolean result = featureAtCoord != null && featureAtCoord.getTraitId() == feature.getTraitId();
+        boolean result = featureAtCoord != null && featureAtCoord.getFeatureTraitId() == feature.getFeatureTraitId();
         if (checkValidity && result)
         {
             result = featureAtCoord.isFeatureValid(request.forLocation(coord));

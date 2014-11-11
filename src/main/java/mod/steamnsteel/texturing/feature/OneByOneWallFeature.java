@@ -43,7 +43,7 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
     @Override
     public Collection<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord)
     {
-        Random random = new Random(Objects.hash(chunkCoord, getTraitId(), 13));
+        Random random = new Random(Objects.hash(chunkCoord, getFeatureTraitId(), 13));
 
         final int featureCount = 64;
 
@@ -61,13 +61,13 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties)
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long traits)
     {
         if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature)
         {
             return Behaviour.CANNOT_EXIST;
         }
-        if ((featureProperties & featureMask) != 0)
+        if ((traits & featureMask) != 0)
         {
             return Behaviour.CANNOT_EXIST;
         }

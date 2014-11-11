@@ -20,39 +20,44 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     }
 
     /**
-     * @return the Id of this feature
+     * @return the traitId of this feature
      */
-
     @Override
-    public final long getTraitId()
+    public final long getFeatureTraitId()
     {
         return featureId;
     }
 
     /**
-     * @param featureId The Id of this feature.
+     * @param featureTraitId The Id of this feature.
      */
     @Override
-    public final void setFeatureId(long featureId)
+    public final void setFeatureTraitId(long featureTraitId)
     {
-        this.featureId = featureId;
+        this.featureId = featureTraitId;
     }
 
+    /**
+     * @return the layer the feature is defined on
+     */
     public final Layer getLayer()
     {
         return layer;
     }
 
+    /**
+     * @return the name of the feature
+     */
     public final String getName()
     {
         return name;
     }
 
     /**
-     * TODO: Comment this!
+     * gets the traits present at the location of the IconRequest
      *
-     * @param request
-     * @return
+     * @param request the request to examine
+     * @return the traits present at the specified location
      */
     @Override
     public long getTraits(IconRequest request)
@@ -71,10 +76,10 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     }
 
     /**
-     * Retrieves a set of Feature Instances for the specified chunk
+     * Retrieves a set of FeatureInstances for the specified chunk
      *
-     * @param chunkCoord
-     * @return
+     * @param chunkCoord the chunk to get instances for
+     * @return the Features present in the chunk
      */
     @Override
     public Iterable<FeatureInstance> getFeatureInstancesFor(ChunkCoord chunkCoord)

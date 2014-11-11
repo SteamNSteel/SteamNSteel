@@ -105,7 +105,7 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
     @Override
     public Collection<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord)
     {
-        Random random = new Random(Objects.hash(chunkCoord, getTraitId(), 13));
+        Random random = new Random(Objects.hash(chunkCoord, getFeatureTraitId(), 13));
 
         final int featureCount = 64;
 
@@ -141,18 +141,18 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
         }
 
         //Pipes are only a single block wide and must ignore LEFT | RIGHT edges
-        subProperties &= getTraitId() | FEATURE_EDGE_LEFT_AND_RIGHT;
+        subProperties &= getFeatureTraitId() | FEATURE_EDGE_LEFT_AND_RIGHT;
         return subProperties;
     }
 
     @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long featureProperties)
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long traits)
     {
         if (otherLayerFeature instanceof TopBandWallFeature || otherLayerFeature instanceof BottomBandWallFeature)
         {
             return Behaviour.CANNOT_EXIST;
         }
-        if ((featureProperties & plateEdgeMask) != 0)
+        if ((traits & plateEdgeMask) != 0)
         {
             return Behaviour.CANNOT_EXIST;
         }

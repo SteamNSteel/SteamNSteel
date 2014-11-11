@@ -75,16 +75,16 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     @Override
     protected void registerIcons(IIconDefinitionStart textures)
     {
-        final long pipesFeatureId = featurePipes.getTraitId();
-        final long plateFeatureId = featurePlate.getTraitId();
-        final long crownFeatureId = featureCrown.getTraitId();
-        final long ventFeatureId = featureVent.getTraitId();
-        final long screenFeatureId = featureScreen.getTraitId();
-        final long valveFeatureId = featureValve.getTraitId();
-        final long baseFeatureId = featureBase.getTraitId();
-        final long horizontalMetalTearFeatureId = featureHorizontalMetalTear.getTraitId();
-        final long verticalMetalTearFeatureId = featureVerticalMetalTear.getTraitId();
-        final long longPipeFeatureId = featureLongPipe.getTraitId();
+        final long pipesTraitId = featurePipes.getFeatureTraitId();
+        final long plateTraitId = featurePlate.getFeatureTraitId();
+        final long crownTraitId = featureCrown.getFeatureTraitId();
+        final long ventTraitId = featureVent.getFeatureTraitId();
+        final long screenTraitId = featureScreen.getFeatureTraitId();
+        final long valveTraitId = featureValve.getFeatureTraitId();
+        final long baseTraitId = featureBase.getFeatureTraitId();
+        final long horizontalMetalTearTraitId = featureHorizontalMetalTear.getFeatureTraitId();
+        final long verticalMetalTearTraitId = featureVerticalMetalTear.getFeatureTraitId();
+        final long longPipeTraitId = featureLongPipe.getFeatureTraitId();
 
         textures.useIconNamed("ruinWallPlotonium")
                 .forTraitSet(DEFAULT)
@@ -92,265 +92,265 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .andTraitSet(RIGHT)
                 .andTraitSet(LEFT | RIGHT)
                 .andTraitSet(TOP | BOTTOM)
-                .andTraitSet(plateFeatureId)
+                .andTraitSet(plateTraitId)
                         //Hacks around a hard to detect issue of two pipes spawning in a 1x4 stack.
                         //An alternative would be to replace these with a 1x1 texture.
-                .andTraitSet(pipesFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(pipesFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | RIGHT)
-                .andTraitSet(pipesFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT)
-                .andTraitSet(pipesFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT | RIGHT);
+                .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | RIGHT)
+                .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT)
+                .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT | RIGHT);
 
         textures.useIconNamed("Wall_DD1_PipeA")
-                .forTraitSet(pipesFeatureId | FEATURE_EDGE_TOP)
-                .andTraitSet(pipesFeatureId | plateFeatureId | FEATURE_EDGE_TOP)
-                .andTraitSet(LEFT | pipesFeatureId | FEATURE_EDGE_TOP)
-                .andTraitSet(RIGHT | pipesFeatureId | FEATURE_EDGE_TOP)
-                .andTraitSet(LEFT | RIGHT | pipesFeatureId | FEATURE_EDGE_TOP);
+                .forTraitSet(pipesTraitId | FEATURE_EDGE_TOP)
+                .andTraitSet(pipesTraitId | plateTraitId | FEATURE_EDGE_TOP)
+                .andTraitSet(LEFT | pipesTraitId | FEATURE_EDGE_TOP)
+                .andTraitSet(RIGHT | pipesTraitId | FEATURE_EDGE_TOP)
+                .andTraitSet(LEFT | RIGHT | pipesTraitId | FEATURE_EDGE_TOP);
 
         textures.useIconNamed("Wall_DD1_PipeB")
-                .forTraitSet(pipesFeatureId | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(pipesFeatureId | plateFeatureId | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(LEFT | pipesFeatureId | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(RIGHT | pipesFeatureId | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(LEFT | RIGHT | pipesFeatureId | FEATURE_EDGE_BOTTOM);
+                .forTraitSet(pipesTraitId | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(pipesTraitId | plateTraitId | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(LEFT | pipesTraitId | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(RIGHT | pipesTraitId | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(LEFT | RIGHT | pipesTraitId | FEATURE_EDGE_BOTTOM);
 
         textures.useIconNamed("Wall_DD2_PEdgeVL")
-                .forTraitSet(plateFeatureId | FEATURE_EDGE_LEFT)
-                .andTraitSet(plateFeatureId | LEFT | FEATURE_EDGE_LEFT);
+                .forTraitSet(plateTraitId | FEATURE_EDGE_LEFT)
+                .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT);
 
         textures.useIconNamed("Wall_DD2_PEdgeVR")
-                .forTraitSet(plateFeatureId | FEATURE_EDGE_RIGHT)
-                .andTraitSet(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT);
+                .forTraitSet(plateTraitId | FEATURE_EDGE_RIGHT)
+                .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT);
 
         textures.useIconNamed("Wall_DD2_PEdgeHU")
-                .forTraitSet(plateFeatureId | FEATURE_EDGE_TOP)
-                .andTraitSet(crownFeatureId | TOP | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_TOP);
+                .forTraitSet(plateTraitId | FEATURE_EDGE_TOP)
+                .andTraitSet(crownTraitId | TOP | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_TOP);
 
         textures.useIconNamed("Wall_DD2_PEdgeHD")
-                .forTraitSet(plateFeatureId | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM);
+                .forTraitSet(plateTraitId | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM);
 
         textures.useIconNamed("Wall_DD2_PEdgeRDC")
-                .forTraitSet(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
-                .andTraitSet(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
-                .andTraitSet(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BR_CORNER)
-                .andTraitSet(plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
+                .forTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
+                .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
+                .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BR_CORNER)
+                .andTraitSet(plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
 
         textures.useIconNamed("Wall_DD2_PEdgeRUC")
-                .forTraitSet(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
-                .andTraitSet(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
-                .andTraitSet(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
-                .andTraitSet(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
-                .andTraitSet(plateFeatureId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TR_CORNER)
-                .andTraitSet(plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
+                .forTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
+                .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
+                .andTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
+                .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
+                .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TR_CORNER)
+                .andTraitSet(plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
 
         textures.useIconNamed("Wall_DD2_PEdgeRUCbent")
-                .forTraitSet(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE)
-                .andTraitSet(plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE | RIGHT);
+                .forTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE)
+                .andTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE | RIGHT);
 
         textures.useIconNamed("Wall_DD2_PEdgeLUCbent")
-                .forTraitSet(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE)
-                .andTraitSet(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE | LEFT);
+                .forTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE)
+                .andTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE | LEFT);
 
         textures.useIconNamed("Wall_DD2_PEdgeLDC")
-                .forTraitSet(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
-                .andTraitSet(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
-                .andTraitSet(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BL_CORNER)
-                .andTraitSet(plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
+                .forTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
+                .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
+                .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BL_CORNER)
+                .andTraitSet(plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
 
         textures.useIconNamed("Wall_DD2_PEdgeLUC")
-                .forTraitSet(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
-                .andTraitSet(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
-                .andTraitSet(plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
-                .andTraitSet(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TL_CORNER)
-                .andTraitSet(plateFeatureId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
-                .andTraitSet(plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER)
-                .andTraitSet(plateFeatureId | crownFeatureId | TOP | LEFT | RIGHT | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
+                .forTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
+                .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
+                .andTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
+                .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TL_CORNER)
+                .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
+                .andTraitSet(plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER)
+                .andTraitSet(plateTraitId | crownTraitId | TOP | LEFT | RIGHT | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
 
         textures.useIconNamed("Wall_DD2_PEdgeInnerRDC_S")
-                .forTraitSet(plateFeatureId | FEATURE_PLATE_BR_CORNER);
+                .forTraitSet(plateTraitId | FEATURE_PLATE_BR_CORNER);
 
         textures.useIconNamed("Wall_DD2_PEdgeInnerRUC_S")
-                .forTraitSet(plateFeatureId | FEATURE_PLATE_TR_CORNER);
+                .forTraitSet(plateTraitId | FEATURE_PLATE_TR_CORNER);
 
         textures.useIconNamed("Wall_DD2_PEdgeInnerLDC_S")
-                .forTraitSet(plateFeatureId | FEATURE_PLATE_BL_CORNER);
+                .forTraitSet(plateTraitId | FEATURE_PLATE_BL_CORNER);
 
         textures.useIconNamed("Wall_DD2_PEdgeInnerLUC_S")
-                .forTraitSet(plateFeatureId | FEATURE_PLATE_TL_CORNER);
+                .forTraitSet(plateTraitId | FEATURE_PLATE_TL_CORNER);
 
         textures.useIconNamed("Wall_DD2_PEdgeInnerLURDC_S")
-                .forTraitSet(plateFeatureId | FEATURE_PLATE_TL_CORNER | FEATURE_PLATE_BR_CORNER);
+                .forTraitSet(plateTraitId | FEATURE_PLATE_TL_CORNER | FEATURE_PLATE_BR_CORNER);
 
         textures.useIconNamed("Wall_DD2_PEdgeInnerLDRUC_S")
-                .forTraitSet(plateFeatureId | FEATURE_PLATE_BL_CORNER | FEATURE_PLATE_TR_CORNER);
+                .forTraitSet(plateTraitId | FEATURE_PLATE_BL_CORNER | FEATURE_PLATE_TR_CORNER);
 
         textures.useIconNamed("Wall_DD3_Vent")
-                .forTraitSet(ventFeatureId)
-                .andTraitSet(ventFeatureId | LEFT)
-                .andTraitSet(ventFeatureId | RIGHT)
-                .andTraitSet(ventFeatureId | LEFT | RIGHT)
-                .andTraitSet(ventFeatureId | plateFeatureId);
+                .forTraitSet(ventTraitId)
+                .andTraitSet(ventTraitId | LEFT)
+                .andTraitSet(ventTraitId | RIGHT)
+                .andTraitSet(ventTraitId | LEFT | RIGHT)
+                .andTraitSet(ventTraitId | plateTraitId);
 
         textures.useIconNamed("Wall_DD4_Screen")
-                .forTraitSet(screenFeatureId)
-                .andTraitSet(screenFeatureId | LEFT)
-                .andTraitSet(screenFeatureId | RIGHT)
-                .andTraitSet(screenFeatureId | LEFT | RIGHT)
-                .andTraitSet(screenFeatureId | plateFeatureId);
+                .forTraitSet(screenTraitId)
+                .andTraitSet(screenTraitId | LEFT)
+                .andTraitSet(screenTraitId | RIGHT)
+                .andTraitSet(screenTraitId | LEFT | RIGHT)
+                .andTraitSet(screenTraitId | plateTraitId);
 
         textures.useIconNamed("Wall_DD5_Valve")
-                .forTraitSet(valveFeatureId)
-                .andTraitSet(valveFeatureId | LEFT)
-                .andTraitSet(valveFeatureId | RIGHT)
-                .andTraitSet(valveFeatureId | LEFT | RIGHT)
-                .andTraitSet(valveFeatureId | plateFeatureId);
+                .forTraitSet(valveTraitId)
+                .andTraitSet(valveTraitId | LEFT)
+                .andTraitSet(valveTraitId | RIGHT)
+                .andTraitSet(valveTraitId | LEFT | RIGHT)
+                .andTraitSet(valveTraitId | plateTraitId);
 
 
         textures.useIconNamed("Wall_DDLongPipe_L")
-                .forTraitSet(horizontalMetalTearFeatureId | FEATURE_EDGE_LEFT)
-                .andTraitSet(horizontalMetalTearFeatureId | FEATURE_EDGE_LEFT | LEFT)
-                .andTraitSet(horizontalMetalTearFeatureId | plateFeatureId | FEATURE_EDGE_LEFT);
+                .forTraitSet(horizontalMetalTearTraitId | FEATURE_EDGE_LEFT)
+                .andTraitSet(horizontalMetalTearTraitId | FEATURE_EDGE_LEFT | LEFT)
+                .andTraitSet(horizontalMetalTearTraitId | plateTraitId | FEATURE_EDGE_LEFT);
 
         textures.useIconNamed("Wall_DDLongPipe_M")
-                .forTraitSet(horizontalMetalTearFeatureId)
-                .andTraitSet(horizontalMetalTearFeatureId | plateFeatureId);
+                .forTraitSet(horizontalMetalTearTraitId)
+                .andTraitSet(horizontalMetalTearTraitId | plateTraitId);
 
         textures.useIconNamed("Wall_DDLongPipe_R")
-                .forTraitSet(horizontalMetalTearFeatureId | FEATURE_EDGE_RIGHT)
-                .andTraitSet(horizontalMetalTearFeatureId | FEATURE_EDGE_RIGHT | RIGHT)
-                .andTraitSet(horizontalMetalTearFeatureId | plateFeatureId | FEATURE_EDGE_RIGHT);
+                .forTraitSet(horizontalMetalTearTraitId | FEATURE_EDGE_RIGHT)
+                .andTraitSet(horizontalMetalTearTraitId | FEATURE_EDGE_RIGHT | RIGHT)
+                .andTraitSet(horizontalMetalTearTraitId | plateTraitId | FEATURE_EDGE_RIGHT);
 
         textures.useIconNamed("Wall_DDLongPipe_U")
-                .forTraitSet(verticalMetalTearFeatureId | FEATURE_EDGE_TOP)
-                .andTraitSet(verticalMetalTearFeatureId | FEATURE_EDGE_TOP | TOP)
-                .andTraitSet(verticalMetalTearFeatureId | FEATURE_EDGE_TOP | LEFT)
-                .andTraitSet(verticalMetalTearFeatureId | FEATURE_EDGE_TOP | RIGHT)
-                .andTraitSet(verticalMetalTearFeatureId | FEATURE_EDGE_TOP | LEFT | RIGHT)
-                .andTraitSet(verticalMetalTearFeatureId | plateFeatureId | FEATURE_EDGE_TOP);
+                .forTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_TOP)
+                .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_TOP | TOP)
+                .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_TOP | LEFT)
+                .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_TOP | RIGHT)
+                .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_TOP | LEFT | RIGHT)
+                .andTraitSet(verticalMetalTearTraitId | plateTraitId | FEATURE_EDGE_TOP);
 
         textures.useIconNamed("Wall_DDLongPipe_M2")
-                .forTraitSet(verticalMetalTearFeatureId)
-                .andTraitSet(verticalMetalTearFeatureId | LEFT)
-                .andTraitSet(verticalMetalTearFeatureId | RIGHT)
-                .andTraitSet(verticalMetalTearFeatureId | LEFT | RIGHT)
-                .andTraitSet(verticalMetalTearFeatureId | plateFeatureId);
+                .forTraitSet(verticalMetalTearTraitId)
+                .andTraitSet(verticalMetalTearTraitId | LEFT)
+                .andTraitSet(verticalMetalTearTraitId | RIGHT)
+                .andTraitSet(verticalMetalTearTraitId | LEFT | RIGHT)
+                .andTraitSet(verticalMetalTearTraitId | plateTraitId);
 
         textures.useIconNamed("Wall_DDLongPipe_D")
-                .forTraitSet(verticalMetalTearFeatureId | FEATURE_EDGE_BOTTOM)
-                .andTraitSet(verticalMetalTearFeatureId | FEATURE_EDGE_BOTTOM | BOTTOM)
-                .andTraitSet(verticalMetalTearFeatureId | FEATURE_EDGE_BOTTOM | LEFT)
-                .andTraitSet(verticalMetalTearFeatureId | FEATURE_EDGE_BOTTOM | RIGHT)
-                .andTraitSet(verticalMetalTearFeatureId | FEATURE_EDGE_BOTTOM | LEFT | RIGHT)
+                .forTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_BOTTOM)
+                .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_BOTTOM | BOTTOM)
+                .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_BOTTOM | LEFT)
+                .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_BOTTOM | RIGHT)
+                .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_BOTTOM | LEFT | RIGHT)
 
 
-                .andTraitSet(verticalMetalTearFeatureId | plateFeatureId | FEATURE_EDGE_BOTTOM);
+                .andTraitSet(verticalMetalTearTraitId | plateTraitId | FEATURE_EDGE_BOTTOM);
 
         textures.useIconNamed("Wall_DD6_PipeCapL")
-                .forTraitSet(longPipeFeatureId | FEATURE_EDGE_LEFT)
-                .andTraitSet(longPipeFeatureId | FEATURE_EDGE_LEFT | LEFT)
-                .andTraitSet(longPipeFeatureId | plateFeatureId | FEATURE_EDGE_LEFT);
+                .forTraitSet(longPipeTraitId | FEATURE_EDGE_LEFT)
+                .andTraitSet(longPipeTraitId | FEATURE_EDGE_LEFT | LEFT)
+                .andTraitSet(longPipeTraitId | plateTraitId | FEATURE_EDGE_LEFT);
 
         textures.useIconNamed("Wall_DD6_PipeSec1")
-                .forTraitSet(longPipeFeatureId)
-                .andTraitSet(longPipeFeatureId | plateFeatureId);
+                .forTraitSet(longPipeTraitId)
+                .andTraitSet(longPipeTraitId | plateTraitId);
 
         textures.useIconNamed("Wall_DD6_PipeCapR")
-                .forTraitSet(longPipeFeatureId | FEATURE_EDGE_RIGHT)
-                .andTraitSet(longPipeFeatureId | FEATURE_EDGE_RIGHT | RIGHT)
-                .andTraitSet(longPipeFeatureId | plateFeatureId | FEATURE_EDGE_RIGHT);
+                .forTraitSet(longPipeTraitId | FEATURE_EDGE_RIGHT)
+                .andTraitSet(longPipeTraitId | FEATURE_EDGE_RIGHT | RIGHT)
+                .andTraitSet(longPipeTraitId | plateTraitId | FEATURE_EDGE_RIGHT);
 
         textures.useIconNamed("Wall_CrownM_EdgeL")
-                .forTraitSet(crownFeatureId | TOP | LEFT)
-                .andTraitSet(crownFeatureId | TOP | LEFT | plateFeatureId | FEATURE_EDGE_TOP)
-                .andTraitSet(crownFeatureId | TOP | LEFT | plateFeatureId);
+                .forTraitSet(crownTraitId | TOP | LEFT)
+                .andTraitSet(crownTraitId | TOP | LEFT | plateTraitId | FEATURE_EDGE_TOP)
+                .andTraitSet(crownTraitId | TOP | LEFT | plateTraitId);
 
         textures.useIconNamed("Wall_CrownM_EdgeR")
-                .forTraitSet(crownFeatureId | TOP | RIGHT)
-                .andTraitSet(crownFeatureId | TOP | RIGHT | plateFeatureId | FEATURE_EDGE_TOP)
-                .andTraitSet(crownFeatureId | TOP | RIGHT | plateFeatureId);
+                .forTraitSet(crownTraitId | TOP | RIGHT)
+                .andTraitSet(crownTraitId | TOP | RIGHT | plateTraitId | FEATURE_EDGE_TOP)
+                .andTraitSet(crownTraitId | TOP | RIGHT | plateTraitId);
 
         textures.useIconNamed("Wall_CrownM_AllEdge")
-                .forTraitSet(crownFeatureId | TOP | LEFT | RIGHT);
+                .forTraitSet(crownTraitId | TOP | LEFT | RIGHT);
 
         textures.useIconNamed("Wall_CrownM_Center")
-                .forTraitSet(crownFeatureId | TOP)
-                .andTraitSet(crownFeatureId | TOP | plateFeatureId | FEATURE_EDGE_TOP);
+                .forTraitSet(crownTraitId | TOP)
+                .andTraitSet(crownTraitId | TOP | plateTraitId | FEATURE_EDGE_TOP);
 
         textures.useIconNamed("Wall_CrownM_DDPanelCL")
-                .forTraitSet(crownFeatureId | TOP | plateFeatureId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP);
+                .forTraitSet(crownTraitId | TOP | plateTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP);
 
         textures.useIconNamed("Wall_CrownM_DDPanelCR")
-                .forTraitSet(crownFeatureId | TOP | plateFeatureId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP);
+                .forTraitSet(crownTraitId | TOP | plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP);
 
         textures.useIconNamed("Wall_BaseM_EdgeL")
-                .forTraitSet(baseFeatureId | BOTTOM | LEFT)
-                .andTraitSet(baseFeatureId | BOTTOM | LEFT | plateFeatureId | FEATURE_EDGE_BOTTOM);
+                .forTraitSet(baseTraitId | BOTTOM | LEFT)
+                .andTraitSet(baseTraitId | BOTTOM | LEFT | plateTraitId | FEATURE_EDGE_BOTTOM);
 
         textures.useIconNamed("Wall_BaseM_EdgeR")
-                .forTraitSet(baseFeatureId | BOTTOM | RIGHT)
-                .andTraitSet(baseFeatureId | BOTTOM | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM);
+                .forTraitSet(baseTraitId | BOTTOM | RIGHT)
+                .andTraitSet(baseTraitId | BOTTOM | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM);
 
         textures.useIconNamed("Wall_BaseM_AllEdge")
-                .forTraitSet(baseFeatureId | BOTTOM | LEFT | RIGHT);
+                .forTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT);
 
         textures.useIconNamed("Wall_BaseM_Center")
-                .forTraitSet(baseFeatureId | BOTTOM)
-                .andTraitSet(baseFeatureId | BOTTOM | plateFeatureId | FEATURE_EDGE_BOTTOM);
+                .forTraitSet(baseTraitId | BOTTOM)
+                .andTraitSet(baseTraitId | BOTTOM | plateTraitId | FEATURE_EDGE_BOTTOM);
 
         textures.useIconNamed("Wall_BaseM_DDPanelCL")
-                .forTraitSet(baseFeatureId | BOTTOM | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
+                .forTraitSet(baseTraitId | BOTTOM | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
 
         textures.useIconNamed("Wall_BaseM_DDPanelCR")
-                .forTraitSet(baseFeatureId | BOTTOM | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
+                .forTraitSet(baseTraitId | BOTTOM | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
 
         textures.useIconNamed("Wall_CrownM_EdgeL_DDPanelCL_S")
-                .forTraitSet(crownFeatureId | TOP | LEFT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
-                .andTraitSet(crownFeatureId | TOP | LEFT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
+                .forTraitSet(crownTraitId | TOP | LEFT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
+                .andTraitSet(crownTraitId | TOP | LEFT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
 
         textures.useIconNamed("Wall_CrownM_EdgeL_DDPanelCR_S")
-                .forTraitSet(crownFeatureId | TOP | LEFT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT);
+                .forTraitSet(crownTraitId | TOP | LEFT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT);
 
         textures.useIconNamed("Wall_CrownM_EdgeR_DDPanelCR_S")
-                .forTraitSet(crownFeatureId | TOP | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
-                .andTraitSet(crownFeatureId | TOP | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
+                .forTraitSet(crownTraitId | TOP | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
+                .andTraitSet(crownTraitId | TOP | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
 
         textures.useIconNamed("Wall_CrownM_EdgeR_DDPanelCL_S")
-                .forTraitSet(crownFeatureId | TOP | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT);
+                .forTraitSet(crownTraitId | TOP | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT);
 
         textures.useIconNamed("Wall_CrownM_AllEdge_DDPanelCR_S")
-                .forTraitSet(crownFeatureId | TOP | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
-                .andTraitSet(crownFeatureId | TOP | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
+                .forTraitSet(crownTraitId | TOP | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
+                .andTraitSet(crownTraitId | TOP | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
 
         textures.useIconNamed("Wall_CrownM_AllEdge_DDPanelCL_S")
-                .forTraitSet(crownFeatureId | TOP | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
-                .andTraitSet(crownFeatureId | TOP | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
+                .forTraitSet(crownTraitId | TOP | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
+                .andTraitSet(crownTraitId | TOP | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
 
         textures.useIconNamed("Wall_BaseM_EdgeL_DDPanelCL_S")
-                .forTraitSet(baseFeatureId | BOTTOM | LEFT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
-                .andTraitSet(baseFeatureId | BOTTOM | LEFT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
+                .forTraitSet(baseTraitId | BOTTOM | LEFT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
+                .andTraitSet(baseTraitId | BOTTOM | LEFT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
 
         textures.useIconNamed("Wall_BaseM_EdgeL_DDPanelCR_S")
-                .forTraitSet(baseFeatureId | BOTTOM | LEFT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
+                .forTraitSet(baseTraitId | BOTTOM | LEFT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
 
         textures.useIconNamed("Wall_BaseM_EdgeR_DDPanelCL_S")
-                .forTraitSet(baseFeatureId | BOTTOM | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
+                .forTraitSet(baseTraitId | BOTTOM | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
 
         textures.useIconNamed("Wall_BaseM_EdgeR_DDPanelCR_S")
-                .forTraitSet(baseFeatureId | BOTTOM | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
-                .andTraitSet(baseFeatureId | BOTTOM | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
+                .forTraitSet(baseTraitId | BOTTOM | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
+                .andTraitSet(baseTraitId | BOTTOM | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
 
         textures.useIconNamed("Wall_BaseM_AllEdge_DDPanelCR_S")
-                .forTraitSet(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
-                .andTraitSet(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
+                .forTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
+                .andTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
 
         textures.useIconNamed("Wall_BaseM_AllEdge_DDPanelCL_S")
-                .forTraitSet(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
-                .andTraitSet(baseFeatureId | BOTTOM | LEFT | RIGHT | plateFeatureId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
+                .forTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
+                .andTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
     }
 
 
