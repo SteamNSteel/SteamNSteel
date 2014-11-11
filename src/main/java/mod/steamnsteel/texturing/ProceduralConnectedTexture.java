@@ -179,11 +179,22 @@ public abstract class ProceduralConnectedTexture
             return false;
         }
 
-        if (coord.offset(context.getBackwardDirection()).getBlock(context.getBlockAccess()).getMaterial().isOpaque())
-        {
-            return false;
-        }
-        return true;
+        final Block obscuringBlock = coord.offset(context.getBackwardDirection()).getBlock(context.getBlockAccess());
+        
+        return !canBlockObscure(context, obscuringBlock);
+
+    }
+
+    /**
+     * Override this method to change the behaviour that only compatible blocks count as obscuring
+     * a texture.
+     * @param context The Texture Context
+     * @param obscuringBlock the block that is beinc checked
+     * @return true if the block is obscuring a texture.
+     */
+    protected boolean canBlockObscure(TextureContext context, Block obscuringBlock)
+    {
+        return isCompatibleBlock(context, obscuringBlock);
     }
 
     /**
@@ -216,7 +227,7 @@ public abstract class ProceduralConnectedTexture
         final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
         boolean result = featureAtCoord != null && featureAtCoord.getFeatureId() == feature.getFeatureId();
         if (checkValidity && result) {
-            result &= featureAtCoord.isFeatureValid(context.forLocation(coord));
+            result = featureAtCoord.isFeatureValid(context.forLocation(coord));
         }
         return result;
     }
