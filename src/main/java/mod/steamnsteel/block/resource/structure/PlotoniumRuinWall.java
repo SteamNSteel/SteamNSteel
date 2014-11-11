@@ -16,9 +16,8 @@
 
 package mod.steamnsteel.block.resource.structure;
 
-import com.google.common.math.LongMath;
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.texturing.ProceduralConnectedTexture;
+import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.texturing.wall.RuinWallTexture;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
