@@ -1,4 +1,4 @@
-package mod.steamnsteel.texturing;
+package mod.steamnsteel.texturing.api;
 
 import mod.steamnsteel.TheMod;
 import net.minecraft.client.renderer.texture.IIconRegister;

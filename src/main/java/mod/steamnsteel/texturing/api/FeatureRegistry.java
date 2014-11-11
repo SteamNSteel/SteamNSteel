@@ -1,4 +1,4 @@
-package mod.steamnsteel.texturing;
+package mod.steamnsteel.texturing.api;
 
 import com.google.common.collect.Iterables;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;

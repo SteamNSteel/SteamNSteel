@@ -1,4 +1,4 @@
-package mod.steamnsteel.texturing;
+package mod.steamnsteel.texturing.api;
 
 /**
  * Defines what will happen across layers when two features co-exist.

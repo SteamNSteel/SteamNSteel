@@ -1,4 +1,4 @@
-package mod.steamnsteel.texturing;
+package mod.steamnsteel.texturing.api;
 
 public interface IFeatureRegistry
 {

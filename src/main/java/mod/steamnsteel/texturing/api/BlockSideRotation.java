@@ -1,4 +1,4 @@
-package mod.steamnsteel.texturing;
+package mod.steamnsteel.texturing.api;
 
 import net.minecraftforge.common.util.ForgeDirection;
 

@@ -1,4 +1,4 @@
-package mod.steamnsteel.texturing;
+package mod.steamnsteel.texturing.api;
 
 /**
  * TextureDirection is a relative direction alternative to ForgeDirection's absolute direction

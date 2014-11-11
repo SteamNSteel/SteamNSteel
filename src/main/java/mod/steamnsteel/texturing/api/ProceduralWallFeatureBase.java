@@ -1,4 +1,4 @@
-package mod.steamnsteel.texturing;
+package mod.steamnsteel.texturing.api;
 
 import mod.steamnsteel.utility.position.ChunkCoord;
 import java.util.Collection;
