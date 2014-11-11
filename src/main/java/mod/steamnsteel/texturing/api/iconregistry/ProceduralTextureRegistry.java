@@ -8,7 +8,7 @@ import java.util.HashMap;
 /**
  * A Fluent Interface for registering IIcons for use in a procedural texture
  */
-class ProceduralTextureRegistry implements ITextureConditionSet, ITextureConditionOrNewSet, IAdditionalTextureConditionOrNewSet
+public class ProceduralTextureRegistry implements ITextureConditionSet, ITextureConditionOrNewSet, IAdditionalTextureConditionOrNewSet
 {
     private final IIconRegister iconRegister;
 

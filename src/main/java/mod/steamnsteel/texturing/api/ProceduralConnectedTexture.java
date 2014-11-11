@@ -1,5 +1,9 @@
 package mod.steamnsteel.texturing.api;
 
+import mod.steamnsteel.texturing.api.iconregistry.ITextureConditionSet;
+import mod.steamnsteel.texturing.api.iconregistry.ProceduralTextureRegistry;
+import mod.steamnsteel.texturing.api.traitregistry.FeatureRegistry;
+import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;

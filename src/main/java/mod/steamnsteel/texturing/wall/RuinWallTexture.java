@@ -2,6 +2,8 @@ package mod.steamnsteel.texturing.wall;
 
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
 import mod.steamnsteel.texturing.api.*;
+import mod.steamnsteel.texturing.api.iconregistry.ITextureConditionSet;
+import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import mod.steamnsteel.texturing.feature.*;
 import net.minecraft.block.Block;
 
