@@ -9,7 +9,7 @@ import java.util.*;
 
 public class FeatureRegistry implements IFeatureRegistry
 {
-    private int currentBit = 0;
+    private int currentTraitIdBit = 0;
     private int currentLayer = 0;
     Map<Layer, List<IProceduralWallFeature>> featureLayers = new TreeMap<Layer, List<IProceduralWallFeature>>();
     Map<Long, IProceduralWallFeature> features = new Hashtable<Long, IProceduralWallFeature>();
@@ -20,7 +20,7 @@ public class FeatureRegistry implements IFeatureRegistry
     /**
      * Registers a feature
      *
-     * @param feature
+     * @param feature The Feature
      */
     @Override
     public void registerFeature(IProceduralWallFeature feature)
@@ -33,15 +33,16 @@ public class FeatureRegistry implements IFeatureRegistry
         }
         featureList.add(feature);
 
-        long featureId = 1 << currentBit;
-        feature.setFeatureId(featureId);
-        features.put(featureId, feature);
-        descriptions.put(featureId, feature.getName());
-        currentBit++;
+        long featureTraitId = 1 << currentTraitIdBit;
+        feature.setFeatureId(featureTraitId);
+        features.put(featureTraitId, feature);
+        descriptions.put(featureTraitId, feature.getName());
+        currentTraitIdBit++;
     }
 
     /**
-     * Registers a new layer
+     * Registers a new layer.
+     * The allowRandomization parameter allows you to specify that y values above 16 will be altered so as to not provide a sterile wall
      *
      * @param name               The name of the layer
      * @param allowRandomization true, if the layer should be randomized
@@ -55,18 +56,18 @@ public class FeatureRegistry implements IFeatureRegistry
     }
 
     /**
-     * Registers a feature property, that is, a condition that affects the design of a feature.
+     * Registers a trait
      *
-     * @param description
-     * @return
+     * @param description description of the trait
+     * @return the Id of the trait
      */
     @Override
-    public long registerFeatureProperty(String description)
+    public long registerTrait(String description)
     {
-        long featurePropertyId = 1 << currentBit;
-        descriptions.put(featurePropertyId, description);
-        currentBit++;
-        return featurePropertyId;
+        long traitId = 1 << currentTraitIdBit;
+        descriptions.put(traitId, description);
+        currentTraitIdBit++;
+        return traitId;
     }
 
     /**
@@ -94,14 +95,14 @@ public class FeatureRegistry implements IFeatureRegistry
 
         ChunkBlockCoord localCoord = ChunkBlockCoord.of(worldBlockCoord);
         final int index = localCoord.getY() | localCoord.getZ() << 8 | localCoord.getX() << 12;
-        long featureId = featureMap[index];
-        if (featureId == 0)
+        long featureTraitId = featureMap[index];
+        if (featureTraitId == 0)
         {
             int x = localCoord.getX();
             int y = localCoord.getY() & 15;
             int z = localCoord.getZ();
 
-            featureId = -1;
+            featureTraitId = -1;
             int offsetAmount = layer.allowRandomization() ? (localCoord.getY() >> 4) : 0;
             for (FeatureInstance feature : getFeaturesIn(chunkCoord, layer))
             {
@@ -114,15 +115,15 @@ public class FeatureRegistry implements IFeatureRegistry
                     {
                         if (y >= featureBlockCoord.getY() && y < featureBlockCoord.getY() + feature.getHeight())
                         {
-                            featureId = feature.getFeature().getFeatureId();
+                            featureTraitId = feature.getFeature().getTraitId();
                             break;
                         }
                     }
                 }
             }
-            featureMap[index] = featureId;
+            featureMap[index] = featureTraitId;
         }
-        return features.get(featureId);
+        return features.get(featureTraitId);
     }
 
     private Iterable<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord, Layer layer)
@@ -142,17 +143,17 @@ public class FeatureRegistry implements IFeatureRegistry
     }
 
     /**
-     * Calculates the final condition for a given TextureContext. Part of the condition is already calculated at this
+     * Calculates the final Trait Set for a given IconRequest. Part of the Trait Set is already calculated at this
      * point, but it can be overriden by features.
      *
      * @param request           The Icon Request
-     * @param currentProperties The preselected conditions, such as (LEFT, RIGHT, TOP, BOTTOM) that are already
+     * @param currentTraits The preselected traits, such as (LEFT, RIGHT, TOP, BOTTOM) that have already been
      *                          calculated
-     * @return the condition.
+     * @return the Trait Set.
      */
-    public long getFeatureBits(IconRequest request, long currentProperties)
+    public long getFeatureBits(IconRequest request, long currentTraits)
     {
-        Map<IProceduralWallFeature, Long> featureList = new Hashtable<IProceduralWallFeature, Long>() {};
+        Map<IProceduralWallFeature, Long> featuresToApply = new Hashtable<IProceduralWallFeature, Long>() {};
 
         for (Layer layer : featureLayers.keySet())
         {
@@ -167,65 +168,65 @@ public class FeatureRegistry implements IFeatureRegistry
                 continue;
             }
 
-            boolean add = true;
-            List<IProceduralWallFeature> removeList = new LinkedList<IProceduralWallFeature>();
-            for (Map.Entry<IProceduralWallFeature, Long> otherLayerFeature : featureList.entrySet())
+            boolean addFeature = true;
+            List<IProceduralWallFeature> featuresToRemove = new LinkedList<IProceduralWallFeature>();
+            for (Map.Entry<IProceduralWallFeature, Long> otherLayerFeature : featuresToApply.entrySet())
             {
                 Behaviour behaviour = currentLayerFeature.getBehaviourAgainst(otherLayerFeature.getKey(), otherLayerFeature.getValue());
                 switch (behaviour)
                 {
                     case CANNOT_EXIST:
-                        add = false;
+                        addFeature = false;
                         break;
                     case REPLACES:
-                        removeList.add(otherLayerFeature.getKey());
+                        featuresToRemove.add(otherLayerFeature.getKey());
                         break;
                     case COEXIST:
-                        add = true;
+                        addFeature = true;
                         break;
                 }
             }
 
-            for (IProceduralWallFeature removeFeature : removeList)
+            for (IProceduralWallFeature featureToRemove : featuresToRemove)
             {
-                featureList.remove(removeFeature);
+                featuresToApply.remove(featureToRemove);
             }
 
-            if (add)
+            if (addFeature)
             {
-                long featureBits = currentLayerFeature.getSubProperties(request);
-                featureList.put(currentLayerFeature, featureBits);
+                long traits = currentLayerFeature.getTraits(request);
+                featuresToApply.put(currentLayerFeature, traits);
             }
         }
 
-        long incompatibleBits = 0;
+        long incompatibleTraits = 0;
 
-        for (Map.Entry<IProceduralWallFeature, Long> featureBit : featureList.entrySet())
+        for (Map.Entry<IProceduralWallFeature, Long> feature : featuresToApply.entrySet())
         {
-            currentProperties |= featureBit.getKey().getFeatureId();
-            currentProperties |= featureBit.getValue();
-            incompatibleBits |= featureBit.getKey().getIncompatibleProperties();
+            currentTraits |= feature.getKey().getTraitId();
+            currentTraits |= feature.getValue();
+            incompatibleTraits |= feature.getKey().getIncompatibleTraits();
         }
 
-        currentProperties &= ~incompatibleBits;
+        currentTraits &= ~incompatibleTraits;
 
-        return currentProperties;
+        return currentTraits;
     }
 
     /**
-     * Describes a condition according to the names of features.
+     * Describes a Trait Set according to the names of the traits.
      *
-     * @param features The condition to describe.
-     * @return A textual representation of the condition
+     * @param traitSet The Trait Set to describe.
+     * @return A textual representation of the Trait Set
      */
-    public String describeSide(long features)
+    public String describeTraitSet(long traitSet)
     {
         StringBuilder descriptionBuffer = new StringBuilder();
         boolean first = true;
         for (Map.Entry<Long, String> feature : descriptions.entrySet())
         {
-            long featureMask = feature.getKey();
-            if ((features & featureMask) == featureMask)
+            long featureTraitId = feature.getKey();
+            if ((traitSet & featureTraitId) == featureTraitId)
             {
                 if (!first)
                 {

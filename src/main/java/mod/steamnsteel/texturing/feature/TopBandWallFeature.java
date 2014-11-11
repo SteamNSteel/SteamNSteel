@@ -35,7 +35,7 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(IconRequest request)
+    public long getTraits(IconRequest request)
     {
         long properties = 0;
         if (texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.LEFT, TextureDirection.ABOVE))
@@ -73,7 +73,7 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getIncompatibleProperties()
+    public long getIncompatibleTraits()
     {
         return RuinWallTexture.ALTERNATE;
     }

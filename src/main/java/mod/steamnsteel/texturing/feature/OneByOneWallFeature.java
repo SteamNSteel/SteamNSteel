@@ -43,7 +43,7 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
     @Override
     public Collection<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord)
     {
-        Random random = new Random(Objects.hash(chunkCoord, getFeatureId(), 13));
+        Random random = new Random(Objects.hash(chunkCoord, getTraitId(), 13));
 
         final int featureCount = 64;
 

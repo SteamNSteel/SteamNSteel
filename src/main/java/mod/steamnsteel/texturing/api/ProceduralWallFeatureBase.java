@@ -24,7 +24,7 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
      */
 
     @Override
-    public final long getFeatureId()
+    public final long getTraitId()
     {
         return featureId;
     }
@@ -55,7 +55,7 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
      * @return
      */
     @Override
-    public long getSubProperties(IconRequest request)
+    public long getTraits(IconRequest request)
     {
         return 0;
     }
@@ -65,7 +65,7 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
      * co-exist.
      */
     @Override
-    public long getIncompatibleProperties()
+    public long getIncompatibleTraits()
     {
         return 0;
     }

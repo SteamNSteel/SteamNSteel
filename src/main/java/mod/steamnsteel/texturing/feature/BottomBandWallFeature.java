@@ -34,7 +34,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(IconRequest request)
+    public long getTraits(IconRequest request)
     {
         long properties = 0;
         if (texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.LEFT, TextureDirection.BELOW))
@@ -58,11 +58,11 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
 
         properties |= ProceduralConnectedTexture.BOTTOM;
         return properties;
-        //return getFeatureId() | (currentProperties & ~ProceduralConnectedTexture.TOP);
+        //return getTraitId() | (currentProperties & ~ProceduralConnectedTexture.TOP);
     }
 
     @Override
-    public long getIncompatibleProperties()
+    public long getIncompatibleTraits()
     {
         return ProceduralConnectedTexture.TOP | RuinWallTexture.ALTERNATE;
     }

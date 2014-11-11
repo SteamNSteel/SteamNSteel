@@ -64,27 +64,27 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         features.registerFeature(featureVerticalMetalTear);
         features.registerFeature(featureLongPipe);
 
-        FEATURE_PLATE_TL_CORNER = features.registerFeatureProperty("Plate_TLC");
-        FEATURE_PLATE_TR_CORNER = features.registerFeatureProperty("Plate_TRC");
-        FEATURE_PLATE_BL_CORNER = features.registerFeatureProperty("Plate_BLC");
-        FEATURE_PLATE_BR_CORNER = features.registerFeatureProperty("Plate_BRC");
+        FEATURE_PLATE_TL_CORNER = features.registerTrait("Plate_TLC");
+        FEATURE_PLATE_TR_CORNER = features.registerTrait("Plate_TRC");
+        FEATURE_PLATE_BL_CORNER = features.registerTrait("Plate_BLC");
+        FEATURE_PLATE_BR_CORNER = features.registerTrait("Plate_BRC");
 
-        ALTERNATE = features.registerFeatureProperty("Alternate");
+        ALTERNATE = features.registerTrait("Alternate");
     }
 
     @Override
     protected void registerIcons(IIconDefinitionStart textures)
     {
-        final long pipesFeatureId = featurePipes.getFeatureId();
-        final long plateFeatureId = featurePlate.getFeatureId();
-        final long crownFeatureId = featureCrown.getFeatureId();
-        final long ventFeatureId = featureVent.getFeatureId();
-        final long screenFeatureId = featureScreen.getFeatureId();
-        final long valveFeatureId = featureValve.getFeatureId();
-        final long baseFeatureId = featureBase.getFeatureId();
-        final long horizontalMetalTearFeatureId = featureHorizontalMetalTear.getFeatureId();
-        final long verticalMetalTearFeatureId = featureVerticalMetalTear.getFeatureId();
-        final long longPipeFeatureId = featureLongPipe.getFeatureId();
+        final long pipesFeatureId = featurePipes.getTraitId();
+        final long plateFeatureId = featurePlate.getTraitId();
+        final long crownFeatureId = featureCrown.getTraitId();
+        final long ventFeatureId = featureVent.getTraitId();
+        final long screenFeatureId = featureScreen.getTraitId();
+        final long valveFeatureId = featureValve.getTraitId();
+        final long baseFeatureId = featureBase.getTraitId();
+        final long horizontalMetalTearFeatureId = featureHorizontalMetalTear.getTraitId();
+        final long verticalMetalTearFeatureId = featureVerticalMetalTear.getTraitId();
+        final long longPipeFeatureId = featureLongPipe.getTraitId();
 
         textures.useIconNamed("ruinWallPlotonium")
                 .forTraitSet(DEFAULT)

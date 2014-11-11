@@ -78,7 +78,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     {
         final int featureCount = 64;
 
-        Random random = new Random(Objects.hash(chunkCoord, getFeatureId(), 6));
+        Random random = new Random(Objects.hash(chunkCoord, getTraitId(), 6));
 
         List<FeatureInstance> features = new ArrayList<FeatureInstance>(featureCount);
 
@@ -100,7 +100,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(IconRequest request)
+    public long getTraits(IconRequest request)
     {
         long subProperties = 0;
         boolean isLeftBlockValid = ruinWallTexture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, true, TextureDirection.LEFT);

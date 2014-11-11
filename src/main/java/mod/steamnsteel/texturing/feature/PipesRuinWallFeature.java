@@ -89,7 +89,7 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     @Override
     public Collection<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord)
     {
-        Random random = new Random(Objects.hash(chunkCoord, getFeatureId(), 6));
+        Random random = new Random(Objects.hash(chunkCoord, getTraitId(), 6));
 
         final int featureCount = 64;
 
@@ -107,7 +107,7 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(IconRequest request)
+    public long getTraits(IconRequest request)
     {
         long subProperties = 0;
         IProceduralWallFeature aboveBlockFeature = texture.getValidFeature(request, getLayer(), TextureDirection.ABOVE);
@@ -125,7 +125,7 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
         final long FEATURE_EDGE_TOP_AND_BOTTOM = texture.FEATURE_EDGE_TOP | texture.FEATURE_EDGE_BOTTOM;
 
         //Pipes are only a single block wide and must ignore LEFT | RIGHT edges
-        //subProperties &= getFeatureId() | FEATURE_EDGE_TOP_AND_BOTTOM;
+        //subProperties &= getTraitId() | FEATURE_EDGE_TOP_AND_BOTTOM;
         return subProperties;// | currentProperties;
     }
 

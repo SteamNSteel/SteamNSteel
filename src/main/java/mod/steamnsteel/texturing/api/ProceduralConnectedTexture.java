@@ -81,15 +81,15 @@ public abstract class ProceduralConnectedTexture
      */
     private void registerInternalFeatureProperties(IFeatureRegistry features)
     {
-        TOP = features.registerFeatureProperty("T");
-        LEFT = features.registerFeatureProperty("L");
-        BOTTOM = features.registerFeatureProperty("B");
-        RIGHT = features.registerFeatureProperty("R");
+        TOP = features.registerTrait("T");
+        LEFT = features.registerTrait("L");
+        BOTTOM = features.registerTrait("B");
+        RIGHT = features.registerTrait("R");
 
-        FEATURE_EDGE_TOP = features.registerFeatureProperty("FE_T");
-        FEATURE_EDGE_LEFT = features.registerFeatureProperty("FE_L");
-        FEATURE_EDGE_BOTTOM = features.registerFeatureProperty("FE_B");
-        FEATURE_EDGE_RIGHT = features.registerFeatureProperty("FE_R");
+        FEATURE_EDGE_TOP = features.registerTrait("FE_T");
+        FEATURE_EDGE_LEFT = features.registerTrait("FE_L");
+        FEATURE_EDGE_BOTTOM = features.registerTrait("FE_B");
+        FEATURE_EDGE_RIGHT = features.registerTrait("FE_R");
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class ProceduralConnectedTexture
 
         if (icon == null)
         {
-            String blockPropertiesDescription = featureRegistry.describeSide(blockProperties);
+            String blockPropertiesDescription = featureRegistry.describeTraitSet(blockProperties);
 
             Logger.warning("Unknown texture: %d (%s) - %s @ (%s) - %d", blockProperties, Long.toBinaryString(blockProperties), blockPropertiesDescription, worldBlockCoord, side);
         }
@@ -186,7 +186,7 @@ public abstract class ProceduralConnectedTexture
         IconRequest request = new IconRequest(blockAccess, worldBlockCoord, side);
 
         long blockProperties = getTexturePropertiesForSide(request);
-        return featureRegistry.describeSide(blockProperties);
+        return featureRegistry.describeTraitSet(blockProperties);
 
     }
 
@@ -254,7 +254,7 @@ public abstract class ProceduralConnectedTexture
     {
         WorldBlockCoord coord = getOffsetCoordinate(request, direction);
         final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
-        boolean result = featureAtCoord != null && featureAtCoord.getFeatureId() == feature.getFeatureId();
+        boolean result = featureAtCoord != null && featureAtCoord.getTraitId() == feature.getTraitId();
         if (checkValidity && result)
         {
             result = featureAtCoord.isFeatureValid(request.forLocation(coord));

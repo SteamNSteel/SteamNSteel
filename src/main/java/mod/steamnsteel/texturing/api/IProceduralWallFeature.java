@@ -6,9 +6,9 @@ public interface IProceduralWallFeature
 {
     Iterable<FeatureInstance> getFeatureInstancesFor(ChunkCoord chunkCoord);
 
-    long getFeatureId();
+    long getTraitId();
 
-    long getSubProperties(IconRequest context);
+    long getTraits(IconRequest context);
 
     void setFeatureId(long featureId);
 
@@ -20,5 +20,5 @@ public interface IProceduralWallFeature
 
     boolean isFeatureValid(IconRequest request);
 
-    long getIncompatibleProperties();
+    long getIncompatibleTraits();
 }
