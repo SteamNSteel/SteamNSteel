@@ -25,15 +25,15 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(TextureContext context)
+    public boolean isFeatureValid(IconRequest request)
     {
-        if (!texture.isBlockPartOfWallAndUnobstructed(context))
+        if (!texture.isBlockPartOfWallAndUnobstructed(request))
         {
             return false;
         }
 
-        boolean aboveBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.ABOVE);
-        boolean belowBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.BELOW);
+        boolean aboveBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, false, TextureDirection.ABOVE);
+        boolean belowBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, false, TextureDirection.BELOW);
         boolean plateAIsPresent;
         boolean plateBIsPresent;
         boolean placeCIsPresent;
@@ -42,11 +42,11 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
 
         if (aboveBlockIsValid && belowBlockIsValid)
         {
-            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
-            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
-            placeCIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
-            plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
+            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
+            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
+            placeCIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
+            plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
 
             if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
             {
@@ -59,14 +59,14 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
             return false;
         }
 
-        final boolean aboveAboveBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
+        final boolean aboveAboveBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
         if (aboveBlockIsValid && aboveAboveBlockIsValid)
         {
-            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE, TextureDirection.ABOVE, TextureDirection.ABOVE);
-            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.ABOVE);
-            placeCIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
-            plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
+            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE, TextureDirection.ABOVE, TextureDirection.ABOVE);
+            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.ABOVE);
+            placeCIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
+            plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
 
             if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
             {
@@ -79,15 +79,15 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
             return false;
         }
 
-        final boolean belowBelowBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, false, TextureDirection.BELOW, TextureDirection.BELOW);
+        final boolean belowBelowBlockIsValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, false, TextureDirection.BELOW, TextureDirection.BELOW);
 
         if (belowBlockIsValid && belowBelowBlockIsValid)
         {
-            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
-            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            placeCIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
-            plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
-            plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW, TextureDirection.BELOW);
+            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
+            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            placeCIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
+            plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
+            plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW, TextureDirection.BELOW);
 
             if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
             {
@@ -122,12 +122,12 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context)
+    public long getSubProperties(IconRequest request)
     {
         long subProperties = 0;
 
-        boolean isAboveValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, true, TextureDirection.ABOVE);
-        boolean isBelowValid = texture.isFeatureAtCoordVisibleAndCompatible(context, getLayer(), this, true, TextureDirection.BELOW);
+        boolean isAboveValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, true, TextureDirection.ABOVE);
+        boolean isBelowValid = texture.isFeatureAtCoordVisibleAndCompatible(request, getLayer(), this, true, TextureDirection.BELOW);
 
         if (!isAboveValid)
         {
@@ -135,7 +135,7 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
         } else if (!isBelowValid)
         {
             subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_BOTTOM;
-        } else if (context.useAlternateVersion(1 / 7f))
+        } else if (request.useAlternateVersion(1 / 7f))
         {
             subProperties |= RuinWallTexture.ALTERNATE;
         }

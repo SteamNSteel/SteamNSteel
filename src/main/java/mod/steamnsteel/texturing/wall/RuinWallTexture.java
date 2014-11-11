@@ -355,7 +355,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
 
 
     @Override
-    protected boolean isCompatibleBlock(TextureContext context, Block block)
+    protected boolean isCompatibleBlock(IconRequest request, Block block)
     {
         return (block instanceof PlotoniumRuinWall);
     }

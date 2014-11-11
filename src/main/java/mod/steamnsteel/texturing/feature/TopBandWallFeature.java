@@ -21,9 +21,9 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(TextureContext context)
+    public boolean isFeatureValid(IconRequest request)
     {
-        return !texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE);
+        return !texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.ABOVE);
     }
 
     @Override
@@ -35,24 +35,24 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context)
+    public long getSubProperties(IconRequest request)
     {
         long properties = 0;
-        if (texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT, TextureDirection.ABOVE))
+        if (texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.LEFT, TextureDirection.ABOVE))
         {
             properties |= ProceduralConnectedTexture.LEFT;
         }
-        if (texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT, TextureDirection.ABOVE))
+        if (texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.RIGHT, TextureDirection.ABOVE))
         {
             properties |= ProceduralConnectedTexture.RIGHT;
         }
 
         //Break up the bases
-        if ((getCrownSplitOpportunity(context.getWorldBlockCoord()) & 14) == 0)
+        if ((getCrownSplitOpportunity(request.getWorldBlockCoord()) & 14) == 0)
         {
             properties |= ProceduralConnectedTexture.LEFT;
         }
-        if ((getCrownSplitOpportunity(context.getWorldBlockCoord().offset(context.getRightDirection())) & 14) == 0)
+        if ((getCrownSplitOpportunity(request.getWorldBlockCoord().offset(request.getRightDirection())) & 14) == 0)
         {
             properties |= ProceduralConnectedTexture.RIGHT;
         }

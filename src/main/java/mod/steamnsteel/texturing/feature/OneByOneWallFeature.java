@@ -23,15 +23,15 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(TextureContext context)
+    public boolean isFeatureValid(IconRequest request)
     {
-        if (!ruinWallTexture.isBlockPartOfWallAndUnobstructed(context))
+        if (!ruinWallTexture.isBlockPartOfWallAndUnobstructed(request))
         {
             return false;
         }
 
-        final boolean aboveBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE);
-        final boolean belowBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW);
+        final boolean aboveBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.ABOVE);
+        final boolean belowBlockIsClear = ruinWallTexture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.BELOW);
 
         if (aboveBlockIsClear && belowBlockIsClear)
         {

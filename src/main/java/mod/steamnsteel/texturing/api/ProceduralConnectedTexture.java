@@ -116,9 +116,9 @@ public abstract class ProceduralConnectedTexture
      */
     public IIcon getIconForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
     {
-        TextureContext context = new TextureContext(blockAccess, worldBlockCoord, side);
+        IconRequest request = new IconRequest(blockAccess, worldBlockCoord, side);
 
-        long blockProperties = getTexturePropertiesForSide(context);
+        long blockProperties = getTexturePropertiesForSide(request);
 
         IIcon icon = textures.getTextureFor(blockProperties);
 
@@ -134,22 +134,22 @@ public abstract class ProceduralConnectedTexture
     /**
      * Calculates an id that correlates to a set of features
      *
-     * @param context The Texture Context
+     * @param request The Icon Request
      * @return the feature mask
      */
-    private long getTexturePropertiesForSide(TextureContext context)
+    private long getTexturePropertiesForSide(IconRequest request)
     {
         long blockProperties = 0;
-        ForgeDirection orientation = context.getOrientation();
-        if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN || isBlockPartOfWallAndUnobstructed(context, TextureDirection.BACKWARDS))
+        ForgeDirection orientation = request.getOrientation();
+        if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN || isBlockPartOfWallAndUnobstructed(request, TextureDirection.BACKWARDS))
         {
             return DEFAULT;
         }
 
-        boolean leftIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(context, TextureDirection.LEFT);
-        boolean rightIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(context, TextureDirection.RIGHT);
-        boolean aboveIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE);
-        boolean belowIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW);
+        boolean leftIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(request, TextureDirection.LEFT);
+        boolean rightIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(request, TextureDirection.RIGHT);
+        boolean aboveIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(request, TextureDirection.ABOVE);
+        boolean belowIsRuinWallAndNotObscured = isBlockPartOfWallAndUnobstructed(request, TextureDirection.BELOW);
 
         if (!aboveIsRuinWallAndNotObscured)
         {
@@ -168,7 +168,7 @@ public abstract class ProceduralConnectedTexture
             blockProperties |= RIGHT;
         }
 
-        blockProperties = featureRegistry.getFeatureBits(context, blockProperties);
+        blockProperties = featureRegistry.getFeatureBits(request, blockProperties);
 
         return blockProperties;
     }
@@ -183,60 +183,60 @@ public abstract class ProceduralConnectedTexture
      */
     public final String describeTextureAt(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
     {
-        TextureContext context = new TextureContext(blockAccess, worldBlockCoord, side);
+        IconRequest request = new IconRequest(blockAccess, worldBlockCoord, side);
 
-        long blockProperties = getTexturePropertiesForSide(context);
+        long blockProperties = getTexturePropertiesForSide(request);
         return featureRegistry.describeSide(blockProperties);
 
     }
 
     /**
-     * Checks if a block offset from the context is part of the wall and is not obstructed by an opaque block
+     * Checks if a block offset from the request is part of the wall and is not obstructed by an opaque block
      *
-     * @param context   The Texture Context
+     * @param request   The Icon Request
      * @param direction The directions to apply
      * @return true if the block is part of the wall and can be seen.
      */
-    public final boolean isBlockPartOfWallAndUnobstructed(TextureContext context, TextureDirection... direction)
+    public final boolean isBlockPartOfWallAndUnobstructed(IconRequest request, TextureDirection... direction)
     {
-        WorldBlockCoord coord = getOffsetCoordinate(context, direction);
+        WorldBlockCoord coord = getOffsetCoordinate(request, direction);
 
-        if (!isCompatibleBlock(context, coord.getBlock(context.getBlockAccess())))
+        if (!isCompatibleBlock(request, coord.getBlock(request.getBlockAccess())))
         {
             return false;
         }
 
-        final Block obscuringBlock = coord.offset(context.getBackwardDirection()).getBlock(context.getBlockAccess());
+        final Block obscuringBlock = coord.offset(request.getBackwardDirection()).getBlock(request.getBlockAccess());
 
-        return !canBlockObscure(context, obscuringBlock);
+        return !canBlockObscure(request, obscuringBlock);
 
     }
 
     /**
      * Override this method to change the behaviour that only compatible blocks count as obscuring a texture.
      *
-     * @param context        The Texture Context
+     * @param request        The Icon Request
      * @param obscuringBlock the block that is beinc checked
      * @return true if the block is obscuring a texture.
      */
-    protected boolean canBlockObscure(TextureContext context, Block obscuringBlock)
+    protected boolean canBlockObscure(IconRequest request, Block obscuringBlock)
     {
-        return isCompatibleBlock(context, obscuringBlock);
+        return isCompatibleBlock(request, obscuringBlock);
     }
 
     /**
-     * Takes a series of TextureDirections and applies them to the context to return a world coordinate.
+     * Takes a series of TextureDirections and applies them to the request to return a world coordinate.
      *
-     * @param context   The Texture Context
+     * @param request   The Icon Request
      * @param direction The directions to apply
      * @return the world space coordinates after transformation
      */
-    private WorldBlockCoord getOffsetCoordinate(TextureContext context, TextureDirection[] direction)
+    private WorldBlockCoord getOffsetCoordinate(IconRequest request, TextureDirection[] direction)
     {
-        WorldBlockCoord coord = context.getWorldBlockCoord();
+        WorldBlockCoord coord = request.getWorldBlockCoord();
         for (TextureDirection textureDirection : direction)
         {
-            coord = coord.offset(context.getForgeDirection(textureDirection));
+            coord = coord.offset(request.getForgeDirection(textureDirection));
         }
         return coord;
     }
@@ -244,20 +244,20 @@ public abstract class ProceduralConnectedTexture
     /**
      * Detects if a given block can be considered for texturing.
      *
-     * @param context the context that the search is being taken under
+     * @param request the request that the search is being taken under
      * @param block   the block to check compatibility with
      * @return true if the block is considered compatible with this texture.
      */
-    protected abstract boolean isCompatibleBlock(TextureContext context, Block block);
+    protected abstract boolean isCompatibleBlock(IconRequest request, Block block);
 
-    public boolean isFeatureAtCoordCompatibleWith(TextureContext context, Layer layer, IProceduralWallFeature feature, boolean checkValidity, TextureDirection... direction)
+    public boolean isFeatureAtCoordCompatibleWith(IconRequest request, Layer layer, IProceduralWallFeature feature, boolean checkValidity, TextureDirection... direction)
     {
-        WorldBlockCoord coord = getOffsetCoordinate(context, direction);
+        WorldBlockCoord coord = getOffsetCoordinate(request, direction);
         final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
         boolean result = featureAtCoord != null && featureAtCoord.getFeatureId() == feature.getFeatureId();
         if (checkValidity && result)
         {
-            result = featureAtCoord.isFeatureValid(context.forLocation(coord));
+            result = featureAtCoord.isFeatureValid(request.forLocation(coord));
         }
         return result;
     }
@@ -265,21 +265,21 @@ public abstract class ProceduralConnectedTexture
     /**
      * gets a wall feature present on a given layer at a given location, or null if no feature found.
      *
-     * @param context   The Texture Context
+     * @param request   The Icon Request
      * @param layer     The layer to check
      * @param direction The offsets to the block that is being checked
      * @return The potential feature at a point.
      */
-    public IProceduralWallFeature getValidFeature(TextureContext context, Layer layer, TextureDirection... direction)
+    public IProceduralWallFeature getValidFeature(IconRequest request, Layer layer, TextureDirection... direction)
     {
-        WorldBlockCoord coord = getOffsetCoordinate(context, direction);
+        WorldBlockCoord coord = getOffsetCoordinate(request, direction);
         IProceduralWallFeature desiredFeature = featureRegistry.getFeatureAt(coord, layer);
         if (desiredFeature == null)
         {
             return null;
         }
 
-        if (desiredFeature.isFeatureValid(context))
+        if (desiredFeature.isFeatureValid(request))
         {
             return desiredFeature;
         }
@@ -289,15 +289,15 @@ public abstract class ProceduralConnectedTexture
     /**
      * Checks that a feature can be used at a given location.
      *
-     * @param context       The texture context
+     * @param request       The Icon Request
      * @param layer         The layer of the feature
      * @param wallFeature   The feature to check
      * @param checkValidity when true, this call will also check that the feature is valid
      * @param direction     A series of offsets to apply
      * @return true if the feature is valid at the requested location.
      */
-    public boolean isFeatureAtCoordVisibleAndCompatible(TextureContext context, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... direction)
+    public boolean isFeatureAtCoordVisibleAndCompatible(IconRequest request, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... direction)
     {
-        return isBlockPartOfWallAndUnobstructed(context, direction) && isFeatureAtCoordCompatibleWith(context, layer, wallFeature, checkValidity, direction);
+        return isBlockPartOfWallAndUnobstructed(request, direction) && isFeatureAtCoordCompatibleWith(request, layer, wallFeature, checkValidity, direction);
     }
 }

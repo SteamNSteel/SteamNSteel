@@ -145,24 +145,24 @@ public class FeatureRegistry implements IFeatureRegistry
      * Calculates the final condition for a given TextureContext. Part of the condition is already calculated at this
      * point, but it can be overriden by features.
      *
-     * @param context           The Texture Condition
+     * @param request           The Icon Request
      * @param currentProperties The preselected conditions, such as (LEFT, RIGHT, TOP, BOTTOM) that are already
      *                          calculated
      * @return the condition.
      */
-    public long getFeatureBits(TextureContext context, long currentProperties)
+    public long getFeatureBits(IconRequest request, long currentProperties)
     {
         Map<IProceduralWallFeature, Long> featureList = new Hashtable<IProceduralWallFeature, Long>() {};
 
         for (Layer layer : featureLayers.keySet())
         {
-            IProceduralWallFeature currentLayerFeature = getFeatureAt(context.getWorldBlockCoord(), layer);
+            IProceduralWallFeature currentLayerFeature = getFeatureAt(request.getWorldBlockCoord(), layer);
             if (currentLayerFeature == null)
             {
                 continue;
             }
 
-            if (!currentLayerFeature.isFeatureValid(context))
+            if (!currentLayerFeature.isFeatureValid(request))
             {
                 continue;
             }
@@ -193,7 +193,7 @@ public class FeatureRegistry implements IFeatureRegistry
 
             if (add)
             {
-                long featureBits = currentLayerFeature.getSubProperties(context);
+                long featureBits = currentLayerFeature.getSubProperties(request);
                 featureList.put(currentLayerFeature, featureBits);
             }
         }

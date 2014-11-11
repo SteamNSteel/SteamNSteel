@@ -23,17 +23,17 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(TextureContext context)
+    public boolean isFeatureValid(IconRequest request)
     {
-        if (!texture.isBlockPartOfWallAndUnobstructed(context))
+        if (!texture.isBlockPartOfWallAndUnobstructed(request))
         {
             return false;
         }
 
-        final boolean aboveBlockIsClear = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE);
-        final boolean aboveBlockFeatureIsCompatible = texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, false, TextureDirection.ABOVE);
-        final boolean belowBlockIsClear = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW);
-        final boolean belowBlockFeatureIsCompatible = texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, false, TextureDirection.BELOW);
+        final boolean aboveBlockIsClear = texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.ABOVE);
+        final boolean aboveBlockFeatureIsCompatible = texture.isFeatureAtCoordCompatibleWith(request, getLayer(), this, false, TextureDirection.ABOVE);
+        final boolean belowBlockIsClear = texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.BELOW);
+        final boolean belowBlockFeatureIsCompatible = texture.isFeatureAtCoordCompatibleWith(request, getLayer(), this, false, TextureDirection.BELOW);
 
         //boolean aboveValid2 = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.ABOVE, TextureDirection.ABOVE);
         //boolean belowValid2 = texture.isBlockPartOfWallAndUnobstructed(context, TextureDirection.BELOW, TextureDirection.BELOW);
@@ -42,11 +42,11 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
 
         if (aboveBlockIsClear && !aboveBlockFeatureIsCompatible && belowBlockIsClear && belowBlockFeatureIsCompatible)
         {
-            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
-            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            plateCIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
-            plateDIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
-            boolean finalCheck = texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, false, TextureDirection.BELOW, TextureDirection.BELOW);
+            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
+            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            plateCIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
+            plateDIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
+            boolean finalCheck = texture.isFeatureAtCoordCompatibleWith(request, getLayer(), this, false, TextureDirection.BELOW, TextureDirection.BELOW);
 
             if (!finalCheck && plateAIsPresent && plateBIsPresent && plateCIsPresent && plateDIsPresent)
             {
@@ -62,12 +62,12 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
 
         if (belowBlockIsClear && !belowBlockFeatureIsCompatible && aboveBlockIsClear && aboveBlockFeatureIsCompatible)
         {
-            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
-            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
-            plateCIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            plateDIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
+            plateAIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
+            plateBIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.ABOVE);
+            plateCIsPresent = texture.isFeatureAtCoordCompatibleWith(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            plateDIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
 
-            boolean finalCheck = texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
+            boolean finalCheck = texture.isFeatureAtCoordCompatibleWith(request, getLayer(), this, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
 
 
             if (!finalCheck && plateAIsPresent && plateBIsPresent && plateCIsPresent && plateDIsPresent)
@@ -107,11 +107,11 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getSubProperties(TextureContext context)
+    public long getSubProperties(IconRequest request)
     {
         long subProperties = 0;
-        IProceduralWallFeature aboveBlockFeature = texture.getValidFeature(context, getLayer(), TextureDirection.ABOVE);
-        IProceduralWallFeature belowBlockFeature = texture.getValidFeature(context, getLayer(), TextureDirection.BELOW);
+        IProceduralWallFeature aboveBlockFeature = texture.getValidFeature(request, getLayer(), TextureDirection.ABOVE);
+        IProceduralWallFeature belowBlockFeature = texture.getValidFeature(request, getLayer(), TextureDirection.BELOW);
 
         if (!(aboveBlockFeature instanceof PipesRuinWallFeature))
         {

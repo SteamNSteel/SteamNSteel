@@ -51,11 +51,11 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     /**
      * TODO: Comment this!
      *
-     * @param context
+     * @param request
      * @return
      */
     @Override
-    public long getSubProperties(TextureContext context)
+    public long getSubProperties(IconRequest request)
     {
         return 0;
     }
