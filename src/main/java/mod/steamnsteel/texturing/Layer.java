@@ -6,7 +6,8 @@ public class Layer implements Comparable<Layer>
     private final String name;
     private final boolean allowRandomization;
 
-    public Layer(int layerId, String name, boolean allowRandomization) {
+    public Layer(int layerId, String name, boolean allowRandomization)
+    {
         this.layerId = layerId;
         this.name = name;
         this.allowRandomization = allowRandomization;

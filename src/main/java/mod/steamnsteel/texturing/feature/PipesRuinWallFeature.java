@@ -48,10 +48,12 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
             plateDIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
             boolean finalCheck = texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, false, TextureDirection.BELOW, TextureDirection.BELOW);
 
-            if (!finalCheck && plateAIsPresent && plateBIsPresent && plateCIsPresent && plateDIsPresent) {
+            if (!finalCheck && plateAIsPresent && plateBIsPresent && plateCIsPresent && plateDIsPresent)
+            {
                 return true;
             }
-            if (!finalCheck && !plateAIsPresent && !plateBIsPresent && !plateCIsPresent && !plateDIsPresent) {
+            if (!finalCheck && !plateAIsPresent && !plateBIsPresent && !plateCIsPresent && !plateDIsPresent)
+            {
                 return true;
             }
 
@@ -68,10 +70,12 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
             boolean finalCheck = texture.isFeatureAtCoordCompatibleWith(context, getLayer(), this, false, TextureDirection.ABOVE, TextureDirection.ABOVE);
 
 
-            if (!finalCheck && plateAIsPresent && plateBIsPresent && plateCIsPresent && plateDIsPresent) {
+            if (!finalCheck && plateAIsPresent && plateBIsPresent && plateCIsPresent && plateDIsPresent)
+            {
                 return true;
             }
-            if (!finalCheck && !plateAIsPresent && !plateBIsPresent && !plateCIsPresent && !plateDIsPresent) {
+            if (!finalCheck && !plateAIsPresent && !plateBIsPresent && !plateCIsPresent && !plateDIsPresent)
+            {
                 return true;
             }
 
@@ -132,7 +136,8 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
         {
             return Behaviour.CANNOT_EXIST;
         }
-        if ((featureProperties & featureMask) != 0) {
+        if ((featureProperties & featureMask) != 0)
+        {
             return Behaviour.CANNOT_EXIST;
         }
         return Behaviour.COEXIST;

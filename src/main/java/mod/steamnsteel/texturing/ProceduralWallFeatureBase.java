@@ -1,10 +1,6 @@
 package mod.steamnsteel.texturing;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import mod.steamnsteel.utility.position.ChunkCoord;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -54,6 +50,7 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
 
     /**
      * TODO: Comment this!
+     *
      * @param context
      * @return
      */
@@ -64,7 +61,8 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     }
 
     /**
-     * @return a bit mask of features that are incompatible with this feature. I.e, a monitor and a valve can't co-exist.
+     * @return a bit mask of features that are incompatible with this feature. I.e, a monitor and a valve can't
+     * co-exist.
      */
     @Override
     public long getIncompatibleProperties()
@@ -74,6 +72,7 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
 
     /**
      * Retrieves a set of Feature Instances for the specified chunk
+     *
      * @param chunkCoord
      * @return
      */
@@ -97,6 +96,7 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
 
     /**
      * Implementers of this method should provide a set of feature instances for a given 16x16 chunk.
+     *
      * @param chunkCoord
      * @return
      */

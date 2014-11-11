@@ -1,7 +1,6 @@
 package mod.steamnsteel.texturing;
 
 import mod.steamnsteel.utility.position.WorldBlockCoord;
-import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.util.Random;
@@ -114,10 +113,12 @@ public class TextureContext
 
     /**
      * Creates a new context for a related location. Directions are maintained.
+     *
      * @param blockCoord the new coordinate to relate to
      * @return a new TextureContext for that location
      */
-    public TextureContext forLocation(WorldBlockCoord blockCoord) {
+    public TextureContext forLocation(WorldBlockCoord blockCoord)
+    {
         TextureContext newContext = new TextureContext();
         newContext.blockAccess = blockAccess;
         newContext.worldBlockCoord = blockCoord;
@@ -134,6 +135,7 @@ public class TextureContext
 
     /**
      * a common method for calculating the probability of an alternate version of a feature.
+     *
      * @param probability the chance that the feature will be selected.
      * @return true if the alternate version should be used.
      */
@@ -156,6 +158,7 @@ public class TextureContext
 
     /**
      * returns the corresponding ForgeDirection for a TextureDirection within this context.
+     *
      * @param textureDirection the TextureDirection to convert
      * @return the correlated ForgeDirection
      */

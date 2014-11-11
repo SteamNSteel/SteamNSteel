@@ -18,6 +18,7 @@ public class FeatureRegistry implements IFeatureRegistry
 
     /**
      * Registers a feature
+     *
      * @param feature
      */
     @Override
@@ -40,11 +41,13 @@ public class FeatureRegistry implements IFeatureRegistry
 
     /**
      * Registers a new layer
-     * @param name The name of the layer
+     *
+     * @param name               The name of the layer
      * @param allowRandomization true, if the layer should be randomized
      * @return The created layer
      */
-    public Layer registerLayer(String name, boolean allowRandomization) {
+    public Layer registerLayer(String name, boolean allowRandomization)
+    {
         Layer layer = new Layer(currentLayer, name, allowRandomization);
         currentLayer++;
         return layer;
@@ -52,6 +55,7 @@ public class FeatureRegistry implements IFeatureRegistry
 
     /**
      * Registers a feature property, that is, a condition that affects the design of a feature.
+     *
      * @param description
      * @return
      */
@@ -66,8 +70,9 @@ public class FeatureRegistry implements IFeatureRegistry
 
     /**
      * Requests the feature in place on a given layer at a given world coordinate.
+     *
      * @param worldBlockCoord The coordinate of the feature
-     * @param layer The layer the feature appears on
+     * @param layer           The layer the feature appears on
      * @return The feature present at that location on the layer.
      */
     public IProceduralWallFeature getFeatureAt(WorldBlockCoord worldBlockCoord, Layer layer)
@@ -136,10 +141,12 @@ public class FeatureRegistry implements IFeatureRegistry
     }
 
     /**
-     * Calculates the final condition for a given TextureContext.
-     * Part of the condition is already calculated at this point, but it can be overriden by features.
-     * @param context The Texture Condition
-     * @param currentProperties The preselected conditions, such as (LEFT, RIGHT, TOP, BOTTOM) that are already calculated
+     * Calculates the final condition for a given TextureContext. Part of the condition is already calculated at this
+     * point, but it can be overriden by features.
+     *
+     * @param context           The Texture Condition
+     * @param currentProperties The preselected conditions, such as (LEFT, RIGHT, TOP, BOTTOM) that are already
+     *                          calculated
      * @return the condition.
      */
     public long getFeatureBits(TextureContext context, long currentProperties)
@@ -206,6 +213,7 @@ public class FeatureRegistry implements IFeatureRegistry
 
     /**
      * Describes a condition according to the names of features.
+     *
      * @param features The condition to describe.
      * @return A textual representation of the condition
      */

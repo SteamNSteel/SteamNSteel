@@ -48,10 +48,12 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
             plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
             plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
 
-            if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent) {
+            if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
+            {
                 return true;
             }
-            if (!plateBIsPresent && !plateDIsPresent && !placeCIsPresent && !plateAIsPresent && !plateEIsPresent) {
+            if (!plateBIsPresent && !plateDIsPresent && !placeCIsPresent && !plateAIsPresent && !plateEIsPresent)
+            {
                 return true;
             }
             return false;
@@ -66,10 +68,12 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
             plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
             plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW);
 
-            if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent) {
+            if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
+            {
                 return true;
             }
-            if (!plateBIsPresent && !plateDIsPresent && !placeCIsPresent && !plateAIsPresent && !plateEIsPresent) {
+            if (!plateBIsPresent && !plateDIsPresent && !placeCIsPresent && !plateAIsPresent && !plateEIsPresent)
+            {
                 return true;
             }
             return false;
@@ -85,10 +89,12 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
             plateDIsPresent = texture.isFeatureAtCoordCompatibleWith(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW);
             plateEIsPresent = texture.isFeatureAtCoordVisibleAndCompatible(context, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.BELOW, TextureDirection.BELOW, TextureDirection.BELOW);
 
-            if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent) {
+            if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
+            {
                 return true;
             }
-            if (!plateBIsPresent && !plateDIsPresent && !placeCIsPresent && !plateAIsPresent && !plateEIsPresent) {
+            if (!plateBIsPresent && !plateDIsPresent && !placeCIsPresent && !plateAIsPresent && !plateEIsPresent)
+            {
                 return true;
             }
             return false;
@@ -129,7 +135,8 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
         } else if (!isBelowValid)
         {
             subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_BOTTOM;
-        } else if (context.useAlternateVersion(1/7f)) {
+        } else if (context.useAlternateVersion(1 / 7f))
+        {
             subProperties |= RuinWallTexture.ALTERNATE;
         }
 

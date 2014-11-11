@@ -22,6 +22,7 @@ class ProceduralTextureRegistry implements ITextureConditionSet, ITextureConditi
 
     /**
      * Starts a new set of conditions for a texture
+     *
      * @param textureName The name of the texture
      * @return an interface to add conditions, or create a new texture
      */
@@ -33,6 +34,7 @@ class ProceduralTextureRegistry implements ITextureConditionSet, ITextureConditi
 
     /**
      * Applies a condition to a texture
+     *
      * @param condition the featureId bits for a condition
      * @return an interface that will allow you to specify additional conditions, or create a new texture.
      */
@@ -44,6 +46,7 @@ class ProceduralTextureRegistry implements ITextureConditionSet, ITextureConditi
 
     /**
      * Applies an additional condition to a texture
+     *
      * @param condition the featureId bits for a condition
      * @return an interface that will allow you to specify additional conditions, or create a new texture.
      */
@@ -55,6 +58,7 @@ class ProceduralTextureRegistry implements ITextureConditionSet, ITextureConditi
 
     /**
      * Retrieves an IIcon for a condition, or null if no condition was found.
+     *
      * @param condition The Condition to match
      * @return The appropriate IIcon.
      */

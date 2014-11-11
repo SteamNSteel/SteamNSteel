@@ -67,7 +67,8 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
         {
             return Behaviour.CANNOT_EXIST;
         }
-        if ((featureProperties & featureMask) != 0) {
+        if ((featureProperties & featureMask) != 0)
+        {
             return Behaviour.CANNOT_EXIST;
         }
         return Behaviour.COEXIST;

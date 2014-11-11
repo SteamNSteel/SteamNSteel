@@ -11,22 +11,38 @@ import net.minecraftforge.common.util.ForgeDirection;
 public abstract class ProceduralConnectedTexture
 {
     protected final int DEFAULT = 0;
-    /** The featureId for the top of a wall */
+    /**
+     * The featureId for the top of a wall
+     */
     public static long TOP;
-    /** The featureId for the bottom of a wall */
+    /**
+     * The featureId for the bottom of a wall
+     */
     public static long BOTTOM;
-    /** The featureId for the left side of a wall */
+    /**
+     * The featureId for the left side of a wall
+     */
     public static long LEFT;
-    /** The featureId for the right side of a wall */
+    /**
+     * The featureId for the right side of a wall
+     */
     public static long RIGHT;
 
-    /** The featureId for the top edge of a feature */
+    /**
+     * The featureId for the top edge of a feature
+     */
     public static long FEATURE_EDGE_TOP;
-    /** The featureId for the bottom edge of a feature */
+    /**
+     * The featureId for the bottom edge of a feature
+     */
     public static long FEATURE_EDGE_BOTTOM;
-    /** The featureId for the left edge of a feature */
+    /**
+     * The featureId for the left edge of a feature
+     */
     public static long FEATURE_EDGE_LEFT;
-    /** The featureId for the right edge of a feature */
+    /**
+     * The featureId for the right edge of a feature
+     */
     public static long FEATURE_EDGE_RIGHT;
 
     private FeatureRegistry featureRegistry;
@@ -56,6 +72,7 @@ public abstract class ProceduralConnectedTexture
 
     /**
      * Registers some key features used by most textures.
+     *
      * @param features the fluent interface to register features with.
      */
     private void registerInternalFeatureProperties(IFeatureRegistry features)
@@ -73,21 +90,24 @@ public abstract class ProceduralConnectedTexture
 
     /**
      * Called at an appropriate time to register the features used by texture
+     *
      * @param features a fluent interface to register features.
      */
     protected abstract void registerFeatures(IFeatureRegistry features);
 
     /**
      * This method is called at the time it is appropriate to register icons that can be assigned to the wall.
+     *
      * @param textures A fluent interface to register textures.
      */
     protected abstract void registerIcons(ITextureConditionSet textures);
 
     /**
      * Calculates the IIcon to use to represent the side of a block
-     * @param blockAccess a method by which blocks can be accessed (Typically World)
+     *
+     * @param blockAccess     a method by which blocks can be accessed (Typically World)
      * @param worldBlockCoord the world block coordinate to describe
-     * @param side the side of the block to describe
+     * @param side            the side of the block to describe
      * @return the icon to use when rendering the side of the block.
      */
     public IIcon getIconForSide(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
@@ -109,6 +129,7 @@ public abstract class ProceduralConnectedTexture
 
     /**
      * Calculates an id that correlates to a set of features
+     *
      * @param context The Texture Context
      * @return the feature mask
      */
@@ -150,9 +171,10 @@ public abstract class ProceduralConnectedTexture
 
     /**
      * Used to debug the texturing process, converts a set of features to a text string describing the conditions
-     * @param blockAccess a method by which blocks can be accessed (Typically World)
+     *
+     * @param blockAccess     a method by which blocks can be accessed (Typically World)
      * @param worldBlockCoord the world block coordinate to describe
-     * @param side the side of the block to describe
+     * @param side            the side of the block to describe
      * @return a string that represents the various conditions on the wall.
      */
     public final String describeTextureAt(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
@@ -166,7 +188,8 @@ public abstract class ProceduralConnectedTexture
 
     /**
      * Checks if a block offset from the context is part of the wall and is not obstructed by an opaque block
-     * @param context The Texture Context
+     *
+     * @param context   The Texture Context
      * @param direction The directions to apply
      * @return true if the block is part of the wall and can be seen.
      */
@@ -180,15 +203,15 @@ public abstract class ProceduralConnectedTexture
         }
 
         final Block obscuringBlock = coord.offset(context.getBackwardDirection()).getBlock(context.getBlockAccess());
-        
+
         return !canBlockObscure(context, obscuringBlock);
 
     }
 
     /**
-     * Override this method to change the behaviour that only compatible blocks count as obscuring
-     * a texture.
-     * @param context The Texture Context
+     * Override this method to change the behaviour that only compatible blocks count as obscuring a texture.
+     *
+     * @param context        The Texture Context
      * @param obscuringBlock the block that is beinc checked
      * @return true if the block is obscuring a texture.
      */
@@ -199,7 +222,8 @@ public abstract class ProceduralConnectedTexture
 
     /**
      * Takes a series of TextureDirections and applies them to the context to return a world coordinate.
-     * @param context The Texture Context
+     *
+     * @param context   The Texture Context
      * @param direction The directions to apply
      * @return the world space coordinates after transformation
      */
@@ -215,8 +239,9 @@ public abstract class ProceduralConnectedTexture
 
     /**
      * Detects if a given block can be considered for texturing.
+     *
      * @param context the context that the search is being taken under
-     * @param block the block to check compatibility with
+     * @param block   the block to check compatibility with
      * @return true if the block is considered compatible with this texture.
      */
     protected abstract boolean isCompatibleBlock(TextureContext context, Block block);
@@ -226,7 +251,8 @@ public abstract class ProceduralConnectedTexture
         WorldBlockCoord coord = getOffsetCoordinate(context, direction);
         final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
         boolean result = featureAtCoord != null && featureAtCoord.getFeatureId() == feature.getFeatureId();
-        if (checkValidity && result) {
+        if (checkValidity && result)
+        {
             result = featureAtCoord.isFeatureValid(context.forLocation(coord));
         }
         return result;
@@ -234,8 +260,9 @@ public abstract class ProceduralConnectedTexture
 
     /**
      * gets a wall feature present on a given layer at a given location, or null if no feature found.
-     * @param context The Texture Context
-     * @param layer The layer to check
+     *
+     * @param context   The Texture Context
+     * @param layer     The layer to check
      * @param direction The offsets to the block that is being checked
      * @return The potential feature at a point.
      */
@@ -257,14 +284,16 @@ public abstract class ProceduralConnectedTexture
 
     /**
      * Checks that a feature can be used at a given location.
-     * @param context The texture context
-     * @param layer The layer of the feature
-     * @param wallFeature The feature to check
+     *
+     * @param context       The texture context
+     * @param layer         The layer of the feature
+     * @param wallFeature   The feature to check
      * @param checkValidity when true, this call will also check that the feature is valid
-     * @param direction A series of offsets to apply
+     * @param direction     A series of offsets to apply
      * @return true if the feature is valid at the requested location.
      */
-    public boolean isFeatureAtCoordVisibleAndCompatible(TextureContext context, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... direction) {
+    public boolean isFeatureAtCoordVisibleAndCompatible(TextureContext context, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... direction)
+    {
         return isBlockPartOfWallAndUnobstructed(context, direction) && isFeatureAtCoordCompatibleWith(context, layer, wallFeature, checkValidity, direction);
     }
 }
