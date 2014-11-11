@@ -1,7 +1,7 @@
 package mod.steamnsteel.texturing.api;
 
-import mod.steamnsteel.texturing.api.traiticonregistry.ITextureConditionSet;
-import mod.steamnsteel.texturing.api.traiticonregistry.ProceduralTextureRegistry;
+import mod.steamnsteel.texturing.api.traiticonregistry.IIconDefinitionStart;
+import mod.steamnsteel.texturing.api.traiticonregistry.TraitIconRegistry;
 import mod.steamnsteel.texturing.api.traitregistry.FeatureRegistry;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import mod.steamnsteel.utility.log.Logger;
@@ -51,7 +51,7 @@ public abstract class ProceduralConnectedTexture
 
     private FeatureRegistry featureRegistry;
 
-    private ProceduralTextureRegistry textures;
+    private TraitIconRegistry textures;
 
     protected ProceduralConnectedTexture()
     {
@@ -62,7 +62,7 @@ public abstract class ProceduralConnectedTexture
     {
         registerFeatures();
 
-        textures = new ProceduralTextureRegistry(iconRegister);
+        textures = new TraitIconRegistry(iconRegister);
         registerIcons(textures);
     }
 
@@ -104,7 +104,7 @@ public abstract class ProceduralConnectedTexture
      *
      * @param textures A fluent interface to register textures.
      */
-    protected abstract void registerIcons(ITextureConditionSet textures);
+    protected abstract void registerIcons(IIconDefinitionStart textures);
 
     /**
      * Calculates the IIcon to use to represent the side of a block
