@@ -17,10 +17,8 @@
 package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.tileentity.CupolaTE;
+import mod.steamnsteel.tileentity.BasePlumbingTE;
 import mod.steamnsteel.tileentity.PipeTE;
-import mod.steamnsteel.tileentity.SteamNSteelTE;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
@@ -93,7 +91,7 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
                 return true;
             }
             if (itemInUse != null && itemInUse.getItem() == Items.name_tag) {
-                PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
+                BasePlumbingTE entity = (BasePlumbingTE) world.getTileEntity(x, y, z);
                 Logger.info("%s - Entity Check - %s", world.isRemote ? "client" : "server", entity.toString());
             }
         }

@@ -11,14 +11,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import java.awt.font.FontRenderContext;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntityWithParts
+public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
 {
     private static final String NBT_END_A = "endA";
     private static final String NBT_END_A_CONNECTED = "endAConnected";
@@ -208,9 +206,10 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         useAlternateModel = false;
         if (endA == ForgeDirection.NORTH && endB == ForgeDirection.WEST) {
             final IPipeTileEntity pipeTileEntity = getPipeTileEntityInDirection(ForgeDirection.NORTH);
-            if (pipeTileEntity instanceof PipeTE) {
-                final PipeTE pipeTE = (PipeTE)pipeTileEntity;
-                if (pipeTE.endA == ForgeDirection.NORTH && pipeTE.endB == ForgeDirection.SOUTH) {
+            if (pipeTileEntity instanceof BasePlumbingTE) {
+
+                final BasePlumbingTE pipeTE = (BasePlumbingTE)pipeTileEntity;
+                if (pipeTE.isDirectionConnected(ForgeDirection.NORTH) && pipeTE.isDirectionConnected(ForgeDirection.SOUTH)) {
                     useAlternateModel = true;
                 }
             }
@@ -239,14 +238,6 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
             orderEnds();
             sendUpdate();
         }
-    }
-
-    private void sendUpdate()
-    {
-        Logger.info("%s - Notifying Block Change - %s", worldObj.isRemote ? "client" : "server", toString());
-        markDirty();
-        worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     public boolean shouldRenderAsCorner()
@@ -322,18 +313,6 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
 
         sendUpdate();
     }
-
-    private IPipeTileEntity getPipeTileEntityInDirection(ForgeDirection offset) {
-        if (offset == null) {
-            return null;
-        }
-        TileEntity te = getWorldBlockCoord().offset(offset).getTileEntity(worldObj);
-        if (te instanceof IPipeTileEntity) {
-            return (IPipeTileEntity)te;
-        }
-        return null;
-    }
-
 
     @Override
     public String toString()
@@ -428,25 +407,10 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         }
     }
 
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        final NBTTagCompound nbt = new NBTTagCompound();
-        writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
-    }
-
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+    public void writePlumbingToNBT(NBTTagCompound nbt)
     {
-        readFromNBT(packet.func_148857_g());
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound nbt)
-    {
-        super.writeToNBT(nbt);
         nbt.setByte(NBT_END_A, (byte)endA.ordinal());
         nbt.setBoolean(NBT_END_A_CONNECTED, endAIsConnected);
         nbt.setByte(NBT_END_B, (byte)endB.ordinal());
@@ -456,10 +420,8 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt)
+    public void readPlumbingFromNBT(NBTTagCompound nbt)
     {
-        super.readFromNBT(nbt);
-
         endA = ForgeDirection.getOrientation(nbt.getByte(NBT_END_A));
         endAIsConnected = nbt.getBoolean(NBT_END_A_CONNECTED);
         endB = ForgeDirection.getOrientation(nbt.getByte(NBT_END_B));
