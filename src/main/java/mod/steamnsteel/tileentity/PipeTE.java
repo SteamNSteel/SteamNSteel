@@ -8,9 +8,6 @@ import mod.steamnsteel.utility.blockParts.ITileEntityWithParts;
 import mod.steamnsteel.utility.PartSets;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.util.LinkedList;
@@ -55,6 +52,13 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         return blockPartConfiguration;
     }
 
+    /**
+     * Verifies that the current ends are valid using the following ruels:
+     * 1) If the current end configuration is valid, use that
+     * 2) If it is not valid, use the first valid configuration with two ends connected
+     * 3) If that is not possible, use the first valid end that is valid, and make a straight pipe
+     * 4) Otherwise, leave the pipe as is.
+     */
     public void checkEnds()
     {
         IPipeTileEntity pipeEntity;
@@ -63,6 +67,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = recalculateValidDirections();
         ImmutablePair<ForgeDirection, ForgeDirection> connectionToMake = null;
 
+        //Check if current ends are valid, or use the first pair that is.
         for (ImmutablePair<ForgeDirection, ForgeDirection> pair : validDirections)
         {
             final ForgeDirection left = pair.getLeft();
@@ -76,6 +81,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
             }
         }
 
+        //If none were found, find the first single end that is connected and connect to that and it's opposite.
         if (connectionToMake == null)
         {
             for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i)
@@ -93,17 +99,22 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         boolean endAIsConnected = false;
         boolean endBIsConnected = false;
 
+        //If we're going to make a connection
         if (connectionToMake != null) {
             final ForgeDirection left = connectionToMake.getLeft();
             final ForgeDirection right = connectionToMake.getRight();
 
+            //We're connected to endA if we can make a connection
             endAIsConnected = getPipeTileEntityInDirection(left).tryConnect(left.getOpposite());
 
             pipeEntity = getPipeTileEntityInDirection(right);
+            //If we couldn't connect to endA, there's no point in checking endB
             if (pipeEntity != null) {
+                //We're connected to endB is we can make a connection
                 endBIsConnected = pipeEntity.tryConnect(right.getOpposite());
             }
 
+            //if the ends have changed, we'll flag it for later and set the ends
             if (endA != left || endB != right)
             {
                 changed = true;
@@ -112,14 +123,25 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
             }
         }
 
+        //It's also possible that a connection to a neighbour has just occurred. this also counts as a change.
         if (this.endAIsConnected != endAIsConnected || this.endBIsConnected != endBIsConnected) {
             changed = true;
             this.endAIsConnected = endAIsConnected;
             this.endBIsConnected = endBIsConnected;
         }
 
+        //It's also possible that endA and endB need to be swapped. This is also a change.
         changed |= orderEnds();
 
+        //So if we've made a change after all that, we need to send it to the other side.
+        if (changed) {
+            Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());
+            sendUpdate();
+        } else {
+            Logger.info("%s - Updating block         - %s", worldObj.isRemote ? "client" : "server", toString());
+        }
+
+        //We'll now update the BlockPart configuration and enable the sides that have neighbouring blocks.
         for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i) {
             final ForgeDirection direction = ForgeDirection.VALID_DIRECTIONS[i];
             BlockPart part = blockPartConfiguration.getBlockPartByKey(direction);
@@ -129,18 +151,16 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
             blockPartConfiguration.setEnabled(part, tileEntity != null);
         }
 
-        if (changed) {
-            Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());
-            sendUpdate();
-        } else {
-            Logger.info("%s - Updating block         - %s", worldObj.isRemote ? "client" : "server", toString());
-        }
-
+        //Finally, if we're on the client, we should recalculate any visuals.
         if (worldObj.isRemote) {
             recalculateVisuals();
         }
     }
 
+    /**
+     * Reorders the pipe ends so that endA has a lower ordinal than endB. This helps with texturing.
+     * @return
+     */
     private boolean orderEnds()
     {
         if (endB == null || (endA != null && endB.ordinal() >= endA.ordinal())) {
@@ -161,6 +181,9 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
 
     private static final List<ImmutablePair<ForgeDirection, ForgeDirection>> PIPE_ROTATIONS = new LinkedList<ImmutablePair<ForgeDirection, ForgeDirection>>();
 
+    /**
+     * Calculates the minimum list of possible commutative rotations
+     */
     private synchronized static void calculatePipeRotations() {
         if (PIPE_ROTATIONS.isEmpty())
         {
@@ -202,23 +225,33 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
     public void recalculateVisuals()
     {
         if (worldObj == null || !worldObj.isRemote) return;
+        //Render as a corner if endB is not the opposite of endA
         this.shouldRenderAsCorner = endB != endA.getOpposite();
-        useAlternateModel = false;
-        if (endA == ForgeDirection.NORTH && endB == ForgeDirection.WEST) {
-            final IPipeTileEntity pipeTileEntity = getPipeTileEntityInDirection(ForgeDirection.NORTH);
-            if (pipeTileEntity instanceof BasePlumbingTE) {
 
+        //There are two edge cases where we need an alternative model
+        useAlternateModel = false;
+
+        //If the ends are NORTH and WEST or they are SOUTH and EAST
+        if ((endA == ForgeDirection.NORTH && endB == ForgeDirection.WEST) ||
+                endA == ForgeDirection.SOUTH && endB == ForgeDirection.EAST) {
+            //And the tile entity in the z access
+            final IPipeTileEntity pipeTileEntity = getPipeTileEntityInDirection(endA);
+            if (pipeTileEntity instanceof BasePlumbingTE) {
                 final BasePlumbingTE pipeTE = (BasePlumbingTE)pipeTileEntity;
-                if (pipeTE.isDirectionConnected(ForgeDirection.NORTH) && pipeTE.isDirectionConnected(ForgeDirection.SOUTH)) {
+                //Is a straight pipe going north/south
+                if (pipeTE.isSideConnected(ForgeDirection.NORTH) && pipeTE.isSideConnected(ForgeDirection.SOUTH)) {
                     useAlternateModel = true;
                 }
             }
-        } else if (endA == ForgeDirection.SOUTH && endB == ForgeDirection.EAST) {
-
         }
         Logger.info("%s - Recalculating Visuals  - %s", "client", toString());
     }
 
+    /**
+     * Disconnects a side from the pipe. The end result is that if one end is still connected, it will be endA, and
+     * endB will be set to the opposite direction as endA.
+     * @param opposite
+     */
     @Override
     public void disconnect(ForgeDirection opposite)
     {
@@ -240,17 +273,18 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         }
     }
 
-    public boolean shouldRenderAsCorner()
-    {
-        return shouldRenderAsCorner;
-    }
-
+    /**
+     * Rotates the pipe around the axis that are valid.
+     */
     public void rotatePipe()
     {
+        //Find all the sides we could possibly connect to
         List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = recalculateValidDirections();
         int length = validDirections.size();
+        //If there is none, or just one, then return, there's no point in doing anything.
         if (length <= 1) {return;}
 
+        //Out of all the valid ends, find the current one (if there is one). We'll start from here.
         int i;
         for (i = 0; i < length; ++i) {
             ImmutablePair<ForgeDirection, ForgeDirection> pipeEnds = validDirections.get(i);
@@ -259,20 +293,26 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
                 break;
             }
         }
+        //When we hit this number, we've looped around to the beginning
         int stop = i % length;
         ImmutablePair<ForgeDirection, ForgeDirection> selectedEnds = null;
+        //Iterate forward from the current set, looping around, until we hit our stopping index.
         while ((i = (++i) % length) != stop) {
             ImmutablePair<ForgeDirection, ForgeDirection> pipeEnds = validDirections.get(i);
             IPipeTileEntity pipe = getPipeTileEntityInDirection(pipeEnds.left);
+            //Check to see if it's possible to connect to this pipe to endA (it might already have both ends connected)
             if (pipe == null || pipe.canConnect(pipeEnds.left.getOpposite())) {
                 pipe = getPipeTileEntityInDirection(pipeEnds.right);
+                //Now check to see if it's possible for the pipe at the other end to connect to endB
                 if (pipe == null || pipe.canConnect(pipeEnds.right.getOpposite())) {
+                    //We've found a valid selection
                     selectedEnds = pipeEnds;
                     break;
                 }
             }
         }
 
+        //If we haven't found any valid ends, leave everything alone and just exit here.
         if (selectedEnds == null) {
             Logger.info("%s - Rotating Block Fail - %s", worldObj.isRemote ? "client" : "server", toString());
             return;
@@ -282,35 +322,38 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
 
         Logger.info("%s - Rotating Block - %s - new(A:%s, B:%s)", worldObj.isRemote ? "client" : "server", toString(), newEndA, newEndB);
 
-        IPipeTileEntity prevEndATE;
-        IPipeTileEntity newEndATE;
+        IPipeTileEntity prevEndATileEntity;
+        IPipeTileEntity newEndATileEntity;
 
-        prevEndATE = getPipeTileEntityInDirection(endA);
-        newEndATE = getPipeTileEntityInDirection(newEndA);
+        prevEndATileEntity = getPipeTileEntityInDirection(endA);
+        newEndATileEntity = getPipeTileEntityInDirection(newEndA);
 
-        IPipeTileEntity prevEndBTE = getPipeTileEntityInDirection(endB);
-        IPipeTileEntity newEndBTE = getPipeTileEntityInDirection(newEndB);
+        IPipeTileEntity prevEndBTileEntity = getPipeTileEntityInDirection(endB);
+        IPipeTileEntity newEndBTileEntity = getPipeTileEntityInDirection(newEndB);
 
         boolean endAChanged = endA != newEndA;
         boolean endBChanged = endB != newEndB;
 
+        //TODO: Why am I not using tryConnect on the opposite ends?
         endA = newEndA;
         endB = newEndB;
         orderEnds();
 
-        if (endAChanged && prevEndATE != null) {
-            prevEndATE.recalculateVisuals();
+        //Notify any neighbouring blocks that have been changed that they need to recalculate their visuals
+        if (endAChanged && prevEndATileEntity != null) {
+            prevEndATileEntity.recalculateVisuals();
         }
-        if (endBChanged && prevEndBTE != null) {
-            prevEndBTE.recalculateVisuals();
+        if (endBChanged && prevEndBTileEntity != null) {
+            prevEndBTileEntity.recalculateVisuals();
         }
-        if (endAChanged && newEndATE != null) {
-            newEndATE.recalculateVisuals();
+        if (endAChanged && newEndATileEntity != null) {
+            newEndATileEntity.recalculateVisuals();
         }
-        if (endBChanged && newEndBTE != null) {
-            newEndBTE.recalculateVisuals();
+        if (endBChanged && newEndBTileEntity != null) {
+            newEndBTileEntity.recalculateVisuals();
         }
 
+        //TODO: Remind myself why this is last?
         sendUpdate();
     }
 
@@ -332,14 +375,25 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         return stringHelper.toString();
     }
 
+    /**
+     * Checks if the specified side is connected to either end of this pipe
+     * @param side the side of the pipe to check
+     * @return true if the side is connected
+     */
     @Override
-    public boolean isDirectionConnected(ForgeDirection direction)
+    public boolean isSideConnected(ForgeDirection side)
     {
-        return endA == direction || endB == direction;
+        //TODO: not using endAisConnected??
+        return endA == side || endB == side;
     }
 
+    /**
+     * Attempts to make a connection to an available end.
+     * @param side the side of the pipe to connect to
+     * @return true if a connection was made
+     */
     @Override
-    public boolean tryConnect(ForgeDirection direction)
+    public boolean tryConnect(ForgeDirection side)
     {
         ForgeDirection previousEndA = endA;
         ForgeDirection previousEndB = endB;
@@ -347,18 +401,18 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         boolean previousEndBConnected = endBIsConnected;
 
         boolean connected = false;
-        if (endA == direction) {
+        if (endA == side) {
             endAIsConnected = true;
             connected = true;
-        } else if (!endAIsConnected && endB != direction) {
-            endA = direction;
+        } else if (!endAIsConnected && endB != side) {
+            endA = side;
             endAIsConnected = true;
             connected = true;
-        } else if (endB == direction) {
+        } else if (endB == side) {
             endBIsConnected = true;
             connected = true;
         } else if (!endBIsConnected) {
-            endB = direction;
+            endB = side;
             endBIsConnected = true;
             connected = true;
         }
@@ -371,10 +425,15 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         return connected;
     }
 
+    /**
+     * Checks if there is a free side to connect to, or true if it's already connected
+     * @param side the desired side to connect to
+     * @return true if a connection is possible, or already made
+     */
     @Override
-    public boolean canConnect(ForgeDirection opposite)
+    public boolean canConnect(ForgeDirection side)
     {
-        return !endAIsConnected || !endBIsConnected || endA == opposite || endB == opposite;
+        return !endAIsConnected || !endBIsConnected || endA == side || endB == side;
     }
 
     public void setOrientation(ForgeDirection orientation)
@@ -383,11 +442,11 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
 
         this.endA = orientation;
         tileEntity = getPipeTileEntityInDirection(endA);
-        endAIsConnected = tileEntity != null && tileEntity.isDirectionConnected(endA.getOpposite());
+        endAIsConnected = tileEntity != null && tileEntity.isSideConnected(endA.getOpposite());
 
         this.endB = orientation.getOpposite();
         tileEntity = getPipeTileEntityInDirection(endB);
-        endBIsConnected = tileEntity != null && tileEntity.isDirectionConnected(endB.getOpposite());
+        endBIsConnected = tileEntity != null && tileEntity.isSideConnected(endB.getOpposite());
         orderEnds();
         sendUpdate();
     }
@@ -406,8 +465,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
             tileEntity.disconnect(endB.getOpposite());
         }
     }
-
-
+    
     @Override
     public void writePlumbingToNBT(NBTTagCompound nbt)
     {
@@ -432,6 +490,11 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         {
             recalculateVisuals();
         }
+    }
+
+    public boolean shouldRenderAsCorner()
+    {
+        return shouldRenderAsCorner;
     }
 
     public boolean shouldUseAlternateModel()

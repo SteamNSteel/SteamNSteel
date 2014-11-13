@@ -47,7 +47,7 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
     }
 
     @Override
-    public abstract boolean isDirectionConnected(ForgeDirection direction);
+    public abstract boolean isSideConnected(ForgeDirection direction);
 
     @Override
     public abstract boolean tryConnect(ForgeDirection direction);
