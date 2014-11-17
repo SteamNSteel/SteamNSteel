@@ -2,16 +2,19 @@ package mod.steamnsteel.entity;
 
 import mod.steamnsteel.entity.ai.*;
 import mod.steamnsteel.proxy.Proxies;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class SteamSpiderEntity extends EntityCreature implements ISwarmer, IRangedAttackMob
+public class SteamSpiderEntity extends EntityMob implements ISwarmer, IRangedAttackMob
 {
     public static final String NAME = "steamSpider";
     private Swarm swarm;
@@ -21,17 +24,18 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer, IRang
         super(world);
         //TODO Proper AI tasks
         tasks.addTask(0, new EntityAISwimming(this));
-        //tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
-        tasks.addTask(3, new AISwarmReturnHome<SteamSpiderEntity>(this, 32, 1.2F, true));
-        //tasks.addTask(4, new EntityAILeapAtTarget(this, 0.5F));
+        tasks.addTask(1, new EntityAILeapAtTarget(this, 0.5F));
+        tasks.addTask(1, new AISwarmReturnHome<SteamSpiderEntity>(this, 256, 1.2F, true));
+        tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, false));
         tasks.addTask(2, new AIRangeBurstAttack<SteamSpiderEntity>(this, 1.2D, 4F, 40, 1200));
-        //tasks.addTask(7, new EntityAIWander(this, 1.0D));
+        tasks.addTask(4, new AISwarmWander<SteamSpiderEntity>(this, 60, 1.0F));
         //tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         //tasks.addTask(8, new EntityAILookIdle(this));
         tasks.addTask(8, new AISwarmSeek<SteamSpiderEntity>(this, 0, 50, 100, 3, 1200, false)); //This should be removed if we want spiders to become "dumb" when their host is killed
         targetTasks.addTask(1, new AISwarmOnHurt<SteamSpiderEntity>(this));
         targetTasks.addTask(2, new AISwarmDefendHome<SteamSpiderEntity>(this, 16));
         setSize(0.35F, 0.8F);
+        renderDistanceWeight = 128F;
     }
 
     @Override
@@ -41,7 +45,8 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer, IRang
         super.applyEntityAttributes();
         getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
         getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.35D); //Same speed as player walking
-        getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0D);
+        //getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue();
+        //getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(3.0D);
     }
 
     @Override
@@ -85,12 +90,32 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer, IRang
                 Proxies.render.spawnParticle("smoke", worldObj, x, posY + 0.61, z, 0, 0, 0, 0.5F);
             }
         }
-        setAttackTarget(Minecraft.getMinecraft().thePlayer);
     }
 
+    @Override
+    public boolean attackEntityAsMob(Entity p_70652_1_)
+    {
+        this.setLastAttacker(p_70652_1_);
+        return false;
+    }
+
+    @Override
+    protected Entity findPlayerToAttack()
+    {
+        EntityPlayer entityplayer = this.worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
+        return entityplayer != null && this.canEntityBeSeen(entityplayer) ? entityplayer : null;
+    }
+
+    @Override
     public float getEyeHeight()
     {
         return 0.2F;
+    }
+
+    @Override
+    protected boolean isValidLightLevel()
+    {
+        return true;
     }
 
     @Override
@@ -100,9 +125,16 @@ public class SteamSpiderEntity extends EntityCreature implements ISwarmer, IRang
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void setSwarm(Swarm swarm)
     {
+        if (this.swarm != null)
+        {
+            swarm.removeEntity(this);
+        }
+
         this.swarm = swarm;
+        swarm.addEntity(this);
     }
 
     @Override

@@ -4,14 +4,13 @@ import mod.steamnsteel.entity.ISwarmer;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.MathHelper;
 
-//TODO move to Swarm?
 public class AISwarmReturnHome<T extends EntityLiving & ISwarmer> extends AISwarmBase<T>
 {
     private final int range;
     private final float speed;
     private final boolean ignoreCurrPath;
-    private boolean returningHome = false; //This is true if we are currently pathing home
 
     /**
      * This creates an AI task for making the swarm entity return home (note, only makes the entity it's assigned to return
@@ -28,14 +27,15 @@ public class AISwarmReturnHome<T extends EntityLiving & ISwarmer> extends AISwar
         this.range = range;
         this.speed = speed;
         this.ignoreCurrPath = ignoreCurrPath;
+        setMutexBits(3);
     }
 
     @Override
     public boolean shouldExecute()
     {
-        if (super.shouldExecute() && !returningHome && (!entity.getNavigator().noPath() || ignoreCurrPath)) {
+        if (super.shouldExecute() && (entity.getNavigator().noPath() || ignoreCurrPath)) {
             ChunkCoord homeChunkCoords = entity.getSwarm().getHomeChunkCoord();
-            if (entity.getDistance(homeChunkCoords.getX() + 8, entity.getSwarm().getHomeBlockCoord().getY(), homeChunkCoords.getZ() + 8) > range + 8)
+            if (entity.getDistanceSq((homeChunkCoords.getX() * 16) + 8, entity.getSwarm().getHomeBlockCoord().getY(), (homeChunkCoords.getZ() * 16) + 8) > range + 16)
             {
                 return true;
             }
@@ -46,17 +46,33 @@ public class AISwarmReturnHome<T extends EntityLiving & ISwarmer> extends AISwar
     @Override
     public void startExecuting()
     {
-        ChunkCoord homeChunkCoords = entity.getSwarm().getHomeChunkCoord();
-        WorldBlockCoord worldBlockCoord = homeChunkCoords.localToWorldCoords(entity.getSwarm().getHomeBlockCoord());
-        //TODO add some variation?
-        entity.getNavigator().setPath(entity.getNavigator().getPathToXYZ(worldBlockCoord.getX(), worldBlockCoord.getY(), worldBlockCoord.getZ()), speed);
-        returningHome = true;
+        entity.setAttackTarget(null);
+        WorldBlockCoord worldBlockCoord = entity.getSwarm().getHomeChunkCoord().localToWorldCoords(entity.getSwarm().getHomeBlockCoord());
+        entity.getNavigator().tryMoveToXYZ(worldBlockCoord.getX(), worldBlockCoord.getY(), worldBlockCoord.getZ(), speed);
+    }
+
+    @Override
+    public void updateTask()
+    {
+        entity.setAttackTarget(null);
+        if (entity.getNavigator().noPath())
+        {
+            //This will basically only be called if getting to the main home position failed so find random point around
+            WorldBlockCoord worldBlockCoord = entity.getSwarm().getHomeChunkCoord().localToWorldCoords(entity.getSwarm().getHomeBlockCoord());
+            entity.getNavigator().tryMoveToXYZ(worldBlockCoord.getX() + MathHelper.getRandomIntegerInRange(entity.getRNG(), -4, 4),
+                    worldBlockCoord.getY(), worldBlockCoord.getZ() + MathHelper.getRandomIntegerInRange(entity.getRNG(), -4, 4), speed);
+        }
     }
 
     @Override
     public void resetTask()
     {
-        returningHome = false;
         super.resetTask();
+    }
+
+    @Override
+    public boolean isInterruptible()
+    {
+        return false;
     }
 }

@@ -3,19 +3,16 @@ package mod.steamnsteel.entity.ai;
 import mod.steamnsteel.entity.ISwarmer;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import java.util.List;
 
-public class AISwarmDefendHome<T extends EntityLiving & ISwarmer> extends AISwarmBase<T>
+public class AISwarmDefendHome<T extends EntityCreature & ISwarmer> extends AISwarmTarget<T>
 {
-    private final int range;
-
     //Defends against any enemy that enters into its range. TODO should this check be in SpiderSwarm instead? Means less calls
     public AISwarmDefendHome(T entity, int range)
     {
-        super(entity);
-        this.range = range;
+        super(entity, range);
     }
 
     @Override

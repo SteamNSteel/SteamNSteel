@@ -71,6 +71,16 @@ public class Swarm<T extends EntityLiving & ISwarmer>
         }
     }
 
+    public void addEntity(T entity)
+    {
+        swarmerEntities.add(entity);
+    }
+
+    public void removeEntity(T entity)
+    {
+        swarmerEntities.remove(entity);
+    }
+
     public void setWorld(World world)
     {
         this.world = world;

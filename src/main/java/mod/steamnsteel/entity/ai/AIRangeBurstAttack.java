@@ -36,6 +36,7 @@ public class AIRangeBurstAttack<T extends EntityLiving & IRangedAttackMob> exten
         this.attackRange = attackRange;
         this.maxAttackTime = maxAttackTime;
         this.cooldown = cooldown;
+        setMutexBits(3);
     }
 
     @Override

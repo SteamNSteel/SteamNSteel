@@ -1,13 +1,13 @@
 package mod.steamnsteel.entity.ai;
 
 import mod.steamnsteel.entity.ISwarmer;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityCreature;
 
-public class AISwarmOnHurt<T extends EntityLiving & ISwarmer> extends AISwarmBase<T>
+public class AISwarmOnHurt<T extends EntityCreature & ISwarmer> extends AISwarmTarget<T>
 {
     public AISwarmOnHurt(T entity)
     {
-        super(entity);
+        super(entity, 32);
     }
 
     public void startExecuting()

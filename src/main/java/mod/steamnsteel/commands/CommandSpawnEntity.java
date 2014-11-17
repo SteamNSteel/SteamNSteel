@@ -12,7 +12,7 @@
  *     GNU General Public License for more details.
  */
 
-package mod.steamnsteel;
+package mod.steamnsteel.commands;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;

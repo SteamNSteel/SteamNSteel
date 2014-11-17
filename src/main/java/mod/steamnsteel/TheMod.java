@@ -26,6 +26,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import mod.steamnsteel.api.crafting.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
+import mod.steamnsteel.commands.CommandCreateSwarm;
+import mod.steamnsteel.commands.CommandSpawnEntity;
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
@@ -111,5 +113,6 @@ public class TheMod
     public void serverStarting(FMLServerStartingEvent e)
     {
         e.registerServerCommand(new CommandSpawnEntity());
+        e.registerServerCommand(new CommandCreateSwarm());
     }
 }
