@@ -17,15 +17,79 @@
 package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
+import mod.steamnsteel.texturing.wall.RuinWallTexture;
+import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class PlotoniumRuinWall extends SteamNSteelBlock
 {
     public static final String NAME = "ruinWallPlotonium";
+    ProceduralConnectedTexture textureManager;
 
     public PlotoniumRuinWall()
     {
         super(Material.rock);
         setBlockName(NAME);
+    }
+
+    @Override
+    public void registerBlockIcons(IIconRegister iconRegister)
+    {
+        blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
+
+        textureManager = new RuinWallTexture();
+        textureManager.registerIcons(iconRegister);
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+    {
+        if (world.isRemote)
+        {
+            String description = textureManager.describeTextureAt(world, WorldBlockCoord.of(x, y, z), side);
+            player.addChatComponentMessage(new ChatComponentText(description));
+        }
+        return super.onBlockActivated(world, x, y, z, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
+    }
+
+    long[] durations = new long[10];
+    int index = 0;
+    int sidesCalculated = 0;
+    long currentMillis;
+    @Override
+    public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side)
+    {
+        long startTime = System.currentTimeMillis();
+        if (startTime - currentMillis > 1000) {
+            Logger.info("%d sides calculated in 1 seconds", sidesCalculated);
+            currentMillis = startTime;
+            sidesCalculated = 0;
+        }
+        final IIcon iconForSide = textureManager.getIconForSide(blockAccess, WorldBlockCoord.of(x, y, z), side);
+        long endTime = System.currentTimeMillis();
+        sidesCalculated++;
+        /*long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+        durations[index++] = duration;
+        if (index == durations.length) {
+            index = 0;
+
+            long sum = 0;
+            for (int i = 0; i < durations.length; i++) {
+                sum += durations[i];
+            }
+            //Logger.info("ProceduralWall took %f milliseconds", (sum / (float)durations.length));
+            durations = new long[100];
+        }*/
+
+
+        return iconForSide;
     }
 }
