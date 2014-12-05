@@ -21,7 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.IProgressUpdate;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.*;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -35,15 +34,18 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.logging.log4j.Logger;
 import javax.vecmath.Vector3f;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
-import java.util.zip.GZIPOutputStream;
 
 public class SchematicLoader
 {
-    public boolean loadSchematic(EntityPlayer player, File directory, String filename) {
-        SchematicWorld schematic = SchematicFormat.readFromFile(directory, filename);
-        if (schematic == null) {
+    public boolean loadSchematic(EntityPlayer player, File directory, String filename)
+    {
+        SchematicWorld schematic = readFromFile(directory, filename);
+        if (schematic == null)
+        {
             return false;
         }
 
@@ -64,222 +66,118 @@ public class SchematicLoader
         }
     };
 
-    public static abstract class SchematicFormat {
-        public static final Map<String, SchematicFormat> FORMATS = new HashMap<String, SchematicFormat>();
-        public static String FORMAT_DEFAULT;
 
-        public abstract SchematicWorld readFromNBT(NBTTagCompound tagCompound);
-
-        public abstract boolean writeToNBT(NBTTagCompound tagCompound, SchematicWorld world);
-
-        public static SchematicWorld readFromFile(File file) {
-            try {
-                final NBTTagCompound tagCompound = readTagCompoundFromFile(file);
-                final String format = tagCompound.getString(Names.NBT.MATERIALS);
-                final SchematicFormat schematicFormat = FORMATS.get(format);
-
-                if (schematicFormat == null) {
-                    throw new UnsupportedFormatException(format);
-                }
-
-                return schematicFormat.readFromNBT(tagCompound);
-            } catch (Exception ex) {
-                _logger.error("Failed to read schematic!", ex);
-            }
-
-            return null;
-        }
-
-        public static NBTTagCompound readTagCompoundFromFile(File file) throws IOException
+    public SchematicWorld readFromFile(File file)
+    {
+        try
         {
-            try {
-                return CompressedStreamTools.readCompressed(new FileInputStream(file));
-            } catch (Exception ex) {
-                _logger.warn("Failed compressed read, trying normal read...", ex);
-                return CompressedStreamTools.read(file);
-            }
+            final NBTTagCompound tagCompound = readTagCompoundFromFile(file);
+            return readFromNBT(tagCompound);
+        } catch (Exception ex)
+        {
+            _logger.error("Failed to read schematic!", ex);
         }
 
-        public static SchematicWorld readFromFile(File directory, String filename) {
-            return readFromFile(new File(directory, filename));
-        }
+        return null;
+    }
 
-        public static boolean writeToFile(File file, SchematicWorld world) {
-            try {
-                NBTTagCompound tagCompound = new NBTTagCompound();
-
-                FORMATS.get(FORMAT_DEFAULT).writeToNBT(tagCompound, world);
-
-                DataOutputStream dataOutputStream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
-
-                try {
-                    NBTTagCompound.func_150298_a(Names.NBT.ROOT, tagCompound, dataOutputStream);
-                } finally {
-                    dataOutputStream.close();
-                }
-
-                return true;
-            } catch (Exception ex) {
-                _logger.error("Failed to write schematic!", ex);
-            }
-
-            return false;
-        }
-
-        public static boolean writeToFile(File directory, String filename, SchematicWorld world) {
-            return writeToFile(new File(directory, filename), world);
-        }
-
-        static {
-            FORMATS.put(Names.NBT.FORMAT_ALPHA, new SchematicAlpha());
-
-            FORMAT_DEFAULT = Names.NBT.FORMAT_ALPHA;
+    private NBTTagCompound readTagCompoundFromFile(File file) throws IOException
+    {
+        try
+        {
+            return CompressedStreamTools.readCompressed(new FileInputStream(file));
+        } catch (Exception ex)
+        {
+            _logger.warn("Failed compressed read, trying normal read...", ex);
+            return CompressedStreamTools.read(file);
         }
     }
 
-    public static class SchematicAlpha extends SchematicFormat {
-        @Override
-        public SchematicWorld readFromNBT(NBTTagCompound tagCompound) {
-            byte localBlocks[] = tagCompound.getByteArray(Names.NBT.BLOCKS);
-            byte localMetadata[] = tagCompound.getByteArray(Names.NBT.DATA);
-
-            boolean extra = false;
-            byte extraBlocks[] = null;
-            byte extraBlocksNibble[] = null;
-            if (tagCompound.hasKey(Names.NBT.ADD_BLOCKS)) {
-                extra = true;
-                extraBlocksNibble = tagCompound.getByteArray(Names.NBT.ADD_BLOCKS);
-                extraBlocks = new byte[extraBlocksNibble.length * 2];
-                for (int i = 0; i < extraBlocksNibble.length; i++) {
-                    extraBlocks[i * 2 + 0] = (byte) ((extraBlocksNibble[i] >> 4) & 0xF);
-                    extraBlocks[i * 2 + 1] = (byte) (extraBlocksNibble[i] & 0xF);
-                }
-            } else if (tagCompound.hasKey(Names.NBT.ADD_BLOCKS_SCHEMATICA)) {
-                extra = true;
-                extraBlocks = tagCompound.getByteArray(Names.NBT.ADD_BLOCKS_SCHEMATICA);
-            }
-
-            short width = tagCompound.getShort(Names.NBT.WIDTH);
-            short length = tagCompound.getShort(Names.NBT.LENGTH);
-            short height = tagCompound.getShort(Names.NBT.HEIGHT);
-
-            short[][][] blocks = new short[width][height][length];
-            byte[][][] metadata = new byte[width][height][length];
-
-            Short id = null;
-            Map<Short, Short> oldToNew = new HashMap<Short, Short>();
-            if (tagCompound.hasKey(Names.NBT.MAPPING_SCHEMATICA)) {
-                NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING_SCHEMATICA);
-                Set<String> names = mapping.func_150296_c();
-                for (String name : names) {
-                    oldToNew.put(mapping.getShort(name), (short) GameData.getBlockRegistry().getId(name));
-                }
-            }
-
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    for (int z = 0; z < length; z++) {
-                        int index = x + (y * length + z) * width;
-                        blocks[x][y][z] = (short) ((localBlocks[index] & 0xFF) | (extra ? ((extraBlocks[index] & 0xFF) << 8) : 0));
-                        metadata[x][y][z] = (byte) (localMetadata[index] & 0xFF);
-                        if ((id = oldToNew.get(blocks[x][y][z])) != null) {
-                            blocks[x][y][z] = id;
-                        }
-                    }
-                }
-            }
-
-            List<TileEntity> tileEntities = new ArrayList<TileEntity>();
-            NBTTagList tileEntitiesList = tagCompound.getTagList(Names.NBT.TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
-
-            for (int i = 0; i < tileEntitiesList.tagCount(); i++) {
-                try {
-                    TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntitiesList.getCompoundTagAt(i));
-                    if (tileEntity != null) {
-                        tileEntities.add(tileEntity);
-                    }
-                } catch (Exception e) {
-                    _logger.error("TileEntity failed to load properly!", e);
-                }
-            }
-
-            return new SchematicWorld(blocks, metadata, tileEntities, width, height, length);
-        }
-
-        @Override
-        public boolean writeToNBT(NBTTagCompound tagCompound, SchematicWorld world) {
-            tagCompound.setShort(Names.NBT.WIDTH, (short) world.getWidth());
-            tagCompound.setShort(Names.NBT.LENGTH, (short) world.getLength());
-            tagCompound.setShort(Names.NBT.HEIGHT, (short) world.getHeight());
-
-            int size = world.getWidth() * world.getLength() * world.getHeight();
-            byte localBlocks[] = new byte[size];
-            byte localMetadata[] = new byte[size];
-            byte extraBlocks[] = new byte[size];
-            byte extraBlocksNibble[] = new byte[(int) Math.ceil(size / 2.0)];
-            boolean extra = false;
-            NBTTagCompound mapping = new NBTTagCompound();
-
-            for (int x = 0; x < world.getWidth(); x++) {
-                for (int y = 0; y < world.getHeight(); y++) {
-                    for (int z = 0; z < world.getLength(); z++) {
-                        int index = x + (y * world.getLength() + z) * world.getWidth();
-                        int blockId = world.getBlockIdRaw(x, y, z);
-                        localBlocks[index] = (byte) blockId;
-                        localMetadata[index] = (byte) world.getBlockMetadata(x, y, z);
-                        if ((extraBlocks[index] = (byte) (blockId >> 8)) > 0) {
-                            extra = true;
-                        }
-
-                        String name = GameData.getBlockRegistry().getNameForObject(world.getBlockRaw(x, y, z));
-                        if (!mapping.hasKey(name)) {
-                            mapping.setShort(name, (short) blockId);
-                        }
-                    }
-                }
-            }
-
-            for (int i = 0; i < extraBlocksNibble.length; i++) {
-                if (i * 2 + 1 < extraBlocks.length) {
-                    extraBlocksNibble[i] = (byte) ((extraBlocks[i * 2 + 0] << 4) | extraBlocks[i * 2 + 1]);
-                } else {
-                    extraBlocksNibble[i] = (byte) (extraBlocks[i * 2 + 0] << 4);
-                }
-            }
-
-            int count = 20;
-            NBTTagList tileEntitiesList = new NBTTagList();
-            for (TileEntity tileEntity : world.getTileEntities()) {
-                NBTTagCompound tileEntityTagCompound = new NBTTagCompound();
-                try {
-                    tileEntity.writeToNBT(tileEntityTagCompound);
-                    tileEntitiesList.appendTag(tileEntityTagCompound);
-                } catch (Exception e) {
-                    int pos = tileEntity.xCoord + (tileEntity.yCoord * world.getLength() + tileEntity.zCoord) * world.getWidth();
-                    if (--count > 0) {
-                        Block block = world.getBlockRaw(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
-                        _logger.error(String.format("Block %s[%s] with TileEntity %s failed to save! Replacing with bedrock...", block, block != null ? GameData.getBlockRegistry().getNameForObject(block) : "?", tileEntity.getClass().getName()), e);
-                    }
-                    localBlocks[pos] = (byte) GameData.getBlockRegistry().getId(Blocks.bedrock);
-                    localMetadata[pos] = 0;
-                    extraBlocks[pos] = 0;
-                }
-            }
-
-            tagCompound.setString(Names.NBT.MATERIALS, Names.NBT.FORMAT_ALPHA);
-            tagCompound.setByteArray(Names.NBT.BLOCKS, localBlocks);
-            tagCompound.setByteArray(Names.NBT.DATA, localMetadata);
-            if (extra) {
-                tagCompound.setByteArray(Names.NBT.ADD_BLOCKS, extraBlocksNibble);
-            }
-            tagCompound.setTag(Names.NBT.ENTITIES, new NBTTagList());
-            tagCompound.setTag(Names.NBT.TILE_ENTITIES, tileEntitiesList);
-            tagCompound.setTag(Names.NBT.MAPPING_SCHEMATICA, mapping);
-
-            return true;
-        }
+    public SchematicWorld readFromFile(File directory, String filename)
+    {
+        return readFromFile(new File(directory, filename));
     }
 
+    public SchematicWorld readFromNBT(NBTTagCompound tagCompound)
+    {
+        byte localBlocks[] = tagCompound.getByteArray(Names.NBT.BLOCKS);
+        byte localMetadata[] = tagCompound.getByteArray(Names.NBT.DATA);
+
+        boolean extra = false;
+        byte extraBlocks[] = null;
+        byte extraBlocksNibble[] = null;
+        if (tagCompound.hasKey(Names.NBT.ADD_BLOCKS))
+        {
+            extra = true;
+            extraBlocksNibble = tagCompound.getByteArray(Names.NBT.ADD_BLOCKS);
+            extraBlocks = new byte[extraBlocksNibble.length * 2];
+            for (int i = 0; i < extraBlocksNibble.length; i++)
+            {
+                extraBlocks[i * 2 + 0] = (byte) ((extraBlocksNibble[i] >> 4) & 0xF);
+                extraBlocks[i * 2 + 1] = (byte) (extraBlocksNibble[i] & 0xF);
+            }
+        } else if (tagCompound.hasKey(Names.NBT.ADD_BLOCKS_SCHEMATICA))
+        {
+            extra = true;
+            extraBlocks = tagCompound.getByteArray(Names.NBT.ADD_BLOCKS_SCHEMATICA);
+        }
+
+        short width = tagCompound.getShort(Names.NBT.WIDTH);
+        short length = tagCompound.getShort(Names.NBT.LENGTH);
+        short height = tagCompound.getShort(Names.NBT.HEIGHT);
+
+        short[][][] blocks = new short[width][height][length];
+        byte[][][] metadata = new byte[width][height][length];
+
+        Short id = null;
+        Map<Short, Short> oldToNew = new HashMap<Short, Short>();
+        if (tagCompound.hasKey(Names.NBT.MAPPING_SCHEMATICA))
+        {
+            NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING_SCHEMATICA);
+            Set<String> names = mapping.func_150296_c();
+            for (String name : names)
+            {
+                oldToNew.put(mapping.getShort(name), (short) GameData.getBlockRegistry().getId(name));
+            }
+        }
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                for (int z = 0; z < length; z++)
+                {
+                    int index = x + (y * length + z) * width;
+                    blocks[x][y][z] = (short) ((localBlocks[index] & 0xFF) | (extra ? ((extraBlocks[index] & 0xFF) << 8) : 0));
+                    metadata[x][y][z] = (byte) (localMetadata[index] & 0xFF);
+                    if ((id = oldToNew.get(blocks[x][y][z])) != null)
+                    {
+                        blocks[x][y][z] = id;
+                    }
+                }
+            }
+        }
+
+        List<TileEntity> tileEntities = new ArrayList<TileEntity>();
+        NBTTagList tileEntitiesList = tagCompound.getTagList(Names.NBT.TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
+
+        for (int i = 0; i < tileEntitiesList.tagCount(); i++)
+        {
+            try
+            {
+                TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntitiesList.getCompoundTagAt(i));
+                if (tileEntity != null)
+                {
+                    tileEntities.add(tileEntity);
+                }
+            } catch (Exception e)
+            {
+                _logger.error("TileEntity failed to load properly!", e);
+            }
+        }
+
+        return new SchematicWorld(blocks, metadata, tileEntities, width, height, length);
+    }
 
 
     private static ISaveHandler NULL_SAVE_HANDLER = new ISaveHandler()
@@ -856,25 +754,30 @@ public class SchematicLoader
         }
     }
 
-    static class ChunkProviderSchematic implements IChunkProvider {
+    static class ChunkProviderSchematic implements IChunkProvider
+    {
         private Chunk emptyChunk;
 
-        public ChunkProviderSchematic(World world) {
+        public ChunkProviderSchematic(World world)
+        {
             this.emptyChunk = new EmptyChunk(world, 0, 0);
         }
 
         @Override
-        public boolean chunkExists(int x, int y) {
+        public boolean chunkExists(int x, int y)
+        {
             return true;
         }
 
         @Override
-        public Chunk provideChunk(int x, int y) {
+        public Chunk provideChunk(int x, int y)
+        {
             return this.emptyChunk;
         }
 
         @Override
-        public Chunk loadChunk(int x, int y) {
+        public Chunk loadChunk(int x, int y)
+        {
             return this.emptyChunk;
         }
 
@@ -882,37 +785,44 @@ public class SchematicLoader
         public void populate(IChunkProvider provider, int x, int y) {}
 
         @Override
-        public boolean saveChunks(boolean saveExtra, IProgressUpdate progressUpdate) {
+        public boolean saveChunks(boolean saveExtra, IProgressUpdate progressUpdate)
+        {
             return true;
         }
 
         @Override
-        public boolean unloadQueuedChunks() {
+        public boolean unloadQueuedChunks()
+        {
             return false;
         }
 
         @Override
-        public boolean canSave() {
+        public boolean canSave()
+        {
             return false;
         }
 
         @Override
-        public String makeString() {
+        public String makeString()
+        {
             return "SchematicChunkCache";
         }
 
         @Override
-        public List getPossibleCreatures(EnumCreatureType creatureType, int x, int y, int z) {
+        public List getPossibleCreatures(EnumCreatureType creatureType, int x, int y, int z)
+        {
             return null;
         }
 
         @Override
-        public ChunkPosition func_147416_a(World world, String name, int x, int y, int z) {
+        public ChunkPosition func_147416_a(World world, String name, int x, int y, int z)
+        {
             return null;
         }
 
         @Override
-        public int getLoadedChunkCount() {
+        public int getLoadedChunkCount()
+        {
             return 0;
         }
 
@@ -924,7 +834,8 @@ public class SchematicLoader
     }
 
 
-    public static class BlockInfo {
+    public static class BlockInfo
+    {
         public static final List<Block> BLOCK_LIST_IGNORE_BLOCK = new ArrayList<Block>();
         public static final List<Block> BLOCK_LIST_IGNORE_METADATA = new ArrayList<Block>();
         public static final Map<Block, Item> BLOCK_ITEM_MAP = new HashMap<Block, Item>();
@@ -933,11 +844,13 @@ public class SchematicLoader
 
         private static String modId = Names.ModId.MINECRAFT;
 
-        public static void setModId(String modId) {
+        public static void setModId(String modId)
+        {
             BlockInfo.modId = modId;
         }
 
-        public static void populateIgnoredBlocks() {
+        public static void populateIgnoredBlocks()
+        {
             BLOCK_LIST_IGNORE_BLOCK.clear();
 
             /**
@@ -949,23 +862,28 @@ public class SchematicLoader
             addIgnoredBlock(Blocks.end_portal);
         }
 
-        private static boolean addIgnoredBlock(Block block) {
-            if (block == null) {
+        private static boolean addIgnoredBlock(Block block)
+        {
+            if (block == null)
+            {
                 return false;
             }
 
             return BLOCK_LIST_IGNORE_BLOCK.add(block);
         }
 
-        private static boolean addIgnoredBlock(String blockName) {
-            if (!Names.ModId.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
+        private static boolean addIgnoredBlock(String blockName)
+        {
+            if (!Names.ModId.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId))
+            {
                 return false;
             }
 
             return addIgnoredBlock(GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockName)));
         }
 
-        public static void populateIgnoredBlockMetadata() {
+        public static void populateIgnoredBlockMetadata()
+        {
             BLOCK_LIST_IGNORE_METADATA.clear();
 
             /**
@@ -1040,23 +958,28 @@ public class SchematicLoader
             addIgnoredBlockMetadata(Blocks.dropper);
         }
 
-        private static boolean addIgnoredBlockMetadata(Block block) {
-            if (block == null) {
+        private static boolean addIgnoredBlockMetadata(Block block)
+        {
+            if (block == null)
+            {
                 return false;
             }
 
             return BLOCK_LIST_IGNORE_METADATA.add(block);
         }
 
-        private static boolean addIgnoredBlockMetadata(String blockName) {
-            if (!Names.ModId.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
+        private static boolean addIgnoredBlockMetadata(String blockName)
+        {
+            if (!Names.ModId.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId))
+            {
                 return false;
             }
 
             return addIgnoredBlockMetadata(GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockName)));
         }
 
-        public static void populateBlockItemMap() {
+        public static void populateBlockItemMap()
+        {
             BLOCK_ITEM_MAP.clear();
 
             /**
@@ -1094,40 +1017,51 @@ public class SchematicLoader
             addBlockItemMapping(Blocks.powered_comparator, Items.comparator);
         }
 
-        private static Item addBlockItemMapping(Block block, Item item) {
-            if (block == null || item == null) {
+        private static Item addBlockItemMapping(Block block, Item item)
+        {
+            if (block == null || item == null)
+            {
                 return null;
             }
 
             return BLOCK_ITEM_MAP.put(block, item);
         }
 
-        private static Item addBlockItemMapping(Block block, Block item) {
+        private static Item addBlockItemMapping(Block block, Block item)
+        {
             return addBlockItemMapping(block, Item.getItemFromBlock(item));
         }
 
-        private static Item addBlockItemMapping(Object blockObj, Object itemObj) {
-            if (!Names.ModId.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
+        private static Item addBlockItemMapping(Object blockObj, Object itemObj)
+        {
+            if (!Names.ModId.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId))
+            {
                 return null;
             }
 
             Block block = null;
             Item item = null;
 
-            if (blockObj instanceof Block) {
+            if (blockObj instanceof Block)
+            {
                 block = (Block) blockObj;
-            } else if (blockObj instanceof String) {
+            } else if (blockObj instanceof String)
+            {
                 block = GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockObj));
             }
 
-            if (itemObj instanceof Item) {
+            if (itemObj instanceof Item)
+            {
                 item = (Item) itemObj;
-            } else if (itemObj instanceof Block) {
+            } else if (itemObj instanceof Block)
+            {
                 item = Item.getItemFromBlock((Block) itemObj);
-            } else if (itemObj instanceof String) {
+            } else if (itemObj instanceof String)
+            {
                 String formattedName = String.format("%s:%s", modId, itemObj);
                 item = GameData.getItemRegistry().getObject(formattedName);
-                if (item == null) {
+                if (item == null)
+                {
                     item = Item.getItemFromBlock(GameData.getBlockRegistry().getObject(formattedName));
                 }
             }
@@ -1135,16 +1069,19 @@ public class SchematicLoader
             return addBlockItemMapping(block, item);
         }
 
-        public static Item getItemFromBlock(Block block) {
+        public static Item getItemFromBlock(Block block)
+        {
             Item item = BLOCK_ITEM_MAP.get(block);
-            if (item != null) {
+            if (item != null)
+            {
                 return item;
             }
 
             return Item.getItemFromBlock(block);
         }
 
-        public static void populatePlacementMaps() {
+        public static void populatePlacementMaps()
+        {
             ITEM_PLACEMENT_MAP.clear();
 
             /**
@@ -1192,41 +1129,52 @@ public class SchematicLoader
             addPlacementMapping(Items.comparator, new PlacementData(PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
         }
 
-        public static PlacementData addPlacementMapping(Class clazz, PlacementData data) {
-            if (clazz == null || data == null) {
+        public static PlacementData addPlacementMapping(Class clazz, PlacementData data)
+        {
+            if (clazz == null || data == null)
+            {
                 return null;
             }
 
             return CLASS_PLACEMENT_MAP.put(clazz, data);
         }
 
-        public static PlacementData addPlacementMapping(Item item, PlacementData data) {
-            if (item == null || data == null) {
+        public static PlacementData addPlacementMapping(Item item, PlacementData data)
+        {
+            if (item == null || data == null)
+            {
                 return null;
             }
 
             return ITEM_PLACEMENT_MAP.put(item, data);
         }
 
-        public static PlacementData addPlacementMapping(Block block, PlacementData data) {
+        public static PlacementData addPlacementMapping(Block block, PlacementData data)
+        {
             return addPlacementMapping(Item.getItemFromBlock(block), data);
         }
 
-        public static PlacementData addPlacementMapping(Object itemObj, PlacementData data) {
-            if (itemObj == null || data == null) {
+        public static PlacementData addPlacementMapping(Object itemObj, PlacementData data)
+        {
+            if (itemObj == null || data == null)
+            {
                 return null;
             }
 
             Item item = null;
 
-            if (itemObj instanceof Item) {
+            if (itemObj instanceof Item)
+            {
                 item = (Item) itemObj;
-            } else if (itemObj instanceof Block) {
+            } else if (itemObj instanceof Block)
+            {
                 item = Item.getItemFromBlock((Block) itemObj);
-            } else if (itemObj instanceof String) {
+            } else if (itemObj instanceof String)
+            {
                 String formattedName = String.format("%s:%s", modId, itemObj);
                 item = GameData.getItemRegistry().getObject(formattedName);
-                if (item == null) {
+                if (item == null)
+                {
                     item = Item.getItemFromBlock(GameData.getBlockRegistry().getObject(formattedName));
                 }
             }
@@ -1234,19 +1182,24 @@ public class SchematicLoader
             return addPlacementMapping(item, data);
         }
 
-        public static PlacementData getPlacementDataFromItem(Item item) {
+        public static PlacementData getPlacementDataFromItem(Item item)
+        {
             Block block = Block.getBlockFromItem(item);
             PlacementData data = null;
 
-            for (Class clazz : CLASS_PLACEMENT_MAP.keySet()) {
-                if (clazz.isInstance(block)) {
+            for (Class clazz : CLASS_PLACEMENT_MAP.keySet())
+            {
+                if (clazz.isInstance(block))
+                {
                     data = CLASS_PLACEMENT_MAP.get(clazz);
                     break;
                 }
             }
 
-            for (Item i : ITEM_PLACEMENT_MAP.keySet()) {
-                if (i == item) {
+            for (Item i : ITEM_PLACEMENT_MAP.keySet())
+            {
+                if (i == item)
+                {
                     data = ITEM_PLACEMENT_MAP.get(i);
                     break;
                 }
@@ -1255,7 +1208,8 @@ public class SchematicLoader
             return data;
         }
 
-        static {
+        static
+        {
             populateIgnoredBlocks();
             populateIgnoredBlockMetadata();
             populateBlockItemMap();
@@ -1264,11 +1218,13 @@ public class SchematicLoader
     }
 
 
-    public static enum PlacementType {
+    public static enum PlacementType
+    {
         BLOCK, PLAYER, PISTON
     }
 
-    public static class PlacementData {
+    public static class PlacementData
+    {
 
 
         public static final ForgeDirection[] VALID_DIRECTIONS = ForgeDirection.VALID_DIRECTIONS;
@@ -1282,75 +1238,96 @@ public class SchematicLoader
         public int maskMeta = 0xF;
         public final Map<ForgeDirection, Integer> mapping = new HashMap<ForgeDirection, Integer>();
 
-        public PlacementData(PlacementType type, int... metadata) {
+        public PlacementData(PlacementType type, int... metadata)
+        {
             this.type = type;
 
-            for (int i = 0; i < VALID_DIRECTIONS.length && i < metadata.length; i++) {
-                if (metadata[i] >= 0x0 && metadata[i] <= 0xF) {
+            for (int i = 0; i < VALID_DIRECTIONS.length && i < metadata.length; i++)
+            {
+                if (metadata[i] >= 0x0 && metadata[i] <= 0xF)
+                {
                     this.mapping.put(VALID_DIRECTIONS[i], metadata[i]);
                 }
             }
         }
 
-        public PlacementData setOffset(int maskOffset, float offsetLowY, float offsetHighY) {
+        public PlacementData setOffset(int maskOffset, float offsetLowY, float offsetHighY)
+        {
             this.maskOffset = maskOffset;
             this.offsetLowY = offsetLowY;
             this.offsetHighY = offsetHighY;
             return this;
         }
 
-        public PlacementData setMaskMetaInHand(int maskMetaInHand) {
+        public PlacementData setMaskMetaInHand(int maskMetaInHand)
+        {
             this.maskMetaInHand = maskMetaInHand;
             return this;
         }
 
-        public PlacementData setBitShiftMetaInHand(int bitShiftMetaInHand) {
+        public PlacementData setBitShiftMetaInHand(int bitShiftMetaInHand)
+        {
             this.bitShiftMetaInHand = bitShiftMetaInHand;
             return this;
         }
 
-        public PlacementData setMaskMeta(int maskMeta) {
+        public PlacementData setMaskMeta(int maskMeta)
+        {
             this.maskMeta = maskMeta;
             return this;
         }
 
-        public float getOffsetFromMetadata(int metadata) {
+        public float getOffsetFromMetadata(int metadata)
+        {
             return (metadata & this.maskOffset) == 0 ? this.offsetLowY : this.offsetHighY;
         }
 
-        public int getMetaInHand(int metadata) {
-            if (this.maskMetaInHand != -1) {
+        public int getMetaInHand(int metadata)
+        {
+            if (this.maskMetaInHand != -1)
+            {
                 metadata &= this.maskMetaInHand;
             }
 
-            if (this.bitShiftMetaInHand > 0) {
+            if (this.bitShiftMetaInHand > 0)
+            {
                 metadata >>= this.bitShiftMetaInHand;
-            } else if (this.bitShiftMetaInHand < 0) {
+            } else if (this.bitShiftMetaInHand < 0)
+            {
                 metadata <<= -this.bitShiftMetaInHand;
             }
 
             return metadata;
         }
 
-        public ForgeDirection[] getValidDirections(ForgeDirection[] solidSides, int metadata) {
+        public ForgeDirection[] getValidDirections(ForgeDirection[] solidSides, int metadata)
+        {
             List<ForgeDirection> list = new ArrayList<ForgeDirection>();
 
-            for (ForgeDirection direction : solidSides) {
-                if (this.maskOffset != 0) {
-                    if ((metadata & this.maskOffset) == 0) {
-                        if (this.offsetLowY < 0.5f && direction == ForgeDirection.UP) {
+            for (ForgeDirection direction : solidSides)
+            {
+                if (this.maskOffset != 0)
+                {
+                    if ((metadata & this.maskOffset) == 0)
+                    {
+                        if (this.offsetLowY < 0.5f && direction == ForgeDirection.UP)
+                        {
                             continue;
                         }
-                    } else {
-                        if (this.offsetLowY < 0.5f && direction == ForgeDirection.DOWN) {
+                    } else
+                    {
+                        if (this.offsetLowY < 0.5f && direction == ForgeDirection.DOWN)
+                        {
                             continue;
                         }
                     }
                 }
 
-                if (this.type == PlacementType.BLOCK) {
+                if (this.type == PlacementType.BLOCK)
+                {
                     Integer meta = this.mapping.get(direction);
-                    if ((meta != null ? meta : -1) != (this.maskMeta & metadata) && this.mapping.size() != 0) {
+                    if ((meta != null ? meta : -1) != (this.maskMeta & metadata) && this.mapping.size() != 0)
+                    {
                         continue;
                     }
                 }
@@ -1364,13 +1341,16 @@ public class SchematicLoader
     }
 
 
-    public static final class Names {
-        public static final class ModId {
+    public static final class Names
+    {
+        public static final class ModId
+        {
             public static final String MINECRAFT = "minecraft";
         }
 
 
-        public static final class NBT {
+        public static final class NBT
+        {
             public static final String ROOT = "Schematic";
 
             public static final String MATERIALS = "Materials";
