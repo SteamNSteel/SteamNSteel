@@ -33,10 +33,10 @@ import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
+import org.apache.logging.log4j.Logger;
 import javax.vecmath.Vector3f;
 import java.io.*;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.zip.GZIPOutputStream;
 
 public class SchematicLoader
@@ -379,7 +379,7 @@ public class SchematicLoader
                         tileEntity.validate();
                     } catch (Exception e)
                     {
-                        _logger.(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
+                        _logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
                     }
                 }
             }
