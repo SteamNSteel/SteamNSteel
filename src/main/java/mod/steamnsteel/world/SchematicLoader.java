@@ -48,12 +48,6 @@ public class SchematicLoader
         }
 
         _logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
-
-        Schematica.proxy.setActiveSchematic(schematic);
-        RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(schematic);
-        SchematicPrinter.INSTANCE.setSchematic(schematic);
-        schematic.isRendering = true;
-
         return true;
     }
 
@@ -69,72 +63,6 @@ public class SchematicLoader
             return itemStackA.getUnlocalizedName().compareTo(itemStackB.getUnlocalizedName());
         }
     };
-    public static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.grass);
-
-    public static final class SchematicUtil {
-        public static NBTTagCompound readTagCompoundFromFile(File file) throws IOException
-        {
-            try {
-                return CompressedStreamTools.readCompressed(new FileInputStream(file));
-            } catch (Exception ex) {
-                _logger.warn("Failed compressed read, trying normal read...", ex);
-                return CompressedStreamTools.read(file);
-            }
-        }
-
-        public static ItemStack getIconFromName(String iconName) {
-            ItemStack icon;
-            String name = "";
-            int damage = 0;
-
-            String[] parts = iconName.split(",");
-            if (parts.length >= 1) {
-                name = parts[0];
-                if (parts.length >= 2) {
-                    try {
-                        damage = Integer.parseInt(parts[1]);
-                    } catch (NumberFormatException ignored) {
-                    }
-                }
-            }
-
-            icon = new ItemStack(GameData.getBlockRegistry().getObject(name), 1, damage);
-            if (icon.getItem() != null) {
-                return icon;
-            }
-
-            icon = new ItemStack(GameData.getItemRegistry().getObject(name), 1, damage);
-            if (icon.getItem() != null) {
-                return icon;
-            }
-
-            return SchematicWorld.DEFAULT_ICON.copy();
-        }
-
-        public static ItemStack getIconFromNBT(NBTTagCompound tagCompound) {
-            ItemStack icon = SchematicWorld.DEFAULT_ICON.copy();
-
-            if (tagCompound != null && tagCompound.hasKey(Names.NBT.ICON)) {
-                icon.readFromNBT(tagCompound.getCompoundTag(Names.NBT.ICON));
-
-                if (icon.getItem() == null) {
-                    icon = SchematicWorld.DEFAULT_ICON.copy();
-                }
-            }
-
-            return icon;
-        }
-
-        public static ItemStack getIconFromFile(File file) {
-            try {
-                return getIconFromNBT(readTagCompoundFromFile(file));
-            } catch (Exception e) {
-                _logger.error("Failed to read schematic icon!", e);
-            }
-
-            return SchematicWorld.DEFAULT_ICON.copy();
-        }
-    }
 
     public static abstract class SchematicFormat {
         public static final Map<String, SchematicFormat> FORMATS = new HashMap<String, SchematicFormat>();
@@ -146,7 +74,7 @@ public class SchematicLoader
 
         public static SchematicWorld readFromFile(File file) {
             try {
-                final NBTTagCompound tagCompound = SchematicUtil.readTagCompoundFromFile(file);
+                final NBTTagCompound tagCompound = readTagCompoundFromFile(file);
                 final String format = tagCompound.getString(Names.NBT.MATERIALS);
                 final SchematicFormat schematicFormat = FORMATS.get(format);
 
@@ -160,6 +88,16 @@ public class SchematicLoader
             }
 
             return null;
+        }
+
+        public static NBTTagCompound readTagCompoundFromFile(File file) throws IOException
+        {
+            try {
+                return CompressedStreamTools.readCompressed(new FileInputStream(file));
+            } catch (Exception ex) {
+                _logger.warn("Failed compressed read, trying normal read...", ex);
+                return CompressedStreamTools.read(file);
+            }
         }
 
         public static SchematicWorld readFromFile(File directory, String filename) {
@@ -193,7 +131,6 @@ public class SchematicLoader
         }
 
         static {
-            FORMATS.put(Names.NBT.FORMAT_CLASSIC, new SchematicClassic());
             FORMATS.put(Names.NBT.FORMAT_ALPHA, new SchematicAlpha());
 
             FORMAT_DEFAULT = Names.NBT.FORMAT_ALPHA;
@@ -203,8 +140,6 @@ public class SchematicLoader
     public static class SchematicAlpha extends SchematicFormat {
         @Override
         public SchematicWorld readFromNBT(NBTTagCompound tagCompound) {
-            ItemStack icon = SchematicUtil.getIconFromNBT(tagCompound);
-
             byte localBlocks[] = tagCompound.getByteArray(Names.NBT.BLOCKS);
             byte localMetadata[] = tagCompound.getByteArray(Names.NBT.DATA);
 
@@ -268,16 +203,11 @@ public class SchematicLoader
                 }
             }
 
-            return new SchematicWorld(icon, blocks, metadata, tileEntities, width, height, length);
+            return new SchematicWorld(blocks, metadata, tileEntities, width, height, length);
         }
 
         @Override
         public boolean writeToNBT(NBTTagCompound tagCompound, SchematicWorld world) {
-            NBTTagCompound tagCompoundIcon = new NBTTagCompound();
-            ItemStack icon = world.getIcon();
-            icon.writeToNBT(tagCompoundIcon);
-            tagCompound.setTag(Names.NBT.ICON, tagCompoundIcon);
-
             tagCompound.setShort(Names.NBT.WIDTH, (short) world.getWidth());
             tagCompound.setShort(Names.NBT.LENGTH, (short) world.getLength());
             tagCompound.setShort(Names.NBT.HEIGHT, (short) world.getHeight());
@@ -405,7 +335,6 @@ public class SchematicLoader
 
     public static class SchematicWorld extends World
     {
-        private ItemStack icon;
         private short[][][] blocks;
         private byte[][][] metadata;
         private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
@@ -414,30 +343,22 @@ public class SchematicLoader
         private short height;
         private short length;
 
-        public final Vector3i position = new Vector3i();
-        public boolean isRendering;
-        public int renderingLayer;
+//        public final Vector3i position = new Vector3i();
 
         public SchematicWorld()
         {
             super(NULL_SAVE_HANDLER, "Schematica", WORLD_SETTINGS, null, null);
-            this.icon = SchematicWorld.DEFAULT_ICON.copy();
             this.blocks = null;
             this.metadata = null;
             this.tileEntities.clear();
             this.width = 0;
             this.height = 0;
             this.length = 0;
-
-            this.isRendering = false;
-            this.renderingLayer = -1;
         }
 
-        public SchematicWorld(ItemStack icon, short[][][] blocks, byte[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length)
+        public SchematicWorld(short[][][] blocks, byte[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length)
         {
             this();
-
-            this.icon = icon != null ? icon : SchematicWorld.DEFAULT_ICON.copy();
 
             this.blocks = blocks != null ? blocks.clone() : new short[width][height][length];
             this.metadata = metadata != null ? metadata.clone() : new byte[width][height][length];
@@ -469,9 +390,9 @@ public class SchematicLoader
             }
         }
 
-        public SchematicWorld(ItemStack icon, short width, short height, short length)
+        public SchematicWorld(short width, short height, short length)
         {
-            this(icon, null, null, null, width, height, length);
+            this(null, null, null, width, height, length);
         }
 
         private void generateBlockList()
@@ -590,10 +511,6 @@ public class SchematicLoader
 
         private int getBlockId(int x, int y, int z)
         {
-            if (this.renderingLayer != -1 && this.renderingLayer != y)
-            {
-                return 0;
-            }
             return getBlockIdRaw(x, y, z);
         }
 
@@ -798,16 +715,6 @@ public class SchematicLoader
             return block.isSideSolid(this, x, y, z, side);
         }
 
-        public void setIcon(ItemStack icon)
-        {
-            this.icon = icon;
-        }
-
-        public ItemStack getIcon()
-        {
-            return this.icon;
-        }
-
         public void setTileEntities(List<TileEntity> tileEntities)
         {
             this.tileEntities.clear();
@@ -833,22 +740,6 @@ public class SchematicLoader
         public List<ItemStack> getBlockList()
         {
             return this.blockList;
-        }
-
-        public boolean toggleRendering()
-        {
-            this.isRendering = !this.isRendering;
-            return this.isRendering;
-        }
-
-        public void decrementRenderingLayer()
-        {
-            this.renderingLayer = MathHelper.clamp_int(this.renderingLayer - 1, -1, getHeight() - 1);
-        }
-
-        public void incrementRenderingLayer()
-        {
-            this.renderingLayer = MathHelper.clamp_int(this.renderingLayer + 1, -1, getHeight() - 1);
         }
 
         public void refreshChests()
@@ -1483,10 +1374,8 @@ public class SchematicLoader
             public static final String ROOT = "Schematic";
 
             public static final String MATERIALS = "Materials";
-            public static final String FORMAT_CLASSIC = "Classic";
             public static final String FORMAT_ALPHA = "Alpha";
 
-            public static final String ICON = "Icon";
             public static final String BLOCKS = "Blocks";
             public static final String DATA = "Data";
             public static final String ADD_BLOCKS = "AddBlocks";
