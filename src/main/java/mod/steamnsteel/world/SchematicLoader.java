@@ -3,40 +3,82 @@ package mod.steamnsteel.world;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ForgeDirection;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 public class SchematicLoader
 {
-    public boolean loadSchematic(File directory, String filename)
-    {
-        SchematicWorld schematic = readFromFile(directory, filename);
-        if (schematic == null)
-        {
-            return false;
-        }
+    private Map<ResourceLocation, SchematicWorld> loadedSchematics = new HashMap<ResourceLocation, SchematicWorld>();
 
-        _logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
-        return true;
+    public SchematicLoader()
+    {
     }
 
-    private static Logger _logger;
-
-    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
-
-    public SchematicWorld readFromFile(File file)
+    public void loadSchematic(ResourceLocation schematicLocation)
     {
         try
         {
-            final NBTTagCompound tagCompound = readTagCompoundFromFile(file);
+            final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(schematicLocation);
+            SchematicWorld schematic = readFromFile(resource.getInputStream());
+            if (schematic == null)
+            {
+                return;
+            }
+
+            loadedSchematics.put(schematicLocation, schematic);
+            _logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", schematicLocation, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
+        } catch (IOException exception)
+        {
+            _logger.error(String.format("Unable to load %s", schematicLocation), exception);
+        }
+    }
+
+    public void renderSchematic(ResourceLocation resource, World world, int x, int y, int z, ForgeDirection rotation, boolean flip) {
+        if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP) {
+            _logger.error("Unable to load schematic %s, invalid rotation specified: %s", resource, rotation);
+            return;
+        }
+
+        SchematicWorld schematic = loadedSchematics.get(resource);
+        if (schematic == null) {
+            _logger.error("schematic %s was not loaded", resource);
+            return;
+        }
+    }
+
+    private static Logger _logger = LogManager.getLogger("SchematicLoader");
+
+    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
+
+    public SchematicWorld readFromFile(InputStream inputStream)
+    {
+        try
+        {
+            NBTTagCompound result;
+            try
+            {
+                result = CompressedStreamTools.readCompressed(inputStream);
+            } catch (Exception ex)
+            {
+                _logger.warn("Failed compressed read, trying normal read...", ex);
+                result = CompressedStreamTools.read(new DataInputStream(new BufferedInputStream(inputStream)));
+            }
+            final NBTTagCompound tagCompound = result;
             return readFromNBT(tagCompound);
         } catch (Exception ex)
         {
@@ -46,31 +88,14 @@ public class SchematicLoader
         return null;
     }
 
-    private NBTTagCompound readTagCompoundFromFile(File file) throws IOException
-    {
-        try
-        {
-            return CompressedStreamTools.readCompressed(new FileInputStream(file));
-        } catch (Exception ex)
-        {
-            _logger.warn("Failed compressed read, trying normal read...", ex);
-            return CompressedStreamTools.read(file);
-        }
-    }
-
-    public SchematicWorld readFromFile(File directory, String filename)
-    {
-        return readFromFile(new File(directory, filename));
-    }
-
-    public SchematicWorld readFromNBT(NBTTagCompound tagCompound)
+    private SchematicWorld readFromNBT(NBTTagCompound tagCompound)
     {
         byte localBlocks[] = tagCompound.getByteArray(Names.NBT.BLOCKS);
         byte localMetadata[] = tagCompound.getByteArray(Names.NBT.DATA);
 
         boolean extra = false;
         byte extraBlocks[] = null;
-        byte extraBlocksNibble[] = null;
+        byte extraBlocksNibble[];
         if (tagCompound.hasKey(Names.NBT.ADD_BLOCKS))
         {
             extra = true;
@@ -78,7 +103,7 @@ public class SchematicLoader
             extraBlocks = new byte[extraBlocksNibble.length * 2];
             for (int i = 0; i < extraBlocksNibble.length; i++)
             {
-                extraBlocks[i * 2 + 0] = (byte) ((extraBlocksNibble[i] >> 4) & 0xF);
+                extraBlocks[i * 2] = (byte) ((extraBlocksNibble[i] >> 4) & 0xF);
                 extraBlocks[i * 2 + 1] = (byte) (extraBlocksNibble[i] & 0xF);
             }
         } else if (tagCompound.hasKey(Names.NBT.ADD_BLOCKS_SCHEMATICA))
@@ -99,6 +124,7 @@ public class SchematicLoader
         if (tagCompound.hasKey(Names.NBT.MAPPING_SCHEMATICA))
         {
             NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING_SCHEMATICA);
+            @SuppressWarnings("unchecked")
             Set<String> names = mapping.func_150296_c();
             for (String name : names)
             {
@@ -144,7 +170,7 @@ public class SchematicLoader
         return new SchematicWorld(blocks, metadata, tileEntities, width, height, length);
     }
 
-    public static class SchematicWorld
+    private static class SchematicWorld
     {
         private short[][][] blocks;
         private byte[][][] metadata;
@@ -239,11 +265,7 @@ public class SchematicLoader
         public boolean isAirBlock(int x, int y, int z)
         {
             Block block = getBlock(x, y, z);
-            if (block == null)
-            {
-                return true;
-            }
-            return block.isAir(null, x, y, z);
+            return block == null || block.isAir(null, x, y, z);
         }
 
         public int getWidth()
