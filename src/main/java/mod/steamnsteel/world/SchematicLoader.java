@@ -5,12 +5,16 @@ import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
+import net.minecraft.command.server.CommandBlockLogic;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.logging.log4j.LogManager;
@@ -25,14 +29,39 @@ public class SchematicLoader
 {
     private Map<ResourceLocation, SchematicWorld> loadedSchematics = new HashMap<ResourceLocation, SchematicWorld>();
 
+    private List<ITileEntityLoadedEvent> listeners = new LinkedList<ITileEntityLoadedEvent>();
+
     public SchematicLoader()
     {
+        listeners.add(new ITileEntityLoadedEvent() {
+            @Override
+            public boolean onTileEntityAdded(TileEntity tileEntity)
+            {
+                if (tileEntity instanceof TileEntityCommandBlock) {
+                    final World worldObj = tileEntity.getWorldObj();
+                    TileEntityCommandBlock commandBlock = (TileEntityCommandBlock)tileEntity;
+                    Block block = worldObj.getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+                    CommandBlockLogic commandblocklogic = commandBlock.func_145993_a();
+                    commandblocklogic.func_145755_a(worldObj);
+                    worldObj.func_147453_f(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord, block);
+
+                    worldObj.setBlock(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord, Blocks.air, 0, 3);
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void loadSchematic(ResourceLocation schematicLocation)
     {
         try
         {
+            if (loadedSchematics.containsKey(schematicLocation)) {
+                return;
+            }
+
             final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(schematicLocation);
             SchematicWorld schematic = readFromFile(resource.getInputStream());
             if (schematic == null)
@@ -48,16 +77,58 @@ public class SchematicLoader
         }
     }
 
-    public void renderSchematic(ResourceLocation resource, World world, int x, int y, int z, ForgeDirection rotation, boolean flip) {
-        if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP) {
+    public void renderSchematic(ResourceLocation resource, World world, int x, int y, int z, ForgeDirection rotation, boolean flip)
+    {
+        if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP)
+        {
             _logger.error("Unable to load schematic %s, invalid rotation specified: %s", resource, rotation);
             return;
         }
 
         SchematicWorld schematic = loadedSchematics.get(resource);
-        if (schematic == null) {
+        if (schematic == null)
+        {
             _logger.error("schematic %s was not loaded", resource);
             return;
+        }
+
+        for (int schematicX = 0; schematicX < schematic.getWidth(); ++schematicX)
+        {
+            for (int schematicY = 0; schematicY < schematic.getHeight(); ++schematicY)
+            {
+                for (int schematicZ = 0; schematicZ < schematic.getLength(); ++schematicZ)
+                {
+                    final int xPos = schematicX + x;
+                    final int yPos = schematicY + y;
+                    final int zPos = schematicZ + z;
+                    final Block block = schematic.getBlock(schematicX, schematicY, schematicZ);
+                    if (block != Blocks.air)
+                    {
+                        final int blockMetadata = schematic.getBlockMetadata(schematicX, schematicY, schematicZ);
+                        world.setBlock(xPos, yPos, zPos, block, blockMetadata, 3);
+                    }
+                }
+            }
+        }
+
+        for (NBTTagCompound entity : schematic.getTileEntityData())
+        {
+            TileEntity tileEntity = TileEntity.createAndLoadEntity(entity);
+            world.setTileEntity(tileEntity.xCoord + x, tileEntity.yCoord + y, tileEntity.zCoord + z, tileEntity);
+            tileEntity.getBlockType();
+            try
+            {
+                tileEntity.validate();
+            } catch (Exception e)
+            {
+                _logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
+            }
+
+            for(ITileEntityLoadedEvent tileEntityHandler : listeners) {
+                if (tileEntityHandler.onTileEntityAdded(tileEntity)) {
+                    break;
+                }
+            }
         }
     }
 
@@ -149,14 +220,14 @@ public class SchematicLoader
             }
         }
 
-        List<TileEntity> tileEntities = new ArrayList<TileEntity>();
+        List<NBTTagCompound> tileEntities = new ArrayList<NBTTagCompound>();
         NBTTagList tileEntitiesList = tagCompound.getTagList(Names.NBT.TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < tileEntitiesList.tagCount(); i++)
         {
             try
             {
-                TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntitiesList.getCompoundTagAt(i));
+                NBTTagCompound tileEntity = (NBTTagCompound) tileEntitiesList.getCompoundTagAt(i).copy();
                 if (tileEntity != null)
                 {
                     tileEntities.add(tileEntity);
@@ -174,7 +245,7 @@ public class SchematicLoader
     {
         private short[][][] blocks;
         private byte[][][] metadata;
-        private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
+        private final List<NBTTagCompound> tileEntities = new ArrayList<NBTTagCompound>();
         private short width;
         private short height;
         private short length;
@@ -189,7 +260,7 @@ public class SchematicLoader
             this.length = 0;
         }
 
-        public SchematicWorld(short[][][] blocks, byte[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length)
+        public SchematicWorld(short[][][] blocks, byte[][][] metadata, List<NBTTagCompound> tileEntities, short width, short height, short length)
         {
             this();
 
@@ -203,54 +274,16 @@ public class SchematicLoader
             if (tileEntities != null)
             {
                 this.tileEntities.addAll(tileEntities);
-                for (TileEntity tileEntity : this.tileEntities)
-                {
-                    tileEntity.getBlockType();
-                    try
-                    {
-                        tileEntity.validate();
-                    } catch (Exception e)
-                    {
-                        _logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
-                    }
-                }
             }
-        }
-
-        public int getBlockIdRaw(int x, int y, int z)
-        {
-            if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length)
-            {
-                return 0;
-            }
-            return this.blocks[x][y][z];
-        }
-
-        private int getBlockId(int x, int y, int z)
-        {
-            return getBlockIdRaw(x, y, z);
-        }
-
-        public Block getBlockRaw(int x, int y, int z)
-        {
-            return BLOCK_REGISTRY.getObjectById(getBlockIdRaw(x, y, z));
         }
 
         public Block getBlock(int x, int y, int z)
         {
-            return BLOCK_REGISTRY.getObjectById(getBlockId(x, y, z));
-        }
-
-        public TileEntity getTileEntity(int x, int y, int z)
-        {
-            for (TileEntity tileEntity : this.tileEntities)
+            if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length)
             {
-                if (tileEntity.xCoord == x && tileEntity.yCoord == y && tileEntity.zCoord == z)
-                {
-                    return tileEntity;
-                }
+                return BLOCK_REGISTRY.getObjectById(0);
             }
-            return null;
+            return BLOCK_REGISTRY.getObjectById(this.blocks[x][y][z]);
         }
 
         public int getBlockMetadata(int x, int y, int z)
@@ -283,7 +316,7 @@ public class SchematicLoader
             return this.height;
         }
 
-        public List<TileEntity> getTileEntities()
+        public List<NBTTagCompound> getTileEntityData()
         {
             return this.tileEntities;
         }
@@ -303,5 +336,9 @@ public class SchematicLoader
             public static final String MAPPING_SCHEMATICA = "SchematicaMapping";
             public static final String TILE_ENTITIES = "TileEntities";
         }
+    }
+
+    public interface ITileEntityLoadedEvent {
+        boolean onTileEntityAdded(TileEntity tileEntity);
     }
 }
