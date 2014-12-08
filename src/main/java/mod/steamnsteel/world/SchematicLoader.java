@@ -10,11 +10,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.logging.log4j.LogManager;
@@ -33,20 +34,28 @@ public class SchematicLoader
 
     public SchematicLoader()
     {
-        listeners.add(new ITileEntityLoadedEvent() {
+        listeners.add(new ITileEntityLoadedEvent()
+        {
             @Override
             public boolean onTileEntityAdded(TileEntity tileEntity)
             {
-                if (tileEntity instanceof TileEntityCommandBlock) {
+                if (tileEntity instanceof TileEntityCommandBlock)
+                {
+                    _logger.info("Activating command Block");
+
+                    final GameRules gameRules = MinecraftServer.getServer().worldServers[0].getGameRules();
+                    Boolean commandBlockOutputSetting = gameRules.getGameRuleBooleanValue("commandBlockOutput");
+                    gameRules.setOrCreateGameRule("commandBlockOutput", "false");
+
                     final World worldObj = tileEntity.getWorldObj();
-                    TileEntityCommandBlock commandBlock = (TileEntityCommandBlock)tileEntity;
+                    TileEntityCommandBlock commandBlock = (TileEntityCommandBlock) tileEntity;
                     Block block = worldObj.getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
                     CommandBlockLogic commandblocklogic = commandBlock.func_145993_a();
                     commandblocklogic.func_145755_a(worldObj);
                     worldObj.func_147453_f(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord, block);
 
                     worldObj.setBlock(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord, Blocks.air, 0, 3);
-
+                    gameRules.setOrCreateGameRule("commandBlockOutput", commandBlockOutputSetting.toString());
                     return true;
                 }
                 return false;
@@ -58,7 +67,8 @@ public class SchematicLoader
     {
         try
         {
-            if (loadedSchematics.containsKey(schematicLocation)) {
+            if (loadedSchematics.containsKey(schematicLocation))
+            {
                 return;
             }
 
@@ -92,11 +102,13 @@ public class SchematicLoader
             return;
         }
 
-        for (int schematicX = 0; schematicX < schematic.getWidth(); ++schematicX)
+        _logger.info("Setting Blocks");
+        for (int schematicZ = 0; schematicZ < schematic.getLength(); ++schematicZ)
         {
-            for (int schematicY = 0; schematicY < schematic.getHeight(); ++schematicY)
+            _logger.info("Working at z = " + schematicZ);
+            for (int schematicX = 0; schematicX < schematic.getWidth(); ++schematicX)
             {
-                for (int schematicZ = 0; schematicZ < schematic.getLength(); ++schematicZ)
+                for (int schematicY = 0; schematicY < schematic.getHeight(); ++schematicY)
                 {
                     final int xPos = schematicX + x;
                     final int yPos = schematicY + y;
@@ -111,6 +123,7 @@ public class SchematicLoader
             }
         }
 
+        _logger.info("Creating Tile Entities");
         for (NBTTagCompound entity : schematic.getTileEntityData())
         {
             TileEntity tileEntity = TileEntity.createAndLoadEntity(entity);
@@ -124,8 +137,10 @@ public class SchematicLoader
                 _logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
             }
 
-            for(ITileEntityLoadedEvent tileEntityHandler : listeners) {
-                if (tileEntityHandler.onTileEntityAdded(tileEntity)) {
+            for (ITileEntityLoadedEvent tileEntityHandler : listeners)
+            {
+                if (tileEntityHandler.onTileEntityAdded(tileEntity))
+                {
                     break;
                 }
             }
@@ -187,8 +202,8 @@ public class SchematicLoader
         short length = tagCompound.getShort(Names.NBT.LENGTH);
         short height = tagCompound.getShort(Names.NBT.HEIGHT);
 
-        short[][][] blocks = new short[width][height][length];
-        byte[][][] metadata = new byte[width][height][length];
+        short[] blocks = new short[width * height * length];
+        byte[] metadata = new byte[width * height * length];
 
         Short id;
         Map<Short, Short> oldToNew = new HashMap<Short, Short>();
@@ -210,11 +225,12 @@ public class SchematicLoader
                 for (int z = 0; z < length; z++)
                 {
                     int index = x + (y * length + z) * width;
-                    blocks[x][y][z] = (short) ((localBlocks[index] & 0xFF) | (extra ? ((extraBlocks[index] & 0xFF) << 8) : 0));
-                    metadata[x][y][z] = (byte) (localMetadata[index] & 0xFF);
-                    if ((id = oldToNew.get(blocks[x][y][z])) != null)
+                    //int index2 = y | z << 8 | x << 12;
+                    blocks[index] = (short) ((localBlocks[index] & 0xFF) | (extra ? ((extraBlocks[index] & 0xFF) << 8) : 0));
+                    metadata[index] = (byte) (localMetadata[index] & 0xFF);
+                    if ((id = oldToNew.get(blocks[index])) != null)
                     {
-                        blocks[x][y][z] = id;
+                        blocks[index] = id;
                     }
                 }
             }
@@ -243,8 +259,8 @@ public class SchematicLoader
 
     private static class SchematicWorld
     {
-        private short[][][] blocks;
-        private byte[][][] metadata;
+        private short[] blocks;
+        private byte[] metadata;
         private final List<NBTTagCompound> tileEntities = new ArrayList<NBTTagCompound>();
         private short width;
         private short height;
@@ -260,12 +276,12 @@ public class SchematicLoader
             this.length = 0;
         }
 
-        public SchematicWorld(short[][][] blocks, byte[][][] metadata, List<NBTTagCompound> tileEntities, short width, short height, short length)
+        public SchematicWorld(short[] blocks, byte[] metadata, List<NBTTagCompound> tileEntities, short width, short height, short length)
         {
             this();
 
-            this.blocks = blocks != null ? blocks.clone() : new short[width][height][length];
-            this.metadata = metadata != null ? metadata.clone() : new byte[width][height][length];
+            this.blocks = blocks != null ? blocks.clone() : new short[width * height * length];
+            this.metadata = metadata != null ? metadata.clone() : new byte[width * height * length];
 
             this.width = width;
             this.height = height;
@@ -283,7 +299,8 @@ public class SchematicLoader
             {
                 return BLOCK_REGISTRY.getObjectById(0);
             }
-            return BLOCK_REGISTRY.getObjectById(this.blocks[x][y][z]);
+            int index = x + (y * length + z) * width;
+            return BLOCK_REGISTRY.getObjectById(this.blocks[index]);
         }
 
         public int getBlockMetadata(int x, int y, int z)
@@ -292,7 +309,8 @@ public class SchematicLoader
             {
                 return 0;
             }
-            return this.metadata[x][y][z];
+            int index = x + (y * length + z) * width;
+            return this.metadata[index];
         }
 
         public boolean isAirBlock(int x, int y, int z)
@@ -338,7 +356,8 @@ public class SchematicLoader
         }
     }
 
-    public interface ITileEntityLoadedEvent {
+    public interface ITileEntityLoadedEvent
+    {
         boolean onTileEntityAdded(TileEntity tileEntity);
     }
 }
