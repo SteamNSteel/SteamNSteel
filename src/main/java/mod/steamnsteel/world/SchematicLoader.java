@@ -1,5 +1,6 @@
 package mod.steamnsteel.world;
 
+import com.google.common.base.*;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
@@ -15,9 +16,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.io.BufferedInputStream;
@@ -25,6 +30,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.Objects;
 
 public class SchematicLoader
 {
@@ -54,7 +60,10 @@ public class SchematicLoader
                     commandblocklogic.func_145755_a(worldObj);
                     worldObj.func_147453_f(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord, block);
 
-                    worldObj.setBlock(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord, Blocks.air, 0, 3);
+                    if (worldObj.getTileEntity(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord) instanceof TileEntityCommandBlock)
+                    {
+                        worldObj.setBlock(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord, Blocks.air, 0, 3);
+                    }
                     gameRules.setOrCreateGameRule("commandBlockOutput", commandBlockOutputSetting.toString());
                     return true;
                 }
@@ -71,6 +80,7 @@ public class SchematicLoader
             {
                 return;
             }
+            _logger.info(String.format("%s - Loading schematic %s", System.currentTimeMillis(), schematicLocation));
 
             final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(schematicLocation);
             SchematicWorld schematic = readFromFile(resource.getInputStream());
@@ -80,15 +90,16 @@ public class SchematicLoader
             }
 
             loadedSchematics.put(schematicLocation, schematic);
-            _logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", schematicLocation, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
+            _logger.info(String.format("%s - Loaded %s [w:%d,h:%d,l:%d]", System.currentTimeMillis(), schematicLocation, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
         } catch (IOException exception)
         {
             _logger.error(String.format("Unable to load %s", schematicLocation), exception);
         }
     }
 
-    public void renderSchematic(ResourceLocation resource, World world, int x, int y, int z, ForgeDirection rotation, boolean flip)
-    {
+    public void renderSchematicToSingleChunk(ResourceLocation resource, World world,
+                                             int originX, int originY, int originZ,
+                                             int chunkX, int chunkZ, ForgeDirection rotation, boolean flip) {
         if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP)
         {
             _logger.error("Unable to load schematic %s, invalid rotation specified: %s", resource, rotation);
@@ -102,41 +113,70 @@ public class SchematicLoader
             return;
         }
 
-        _logger.info("Setting Blocks");
-        for (int schematicZ = 0; schematicZ < schematic.getLength(); ++schematicZ)
-        {
-            _logger.info("Working at z = " + schematicZ);
-            for (int schematicX = 0; schematicX < schematic.getWidth(); ++schematicX)
-            {
-                for (int schematicY = 0; schematicY < schematic.getHeight(); ++schematicY)
-                {
-                    final int xPos = schematicX + x;
-                    final int yPos = schematicY + y;
-                    final int zPos = schematicZ + z;
-                    final Block block = schematic.getBlock(schematicX, schematicY, schematicZ);
-                    if (block != Blocks.air)
-                    {
-                        final int blockMetadata = schematic.getBlockMetadata(schematicX, schematicY, schematicZ);
-                        world.setBlock(xPos, yPos, zPos, block, blockMetadata, 3);
+        _logger.info(String.format("%s - Rendering Chunk (%d, %d) ", System.currentTimeMillis(), chunkX, chunkZ));
+
+        final int minX = originX;
+        final int maxX = originX + schematic.getWidth();
+        final int minY = originY;
+        final int maxY = originY + schematic.getHeight();
+        final int minZ = originZ;
+        final int maxZ = originZ + schematic.getLength();
+
+        final int localMinX = minX < (chunkX << 4) ? 0 : (minX & 15);
+        final int localMaxX = maxX > ((chunkX << 4) + 15) ? 15 : (maxX & 15);
+        final int localMinZ = minZ < (chunkZ << 4) ? 0 : (minZ & 15);
+        final int localMaxZ = maxZ > ((chunkZ << 4) + 15) ? 15 : (maxZ & 15);
+
+        Chunk c = world.getChunkFromChunkCoords(chunkX, chunkZ);
+
+        int blockCount = 0;
+        Block ignore = Blocks.air;
+
+        LinkedList<TileEntity> createdTileEntities = new LinkedList<TileEntity>();
+
+        for (int chunkLocalZ = localMinZ; chunkLocalZ <= localMaxZ; chunkLocalZ++) {
+            for (int y = minY; y < maxY; y++) {
+                for (int chunkLocalX = localMinX; chunkLocalX <= localMaxX; chunkLocalX++) {
+                    ++blockCount;
+                    final int x = chunkLocalX | (chunkX << 4);
+                    final int z = chunkLocalZ | (chunkZ << 4);
+
+                    final int schematicX = x - minX;
+                    final int schematicY = y - minY;
+                    final int schematicZ = z - minZ;
+
+                    try {
+                        final Block block = schematic.getBlock(schematicX, schematicY, schematicZ);
+                        final int metadata = schematic.getBlockMetadata(schematicX, schematicY, schematicZ);
+
+                        if (c.func_150807_a(chunkLocalX, y, chunkLocalZ, block, metadata)) {
+                            world.markBlockForUpdate(x, y, z);
+                            final NBTTagCompound tileEntityData = schematic.getTileEntity(schematicX, schematicY, schematicZ);
+                            if (block.hasTileEntity(metadata) && tileEntityData != null) {
+                                TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntityData);
+
+                                c.func_150812_a(chunkLocalX, y, chunkLocalZ, tileEntity);
+                                tileEntity.getBlockType();
+                                try
+                                {
+                                    tileEntity.validate();
+                                } catch (Exception e)
+                                {
+                                    _logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
+                                }
+
+                                createdTileEntities.add(tileEntity);
+                            }
+                        }
+                    } catch (Exception e) {
+                        _logger.error("Something went wrong!", e);
                     }
                 }
             }
         }
 
-        _logger.info("Creating Tile Entities");
-        for (NBTTagCompound entity : schematic.getTileEntityData())
+        for (final TileEntity tileEntity : createdTileEntities)
         {
-            TileEntity tileEntity = TileEntity.createAndLoadEntity(entity);
-            world.setTileEntity(tileEntity.xCoord + x, tileEntity.yCoord + y, tileEntity.zCoord + z, tileEntity);
-            tileEntity.getBlockType();
-            try
-            {
-                tileEntity.validate();
-            } catch (Exception e)
-            {
-                _logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
-            }
-
             for (ITileEntityLoadedEvent tileEntityHandler : listeners)
             {
                 if (tileEntityHandler.onTileEntityAdded(tileEntity))
@@ -145,6 +185,96 @@ public class SchematicLoader
                 }
             }
         }
+
+        c.enqueueRelightChecks();
+        c.setChunkModified();
+    }
+
+    public void renderSchematicInOneShot(ResourceLocation resource, World world, int x, int y, int z, ForgeDirection rotation, boolean flip)
+    {
+        long start = System.currentTimeMillis();
+
+        if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP)
+        {
+            _logger.error("Unable to load schematic %s, invalid rotation specified: %s", resource, rotation);
+            return;
+        }
+
+        SchematicWorld schematic = loadedSchematics.get(resource);
+        if (schematic == null)
+        {
+            _logger.error("schematic %s was not loaded", resource);
+            return;
+        }
+
+        boolean useChunkRendering = true;
+
+
+        if (useChunkRendering)
+        {
+            int chunkXStart = x >> 4;
+            int chunkXEnd = ((x + schematic.getWidth()) >> 4) + 1;
+            int chunkZStart = z >> 4;
+            int chunkZEnd = ((z + schematic.getLength()) >> 4) + 1;
+
+            for (int chunkX = chunkXStart; chunkX <= chunkXEnd; ++chunkX)
+            {
+                for (int chunkZ = chunkZStart; chunkZ <= chunkZEnd; ++chunkZ)
+                {
+                    renderSchematicToSingleChunk(resource, world, x, y, z, chunkX, chunkZ, rotation, flip);
+                }
+            }
+        } else
+        {
+
+            _logger.info(String.format("%s - Setting Blocks", System.currentTimeMillis()));
+            for (int schematicZ = 0; schematicZ < schematic.getLength(); ++schematicZ)
+            {
+                _logger.info(String.format("%s - Working at z = " + schematicZ, System.currentTimeMillis()));
+                for (int schematicX = 0; schematicX < schematic.getWidth(); ++schematicX)
+                {
+                    for (int schematicY = 0; schematicY < schematic.getHeight(); ++schematicY)
+                    {
+                        final int xPos = schematicX + x;
+                        final int yPos = schematicY + y;
+                        final int zPos = schematicZ + z;
+                        final Block block = schematic.getBlock(schematicX, schematicY, schematicZ);
+                        if (block != Blocks.air)
+                        {
+                            final int blockMetadata = schematic.getBlockMetadata(schematicX, schematicY, schematicZ);
+
+                            world.setBlock(xPos, yPos, zPos, block, blockMetadata, 2);
+                        }
+                    }
+                }
+            }
+
+            _logger.info(String.format("%s - Creating Tile Entities", System.currentTimeMillis()));
+            for (NBTTagCompound entity : schematic.getTileEntityData())
+            {
+                TileEntity tileEntity = TileEntity.createAndLoadEntity(entity);
+                world.setTileEntity(tileEntity.xCoord + x, tileEntity.yCoord + y, tileEntity.zCoord + z, tileEntity);
+                tileEntity.getBlockType();
+                try
+                {
+                    tileEntity.validate();
+                } catch (Exception e)
+                {
+                    _logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
+                }
+
+                for (ITileEntityLoadedEvent tileEntityHandler : listeners)
+                {
+                    if (tileEntityHandler.onTileEntityAdded(tileEntity))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        long end = System.currentTimeMillis();
+        _logger.info(String.format("Writing schematic took %d millis", end - start));
     }
 
     private static Logger _logger = LogManager.getLogger("SchematicLoader");
@@ -225,7 +355,6 @@ public class SchematicLoader
                 for (int z = 0; z < length; z++)
                 {
                     int index = x + (y * length + z) * width;
-                    //int index2 = y | z << 8 | x << 12;
                     blocks[index] = (short) ((localBlocks[index] & 0xFF) | (extra ? ((extraBlocks[index] & 0xFF) << 8) : 0));
                     metadata[index] = (byte) (localMetadata[index] & 0xFF);
                     if ((id = oldToNew.get(blocks[index])) != null)
@@ -236,7 +365,7 @@ public class SchematicLoader
             }
         }
 
-        List<NBTTagCompound> tileEntities = new ArrayList<NBTTagCompound>();
+        Map<WorldBlockCoord, NBTTagCompound> tileEntities = new HashMap<WorldBlockCoord, NBTTagCompound>();
         NBTTagList tileEntitiesList = tagCompound.getTagList(Names.NBT.TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < tileEntitiesList.tagCount(); i++)
@@ -244,9 +373,16 @@ public class SchematicLoader
             try
             {
                 NBTTagCompound tileEntity = (NBTTagCompound) tileEntitiesList.getCompoundTagAt(i).copy();
+
                 if (tileEntity != null)
                 {
-                    tileEntities.add(tileEntity);
+                    int x = tileEntity.getInteger("x");
+                    int y = tileEntity.getInteger("y");
+                    int z = tileEntity.getInteger("z");
+
+                    WorldBlockCoord loc = WorldBlockCoord.of(x, y, z);
+
+                    tileEntities.put(loc, tileEntity);
                 }
             } catch (Exception e)
             {
@@ -261,7 +397,7 @@ public class SchematicLoader
     {
         private short[] blocks;
         private byte[] metadata;
-        private final List<NBTTagCompound> tileEntities = new ArrayList<NBTTagCompound>();
+        private final Map<WorldBlockCoord, NBTTagCompound> tileEntities = new HashMap<WorldBlockCoord, NBTTagCompound>();
         private short width;
         private short height;
         private short length;
@@ -276,7 +412,7 @@ public class SchematicLoader
             this.length = 0;
         }
 
-        public SchematicWorld(short[] blocks, byte[] metadata, List<NBTTagCompound> tileEntities, short width, short height, short length)
+        public SchematicWorld(short[] blocks, byte[] metadata, Map<WorldBlockCoord, NBTTagCompound> tileEntities, short width, short height, short length)
         {
             this();
 
@@ -289,7 +425,7 @@ public class SchematicLoader
 
             if (tileEntities != null)
             {
-                this.tileEntities.addAll(tileEntities);
+                this.tileEntities.putAll(tileEntities);
             }
         }
 
@@ -334,9 +470,13 @@ public class SchematicLoader
             return this.height;
         }
 
-        public List<NBTTagCompound> getTileEntityData()
+        public Collection<NBTTagCompound> getTileEntityData()
         {
-            return this.tileEntities;
+            return this.tileEntities.values();
+        }
+
+        public NBTTagCompound getTileEntity(int x, int y, int z) {
+            return tileEntities.get(WorldBlockCoord.of(x, y, z));
         }
     }
 
@@ -360,4 +500,58 @@ public class SchematicLoader
     {
         boolean onTileEntityAdded(TileEntity tileEntity);
     }
+
+    public static class WorldBlockCoord implements Comparable<WorldBlockCoord>
+    {
+        private final ImmutableTriple<Integer, Integer, Integer> data;
+
+        private WorldBlockCoord(int x, int y, int z) { data = ImmutableTriple.of(x, y, z); }
+
+        public static WorldBlockCoord of(int x, int y, int z) { return new WorldBlockCoord(x, y, z); }
+
+        public int getX() { return data.left; }
+
+        public int getY() { return data.middle; }
+
+        public int getZ() { return data.right; }
+
+        @Override
+        public int hashCode()
+        {
+            return com.google.common.base.Objects.hashCode(data.left, data.middle, data.right);
+        }
+
+        @Override
+        public boolean equals(Object o)
+        {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            final WorldBlockCoord that = (WorldBlockCoord) o;
+            return data.left.equals(that.data.left)
+                    && data.middle.equals(that.data.middle)
+                    && data.right.equals(that.data.right);
+        }
+
+        @Override
+        public String toString()
+        {
+            return com.google.common.base.Objects.toStringHelper(this)
+                    .add("X", data.left)
+                    .add("Y", data.middle)
+                    .add("Z", data.right)
+                    .toString();
+        }
+
+        @Override
+        public int compareTo(WorldBlockCoord o)
+        {
+            if (data.left.equals(o.data.left)) return data.middle.equals(o.data.middle)
+                    ? data.right.compareTo(o.data.right)
+                    : data.middle.compareTo(o.data.middle);
+
+            else return data.left.compareTo(o.data.left);
+        }
+    }
+
 }
