@@ -44,21 +44,14 @@ public class Concrete extends SteamNSteelBlock{
     }
 
     @Override
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int p_149673_5_) {
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
         return textures[world.getBlockMetadata(x, y, z)];
-    }
-
-    @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack is) {
-        world.setBlockMetadataWithNotify(x, y, z, is.getItemDamage(), 2);
-        world.getBlock(x, y, z).setResistance(is.getItemDamage() * 2.0F);
-        world.getBlock(x, y, z).setHardness(is.getItemDamage() * 1.8F + 1.5F);
     }
 
     @Override
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
         world.getBlock(x, y, z).setResistance(metadata * 2.0F);
-        world.getBlock(x, y, z).setHardness(metadata * 1.8F + 1.5F);
+        world.getBlock(x, y, z).setHardness(metadata * 1.8F + 1.5F); //Changes the values the more dry it is
         return super.onBlockPlaced(world, x, y, z, side, hitX, hitY, hitZ, metadata);
     }
 
@@ -75,18 +68,18 @@ public class Concrete extends SteamNSteelBlock{
         float temp = world.getBiomeGenForCoords(x, z).temperature;
         int currentMeta = world.getBlockMetadata(x, y, z);
         if(currentMeta == 4) return;
-        int num1 = 25 + random.nextInt(15 - (int)(temp * 5));
+        int chanceToDry = 25 + random.nextInt(15 - (int)(temp * 5));
 
         if(world.isRaining()){
-            num1 *= 1.25;
+            chanceToDry *= 1.25;
         }else{
-            num1 -= 2 + random.nextInt(4);
+            chanceToDry -= 2 + random.nextInt(4);
         }
 
         if(world.canBlockSeeTheSky(x, y, z) && world.isDaytime()){
-            num1 -= 3 + random.nextInt(6);
+            chanceToDry -= 3 + random.nextInt(6);
         }else if(world.canBlockSeeTheSky(x, y, z)){
-            num1 -= 2 + random.nextInt(5);
+            chanceToDry -= 2 + random.nextInt(5);
         }
 
         int num2 = random.nextInt(5);
@@ -97,23 +90,27 @@ public class Concrete extends SteamNSteelBlock{
             int num6 = (world.getBlock(x, y, z - 1) instanceof Concrete) ? random.nextInt(3) : 0;
             int num7 = (world.getBlock(x, y + 1, z) instanceof Concrete) ? random.nextInt(3) : 0;
             int num8 = (world.getBlock(x, y - 1, z) instanceof Concrete) ? random.nextInt(3) : 0;
-            int num9 = num3 + num4;
-            int num10 = num5 + num6;
-            int num11 = num7 + num8;
+            int xBlocks = num3 + num4;
+            int zBlocks = num5 + num6;
+            int yBlocks = num7 + num8;
 
-            if(num9 - random.nextInt(3) < 2){
-                num1 /= 1.5;
+            if(xBlocks - random.nextInt(3) < 2){
+                chanceToDry /= 1.25;
             }
-            if(num10 + (num11 / (random.nextInt(3) + 1)) < 1){
-                num1 /= 1.25;
+            if(zBlocks - random.nextInt(3) < 2){
+                chanceToDry /= 1.25;
             }
-            if(num11 + num10 + num9 > 8){
-                num1 *= 2.5;
+            if(yBlocks - random.nextInt(3) < 1){
+                chanceToDry /= 1.5;
+            }
+
+            if(yBlocks + zBlocks + xBlocks > 8){
+                chanceToDry *= 2.5;
             }
         }
 
 
-        if(num1 <= 7 + random.nextInt(3)){
+        if(chanceToDry <= 7 + random.nextInt(3)){
             currentMeta++;
             world.setBlockMetadataWithNotify(x, y, z, currentMeta, 2);
             world.getBlock(x, y, z).setResistance(currentMeta * 2.0F);
