@@ -20,13 +20,12 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
+import mod.steamnsteel.block.SteamNSteelPaneBlock;
 import mod.steamnsteel.block.SteamNSteelStorageBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.block.resource.ore.*;
-import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
-import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
-import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
+import mod.steamnsteel.block.resource.structure.*;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.tileentity.PlotoniumChestTE;
 import net.minecraft.block.Block;
@@ -60,6 +59,10 @@ public final class ModBlock
     public static final SteamNSteelBlock ruinFloorPlotonium = new PlotoniumRuinFloor();
     public static final SteamNSteelBlock ruinPillarPlotonium = new PlotoniumRuinPillar();
     public static final SteamNSteelBlock ruinWallPlotonium = new PlotoniumRuinWall();
+
+    public static final SteamNSteelPaneBlock blockRustedIronBars = new RustyIronBarsBlock();
+    public static final SteamNSteelPaneBlock blockMossyIronBars = new MossyIronBarsBlock();
+    public static final SteamNSteelPaneBlock blockMossyRustyIronBars = new MossyRustyIronBarsBlock();
 
     private ModBlock()
     {
@@ -97,6 +100,9 @@ public final class ModBlock
         GameRegistry.registerBlock(ruinFloorPlotonium, PlotoniumRuinFloor.NAME);
         GameRegistry.registerBlock(ruinPillarPlotonium, PlotoniumRuinPillar.NAME);
         GameRegistry.registerBlock(ruinWallPlotonium, PlotoniumRuinWall.NAME);
+        GameRegistry.registerBlock(blockRustedIronBars, RustyIronBarsBlock.NAME);
+        GameRegistry.registerBlock(blockMossyIronBars, MossyIronBarsBlock.NAME);
+        GameRegistry.registerBlock(blockMossyRustyIronBars, MossyRustyIronBarsBlock.NAME);
     }
 
     private static void registerBlockAndOre(Block block, String name)
