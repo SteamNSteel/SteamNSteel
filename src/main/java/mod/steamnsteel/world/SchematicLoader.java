@@ -25,10 +25,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 import java.util.Objects;
 
@@ -70,6 +67,36 @@ public class SchematicLoader
                 return false;
             }
         });
+    }
+
+    public ResourceLocation loadSchematic(File file)
+    {
+        ResourceLocation schematicLocation = null;
+        try
+        {
+
+            schematicLocation = new ResourceLocation("localFile:" + file.getPath());
+
+            if (loadedSchematics.containsKey(schematicLocation))
+            {
+//                return schematicLocation;
+            }
+            _logger.info(String.format("%s - Loading schematic %s", System.currentTimeMillis(), schematicLocation));
+
+            //final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(schematicLocation);
+            SchematicWorld schematic = readFromFile(new FileInputStream(file));
+            if (schematic == null)
+            {
+                return null;
+            }
+
+            loadedSchematics.put(schematicLocation, schematic);
+            _logger.info(String.format("%s - Loaded %s [w:%d,h:%d,l:%d]", System.currentTimeMillis(), schematicLocation, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
+        } catch (IOException exception)
+        {
+            _logger.error(String.format("Unable to load %s", file.getAbsolutePath()), exception);
+        }
+        return schematicLocation;
     }
 
     public void loadSchematic(ResourceLocation schematicLocation)
@@ -149,7 +176,8 @@ public class SchematicLoader
                         final Block block = schematic.getBlock(schematicX, schematicY, schematicZ);
                         final int metadata = schematic.getBlockMetadata(schematicX, schematicY, schematicZ);
 
-                        if (c.func_150807_a(chunkLocalX, y, chunkLocalZ, block, metadata)) {
+
+                        if (block != null && c.func_150807_a(chunkLocalX, y, chunkLocalZ, block, metadata)) {
                             world.markBlockForUpdate(x, y, z);
                             final NBTTagCompound tileEntityData = schematic.getTileEntity(schematicX, schematicY, schematicZ);
                             if (block.hasTileEntity(metadata) && tileEntityData != null) {
@@ -337,6 +365,7 @@ public class SchematicLoader
 
         Short id;
         Map<Short, Short> oldToNew = new HashMap<Short, Short>();
+        short currentBadId = -1;
         if (tagCompound.hasKey(Names.NBT.MAPPING_SCHEMATICA))
         {
             NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING_SCHEMATICA);
@@ -344,7 +373,15 @@ public class SchematicLoader
             Set<String> names = mapping.func_150296_c();
             for (String name : names)
             {
-                oldToNew.put(mapping.getShort(name), (short) GameData.getBlockRegistry().getId(name));
+                if (GameData.getBlockRegistry().containsKey(name))
+                {
+                    final short id1 = (short) GameData.getBlockRegistry().getId(name);
+                    oldToNew.put(mapping.getShort(name), id1);
+                } else {
+                    //TODO: Should I be handling unknown blocks here via an event?
+                    oldToNew.put(mapping.getShort(name), currentBadId);
+                    currentBadId--;
+                }
             }
         }
 
@@ -433,10 +470,17 @@ public class SchematicLoader
         {
             if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length)
             {
-                return BLOCK_REGISTRY.getObjectById(0);
+                //return BLOCK_REGISTRY.getObjectById(0);
+                return null;
             }
             int index = x + (y * length + z) * width;
-            return BLOCK_REGISTRY.getObjectById(this.blocks[index]);
+            final short blockId = this.blocks[index];
+
+            if (!BLOCK_REGISTRY.containsId(blockId))
+            {
+                return null;
+            }
+            return BLOCK_REGISTRY.getObjectById(blockId);
         }
 
         public int getBlockMetadata(int x, int y, int z)

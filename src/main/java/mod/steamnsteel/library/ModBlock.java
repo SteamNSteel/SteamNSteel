@@ -56,7 +56,7 @@ public final class ModBlock
     public static final SteamNSteelOreBlock oreSulfur = new SulfurOre();
     public static final SteamNSteelOreBlock oreTin = new TinOre();
     public static final SteamNSteelOreBlock oreZinc = new ZincOre();
-    public static final SteamNSteelBlock ruinFloorPlotonium = new PlotoniumRuinFloor();
+    public static final SteamNSteelBlock blockSteelFloor = new SteelFloorBlock();
     public static final SteamNSteelBlock ruinPillarPlotonium = new PlotoniumRuinPillar();
     public static final SteamNSteelBlock ruinWallPlotonium = new PlotoniumRuinWall();
 
@@ -97,7 +97,7 @@ public final class ModBlock
         registerBlockAndOre(blockTin, TIN_BLOCK);
         registerBlockAndOre(blockZinc, ZINC_BLOCK);
 
-        GameRegistry.registerBlock(ruinFloorPlotonium, PlotoniumRuinFloor.NAME);
+        GameRegistry.registerBlock(blockSteelFloor, SteelFloorBlock.NAME);
         GameRegistry.registerBlock(ruinPillarPlotonium, PlotoniumRuinPillar.NAME);
         GameRegistry.registerBlock(ruinWallPlotonium, PlotoniumRuinWall.NAME);
         GameRegistry.registerBlock(blockRustedIronBars, RustyIronBarsBlock.NAME);
