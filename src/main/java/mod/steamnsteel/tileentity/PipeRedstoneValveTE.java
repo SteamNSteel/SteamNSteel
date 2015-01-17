@@ -24,7 +24,7 @@ public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntit
     }
 
     @Override
-    public boolean isDirectionConnected(ForgeDirection opposite)
+    public boolean isSideConnected(ForgeDirection opposite)
     {
         return false;
     }
