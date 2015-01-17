@@ -23,11 +23,10 @@ import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.block.SteamNSteelPaneBlock;
 import mod.steamnsteel.block.SteamNSteelStorageBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
-import mod.steamnsteel.block.machine.CupolaBlock;
+import mod.steamnsteel.block.machine.*;
 import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.structure.*;
-import mod.steamnsteel.tileentity.CupolaTE;
-import mod.steamnsteel.tileentity.PlotoniumChestTE;
+import mod.steamnsteel.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -51,6 +50,11 @@ public final class ModBlock
 
     public static final SteamNSteelBlock chestPlotonium = new PlotoniumChest();
     public static final SteamNSteelBlock cupola = new CupolaBlock();
+    public static final SteamNSteelBlock pipe = new PipeBlock();
+    public static final SteamNSteelBlock pipeValve = new PipeValveBlock();
+    public static final SteamNSteelBlock pipeRedstoneValve = new PipeRedstoneValveBlock();
+    public static final SteamNSteelBlock pipeJunction = new PipeJunctionBlock();
+
     public static final SteamNSteelOreBlock oreCopper = new CopperOre();
     public static final SteamNSteelOreBlock oreNiter = new NiterOre();
     public static final SteamNSteelOreBlock oreSulfur = new SulfurOre();
@@ -73,6 +77,11 @@ public final class ModBlock
     {
         GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
         GameRegistry.registerTileEntity(PlotoniumChestTE.class, getTEName(PlotoniumChest.NAME));
+        GameRegistry.registerTileEntity(PipeTE.class, getTEName(PipeBlock.NAME));
+        GameRegistry.registerTileEntity(PipeValveTE.class, getTEName(PipeValveBlock.NAME));
+        GameRegistry.registerTileEntity(PipeRedstoneValveTE.class, getTEName(PipeRedstoneValveBlock.NAME));
+        GameRegistry.registerTileEntity(PipeJunctionTE.class, getTEName(PipeJunctionBlock.NAME));
+
     }
 
     private static String getTEName(String name) { return "tile." + name;}
@@ -80,8 +89,11 @@ public final class ModBlock
     public static void init()
     {
         GameRegistry.registerBlock(chestPlotonium, PlotoniumChest.NAME);
-
         GameRegistry.registerBlock(cupola, CupolaBlock.NAME);
+        GameRegistry.registerBlock(pipe, PipeBlock.NAME);
+        GameRegistry.registerBlock(pipeValve, PipeValveBlock.NAME);
+        GameRegistry.registerBlock(pipeRedstoneValve, PipeRedstoneValveBlock.NAME);
+        GameRegistry.registerBlock(pipeJunction, PipeJunctionBlock.NAME);
 
         registerBlockAndOre(oreCopper, CopperOre.NAME);
         registerBlockAndOre(oreNiter, NiterOre.NAME);
