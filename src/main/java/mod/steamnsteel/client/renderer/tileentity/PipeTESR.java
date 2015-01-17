@@ -243,8 +243,11 @@ public class PipeTESR extends SteamNSteelTESR
                         model.renderPipeCornerSE();
                     } else
                     {
-                        //bindTexture(TEXTURE_ALTERNATE);
+                        bindTexture(TEXTURE_ALTERNATE);
+                        //FIXME: This should be SE, not NW, but I need a new texture/model for that.
+                        alternateModel.renderPipeCornerNW();
                         //alternateModel.renderPipeCornerSE();
+
                     }
                     break;
                 default:
