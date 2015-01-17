@@ -17,22 +17,27 @@ import org.lwjgl.opengl.GL11;
 /**
  * Created by steblo on 31/10/2014.
  */
-public class BlockHighlightEventListener {
+public class BlockHighlightEventListener
+{
 
     private BlockHighlightEventListener() {}
 
     private static BlockHighlightEventListener ourInstance = new BlockHighlightEventListener();
-    public static BlockHighlightEventListener getInstance() {
+
+    public static BlockHighlightEventListener getInstance()
+    {
         return ourInstance;
     }
 
     @SubscribeEvent
-    public void onBlockHighlightEvent(DrawBlockHighlightEvent highlightEvent) {
+    public void onBlockHighlightEvent(DrawBlockHighlightEvent highlightEvent)
+    {
         MovingObjectPosition target = highlightEvent.target;
-        if (target.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+        if (target.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
+        {
             final Minecraft minecraft = Minecraft.getMinecraft();
             EntityPlayer player = highlightEvent.player;
-            double blockReachDistance = (double)minecraft.playerController.getBlockReachDistance();
+            double blockReachDistance = (double) minecraft.playerController.getBlockReachDistance();
             World world = highlightEvent.player.worldObj;
 
             final float partialTicks = highlightEvent.partialTicks;
@@ -41,14 +46,15 @@ public class BlockHighlightEventListener {
             Vec3 vec32 = vec3.addVector(vec31.xCoord * blockReachDistance, vec31.yCoord * blockReachDistance, vec31.zCoord * blockReachDistance);
 
             WorldRaytraceIterator worldRaytraceIterator = new WorldRaytraceIterator(world, vec3, vec32);
-            while(worldRaytraceIterator.hasNext() )
+            while (worldRaytraceIterator.hasNext())
             {
                 MovingObjectPosition mop = worldRaytraceIterator.next();
                 if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
                 {
                     TileEntity tileEntity = world.getTileEntity(mop.blockX, mop.blockY, mop.blockZ);
-                    if (tileEntity instanceof ITileEntityWithParts) {
-                        ITileEntityWithParts tileEntityWithParts = (ITileEntityWithParts)tileEntity;
+                    if (tileEntity instanceof ITileEntityWithParts)
+                    {
+                        ITileEntityWithParts tileEntityWithParts = (ITileEntityWithParts) tileEntity;
 
                         Vec3 targetBlockVec = Vec3.createVectorHelper(mop.blockX, mop.blockY, mop.blockZ);
                         Vec3 vec = targetBlockVec.subtract(mop.hitVec);
@@ -56,7 +62,8 @@ public class BlockHighlightEventListener {
 
                         BlockPartConfiguration partConfiguration = tileEntityWithParts.getBlockPartConfiguration();
                         Iterable<BlockPart> parts = partConfiguration.getBlockPartsIntersecting(tileEntity, vec, lookVec);
-                        for(BlockPart part : parts) {
+                        for (BlockPart part : parts)
+                        {
                             part.renderBoundingBox(highlightEvent.player, tileEntity, highlightEvent.partialTicks);
                         }
                         highlightEvent.setCanceled(true);
@@ -82,11 +89,11 @@ public class BlockHighlightEventListener {
 
             //if (block.getMaterial() != Material.air)
             //{
-                block.setBlockBoundsBasedOnState(world, p_72731_2_.blockX, p_72731_2_.blockY, p_72731_2_.blockZ);
-            double d0 = p_72731_1_.lastTickPosX + (p_72731_1_.posX - p_72731_1_.lastTickPosX) * (double)p_72731_4_;
-                double d1 = p_72731_1_.lastTickPosY + (p_72731_1_.posY - p_72731_1_.lastTickPosY) * (double)p_72731_4_;
-                double d2 = p_72731_1_.lastTickPosZ + (p_72731_1_.posZ - p_72731_1_.lastTickPosZ) * (double)p_72731_4_;
-                RenderGlobal.drawOutlinedBoundingBox(block.getSelectedBoundingBoxFromPool(world, p_72731_2_.blockX, p_72731_2_.blockY, p_72731_2_.blockZ).expand((double) f1, (double) f1, (double) f1).getOffsetBoundingBox(-d0, -d1, -d2), -1);
+            block.setBlockBoundsBasedOnState(world, p_72731_2_.blockX, p_72731_2_.blockY, p_72731_2_.blockZ);
+            double d0 = p_72731_1_.lastTickPosX + (p_72731_1_.posX - p_72731_1_.lastTickPosX) * (double) p_72731_4_;
+            double d1 = p_72731_1_.lastTickPosY + (p_72731_1_.posY - p_72731_1_.lastTickPosY) * (double) p_72731_4_;
+            double d2 = p_72731_1_.lastTickPosZ + (p_72731_1_.posZ - p_72731_1_.lastTickPosZ) * (double) p_72731_4_;
+            RenderGlobal.drawOutlinedBoundingBox(block.getSelectedBoundingBoxFromPool(world, p_72731_2_.blockX, p_72731_2_.blockY, p_72731_2_.blockZ).expand((double) f1, (double) f1, (double) f1).getOffsetBoundingBox(-d0, -d1, -d2), -1);
             //}
 
             GL11.glDepthMask(true);

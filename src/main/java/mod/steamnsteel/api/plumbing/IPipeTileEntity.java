@@ -4,7 +4,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public interface IPipeTileEntity
 {
-    boolean isDirectionConnected(ForgeDirection opposite);
+    boolean isSideConnected(ForgeDirection opposite);
 
     boolean tryConnect(ForgeDirection opposite);
 

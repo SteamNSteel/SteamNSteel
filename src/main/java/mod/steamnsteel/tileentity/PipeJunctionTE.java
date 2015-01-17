@@ -13,7 +13,7 @@ public class PipeJunctionTE extends SteamNSteelTE implements IPipeTileEntity
     }
 
     @Override
-    public boolean isDirectionConnected(ForgeDirection opposite)
+    public boolean isSideConnected(ForgeDirection opposite)
     {
         return false;
     }
