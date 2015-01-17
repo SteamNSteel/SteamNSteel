@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lwjgl.opengl.GL11;
 
-public class CupbolaTESR extends SteamNSteelTESR
+public class CupolaTESR extends SteamNSteelTESR
 {
     public static final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
     private static final ImmutableTriple<Float, Float, Float> SCALE = ImmutableTriple.of(1.0f, 1.0f, 1.0f);

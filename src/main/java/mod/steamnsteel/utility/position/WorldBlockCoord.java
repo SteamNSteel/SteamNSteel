@@ -18,6 +18,7 @@ package mod.steamnsteel.utility.position;
 
 import com.google.common.base.Objects;
 import net.minecraft.block.Block;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -41,7 +42,7 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
 
     public int getZ() { return data.right; }
 
-    public Block getBlock(World world)
+    public Block getBlock(IBlockAccess world)
     {
         return world.getBlock(data.left, data.middle, data.right);
     }
@@ -119,4 +120,5 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
 
         else return data.left.compareTo(o.data.left);
     }
+
 }

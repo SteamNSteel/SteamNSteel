@@ -21,7 +21,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.client.renderer.model.CupolaModel;
-import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
+import mod.steamnsteel.client.renderer.tileentity.CupolaTESR;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -83,7 +83,7 @@ public class CupolaItemRenderer implements IItemRenderer
         GL11.glScalef(SCALE.left, SCALE.middle, SCALE.right);
         GL11.glTranslatef(offset.left, offset.middle, offset.right);
 
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(CupbolaTESR.TEXTURE);
+        FMLClientHandler.instance().getClient().renderEngine.bindTexture(CupolaTESR.TEXTURE);
 
         model.render();
 
