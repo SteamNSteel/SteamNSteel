@@ -1,16 +1,11 @@
 package mod.steamnsteel.utility.blockParts;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import mod.steamnsteel.tileentity.SteamNSteelTE;
-import mod.steamnsteel.utility.log.Logger;
-import mod.steamnsteel.utility.world.BadWorldRaytraceIterator;
 import mod.steamnsteel.utility.world.WorldRaytraceIterator;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
@@ -59,8 +54,6 @@ public class BlockHighlightEventListener {
                         Vec3 vec = targetBlockVec.subtract(mop.hitVec);
                         Vec3 lookVec = player.getLookVec();
 
-                        //Should this be taking into account the player???
-
                         BlockPartConfiguration partConfiguration = tileEntityWithParts.getBlockPartConfiguration();
                         Iterable<BlockPart> parts = partConfiguration.getBlockPartsIntersecting(tileEntity, vec, lookVec);
                         for(BlockPart part : parts) {
@@ -69,25 +62,8 @@ public class BlockHighlightEventListener {
                         highlightEvent.setCanceled(true);
                         break;
                     }
-//                    drawSelectionBox(world, player, mop, 0, partialTicks);
                 }
             }
-//            highlightEvent.setCanceled(true);
-            /*
-            if (tileEntity instanceof ITileEntityWithParts) {
-                ITileEntityWithParts tileEntityWithParts = (ITileEntityWithParts)tileEntity;
-
-                Vec3 lookVec = player.getLookVec();
-
-                //Should this be taking into account the player???
-
-                BlockPartConfiguration partConfiguration = tileEntityWithParts.getBlockPartConfiguration();
-                Iterable<BlockPart> parts = partConfiguration.getBlockPartsIntersecting(tileEntity, vec, lookVec);
-                for(BlockPart part : parts) {
-                    part.renderBoundingBox(highlightEvent.player, tileEntity, highlightEvent.partialTicks);
-                }
-                highlightEvent.setCanceled(true);
-            }*/
         }
     }
 

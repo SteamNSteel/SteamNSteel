@@ -136,8 +136,6 @@ public class PipeRedstoneValveBlock extends SteamNSteelBlock implements ITileEnt
                 direction = ForgeDirection.EAST;
             }
 
-            Logger.info("%s - Block Placed by - %s - %s - orientation:%s", world.isRemote ? "client" : "server", entityLiving.toString(), WorldBlockCoord.of(x, y, z), direction);
-
             te.setOrientation(direction);
             te.checkEnds();
         }

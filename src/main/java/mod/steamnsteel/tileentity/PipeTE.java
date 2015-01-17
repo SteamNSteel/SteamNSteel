@@ -132,11 +132,11 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         }
 
         if (changed) {
-            Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());
+            //Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());
             sendUpdate();
-        } else {
+        }/* else {
             Logger.info("%s - Updating block         - %s", worldObj.isRemote ? "client" : "server", toString());
-        }
+        }*/
 
         if (worldObj.isRemote) {
             recalculateVisuals();
@@ -149,7 +149,6 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
             return false;
         }
 
-        Logger.info("%s - Swapping ends          - w%s A:%s-%d and B:%s-%d", worldObj.isRemote ? "client" : "server", toString(), endA, endA == null ? -1 : endA.ordinal(), endB, endB.ordinal());
         ForgeDirection endSwap = endA;
         endA = endB;
         endB = endSwap;
@@ -157,7 +156,6 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         boolean isConnectedSwap = endAIsConnected;
         endAIsConnected = endBIsConnected;
         endBIsConnected = isConnectedSwap;
-        Logger.info("%s - Swapping ends          - w%s A:%s-%d and B:%s-%d", worldObj.isRemote ? "client" : "server", toString(), endA, endA.ordinal(), endB, endB == null ? -1 : endB.ordinal());
         return true;
     }
 
@@ -217,7 +215,6 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         } else if (endA == ForgeDirection.SOUTH && endB == ForgeDirection.EAST) {
 
         }
-        Logger.info("%s - Recalculating Visuals  - %s", "client", toString());
     }
 
     @Override
@@ -243,7 +240,6 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
 
     private void sendUpdate()
     {
-        Logger.info("%s - Notifying Block Change - %s", worldObj.isRemote ? "client" : "server", toString());
         markDirty();
         worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -283,13 +279,10 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         }
 
         if (selectedEnds == null) {
-            Logger.info("%s - Rotating Block Fail - %s", worldObj.isRemote ? "client" : "server", toString());
             return;
         }
         ForgeDirection newEndA = selectedEnds.getLeft();
         ForgeDirection newEndB = selectedEnds.getRight();
-
-        Logger.info("%s - Rotating Block - %s - new(A:%s, B:%s)", worldObj.isRemote ? "client" : "server", toString(), newEndA, newEndB);
 
         IPipeTileEntity prevEndATE;
         IPipeTileEntity newEndATE;
@@ -451,8 +444,6 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         nbt.setBoolean(NBT_END_A_CONNECTED, endAIsConnected);
         nbt.setByte(NBT_END_B, (byte)endB.ordinal());
         nbt.setBoolean(NBT_END_B_CONNECTED, endBIsConnected);
-
-        Logger.info("%s - Wrote to NBT           - %s", worldObj.isRemote ? "client" : "server", this.toString());
     }
 
     @Override
@@ -465,7 +456,6 @@ public class PipeTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntit
         endB = ForgeDirection.getOrientation(nbt.getByte(NBT_END_B));
         endBIsConnected = nbt.getBoolean(NBT_END_B_CONNECTED);
 
-        Logger.info("%s - Read from NBT          - %s", worldObj == null ? "worldObj not available" : worldObj.isRemote ? "client" : "server", toString());
         if (worldObj != null && worldObj.isRemote)
         {
             recalculateVisuals();

@@ -92,10 +92,10 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
                 }
                 return true;
             }
-            if (itemInUse != null && itemInUse.getItem() == Items.name_tag) {
+            /*if (itemInUse != null && itemInUse.getItem() == Items.name_tag) {
                 PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
                 Logger.info("%s - Entity Check - %s", world.isRemote ? "client" : "server", entity.toString());
-            }
+            }*/
         }
 
         return false;
@@ -140,8 +140,6 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
             {
                 direction = ForgeDirection.WEST;
             }
-
-            Logger.info("%s - Block Placed by - %s - %s - orientation:%s", world.isRemote ? "client" : "server", entityLiving.toString(), WorldBlockCoord.of(x, y, z), direction);
 
             te.setOrientation(direction);
             te.checkEnds();

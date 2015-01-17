@@ -97,7 +97,6 @@ public class PipeValveTE extends SteamNSteelTE implements IPipeTileEntity, ITile
 
     private void sendUpdate()
     {
-        Logger.info("%s - Notifying Block Change - %s", worldObj.isRemote ? "client" : "server", toString());
         markDirty();
         worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

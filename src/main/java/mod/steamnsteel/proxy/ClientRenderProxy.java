@@ -75,6 +75,7 @@ public class ClientRenderProxy extends RenderProxy
     }
 
     private void registerEventHandlers() {
-        MinecraftForge.EVENT_BUS.register(BlockHighlightEventListener.getInstance());
+        //FIXME: The Block Parts are not currently working.
+        //MinecraftForge.EVENT_BUS.register(BlockHighlightEventListener.getInstance());
     }
 }
