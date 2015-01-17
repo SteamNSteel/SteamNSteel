@@ -135,10 +135,10 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
 
         //So if we've made a change after all that, we need to send it to the other side.
         if (changed) {
-            Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());
+            //Logger.info("%s - Updating block-Changed - %s", worldObj.isRemote ? "client" : "server", toString());
             sendUpdate();
         } else {
-            Logger.info("%s - Updating block         - %s", worldObj.isRemote ? "client" : "server", toString());
+            //Logger.info("%s - Updating block         - %s", worldObj.isRemote ? "client" : "server", toString());
         }
 
         //We'll now update the BlockPart configuration and enable the sides that have neighbouring blocks.
