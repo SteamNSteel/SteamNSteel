@@ -66,7 +66,7 @@ public class ClientRenderProxy extends RenderProxy
         PipeRedstoneValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
         PipeJunctionBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupbolaTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeValveTE.class, new PipeValveTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeRedstoneValveTE.class, new PipeRedstoneValveTESR());
