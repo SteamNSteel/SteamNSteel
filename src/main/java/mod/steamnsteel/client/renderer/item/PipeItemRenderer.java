@@ -2,9 +2,7 @@ package mod.steamnsteel.client.renderer.item;
 
 import com.google.common.base.Objects;
 import cpw.mods.fml.client.FMLClientHandler;
-import mod.steamnsteel.client.renderer.model.CupolaModel;
 import mod.steamnsteel.client.renderer.model.PipeModel;
-import mod.steamnsteel.client.renderer.tileentity.CupbolaTESR;
 import mod.steamnsteel.client.renderer.tileentity.PipeTESR;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
