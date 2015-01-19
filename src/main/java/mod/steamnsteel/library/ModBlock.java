@@ -24,6 +24,7 @@ import mod.steamnsteel.block.SteamNSteelStorageBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.*;
 import mod.steamnsteel.block.resource.ore.*;
+import mod.steamnsteel.block.resource.structure.Concrete;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
@@ -64,6 +65,7 @@ public final class ModBlock
     public static final SteamNSteelBlock ruinFloorPlotonium = new PlotoniumRuinFloor();
     public static final SteamNSteelBlock ruinPillarPlotonium = new PlotoniumRuinPillar();
     public static final SteamNSteelBlock ruinWallPlotonium = new PlotoniumRuinWall();
+    public static final SteamNSteelBlock concrete = new Concrete();
 
 
 
@@ -111,6 +113,7 @@ public final class ModBlock
         GameRegistry.registerBlock(ruinFloorPlotonium, PlotoniumRuinFloor.NAME);
         GameRegistry.registerBlock(ruinPillarPlotonium, PlotoniumRuinPillar.NAME);
         GameRegistry.registerBlock(ruinWallPlotonium, PlotoniumRuinWall.NAME);
+        GameRegistry.registerBlock(concrete, Concrete.NAME);
     }
 
     private static void registerBlockAndOre(Block block, String name)
