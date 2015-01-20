@@ -49,7 +49,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
         textureManager.registerIcons(iconRegister);
     }
 
-    @Override
+    /*@Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
     {
         if (world.isRemote)
@@ -58,7 +58,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
             player.addChatComponentMessage(new ChatComponentText(description));
         }
         return super.onBlockActivated(world, x, y, z, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
-    }
+    }*/
 
     long[] durations = new long[10];
     int index = 0;
@@ -69,7 +69,7 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     {
         long startTime = System.currentTimeMillis();
         if (startTime - currentMillis > 1000) {
-            Logger.info("%d sides calculated in 1 seconds", sidesCalculated);
+            //Logger.info("%d sides calculated in 1 seconds", sidesCalculated);
             currentMillis = startTime;
             sidesCalculated = 0;
         }
