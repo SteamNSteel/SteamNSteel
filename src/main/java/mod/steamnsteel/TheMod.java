@@ -34,7 +34,8 @@ import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModBlockParts;
 import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.proxy.Proxies;
-import mod.steamnsteel.world.SchematicLoaderCommand;
+import mod.steamnsteel.world.LoadSchematicCommand;
+import mod.steamnsteel.world.SpawnPotatoCommand;
 import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -104,6 +105,7 @@ public class TheMod
 
     @Mod.EventHandler
     public void onServerStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new SchematicLoaderCommand());
+        event.registerServerCommand(new SpawnPotatoCommand());
+        event.registerServerCommand(new LoadSchematicCommand());
     }
 }

@@ -7,7 +7,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class SchematicLoaderCommand extends CommandBase
+public class SpawnPotatoCommand extends CommandBase
 {
 
     @Override
