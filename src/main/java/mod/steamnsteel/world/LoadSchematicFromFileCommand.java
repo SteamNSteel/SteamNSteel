@@ -10,19 +10,19 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import java.io.File;
 
-public class LoadSchematicCommand extends CommandBase
+public class LoadSchematicFromFileCommand extends CommandBase
 {
 
     @Override
     public String getCommandName()
     {
-        return "snsLoadSchematic";
+        return "snsLoadSchematicFromFile";
     }
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_)
     {
-        return "snsLoadSchematic [schematicName]";
+        return "snsLoadSchematicFromFile [schematicName]";
     }
 
     @Override
