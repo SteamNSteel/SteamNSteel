@@ -18,16 +18,25 @@ package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
+import mod.steamnsteel.texturing.wall.RuinWallTexture;
+import mod.steamnsteel.texturing.wall.SteelFloorSideTexture;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class SteelFloorBlock extends SteamNSteelBlock
 {
     public static final String NAME = "blockSteelFloor";
     public static IIcon[] floorIcons;
+    ProceduralConnectedTexture textureManager;
+
     public SteelFloorBlock()
     {
         super(Material.rock);
@@ -38,7 +47,7 @@ public class SteelFloorBlock extends SteamNSteelBlock
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
         //return super.getIcon(world, x, y, z, side);
-        if (side == ForgeDirection.UP.ordinal()) {
+        if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) {
             int xPos = x % 3;
             if (xPos < 0) xPos += 3;
             int zPos = z % 9;
@@ -47,8 +56,20 @@ public class SteelFloorBlock extends SteamNSteelBlock
             final int index = zPos * 3 + xPos;
             return floorIcons[index];
         } else {
-            return null;
+            final IIcon iconForSide = textureManager.getIconForSide(world, WorldBlockCoord.of(x, y, z), side);
+            return iconForSide;
         }
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+    {
+        if (world.isRemote)
+        {
+            String description = textureManager.describeTextureAt(world, WorldBlockCoord.of(x, y, z), side);
+            player.addChatComponentMessage(new ChatComponentText(description));
+        }
+        return super.onBlockActivated(world, x, y, z, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
     }
 
     @Override
@@ -61,5 +82,8 @@ public class SteelFloorBlock extends SteamNSteelBlock
                 floorIcons[y * 3 + x] = iconRegister.registerIcon(filename);
             }
         }
+
+        textureManager = new SteelFloorSideTexture();
+        textureManager.registerIcons(iconRegister);
     }
 }
