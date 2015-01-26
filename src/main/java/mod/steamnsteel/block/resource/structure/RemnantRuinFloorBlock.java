@@ -19,8 +19,7 @@ package mod.steamnsteel.block.resource.structure;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
-import mod.steamnsteel.texturing.wall.RuinWallTexture;
-import mod.steamnsteel.texturing.wall.SteelFloorSideTexture;
+import mod.steamnsteel.texturing.wall.RemnantRuinFloorSideTexture;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -83,7 +82,7 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
             }
         }
 
-        textureManager = new SteelFloorSideTexture();
+        textureManager = new RemnantRuinFloorSideTexture();
         textureManager.registerIcons(iconRegister);
 
         blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinFloorSide/RemnantRuinFloorSideSingle");

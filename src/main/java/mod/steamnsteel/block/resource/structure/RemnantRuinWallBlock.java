@@ -19,16 +19,12 @@ package mod.steamnsteel.block.resource.structure;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
-import mod.steamnsteel.texturing.wall.RuinWallTexture;
-import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 public class RemnantRuinWallBlock extends SteamNSteelBlock
 {
@@ -46,7 +42,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
     {
         //blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
 
-        textureManager = new RuinWallTexture();
+        textureManager = new RemnantRuinWallTexture();
         textureManager.registerIcons(iconRegister);
         blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinWall/Wall_Default");
     }

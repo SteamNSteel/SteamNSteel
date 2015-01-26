@@ -7,7 +7,7 @@ import mod.steamnsteel.texturing.api.traiticonregistry.IIconDefinitionStart;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import net.minecraft.block.Block;
 
-public class SteelFloorSideTexture extends ProceduralConnectedTexture
+public class RemnantRuinFloorSideTexture extends ProceduralConnectedTexture
 {
     @Override
     protected void registerFeatures(IFeatureRegistry features)

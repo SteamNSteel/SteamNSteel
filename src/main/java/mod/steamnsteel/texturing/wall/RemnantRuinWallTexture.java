@@ -10,7 +10,7 @@ import net.minecraft.block.Block;
 /**
  * Defines the Ruin wall texture.
  */
-public class RuinWallTexture extends ProceduralConnectedTexture
+public class RemnantRuinWallTexture extends ProceduralConnectedTexture
 {
     public static long FEATURE_PLATE_TL_CORNER;
     public static long FEATURE_PLATE_TR_CORNER;

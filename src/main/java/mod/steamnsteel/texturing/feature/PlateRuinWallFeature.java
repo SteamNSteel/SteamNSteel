@@ -1,7 +1,7 @@
 package mod.steamnsteel.texturing.feature;
 
 import mod.steamnsteel.texturing.api.*;
-import mod.steamnsteel.texturing.wall.RuinWallTexture;
+import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import java.util.*;
@@ -10,9 +10,9 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 {
     private final long FEATURE_EDGE_TOP_AND_BOTTOM;
     private final long FEATURE_EDGE_LEFT_AND_RIGHT;
-    private RuinWallTexture ruinWallTexture;
+    private RemnantRuinWallTexture ruinWallTexture;
 
-    public PlateRuinWallFeature(RuinWallTexture ruinWallTexture, Layer layer)
+    public PlateRuinWallFeature(RemnantRuinWallTexture ruinWallTexture, Layer layer)
     {
         super("Plate", layer);
         this.ruinWallTexture = ruinWallTexture;
@@ -144,7 +144,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
                     true, TextureDirection.ABOVE, TextureDirection.LEFT);
             if (!isCornerValid)
             {
-                subProperties |= RuinWallTexture.FEATURE_PLATE_TL_CORNER;
+                subProperties |= RemnantRuinWallTexture.FEATURE_PLATE_TL_CORNER;
             }
         }
         if (isAboveBlockValid && isRightBlockValid)
@@ -153,7 +153,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
                     true, TextureDirection.ABOVE, TextureDirection.RIGHT);
             if (!isCornerValid)
             {
-                subProperties |= RuinWallTexture.FEATURE_PLATE_TR_CORNER;
+                subProperties |= RemnantRuinWallTexture.FEATURE_PLATE_TR_CORNER;
             }
         }
 
@@ -163,7 +163,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
                     true, TextureDirection.BELOW, TextureDirection.LEFT);
             if (!isCornerValid)
             {
-                subProperties |= RuinWallTexture.FEATURE_PLATE_BL_CORNER;
+                subProperties |= RemnantRuinWallTexture.FEATURE_PLATE_BL_CORNER;
             }
         }
         if (isBelowBlockValid && isRightBlockValid)
@@ -173,17 +173,17 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
 
             if (!isCornerValid)
             {
-                subProperties |= RuinWallTexture.FEATURE_PLATE_BR_CORNER;
+                subProperties |= RemnantRuinWallTexture.FEATURE_PLATE_BR_CORNER;
             }
         }
 
-        final long topAndLeft = RuinWallTexture.FEATURE_EDGE_TOP | RuinWallTexture.FEATURE_EDGE_LEFT;
-        final long topAndRight = RuinWallTexture.FEATURE_EDGE_TOP | RuinWallTexture.FEATURE_EDGE_RIGHT;
+        final long topAndLeft = RemnantRuinWallTexture.FEATURE_EDGE_TOP | RemnantRuinWallTexture.FEATURE_EDGE_LEFT;
+        final long topAndRight = RemnantRuinWallTexture.FEATURE_EDGE_TOP | RemnantRuinWallTexture.FEATURE_EDGE_RIGHT;
         if ((subProperties & topAndLeft) == topAndLeft || (subProperties & topAndRight) == topAndRight)
         {
             if (request.useAlternateVersion(0.2f))
             {
-                subProperties |= RuinWallTexture.ALTERNATE;
+                subProperties |= RemnantRuinWallTexture.ALTERNATE;
             }
         }
 

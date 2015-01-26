@@ -1,7 +1,7 @@
 package mod.steamnsteel.texturing.feature;
 
 import mod.steamnsteel.texturing.api.*;
-import mod.steamnsteel.texturing.wall.RuinWallTexture;
+import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import java.util.*;
@@ -10,16 +10,16 @@ public class HorizontalMetalTearRuinWallFeature extends ProceduralWallFeatureBas
 {
     private final long plateEdgeMask;
     private final long FEATURE_EDGE_TOP_AND_BOTTOM;
-    private RuinWallTexture texture;
+    private RemnantRuinWallTexture texture;
 
-    public HorizontalMetalTearRuinWallFeature(RuinWallTexture texture, String name, Layer layer)
+    public HorizontalMetalTearRuinWallFeature(RemnantRuinWallTexture texture, String name, Layer layer)
     {
         super(name, layer);
         this.texture = texture;
-        plateEdgeMask = RuinWallTexture.FEATURE_PLATE_BL_CORNER | RuinWallTexture.FEATURE_PLATE_BR_CORNER |
-                RuinWallTexture.FEATURE_PLATE_TL_CORNER | RuinWallTexture.FEATURE_PLATE_TR_CORNER |
-                RuinWallTexture.FEATURE_EDGE_BOTTOM | RuinWallTexture.FEATURE_EDGE_LEFT |
-                RuinWallTexture.FEATURE_EDGE_RIGHT | RuinWallTexture.FEATURE_EDGE_TOP;
+        plateEdgeMask = RemnantRuinWallTexture.FEATURE_PLATE_BL_CORNER | RemnantRuinWallTexture.FEATURE_PLATE_BR_CORNER |
+                RemnantRuinWallTexture.FEATURE_PLATE_TL_CORNER | RemnantRuinWallTexture.FEATURE_PLATE_TR_CORNER |
+                RemnantRuinWallTexture.FEATURE_EDGE_BOTTOM | RemnantRuinWallTexture.FEATURE_EDGE_LEFT |
+                RemnantRuinWallTexture.FEATURE_EDGE_RIGHT | RemnantRuinWallTexture.FEATURE_EDGE_TOP;
 
         FEATURE_EDGE_TOP_AND_BOTTOM = ProceduralConnectedTexture.FEATURE_EDGE_LEFT | ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
     }
@@ -42,11 +42,11 @@ public class HorizontalMetalTearRuinWallFeature extends ProceduralWallFeatureBas
 
         if (leftBlockIsValid && rightBlockIsValid)
         {
-            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT);
-            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
-            placeCIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            plateDIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
-            plateEIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
+            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT);
+            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
+            placeCIsPresent = texture.isFeatureAtOffsetOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            plateDIsPresent = texture.isFeatureAtOffsetOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
+            plateEIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
 
             if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
             {
@@ -62,11 +62,11 @@ public class HorizontalMetalTearRuinWallFeature extends ProceduralWallFeatureBas
         final boolean leftLeftBlockIsValid = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, getLayer(), this, false, TextureDirection.LEFT, TextureDirection.LEFT);
         if (leftBlockIsValid && leftLeftBlockIsValid)
         {
-            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT, TextureDirection.LEFT);
-            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT);
-            placeCIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
-            plateDIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            plateEIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
+            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT, TextureDirection.LEFT);
+            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT, TextureDirection.LEFT);
+            placeCIsPresent = texture.isFeatureAtOffsetOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
+            plateDIsPresent = texture.isFeatureAtOffsetOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            plateEIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
 
             if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
             {
@@ -83,11 +83,11 @@ public class HorizontalMetalTearRuinWallFeature extends ProceduralWallFeatureBas
 
         if (rightBlockIsValid && rightRightBlockIsValid)
         {
-            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
-            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
-            placeCIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
-            plateDIsPresent = texture.isFeatureAtOffsetOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
-            plateEIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT, TextureDirection.RIGHT);
+            plateAIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.LEFT);
+            plateBIsPresent = texture.isFeatureAtOffsetOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false);
+            placeCIsPresent = texture.isFeatureAtOffsetOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT);
+            plateDIsPresent = texture.isFeatureAtOffsetOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT);
+            plateEIsPresent = texture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, RemnantRuinWallTexture.LAYER_PLATE, texture.featurePlate, false, TextureDirection.RIGHT, TextureDirection.RIGHT, TextureDirection.RIGHT);
 
             if (plateBIsPresent && plateDIsPresent && placeCIsPresent && plateAIsPresent && plateEIsPresent)
             {
@@ -144,7 +144,7 @@ public class HorizontalMetalTearRuinWallFeature extends ProceduralWallFeatureBas
             subProperties |= ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
         } else if (request.useAlternateVersion(1 / 7f))
         {
-            subProperties |= RuinWallTexture.ALTERNATE;
+            subProperties |= RemnantRuinWallTexture.ALTERNATE;
         }
 
         //Pipes are only a single block wide and must ignore LEFT | RIGHT edges

@@ -62,7 +62,7 @@ public final class ModBlock
     public static final SteamNSteelOreBlock oreTin = new TinOre();
     public static final SteamNSteelOreBlock oreZinc = new ZincOre();
     public static final SteamNSteelBlock remnantRuinFloor = new RemnantRuinFloorBlock();
-    public static final SteamNSteelBlock ruinPillarPlotonium = new PlotoniumRuinPillar();
+    public static final SteamNSteelBlock remnantRuinPillar = new RemnantRuinPillarBlock();
     public static final SteamNSteelBlock remnantRuinWall = new RemnantRuinWallBlock();
 
     public static final SteamNSteelPaneBlock blockRustedIronBars = new RustyIronBarsBlock();
@@ -111,7 +111,7 @@ public final class ModBlock
         registerBlockAndOre(blockZinc, ZINC_BLOCK);
 
         GameRegistry.registerBlock(remnantRuinFloor, RemnantRuinFloorBlock.NAME);
-        GameRegistry.registerBlock(ruinPillarPlotonium, PlotoniumRuinPillar.NAME);
+        GameRegistry.registerBlock(remnantRuinPillar, RemnantRuinPillarBlock.NAME);
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
         GameRegistry.registerBlock(blockRustedIronBars, RustyIronBarsBlock.NAME);
         GameRegistry.registerBlock(blockMossyIronBars, MossyIronBarsBlock.NAME);
@@ -132,6 +132,8 @@ public final class ModBlock
                 remapBlock(missingMapping, remnantRuinWall);
             } else if (missingMapping.name.equals(TheMod.MOD_ID + ":blockSteelFloor")) {
                 remapBlock(missingMapping, remnantRuinFloor);
+            } else if (missingMapping.name.equals(TheMod.MOD_ID + ":ruinPillarPlotonium")) {
+                remapBlock(missingMapping, remnantRuinPillar);
             }
         }
     }
