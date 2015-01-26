@@ -24,7 +24,7 @@ tile.steamnsteel:oreNiter.name=Nitre Ore
 tile.steamnsteel:oreSulfur.name=Sulphur Ore
 tile.steamnsteel:oreTin.name=Tin Ore
 tile.steamnsteel:oreZinc.name=Zinc Ore
-tile.steamnsteel:blockSteelFloor.name=Steel Floor
+tile.steamnsteel:remnantRuinFloor.name=Remnant Ruin Floor
 tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
 tile.steamnsteel:remnantRuinWall.name=Remnant Ruin Wall
 
