@@ -13,7 +13,7 @@ tile.steamnsteel:blockPlotonium.name=Plotonium Block
 tile.steamnsteel:blockSteel.name=Steel Block
 tile.steamnsteel:blockTin.name=Tin Block
 tile.steamnsteel:blockZinc.name=Zinc Block
-tile.steamnsteel:chestPlotonium.name=Plotonium Chest
+tile.steamnsteel:remnantRuinChest.name=Remnant Ruin Chest
 tile.steamnsteel:cupola.name=Cupola
 tile.steamnsteel:pipe.name=Pipe
 tile.steamnsteel:pipeValve.name=Valve
@@ -38,7 +38,7 @@ config.steamnsteel:retroOreGen=Should ore be generated in existing chunks? (also
 
 # Containers
 container.steamnsteel:cupola=Cupola
-container.steamnsteel:chestPlotonium.name=Plotonium Chest
+container.steamnsteel:remnantRuinChest=Remnant Ruin Chest
 
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel

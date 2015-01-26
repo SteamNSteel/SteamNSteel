@@ -20,7 +20,7 @@ import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.*;
-import mod.steamnsteel.block.container.PlotoniumChest;
+import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.block.machine.*;
 import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.structure.*;
@@ -49,7 +49,7 @@ public final class ModBlock
     public static final SteamNSteelBlock blockTin = new SteamNSteelStorageBlock(TIN_BLOCK);
     public static final SteamNSteelBlock blockZinc = new SteamNSteelStorageBlock(ZINC_BLOCK);
 
-    public static final SteamNSteelBlock chestPlotonium = new PlotoniumChest();
+    public static final SteamNSteelBlock remnantRuinChest = new RemnantRuinChestBlock();
     public static final SteamNSteelBlock cupola = new CupolaBlock();
     public static final SteamNSteelBlock pipe = new PipeBlock();
     public static final SteamNSteelBlock pipeValve = new PipeValveBlock();
@@ -77,7 +77,7 @@ public final class ModBlock
     public static void registerTileEntities()
     {
         GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
-        GameRegistry.registerTileEntity(PlotoniumChestTE.class, getTEName(PlotoniumChest.NAME));
+        GameRegistry.registerTileEntity(RemnantRuinChestTE.class, getTEName(RemnantRuinChestBlock.NAME));
         GameRegistry.registerTileEntity(PipeTE.class, getTEName(PipeBlock.NAME));
         GameRegistry.registerTileEntity(PipeValveTE.class, getTEName(PipeValveBlock.NAME));
         GameRegistry.registerTileEntity(PipeRedstoneValveTE.class, getTEName(PipeRedstoneValveBlock.NAME));
@@ -89,7 +89,7 @@ public final class ModBlock
 
     public static void init()
     {
-        GameRegistry.registerBlock(chestPlotonium, PlotoniumChest.NAME);
+        GameRegistry.registerBlock(remnantRuinChest, RemnantRuinChestBlock.NAME);
         GameRegistry.registerBlock(cupola, CupolaBlock.NAME);
         GameRegistry.registerBlock(pipe, PipeBlock.NAME);
         GameRegistry.registerBlock(pipeValve, PipeValveBlock.NAME);
@@ -134,6 +134,8 @@ public final class ModBlock
                 remapBlock(missingMapping, remnantRuinFloor);
             } else if (missingMapping.name.equals(TheMod.MOD_ID + ":ruinPillarPlotonium")) {
                 remapBlock(missingMapping, remnantRuinPillar);
+            } else if (missingMapping.name.equals(TheMod.MOD_ID  + ":plotoniumChest")) {
+                remapBlock(missingMapping, remnantRuinChest);
             }
         }
     }
