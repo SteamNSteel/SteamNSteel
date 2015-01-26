@@ -1,6 +1,6 @@
 package mod.steamnsteel.texturing.wall;
 
-import mod.steamnsteel.block.resource.structure.SteelFloorBlock;
+import mod.steamnsteel.block.resource.structure.RemnantRuinFloorBlock;
 import mod.steamnsteel.texturing.api.IconRequest;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.texturing.api.traiticonregistry.IIconDefinitionStart;
@@ -44,6 +44,6 @@ public class SteelFloorSideTexture extends ProceduralConnectedTexture
     @Override
     protected boolean isCompatibleBlock(IconRequest request, Block block)
     {
-        return (block instanceof SteelFloorBlock);
+        return (block instanceof RemnantRuinFloorBlock);
     }
 }

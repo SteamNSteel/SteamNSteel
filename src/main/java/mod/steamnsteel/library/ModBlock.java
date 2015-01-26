@@ -61,7 +61,7 @@ public final class ModBlock
     public static final SteamNSteelOreBlock oreSulfur = new SulfurOre();
     public static final SteamNSteelOreBlock oreTin = new TinOre();
     public static final SteamNSteelOreBlock oreZinc = new ZincOre();
-    public static final SteamNSteelBlock blockSteelFloor = new SteelFloorBlock();
+    public static final SteamNSteelBlock remnantRuinFloor = new RemnantRuinFloorBlock();
     public static final SteamNSteelBlock ruinPillarPlotonium = new PlotoniumRuinPillar();
     public static final SteamNSteelBlock remnantRuinWall = new RemnantRuinWallBlock();
 
@@ -110,7 +110,7 @@ public final class ModBlock
         registerBlockAndOre(blockTin, TIN_BLOCK);
         registerBlockAndOre(blockZinc, ZINC_BLOCK);
 
-        GameRegistry.registerBlock(blockSteelFloor, SteelFloorBlock.NAME);
+        GameRegistry.registerBlock(remnantRuinFloor, RemnantRuinFloorBlock.NAME);
         GameRegistry.registerBlock(ruinPillarPlotonium, PlotoniumRuinPillar.NAME);
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
         GameRegistry.registerBlock(blockRustedIronBars, RustyIronBarsBlock.NAME);
@@ -129,13 +129,20 @@ public final class ModBlock
         //These mappings are temporary and are only really present to prevent Rorax' worlds from being destroyed.
         for (FMLMissingMappingsEvent.MissingMapping missingMapping : missingMappings) {
             if (missingMapping.name.equals(TheMod.MOD_ID + ":ruinWallPlotonium")) {
-                if (missingMapping.type == GameRegistry.Type.BLOCK)
-                {
-                    missingMapping.remap(remnantRuinWall);
-                } else {
-                    missingMapping.remap(Item.getItemFromBlock(remnantRuinWall));
-                }
+                remapBlock(missingMapping, remnantRuinWall);
+            } else if (missingMapping.name.equals(TheMod.MOD_ID + ":blockSteelFloor")) {
+                remapBlock(missingMapping, remnantRuinFloor);
             }
+        }
+    }
+
+    private static void remapBlock(FMLMissingMappingsEvent.MissingMapping missingMapping, Block block)
+    {
+        if (missingMapping.type == GameRegistry.Type.BLOCK)
+        {
+            missingMapping.remap(block);
+        } else {
+            missingMapping.remap(Item.getItemFromBlock(block));
         }
     }
 }

@@ -31,13 +31,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class SteelFloorBlock extends SteamNSteelBlock
+public class RemnantRuinFloorBlock extends SteamNSteelBlock
 {
-    public static final String NAME = "blockSteelFloor";
+    public static final String NAME = "remnantRuinFloor";
     public static IIcon[] floorIcons;
     ProceduralConnectedTexture textureManager;
 
-    public SteelFloorBlock()
+    public RemnantRuinFloorBlock()
     {
         super(Material.rock);
         setBlockName(NAME);
@@ -85,5 +85,7 @@ public class SteelFloorBlock extends SteamNSteelBlock
 
         textureManager = new SteelFloorSideTexture();
         textureManager.registerIcons(iconRegister);
+
+        blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinFloorSide/RemnantRuinFloorSideSingle");
     }
 }
