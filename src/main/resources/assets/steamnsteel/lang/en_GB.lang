@@ -26,7 +26,7 @@ tile.steamnsteel:oreTin.name=Tin Ore
 tile.steamnsteel:oreZinc.name=Zinc Ore
 tile.steamnsteel:blockSteelFloor.name=Steel Floor
 tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
-tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
+tile.steamnsteel:remnantRuinWall.name=Remnant Ruin Wall
 
 # Config file comments
 config.steamnsteel:genCopper=Should copper ore be generated in new chunks?

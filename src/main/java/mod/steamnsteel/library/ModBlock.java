@@ -16,19 +16,20 @@
 
 package mod.steamnsteel.library;
 
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
-import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.block.SteamNSteelOreBlock;
-import mod.steamnsteel.block.SteamNSteelPaneBlock;
-import mod.steamnsteel.block.SteamNSteelStorageBlock;
+import mod.steamnsteel.block.*;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.*;
 import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.structure.*;
 import mod.steamnsteel.tileentity.*;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.List;
 
 import static mod.steamnsteel.block.SteamNSteelStorageBlock.*;
 
@@ -62,7 +63,7 @@ public final class ModBlock
     public static final SteamNSteelOreBlock oreZinc = new ZincOre();
     public static final SteamNSteelBlock blockSteelFloor = new SteelFloorBlock();
     public static final SteamNSteelBlock ruinPillarPlotonium = new PlotoniumRuinPillar();
-    public static final SteamNSteelBlock ruinWallPlotonium = new PlotoniumRuinWall();
+    public static final SteamNSteelBlock remnantRuinWall = new RemnantRuinWallBlock();
 
     public static final SteamNSteelPaneBlock blockRustedIronBars = new RustyIronBarsBlock();
     public static final SteamNSteelPaneBlock blockMossyIronBars = new MossyIronBarsBlock();
@@ -111,7 +112,7 @@ public final class ModBlock
 
         GameRegistry.registerBlock(blockSteelFloor, SteelFloorBlock.NAME);
         GameRegistry.registerBlock(ruinPillarPlotonium, PlotoniumRuinPillar.NAME);
-        GameRegistry.registerBlock(ruinWallPlotonium, PlotoniumRuinWall.NAME);
+        GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
         GameRegistry.registerBlock(blockRustedIronBars, RustyIronBarsBlock.NAME);
         GameRegistry.registerBlock(blockMossyIronBars, MossyIronBarsBlock.NAME);
         GameRegistry.registerBlock(blockMossyRustyIronBars, MossyRustyIronBarsBlock.NAME);
@@ -121,5 +122,20 @@ public final class ModBlock
     {
         GameRegistry.registerBlock(block, name);
         OreDictionary.registerOre(name, block);
+    }
+
+    public static void remapMissingMappings(List<FMLMissingMappingsEvent.MissingMapping> missingMappings)
+    {
+        //These mappings are temporary and are only really present to prevent Rorax' worlds from being destroyed.
+        for (FMLMissingMappingsEvent.MissingMapping missingMapping : missingMappings) {
+            if (missingMapping.name.equals(TheMod.MOD_ID + ":ruinWallPlotonium")) {
+                if (missingMapping.type == GameRegistry.Type.BLOCK)
+                {
+                    missingMapping.remap(remnantRuinWall);
+                } else {
+                    missingMapping.remap(Item.getItemFromBlock(remnantRuinWall));
+                }
+            }
+        }
     }
 }

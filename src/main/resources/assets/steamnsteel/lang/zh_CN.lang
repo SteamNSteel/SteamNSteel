@@ -20,9 +20,6 @@ tile.steamnsteel:oreNiter.name=硝石矿
 tile.steamnsteel:oreSulfur.name=硫磺矿
 tile.steamnsteel:oreTin.name=锡矿石
 tile.steamnsteel:oreZinc.name=锌矿
-tile.steamnsteel:ruinFloorPlotonium.name=遗迹地块楼
-tile.steamnsteel:ruinPillarPlotonium.name=遗迹情节支柱
-tile.steamnsteel:ruinWallPlotonium.name=遗迹绘制墙
 
 # Config file comments
 config.steamnsteel:genCopper=Should copper ore be generated in new chunks?

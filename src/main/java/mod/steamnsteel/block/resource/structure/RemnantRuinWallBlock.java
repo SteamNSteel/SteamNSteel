@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.block.resource.structure;
 
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.texturing.wall.RuinWallTexture;
@@ -29,12 +30,12 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class PlotoniumRuinWall extends SteamNSteelBlock
+public class RemnantRuinWallBlock extends SteamNSteelBlock
 {
-    public static final String NAME = "ruinWallPlotonium";
+    public static final String NAME = "remnantRuinWall";
     ProceduralConnectedTexture textureManager;
 
-    public PlotoniumRuinWall()
+    public RemnantRuinWallBlock()
     {
         super(Material.rock);
         setBlockName(NAME);
@@ -43,10 +44,11 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
     @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
-        blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
+        //blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
 
         textureManager = new RuinWallTexture();
         textureManager.registerIcons(iconRegister);
+        blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinWall/Wall_Default");
     }
 
     /*@Override
