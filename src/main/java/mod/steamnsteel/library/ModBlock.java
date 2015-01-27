@@ -66,7 +66,7 @@ public final class ModBlock
     public static final SteamNSteelBlock remnantRuinPillar = new RemnantRuinPillarBlock();
     public static final SteamNSteelBlock remnantRuinWall = new RemnantRuinWallBlock();
 
-    public static final SteamNSteelPaneBlock blockRustedIronBars = new RustyIronBarsBlock();
+    public static final SteamNSteelPaneBlock remnantRuinIronBars = new RemnantRuinIronBarsBlock();
     public static final SteamNSteelPaneBlock blockMossyIronBars = new MossyIronBarsBlock();
     public static final SteamNSteelPaneBlock blockMossyRustyIronBars = new MossyRustyIronBarsBlock();
 
@@ -114,7 +114,7 @@ public final class ModBlock
         GameRegistry.registerBlock(remnantRuinFloor, RemnantRuinFloorBlock.NAME);
         GameRegistry.registerBlock(remnantRuinPillar, RemnantRuinPillarBlock.NAME);
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
-        GameRegistry.registerBlock(blockRustedIronBars, RustyIronBarsBlock.NAME);
+        GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlock.NAME);
         GameRegistry.registerBlock(blockMossyIronBars, MossyIronBarsBlock.NAME);
         GameRegistry.registerBlock(blockMossyRustyIronBars, MossyRustyIronBarsBlock.NAME);
 
@@ -140,6 +140,8 @@ public final class ModBlock
                 remapBlock(missingMapping, remnantRuinPillar);
             } else if (missingMapping.name.equals(TheMod.MOD_ID + ":chestPlotonium")) {
                 remapBlock(missingMapping, remnantRuinChest);
+            } else if (missingMapping.name.equals(TheMod.MOD_ID + ":blockRustedIronBars")) {
+                remapBlock(missingMapping, remnantRuinIronBars);
             }
         }
     }

@@ -3,11 +3,11 @@ package mod.steamnsteel.block.resource.structure;
 import mod.steamnsteel.block.SteamNSteelPaneBlock;
 import net.minecraft.block.material.Material;
 
-public class RustyIronBarsBlock extends SteamNSteelPaneBlock
+public class RemnantRuinIronBarsBlock extends SteamNSteelPaneBlock
 {
     public static final String NAME = "ironBarsRust";
 
-    public RustyIronBarsBlock()
+    public RemnantRuinIronBarsBlock()
     {
         super(NAME, Material.iron);
 
