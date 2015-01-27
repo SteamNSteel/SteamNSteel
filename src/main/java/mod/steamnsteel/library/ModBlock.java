@@ -27,6 +27,7 @@ import mod.steamnsteel.block.resource.structure.*;
 import mod.steamnsteel.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
@@ -116,6 +117,9 @@ public final class ModBlock
         GameRegistry.registerBlock(blockRustedIronBars, RustyIronBarsBlock.NAME);
         GameRegistry.registerBlock(blockMossyIronBars, MossyIronBarsBlock.NAME);
         GameRegistry.registerBlock(blockMossyRustyIronBars, MossyRustyIronBarsBlock.NAME);
+
+        //Compat
+        TileEntity.addMapping(RemnantRuinChestTE.class, "tile.chestPlotonium");
     }
 
     private static void registerBlockAndOre(Block block, String name)
@@ -134,7 +138,7 @@ public final class ModBlock
                 remapBlock(missingMapping, remnantRuinFloor);
             } else if (missingMapping.name.equals(TheMod.MOD_ID + ":ruinPillarPlotonium")) {
                 remapBlock(missingMapping, remnantRuinPillar);
-            } else if (missingMapping.name.equals(TheMod.MOD_ID  + ":plotoniumChest")) {
+            } else if (missingMapping.name.equals(TheMod.MOD_ID + ":chestPlotonium")) {
                 remapBlock(missingMapping, remnantRuinChest);
             }
         }
