@@ -24,6 +24,7 @@ import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.block.machine.*;
 import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.structure.*;
+import mod.steamnsteel.item.resource.structure.RemnantRuinIronBarsBlockItem;
 import mod.steamnsteel.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -62,13 +63,11 @@ public final class ModBlock
     public static final SteamNSteelOreBlock oreSulfur = new SulfurOre();
     public static final SteamNSteelOreBlock oreTin = new TinOre();
     public static final SteamNSteelOreBlock oreZinc = new ZincOre();
+
     public static final SteamNSteelBlock remnantRuinFloor = new RemnantRuinFloorBlock();
     public static final SteamNSteelBlock remnantRuinPillar = new RemnantRuinPillarBlock();
     public static final SteamNSteelBlock remnantRuinWall = new RemnantRuinWallBlock();
-
     public static final SteamNSteelPaneBlock remnantRuinIronBars = new RemnantRuinIronBarsBlock();
-    public static final SteamNSteelPaneBlock blockMossyIronBars = new MossyIronBarsBlock();
-    public static final SteamNSteelPaneBlock blockMossyRustyIronBars = new MossyRustyIronBarsBlock();
 
     private ModBlock()
     {
@@ -114,9 +113,7 @@ public final class ModBlock
         GameRegistry.registerBlock(remnantRuinFloor, RemnantRuinFloorBlock.NAME);
         GameRegistry.registerBlock(remnantRuinPillar, RemnantRuinPillarBlock.NAME);
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
-        GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlock.NAME);
-        GameRegistry.registerBlock(blockMossyIronBars, MossyIronBarsBlock.NAME);
-        GameRegistry.registerBlock(blockMossyRustyIronBars, MossyRustyIronBarsBlock.NAME);
+        GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlockItem.class, RemnantRuinIronBarsBlock.NAME);
 
         //Compat
         TileEntity.addMapping(RemnantRuinChestTE.class, "tile.chestPlotonium");
@@ -140,9 +137,14 @@ public final class ModBlock
                 remapBlock(missingMapping, remnantRuinPillar);
             } else if (missingMapping.name.equals(TheMod.MOD_ID + ":chestPlotonium")) {
                 remapBlock(missingMapping, remnantRuinChest);
-            } else if (missingMapping.name.equals(TheMod.MOD_ID + ":blockRustedIronBars")) {
+            } else if (missingMapping.name.equals(TheMod.MOD_ID + ":ironBarsRust")) {
                 remapBlock(missingMapping, remnantRuinIronBars);
-            }
+            }/* else if (missingMapping.name.equals(TheMod.MOD_ID + ":ironBarsMoss")) {
+                remapBlock(missingMapping, remnantRuinIronBars);
+            } else if (missingMapping.name.equals(TheMod.MOD_ID + ":ironBarsMossRust")) {
+                remapBlock(missingMapping, remnantRuinIronBars);
+            }*/
+
         }
     }
 

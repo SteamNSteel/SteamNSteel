@@ -22,6 +22,7 @@ import mod.steamnsteel.block.machine.PipeBlock;
 import mod.steamnsteel.block.machine.PipeJunctionBlock;
 import mod.steamnsteel.block.machine.PipeRedstoneValveBlock;
 import mod.steamnsteel.block.machine.PipeValveBlock;
+import mod.steamnsteel.client.renderer.block.SteamNSteelPaneRenderer;
 import mod.steamnsteel.client.renderer.item.*;
 import mod.steamnsteel.client.renderer.tileentity.*;
 import mod.steamnsteel.library.ModBlock;
@@ -62,6 +63,8 @@ public class ClientRenderProxy extends RenderProxy
         PipeValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
         PipeRedstoneValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
         PipeJunctionBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
+
+        RenderingRegistry.registerBlockHandler(SteamNSteelPaneRenderer.INSTANCE);
 
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());
