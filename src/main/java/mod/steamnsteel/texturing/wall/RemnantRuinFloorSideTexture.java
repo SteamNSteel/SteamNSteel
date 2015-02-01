@@ -1,13 +1,13 @@
 package mod.steamnsteel.texturing.wall;
 
-import mod.steamnsteel.block.resource.structure.SteelFloorBlock;
+import mod.steamnsteel.block.resource.structure.RemnantRuinFloorBlock;
 import mod.steamnsteel.texturing.api.IconRequest;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.texturing.api.traiticonregistry.IIconDefinitionStart;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import net.minecraft.block.Block;
 
-public class SteelFloorSideTexture extends ProceduralConnectedTexture
+public class RemnantRuinFloorSideTexture extends ProceduralConnectedTexture
 {
     @Override
     protected void registerFeatures(IFeatureRegistry features)
@@ -44,6 +44,6 @@ public class SteelFloorSideTexture extends ProceduralConnectedTexture
     @Override
     protected boolean isCompatibleBlock(IconRequest request, Block block)
     {
-        return (block instanceof SteelFloorBlock);
+        return (block instanceof RemnantRuinFloorBlock);
     }
 }

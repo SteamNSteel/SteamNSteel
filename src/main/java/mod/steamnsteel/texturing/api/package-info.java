@@ -109,10 +109,10 @@ package mod.steamnsteel.texturing.api;
  * This is where you assign TraitSets to Icons. TraitSets are defined as a series of 'Or'd traitIds together. A simple
  * assignment of a texture to a TraitSet looks like this:
  *      final long plateTraitId = featurePlate.getFeatureTraitId();
- *      textures.useIconNamed("ruinWallPlotonium")
+ *      textures.useIconNamed("remnantRuinWall")
  *              .forTraitSet(DEFAULT)
  *              .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM)
- * This particular example uses the ruinWallPlotonium texture for the default texture, as well as a feature with the
+ * This particular example uses the remnantRuinWall texture for the default texture, as well as a feature with the
  * traits FEATURE_EDGE_TOP and FEATURE_EDGE_BOTTOM.
  *
  * <h1>Creating a feature</h1>

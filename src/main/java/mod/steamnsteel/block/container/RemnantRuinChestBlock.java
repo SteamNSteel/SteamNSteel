@@ -17,7 +17,7 @@
 package mod.steamnsteel.block.container;
 
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
-import mod.steamnsteel.tileentity.PlotoniumChestTE;
+import mod.steamnsteel.tileentity.RemnantRuinChestTE;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -27,11 +27,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEntityProvider
+public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
-    public static final String NAME = "chestPlotonium";
+    public static final String NAME = "remnantRuinChest";
 
-    public PlotoniumChest() {
+    public RemnantRuinChestBlock() {
         setBlockName(NAME);
         setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
     }
@@ -39,7 +39,7 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
     @Override
     public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
     {
-        final PlotoniumChestTE te = (PlotoniumChestTE) world.getTileEntity(x, y, z);
+        final RemnantRuinChestTE te = (RemnantRuinChestTE) world.getTileEntity(x, y, z);
 
         if (te != null)
         {
@@ -56,7 +56,7 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
         final TileEntity te = world.getTileEntity(x, y, z);
 
         if (!player.isSneaking())
-            if (!world.isRemote && te != null && te instanceof PlotoniumChestTE)
+            if (!world.isRemote && te != null && te instanceof RemnantRuinChestTE)
                 player.displayGUIChest((IInventory) te);
 
         return true;
@@ -65,7 +65,7 @@ public class PlotoniumChest extends SteamNSteelMachineBlock implements ITileEnti
     @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
-        return new PlotoniumChestTE();
+        return new RemnantRuinChestTE();
     }
 
     @Override

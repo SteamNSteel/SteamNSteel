@@ -17,7 +17,7 @@
 package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
-import mod.steamnsteel.block.container.PlotoniumChest;
+import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.inventory.Inventory;
 import mod.steamnsteel.library.ModBlock;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +25,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class PlotoniumChestTE extends SteamNSteelTE implements IInventory
+public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory
 {
     private static final int INVENTORY_SIZE = 27;
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
@@ -79,7 +79,7 @@ public class PlotoniumChestTE extends SteamNSteelTE implements IInventory
     @Override
     public String getInventoryName()
     {
-        return containerName(PlotoniumChest.NAME);
+        return containerName(RemnantRuinChestBlock.NAME);
     }
 
     @Override
@@ -104,14 +104,14 @@ public class PlotoniumChestTE extends SteamNSteelTE implements IInventory
     public void openInventory()
     {
         ++numUsingPlayers;
-        worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.chestPlotonium, 1, numUsingPlayers);
+        worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.remnantRuinChest, 1, numUsingPlayers);
     }
 
     @Override
     public void closeInventory()
     {
         --numUsingPlayers;
-        worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.chestPlotonium, 1, numUsingPlayers);
+        worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.remnantRuinChest, 1, numUsingPlayers);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class PlotoniumChestTE extends SteamNSteelTE implements IInventory
         ++ticksSinceSync;
         if (ticksSinceSync % 20 * 4 == 0)
         {
-            worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.chestPlotonium, 1, numUsingPlayers);
+            worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.remnantRuinChest, 1, numUsingPlayers);
         }
 
         prevLidAngle = lidAngle;

@@ -16,10 +16,10 @@
 
 package mod.steamnsteel.block.resource.structure;
 
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
-import mod.steamnsteel.texturing.wall.RuinWallTexture;
-import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.texturing.wall.RemnantRuinFloorSideTexture;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -28,28 +28,39 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class PlotoniumRuinWall extends SteamNSteelBlock
+public class RemnantRuinFloorBlock extends SteamNSteelBlock
 {
-    public static final String NAME = "ruinWallPlotonium";
+    public static final String NAME = "remnantRuinFloor";
+    public static IIcon[] floorIcons;
     ProceduralConnectedTexture textureManager;
 
-    public PlotoniumRuinWall()
+    public RemnantRuinFloorBlock()
     {
         super(Material.rock);
         setBlockName(NAME);
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
-        blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
+        //return super.getIcon(world, x, y, z, side);
+        if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) {
+            int xPos = x % 3;
+            if (xPos < 0) xPos += 3;
+            int zPos = z % 9;
+            if (zPos < 0) zPos += 9;
 
-        textureManager = new RuinWallTexture();
-        textureManager.registerIcons(iconRegister);
+            final int index = zPos * 3 + xPos;
+            return floorIcons[index];
+        } else {
+            final IIcon iconForSide = textureManager.getIconForSide(world, WorldBlockCoord.of(x, y, z), side);
+            return iconForSide;
+        }
     }
 
-    /*@Override
+    @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
     {
         if (world.isRemote)
@@ -58,38 +69,22 @@ public class PlotoniumRuinWall extends SteamNSteelBlock
             player.addChatComponentMessage(new ChatComponentText(description));
         }
         return super.onBlockActivated(world, x, y, z, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
-    }*/
+    }
 
-    long[] durations = new long[10];
-    int index = 0;
-    int sidesCalculated = 0;
-    long currentMillis;
     @Override
-    public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side)
+    public void registerBlockIcons(IIconRegister iconRegister)
     {
-        long startTime = System.currentTimeMillis();
-        if (startTime - currentMillis > 1000) {
-            //Logger.info("%d sides calculated in 1 seconds", sidesCalculated);
-            currentMillis = startTime;
-            sidesCalculated = 0;
-        }
-        final IIcon iconForSide = textureManager.getIconForSide(blockAccess, WorldBlockCoord.of(x, y, z), side);
-        long endTime = System.currentTimeMillis();
-        sidesCalculated++;
-        /*long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
-        durations[index++] = duration;
-        if (index == durations.length) {
-            index = 0;
-
-            long sum = 0;
-            for (int i = 0; i < durations.length; i++) {
-                sum += durations[i];
+        floorIcons = new IIcon[3*9];
+        for (int y = 0; y < 9; ++y) {
+            for (int x = 0; x < 3; ++x) {
+                String filename = String.format("%s:steelfloor/steelfloor_%dx%d", TheMod.MOD_ID, x + 1, y + 1);
+                floorIcons[y * 3 + x] = iconRegister.registerIcon(filename);
             }
-            //Logger.info("ProceduralWall took %f milliseconds", (sum / (float)durations.length));
-            durations = new long[100];
-        }*/
+        }
 
+        textureManager = new RemnantRuinFloorSideTexture();
+        textureManager.registerIcons(iconRegister);
 
-        return iconForSide;
+        blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinFloorSide/RemnantRuinFloorSideSingle");
     }
 }

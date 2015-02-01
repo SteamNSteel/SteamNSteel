@@ -13,16 +13,12 @@ tile.steamnsteel:blockPlotonium.name=Блок фабулония
 tile.steamnsteel:blockSteel.name=Стальной блок
 tile.steamnsteel:blockTin.name=Оловянный блок
 tile.steamnsteel:blockZinc.name=Цинковый блок
-tile.steamnsteel:chestPlotonium.name=Сундук из фабулония
 tile.steamnsteel:cupola.name=Купол
 tile.steamnsteel:oreCopper.name=Медная руда
 tile.steamnsteel:oreNiter.name=Селитровая руда
 tile.steamnsteel:oreSulfur.name=Серная руда
 tile.steamnsteel:oreTin.name=Оловянная руда
 tile.steamnsteel:oreZinc.name=Цинковая руда
-tile.steamnsteel:ruinFloorPlotonium.name=Пол из разрушенного фабулония
-tile.steamnsteel:ruinPillarPlotonium.name=Колонна из разрушенного фабулония
-tile.steamnsteel:ruinWallPlotonium.name=Стена из разрушенного фабулония
 
 # Config file comments
 config.steamnsteel:genCopper=Should copper ore be generated in new chunks?
@@ -34,7 +30,6 @@ config.steamnsteel:retroOreGen=Should ore be generated in existing chunks? (also
 
 # Containers
 container.steamnsteel:cupola=Купол
-container.steamnsteel:chestPlotonium.name=Сундук из фабулония
 
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel

@@ -19,11 +19,11 @@ package mod.steamnsteel.block.resource.structure;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import net.minecraft.block.material.Material;
 
-public class PlotoniumRuinPillar extends SteamNSteelBlock
+public class RemnantRuinPillarBlock extends SteamNSteelBlock
 {
-    public static final String NAME = "ruinPillarPlotonium";
+    public static final String NAME = "remnantRuinPillar";
 
-    public PlotoniumRuinPillar()
+    public RemnantRuinPillarBlock()
     {
         super(Material.rock);
         setBlockName(NAME);

@@ -1,6 +1,6 @@
 package mod.steamnsteel.texturing.wall;
 
-import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
+import mod.steamnsteel.block.resource.structure.RemnantRuinWallBlock;
 import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.texturing.api.traiticonregistry.IIconDefinitionStart;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
@@ -10,7 +10,7 @@ import net.minecraft.block.Block;
 /**
  * Defines the Ruin wall texture.
  */
-public class RuinWallTexture extends ProceduralConnectedTexture
+public class RemnantRuinWallTexture extends ProceduralConnectedTexture
 {
     public static long FEATURE_PLATE_TL_CORNER;
     public static long FEATURE_PLATE_TR_CORNER;
@@ -86,7 +86,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
         final long verticalMetalTearTraitId = featureVerticalMetalTear.getFeatureTraitId();
         final long longPipeTraitId = featureLongPipe.getFeatureTraitId();
 
-        textures.useIconNamed("ruinWallPlotonium")
+        textures.useIconNamed("remnantRuinWall/Wall_Default")
                 .forTraitSet(DEFAULT)
                 .andTraitSet(LEFT)
                 .andTraitSet(RIGHT)
@@ -100,37 +100,37 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT)
                 .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT | RIGHT);
 
-        textures.useIconNamed("Wall_DD1_PipeA")
+        textures.useIconNamed("remnantRuinWall/Wall_DD1_PipeA")
                 .forTraitSet(pipesTraitId | FEATURE_EDGE_TOP)
                 .andTraitSet(pipesTraitId | plateTraitId | FEATURE_EDGE_TOP)
                 .andTraitSet(LEFT | pipesTraitId | FEATURE_EDGE_TOP)
                 .andTraitSet(RIGHT | pipesTraitId | FEATURE_EDGE_TOP)
                 .andTraitSet(LEFT | RIGHT | pipesTraitId | FEATURE_EDGE_TOP);
 
-        textures.useIconNamed("Wall_DD1_PipeB")
+        textures.useIconNamed("remnantRuinWall/Wall_DD1_PipeB")
                 .forTraitSet(pipesTraitId | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(pipesTraitId | plateTraitId | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(LEFT | pipesTraitId | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(RIGHT | pipesTraitId | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(LEFT | RIGHT | pipesTraitId | FEATURE_EDGE_BOTTOM);
 
-        textures.useIconNamed("Wall_DD2_PEdgeVL")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeVL")
                 .forTraitSet(plateTraitId | FEATURE_EDGE_LEFT)
                 .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT);
 
-        textures.useIconNamed("Wall_DD2_PEdgeVR")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeVR")
                 .forTraitSet(plateTraitId | FEATURE_EDGE_RIGHT)
                 .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT);
 
-        textures.useIconNamed("Wall_DD2_PEdgeHU")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeHU")
                 .forTraitSet(plateTraitId | FEATURE_EDGE_TOP)
                 .andTraitSet(crownTraitId | TOP | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_TOP);
 
-        textures.useIconNamed("Wall_DD2_PEdgeHD")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeHD")
                 .forTraitSet(plateTraitId | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM);
 
-        textures.useIconNamed("Wall_DD2_PEdgeRDC")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeRDC")
                 .forTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BL_CORNER)
@@ -138,7 +138,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_BR_CORNER)
                 .andTraitSet(plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
 
-        textures.useIconNamed("Wall_DD2_PEdgeRUC")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeRUC")
                 .forTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
                 .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP)
                 .andTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TL_CORNER)
@@ -146,15 +146,15 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .andTraitSet(plateTraitId | RIGHT | FEATURE_EDGE_RIGHT | FEATURE_PLATE_TR_CORNER)
                 .andTraitSet(plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
 
-        textures.useIconNamed("Wall_DD2_PEdgeRUCbent")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeRUCbent")
                 .forTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE)
                 .andTraitSet(plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP | ALTERNATE | RIGHT);
 
-        textures.useIconNamed("Wall_DD2_PEdgeLUCbent")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeLUCbent")
                 .forTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE)
                 .andTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP | ALTERNATE | LEFT);
 
-        textures.useIconNamed("Wall_DD2_PEdgeLDC")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeLDC")
                 .forTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_PLATE_BR_CORNER)
@@ -162,7 +162,7 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT | FEATURE_PLATE_BL_CORNER)
                 .andTraitSet(plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
 
-        textures.useIconNamed("Wall_DD2_PEdgeLUC")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeLUC")
                 .forTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
                 .andTraitSet(plateTraitId | LEFT | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP)
                 .andTraitSet(plateTraitId | FEATURE_EDGE_LEFT | FEATURE_PLATE_TR_CORNER)
@@ -171,39 +171,39 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .andTraitSet(plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER)
                 .andTraitSet(plateTraitId | crownTraitId | TOP | LEFT | RIGHT | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
 
-        textures.useIconNamed("Wall_DD2_PEdgeInnerRDC_S")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeInnerRDC_S")
                 .forTraitSet(plateTraitId | FEATURE_PLATE_BR_CORNER);
 
-        textures.useIconNamed("Wall_DD2_PEdgeInnerRUC_S")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeInnerRUC_S")
                 .forTraitSet(plateTraitId | FEATURE_PLATE_TR_CORNER);
 
-        textures.useIconNamed("Wall_DD2_PEdgeInnerLDC_S")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeInnerLDC_S")
                 .forTraitSet(plateTraitId | FEATURE_PLATE_BL_CORNER);
 
-        textures.useIconNamed("Wall_DD2_PEdgeInnerLUC_S")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeInnerLUC_S")
                 .forTraitSet(plateTraitId | FEATURE_PLATE_TL_CORNER);
 
-        textures.useIconNamed("Wall_DD2_PEdgeInnerLURDC_S")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeInnerLURDC_S")
                 .forTraitSet(plateTraitId | FEATURE_PLATE_TL_CORNER | FEATURE_PLATE_BR_CORNER);
 
-        textures.useIconNamed("Wall_DD2_PEdgeInnerLDRUC_S")
+        textures.useIconNamed("remnantRuinWall/Wall_DD2_PEdgeInnerLDRUC_S")
                 .forTraitSet(plateTraitId | FEATURE_PLATE_BL_CORNER | FEATURE_PLATE_TR_CORNER);
 
-        textures.useIconNamed("Wall_DD3_Vent")
+        textures.useIconNamed("remnantRuinWall/Wall_DD3_Vent")
                 .forTraitSet(ventTraitId)
                 .andTraitSet(ventTraitId | LEFT)
                 .andTraitSet(ventTraitId | RIGHT)
                 .andTraitSet(ventTraitId | LEFT | RIGHT)
                 .andTraitSet(ventTraitId | plateTraitId);
 
-        textures.useIconNamed("Wall_DD4_Screen")
+        textures.useIconNamed("remnantRuinWall/Wall_DD4_Screen")
                 .forTraitSet(screenTraitId)
                 .andTraitSet(screenTraitId | LEFT)
                 .andTraitSet(screenTraitId | RIGHT)
                 .andTraitSet(screenTraitId | LEFT | RIGHT)
                 .andTraitSet(screenTraitId | plateTraitId);
 
-        textures.useIconNamed("Wall_DD5_Valve")
+        textures.useIconNamed("remnantRuinWall/Wall_DD5_Valve")
                 .forTraitSet(valveTraitId)
                 .andTraitSet(valveTraitId | LEFT)
                 .andTraitSet(valveTraitId | RIGHT)
@@ -211,21 +211,21 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .andTraitSet(valveTraitId | plateTraitId);
 
 
-        textures.useIconNamed("Wall_DDLongPipe_L")
+        textures.useIconNamed("remnantRuinWall/Wall_DDLongPipe_L")
                 .forTraitSet(horizontalMetalTearTraitId | FEATURE_EDGE_LEFT)
                 .andTraitSet(horizontalMetalTearTraitId | FEATURE_EDGE_LEFT | LEFT)
                 .andTraitSet(horizontalMetalTearTraitId | plateTraitId | FEATURE_EDGE_LEFT);
 
-        textures.useIconNamed("Wall_DDLongPipe_M")
+        textures.useIconNamed("remnantRuinWall/Wall_DDLongPipe_M")
                 .forTraitSet(horizontalMetalTearTraitId)
                 .andTraitSet(horizontalMetalTearTraitId | plateTraitId);
 
-        textures.useIconNamed("Wall_DDLongPipe_R")
+        textures.useIconNamed("remnantRuinWall/Wall_DDLongPipe_R")
                 .forTraitSet(horizontalMetalTearTraitId | FEATURE_EDGE_RIGHT)
                 .andTraitSet(horizontalMetalTearTraitId | FEATURE_EDGE_RIGHT | RIGHT)
                 .andTraitSet(horizontalMetalTearTraitId | plateTraitId | FEATURE_EDGE_RIGHT);
 
-        textures.useIconNamed("Wall_DDLongPipe_U")
+        textures.useIconNamed("remnantRuinWall/Wall_DDLongPipe_U")
                 .forTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_TOP)
                 .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_TOP | TOP)
                 .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_TOP | LEFT)
@@ -233,122 +233,120 @@ public class RuinWallTexture extends ProceduralConnectedTexture
                 .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_TOP | LEFT | RIGHT)
                 .andTraitSet(verticalMetalTearTraitId | plateTraitId | FEATURE_EDGE_TOP);
 
-        textures.useIconNamed("Wall_DDLongPipe_M2")
+        textures.useIconNamed("remnantRuinWall/Wall_DDLongPipe_M2")
                 .forTraitSet(verticalMetalTearTraitId)
                 .andTraitSet(verticalMetalTearTraitId | LEFT)
                 .andTraitSet(verticalMetalTearTraitId | RIGHT)
                 .andTraitSet(verticalMetalTearTraitId | LEFT | RIGHT)
                 .andTraitSet(verticalMetalTearTraitId | plateTraitId);
 
-        textures.useIconNamed("Wall_DDLongPipe_D")
+        textures.useIconNamed("remnantRuinWall/Wall_DDLongPipe_D")
                 .forTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_BOTTOM | BOTTOM)
                 .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_BOTTOM | LEFT)
                 .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_BOTTOM | RIGHT)
                 .andTraitSet(verticalMetalTearTraitId | FEATURE_EDGE_BOTTOM | LEFT | RIGHT)
-
-
                 .andTraitSet(verticalMetalTearTraitId | plateTraitId | FEATURE_EDGE_BOTTOM);
 
-        textures.useIconNamed("Wall_DD6_PipeCapL")
+        textures.useIconNamed("remnantRuinWall/Wall_DD6_PipeCapL")
                 .forTraitSet(longPipeTraitId | FEATURE_EDGE_LEFT)
                 .andTraitSet(longPipeTraitId | FEATURE_EDGE_LEFT | LEFT)
                 .andTraitSet(longPipeTraitId | plateTraitId | FEATURE_EDGE_LEFT);
 
-        textures.useIconNamed("Wall_DD6_PipeSec1")
+        textures.useIconNamed("remnantRuinWall/Wall_DD6_PipeSec1")
                 .forTraitSet(longPipeTraitId)
                 .andTraitSet(longPipeTraitId | plateTraitId);
 
-        textures.useIconNamed("Wall_DD6_PipeCapR")
+        textures.useIconNamed("remnantRuinWall/Wall_DD6_PipeCapR")
                 .forTraitSet(longPipeTraitId | FEATURE_EDGE_RIGHT)
                 .andTraitSet(longPipeTraitId | FEATURE_EDGE_RIGHT | RIGHT)
                 .andTraitSet(longPipeTraitId | plateTraitId | FEATURE_EDGE_RIGHT);
 
-        textures.useIconNamed("Wall_CrownM_EdgeL")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_EdgeL")
                 .forTraitSet(crownTraitId | TOP | LEFT)
                 .andTraitSet(crownTraitId | TOP | LEFT | plateTraitId | FEATURE_EDGE_TOP)
                 .andTraitSet(crownTraitId | TOP | LEFT | plateTraitId);
 
-        textures.useIconNamed("Wall_CrownM_EdgeR")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_EdgeR")
                 .forTraitSet(crownTraitId | TOP | RIGHT)
                 .andTraitSet(crownTraitId | TOP | RIGHT | plateTraitId | FEATURE_EDGE_TOP)
                 .andTraitSet(crownTraitId | TOP | RIGHT | plateTraitId);
 
-        textures.useIconNamed("Wall_CrownM_AllEdge")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_AllEdge")
                 .forTraitSet(crownTraitId | TOP | LEFT | RIGHT);
 
-        textures.useIconNamed("Wall_CrownM_Center")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_Center")
                 .forTraitSet(crownTraitId | TOP)
                 .andTraitSet(crownTraitId | TOP | plateTraitId | FEATURE_EDGE_TOP);
 
-        textures.useIconNamed("Wall_CrownM_DDPanelCL")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_DDPanelCL")
                 .forTraitSet(crownTraitId | TOP | plateTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_TOP);
 
-        textures.useIconNamed("Wall_CrownM_DDPanelCR")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_DDPanelCR")
                 .forTraitSet(crownTraitId | TOP | plateTraitId | FEATURE_EDGE_RIGHT | FEATURE_EDGE_TOP);
 
-        textures.useIconNamed("Wall_BaseM_EdgeL")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_EdgeL")
                 .forTraitSet(baseTraitId | BOTTOM | LEFT)
                 .andTraitSet(baseTraitId | BOTTOM | LEFT | plateTraitId | FEATURE_EDGE_BOTTOM);
 
-        textures.useIconNamed("Wall_BaseM_EdgeR")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_EdgeR")
                 .forTraitSet(baseTraitId | BOTTOM | RIGHT)
                 .andTraitSet(baseTraitId | BOTTOM | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM);
 
-        textures.useIconNamed("Wall_BaseM_AllEdge")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_AllEdge")
                 .forTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT);
 
-        textures.useIconNamed("Wall_BaseM_Center")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_Center")
                 .forTraitSet(baseTraitId | BOTTOM)
                 .andTraitSet(baseTraitId | BOTTOM | plateTraitId | FEATURE_EDGE_BOTTOM);
 
-        textures.useIconNamed("Wall_BaseM_DDPanelCL")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_DDPanelCL")
                 .forTraitSet(baseTraitId | BOTTOM | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
 
-        textures.useIconNamed("Wall_BaseM_DDPanelCR")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_DDPanelCR")
                 .forTraitSet(baseTraitId | BOTTOM | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
 
-        textures.useIconNamed("Wall_CrownM_EdgeL_DDPanelCL_S")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_EdgeL_DDPanelCL_S")
                 .forTraitSet(crownTraitId | TOP | LEFT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
                 .andTraitSet(crownTraitId | TOP | LEFT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
 
-        textures.useIconNamed("Wall_CrownM_EdgeL_DDPanelCR_S")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_EdgeL_DDPanelCR_S")
                 .forTraitSet(crownTraitId | TOP | LEFT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT);
 
-        textures.useIconNamed("Wall_CrownM_EdgeR_DDPanelCR_S")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_EdgeR_DDPanelCR_S")
                 .forTraitSet(crownTraitId | TOP | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
                 .andTraitSet(crownTraitId | TOP | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
 
-        textures.useIconNamed("Wall_CrownM_EdgeR_DDPanelCL_S")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_EdgeR_DDPanelCL_S")
                 .forTraitSet(crownTraitId | TOP | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT);
 
-        textures.useIconNamed("Wall_CrownM_AllEdge_DDPanelCR_S")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_AllEdge_DDPanelCR_S")
                 .forTraitSet(crownTraitId | TOP | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_RIGHT)
                 .andTraitSet(crownTraitId | TOP | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BR_CORNER);
 
-        textures.useIconNamed("Wall_CrownM_AllEdge_DDPanelCL_S")
+        textures.useIconNamed("remnantRuinWall/Wall_CrownM_AllEdge_DDPanelCL_S")
                 .forTraitSet(crownTraitId | TOP | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_LEFT)
                 .andTraitSet(crownTraitId | TOP | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_TOP | FEATURE_PLATE_BL_CORNER);
 
-        textures.useIconNamed("Wall_BaseM_EdgeL_DDPanelCL_S")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_EdgeL_DDPanelCL_S")
                 .forTraitSet(baseTraitId | BOTTOM | LEFT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
                 .andTraitSet(baseTraitId | BOTTOM | LEFT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
 
-        textures.useIconNamed("Wall_BaseM_EdgeL_DDPanelCR_S")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_EdgeL_DDPanelCR_S")
                 .forTraitSet(baseTraitId | BOTTOM | LEFT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT);
 
-        textures.useIconNamed("Wall_BaseM_EdgeR_DDPanelCL_S")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_EdgeR_DDPanelCL_S")
                 .forTraitSet(baseTraitId | BOTTOM | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT);
 
-        textures.useIconNamed("Wall_BaseM_EdgeR_DDPanelCR_S")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_EdgeR_DDPanelCR_S")
                 .forTraitSet(baseTraitId | BOTTOM | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
                 .andTraitSet(baseTraitId | BOTTOM | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
 
-        textures.useIconNamed("Wall_BaseM_AllEdge_DDPanelCR_S")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_AllEdge_DDPanelCR_S")
                 .forTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_RIGHT)
                 .andTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TR_CORNER);
 
-        textures.useIconNamed("Wall_BaseM_AllEdge_DDPanelCL_S")
+        textures.useIconNamed("remnantRuinWall/Wall_BaseM_AllEdge_DDPanelCL_S")
                 .forTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_EDGE_LEFT)
                 .andTraitSet(baseTraitId | BOTTOM | LEFT | RIGHT | plateTraitId | FEATURE_EDGE_BOTTOM | FEATURE_PLATE_TL_CORNER);
     }
@@ -357,6 +355,6 @@ public class RuinWallTexture extends ProceduralConnectedTexture
     @Override
     protected boolean isCompatibleBlock(IconRequest request, Block block)
     {
-        return (block instanceof PlotoniumRuinWall);
+        return (block instanceof RemnantRuinWallBlock);
     }
 }

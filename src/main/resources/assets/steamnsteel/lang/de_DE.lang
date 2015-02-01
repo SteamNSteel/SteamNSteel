@@ -13,16 +13,12 @@ tile.steamnsteel:blockPlotonium.name=Plotoniumblock
 tile.steamnsteel:blockSteel.name=Stahlblock
 tile.steamnsteel:blockTin.name=Zinnblock
 tile.steamnsteel:blockZinc.name=Zinkblock
-tile.steamnsteel:chestPlotonium.name=Plotoniumtruhe
 tile.steamnsteel:cupola.name=Kuppel
 tile.steamnsteel:oreCopper.name=Kupfererz
 tile.steamnsteel:oreNiter.name=Salpetererz
 tile.steamnsteel:oreSulfur.name=Schwefelerz
 tile.steamnsteel:oreTin.name=Zinnerz
 tile.steamnsteel:oreZinc.name=Zinkerz
-tile.steamnsteel:ruinFloorPlotonium.name=Verfallener Plotoniumboden
-tile.steamnsteel:ruinPillarPlotonium.name=Verfallene Plotoniumsäule
-tile.steamnsteel:ruinWallPlotonium.name=Verfallene Plotoniumwand
 
 # Config file comments
 config.steamnsteel:genCopper=Should copper ore be generated in new chunks?
@@ -34,7 +30,6 @@ config.steamnsteel:retroOreGen=Should ore be generated in existing chunks? (also
 
 # Containers
 container.steamnsteel:cupola=Kuppel
-container.steamnsteel:chestPlotonium=Plotoniumtruhe
 
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel

@@ -1,7 +1,7 @@
 package mod.steamnsteel.texturing.feature;
 
 import mod.steamnsteel.texturing.api.*;
-import mod.steamnsteel.texturing.wall.RuinWallTexture;
+import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     @Override
     public long getIncompatibleTraits()
     {
-        return ProceduralConnectedTexture.TOP | RuinWallTexture.ALTERNATE;
+        return ProceduralConnectedTexture.TOP | RemnantRuinWallTexture.ALTERNATE;
     }
 
     private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord)
