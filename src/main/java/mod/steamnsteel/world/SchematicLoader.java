@@ -99,13 +99,13 @@ public class SchematicLoader
         return schematicLocation;
     }
 
-    public void loadSchematic(ResourceLocation schematicLocation)
+    public ISchematicWorldMetadata loadSchematic(ResourceLocation schematicLocation)
     {
         try
         {
             if (loadedSchematics.containsKey(schematicLocation))
             {
-                return;
+                return loadedSchematics.get(schematicLocation);
             }
             _logger.info(String.format("%s - Loading schematic %s", System.currentTimeMillis(), schematicLocation));
 
@@ -113,15 +113,17 @@ public class SchematicLoader
             SchematicWorld schematic = readFromFile(resource.getInputStream());
             if (schematic == null)
             {
-                return;
+                return null;
             }
 
             loadedSchematics.put(schematicLocation, schematic);
             _logger.info(String.format("%s - Loaded %s [w:%d,h:%d,l:%d]", System.currentTimeMillis(), schematicLocation, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
+            return schematic;
         } catch (IOException exception)
         {
             _logger.error(String.format("Unable to load %s", schematicLocation), exception);
         }
+        return null;
     }
 
     public void renderSchematicToSingleChunk(ResourceLocation resource, World world,
@@ -430,7 +432,13 @@ public class SchematicLoader
         return new SchematicWorld(blocks, metadata, tileEntities, width, height, length);
     }
 
-    private static class SchematicWorld
+    public static interface ISchematicWorldMetadata {
+        int getWidth();
+        int getHeight();
+        int getLength();
+    }
+
+    private static class SchematicWorld implements ISchematicWorldMetadata
     {
         private short[] blocks;
         private byte[] metadata;
