@@ -4,7 +4,8 @@ import com.google.common.primitives.Doubles;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import mod.steamnsteel.TheMod;
-import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.utility.json.DimensionJsonTypeAdapter;
+import mod.steamnsteel.utility.json.RuinTypeJsonTypeAdapter;
 import mod.steamnsteel.world.WorldGen;
 import mod.steamnsteel.world.structure.remnantruins.*;
 import net.minecraft.client.Minecraft;
@@ -18,13 +19,14 @@ import org.lwjgl.util.Rectangle;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.List;
 
 public class RemnantRuinsGenerator extends StructureGenerator
 {
     private double MinimumRing = 50D;
     private double RingDistance = 100D;
     private double DistanceBetweenRuins = 500D;
+    final Dimension chunkSize = new Dimension(16, 16);
+
     private RuinRings ruinRings;
     public RemnantRuinsGenerator()
     {
@@ -37,6 +39,7 @@ public class RemnantRuinsGenerator extends StructureGenerator
     @Override
     public StructureChunkGenerator getStructureChunkToGenerate(World world, int chunkX, int chunkZ)
     {
+        //Check which of the four corners of the chunk are closest/furtherst from spawn.
         double[] distancesToCheck = {
                 Math.sqrt(Math.pow(chunkX * 16, 2) + Math.pow(chunkZ * 16, 2)),
                 Math.sqrt(Math.pow(chunkX * 16 + 15, 2) + Math.pow(chunkZ * 16, 2)),
@@ -44,6 +47,7 @@ public class RemnantRuinsGenerator extends StructureGenerator
                 Math.sqrt(Math.pow(chunkX * 16, 2) + Math.pow(chunkZ * 16 + 15, 2)),
         };
 
+        //
         double minDistance = Doubles.min(distancesToCheck);
         double maxDistance = Doubles.max(distancesToCheck);
 
@@ -52,23 +56,21 @@ public class RemnantRuinsGenerator extends StructureGenerator
         do
         {
             ruinRing = ruinRingIterator.next();
-            //Logger.info("Checking ring size: %f (maxDistance: %f)", ruinRing.ringSize, maxDistance);
-            /*if (maxDistance < ruinRing.minRuinRing)
-            {
-                break;
-            }*/
+
+            //If the chunk's minimumDistance or maximumDistance is within the ring's band
 
             if (((minDistance >= ruinRing.minRuinRing && minDistance <= ruinRing.maxRuinRing)) || ((maxDistance >= ruinRing.minRuinRing && maxDistance <= ruinRing.maxRuinRing)))
             {
-                //Logger.info("Ring is potentially valid.");
-                Rectangle chunkRect = new Rectangle(new Point(chunkX << 4, chunkZ << 4), new Dimension(16, 16));
+
+                Rectangle chunkRect = new Rectangle(new Point(chunkX << 4, chunkZ << 4), chunkSize);
+                //Check if this chunk occurs in any ruins
                 Ruin ruin = ruinRing.GetIntersectingRuin(chunkRect);
 
                 if (ruin != null)
                 {
-                    //Logger.info("Found a ruin!");
-                    Rectangle intersection = new Rectangle(ruin.location, new Dimension(16, 16));
-                    return new StructureChunkGenerator(world, chunkX, chunkZ, ruin.schematic, intersection);
+                    //If we've found a ruin, return a StructureChunkGenerator for it.
+                    Rectangle ruinLocation = new Rectangle(ruin.location, chunkSize);
+                    return new StructureChunkGenerator(world, chunkX, chunkZ, ruin.schematic, ruinLocation);
                 }
             }
         } while (ruinRing.minRuinRing < maxDistance);

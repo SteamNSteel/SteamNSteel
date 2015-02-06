@@ -2,7 +2,7 @@ package mod.steamnsteel.world.structure;
 
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.world.WorldGen;
-import mod.steamnsteel.world.structure.remnantruins.Schematic;
+import mod.steamnsteel.world.structure.remnantruins.RuinSchematic;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.util.Rectangle;
@@ -12,10 +12,10 @@ public class StructureChunkGenerator
     private final World world;
     private final int chunkX;
     private final int chunkZ;
-    private final Schematic schematic;
+    private final RuinSchematic schematic;
     private final Rectangle intersection;
 
-    public StructureChunkGenerator(World world, int chunkX, int chunkZ, Schematic schematic, Rectangle intersection)
+    public StructureChunkGenerator(World world, int chunkX, int chunkZ, RuinSchematic schematic, Rectangle intersection)
     {
         this.world = world;
 

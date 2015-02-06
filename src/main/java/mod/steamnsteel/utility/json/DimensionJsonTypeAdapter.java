@@ -1,4 +1,4 @@
-package mod.steamnsteel.world.structure.remnantruins;
+package mod.steamnsteel.utility.json;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

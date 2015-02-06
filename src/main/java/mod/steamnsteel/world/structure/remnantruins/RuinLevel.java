@@ -26,14 +26,14 @@ public class RuinLevel
         return levelName;
     }
 
-    public List<Schematic> getSchematics()
+    public List<RuinSchematic> getSchematics()
     {
         return schematics;
     }
 
     @SerializedName("KeyPoints")
     KeyPoint[] keyPoints;
-    List<Schematic> schematics;
+    List<RuinSchematic> schematics;
     @SerializedName("Schematics")
     List<String> schematicResourcesNames;
 
@@ -48,7 +48,7 @@ public class RuinLevel
         if (ruinType == RuinType.SINGLE && maxRuinSize == null) {
             int maxX = 0;
             int maxY = 0;
-            for (final Schematic schematic : schematics)
+            for (final RuinSchematic schematic : schematics)
             {
                 maxX = Math.max(maxX, schematic.schematicMetadata.getWidth());
                 maxY = Math.max(maxY, schematic.schematicMetadata.getLength());
@@ -65,12 +65,12 @@ public class RuinLevel
     public void resolveSchematicNames(SchematicLoader schematicLoader)
     {
         if (schematicResourcesNames != null) {
-            schematics = new ArrayList<Schematic>();
+            schematics = new ArrayList<RuinSchematic>();
             for (final String name : schematicResourcesNames)
             {
                 ResourceLocation location = new ResourceLocation(String.format("%s:schematics/%s.schematic", TheMod.MOD_ID, name));
                 SchematicLoader.ISchematicWorldMetadata schematic = schematicLoader.loadSchematic(location);
-                schematics.add(new Schematic(location, schematic));
+                schematics.add(new RuinSchematic(location, schematic));
             }
         }
     }

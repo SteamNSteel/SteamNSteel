@@ -1,9 +1,7 @@
 package mod.steamnsteel.world.structure.remnantruins;
 
-import org.lwjgl.util.Rectangle;
+import org.lwjgl.util.ReadableRectangle;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 
 public class RuinRing
 {
@@ -20,12 +18,12 @@ public class RuinRing
         this.maxRuinRing = maxRuinRing;
     }
 
-    public void addRuin(RuinLevel ruinLevel, int ruinLeft, int ruinTop, Schematic ruinSchematic)
+    public void addRuin(RuinLevel ruinLevel, int ruinLeft, int ruinTop, RuinSchematic ruinSchematic)
     {
         ruins.add(new Ruin(ruinLevel, ruinLeft, ruinTop, ruinSchematic));
     }
 
-    public Ruin GetIntersectingRuin(Rectangle chunkRect)
+    public Ruin GetIntersectingRuin(ReadableRectangle chunkRect)
     {
         for (final Ruin ruin : ruins)
         {
