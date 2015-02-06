@@ -70,7 +70,7 @@ public class RemnantRuinsGenerator extends StructureGenerator
                 {
                     //If we've found a ruin, return a StructureChunkGenerator for it.
                     Rectangle ruinLocation = new Rectangle(ruin.location, chunkSize);
-                    return new StructureChunkGenerator(world, chunkX, chunkZ, ruin.schematic, ruinLocation);
+                    return new StructureChunkGenerator(world, chunkX, chunkZ, ruin, ruinLocation);
                 }
             }
         } while (ruinRing.minRuinRing < maxDistance);

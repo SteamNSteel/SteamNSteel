@@ -9,6 +9,7 @@ public class Ruin
     public final RuinLevel ruinLevel;
     public final RuinSchematic schematic;
     public final Point location;
+    public Integer height;
 
     public Ruin(RuinLevel ruinLevel, int ruinX, int ruinY, RuinSchematic ruinSchematic)
     {
