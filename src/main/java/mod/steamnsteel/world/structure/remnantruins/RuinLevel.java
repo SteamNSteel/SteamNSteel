@@ -4,13 +4,18 @@ import com.google.gson.annotations.SerializedName;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.world.SchematicLoader;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.util.Point;
-import java.awt.geom.Point2D;
+import org.lwjgl.util.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RuinLevel
 {
+
+    public RuinLevel()
+    {
+        ruinType = RuinType.COMPOSITE;
+    }
+
     public KeyPoint[] getKeyPoints()
     {
         return keyPoints;
@@ -35,13 +40,27 @@ public class RuinLevel
     @SerializedName("LevelName")
     String levelName;
 
-    public Point2D.Double getMaxRuinSize()
+    @SerializedName("RuinType")
+    RuinType ruinType;
+
+    public Dimension getMaxRuinSize()
     {
+        if (ruinType == RuinType.SINGLE && maxRuinSize == null) {
+            int maxX = 0;
+            int maxY = 0;
+            for (final Schematic schematic : schematics)
+            {
+                maxX = Math.max(maxX, schematic.schematicMetadata.getWidth());
+                maxY = Math.max(maxY, schematic.schematicMetadata.getLength());
+            }
+            maxRuinSize = new Dimension(maxX, maxY);
+        }
+
         return maxRuinSize;
     }
 
     @SerializedName("MaxRuinSize")
-    Point2D.Double maxRuinSize;
+    Dimension maxRuinSize;
 
     public void resolveSchematicNames(SchematicLoader schematicLoader)
     {

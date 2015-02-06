@@ -2,24 +2,29 @@ package mod.steamnsteel.world.structure;
 
 import com.google.common.primitives.Doubles;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.world.WorldGen;
-import mod.steamnsteel.world.structure.remnantruins.RuinLevel;
-import mod.steamnsteel.world.structure.remnantruins.RuinRing;
-import mod.steamnsteel.world.structure.remnantruins.RuinRings;
+import mod.steamnsteel.world.structure.remnantruins.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.MinecraftError;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.lwjgl.util.Dimension;
+import org.lwjgl.util.Point;
+import org.lwjgl.util.Rectangle;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.List;
 
 public class RemnantRuinsGenerator extends StructureGenerator
 {
     private double MinimumRing = 50D;
     private double RingDistance = 100D;
+    private double DistanceBetweenRuins = 500D;
     private RuinRings ruinRings;
     public RemnantRuinsGenerator()
     {
@@ -42,27 +47,31 @@ public class RemnantRuinsGenerator extends StructureGenerator
         double minDistance = Doubles.min(distancesToCheck);
         double maxDistance = Doubles.max(distancesToCheck);
 
-        List<RuinRing> validRings = new LinkedList<RuinRing>();
-
         final Iterator<RuinRing> ruinRingIterator = ruinRings.iterate(world.getSeed());
-        while (true)
+        RuinRing ruinRing;
+        do
         {
-            RuinRing ruinRing = ruinRingIterator.next();
-
-            if (maxDistance < ruinRing.minRuinRing)
+            ruinRing = ruinRingIterator.next();
+            //Logger.info("Checking ring size: %f (maxDistance: %f)", ruinRing.ringSize, maxDistance);
+            /*if (maxDistance < ruinRing.minRuinRing)
             {
                 break;
-            }
+            }*/
 
             if (((minDistance >= ruinRing.minRuinRing && minDistance <= ruinRing.maxRuinRing)) || ((maxDistance >= ruinRing.minRuinRing && maxDistance <= ruinRing.maxRuinRing)))
             {
-                validRings.add(ruinRing);
-            }
-        }
+                //Logger.info("Ring is potentially valid.");
+                Rectangle chunkRect = new Rectangle(new Point(chunkX << 4, chunkZ << 4), new Dimension(16, 16));
+                Ruin ruin = ruinRing.GetIntersectingRuin(chunkRect);
 
-        if (validRings.size() == 0) {
-            return null;
-        }
+                if (ruin != null)
+                {
+                    //Logger.info("Found a ruin!");
+                    Rectangle intersection = new Rectangle(ruin.location, new Dimension(16, 16));
+                    return new StructureChunkGenerator(world, chunkX, chunkZ, ruin.schematic, intersection);
+                }
+            }
+        } while (ruinRing.minRuinRing < maxDistance);
 
         return null;
     }
@@ -71,7 +80,10 @@ public class RemnantRuinsGenerator extends StructureGenerator
     {
         try
         {
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Dimension.class, new DimensionJsonTypeAdapter())
+                    .registerTypeAdapter(RuinType.class, new RuinTypeJsonTypeAdapter())
+                    .create();
             final ResourceLocation resourceLocation = new ResourceLocation(TheMod.MOD_ID + ":schematics/RemnantRuins.json");
 
             final IResource resource;
@@ -85,7 +97,7 @@ public class RemnantRuinsGenerator extends StructureGenerator
                 ruinLevel.resolveSchematicNames(WorldGen.schematicLoader);
             }
 
-            ruinRings = new RuinRings(ruinLevels, MinimumRing, RingDistance);
+            ruinRings = new RuinRings(ruinLevels, MinimumRing, RingDistance, DistanceBetweenRuins);
         } catch (IOException e)
         {
             e.printStackTrace();

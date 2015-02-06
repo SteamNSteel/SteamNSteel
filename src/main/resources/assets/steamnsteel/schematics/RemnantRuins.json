@@ -30,6 +30,7 @@
     "Colour": "#FFDC143C",
     "LevelName": "Tier 0",
     "MaxRuinSize": "24,42",
+	"RuinType": "Single",
     "Schematics": [
       "BunkerSmall00",
       "BunkerSmall01",
@@ -77,6 +78,7 @@
     "Colour": "#FF32CD32",
     "LevelName": "Tier 1",
     "MaxRuinSize": "48,72",
+	"RuinType": "Single",
     "Schematics": [
       "BunkerMed00",
       "BunkerMed01",

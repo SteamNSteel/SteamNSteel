@@ -3,7 +3,10 @@ package mod.steamnsteel.world.structure.remnantruins;
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.Maps;
 import mod.steamnsteel.utility.BezierCurve;
+import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.world.World;
+import org.lwjgl.util.Dimension;
+import org.lwjgl.util.Point;
 import java.awt.geom.Point2D;
 import java.util.*;
 
@@ -49,45 +52,50 @@ public class RuinRings
         protected RuinRing computeNext()
         {
             ringNumber++;
-            if (cachedRings.size() < ringNumber) {
-                return cachedRings.get(ringNumber);
+            if (ringNumber < cachedRings.size()) {
+                return cachedRings.get(ringNumber - 1);
             }
 
-            double ringSize = minimumRing + ringDistance*Math.pow(1 + .50, ringNumber);
-            List<Map.Entry<RuinLevel, Double>> probabilities = GetProbabilities((int) ringSize, true);
+            Logger.info("Creating new ring: " + ringNumber);
 
+            ringNumber++;
+            double ringSize = minimumRing + ringDistance * Math.pow(1 + .50, ringNumber);
+            List<Map.Entry<RuinLevel, Double>> probabilities = GetProbabilities((int) ringSize, true);
             double maxRuinSize = 0;
             for (Map.Entry<RuinLevel, Double> pair : probabilities) {
-                final Point2D.Double maxRuinSize1 = pair.getKey().getMaxRuinSize();
-                double ruinSize = Math.sqrt(Math.pow(maxRuinSize1.x, 2) + Math.pow(maxRuinSize1.y, 2));
+                final Dimension maxRuinSize1 = pair.getKey().getMaxRuinSize();
+                double ruinSize = Math.sqrt(Math.pow(maxRuinSize1.getWidth(), 2) + Math.pow(maxRuinSize1.getHeight(), 2));
                 maxRuinSize = ruinSize > maxRuinSize ? ruinSize : maxRuinSize;
             }
 
             double minRuinRing = (ringSize - maxRuinSize / 2);
             double maxRuinRing = (ringSize + maxRuinSize / 2);
 
-            RuinRing newRing = new RuinRing(ringNumber, ringSize, minRuinRing, maxRuinRing);
-            double circumference = 2*Math.PI*ringSize;
-            int ruins = (int) (circumference/distanceBetweenRuins);
-            double angleBetweenRuins = 360.0/ruins;
-            for (double i = angleBetweenRuins/2; i < 360; i += angleBetweenRuins)
+            Random random = new Random(worldSeed ^ (int) ringSize);
+
+            RuinRing ruinRing = new RuinRing(ringSize, minRuinRing, maxRuinRing);
+
+            double circumference = 2 * Math.PI * ruinRing.ringSize;
+            int ruins = (int)(circumference / distanceBetweenRuins);
+            double angleBetweenRuins = 360.0 / ruins;
+            for (double i = angleBetweenRuins / 2; i < 360; i += angleBetweenRuins)
             {
                 RuinLevel ruinLevel = GetRandomRuinLevel(probabilities, random);
+                if (ruinLevel.schematics == null || ruinLevel.schematics.size() == 0) {
+                    continue;
+                }
+                int x = (int)(Math.sin(i * (Math.PI / 180)) * ruinRing.ringSize);
+                int y = (int)(Math.cos(i * (Math.PI / 180)) * ruinRing.ringSize);
 
-                double x = Math.sin(i * (Math.PI / 180))*ringSize;
-                double y = Math.cos(i*(Math.PI/180))*ringSize;
+                Schematic ruinSchematic = null;
+                ruinSchematic = ruinLevel.schematics.get(random.nextInt(ruinLevel.schematics.size()));
 
-                final Point2D.Double maxRuinSize1 = ruinLevel.getMaxRuinSize();
-                double ruinLeft = 0 + x - (maxRuinSize1.x/2);
-                double ruinTop = 0 + y - (maxRuinSize1.y/2);
-
-                newRing.addRuin(ruinLevel, ruinLeft, ruinTop);
+                ruinRing.addRuin(ruinLevel, x, y, ruinSchematic);
             }
 
+            cachedRings.add(ruinRing);
 
-            cachedRings.add(newRing);
-
-            return newRing;
+            return ruinRing;
         }
 
         private RuinLevel GetRandomRuinLevel(List<Map.Entry<RuinLevel, Double>> probabilities, Random r)
