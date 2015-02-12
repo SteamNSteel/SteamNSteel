@@ -22,11 +22,21 @@ import mod.steamnsteel.block.machine.PipeBlock;
 import mod.steamnsteel.block.machine.PipeJunctionBlock;
 import mod.steamnsteel.block.machine.PipeRedstoneValveBlock;
 import mod.steamnsteel.block.machine.PipeValveBlock;
+import mod.steamnsteel.client.fx.SteamParticle;
 import mod.steamnsteel.client.renderer.block.SteamNSteelPaneRenderer;
+import mod.steamnsteel.client.renderer.entity.SteamNSteelLivingRender;
 import mod.steamnsteel.client.renderer.item.*;
+import mod.steamnsteel.client.renderer.model.SteamSpiderModel;
 import mod.steamnsteel.client.renderer.tileentity.*;
+import mod.steamnsteel.entity.SteamProjectileEntity;
+import mod.steamnsteel.entity.SteamSpiderEntity;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntitySmokeFX;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -101,7 +111,8 @@ public class ClientRenderProxy extends RenderProxy
     private void registerEntityRenderers()
     {
         RenderingRegistry.registerEntityRenderingHandler(SteamSpiderEntity.class, new SteamNSteelLivingRender(new SteamSpiderModel(), SteamSpiderEntity.NAME, 0.4F));
-        RenderingRegistry.registerEntityRenderingHandler(SteamProjectileEntity.class, new Render() {
+        RenderingRegistry.registerEntityRenderingHandler(SteamProjectileEntity.class, new Render()
+        {
             @Override
             public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_) { }
 
@@ -111,6 +122,8 @@ public class ClientRenderProxy extends RenderProxy
                 return null;
             }
         }); //We have to give it a render otherwise it renders a white box
+    }
+
     private void registerEventHandlers() {
         //FIXME: The Block Parts are not currently working.
         //MinecraftForge.EVENT_BUS.register(BlockHighlightEventListener.getInstance());
