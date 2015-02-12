@@ -50,8 +50,8 @@ public class RuinLevel
             int maxY = 0;
             for (final RuinSchematic schematic : schematics)
             {
-                maxX = Math.max(maxX, schematic.schematicMetadata.getWidth());
-                maxY = Math.max(maxY, schematic.schematicMetadata.getLength());
+                maxX = Math.max(maxX, schematic.maxWidth);
+                maxY = Math.max(maxY, schematic.maxLength);
             }
             maxRuinSize = new Dimension(maxX, maxY);
         }
@@ -69,7 +69,8 @@ public class RuinLevel
             for (final String name : schematicResourcesNames)
             {
                 ResourceLocation location = new ResourceLocation(String.format("%s:schematics/%s.schematic", TheMod.MOD_ID, name));
-                SchematicLoader.ISchematicWorldMetadata schematic = schematicLoader.loadSchematic(location);
+                schematicLoader.loadSchematic(location);
+                SchematicLoader.ISchematicMetadata schematic = schematicLoader.getSchematicMetadata(location);
                 schematics.add(new RuinSchematic(location, schematic));
             }
         }

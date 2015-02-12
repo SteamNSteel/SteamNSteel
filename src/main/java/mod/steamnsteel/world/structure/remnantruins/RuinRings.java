@@ -91,13 +91,13 @@ public class RuinRings
                     continue;
                 }
                 int x = (int)(Math.sin(i * (Math.PI / 180)) * ruinRing.ringSize);
-                int y = (int)(Math.cos(i * (Math.PI / 180)) * ruinRing.ringSize);
+                int z = (int)(Math.cos(i * (Math.PI / 180)) * ruinRing.ringSize);
 
                 //Select a schematic
                 RuinSchematic ruinSchematic = ruinLevel.schematics.get(random.nextInt(ruinLevel.schematics.size()));
 
                 //Add it to the ring.
-                ruinRing.addRuin(ruinLevel, x, y, ruinSchematic);
+                ruinRing.addRuin(ruinLevel, x, z, ruinSchematic);
             }
 
             //cache the results for future chunk queries.

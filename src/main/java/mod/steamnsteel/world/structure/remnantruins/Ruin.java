@@ -11,10 +11,12 @@ public class Ruin
     public final Point location;
     public Integer height;
 
-    public Ruin(RuinLevel ruinLevel, int ruinX, int ruinY, RuinSchematic ruinSchematic)
+    public Ruin(RuinLevel ruinLevel, int ruinX, int ruinZ, RuinSchematic ruinSchematic)
     {
         this.ruinLevel = ruinLevel;
-        this.location = new Point(ruinX - ruinLevel.getMaxRuinSize().getWidth() / 2, ruinY - ruinLevel.getMaxRuinSize().getHeight() / 2);
+        this.location = new Point (
+                ruinX - ruinSchematic.schematicMetadata.getWidth() / 2 - ruinSchematic.xOffset,
+                ruinZ - ruinSchematic.schematicMetadata.getLength() / 2 - ruinSchematic.zOffset);
         this.schematic = ruinSchematic;
     }
 
