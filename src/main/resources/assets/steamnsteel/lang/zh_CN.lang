@@ -13,16 +13,12 @@ tile.steamnsteel:blockPlotonium.name=积块
 tile.steamnsteel:blockSteel.name=钢块
 tile.steamnsteel:blockTin.name=锡块
 tile.steamnsteel:blockZinc.name=锌块
-tile.steamnsteel:chestPlotonium.name=胸腔积
 tile.steamnsteel:cupola.name=冲天炉
 tile.steamnsteel:oreCopper.name=铜矿
 tile.steamnsteel:oreNiter.name=硝石矿
 tile.steamnsteel:oreSulfur.name=硫磺矿
 tile.steamnsteel:oreTin.name=锡矿石
 tile.steamnsteel:oreZinc.name=锌矿
-tile.steamnsteel:ruinFloorPlotonium.name=遗迹地块楼
-tile.steamnsteel:ruinPillarPlotonium.name=遗迹情节支柱
-tile.steamnsteel:ruinWallPlotonium.name=遗迹绘制墙
 
 # Config file comments
 config.steamnsteel:genCopper=Should copper ore be generated in new chunks?
@@ -34,7 +30,6 @@ config.steamnsteel:retroOreGen=Should ore be generated in existing chunks? (also
 
 # Containers
 container.steamnsteel:cupola=冲天炉
-container.steamnsteel:chestPlotonium.name=胸腔积
 
 # Creative Tabs
 itemGroup.steamnsteel=蒸汽和钢铁

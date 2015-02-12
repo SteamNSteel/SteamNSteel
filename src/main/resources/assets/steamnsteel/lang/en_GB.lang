@@ -13,16 +13,23 @@ tile.steamnsteel:blockPlotonium.name=Plotonium Block
 tile.steamnsteel:blockSteel.name=Steel Block
 tile.steamnsteel:blockTin.name=Tin Block
 tile.steamnsteel:blockZinc.name=Zinc Block
-tile.steamnsteel:chestPlotonium.name=Plotonium Chest
+tile.steamnsteel:remnantRuinChest.name=Remnant Ruin Chest
 tile.steamnsteel:cupola.name=Cupola
+tile.steamnsteel:pipe.name=Pipe
+tile.steamnsteel:pipeValve.name=Valve
+tile.steamnsteel:pipeRedstoneValve.name=Redstone Valve
+tile.steamnsteel:pipeJunction.name=Pipe Junction
 tile.steamnsteel:oreCopper.name=Copper Ore
 tile.steamnsteel:oreNiter.name=Nitre Ore
 tile.steamnsteel:oreSulfur.name=Sulphur Ore
 tile.steamnsteel:oreTin.name=Tin Ore
 tile.steamnsteel:oreZinc.name=Zinc Ore
-tile.steamnsteel:ruinFloorPlotonium.name=Ruined Plotonium Floor
-tile.steamnsteel:ruinPillarPlotonium.name=Ruined Plotonium Pillar
-tile.steamnsteel:ruinWallPlotonium.name=Ruined Plotonium Wall
+tile.steamnsteel:remnantRuinFloor.name=Remnant Ruin Floor
+tile.steamnsteel:remnantRuinPillar.name=Remnant Ruin Pillar
+tile.steamnsteel:remnantRuinWall.name=Remnant Ruin Wall
+tile.steamnsteel:remnantRuinIronBars_Rusted.name=Rusted Iron Bars
+tile.steamnsteel:remnantRuinIronBars_Mossy.name=Mossy Iron Bars
+tile.steamnsteel:remnantRuinIronBars_RustedMossy.name=Rusty and Mossy Iron Bars
 
 # Config file comments
 config.steamnsteel:genCopper=Should copper ore be generated in new chunks?
@@ -34,7 +41,7 @@ config.steamnsteel:retroOreGen=Should ore be generated in existing chunks? (also
 
 # Containers
 container.steamnsteel:cupola=Cupola
-container.steamnsteel:chestPlotonium.name=Plotonium Chest
+container.steamnsteel:remnantRuinChest=Remnant Ruin Chest
 
 # Creative Tabs
 itemGroup.steamnsteel=Steam and Steel

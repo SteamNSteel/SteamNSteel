@@ -1,0 +1,162 @@
+[
+  {
+    "KeyPoints": [
+      {
+        "CurveProfile": 1.0,
+        "Probability": 1.0,
+        "DistanceFromSpawn": 200
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.8,
+        "DistanceFromSpawn": 275
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.1,
+        "DistanceFromSpawn": 325
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.1,
+        "DistanceFromSpawn": 3950
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.3,
+        "DistanceFromSpawn": 4150
+      }
+    ],
+    "Colour": "#FFDC143C",
+    "LevelName": "Tier 0",
+    "MaxRuinSize": "24,42",
+	"RuinType": "Single",
+    "Schematics": [
+      "BunkerSmall00",
+      "BunkerSmall01",
+      "BunkerSmall02"
+    ]
+  },
+  {
+    "KeyPoints": [
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.0,
+        "DistanceFromSpawn": 195
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 1.0,
+        "DistanceFromSpawn": 275
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 1.0,
+        "DistanceFromSpawn": 525
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.8,
+        "DistanceFromSpawn": 950
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.2,
+        "DistanceFromSpawn": 1275
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.2,
+        "DistanceFromSpawn": 3750
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.3,
+        "DistanceFromSpawn": 3850
+      }
+    ],
+    "Colour": "#FF32CD32",
+    "LevelName": "Tier 1",
+    "MaxRuinSize": "48,72",
+	"RuinType": "Single",
+    "Schematics": [
+      "BunkerMed00",
+      "BunkerMed01",
+      "BunkerMed02"
+    ]
+  },
+  {
+    "KeyPoints": [
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.0,
+        "DistanceFromSpawn": 525
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 1.0,
+        "DistanceFromSpawn": 700
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 1.0,
+        "DistanceFromSpawn": 950
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.8,
+        "DistanceFromSpawn": 2500
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.3,
+        "DistanceFromSpawn": 3600
+      }
+    ],
+    "Colour": "#FF1E90FF",
+    "LevelName": "Tier 2",
+    "MaxRuinSize": "86,76"
+  },
+  {
+    "KeyPoints": [
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.0,
+        "DistanceFromSpawn": 1650
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 1.0,
+        "DistanceFromSpawn": 2100
+      }
+    ],
+    "Colour": "#FF800080",
+    "LevelName": "Tier 3",
+    "MaxRuinSize": "120,109"
+  },
+  {
+    "LevelName": "Potato",
+    "RuinType": "Single",
+    "Colour": "#FFFF9900",
+    "Schematics": [
+      "potato"
+    ],
+    "KeyPoints": [
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.0,
+        "DistanceFromSpawn": 2555
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.025,
+        "DistanceFromSpawn": 2600
+      },
+      {
+        "CurveProfile": 1.0,
+        "Probability": 0.0,
+        "DistanceFromSpawn": 2675
+      }
+    ]
+  }
+]

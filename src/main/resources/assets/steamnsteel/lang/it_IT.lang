@@ -13,16 +13,12 @@ tile.steamnsteel:blockPlotonium.name=Blocco di Plotonio
 tile.steamnsteel:blockSteel.name=Blocco di Acciaio
 tile.steamnsteel:blockTin.name=Blocco di Stagno
 tile.steamnsteel:blockZinc.name=Blocco di Zinco
-tile.steamnsteel:chestPlotonium.name=Cassa di Plotonio
 tile.steamnsteel:cupola.name=Cupola
 tile.steamnsteel:oreCopper.name=Rame Grezzo
 tile.steamnsteel:oreNiter.name=Salnitro Grezzo
 tile.steamnsteel:oreSulfur.name=Zolfo Grezzo
 tile.steamnsteel:oreTin.name=Stagno Grezzo
 tile.steamnsteel:oreZinc.name=Zinco Grezzo
-tile.steamnsteel:ruinFloorPlotonium.name=Pavimento di Plotonio Rovinato
-tile.steamnsteel:ruinPillarPlotonium.name=Colonna di Plotonio Rovinata
-tile.steamnsteel:ruinWallPlotonium.name=Muro di Plotonio Rovinato
 
 # Config file comments
 config.steamnsteel:genCopper=Dovrebbe il rame grezzo essere generato in nuovi chunk?
@@ -34,7 +30,6 @@ config.steamnsteel:retroOreGen=Dovrebbero i minerali grezzi essere generati in n
 
 # Containers
 container.steamnsteel:cupola=Cupola
-container.steamnsteel:chestPlotonium.name=Cassa di Plotonio
 
 # Creative Tabs
 itemGroup.steamnsteel=Vapore e Acciaio

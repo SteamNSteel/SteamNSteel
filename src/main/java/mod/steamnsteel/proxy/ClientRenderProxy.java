@@ -18,25 +18,15 @@ package mod.steamnsteel.proxy;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import mod.steamnsteel.client.fx.SteamParticle;
-import mod.steamnsteel.client.renderer.entity.SteamNSteelLivingRender;
-import mod.steamnsteel.client.renderer.item.CupolaItemRenderer;
-import mod.steamnsteel.client.renderer.item.PlotoniumChestItemRenderer;
-import mod.steamnsteel.client.renderer.model.SteamSpiderModel;
-import mod.steamnsteel.client.renderer.tileentity.CupolaTESR;
-import mod.steamnsteel.client.renderer.tileentity.PlotoniumChestTESR;
-import mod.steamnsteel.client.renderer.tileentity.SpiderFactoryTESR;
-import mod.steamnsteel.entity.SteamProjectileEntity;
-import mod.steamnsteel.entity.SteamSpiderEntity;
+import mod.steamnsteel.block.machine.PipeBlock;
+import mod.steamnsteel.block.machine.PipeJunctionBlock;
+import mod.steamnsteel.block.machine.PipeRedstoneValveBlock;
+import mod.steamnsteel.block.machine.PipeValveBlock;
+import mod.steamnsteel.client.renderer.block.SteamNSteelPaneRenderer;
+import mod.steamnsteel.client.renderer.item.*;
+import mod.steamnsteel.client.renderer.tileentity.*;
 import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.tileentity.CupolaTE;
-import mod.steamnsteel.tileentity.PlotoniumChestTE;
-import mod.steamnsteel.tileentity.SpiderFactoryTE;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.particle.EntitySmokeFX;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
+import mod.steamnsteel.tileentity.*;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -51,6 +41,7 @@ public class ClientRenderProxy extends RenderProxy
         registerEntityRenderers();
         registerItemRenderers();
         registerTESRs();
+        registerEventHandlers();
     }
 
     @Override
@@ -82,13 +73,28 @@ public class ClientRenderProxy extends RenderProxy
     private void registerItemRenderers()
     {
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.cupola), new CupolaItemRenderer());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.chestPlotonium), new PlotoniumChestItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipe), new PipeItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeValve), new PipeValveItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeRedstoneValve), new PipeRedstoneValveItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeJunction), new PipeJunctionItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinChest), new PlotoniumChestItemRenderer());
     }
 
     private void registerTESRs()
     {
+        PipeBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
+        PipeValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
+        PipeRedstoneValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
+        PipeJunctionBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
+
+        RenderingRegistry.registerBlockHandler(SteamNSteelPaneRenderer.INSTANCE);
+
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupolaTESR());
-        ClientRegistry.bindTileEntitySpecialRenderer(PlotoniumChestTE.class, new PlotoniumChestTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(PipeValveTE.class, new PipeValveTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(PipeRedstoneValveTE.class, new PipeRedstoneValveTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(PipeJunctionTE.class, new PipeJunctionTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(RemnantRuinChestTE.class, new PlotoniumChestTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(SpiderFactoryTE.class, new SpiderFactoryTESR());
     }
 
@@ -105,5 +111,8 @@ public class ClientRenderProxy extends RenderProxy
                 return null;
             }
         }); //We have to give it a render otherwise it renders a white box
+    private void registerEventHandlers() {
+        //FIXME: The Block Parts are not currently working.
+        //MinecraftForge.EVENT_BUS.register(BlockHighlightEventListener.getInstance());
     }
 }

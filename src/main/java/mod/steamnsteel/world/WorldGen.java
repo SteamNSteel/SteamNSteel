@@ -24,8 +24,12 @@ import mod.steamnsteel.world.ore.NiterOreGenerator;
 import mod.steamnsteel.world.ore.OreGenerator;
 import mod.steamnsteel.world.ore.RetroGenHandler;
 import mod.steamnsteel.world.ore.SulfurOreGenerator;
+import mod.steamnsteel.world.structure.RemnantRuinsGenerator;
+import mod.steamnsteel.world.structure.StructureChunkGenerator;
+import mod.steamnsteel.world.structure.StructureGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.OreGenEvent;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import java.util.List;
 
@@ -36,15 +40,22 @@ public enum WorldGen
     INSTANCE;
 
     private static final List<OreGenerator> oreGens = Lists.newArrayList();
+    private static final List<StructureGenerator> structureGens = Lists.newArrayList();
+
+    public static final SchematicLoader schematicLoader = new SchematicLoader();
 
     public static void init()
     {
         createOreGenerators();
+        createStructureGenerators();
         register();
         RetroGenHandler.register();
     }
 
-    private static void register() { MinecraftForge.ORE_GEN_BUS.register(INSTANCE); }
+    private static void register() {
+        MinecraftForge.ORE_GEN_BUS.register(INSTANCE);
+        MinecraftForge.EVENT_BUS.register(INSTANCE);
+    }
 
     private static void createOreGenerators()
     {
@@ -75,6 +86,11 @@ public enum WorldGen
         }
     }
 
+    private static void createStructureGenerators() {
+        final RemnantRuinsGenerator ruinsGenerator = new RemnantRuinsGenerator();
+        structureGens.add(ruinsGenerator);
+    }
+
     @SuppressWarnings("MethodMayBeStatic")
     @SubscribeEvent
     public void OnPostOreGenerated(OreGenEvent.Post event)
@@ -82,5 +98,18 @@ public enum WorldGen
         for (final OreGenerator oreGen : oreGens)
             if (TerrainGen.generateOre(event.world, event.rand, oreGen, event.worldX, event.worldZ, CUSTOM))
                 oreGen.generate(event.world, event.rand, event.worldX, 0, event.worldZ);
+    }
+
+    @SubscribeEvent
+    public void OnPostPopulateChunkEvent(PopulateChunkEvent.Post event) {
+        if (event.hasVillageGenerated) {
+            return;
+        }
+        for (final StructureGenerator structureGen : structureGens) {
+            StructureChunkGenerator structureToGenerate = structureGen.getStructureChunkToGenerate(event.world, event.chunkX, event.chunkZ);
+            if (structureToGenerate != null) {
+                structureToGenerate.generate();
+            }
+        }
     }
 }

@@ -19,10 +19,7 @@ package mod.steamnsteel;
 import com.google.common.base.Optional;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import mod.steamnsteel.api.crafting.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
@@ -34,9 +31,12 @@ import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.gui.GuiHandler;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModEntity;
+import mod.steamnsteel.library.ModBlockParts;
 import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.proxy.Proxies;
 import mod.steamnsteel.utility.event.ServerEventHandler;
+import mod.steamnsteel.world.LoadSchematicFromFileCommand;
+import mod.steamnsteel.world.LoadSchematicFromResourceCommand;
 import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -81,6 +81,7 @@ public class TheMod
         ServerEventHandler serverEventHandler = new ServerEventHandler();
         FMLCommonHandler.instance().bus().register(serverEventHandler);
         MinecraftForge.EVENT_BUS.register(serverEventHandler);
+        ModBlockParts.init();
     }
 
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
@@ -110,9 +111,15 @@ public class TheMod
     }
 
     @Mod.EventHandler
-    public void serverStarting(FMLServerStartingEvent e)
-    {
-        e.registerServerCommand(new CommandSpawnEntity());
-        e.registerServerCommand(new CommandCreateSwarm());
+    public void onServerStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new LoadSchematicFromResourceCommand());
+        event.registerServerCommand(new LoadSchematicFromFileCommand());
+        event.registerServerCommand(new CommandSpawnEntity());
+        event.registerServerCommand(new CommandCreateSwarm());
+    }
+
+    @Mod.EventHandler
+    public void onMissingMappings(FMLMissingMappingsEvent event) {
+        ModBlock.remapMissingMappings(event.get());
     }
 }
