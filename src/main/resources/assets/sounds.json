@@ -1,0 +1,11 @@
+{
+  "block.welding": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "block/welding",
+        "stream": true
+      }
+    ]
+  }
+}

@@ -46,9 +46,9 @@ public class SpiderFactoryEntity extends EntityMob {
 
     private void setRotationAndSize(ForgeDirection dir) {
         //TODO this kinda needs to be fixed :/
-        this.boundingBox.maxX = this.boundingBox.minX + (width * (dir.offsetX + 1));
+/*        this.boundingBox.maxX = this.boundingBox.minX + (width * (dir.offsetX + 1));
         this.boundingBox.maxZ = this.boundingBox.minZ + (width * (dir.offsetZ + 1));
-        this.boundingBox.maxY = this.boundingBox.minY + height;
+        this.boundingBox.maxY = this.boundingBox.minY + height;*/
     }
 
     @Override
@@ -57,5 +57,20 @@ public class SpiderFactoryEntity extends EntityMob {
     }
 
     @Override
-    protected void collideWithEntity(Entity p_82167_1_) {}
+    public boolean canBeCollidedWith()
+    {
+        return true;
+    }
+
+    @Override
+    protected void collideWithEntity(Entity entity)
+    {
+        super.collideWithEntity(entity);
+    }
+
+    @Override
+    public void addVelocity(double p_70024_1_, double p_70024_3_, double p_70024_5_)
+    {
+
+    }
 }

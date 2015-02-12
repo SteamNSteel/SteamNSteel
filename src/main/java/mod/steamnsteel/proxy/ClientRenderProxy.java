@@ -22,16 +22,16 @@ import mod.steamnsteel.client.fx.SteamParticle;
 import mod.steamnsteel.client.renderer.entity.SteamNSteelLivingRender;
 import mod.steamnsteel.client.renderer.item.CupolaItemRenderer;
 import mod.steamnsteel.client.renderer.item.PlotoniumChestItemRenderer;
-import mod.steamnsteel.client.renderer.model.SpiderFactoryModel;
 import mod.steamnsteel.client.renderer.model.SteamSpiderModel;
 import mod.steamnsteel.client.renderer.tileentity.CupolaTESR;
 import mod.steamnsteel.client.renderer.tileentity.PlotoniumChestTESR;
-import mod.steamnsteel.entity.SpiderFactoryEntity;
+import mod.steamnsteel.client.renderer.tileentity.SpiderFactoryTESR;
 import mod.steamnsteel.entity.SteamProjectileEntity;
 import mod.steamnsteel.entity.SteamSpiderEntity;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.tileentity.PlotoniumChestTE;
+import mod.steamnsteel.tileentity.SpiderFactoryTE;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.particle.EntitySmokeFX;
@@ -89,12 +89,12 @@ public class ClientRenderProxy extends RenderProxy
     {
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PlotoniumChestTE.class, new PlotoniumChestTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(SpiderFactoryTE.class, new SpiderFactoryTESR());
     }
 
     private void registerEntityRenderers()
     {
         RenderingRegistry.registerEntityRenderingHandler(SteamSpiderEntity.class, new SteamNSteelLivingRender(new SteamSpiderModel(), SteamSpiderEntity.NAME, 0.4F));
-        RenderingRegistry.registerEntityRenderingHandler(SpiderFactoryEntity.class, new SteamNSteelLivingRender(new SpiderFactoryModel(), SpiderFactoryEntity.NAME, 0F));
         RenderingRegistry.registerEntityRenderingHandler(SteamProjectileEntity.class, new Render() {
             @Override
             public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_) { }

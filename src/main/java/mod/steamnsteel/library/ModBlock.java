@@ -23,12 +23,14 @@ import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.block.SteamNSteelStorageBlock;
 import mod.steamnsteel.block.container.PlotoniumChest;
 import mod.steamnsteel.block.machine.CupolaBlock;
+import mod.steamnsteel.block.machine.SpiderFactoryBlock;
 import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinFloor;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinPillar;
 import mod.steamnsteel.block.resource.structure.PlotoniumRuinWall;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.tileentity.PlotoniumChestTE;
+import mod.steamnsteel.tileentity.SpiderFactoryTE;
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -60,6 +62,7 @@ public final class ModBlock
     public static final SteamNSteelBlock ruinFloorPlotonium = new PlotoniumRuinFloor();
     public static final SteamNSteelBlock ruinPillarPlotonium = new PlotoniumRuinPillar();
     public static final SteamNSteelBlock ruinWallPlotonium = new PlotoniumRuinWall();
+    public static final SteamNSteelBlock spiderFactory = new SpiderFactoryBlock();
 
     private ModBlock()
     {
@@ -70,6 +73,7 @@ public final class ModBlock
     {
         GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
         GameRegistry.registerTileEntity(PlotoniumChestTE.class, getTEName(PlotoniumChest.NAME));
+        GameRegistry.registerTileEntity(SpiderFactoryTE.class, getTEName(SpiderFactoryBlock.NAME));
     }
 
     private static String getTEName(String name) { return "tile." + name;}
@@ -97,6 +101,8 @@ public final class ModBlock
         GameRegistry.registerBlock(ruinFloorPlotonium, PlotoniumRuinFloor.NAME);
         GameRegistry.registerBlock(ruinPillarPlotonium, PlotoniumRuinPillar.NAME);
         GameRegistry.registerBlock(ruinWallPlotonium, PlotoniumRuinWall.NAME);
+
+        GameRegistry.registerBlock(spiderFactory, SpiderFactoryBlock.NAME);
     }
 
     private static void registerBlockAndOre(Block block, String name)
