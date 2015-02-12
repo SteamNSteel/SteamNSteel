@@ -45,7 +45,6 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
     @Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
-        //return super.getIcon(world, x, y, z, side);
         if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) {
             int xPos = x % 3;
             if (xPos < 0) xPos += 3;

@@ -1,6 +1,5 @@
 package mod.steamnsteel.world;
 
-import com.google.common.base.*;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
@@ -16,9 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GameRules;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -27,17 +24,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.util.*;
-import java.util.Objects;
 
 public class SchematicLoader
 {
+    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
+    private static Logger _logger = LogManager.getLogger("SchematicLoader");
     private Map<ResourceLocation, SchematicWorld> loadedSchematics = new HashMap<ResourceLocation, SchematicWorld>();
-
-    private List<ITileEntityLoadedEvent> listeners = new LinkedList<ITileEntityLoadedEvent>();
+    private List<ITileEntityLoadedEvent> tileEntityLoadedEventListeners = new LinkedList<ITileEntityLoadedEvent>();
+    private List<IPreSetBlockEventListener> setBlockEventListeners;
+    private List<IUnknownBlockEventListener> unknownBlockEventListener;
 
     public SchematicLoader()
     {
-        listeners.add(new ITileEntityLoadedEvent()
+        tileEntityLoadedEventListeners.add(new ITileEntityLoadedEvent()
         {
             @Override
             public boolean onTileEntityAdded(TileEntity tileEntity)
@@ -69,6 +68,24 @@ public class SchematicLoader
         });
     }
 
+    public void addSetBlockEventListener(IPreSetBlockEventListener listener)
+    {
+        if (setBlockEventListeners == null)
+        {
+            setBlockEventListeners = new LinkedList<IPreSetBlockEventListener>();
+        }
+        setBlockEventListeners.add(listener);
+    }
+
+    public void addUnknownBlockEventListener(IUnknownBlockEventListener listener)
+    {
+        if (unknownBlockEventListener == null)
+        {
+            unknownBlockEventListener = new LinkedList<IUnknownBlockEventListener>();
+        }
+        unknownBlockEventListener.add(listener);
+    }
+
     public ResourceLocation loadSchematic(File file)
     {
         ResourceLocation schematicLocation = null;
@@ -79,11 +96,11 @@ public class SchematicLoader
 
             if (loadedSchematics.containsKey(schematicLocation))
             {
+                //If you copy this code, you probably want this enabled.
 //                return schematicLocation;
             }
             _logger.info(String.format("%s - Loading schematic %s", System.currentTimeMillis(), schematicLocation));
 
-            //final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(schematicLocation);
             SchematicWorld schematic = readFromFile(new FileInputStream(file));
             if (schematic == null)
             {
@@ -126,7 +143,8 @@ public class SchematicLoader
 
     public void renderSchematicToSingleChunk(ResourceLocation resource, World world,
                                              int originX, int originY, int originZ,
-                                             int chunkX, int chunkZ, ForgeDirection rotation, boolean flip) {
+                                             int chunkX, int chunkZ, ForgeDirection rotation, boolean flip)
+    {
         if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP)
         {
             _logger.error("Unable to load schematic %s, invalid rotation specified: %s", resource, rotation);
@@ -161,9 +179,12 @@ public class SchematicLoader
 
         LinkedList<TileEntity> createdTileEntities = new LinkedList<TileEntity>();
 
-        for (int chunkLocalZ = localMinZ; chunkLocalZ <= localMaxZ; chunkLocalZ++) {
-            for (int y = minY; y < maxY; y++) {
-                for (int chunkLocalX = localMinX; chunkLocalX <= localMaxX; chunkLocalX++) {
+        for (int chunkLocalZ = localMinZ; chunkLocalZ <= localMaxZ; chunkLocalZ++)
+        {
+            for (int y = minY; y < maxY; y++)
+            {
+                for (int chunkLocalX = localMinX; chunkLocalX <= localMaxX; chunkLocalX++)
+                {
                     ++blockCount;
                     final int x = chunkLocalX | (chunkX << 4);
                     final int z = chunkLocalZ | (chunkZ << 4);
@@ -172,15 +193,26 @@ public class SchematicLoader
                     final int schematicY = y - minY;
                     final int schematicZ = z - minZ;
 
-                    try {
-                        final Block block = schematic.getBlock(schematicX, schematicY, schematicZ);
-                        final int metadata = schematic.getBlockMetadata(schematicX, schematicY, schematicZ);
+                    try
+                    {
+                        WorldBlockCoord worldCoord = new WorldBlockCoord(chunkX << 4 | chunkLocalX, y, chunkZ << 4 | chunkLocalZ);
+                        WorldBlockCoord schematicCoord = new WorldBlockCoord(schematicX, schematicY, schematicZ);
+                        PreSetBlockEvent event = new PreSetBlockEvent(schematic, world, worldCoord, schematicCoord);
 
+                        if (setBlockEventListeners != null)
+                        {
+                            for (final IPreSetBlockEventListener listener : setBlockEventListeners)
+                            {
+                                listener.preBlockSet(event);
+                            }
+                        }
 
-                        if (block != null && c.func_150807_a(chunkLocalX, y, chunkLocalZ, block, metadata)) {
+                        if (event.block != null && c.func_150807_a(chunkLocalX, y, chunkLocalZ, event.block, event.metadata))
+                        {
                             world.markBlockForUpdate(x, y, z);
                             final NBTTagCompound tileEntityData = schematic.getTileEntity(schematicX, schematicY, schematicZ);
-                            if (block.hasTileEntity(metadata) && tileEntityData != null) {
+                            if (event.block.hasTileEntity(event.metadata) && tileEntityData != null)
+                            {
                                 TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntityData);
 
                                 c.func_150812_a(chunkLocalX, y, chunkLocalZ, tileEntity);
@@ -196,7 +228,8 @@ public class SchematicLoader
                                 createdTileEntities.add(tileEntity);
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (Exception e)
+                    {
                         _logger.error("Something went wrong!", e);
                     }
                 }
@@ -205,7 +238,7 @@ public class SchematicLoader
 
         for (final TileEntity tileEntity : createdTileEntities)
         {
-            for (ITileEntityLoadedEvent tileEntityHandler : listeners)
+            for (ITileEntityLoadedEvent tileEntityHandler : tileEntityLoadedEventListeners)
             {
                 if (tileEntityHandler.onTileEntityAdded(tileEntity))
                 {
@@ -266,12 +299,22 @@ public class SchematicLoader
                         final int xPos = schematicX + x;
                         final int yPos = schematicY + y;
                         final int zPos = schematicZ + z;
-                        final Block block = schematic.getBlock(schematicX, schematicY, schematicZ);
+                        Block block = schematic.getBlock(schematicX, schematicY, schematicZ);
                         if (block != Blocks.air)
                         {
-                            final int blockMetadata = schematic.getBlockMetadata(schematicX, schematicY, schematicZ);
+                            WorldBlockCoord worldCoord = new WorldBlockCoord(xPos, yPos, zPos);
+                            WorldBlockCoord schematicCoord = new WorldBlockCoord(schematicX, schematicY, schematicZ);
+                            PreSetBlockEvent event = new PreSetBlockEvent(schematic, world, worldCoord, schematicCoord);
 
-                            world.setBlock(xPos, yPos, zPos, block, blockMetadata, 2);
+                            if (setBlockEventListeners != null)
+                            {
+                                for (final IPreSetBlockEventListener listener : setBlockEventListeners)
+                                {
+                                    listener.preBlockSet(event);
+                                }
+                            }
+
+                            world.setBlock(xPos, yPos, zPos, event.block, event.metadata, 2);
                         }
                     }
                 }
@@ -291,7 +334,7 @@ public class SchematicLoader
                     _logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
                 }
 
-                for (ITileEntityLoadedEvent tileEntityHandler : listeners)
+                for (ITileEntityLoadedEvent tileEntityHandler : tileEntityLoadedEventListeners)
                 {
                     if (tileEntityHandler.onTileEntityAdded(tileEntity))
                     {
@@ -305,11 +348,7 @@ public class SchematicLoader
         _logger.info(String.format("Writing schematic took %d millis", end - start));
     }
 
-    private static Logger _logger = LogManager.getLogger("SchematicLoader");
-
-    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
-
-    public SchematicWorld readFromFile(InputStream inputStream)
+    private SchematicWorld readFromFile(InputStream inputStream)
     {
         try
         {
@@ -377,10 +416,28 @@ public class SchematicLoader
                 {
                     final short id1 = (short) GameData.getBlockRegistry().getId(name);
                     oldToNew.put(mapping.getShort(name), id1);
-                } else {
-                    //TODO: Should I be handling unknown blocks here via an event?
-                    oldToNew.put(mapping.getShort(name), currentBadId);
-                    currentBadId--;
+                } else
+                {
+                    if (unknownBlockEventListener != null)
+                    {
+                        UnknownBlockEvent event = new UnknownBlockEvent(name, GameData.getBlockRegistry());
+                        for (final IUnknownBlockEventListener listener : unknownBlockEventListener)
+                        {
+                            listener.unknownBlock(event);
+                        }
+                        if (event.isRemapped())
+                        {
+                            oldToNew.put(mapping.getShort(name), event.newId);
+                        } else
+                        {
+                            oldToNew.put(mapping.getShort(name), currentBadId);
+                            currentBadId--;
+                        }
+                    } else
+                    {
+                        oldToNew.put(mapping.getShort(name), currentBadId);
+                        currentBadId--;
+                    }
                 }
             }
         }
@@ -427,14 +484,44 @@ public class SchematicLoader
             }
         }
 
-        return new SchematicWorld(blocks, metadata, tileEntities, width, height, length);
+        NBTTagCompound extendedMetadata = null;
+        if (tagCompound.hasKey(Names.NBT.EXTENDED_METADATA)) {
+            extendedMetadata = tagCompound.getCompoundTag(Names.NBT.EXTENDED_METADATA);
+        }
+
+        return new SchematicWorld(blocks, metadata, tileEntities, width, height, length, extendedMetadata);
     }
 
-    private static class SchematicWorld
+    public ISchematicMetadata getSchematicMetadata(ResourceLocation schematicLocation)
     {
+        if (loadedSchematics.containsKey(schematicLocation))
+        {
+            return loadedSchematics.get(schematicLocation);
+        }
+        return null;
+    }
+
+    public interface ITileEntityLoadedEvent
+    {
+        boolean onTileEntityAdded(TileEntity tileEntity);
+    }
+
+    public interface IPreSetBlockEventListener
+    {
+        void preBlockSet(PreSetBlockEvent event);
+    }
+
+    public interface IUnknownBlockEventListener
+    {
+        void unknownBlock(UnknownBlockEvent event);
+    }
+
+    public static class SchematicWorld implements ISchematicMetadata
+    {
+        private final Map<WorldBlockCoord, NBTTagCompound> tileEntities = new HashMap<WorldBlockCoord, NBTTagCompound>();
+        private NBTTagCompound extendedMetadata;
         private short[] blocks;
         private byte[] metadata;
-        private final Map<WorldBlockCoord, NBTTagCompound> tileEntities = new HashMap<WorldBlockCoord, NBTTagCompound>();
         private short width;
         private short height;
         private short length;
@@ -449,9 +536,10 @@ public class SchematicLoader
             this.length = 0;
         }
 
-        public SchematicWorld(short[] blocks, byte[] metadata, Map<WorldBlockCoord, NBTTagCompound> tileEntities, short width, short height, short length)
+        public SchematicWorld(short[] blocks, byte[] metadata, Map<WorldBlockCoord, NBTTagCompound> tileEntities, short width, short height, short length, NBTTagCompound extendedMetadata)
         {
             this();
+            this.extendedMetadata = extendedMetadata;
 
             this.blocks = blocks != null ? blocks.clone() : new short[width * height * length];
             this.metadata = metadata != null ? metadata.clone() : new byte[width * height * length];
@@ -499,19 +587,29 @@ public class SchematicLoader
             return block == null || block.isAir(null, x, y, z);
         }
 
+        @Override
         public int getWidth()
         {
             return this.width;
         }
 
+        @Override
         public int getLength()
         {
             return this.length;
         }
 
+        @Override
         public int getHeight()
         {
             return this.height;
+        }
+
+        @Override
+        public NBTTagCompound getExtendedMetadata()
+        {
+
+            return extendedMetadata != null ? (NBTTagCompound) extendedMetadata.copy() : null;
         }
 
         public Collection<NBTTagCompound> getTileEntityData()
@@ -519,7 +617,8 @@ public class SchematicLoader
             return this.tileEntities.values();
         }
 
-        public NBTTagCompound getTileEntity(int x, int y, int z) {
+        public NBTTagCompound getTileEntity(int x, int y, int z)
+        {
             return tileEntities.get(WorldBlockCoord.of(x, y, z));
         }
     }
@@ -536,13 +635,9 @@ public class SchematicLoader
             public static final String LENGTH = "Length";
             public static final String HEIGHT = "Height";
             public static final String MAPPING_SCHEMATICA = "SchematicaMapping";
+            public static final String EXTENDED_METADATA = "ExtendedMetadata";
             public static final String TILE_ENTITIES = "TileEntities";
         }
-    }
-
-    public interface ITileEntityLoadedEvent
-    {
-        boolean onTileEntityAdded(TileEntity tileEntity);
     }
 
     public static class WorldBlockCoord implements Comparable<WorldBlockCoord>
@@ -595,6 +690,79 @@ public class SchematicLoader
                     : data.middle.compareTo(o.data.middle);
 
             else return data.left.compareTo(o.data.left);
+        }
+    }
+
+    public interface ISchematicMetadata
+    {
+        int getWidth();
+
+        int getLength();
+
+        int getHeight();
+
+        NBTTagCompound getExtendedMetadata();
+    }
+
+
+    public class UnknownBlockEvent
+    {
+
+        public final String name;
+        public final FMLControlledNamespacedRegistry<Block> blockRegistry;
+        Short newId;
+
+        public UnknownBlockEvent(String name, FMLControlledNamespacedRegistry<Block> blockRegistry)
+        {
+            this.name = name;
+
+            this.blockRegistry = blockRegistry;
+        }
+
+        public void remap(Block block)
+        {
+            newId = (short) blockRegistry.getId(block);
+        }
+
+        public boolean isRemapped()
+        {
+            return newId != null;
+        }
+    }
+
+    public class PreSetBlockEvent
+    {
+        public final SchematicWorld schematic;
+        public final World world;
+        public final WorldBlockCoord worldCoord;
+        public final WorldBlockCoord schematicCoord;
+        private int metadata;
+        private Block block;
+
+        public PreSetBlockEvent(SchematicWorld schematic, World world, WorldBlockCoord worldCoord, WorldBlockCoord schematicCoord)
+        {
+            this.block = schematic.getBlock(schematicCoord.getX(), schematicCoord.getY(), schematicCoord.getZ());
+            this.metadata = schematic.getBlockMetadata(schematicCoord.getX(), schematicCoord.getY(), schematicCoord.getZ());
+            this.schematic = schematic;
+            this.world = world;
+            this.worldCoord = worldCoord;
+            this.schematicCoord = schematicCoord;
+        }
+
+        public Block getBlock()
+        {
+            return block;
+        }
+
+        public int getMetadata()
+        {
+            return metadata;
+        }
+
+        public void replaceBlock(Block replacementBlock, int metadata)
+        {
+            this.block = replacementBlock;
+            this.metadata = metadata;
         }
     }
 
