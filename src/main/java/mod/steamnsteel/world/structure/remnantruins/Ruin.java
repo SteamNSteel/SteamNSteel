@@ -10,6 +10,7 @@ public class Ruin
     public final RuinSchematic schematic;
     public final Point location;
     public Integer height;
+    private boolean generationStarted;
 
     public Ruin(RuinLevel ruinLevel, int ruinX, int ruinZ, RuinSchematic ruinSchematic)
     {
@@ -37,5 +38,13 @@ public class Ruin
                 chunkRect.getY() > (bounds.getY() + bounds.getHeight()) ||
                 (chunkRect.getY() + chunkRect.getHeight()) < bounds.getY()
         );
+    }
+
+    public boolean hasGenerationStarted() {
+        return generationStarted;
+    }
+
+    public void setGenerationStarted() {
+        generationStarted = true;
     }
 }
