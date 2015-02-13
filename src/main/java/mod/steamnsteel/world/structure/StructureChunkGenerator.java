@@ -28,7 +28,12 @@ public class StructureChunkGenerator
 
     public void generate()
     {
-        Logger.info("Creating schematic at %d, %d", intersection.getX(), intersection.getY());
+
+        if (!ruin.hasGenerationStarted())
+        {
+            Logger.info("Creating Structure (type:%s) at %d, %d", ruin.schematic.resource, intersection.getX(), intersection.getY());
+            ruin.setGenerationStarted();
+        }
 
         if (ruin.height == null) {
             Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
