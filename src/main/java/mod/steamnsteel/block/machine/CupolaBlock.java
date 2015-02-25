@@ -32,9 +32,11 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import java.util.Random;
 
 public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
@@ -195,22 +197,6 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z)
-    {
-        final int meta = block.getBlockMetadata(x, y, z);
-
-        if ((meta & flagSlave) == 0)
-        {
-            maxY = 2;   //is Master
-            minY = 0;
-        } else
-        {
-            maxY = 1;   //is Slave
-            minY = -1;
-        }
-    }
-
-    @Override
     public void onPostBlockPlaced(World world, int x, int y, int z, int metadata)
     {
         super.onPostBlockPlaced(world, x, y, z, metadata);
@@ -251,6 +237,14 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         }
 
         return super.removedByPlayer(world, player, x, y, z, willHarvest);
+    }
+
+    @Override
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
+    {
+        return (world.getBlockMetadata(x,y,z) & flagSlave) == 0 ?
+                AxisAlignedBB.getBoundingBox(x, y    , z,  x + 1, y + 2, z + 1): //master
+                AxisAlignedBB.getBoundingBox(x, y - 1, z,  x + 1, y + 1, z + 1); //slave.
     }
 }
 
