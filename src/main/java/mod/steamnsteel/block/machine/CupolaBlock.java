@@ -16,7 +16,6 @@
 
 package mod.steamnsteel.block.machine;
 
-import com.google.common.base.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
@@ -44,8 +43,8 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     public static final String NAME = "cupola";
 
     private static final int flagSlave = 1 << 2;
-    private Optional<IIcon> iconMaster = Optional.absent();
-    private Optional<IIcon> iconSlave = Optional.absent();
+    private IIcon iconMaster = null;
+    private IIcon iconSlave = null;
 
     public CupolaBlock()
     {
@@ -75,15 +74,15 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     {
         final String objName = getUnwrappedUnlocalizedName(getUnlocalizedName());
 
-        if (!iconMaster.isPresent()) iconMaster = Optional.of(iconRegister.registerIcon(objName + "/bSide"));
-        if (!iconSlave.isPresent()) iconSlave = Optional.of(iconRegister.registerIcon(objName + "/tSide"));
+        iconMaster = iconRegister.registerIcon(objName + "/bSide");
+        iconSlave = iconRegister.registerIcon(objName + "/tSide");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta)
     {
-        return (meta & flagSlave) == 0 ? iconMaster.get() : iconSlave.get();
+        return (meta & flagSlave) == 0 ? iconMaster : iconSlave;
     }
 
     @SideOnly(Side.CLIENT)
