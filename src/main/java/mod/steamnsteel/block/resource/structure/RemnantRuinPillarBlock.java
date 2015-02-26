@@ -22,10 +22,35 @@ import net.minecraft.block.material.Material;
 public class RemnantRuinPillarBlock extends SteamNSteelBlock
 {
     public static final String NAME = "remnantRuinPillar";
+    private static int renderId;
 
     public RemnantRuinPillarBlock()
     {
         super(Material.rock);
         setBlockName(NAME);
+    }
+
+    @Override
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube()
+    {
+        return false;
+    }
+
+
+    public static void setRenderType(int renderType)
+    {
+        renderId = renderType;
+    }
+
+    @Override
+    public int getRenderType()
+    {
+        return renderId;
     }
 }
