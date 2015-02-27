@@ -39,4 +39,19 @@ public class RemnantRuinPillarModel extends SteamNSteelModel
     {
         model.renderAll();
     }
+
+    public void renderPillar()
+    {
+        model.renderPart("SSRemnantPillar");
+    }
+
+    public void renderBottomCap()
+    {
+        model.renderPart("SSRemnantPillar_CapBottom");
+    }
+
+    public void renderTopCap()
+    {
+        model.renderPart("SSRemnantPillar_CapTop");
+    }
 }
