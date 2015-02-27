@@ -52,4 +52,5 @@ public abstract class SteamNSteelBlock extends Block
     {
         blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
     }
+
 }
