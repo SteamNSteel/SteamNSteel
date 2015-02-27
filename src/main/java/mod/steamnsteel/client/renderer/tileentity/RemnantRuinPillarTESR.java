@@ -52,11 +52,20 @@ public class RemnantRuinPillarTESR extends SteamNSteelTESR
 
         model.renderPillar();
 
-        if (y > 0 && (world.getBlock(x, y - 1, z) != block || world.getTileEntity(x, y - 1, z).blockMetadata != metadata)) {
-            model.renderBottomCap();
+        if (y > 0)
+        {
+            if ((world.getBlock(x, y - 1, z) != block || world.getBlockMetadata(x, y - 1, z) != metadata))
+            {
+                model.renderBottomCap();
+            }
         }
-        if (y < world.getHeight() - 2 && (world.getBlock(x, y + 1, z) != block || world.getTileEntity(x, y + 1, z).blockMetadata != metadata)) {
-            model.renderTopCap();
+
+        if (y < world.getHeight() - 2)
+        {
+            if ((world.getBlock(x, y + 1, z) != block || world.getBlockMetadata(x, y + 1, z) != metadata))
+            {
+                model.renderTopCap();
+            }
         }
         GL11.glPopMatrix();
 
