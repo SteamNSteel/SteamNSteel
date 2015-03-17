@@ -1,6 +1,8 @@
 package mod.steamnsteel.tileentity;
 
+import mod.steamnsteel.utility.NBTHelper;
 import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 
@@ -21,7 +23,6 @@ public class SpiderFactoryTE extends SteamNSteelTE
     public static final int LOCKDOWN_COOLDOWN = 600;
 
     private float health = 50;
-    private boolean isSlave = false;
 
     //Repair values
     private int repairTime = -1;
@@ -30,12 +31,14 @@ public class SpiderFactoryTE extends SteamNSteelTE
     //Lockdown values
     private int lockdownTime = -1;
 
+    private WorldBlockCoord masterLocation;
+
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
 
         health = nbt.getFloat(CURR_HEALTH);
-        isSlave = nbt.getBoolean(IS_SLAVE);
+        masterLocation = NBTHelper.readWorldBlockCoord(nbt, "master");
     }
 
     @Override
@@ -43,7 +46,7 @@ public class SpiderFactoryTE extends SteamNSteelTE
         super.writeToNBT(nbt);
 
         nbt.setFloat(CURR_HEALTH, health);
-        nbt.setBoolean(IS_SLAVE, isSlave);
+        NBTHelper.writeWorldBlockCoord(nbt, "master", this.masterLocation);
     }
 
     @Override
@@ -87,6 +90,16 @@ public class SpiderFactoryTE extends SteamNSteelTE
     }
 
     public boolean isSlave() {
-        return isSlave;
+        return masterLocation != null;
+    }
+
+    public void setParent(WorldBlockCoord masterLocation)
+    {
+        this.masterLocation = masterLocation;
+    }
+
+    public WorldBlockCoord getMaster()
+    {
+        return this.masterLocation;
     }
 }

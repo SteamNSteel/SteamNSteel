@@ -47,6 +47,10 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
         return world.getBlock(data.left, data.middle, data.right);
     }
 
+    public int getBlockMetadata(IBlockAccess world)
+    {
+        return world.getBlockMetadata(data.left, data.middle, data.right);
+    }
     public TileEntity getTileEntity(World world)
     {
         return world.getTileEntity(data.left, data.middle, data.right);
@@ -120,5 +124,4 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
 
         else return data.left.compareTo(o.data.left);
     }
-
 }
