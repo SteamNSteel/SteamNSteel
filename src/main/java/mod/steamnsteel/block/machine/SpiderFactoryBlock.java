@@ -30,13 +30,9 @@ public class SpiderFactoryBlock extends SteamNSteelBlock implements ITileEntityP
 
     final WorldBlockCoord[] blocks = {
             WorldBlockCoord.of(0,0,0),
-            WorldBlockCoord.of(-1,0,0),
             WorldBlockCoord.of(0,0,1),
-            WorldBlockCoord.of(-1,0,1),
             WorldBlockCoord.of(0,1,0),
-            WorldBlockCoord.of(-1,1,0),
-            WorldBlockCoord.of(0,1,1),
-            WorldBlockCoord.of(-1,1,1)
+            WorldBlockCoord.of(0,1,1)
     };
 
     @Override
