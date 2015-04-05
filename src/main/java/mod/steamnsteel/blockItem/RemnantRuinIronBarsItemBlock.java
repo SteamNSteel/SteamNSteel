@@ -1,14 +1,13 @@
-package mod.steamnsteel.item.resource.structure;
+package mod.steamnsteel.blockitem;
 
 import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock;
-import mod.steamnsteel.library.ModBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlockWithMetadata;
 import net.minecraft.item.ItemStack;
 
-public class RemnantRuinIronBarsBlockItem extends ItemBlockWithMetadata
+public class RemnantRuinIronBarsItemBlock extends ItemBlockWithMetadata
 {
-    public RemnantRuinIronBarsBlockItem(Block block)
+    public RemnantRuinIronBarsItemBlock(Block block)
     {
         super(block, block);
     }
