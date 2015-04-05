@@ -31,6 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
+import net.minecraftforge.event.world.WorldEvent;
 import java.util.List;
 
 import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.CUSTOM;
@@ -47,7 +48,6 @@ public enum WorldGen
     public static void init()
     {
         createOreGenerators();
-        createStructureGenerators();
         register();
         RetroGenHandler.register();
     }
@@ -86,10 +86,13 @@ public enum WorldGen
         }
     }
 
-    private static void createStructureGenerators() {
+    @SubscribeEvent
+    public void OnWorldStarted(WorldEvent.Load worldLoadEvent) {
+        structureGens.clear();
         final RemnantRuinsGenerator ruinsGenerator = new RemnantRuinsGenerator();
         structureGens.add(ruinsGenerator);
     }
+
 
     @SuppressWarnings("MethodMayBeStatic")
     @SubscribeEvent

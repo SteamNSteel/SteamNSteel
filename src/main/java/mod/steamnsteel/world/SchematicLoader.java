@@ -158,7 +158,6 @@ public class SchematicLoader
             return;
         }
 
-        _logger.info(String.format("%s - Rendering Chunk (%d, %d) ", System.currentTimeMillis(), chunkX, chunkZ));
 
         final int minX = originX;
         final int maxX = originX + schematic.getWidth();

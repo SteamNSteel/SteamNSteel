@@ -23,6 +23,7 @@ import mod.steamnsteel.block.machine.PipeJunctionBlock;
 import mod.steamnsteel.block.machine.PipeRedstoneValveBlock;
 import mod.steamnsteel.block.machine.PipeValveBlock;
 import mod.steamnsteel.client.fx.SteamParticle;
+import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
 import mod.steamnsteel.client.renderer.block.SteamNSteelPaneRenderer;
 import mod.steamnsteel.client.renderer.entity.SteamNSteelLivingRender;
 import mod.steamnsteel.client.renderer.item.*;
@@ -88,6 +89,7 @@ public class ClientRenderProxy extends RenderProxy
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeRedstoneValve), new PipeRedstoneValveItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeJunction), new PipeJunctionItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinChest), new PlotoniumChestItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinPillar), new RemnantRuinPillarItemRenderer());
     }
 
     private void registerTESRs()
@@ -96,6 +98,7 @@ public class ClientRenderProxy extends RenderProxy
         PipeValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
         PipeRedstoneValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
         PipeJunctionBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
+        RemnantRuinPillarBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
 
         RenderingRegistry.registerBlockHandler(SteamNSteelPaneRenderer.INSTANCE);
 
@@ -105,6 +108,7 @@ public class ClientRenderProxy extends RenderProxy
         ClientRegistry.bindTileEntitySpecialRenderer(PipeRedstoneValveTE.class, new PipeRedstoneValveTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeJunctionTE.class, new PipeJunctionTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(RemnantRuinChestTE.class, new PlotoniumChestTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(RemnantRuinPillarTE.class, new RemnantRuinPillarTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(SpiderFactoryTE.class, new SpiderFactoryTESR());
     }
 

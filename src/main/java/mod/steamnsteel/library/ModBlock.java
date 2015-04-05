@@ -85,6 +85,7 @@ public final class ModBlock
         GameRegistry.registerTileEntity(PipeRedstoneValveTE.class, getTEName(PipeRedstoneValveBlock.NAME));
         GameRegistry.registerTileEntity(PipeJunctionTE.class, getTEName(PipeJunctionBlock.NAME));
         GameRegistry.registerTileEntity(SpiderFactoryTE.class, getTEName(SpiderFactoryBlock.NAME));
+        GameRegistry.registerTileEntity(RemnantRuinPillarTE.class, getTEName(RemnantRuinPillarBlock.NAME));
     }
 
     private static String getTEName(String name) { return "tile." + name;}
