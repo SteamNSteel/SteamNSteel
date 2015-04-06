@@ -30,7 +30,7 @@ public class SpiderFactoryTESR extends SteamNSteelTESR
         GL11.glTranslated(x1, y1, z1);
         GL11.glTranslated(0.5, 0, 0.5);
         GL11.glRotatef(metadata * 90f, 0f, 1f, 0f);
-        GL11.glTranslated(-0, 0, .700);
+        GL11.glTranslated(0, 0, .700);
         GL11.glRotatef(180F, 1F, 0F, 0F);
 
         model.render();

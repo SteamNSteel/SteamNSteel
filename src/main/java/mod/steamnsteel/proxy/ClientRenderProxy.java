@@ -32,6 +32,7 @@ import mod.steamnsteel.client.renderer.tileentity.*;
 import mod.steamnsteel.entity.SteamProjectileEntity;
 import mod.steamnsteel.entity.SteamSpiderEntity;
 import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.tileentity.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
@@ -90,6 +91,8 @@ public class ClientRenderProxy extends RenderProxy
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeJunction), new PipeJunctionItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinChest), new PlotoniumChestItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinPillar), new RemnantRuinPillarItemRenderer());
+
+        MinecraftForgeClient.registerItemRenderer(ModItem.spiderFactoryItem, new SpiderFactoryItemRenderer());
     }
 
     private void registerTESRs()

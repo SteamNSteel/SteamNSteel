@@ -46,7 +46,9 @@ public class SpiderFactoryTE extends SteamNSteelTE
         super.writeToNBT(nbt);
 
         nbt.setFloat(CURR_HEALTH, health);
-        NBTHelper.writeWorldBlockCoord(nbt, "master", this.masterLocation);
+        if (masterLocation != null) {
+            NBTHelper.writeWorldBlockCoord(nbt, "master", this.masterLocation);
+        }
     }
 
     @Override

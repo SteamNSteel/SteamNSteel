@@ -25,7 +25,6 @@ import mod.steamnsteel.block.machine.*;
 import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.structure.*;
 import mod.steamnsteel.blockitem.RemnantRuinIronBarsItemBlock;
-import mod.steamnsteel.blockitem.SpiderFactoryItemBlock;
 import mod.steamnsteel.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -118,7 +117,7 @@ public final class ModBlock
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
         GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsItemBlock.class, RemnantRuinIronBarsBlock.NAME);
 
-        GameRegistry.registerBlock(spiderFactory, SpiderFactoryItemBlock.class, SpiderFactoryBlock.NAME);
+        GameRegistry.registerBlock(spiderFactory, SpiderFactoryBlock.NAME);
         //Compat
         TileEntity.addMapping(RemnantRuinChestTE.class, "tile.chestPlotonium");
     }

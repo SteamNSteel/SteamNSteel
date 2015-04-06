@@ -14,6 +14,7 @@ public class NBTHelper
     }
 
     public static WorldBlockCoord readWorldBlockCoord(NBTTagCompound nbt, String name) {
+        if (!nbt.hasKey(name)) return null;
         NBTTagCompound compound = (NBTTagCompound)nbt.getTag(name);
         int x = compound.getInteger("x");
         int y = compound.getInteger("y");

@@ -21,6 +21,7 @@ import mod.steamnsteel.TheMod;
 import mod.steamnsteel.item.SteamNSteelItem;
 import mod.steamnsteel.item.armor.*;
 import mod.steamnsteel.item.artifact.*;
+import mod.steamnsteel.item.factory.SpiderFactoryItem;
 import mod.steamnsteel.item.resource.Niter;
 import mod.steamnsteel.item.resource.Sulfur;
 import mod.steamnsteel.item.resource.ingot.*;
@@ -75,6 +76,8 @@ public final class ModItem
     public static final SteamNSteelItem plotoniumScrap = new PlotoniumScrap();
     public static final SteamNSteelItem voxBox = new VoxBox();
 
+    public static final SteamNSteelItem spiderFactoryItem = new SpiderFactoryItem();
+
     private ModItem()
     {
         throw new AssertionError();
@@ -88,6 +91,7 @@ public final class ModItem
         registerDusts();
         registerTools();
         registerWeapons();
+        registerFactories();
     }
 
     private static void registerArmor()
@@ -154,6 +158,10 @@ public final class ModItem
         OreDictionary.registerOre(name, item);
     }
 
+    private static void registerFactories() {
+        GameRegistry.registerItem(spiderFactoryItem, Names.SPIDER_FACTORY);
+    }
+
     public enum Names
     {
         INSTANCE;
@@ -175,5 +183,7 @@ public final class ModItem
         // Items
         public static final String NITER = "dustNiter";
         public static final String SULFUR = "dustSulfur";
+        // Factories
+        public static final String SPIDER_FACTORY = "spiderFactorySpawner";
     }
 }

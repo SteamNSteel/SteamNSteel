@@ -1,8 +1,15 @@
 package mod.steamnsteel.entity;
 
+import mod.steamnsteel.block.machine.SpiderFactoryBlock;
+import mod.steamnsteel.utility.NBTHelper;
+import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -10,10 +17,11 @@ public class SpiderFactoryEntity extends EntityMob {
 
     public static final String NAME = "spiderFactory";
     private Swarm swarm;
+    private WorldBlockCoord masterLocation;
 
     public SpiderFactoryEntity(World p_i1738_1_) {
         super(p_i1738_1_);
-        setSize(0.8F, 1.5F);
+        setSize(1.36F, 1.32F);
         setRotationAndSize(ForgeDirection.EAST);
     }
 
@@ -35,13 +43,20 @@ public class SpiderFactoryEntity extends EntityMob {
 
     @Override
     public void onUpdate() {
+
         super.onUpdate();
+        this.posX = this.prevPosX;
+        this.posZ = this.prevPosZ;
+        this.posY = this.prevPosY;
+        //this.boundingBox.minZ = this.posZ;
+        //this.boundingBox.maxZ = this.boundingBox.minZ + 1.4f;
+        //setSize(1.0f, 1.3f);
     }
 
     @Override
     protected void entityInit() {
         super.entityInit();
-        setRotationAndSize(ForgeDirection.EAST);
+        //setRotationAndSize(ForgeDirection.EAST);
     }
 
     private void setRotationAndSize(ForgeDirection dir) {
@@ -71,6 +86,44 @@ public class SpiderFactoryEntity extends EntityMob {
     @Override
     public void addVelocity(double p_70024_1_, double p_70024_3_, double p_70024_5_)
     {
+    }
 
+    @Override
+    public void readEntityFromNBT(NBTTagCompound nbt) {
+        super.readEntityFromNBT(nbt);
+
+        masterLocation = NBTHelper.readWorldBlockCoord(nbt, "masterBlockLocation");
+        Logger.info("Reading %s", nbt);
+    }
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound nbt) {
+        super.writeEntityToNBT(nbt);
+
+        NBTHelper.writeWorldBlockCoord(nbt, "masterBlockLocation", masterLocation);
+        Logger.info("Writing %s", nbt);
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_) {
+        return super.attackEntityFrom(p_70097_1_, p_70097_2_);
+    }
+
+    public void setMasterBlockLocation(WorldBlockCoord worldBlockCoord) {
+        masterLocation = worldBlockCoord;
+    }
+
+    @Override
+    public void onDeath(DamageSource p_70645_1_) {
+        super.onDeath(p_70645_1_);
+
+        if (!worldObj.isRemote) {
+            masterLocation.setBlock(worldObj, Blocks.air, 0, 3);
+            boolean flag = worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing");
+            flag = false;
+            worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 2.0f, flag);
+        }
+
+        worldObj.removeEntity(this);
     }
 }
