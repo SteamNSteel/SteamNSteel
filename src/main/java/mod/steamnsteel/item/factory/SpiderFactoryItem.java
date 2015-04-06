@@ -80,15 +80,12 @@ public class SpiderFactoryItem extends SteamNSteelItem {
         for (final WorldBlockCoord blockCoord : blocks)
         {
             boolean isMaster = blockCoord.getX() == 0 && blockCoord.getY() == 0 && blockCoord.getZ() == 0;
-
-            minX = Math.min(minX, blockCoord.getX());
-            maxX = Math.max(maxX, blockCoord.getX());
-            minZ = Math.min(minZ, blockCoord.getZ());
-            maxZ = Math.max(maxZ, blockCoord.getZ());
-
             WorldBlockCoord newPos = rotateBlockCoord(parentPosition, direction * 90, blockCoord);
 
-
+            minX = Math.min(minX, newPos.getX());
+            maxX = Math.max(maxX, newPos.getX());
+            minZ = Math.min(minZ, newPos.getZ());
+            maxZ = Math.max(maxZ, newPos.getZ());
 
             newPos.setBlock(world, ModBlock.spiderFactory, direction | (isMaster ? 0 : 4), 3);
 
@@ -99,7 +96,6 @@ public class SpiderFactoryItem extends SteamNSteelItem {
         }
 
         if (!world.isRemote) {
-
             SpiderFactoryEntity entity = (SpiderFactoryEntity) EntityList.createEntityByName(
                     (String) EntityList.classToStringMapping.get(SpiderFactoryEntity.class),
                     world
@@ -107,17 +103,7 @@ public class SpiderFactoryItem extends SteamNSteelItem {
 
             double centreXPos = ((maxX + 1 - minX) / 2.0d) + minX;
             double centreZPos = ((maxZ + 1 - minZ) / 2.0d) + minZ;
-
-            double cos = MathHelper.cos(direction * 90);
-            double sin = MathHelper.sin(direction * 90);
-
-            double entityXPos = centreXPos * cos + centreZPos * sin;
-            double entityZPos = centreZPos * cos - centreXPos * sin;
-
-            Logger.info("CenterPos - (%f, %f)", centreXPos, centreZPos);
-            Logger.info("EntityPos - (%f, %f)", entityXPos, entityZPos);
-            Logger.info("%f, %f", parentPosition.getX() + entityXPos, parentPosition.getZ() + entityZPos);
-            entity.setPositionAndRotation(parentPosition.getX() + entityXPos, y, parentPosition.getZ() + entityZPos, direction * 90, 0);
+            entity.setPositionAndRotation(centreXPos, y, centreZPos, direction * 90, 0);
             entity.setMasterBlockLocation(parentPosition);
             world.spawnEntityInWorld(entity);
         }
