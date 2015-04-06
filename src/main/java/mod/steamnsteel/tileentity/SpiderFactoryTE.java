@@ -4,6 +4,9 @@ import mod.steamnsteel.utility.NBTHelper;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.MathHelper;
 
 public class SpiderFactoryTE extends SteamNSteelTE
@@ -49,6 +52,20 @@ public class SpiderFactoryTE extends SteamNSteelTE
         if (masterLocation != null) {
             NBTHelper.writeWorldBlockCoord(nbt, "master", this.masterLocation);
         }
+    }
+
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        final NBTTagCompound nbt = new NBTTagCompound();
+        writeToNBT(nbt);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+    {
+        readFromNBT(packet.func_148857_g());
     }
 
     @Override
@@ -98,6 +115,13 @@ public class SpiderFactoryTE extends SteamNSteelTE
     public void setParent(WorldBlockCoord masterLocation)
     {
         this.masterLocation = masterLocation;
+        sendUpdate();
+    }
+
+    protected void sendUpdate()
+    {
+        markDirty();
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     public WorldBlockCoord getMaster()

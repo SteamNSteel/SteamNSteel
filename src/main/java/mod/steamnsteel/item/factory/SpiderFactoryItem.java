@@ -107,6 +107,7 @@ public class SpiderFactoryItem extends SteamNSteelItem {
             entity.setMasterBlockLocation(parentPosition);
             world.spawnEntityInWorld(entity);
         }
+
         return true;
     }
 
