@@ -14,16 +14,16 @@
 
 package mod.steamnsteel.commands;
 
-import mod.steamnsteel.api.entity.IEntityFactory;
+import mod.steamnsteel.factory.Factory;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.util.ChunkCoordinates;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,39 +33,54 @@ public class CommandSpawnFactory extends CommandBase {
 
     @Override
     public String getCommandName() {
-        return "spawnentity";
+        return "snsCreateFactory";
     }
 
     @Override
     public String getCommandUsage(ICommandSender commandSender) {
-        return "/spawnfactory <x> <y> <z> <entityname> [direction]";
+        return "/snsCreateFactory <x> <y> <z> <entityname> [direction]";
     }
 
     @Override
     public void processCommand(ICommandSender commandSender, String[] arguments) {
-        if (arguments.length > 4) {
+        if (arguments.length >= 4) {
             String entityName = arguments[3];
-            Entity entity = EntityList.createEntityByName(entityName, commandSender.getEntityWorld());
-            if (!(entity instanceof IEntityFactory)) {
-                throw new CommandException("Specified entity is not a Factory");
+
+            ChunkCoordinates coordinates = commandSender.getPlayerCoordinates();
+            //Gets coordinates handling coordinates relative to sender
+            int x = (int)func_110666_a(commandSender, coordinates.posX, arguments[0]);
+            int y = (int)func_110666_a(commandSender, coordinates.posY, arguments[1]);
+            int z = (int)func_110666_a(commandSender, coordinates.posZ, arguments[2]);
+            Object entityClass = EntityList.stringToClassMapping.get(entityName);
+            if (entityClass == null) {
+                throw new CommandException("Specified entity does not exist");
+            }
+            Factory factory = Factory.getFactoryForEntity((Class<? extends Entity>) entityClass);
+            if (factory == null) {
+                throw new CommandException(String.format("Could not identify factory for entity %s", entityName));
             }
 
-            int x = Integer.parseInt(arguments[0]);
-            int y = Integer.parseInt(arguments[1]);
-            int z = Integer.parseInt(arguments[2]);
-
-            entity.setPosition(x, y, z);
-            commandSender.getEntityWorld().spawnEntityInWorld(entity);
+            int direction = 0;
+            if (arguments.length >= 5) {
+                direction = parseIntBounded(commandSender, arguments[4], 0, 3);
+            }
+            factory.createFactory(commandSender.getEntityWorld(), x, y, z, direction);
         }
     }
 
     public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+
         ArrayList<String> validEntities = new ArrayList<String>();
 
-        for (Class<?> clazz : (Class<?>[])EntityList.classToStringMapping.keySet().toArray(new Class<?>[EntityList.stringToClassMapping.size()])) {
-            if (clazz.isAssignableFrom(IEntityFactory.class)) {
-                validEntities.add((String)EntityList.classToStringMapping.get(clazz));
+        if (par2ArrayOfStr.length <= 3) {
+            validEntities.add("~ ");
+        } else if (par2ArrayOfStr.length == 4) {
+            for (Factory factory : Factory.getAllFactories()) {
+                Class<? extends Entity> entityClass = factory.getSpawnedEntity();
+                validEntities.add(EntityList.classToStringMapping.get(entityClass) + " ");
             }
+        } else if (par2ArrayOfStr.length == 5) {
+            validEntities.add("0 ");
         }
 
         return par2ArrayOfStr.length > 0 ? getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, validEntities) : null;

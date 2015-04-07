@@ -1,6 +1,6 @@
 package mod.steamnsteel.entity;
 
-import mod.steamnsteel.block.machine.SpiderFactoryBlock;
+import mod.steamnsteel.factory.IFactoryEntity;
 import mod.steamnsteel.utility.NBTHelper;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
@@ -13,7 +13,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class SpiderFactoryEntity extends EntityMob {
+public class SpiderFactoryEntity extends EntityMob implements IFactoryEntity {
 
     public static final String NAME = "spiderFactory";
     private Swarm swarm;

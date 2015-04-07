@@ -25,6 +25,7 @@ import mod.steamnsteel.api.crafting.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.commands.CommandCreateSwarm;
 import mod.steamnsteel.commands.CommandSpawnEntity;
+import mod.steamnsteel.commands.CommandSpawnFactory;
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
@@ -115,6 +116,7 @@ public class TheMod
         event.registerServerCommand(new LoadSchematicFromResourceCommand());
         event.registerServerCommand(new LoadSchematicFromFileCommand());
         event.registerServerCommand(new CommandSpawnEntity());
+        event.registerServerCommand(new CommandSpawnFactory());
         event.registerServerCommand(new CommandCreateSwarm());
     }
 

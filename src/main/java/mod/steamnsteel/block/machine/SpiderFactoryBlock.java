@@ -3,6 +3,8 @@ package mod.steamnsteel.block.machine;
 import cpw.mods.fml.common.Mod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.entity.SpiderFactoryEntity;
+import mod.steamnsteel.entity.SteamSpiderEntity;
+import mod.steamnsteel.factory.Factory;
 import mod.steamnsteel.item.factory.SpiderFactoryItem;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.SpiderFactoryTE;
@@ -60,28 +62,21 @@ public class SpiderFactoryBlock extends SteamNSteelBlock implements ITileEntityP
 
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-        SpiderFactoryItem.validateFactory(world, x, y, z);
+        Factory factoryForEntity = Factory.getFactoryForEntity(SteamSpiderEntity.class);
+        factoryForEntity.validateFactory(world, x, y, z);
     }
 
     @Override
     public boolean onBlockEventReceived(World world, int x, int y, int z, int p_149696_5_, int p_149696_6_)
     {
-        super.onBlockEventReceived(world, x, y, z, p_149696_5_, p_149696_6_);
         TileEntity tileentity = world.getTileEntity(x, y, z);
         return tileentity != null && tileentity.receiveClientEvent(p_149696_5_, p_149696_6_);
     }
 
     @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB boundingBox, List collisionList, Entity collindingEntity) {
-        if (collindingEntity instanceof SpiderFactoryEntity) return;
-        //if (collindingEntity instanceof EntityPlayer) return;
-        super.addCollisionBoxesToList(world, x, y, z, boundingBox, collisionList, collindingEntity);
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World p_149668_1_, int p_149668_2_, int p_149668_3_, int p_149668_4_)
-    {
-        return super.getCollisionBoundingBoxFromPool(p_149668_1_, p_149668_2_, p_149668_3_, p_149668_4_);
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB boundingBox, List collisionList, Entity collidingEntity) {
+        if (collidingEntity instanceof SpiderFactoryEntity) return;
+        super.addCollisionBoxesToList(world, x, y, z, boundingBox, collisionList, collidingEntity);
     }
 
     @Override

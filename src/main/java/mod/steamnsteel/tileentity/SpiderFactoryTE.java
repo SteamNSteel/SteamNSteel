@@ -1,15 +1,17 @@
 package mod.steamnsteel.tileentity;
 
+import mod.steamnsteel.factory.IFactoryTE;
 import mod.steamnsteel.utility.NBTHelper;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.MathHelper;
 
-public class SpiderFactoryTE extends SteamNSteelTE
+public class SpiderFactoryTE extends SteamNSteelTE implements IFactoryTE
 {
     public static final String CURR_HEALTH = "health";
     private static final String IS_SLAVE = "isSlave";
