@@ -1,6 +1,7 @@
 package mod.steamnsteel.entity.ai;
 
 import mod.steamnsteel.factory.IFactoryEntity;
+import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 
@@ -26,12 +27,15 @@ public class AIFactorySpawnEntity<T extends EntityLiving & IFactoryEntity> exten
 
     @Override
     public void startExecuting() {
+
+        Logger.info("Starting Build Cycle");
         entity.startBuildCycle();
     }
 
     @Override
     public void updateTask() {
         if (entity.isSpawning() && entity.getBuildStartTime() > entity.worldObj.getWorldTime() - timeToCreateEntity) {
+            Logger.info("Spawning Entity");
             entity.finishBuildCycle();
             entity.spawnEntity();
         }
