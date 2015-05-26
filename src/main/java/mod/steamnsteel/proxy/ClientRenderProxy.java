@@ -26,10 +26,12 @@ import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
 import mod.steamnsteel.client.renderer.block.SteamNSteelPaneRenderer;
 import mod.steamnsteel.client.renderer.item.*;
 import mod.steamnsteel.client.renderer.tileentity.*;
+import mod.steamnsteel.event.VoxboxEventHandler;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.*;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends RenderProxy
@@ -81,5 +83,6 @@ public class ClientRenderProxy extends RenderProxy
     private void registerEventHandlers() {
         //FIXME: The Block Parts are not currently working.
         //MinecraftForge.EVENT_BUS.register(BlockHighlightEventListener.getInstance());
+        MinecraftForge.EVENT_BUS.register(new VoxboxEventHandler());
     }
 }

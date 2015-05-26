@@ -79,3 +79,9 @@ item.steamnsteel:shovelSteel.name=Steel Shovel
 item.steamnsteel:swordBronze.name=Bronze Sword
 item.steamnsteel:swordSteel.name=Steel Sword
 item.steamnsteel:voxBox.name=Vox Box
+
+# Guis
+gui.button.voxbox=V
+
+# Voxbox Entries
+item.steamnsteel:voxBox.voxboxEntry=An ancient device which<br>holds information about many things.

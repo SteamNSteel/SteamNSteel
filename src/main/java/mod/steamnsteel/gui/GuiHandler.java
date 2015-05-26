@@ -18,7 +18,9 @@ package mod.steamnsteel.gui;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 import mod.steamnsteel.client.gui.CupolaGui;
+import mod.steamnsteel.client.gui.VoxBoxGui;
 import mod.steamnsteel.inventory.CupolaContainer;
+import mod.steamnsteel.inventory.VoxBoxContainer;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -36,6 +38,8 @@ public enum GuiHandler implements IGuiHandler
             case CUPOLA:
                 final CupolaTE te = (CupolaTE) world.getTileEntity(x, y, z);
                 return new CupolaContainer(player.inventory, te);
+            case VOXBOX:
+                return new VoxBoxContainer(player.inventory);
         }
         return null;
     }
@@ -49,6 +53,8 @@ public enum GuiHandler implements IGuiHandler
             case CUPOLA:
                 final CupolaTE te = (CupolaTE) world.getTileEntity(x, y, z);
                 return new CupolaGui(player.inventory, te);
+            case VOXBOX:
+                return new VoxBoxGui(player.inventory);
         }
         return null;
     }

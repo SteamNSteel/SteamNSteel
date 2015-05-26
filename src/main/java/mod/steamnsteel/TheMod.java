@@ -21,8 +21,12 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
 import mod.steamnsteel.api.crafting.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
+import mod.steamnsteel.api.voxbox.IVoxBoxDictionary;
+import mod.steamnsteel.api.voxbox.VoxBoxHandler;
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
@@ -30,6 +34,8 @@ import mod.steamnsteel.gui.GuiHandler;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModBlockParts;
 import mod.steamnsteel.library.ModItem;
+import mod.steamnsteel.library.VoxBoxDictionary;
+import mod.steamnsteel.network.packet.VoxBoxPacket;
 import mod.steamnsteel.proxy.Proxies;
 import mod.steamnsteel.world.LoadSchematicFromFileCommand;
 import mod.steamnsteel.world.LoadSchematicFromResourceCommand;
@@ -47,6 +53,8 @@ public class TheMod
     public static final String MOD_GUI_FACTORY = "mod.steamnsteel.configuration.client.ModGuiFactory";
 
     public static final String RESOURCE_PREFIX = MOD_ID.toLowerCase() + ':';
+
+    public static SimpleNetworkWrapper packetChannel = null;//TODO Maybe move the network wrapper around a little?
 
     @SuppressWarnings("AnonymousInnerClass")
     public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID.toLowerCase())
@@ -66,18 +74,21 @@ public class TheMod
     public void onFMLPreInitialization(FMLPreInitializationEvent event)
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+        packetChannel = NetworkRegistry.INSTANCE.newSimpleChannel(TheMod.MOD_ID.toLowerCase());
 
         initAPI();
 
         ModItem.init();
         ModBlock.init();
         ModBlockParts.init();
+        VoxBoxDictionary.init();
     }
 
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
     private void initAPI()
     {
         CraftingManager.alloyManager = Optional.of((IAlloyManager) AlloyManager.INSTANCE);
+        VoxBoxHandler.voxBoxLibrary = Optional.of((IVoxBoxDictionary) VoxBoxDictionary.INSTANCE);
     }
 
     @SuppressWarnings("UnusedParameters")
@@ -86,6 +97,8 @@ public class TheMod
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, GuiHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
+
+        packetChannel.registerMessage(VoxBoxPacket.Handler.class, VoxBoxPacket.class, 0, Side.SERVER);
 
         Recipes.init();
         Proxies.render.init();

@@ -18,7 +18,7 @@ package mod.steamnsteel.gui;
 
 public enum ModGuis
 {
-    CUPOLA;
+    CUPOLA, VOXBOX;
 
     private static final ModGuis[] cache = values();
 
