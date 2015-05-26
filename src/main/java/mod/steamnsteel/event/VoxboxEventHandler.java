@@ -19,7 +19,9 @@ public class VoxboxEventHandler {
     public void onInventoryInitPost(GuiScreenEvent.InitGuiEvent.Post event){
         if(event.gui instanceof GuiInventory){
             //TODO fix up the button and maybe change it's look and feel
-            event.buttonList.add(new GuiButton(VoxBoxGui.BUTTON_ID, 0, 0, 20, 20, I18n.format("gui.button.voxbox")));
+            VoxBoxPlayerProperty property = VoxBoxPlayerProperty.get(event.gui.mc.thePlayer);
+            if(property != null && property.enabled == true)
+                event.buttonList.add(new GuiButton(VoxBoxGui.BUTTON_ID, 0, 0, 20, 20, I18n.format("gui.button.voxbox")));
         }
     }
 

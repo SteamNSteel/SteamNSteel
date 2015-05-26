@@ -16,13 +16,36 @@
 
 package mod.steamnsteel.item.artifact;
 
+import mod.steamnsteel.event.VoxBoxPlayerProperty;
 import mod.steamnsteel.item.SteamNSteelItem;
 import mod.steamnsteel.library.ModItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class PerGuiVox extends SteamNSteelItem
 {
+    public static final String PROPERTY_ID = "voxbox_enabled";
+
     public PerGuiVox()
     {
         setUnlocalizedName(ModItem.Names.PER_GUI_VOX);
+    }
+
+    @Override
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+        VoxBoxPlayerProperty property = VoxBoxPlayerProperty.get(player);
+
+        if(property == null){
+            VoxBoxPlayerProperty.register(player);
+            property = VoxBoxPlayerProperty.get(player);
+        }
+
+        if(!property.enabled) {
+            property.enabled = true;
+            stack.stackSize--;
+        }
+
+        return super.onItemRightClick(stack, world, player);
     }
 }
