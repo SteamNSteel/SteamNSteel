@@ -8,17 +8,12 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            name = "ChickenBones"
-            url = "http://chickenbones.net/maven/"
-        }
     }
     /*dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
     }*/
 }
 //apply plugin: 'net.minecraftforge.gradle.forge'
-
 
 // for people who want stable
 plugins {
@@ -54,6 +49,13 @@ minecraft {
     replace '@API_VERSION@', config.api_version
 }
 
+repositories {
+    maven {
+        name = "ChickenBones"
+        url = "http://chickenbones.net/maven/"
+    }
+}
+
 dependencies {
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
@@ -76,8 +78,8 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    compile 'codechicken:CodeChickenCore:1.8-1.0.5.34:dev'
-    compile 'codechicken:NotEnoughItems:1.8-1.0.5.82:dev'
+    provided 'codechicken:CodeChickenCore:1.8-1.0.5.34:dev'
+    provided 'codechicken:NotEnoughItems:1.8-1.0.5.82:dev'
 }
 
 processResources
@@ -127,7 +129,7 @@ idea {
   }
 }
 
-task copyChicken(type: Copy, dependsOn: "extractUserDev") {
+task copyChicken(type: Copy, dependsOn: "extractUserdev") {
     from { configurations.compile }
     include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
     exclude "**/CodeChickenLib*" // because CCC downloads it anyways.. -_-
