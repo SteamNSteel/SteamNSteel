@@ -18,13 +18,13 @@ package mod.steamnsteel.block.container;
 
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.RemnantRuinChestTE;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
@@ -37,23 +37,24 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
+    public void breakBlock(World world, BlockPos blockPos, IBlockState blockState)
     {
-        final RemnantRuinChestTE te = (RemnantRuinChestTE) world.getTileEntity(x, y, z);
+        final RemnantRuinChestTE te = (RemnantRuinChestTE) world.getTileEntity(blockPos);
 
         if (te != null)
         {
-            dropInventory(world, WorldBlockCoord.of(x, y, z), te);
-            world.func_147453_f(x, y, z, block); // notify neighbors
+            dropInventory(world, blockPos, te);
+
+            world.notifyNeighborsOfStateChange(blockPos, blockState.getBlock());
         }
 
-        super.breakBlock(world, x, y, z, block, metadata);
+        super.breakBlock(world, blockPos, blockState);
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        final TileEntity te = world.getTileEntity(x, y, z);
+        final TileEntity te = world.getTileEntity(pos);
 
         if (!player.isSneaking())
             if (!world.isRemote && te != null && te instanceof RemnantRuinChestTE)
