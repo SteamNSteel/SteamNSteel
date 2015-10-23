@@ -16,8 +16,8 @@
 
 package mod.steamnsteel.client.renderer.model;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
 import net.minecraft.util.ResourceLocation;

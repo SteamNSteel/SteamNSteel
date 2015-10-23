@@ -8,7 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import java.util.EnumSet;
 import java.util.Random;
 
@@ -63,12 +63,12 @@ public class SulfurOreGenerator extends OreGenerator
 
     private static final ImmutableSet<Block> TARGET_BLOCKS = ImmutableSet.of(Blocks.stone, Blocks.dirt);
 
-    private static final ImmutableSet<ForgeDirection> BRANCH_DIRECTIONS = ImmutableSet.copyOf(EnumSet.of(
-            ForgeDirection.UP,
-            ForgeDirection.NORTH,
-            ForgeDirection.SOUTH,
-            ForgeDirection.WEST,
-            ForgeDirection.EAST));
+    private static final ImmutableSet<EnumFacing> BRANCH_DIRECTIONS = ImmutableSet.copyOf(EnumSet.of(
+            EnumFacing.UP,
+            EnumFacing.NORTH,
+            EnumFacing.SOUTH,
+            EnumFacing.WEST,
+            EnumFacing.EAST));
 
     private static void genOreVein(World world, Random rand, WorldBlockCoord coord)
     {
@@ -80,7 +80,7 @@ public class SulfurOreGenerator extends OreGenerator
             if (isBlockReplaceable(world, target, TARGET_BLOCKS))
                 placeSulfurOre(world, target);
 
-            final ForgeDirection offsetToNext = ForgeDirection.getOrientation(rand.nextInt(6));
+            final EnumFacing offsetToNext = EnumFacing.getOrientation(rand.nextInt(6));
             target = target.offset(offsetToNext);
 
             // Has vein strayed into an unloaded chunk? If so, STOP!
@@ -104,7 +104,7 @@ public class SulfurOreGenerator extends OreGenerator
                     return false;
                 }
 
-                target = target.offset(ForgeDirection.DOWN);
+                target = target.offset(EnumFacing.DOWN);
             }
         }
 
@@ -113,7 +113,7 @@ public class SulfurOreGenerator extends OreGenerator
 
     private static boolean isBlockLavaNeighbor(World world, WorldBlockCoord coord)
     {
-        for (final ForgeDirection offset : BRANCH_DIRECTIONS)
+        for (final EnumFacing offset : BRANCH_DIRECTIONS)
         {
             final WorldBlockCoord target = coord.offset(offset);
             if (target.blockExists(world))

@@ -7,7 +7,7 @@ import mod.steamnsteel.tileentity.BasePlumbingTE;
 import mod.steamnsteel.tileentity.PipeTE;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.lwjgl.opengl.GL11;
 
@@ -53,8 +53,8 @@ public class PipeTESR extends SteamNSteelTESR
         GL11.glPushMatrix();
         // Inherent adjustments to model
 
-        ForgeDirection endA = te.getEndADirection();
-        ForgeDirection endB = te.getEndBConnected();
+        EnumFacing endA = te.getEndADirection();
+        EnumFacing endB = te.getEndBConnected();
 
         final int NORTH_WEST = 1;
         final int NORTH_EAST = 2;
@@ -284,7 +284,7 @@ public class PipeTESR extends SteamNSteelTESR
         GL11.glPopMatrix();
     }
 
-    private void renderCap(ForgeDirection direction)
+    private void renderCap(EnumFacing direction)
     {
         switch (direction)
         {

@@ -16,7 +16,7 @@
 
 package mod.steamnsteel.crafting;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.utility.crafting.RecipePattern;
 import net.minecraft.init.Blocks;

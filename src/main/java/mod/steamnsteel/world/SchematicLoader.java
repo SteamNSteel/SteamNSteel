@@ -1,7 +1,5 @@
 package mod.steamnsteel.world;
 
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
@@ -13,12 +11,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraftforge.fml.common.registry.GameData;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -143,9 +143,9 @@ public class SchematicLoader
 
     public void renderSchematicToSingleChunk(ResourceLocation resource, World world,
                                              int originX, int originY, int originZ,
-                                             int chunkX, int chunkZ, ForgeDirection rotation, boolean flip)
+                                             int chunkX, int chunkZ, EnumFacing rotation, boolean flip)
     {
-        if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP)
+        if (rotation == EnumFacing.DOWN || rotation == EnumFacing.UP)
         {
             _logger.error("Unable to load schematic %s, invalid rotation specified: %s", resource, rotation);
             return;
@@ -250,11 +250,11 @@ public class SchematicLoader
         c.setChunkModified();
     }
 
-    public void renderSchematicInOneShot(ResourceLocation resource, World world, int x, int y, int z, ForgeDirection rotation, boolean flip)
+    public void renderSchematicInOneShot(ResourceLocation resource, World world, int x, int y, int z, EnumFacing rotation, boolean flip)
     {
         long start = System.currentTimeMillis();
 
-        if (rotation == ForgeDirection.DOWN || rotation == ForgeDirection.UP)
+        if (rotation == EnumFacing.DOWN || rotation == EnumFacing.UP)
         {
             _logger.error("Unable to load schematic %s, invalid rotation specified: %s", resource, rotation);
             return;

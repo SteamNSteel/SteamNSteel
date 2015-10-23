@@ -22,7 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 /**
@@ -62,7 +62,7 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
         return world.blockExists(data.left, data.middle, data.right);
     }
 
-    public WorldBlockCoord offset(ForgeDirection direction)
+    public WorldBlockCoord offset(EnumFacing direction)
     {
         return new WorldBlockCoord(data.left + direction.offsetX, data.middle + direction.offsetY,
                 data.right + direction.offsetZ);

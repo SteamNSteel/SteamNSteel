@@ -18,7 +18,7 @@ package mod.steamnsteel.crafting;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.utility.crafting.RecipePattern;

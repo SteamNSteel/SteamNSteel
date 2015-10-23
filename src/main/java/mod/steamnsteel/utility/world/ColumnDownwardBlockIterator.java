@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static net.minecraftforge.common.util.ForgeDirection.DOWN;
+import static net.minecraftforge.common.util.EnumFacing.DOWN;
 
 @SuppressWarnings("NewExceptionWithoutArguments")
 public class ColumnDownwardBlockIterator implements Iterator<BlockWorldCoordPair>

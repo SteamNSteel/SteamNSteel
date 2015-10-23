@@ -28,7 +28,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class RemnantRuinFloorBlock extends SteamNSteelBlock
 {
@@ -45,7 +45,7 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
     @Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {
-        if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) {
+        if (side == EnumFacing.UP.ordinal() || side == EnumFacing.DOWN.ordinal()) {
             int xPos = x % 3;
             if (xPos < 0) xPos += 3;
             int zPos = z % 9;

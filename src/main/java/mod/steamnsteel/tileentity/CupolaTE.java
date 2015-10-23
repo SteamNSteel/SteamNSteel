@@ -18,8 +18,8 @@ package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.api.crafting.IAlloyResult;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
@@ -33,7 +33,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 @SuppressWarnings("ClassWithTooManyMethods")
 public class CupolaTE extends SteamNSteelTE implements ISidedInventory
@@ -180,7 +180,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
     @Override
     public int[] getAccessibleSlotsFromSide(int side)
     {
-        final ForgeDirection direction = ForgeDirection.values()[side];
+        final EnumFacing direction = EnumFacing.values()[side];
         switch (direction)
         {
             case DOWN:

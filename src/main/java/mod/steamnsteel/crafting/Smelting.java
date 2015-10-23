@@ -16,7 +16,7 @@
 
 package mod.steamnsteel.crafting;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import mod.steamnsteel.api.crafting.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.api.crafting.ingredient.ItemStackIngredient;

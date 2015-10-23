@@ -26,7 +26,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Random;
@@ -49,9 +49,9 @@ public class NiterVeinGeneratorStateMachine
     private static final float PREF_BIOME_PADDING_CHANCE_PERCENT = 0.25f;
     private static final float OTHER_BIOME_PADDING_CHANCE_PERCENT = 0.5f;
 
-    private static final ImmutableSet<ForgeDirection> DIRECTIONS =
-            ImmutableSet.copyOf(EnumSet.of(ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.EAST,
-                    ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH));
+    private static final ImmutableSet<EnumFacing> DIRECTIONS =
+            ImmutableSet.copyOf(EnumSet.of(EnumFacing.UP, EnumFacing.DOWN, EnumFacing.EAST,
+                    EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH));
 
     private final ColumnMaterialDownwardIterator iterator;
     private final World world;
@@ -89,7 +89,7 @@ public class NiterVeinGeneratorStateMachine
             if (OreGenerator.isBlockReplaceable(world, target, TARGET_BLOCKS))
                 placeNiterOre(target);
 
-            final ForgeDirection offsetToNext = ForgeDirection.getOrientation(rng.nextInt(6));
+            final EnumFacing offsetToNext = EnumFacing.getOrientation(rng.nextInt(6));
             target = target.offset(offsetToNext);
 
             // Has vein strayed into an unloaded chunk? If so, STOP!
@@ -107,11 +107,11 @@ public class NiterVeinGeneratorStateMachine
                 OTHER_BIOME_PADDING_CHANCE_PERCENT;
 
         // encrust ore in sandstone (each additional block of crust is rarer)
-        final Set<ForgeDirection> directions = EnumSet.copyOf(DIRECTIONS);
+        final Set<EnumFacing> directions = EnumSet.copyOf(DIRECTIONS);
         for (int i = 0; i < DIRECTIONS.size(); i++)
         {
             // get random neighbor
-            final ForgeDirection offset = ForgeDirection.getOrientation(rng.nextInt(directions.size()));
+            final EnumFacing offset = EnumFacing.getOrientation(rng.nextInt(directions.size()));
             directions.remove(offset);
             if (rng.nextFloat() < paddingChancePercent)
             {
@@ -125,7 +125,7 @@ public class NiterVeinGeneratorStateMachine
 
     private boolean isBlockLiquidNeighbor(WorldBlockCoord coord)
     {
-        for (final ForgeDirection offset : DIRECTIONS)
+        for (final EnumFacing offset : DIRECTIONS)
         {
             final WorldBlockCoord target = coord.offset(offset);
             if (target.blockExists(world))

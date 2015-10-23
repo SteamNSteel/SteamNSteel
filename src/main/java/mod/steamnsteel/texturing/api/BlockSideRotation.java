@@ -1,19 +1,19 @@
 package mod.steamnsteel.texturing.api;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class BlockSideRotation
 {
-    private static final ForgeDirection[][] ROTATION_MATRIX = {
-            {ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN},
-            {ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN, ForgeDirection.UNKNOWN},
-            {ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN},
-            {ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.SOUTH, ForgeDirection.NORTH, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN},
-            {ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN},
-            {ForgeDirection.SOUTH, ForgeDirection.NORTH, ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.DOWN, ForgeDirection.UP, ForgeDirection.UNKNOWN}
+    private static final EnumFacing[][] ROTATION_MATRIX = {
+            {EnumFacing.UNKNOWN, EnumFacing.UNKNOWN, EnumFacing.UNKNOWN, EnumFacing.UNKNOWN, EnumFacing.UNKNOWN, EnumFacing.UNKNOWN, EnumFacing.UNKNOWN},
+            {EnumFacing.UNKNOWN, EnumFacing.UNKNOWN, EnumFacing.UNKNOWN, EnumFacing.UNKNOWN, EnumFacing.UNKNOWN, EnumFacing.UNKNOWN, EnumFacing.UNKNOWN},
+            {EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.DOWN, EnumFacing.UP, EnumFacing.UNKNOWN},
+            {EnumFacing.WEST, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.NORTH, EnumFacing.DOWN, EnumFacing.UP, EnumFacing.UNKNOWN},
+            {EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.EAST, EnumFacing.DOWN, EnumFacing.UP, EnumFacing.UNKNOWN},
+            {EnumFacing.SOUTH, EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.DOWN, EnumFacing.UP, EnumFacing.UNKNOWN}
     };
 
-    public static ForgeDirection forOrientation(TextureDirection direction, ForgeDirection orientation)
+    public static EnumFacing forOrientation(TextureDirection direction, EnumFacing orientation)
     {
         return ROTATION_MATRIX[orientation.ordinal()][direction.ordinal()];
     }

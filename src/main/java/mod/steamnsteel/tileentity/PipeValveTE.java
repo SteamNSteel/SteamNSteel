@@ -9,15 +9,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class PipeValveTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntityWithParts
 {
     private BlockPartConfiguration blockPartConfiguration = new BlockPartConfiguration(PartSets.Pipe);
 
 
-    private ForgeDirection valveDirection;
-    private ForgeDirection orientation;
+    private EnumFacing valveDirection;
+    private EnumFacing orientation;
 
     private boolean isEndAConnected = false;
     private boolean isEndBConnected = false;
@@ -28,7 +28,7 @@ public class PipeValveTE extends SteamNSteelTE implements IPipeTileEntity, ITile
     }
 
     @Override
-    public boolean isSideConnected(ForgeDirection opposite)
+    public boolean isSideConnected(EnumFacing opposite)
     {
         if (opposite == orientation && isEndAConnected) {
             return true;
@@ -41,7 +41,7 @@ public class PipeValveTE extends SteamNSteelTE implements IPipeTileEntity, ITile
     }
 
     @Override
-    public boolean tryConnect(ForgeDirection opposite)
+    public boolean tryConnect(EnumFacing opposite)
     {
         if (opposite == orientation) {
             isEndAConnected = true;
@@ -60,7 +60,7 @@ public class PipeValveTE extends SteamNSteelTE implements IPipeTileEntity, ITile
     }
 
     @Override
-    public boolean canConnect(ForgeDirection opposite)
+    public boolean canConnect(EnumFacing opposite)
     {
         if (opposite == orientation || opposite == orientation.getOpposite()) {
             return true;
@@ -78,7 +78,7 @@ public class PipeValveTE extends SteamNSteelTE implements IPipeTileEntity, ITile
     }
 
     @Override
-    public void disconnect(ForgeDirection opposite)
+    public void disconnect(EnumFacing opposite)
     {
         boolean updated = false;
 
@@ -129,7 +129,7 @@ public class PipeValveTE extends SteamNSteelTE implements IPipeTileEntity, ITile
         super.readFromNBT(nbt);
     }
 
-    public void setOrientation(ForgeDirection orientation)
+    public void setOrientation(EnumFacing orientation)
     {
         this.orientation = orientation;
     }

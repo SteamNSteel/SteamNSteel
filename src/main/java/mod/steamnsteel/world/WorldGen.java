@@ -17,7 +17,6 @@
 package mod.steamnsteel.world;
 
 import com.google.common.collect.Lists;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mod.steamnsteel.configuration.Settings;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.world.ore.NiterOreGenerator;
@@ -32,6 +31,8 @@ import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import java.util.List;
 
 import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.CUSTOM;

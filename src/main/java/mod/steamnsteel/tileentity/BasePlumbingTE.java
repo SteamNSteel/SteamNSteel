@@ -10,8 +10,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileEntity
 {
@@ -23,7 +22,7 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
-    protected IPipeTileEntity getPipeTileEntityInDirection(ForgeDirection offset) {
+    protected IPipeTileEntity getPipeTileEntityInDirection(EnumFacing offset) {
         if (offset == null) {
             return null;
         }
@@ -47,13 +46,13 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
     }
 
     @Override
-    public abstract boolean isSideConnected(ForgeDirection direction);
+    public abstract boolean isSideConnected(EnumFacing direction);
 
     @Override
-    public abstract boolean tryConnect(ForgeDirection direction);
+    public abstract boolean tryConnect(EnumFacing direction);
 
     @Override
-    public abstract boolean canConnect(ForgeDirection opposite);
+    public abstract boolean canConnect(EnumFacing opposite);
 
     protected abstract void writePlumbingToNBT(NBTTagCompound nbt);
     protected abstract void readPlumbingFromNBT(NBTTagCompound nbt);

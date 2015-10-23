@@ -1,16 +1,11 @@
 package mod.steamnsteel.client.renderer.block;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-
-import static net.minecraftforge.common.util.ForgeDirection.*;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class SteamNSteelPaneRenderer implements ISimpleBlockRenderingHandler
 {

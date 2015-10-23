@@ -1,7 +1,7 @@
 package mod.steamnsteel.texturing.api;
 
 /**
- * TextureDirection is a relative direction alternative to ForgeDirection's absolute direction
+ * TextureDirection is a relative direction alternative to EnumFacing's absolute direction
  */
 public enum TextureDirection
 {

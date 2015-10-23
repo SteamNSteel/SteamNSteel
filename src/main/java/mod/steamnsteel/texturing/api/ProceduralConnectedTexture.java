@@ -10,7 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public abstract class ProceduralConnectedTexture
 {
@@ -140,8 +140,8 @@ public abstract class ProceduralConnectedTexture
     private long getTraitSetForSide(IconRequest request)
     {
         long initialTraits = 0;
-        ForgeDirection orientation = request.getOrientation();
-        if (orientation == ForgeDirection.UP || orientation == ForgeDirection.DOWN || isBlockPartOfWallAndUnobstructed(request, TextureDirection.BACKWARDS))
+        EnumFacing orientation = request.getOrientation();
+        if (orientation == EnumFacing.UP || orientation == EnumFacing.DOWN || isBlockPartOfWallAndUnobstructed(request, TextureDirection.BACKWARDS))
         {
             return DEFAULT;
         }
@@ -214,7 +214,7 @@ public abstract class ProceduralConnectedTexture
         WorldBlockCoord coord = request.getWorldBlockCoord();
         for (TextureDirection textureDirection : direction)
         {
-            coord = coord.offset(request.getForgeDirection(textureDirection));
+            coord = coord.offset(request.getEnumFacing(textureDirection));
         }
         return coord;
     }

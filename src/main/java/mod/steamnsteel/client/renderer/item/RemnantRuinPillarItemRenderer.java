@@ -17,9 +17,9 @@
 package mod.steamnsteel.client.renderer.item;
 
 import com.google.common.base.Objects;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.client.renderer.model.RemnantRuinPillarModel;
 import mod.steamnsteel.client.renderer.tileentity.CupolaTESR;
 import mod.steamnsteel.client.renderer.tileentity.RemnantRuinPillarTESR;

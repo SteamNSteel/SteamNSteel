@@ -1,7 +1,7 @@
 package mod.steamnsteel.block.resource.structure;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelPaneBlock;
 import mod.steamnsteel.client.renderer.block.SteamNSteelPaneRenderer;

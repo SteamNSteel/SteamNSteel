@@ -18,8 +18,8 @@ package mod.steamnsteel.inventory;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.api.crafting.CraftingManager;
 import mod.steamnsteel.inventory.slot.CupolaSlot;
 import mod.steamnsteel.tileentity.CupolaTE;

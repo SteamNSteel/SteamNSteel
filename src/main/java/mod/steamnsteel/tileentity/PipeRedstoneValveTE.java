@@ -9,14 +9,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntityWithParts
 {
     private BlockPartConfiguration blockPartConfiguration = new BlockPartConfiguration(PartSets.Pipe);
 
-    private ForgeDirection endA = ForgeDirection.EAST;
-    private ForgeDirection endB = ForgeDirection.WEST;
+    private EnumFacing endA = EnumFacing.EAST;
+    private EnumFacing endB = EnumFacing.WEST;
 
     @Override
     public BlockPartConfiguration getBlockPartConfiguration() {
@@ -24,19 +24,19 @@ public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntit
     }
 
     @Override
-    public boolean isSideConnected(ForgeDirection opposite)
+    public boolean isSideConnected(EnumFacing opposite)
     {
         return false;
     }
 
     @Override
-    public boolean tryConnect(ForgeDirection opposite)
+    public boolean tryConnect(EnumFacing opposite)
     {
         return false;
     }
 
     @Override
-    public boolean canConnect(ForgeDirection opposite)
+    public boolean canConnect(EnumFacing opposite)
     {
         return false;
     }
@@ -48,7 +48,7 @@ public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntit
     }
 
     @Override
-    public void disconnect(ForgeDirection opposite)
+    public void disconnect(EnumFacing opposite)
     {
         boolean updated = false;
 

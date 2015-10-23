@@ -1,7 +1,7 @@
 package mod.steamnsteel.client.renderer.item;
 
 import com.google.common.base.Objects;
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import mod.steamnsteel.client.renderer.model.PipeRedstoneValveModel;
 import mod.steamnsteel.client.renderer.model.PipeValveModel;
 import mod.steamnsteel.client.renderer.tileentity.PipeRedstoneValveTESR;

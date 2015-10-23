@@ -5,7 +5,7 @@ import mod.steamnsteel.world.WorldGen;
 import mod.steamnsteel.world.structure.remnantruins.Ruin;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import org.lwjgl.util.Rectangle;
 
 public class StructureChunkGenerator
@@ -46,7 +46,7 @@ public class StructureChunkGenerator
                 world,
                 intersection.getX(), ruin.height, intersection.getY(),
                 chunkX, chunkZ,
-                ForgeDirection.NORTH,
+                EnumFacing.NORTH,
                 false);
 
     }

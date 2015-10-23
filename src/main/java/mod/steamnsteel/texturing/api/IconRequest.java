@@ -2,7 +2,7 @@ package mod.steamnsteel.texturing.api;
 
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import java.util.Random;
 
 /**
@@ -10,56 +10,56 @@ import java.util.Random;
  */
 public class IconRequest
 {
-    private ForgeDirection orientation;
-    private ForgeDirection[] directions;
+    private EnumFacing orientation;
+    private EnumFacing[] directions;
 
     /**
-     * @return the ForgeDirection that corresponds to moving forward
+     * @return the EnumFacing that corresponds to moving forward
      */
-    public ForgeDirection getForwardDirection()
+    public EnumFacing getForwardDirection()
     {
         return forwardDirection;
     }
 
 
-    private ForgeDirection forwardDirection;
+    private EnumFacing forwardDirection;
 
     /**
-     * @return the ForgeDirection that corresponds to moving left
+     * @return the EnumFacing that corresponds to moving left
      */
-    public ForgeDirection getLeftDirection()
+    public EnumFacing getLeftDirection()
     {
         return leftDirection;
     }
 
     /**
-     * @return the ForgeDirection that corresponds to moving right
+     * @return the EnumFacing that corresponds to moving right
      */
-    public ForgeDirection getRightDirection()
+    public EnumFacing getRightDirection()
     {
         return rightDirection;
     }
 
     /**
-     * @return the ForgeDirection that corresponds to moving backwards
+     * @return the EnumFacing that corresponds to moving backwards
      */
-    public ForgeDirection getBackwardDirection()
+    public EnumFacing getBackwardDirection()
     {
         return backDirection;
     }
 
     /**
-     * @return the ForgeDirection that corresponds to moving upwards
+     * @return the EnumFacing that corresponds to moving upwards
      */
-    public ForgeDirection getUpDirection()
+    public EnumFacing getUpDirection()
     {
         return upDirection;
     }
 
     /**
-     * @return the ForgeDirection that corresponds to moving downwards
+     * @return the EnumFacing that corresponds to moving downwards
      */
-    public ForgeDirection getDownDirection()
+    public EnumFacing getDownDirection()
     {
         return downDirection;
     }
@@ -80,11 +80,11 @@ public class IconRequest
         return worldBlockCoord;
     }
 
-    private ForgeDirection leftDirection;
-    private ForgeDirection rightDirection;
-    private ForgeDirection backDirection;
-    private ForgeDirection upDirection;
-    private ForgeDirection downDirection;
+    private EnumFacing leftDirection;
+    private EnumFacing rightDirection;
+    private EnumFacing backDirection;
+    private EnumFacing upDirection;
+    private EnumFacing downDirection;
     private IBlockAccess blockAccess;
     private WorldBlockCoord worldBlockCoord;
 
@@ -94,7 +94,7 @@ public class IconRequest
     {
         this.blockAccess = blockAccess;
         this.worldBlockCoord = worldBlockCoord;
-        orientation = ForgeDirection.getOrientation(side);
+        orientation = EnumFacing.getOrientation(side);
         leftDirection = BlockSideRotation.forOrientation(TextureDirection.LEFT, orientation);
         rightDirection = BlockSideRotation.forOrientation(TextureDirection.RIGHT, orientation);
         backDirection = BlockSideRotation.forOrientation(TextureDirection.BACKWARDS, orientation);
@@ -102,7 +102,7 @@ public class IconRequest
         downDirection = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
         forwardDirection = BlockSideRotation.forOrientation(TextureDirection.BELOW, orientation);
 
-        directions = new ForgeDirection[6];
+        directions = new EnumFacing[6];
         directions[TextureDirection.LEFT.ordinal()] = leftDirection;
         directions[TextureDirection.RIGHT.ordinal()] = rightDirection;
         directions[TextureDirection.ABOVE.ordinal()] = upDirection;
@@ -149,20 +149,20 @@ public class IconRequest
     }
 
     /**
-     * @return the ForgeDirection of the side.
+     * @return the EnumFacing of the side.
      */
-    public ForgeDirection getOrientation()
+    public EnumFacing getOrientation()
     {
         return orientation;
     }
 
     /**
-     * returns the corresponding ForgeDirection for a TextureDirection within this context.
+     * returns the corresponding EnumFacing for a TextureDirection within this context.
      *
      * @param textureDirection the TextureDirection to convert
-     * @return the correlated ForgeDirection
+     * @return the correlated EnumFacing
      */
-    public ForgeDirection getForgeDirection(TextureDirection textureDirection)
+    public EnumFacing getEnumFacing(TextureDirection textureDirection)
     {
         return directions[textureDirection.ordinal()];
     }

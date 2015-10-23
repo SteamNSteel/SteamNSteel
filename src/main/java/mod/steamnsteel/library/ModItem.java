@@ -16,7 +16,6 @@
 
 package mod.steamnsteel.library;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.item.SteamNSteelItem;
 import mod.steamnsteel.item.armor.*;
@@ -26,6 +25,7 @@ import mod.steamnsteel.item.resource.Sulfur;
 import mod.steamnsteel.item.resource.ingot.*;
 import mod.steamnsteel.item.tool.*;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import static mod.steamnsteel.library.Material.BRONZE;

@@ -17,8 +17,8 @@
 package mod.steamnsteel.item.tool;
 
 import com.google.common.base.Objects;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.library.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;

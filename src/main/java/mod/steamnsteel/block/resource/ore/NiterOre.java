@@ -17,8 +17,8 @@
 package mod.steamnsteel.block.resource.ore;
 
 import com.google.common.base.Objects;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.configuration.Settings;
 import net.minecraft.block.material.Material;

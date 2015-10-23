@@ -1,16 +1,16 @@
 package mod.steamnsteel.api.plumbing;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public interface IPipeTileEntity
 {
-    boolean isSideConnected(ForgeDirection opposite);
+    boolean isSideConnected(EnumFacing opposite);
 
-    boolean tryConnect(ForgeDirection opposite);
+    boolean tryConnect(EnumFacing opposite);
 
-    boolean canConnect(ForgeDirection opposite);
+    boolean canConnect(EnumFacing opposite);
 
     void recalculateVisuals();
 
-    void disconnect(ForgeDirection opposite);
+    void disconnect(EnumFacing opposite);
 }

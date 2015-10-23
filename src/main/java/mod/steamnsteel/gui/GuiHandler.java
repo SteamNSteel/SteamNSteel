@@ -16,12 +16,12 @@
 
 package mod.steamnsteel.gui;
 
-import cpw.mods.fml.common.network.IGuiHandler;
 import mod.steamnsteel.client.gui.CupolaGui;
 import mod.steamnsteel.inventory.CupolaContainer;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public enum GuiHandler implements IGuiHandler
 {

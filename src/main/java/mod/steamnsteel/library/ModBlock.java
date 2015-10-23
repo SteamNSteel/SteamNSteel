@@ -16,8 +16,8 @@
 
 package mod.steamnsteel.library;
 
-import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.*;
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;

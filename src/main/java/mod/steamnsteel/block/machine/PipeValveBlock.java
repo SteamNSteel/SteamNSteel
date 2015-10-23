@@ -18,16 +18,14 @@ package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.tileentity.PipeValveTE;
-import mod.steamnsteel.utility.log.Logger;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvider
 {
@@ -115,24 +113,24 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
         {
             PipeValveTE te = (PipeValveTE)tileEntity;
 
-            ForgeDirection direction = ForgeDirection.EAST;
+            EnumFacing direction = EnumFacing.EAST;
             int facing = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
             if (facing == 0)
             {
-                direction = ForgeDirection.NORTH;
+                direction = EnumFacing.NORTH;
             }
             else if (facing == 1)
             {
-                direction = ForgeDirection.EAST;
+                direction = EnumFacing.EAST;
             }
             else if (facing == 2)
             {
-                direction = ForgeDirection.NORTH;
+                direction = EnumFacing.NORTH;
             }
             else if (facing == 3)
             {
-                direction = ForgeDirection.EAST;
+                direction = EnumFacing.EAST;
             }
 
             te.setOrientation(direction);

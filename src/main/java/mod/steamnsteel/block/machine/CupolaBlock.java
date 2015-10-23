@@ -17,8 +17,6 @@
 package mod.steamnsteel.block.machine;
 
 import com.google.common.base.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.gui.ModGuis;
@@ -35,6 +33,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.util.Random;
 
 public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityProvider

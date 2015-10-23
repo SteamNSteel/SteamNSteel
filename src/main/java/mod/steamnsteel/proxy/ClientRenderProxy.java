@@ -16,8 +16,6 @@
 
 package mod.steamnsteel.proxy;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import mod.steamnsteel.block.machine.PipeBlock;
 import mod.steamnsteel.block.machine.PipeJunctionBlock;
 import mod.steamnsteel.block.machine.PipeRedstoneValveBlock;
@@ -30,6 +28,8 @@ import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.*;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends RenderProxy

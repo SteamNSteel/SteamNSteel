@@ -6,12 +6,12 @@ import mod.steamnsteel.utility.blockParts.BlockPart;
 import mod.steamnsteel.utility.blockParts.BlockPartConfiguration;
 import mod.steamnsteel.utility.blockParts.ITileEntityWithParts;
 import mod.steamnsteel.utility.PartSets;
-import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import java.util.LinkedList;
+
 import java.util.List;
+
 
 public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
 {
@@ -24,11 +24,11 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
     private BlockPartConfiguration blockPartConfiguration = new BlockPartConfiguration(PartSets.Pipe);
     private boolean useAlternateModel;
 
-    public ForgeDirection getEndADirection()
+    public EnumFacing getEndADirection()
     {
         return endA;
     }
-    public ForgeDirection getEndBConnected()
+    public EnumFacing getEndBConnected()
     {
         return endB;
     }
@@ -41,8 +41,8 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         return endBIsConnected;
     }
 
-    private ForgeDirection endA = ForgeDirection.EAST;
-    private ForgeDirection endB = ForgeDirection.WEST;
+    private EnumFacing endA = EnumFacing.EAST;
+    private EnumFacing endB = EnumFacing.WEST;
 
     private boolean endAIsConnected;
     private boolean endBIsConnected;
@@ -64,14 +64,14 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         IPipeTileEntity pipeEntity;
         boolean changed = false;
 
-        List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = recalculateValidDirections();
-        ImmutablePair<ForgeDirection, ForgeDirection> connectionToMake = null;
+        List<ImmutablePair<EnumFacing, EnumFacing>> validDirections = recalculateValidDirections();
+        ImmutablePair<EnumFacing, EnumFacing> connectionToMake = null;
 
         //Check if current ends are valid, or use the first pair that is.
-        for (ImmutablePair<ForgeDirection, ForgeDirection> pair : validDirections)
+        for (ImmutablePair<EnumFacing, EnumFacing> pair : validDirections)
         {
-            final ForgeDirection left = pair.getLeft();
-            final ForgeDirection right = pair.getRight();
+            final EnumFacing left = pair.getLeft();
+            final EnumFacing right = pair.getRight();
 
             if (getPipeTileEntityInDirection(left).canConnect(left.getOpposite()) && getPipeTileEntityInDirection(right).canConnect(right.getOpposite()))
             {
@@ -84,13 +84,13 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         //If none were found, find the first single end that is connected and connect to that and it's opposite.
         if (connectionToMake == null)
         {
-            for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i)
+            for (int i = 0; i < EnumFacing.VALID_DIRECTIONS.length; ++i)
             {
-                final ForgeDirection direction = ForgeDirection.VALID_DIRECTIONS[i];
+                final EnumFacing direction = EnumFacing.VALID_DIRECTIONS[i];
                 pipeEntity = getPipeTileEntityInDirection(direction);
                 if (pipeEntity != null && pipeEntity.canConnect(direction.getOpposite()))
                 {
-                    connectionToMake = new ImmutablePair<ForgeDirection, ForgeDirection>(direction, direction.getOpposite());
+                    connectionToMake = new ImmutablePair<EnumFacing, EnumFacing>(direction, direction.getOpposite());
                     break;
                 }
             }
@@ -101,8 +101,8 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
 
         //If we're going to make a connection
         if (connectionToMake != null) {
-            final ForgeDirection left = connectionToMake.getLeft();
-            final ForgeDirection right = connectionToMake.getRight();
+            final EnumFacing left = connectionToMake.getLeft();
+            final EnumFacing right = connectionToMake.getRight();
 
             //We're connected to endA if we can make a connection
             endAIsConnected = getPipeTileEntityInDirection(left).tryConnect(left.getOpposite());
@@ -142,8 +142,8 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         }
 
         //We'll now update the BlockPart configuration and enable the sides that have neighbouring blocks.
-        for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i) {
-            final ForgeDirection direction = ForgeDirection.VALID_DIRECTIONS[i];
+        for (int i = 0; i < EnumFacing.VALID_DIRECTIONS.length; ++i) {
+            final EnumFacing direction = EnumFacing.VALID_DIRECTIONS[i];
             BlockPart part = blockPartConfiguration.getBlockPartByKey(direction);
 
             IPipeTileEntity tileEntity = getPipeTileEntityInDirection(direction);
@@ -167,7 +167,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
             return false;
         }
 
-        ForgeDirection endSwap = endA;
+        EnumFacing endSwap = endA;
         endA = endB;
         endB = endSwap;
 
@@ -177,7 +177,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         return true;
     }
 
-    private static final List<ImmutablePair<ForgeDirection, ForgeDirection>> PIPE_ROTATIONS = new LinkedList<ImmutablePair<ForgeDirection, ForgeDirection>>();
+    private static final List<ImmutablePair<EnumFacing, EnumFacing>> PIPE_ROTATIONS = new LinkedList<ImmutablePair<EnumFacing, EnumFacing>>();
 
     /**
      * Calculates the minimum list of possible commutative rotations
@@ -185,11 +185,11 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
     private synchronized static void calculatePipeRotations() {
         if (PIPE_ROTATIONS.isEmpty())
         {
-            for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; ++i)
+            for (int i = 0; i < EnumFacing.VALID_DIRECTIONS.length; ++i)
             {
-                for (int j = i + 1; j < ForgeDirection.VALID_DIRECTIONS.length; ++j)
+                for (int j = i + 1; j < EnumFacing.VALID_DIRECTIONS.length; ++j)
                 {
-                    PIPE_ROTATIONS.add(new ImmutablePair<ForgeDirection, ForgeDirection>(ForgeDirection.VALID_DIRECTIONS[i], ForgeDirection.VALID_DIRECTIONS[j]));
+                    PIPE_ROTATIONS.add(new ImmutablePair<EnumFacing, EnumFacing>(EnumFacing.VALID_DIRECTIONS[i], EnumFacing.VALID_DIRECTIONS[j]));
                 }
             }
         }
@@ -200,14 +200,14 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
      * Calculates a list of valid directions a pipe could potentially be facing.
      * @return A list of ends which are valid for the pipe.
      */
-    private List<ImmutablePair<ForgeDirection, ForgeDirection>> recalculateValidDirections()
+    private List<ImmutablePair<EnumFacing, EnumFacing>> recalculateValidDirections()
     {
         if (PIPE_ROTATIONS.isEmpty()) {
             calculatePipeRotations();
         }
 
-        List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = new LinkedList<ImmutablePair<ForgeDirection, ForgeDirection>>();
-        for (ImmutablePair<ForgeDirection, ForgeDirection> pair : PIPE_ROTATIONS)
+        List<ImmutablePair<EnumFacing, EnumFacing>> validDirections = new LinkedList<ImmutablePair<EnumFacing, EnumFacing>>();
+        for (ImmutablePair<EnumFacing, EnumFacing> pair : PIPE_ROTATIONS)
         {
             if (getPipeTileEntityInDirection(pair.left) != null && getPipeTileEntityInDirection(pair.right) != null) {
                 validDirections.add(pair);
@@ -230,14 +230,14 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         useAlternateModel = false;
 
         //If the ends are NORTH and WEST or they are SOUTH and EAST
-        if ((endA == ForgeDirection.NORTH && endB == ForgeDirection.WEST) ||
-                endA == ForgeDirection.SOUTH && endB == ForgeDirection.EAST) {
+        if ((endA == EnumFacing.NORTH && endB == EnumFacing.WEST) ||
+                endA == EnumFacing.SOUTH && endB == EnumFacing.EAST) {
             //And the tile entity in the z access
             final IPipeTileEntity pipeTileEntity = getPipeTileEntityInDirection(endA);
             if (pipeTileEntity instanceof BasePlumbingTE) {
                 final BasePlumbingTE pipeTE = (BasePlumbingTE)pipeTileEntity;
                 //Is a straight pipe going north/south
-                if (pipeTE.isSideConnected(ForgeDirection.NORTH) && pipeTE.isSideConnected(ForgeDirection.SOUTH)) {
+                if (pipeTE.isSideConnected(EnumFacing.NORTH) && pipeTE.isSideConnected(EnumFacing.SOUTH)) {
                     useAlternateModel = true;
                 }
             }
@@ -250,7 +250,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
      * @param opposite
      */
     @Override
-    public void disconnect(ForgeDirection opposite)
+    public void disconnect(EnumFacing opposite)
     {
         boolean updated = false;
 
@@ -276,7 +276,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
     public void rotatePipe()
     {
         //Find all the sides we could possibly connect to
-        List<ImmutablePair<ForgeDirection, ForgeDirection>> validDirections = recalculateValidDirections();
+        List<ImmutablePair<EnumFacing, EnumFacing>> validDirections = recalculateValidDirections();
         int length = validDirections.size();
         //If there is none, or just one, then return, there's no point in doing anything.
         if (length <= 1) {return;}
@@ -284,7 +284,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         //Out of all the valid ends, find the current one (if there is one). We'll start from here.
         int i;
         for (i = 0; i < length; ++i) {
-            ImmutablePair<ForgeDirection, ForgeDirection> pipeEnds = validDirections.get(i);
+            ImmutablePair<EnumFacing, EnumFacing> pipeEnds = validDirections.get(i);
             if (pipeEnds.left == this.endA && pipeEnds.right == this.endB)
             {
                 break;
@@ -292,10 +292,10 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         }
         //When we hit this number, we've looped around to the beginning
         int stop = i % length;
-        ImmutablePair<ForgeDirection, ForgeDirection> selectedEnds = null;
+        ImmutablePair<EnumFacing, EnumFacing> selectedEnds = null;
         //Iterate forward from the current set, looping around, until we hit our stopping index.
         while ((i = (++i) % length) != stop) {
-            ImmutablePair<ForgeDirection, ForgeDirection> pipeEnds = validDirections.get(i);
+            ImmutablePair<EnumFacing, EnumFacing> pipeEnds = validDirections.get(i);
             IPipeTileEntity pipe = getPipeTileEntityInDirection(pipeEnds.left);
             //Check to see if it's possible to connect to this pipe to endA (it might already have both ends connected)
             if (pipe == null || pipe.canConnect(pipeEnds.left.getOpposite())) {
@@ -313,8 +313,8 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         if (selectedEnds == null) {
             return;
         }
-        ForgeDirection newEndA = selectedEnds.getLeft();
-        ForgeDirection newEndB = selectedEnds.getRight();
+        EnumFacing newEndA = selectedEnds.getLeft();
+        EnumFacing newEndB = selectedEnds.getRight();
 
         IPipeTileEntity prevEndATileEntity;
         IPipeTileEntity newEndATileEntity;
@@ -375,7 +375,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
      * @return true if the side is connected
      */
     @Override
-    public boolean isSideConnected(ForgeDirection side)
+    public boolean isSideConnected(EnumFacing side)
     {
         //TODO: not using endAisConnected??
         return endA == side || endB == side;
@@ -387,10 +387,10 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
      * @return true if a connection was made
      */
     @Override
-    public boolean tryConnect(ForgeDirection side)
+    public boolean tryConnect(EnumFacing side)
     {
-        ForgeDirection previousEndA = endA;
-        ForgeDirection previousEndB = endB;
+        EnumFacing previousEndA = endA;
+        EnumFacing previousEndB = endB;
         boolean previousEndAConnected = endAIsConnected;
         boolean previousEndBConnected = endBIsConnected;
 
@@ -425,12 +425,12 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
      * @return true if a connection is possible, or already made
      */
     @Override
-    public boolean canConnect(ForgeDirection side)
+    public boolean canConnect(EnumFacing side)
     {
         return !endAIsConnected || !endBIsConnected || endA == side || endB == side;
     }
 
-    public void setOrientation(ForgeDirection orientation)
+    public void setOrientation(EnumFacing orientation)
     {
         IPipeTileEntity tileEntity;
 
@@ -472,9 +472,9 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
     @Override
     public void readPlumbingFromNBT(NBTTagCompound nbt)
     {
-        endA = ForgeDirection.getOrientation(nbt.getByte(NBT_END_A));
+        endA = EnumFacing.getOrientation(nbt.getByte(NBT_END_A));
         endAIsConnected = nbt.getBoolean(NBT_END_A_CONNECTED);
-        endB = ForgeDirection.getOrientation(nbt.getByte(NBT_END_B));
+        endB = EnumFacing.getOrientation(nbt.getByte(NBT_END_B));
         endBIsConnected = nbt.getBoolean(NBT_END_B_CONNECTED);
 
         if (worldObj != null && worldObj.isRemote)
