@@ -19,6 +19,7 @@ package mod.steamnsteel.client.renderer.tileentity;
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.tileentity.RemnantRuinChestTE;
 import mod.steamnsteel.utility.Orientation;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -82,7 +83,7 @@ public class PlotoniumChestTESR extends SteamNSteelTESR
         GL11.glScalef(1.0F, -1.0F, -1.0F);  //flip & rotate
         GL11.glTranslatef(0.5F, 0.5F, 0.5F); //translate block pos around fromBLK ORG
 
-        final int metadata = world.getBlockMetadata(x, y, z);
+        final IBlockState metadata = world.getBlockMetadata(blockPos);
         final Orientation orientation = Orientation.getdecodedOrientation(metadata);
         GL11.glRotatef(getAngleFromOrientation(orientation), 0.0F, -1.0F, 0.0F);
 

@@ -23,6 +23,7 @@ import mod.steamnsteel.client.renderer.model.CupolaModel;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.Orientation;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
@@ -86,8 +87,8 @@ public class CupolaTESR extends SteamNSteelTESR
         final World world = te.getWorldObj();
 
         // Lighting
-        final float brightness = ModBlock.cupola.getMixedBrightnessForBlock(world, x, y, z);
-        final int skyLight = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
+        final float brightness = ModBlock.cupola.getMixedBrightnessForBlock(world, blockPos);
+        final int skyLight = world.getLightBrightnessForSkyBlocks(blockPos, 0);
         final int skyLightLSB = skyLight % 65536;
         final int skyLightMSB = skyLight / 65536;
 
@@ -102,7 +103,7 @@ public class CupolaTESR extends SteamNSteelTESR
         GL11.glTranslatef(OFFSET.left, OFFSET.middle, OFFSET.right);
 
         // Orient the model to match the placement
-        final int metadata = world.getBlockMetadata(x, y, z);
+        final IBlockState metadata = world.getBlockMetadata(blockPos);
         final Orientation orientation = Orientation.getdecodedOrientation(metadata);
 
         GL11.glRotatef(getAngleFromOrientation(orientation), 0.0F, 1.0F, 0.0F);

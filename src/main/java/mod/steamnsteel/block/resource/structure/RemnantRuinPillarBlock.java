@@ -74,9 +74,9 @@ public class RemnantRuinPillarBlock extends SteamNSteelBlock
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
+    public void onBlockPlacedBy(World world, BlockPos blockPos EntityLivingBase entity, ItemStack itemStack) {
         final int orientation = BlockDirectional.getDirection(MathHelper.floor_double(entity.rotationYaw * 4.0f / 360.0f + 0.5));
-        world.setBlockMetadataWithNotify(x, y, z, orientation & 1, 0);
+        world.setBlockMetadataWithNotify(blockPos, orientation & 1, 0);
     }
 
 

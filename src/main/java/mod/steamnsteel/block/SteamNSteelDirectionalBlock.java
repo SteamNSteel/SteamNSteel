@@ -20,6 +20,7 @@ import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -31,11 +32,11 @@ abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack)
+    public void onBlockPlacedBy(World world, BlockPos blockPos, EntityLivingBase entity, ItemStack itemStack)
     {
-        super.onBlockPlacedBy(world, x, y, x, entity, itemStack);
+        super.onBlockPlacedBy(world, blockPos, entity, itemStack);
 
         final int orientation = BlockDirectional.getDirection(MathHelper.floor_double(entity.rotationYaw * 4.0f / 360.0f + 0.5));
-        world.setBlockMetadataWithNotify(x, y, z, orientation, 0);
+        world.setBlockMetadataWithNotify(blockPos, orientation, 0);
     }
 }

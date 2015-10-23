@@ -48,14 +48,14 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
     }
 
     /*@Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+    public boolean onBlockActivated(World world, BlockPos blockPos EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
     {
         if (world.isRemote)
         {
-            String description = textureManager.describeTextureAt(world, WorldBlockCoord.of(x, y, z), side);
+            String description = textureManager.describeTextureAt(world, WorldBlockCoord.of(blockPos), side);
             player.addChatComponentMessage(new ChatComponentText(description));
         }
-        return super.onBlockActivated(world, x, y, z, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
+        return super.onBlockActivated(world, blockPos, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
     }*/
 
     long[] durations = new long[10];
@@ -63,7 +63,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
     int sidesCalculated = 0;
     long currentMillis;
     @Override
-    public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side)
+    public IIcon getIcon(IBlockAccess blockAccess, BlockPos blockPos int side)
     {
         long startTime = System.currentTimeMillis();
         if (startTime - currentMillis > 1000) {
@@ -71,7 +71,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
             currentMillis = startTime;
             sidesCalculated = 0;
         }
-        final IIcon iconForSide = textureManager.getIconForSide(blockAccess, WorldBlockCoord.of(x, y, z), side);
+        final IIcon iconForSide = textureManager.getIconForSide(blockAccess, WorldBlockCoord.of(blockPos), side);
         long endTime = System.currentTimeMillis();
         sidesCalculated++;
         /*long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.

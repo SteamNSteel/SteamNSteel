@@ -19,6 +19,8 @@ package mod.steamnsteel.utility;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.state.IBlockState;
+
 import java.util.Map;
 
 public enum Orientation
@@ -46,7 +48,7 @@ public enum Orientation
         this.flag = flag;
     }
 
-    public static Orientation getdecodedOrientation(int encoded)
+    public static Orientation getdecodedOrientation(IBlockState encoded)
     {
         return LOOKUP.get(BlockDirectional.getDirection(encoded));
     }

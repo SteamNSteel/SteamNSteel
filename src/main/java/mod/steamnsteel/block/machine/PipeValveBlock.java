@@ -65,27 +65,27 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
     }
 
     /*@Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block newBlockType)
+    public void onNeighborBlockChange(World world, BlockPos blockPos Block newBlockType)
     {
-        PipeTE entity = (PipeTE)world.getTileEntity(x, y, z);
+        PipeTE entity = (PipeTE)world.getTileEntity(blockPos);
         entity.checkEnds();
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float u, float v, float w)
+    public boolean onBlockActivated(World world, BlockPos blockPos EntityPlayer player, int side, float u, float v, float w)
     {
         if (player != null) {
             ItemStack itemInUse = player.inventory.mainInventory[player.inventory.currentItem];
             if (itemInUse != null && itemInUse.getItem() == Items.bone)
             {
                 if (!world.isRemote) {
-                    PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
+                    PipeTE entity = (PipeTE) world.getTileEntity(blockPos);
                     entity.rotatePipe();
                 }
                 return true;
             }
             if (itemInUse != null && itemInUse.getItem() == Items.name_tag) {
-                PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
+                PipeTE entity = (PipeTE) world.getTileEntity(blockPos);
                 Logger.info("%s - Entity Check - %s", world.isRemote ? "client" : "server", entity.toString());
             }
         }
@@ -94,10 +94,10 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
     }
 
     @Override
-    public void onBlockPreDestroy(World world, int x, int y, int z, int metadata)
+    public void onBlockPreDestroy(World world, BlockPos blockPos int metadata)
     {
         if (!world.isRemote) {
-            PipeTE entity = (PipeTE) world.getTileEntity(x, y, z);
+            PipeTE entity = (PipeTE) world.getTileEntity(blockPos);
             if (entity != null)
             {
                 entity.detach();
@@ -106,9 +106,9 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
     }*/
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
+    public void onBlockPlacedBy(World world, BlockPos blockPos EntityLivingBase entityLiving, ItemStack itemStack)
     {
-        final TileEntity tileEntity = world.getTileEntity(x, y, z);
+        final TileEntity tileEntity = world.getTileEntity(blockPos);
         if (tileEntity instanceof PipeValveTE)
         {
             PipeValveTE te = (PipeValveTE)tileEntity;

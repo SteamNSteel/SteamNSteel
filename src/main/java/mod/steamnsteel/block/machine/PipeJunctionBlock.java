@@ -51,9 +51,9 @@ public class PipeJunctionBlock extends SteamNSteelBlock implements ITileEntityPr
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block newBlockType)
+    public void onNeighborBlockChange(World world, BlockPos blockPos Block newBlockType)
     {
-        SteamNSteelTE entity = (SteamNSteelTE)world.getTileEntity(x, y, z);
+        SteamNSteelTE entity = (SteamNSteelTE)world.getTileEntity(blockPos);
         entity.updateEntity();
     }
 }

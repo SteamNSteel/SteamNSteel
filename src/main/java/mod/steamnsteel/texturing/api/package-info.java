@@ -15,7 +15,7 @@ package mod.steamnsteel.texturing.api;
  *          the world around can be examined.
  *
  * <h1>Procedural Texturing</h1>
- * Minecraft uses getIcon(IBlockAccess blockAccess, int x, int y, int z, int side) to determine what texture (IIcon) to
+ * Minecraft uses getIcon(IBlockAccess blockAccess, BlockPos blockPos int side) to determine what texture (IIcon) to
  * apply to each side of a block. The results are cached. This gives us the opportunity to do some somewhat intensive
  * calculations to dynamically build a set of textures across a wall, following the same principals as Minecraft's
  * procedural world generation. By basing randomness on the x, y and z we can generate pseudo-random features on the
@@ -44,8 +44,8 @@ package mod.steamnsteel.texturing.api;
  * on it to configure the texture manager. This means that it will participate well with texture packs and aid in
  * debugging any issues.
  *
- * When minecraft calls Block.getIcon(IBlockAccess blockAccess, int x, int y, int z, int side), the call should be
- * proxied to your texture using texture.getIconForSide(blockAccess, WorldBlockCoord.of(x, y, z), side).
+ * When minecraft calls Block.getIcon(IBlockAccess blockAccess, BlockPos blockPos int side), the call should be
+ * proxied to your texture using texture.getIconForSide(blockAccess, WorldBlockCoord.of(blockPos), side).
  *
  * Inside of that method, we start by calculating some initial traits, TOP, BOTTOM, LEFT and RIGHT which is done by
  * checking the blocks in the appropriate directions. The traits are set if the block is not compatible with the current

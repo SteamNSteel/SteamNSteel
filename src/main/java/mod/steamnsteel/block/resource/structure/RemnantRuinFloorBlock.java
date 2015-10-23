@@ -43,7 +43,7 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
     }
 
     @Override
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
+    public IIcon getIcon(IBlockAccess world, BlockPos blockPos int side)
     {
         if (side == EnumFacing.UP.ordinal() || side == EnumFacing.DOWN.ordinal()) {
             int xPos = x % 3;
@@ -54,20 +54,20 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
             final int index = zPos * 3 + xPos;
             return floorIcons[index];
         } else {
-            final IIcon iconForSide = textureManager.getIconForSide(world, WorldBlockCoord.of(x, y, z), side);
+            final IIcon iconForSide = textureManager.getIconForSide(world, WorldBlockCoord.of(blockPos), side);
             return iconForSide;
         }
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+    public boolean onBlockActivated(World world, BlockPos blockPos EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
     {
         if (world.isRemote)
         {
-            String description = textureManager.describeTextureAt(world, WorldBlockCoord.of(x, y, z), side);
+            String description = textureManager.describeTextureAt(world, WorldBlockCoord.of(blockPos), side);
             player.addChatComponentMessage(new ChatComponentText(description));
         }
-        return super.onBlockActivated(world, x, y, z, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
+        return super.onBlockActivated(world, blockPos, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
     }
 
     @Override

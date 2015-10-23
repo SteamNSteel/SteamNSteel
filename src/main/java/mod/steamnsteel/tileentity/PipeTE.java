@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -206,7 +207,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
             calculatePipeRotations();
         }
 
-        List<ImmutablePair<EnumFacing, EnumFacing>> validDirections = new LinkedList<ImmutablePair<EnumFacing, EnumFacing>>();
+        List<ImmutablePair<EnumFacing, EnumFacing>> validDirections = new LinkedList<>();
         for (ImmutablePair<EnumFacing, EnumFacing> pair : PIPE_ROTATIONS)
         {
             if (getPipeTileEntityInDirection(pair.left) != null && getPipeTileEntityInDirection(pair.right) != null) {

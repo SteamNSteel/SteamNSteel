@@ -4,10 +4,8 @@ import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
 import mod.steamnsteel.client.renderer.model.RemnantRuinPillarModel;
 import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -32,7 +30,7 @@ public class RemnantRuinPillarTESR extends SteamNSteelTESR
         int z = tileEntity.zCoord;
 
         World world = tileEntity.getWorldObj();
-        Block block = world.getBlock(x, y, z);
+        Block block = world.getBlock(blockPos);
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
 
@@ -40,7 +38,7 @@ public class RemnantRuinPillarTESR extends SteamNSteelTESR
         GL11.glPushMatrix();
 
         // Orient the model to match the placement
-        final int metadata = world.getBlockMetadata(x, y, z);
+        final IBlockState metadata = world.getBlockMetadata(blockPos);
         final Orientation orientation = Orientation.getdecodedOrientation(metadata);
         final float angleFromOrientation = getAngleFromOrientation(orientation);
 

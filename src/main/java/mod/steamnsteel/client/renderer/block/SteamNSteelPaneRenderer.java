@@ -26,9 +26,9 @@ public class SteamNSteelPaneRenderer implements ISimpleBlockRenderingHandler
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
+    public boolean renderWorldBlock(IBlockAccess world, BlockPos blockPos Block block, int modelId, RenderBlocks renderer)
     {
-        return renderBlockPane((RemnantRuinIronBarsBlock)block, x, y, z, renderer);
+        return renderBlockPane((RemnantRuinIronBarsBlock)block, blockPos, renderer);
     }
 
     @Override
@@ -43,12 +43,12 @@ public class SteamNSteelPaneRenderer implements ISimpleBlockRenderingHandler
         return id;
     }
 
-    public boolean renderBlockPane(RemnantRuinIronBarsBlock block, int x, int y, int z, RenderBlocks renderer)
+    public boolean renderBlockPane(RemnantRuinIronBarsBlock block, BlockPos blockPos RenderBlocks renderer)
     {
         int worldHeight = renderer.blockAccess.getHeight();
         Tessellator tessellator = Tessellator.instance;
-        tessellator.setBrightness(block.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z));
-        int colourMultiplier = block.colorMultiplier(renderer.blockAccess, x, y, z);
+        tessellator.setBrightness(block.getMixedBrightnessForBlock(renderer.blockAccess, blockPos));
+        int colourMultiplier = block.colorMultiplier(renderer.blockAccess, blockPos);
         float red = (float)(colourMultiplier >> 16 & 255) / 255.0F;
         float green = (float)(colourMultiplier >> 8 & 255) / 255.0F;
         float blue = (float)(colourMultiplier & 255) / 255.0F;
@@ -74,7 +74,7 @@ public class SteamNSteelPaneRenderer implements ISimpleBlockRenderingHandler
         }
         else
         {
-            int metadata = renderer.blockAccess.getBlockMetadata(x, y, z);
+            int metadata = renderer.blockAccess.getBlockMetadata(blockPos);
             sideIcon = renderer.getBlockIconFromSideAndMetadata(block, 0, metadata);
             topBottomIcon = block.getTopAndBottomIcon(metadata);
         }
@@ -99,8 +99,8 @@ public class SteamNSteelPaneRenderer implements ISimpleBlockRenderingHandler
         double blockXMidPlus1px = (double)x + 0.5D + 0.0625D;
         double blockZMidMinus1px = (double)z + 0.5D - 0.0625D;
         double blockZMidPlus1px = (double)z + 0.5D + 0.0625D;
-        boolean shouldConnectZMinus  = block.canPaneConnectTo(renderer.blockAccess, x, y, z - 1, NORTH);
-        boolean shouldConnectZPlus = block.canPaneConnectTo(renderer.blockAccess, x, y, z + 1, SOUTH);
+        boolean shouldConnectZMinus  = block.canPaneConnectTo(renderer.blockAccess, blockPos - 1, NORTH);
+        boolean shouldConnectZPlus = block.canPaneConnectTo(renderer.blockAccess, blockPos + 1, SOUTH);
         boolean shouldConnectXMinus = block.canPaneConnectTo(renderer.blockAccess, x - 1, y, z, WEST);
         boolean shouldConnectXPlus = block.canPaneConnectTo(renderer.blockAccess, x + 1, y, z, EAST);
         boolean shouldConnectAbove = block.shouldSideBeRendered(renderer.blockAccess, x, y + 1, z, 1);

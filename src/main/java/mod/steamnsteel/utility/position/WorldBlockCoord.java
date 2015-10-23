@@ -32,9 +32,9 @@ public class WorldBlockCoord implements Comparable<WorldBlockCoord>
 {
     private final ImmutableTriple<Integer, Integer, Integer> data;
 
-    private WorldBlockCoord(int x, int y, int z) { data = ImmutableTriple.of(x, y, z); }
+    private WorldBlockCoord(int x, int y, int z) { data = ImmutableTriple.of(blockPos); }
 
-    public static WorldBlockCoord of(int x, int y, int z) { return new WorldBlockCoord(x, y, z); }
+    public static WorldBlockCoord of(int x, int y, int z) { return new WorldBlockCoord(blockPos); }
 
     public int getX() { return data.left; }
 

@@ -34,7 +34,7 @@ public enum GuiHandler implements IGuiHandler
         switch(gui)
         {
             case CUPOLA:
-                final CupolaTE te = (CupolaTE) world.getTileEntity(x, y, z);
+                final CupolaTE te = (CupolaTE) world.getTileEntity(blockPos);
                 return new CupolaContainer(player.inventory, te);
         }
         return null;
@@ -47,7 +47,7 @@ public enum GuiHandler implements IGuiHandler
         switch(gui)
         {
             case CUPOLA:
-                final CupolaTE te = (CupolaTE) world.getTileEntity(x, y, z);
+                final CupolaTE te = (CupolaTE) world.getTileEntity(blockPos);
                 return new CupolaGui(player.inventory, te);
         }
         return null;
