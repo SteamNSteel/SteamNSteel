@@ -39,7 +39,7 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
     public RemnantRuinFloorBlock()
     {
         super(Material.rock);
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
     }
 
     @Override

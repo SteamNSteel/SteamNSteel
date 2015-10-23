@@ -38,7 +38,7 @@ public class PipeRedstoneValveBlock extends SteamNSteelBlock implements ITileEnt
     public PipeRedstoneValveBlock()
     {
         super(Material.circuits, true);
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class SulfurOre extends SteamNSteelOreBlock
     public SulfurOre()
     {
         super(Material.rock);
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
         setHarvestLevel("pickaxe", 1); // stone pick
     }
 

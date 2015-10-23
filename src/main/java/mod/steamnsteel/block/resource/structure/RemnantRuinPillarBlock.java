@@ -34,7 +34,7 @@ public class RemnantRuinPillarBlock extends SteamNSteelBlock
     public RemnantRuinPillarBlock()
     {
         super(Material.rock);
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
     }
 
     @Override

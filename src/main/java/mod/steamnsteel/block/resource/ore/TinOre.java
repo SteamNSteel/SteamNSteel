@@ -25,7 +25,7 @@ public class TinOre extends SteamNSteelOreBlock
 
     public TinOre()
     {
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
         setHarvestLevel("pickaxe", 1); // stone pick
     }
 

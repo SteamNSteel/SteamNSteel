@@ -32,7 +32,7 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
     public static final String NAME = "remnantRuinChest";
 
     public RemnantRuinChestBlock() {
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
         setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
     }
 

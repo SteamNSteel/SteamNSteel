@@ -25,7 +25,7 @@ public class ZincOre extends SteamNSteelOreBlock
 
     public ZincOre()
     {
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
         setHarvestLevel("pickaxe", 1); // stone pick
     }
 

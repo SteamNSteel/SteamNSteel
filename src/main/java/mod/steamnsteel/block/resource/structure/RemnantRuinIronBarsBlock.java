@@ -25,7 +25,7 @@ public class RemnantRuinIronBarsBlock extends SteamNSteelPaneBlock
         setHardness(5.0F);
         setResistance(10.0F);
         setStepSound(soundTypeMetal);
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
     }
 
     private static final IIcon[] iconsSide = new IIcon[NAMES.length];

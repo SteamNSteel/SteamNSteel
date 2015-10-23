@@ -35,7 +35,7 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
     public PipeValveBlock()
     {
         super(Material.circuits, true);
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
     }
 
     @Override

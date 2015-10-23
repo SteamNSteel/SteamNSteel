@@ -41,7 +41,7 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
     public PipeBlock()
     {
         super(Material.circuits, true);
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
     }
 
     @Override

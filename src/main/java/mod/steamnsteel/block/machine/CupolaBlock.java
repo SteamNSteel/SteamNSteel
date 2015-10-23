@@ -48,7 +48,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 
     public CupolaBlock()
     {
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
     }
 
     private static void renderSmokeOnTop(World world, int x, int y, int z, Random rng)
