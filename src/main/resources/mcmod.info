@@ -3,15 +3,20 @@
   "modid": "steamnsteel",
   "name": "Steam and Steel",
   "description": "A Minecraft mod about steampunk tech and adventure.",
-  "version": "${mod_version}",
-  "mcversion": "${minecraft_version}",
-  "url": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://github.com/SteamNSteel/SteamNSteel",
   "updateUrl": "",
   "authorList": [
   	"Rorax",
-    "ScottKillen"
+    "ScottKillen",
+    "AtomicBlom",
+    "Kihira",
+    "FoudroyantFactotum",
+    "Hofius",
+    "Othlon"
   ],
-  "credits": "Thanks to pahimar for his excellent Let's Mod Reboot series and bspkrs for his super build scripts.",
+  "credits": "Thanks to pahimar for his excellent Let's Mod Reboot series and bspkrs for his super build scripts",
   "logoFile": "",
   "screenshots": [
   ],
