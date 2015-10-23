@@ -59,10 +59,10 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
     }
 
     @Override
-    public boolean onBlockEventReceived(World world, BlockPos blockPos, IBlockState blockState, int eventId, int eventParameter)
+    public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState blockState, int eventId, int eventParameter)
     {
-        super.onBlockEventReceived(world, blockPos, blockState, eventId, eventParameter);
-        final TileEntity te = world.getTileEntity(blockPos);
+        super.onBlockEventReceived(world, pos, blockState, eventId, eventParameter);
+        final TileEntity te = world.getTileEntity(pos);
         return te != null && te.receiveClientEvent(eventId, eventParameter);
     }
 
@@ -80,15 +80,15 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
         // no op
     }
 
-    protected void dropInventory(World world, BlockPos blockPos, IInventory inventory)
+    protected void dropInventory(World world, BlockPos pos, IInventory inventory)
     {
         for (int slotIndex = 0; slotIndex < inventory.getSizeInventory(); slotIndex++)
         {
-            dropSlotContents(world, blockPos, inventory, slotIndex);
+            dropSlotContents(world, pos, inventory, slotIndex);
         }
     }
 
-    void dropSlotContents(World world, BlockPos blockPos, IInventory inventory, int slotIndex)
+    void dropSlotContents(World world, BlockPos pos, IInventory inventory, int slotIndex)
     {
         final ItemStack itemstack = inventory.getStackInSlot(slotIndex);
 
@@ -110,7 +110,7 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
                 itemstack.stackSize -= j1;
                 //noinspection ObjectAllocationInLoop
                 final EntityItem entityitem = new EntityItem(world,
-                        blockPos.getX() + xOffset, blockPos.getY() + yOffset, blockPos.getZ() + zOffset,
+                        pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset,
                         new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
                 final float motionMax = 0.05F;
                 //noinspection NumericCastThatLosesPrecision

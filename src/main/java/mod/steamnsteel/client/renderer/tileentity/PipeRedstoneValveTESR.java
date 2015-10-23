@@ -6,6 +6,7 @@ import mod.steamnsteel.client.renderer.model.PipeRedstoneValveModel;
 import mod.steamnsteel.tileentity.PipeRedstoneValveTE;
 import mod.steamnsteel.tileentity.PipeValveTE;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -23,7 +24,7 @@ public class PipeRedstoneValveTESR extends SteamNSteelTESR
     private static final ImmutableTriple<Float, Float, Float> OFFSET = ImmutableTriple.of(0.5f, 0.5f, 0.5f);
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick)
+    public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float tick, int whatDoesThisDo)
     {
         if (tileEntity instanceof PipeRedstoneValveTE)
         {
@@ -33,7 +34,7 @@ public class PipeRedstoneValveTESR extends SteamNSteelTESR
             GL11.glPushMatrix();
 
             // Position Renderer
-            GL11.glTranslatef((float) x, (float) y, (float) z);
+            GL11.glTranslatef((float) posX, (float) posY, (float) posZ);
 
             renderRedstoneValve(te);
 
@@ -44,12 +45,6 @@ public class PipeRedstoneValveTESR extends SteamNSteelTESR
 
     private void renderRedstoneValve(PipeRedstoneValveTE te)
     {
-
-        final int x = te.xCoord;
-        final int y = te.yCoord;
-        final int z = te.zCoord;
-        final World world = te.getWorldObj();
-
         // Open Render buffer
         GL11.glPushMatrix();
 

@@ -26,7 +26,9 @@ import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -58,7 +60,7 @@ public class CupolaTESR extends SteamNSteelTESR
 
     @SuppressWarnings("NumericCastThatLosesPrecision")
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick)
+    public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float tick, int whatDoesThisDo)
     {
         if (tileEntity instanceof CupolaTE)
         {
@@ -68,7 +70,7 @@ public class CupolaTESR extends SteamNSteelTESR
             GL11.glPushMatrix();
 
             // Position Renderer
-            GL11.glTranslatef((float) x, (float) y, (float) z);
+            GL11.glTranslatef((float) posX, (float) posY, (float) posZ);
 
             renderCupola(te);
 
@@ -80,19 +82,20 @@ public class CupolaTESR extends SteamNSteelTESR
     private void renderCupola(CupolaTE te)
     {
         if (te.isSlave()) return;
+        final Tessellator instance = Tessellator.getInstance();
 
-        final int x = te.xCoord;
-        final int y = te.yCoord;
-        final int z = te.zCoord;
-        final World world = te.getWorldObj();
+        final BlockPos pos = te.getPos();
+        final World world = te.getWorld();
 
         // Lighting
-        final float brightness = ModBlock.cupola.getMixedBrightnessForBlock(world, blockPos);
-        final int skyLight = world.getLightBrightnessForSkyBlocks(blockPos, 0);
+        final float brightness = ModBlock.cupola.getMixedBrightnessForBlock(world, pos);
+        final int skyLight = world.getLightBrightnessForSkyBlocks(pos, 0);
         final int skyLightLSB = skyLight % 65536;
         final int skyLightMSB = skyLight / 65536;
 
-        Tessellator.instance.setColorOpaque_F(brightness, brightness, brightness);
+
+        final WorldRenderer worldRenderer = instance.getWorldRenderer();
+        worldRenderer.setColorOpaque_F(brightness, brightness, brightness);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, skyLightLSB, skyLightMSB);
 
         // Open Render buffer
@@ -103,7 +106,7 @@ public class CupolaTESR extends SteamNSteelTESR
         GL11.glTranslatef(OFFSET.left, OFFSET.middle, OFFSET.right);
 
         // Orient the model to match the placement
-        final IBlockState metadata = world.getBlockMetadata(blockPos);
+        final IBlockState metadata = world.getBlockState(pos);
         final Orientation orientation = Orientation.getdecodedOrientation(metadata);
 
         GL11.glRotatef(getAngleFromOrientation(orientation), 0.0F, 1.0F, 0.0F);

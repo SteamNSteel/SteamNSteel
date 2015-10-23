@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GameRules;
@@ -208,7 +209,7 @@ public class SchematicLoader
 
                         if (event.block != null && c.func_150807_a(chunkLocalX, y, chunkLocalZ, event.block, event.metadata))
                         {
-                            world.markBlockForUpdate(blockPos);
+                            world.markBlockForUpdate(pos);
                             final NBTTagCompound tileEntityData = schematic.getTileEntity(schematicX, schematicY, schematicZ);
                             if (event.block.hasTileEntity(event.metadata) && tileEntityData != null)
                             {
@@ -250,7 +251,7 @@ public class SchematicLoader
         c.setChunkModified();
     }
 
-    public void renderSchematicInOneShot(ResourceLocation resource, World world, BlockPos blockPos EnumFacing rotation, boolean flip)
+    public void renderSchematicInOneShot(ResourceLocation resource, World world, BlockPos pos, EnumFacing rotation, boolean flip)
     {
         long start = System.currentTimeMillis();
 
@@ -281,7 +282,7 @@ public class SchematicLoader
             {
                 for (int chunkZ = chunkZStart; chunkZ <= chunkZEnd; ++chunkZ)
                 {
-                    renderSchematicToSingleChunk(resource, world, blockPos, chunkX, chunkZ, rotation, flip);
+                    renderSchematicToSingleChunk(resource, world, pos, chunkX, chunkZ, rotation, flip);
                 }
             }
         } else
@@ -473,7 +474,7 @@ public class SchematicLoader
                     int y = tileEntity.getInteger("y");
                     int z = tileEntity.getInteger("z");
 
-                    WorldBlockCoord loc = WorldBlockCoord.of(blockPos);
+                    WorldBlockCoord loc = WorldBlockCoord.of(pos);
 
                     tileEntities.put(loc, tileEntity);
                 }
@@ -582,8 +583,8 @@ public class SchematicLoader
 
         public boolean isAirBlock(int x, int y, int z)
         {
-            Block block = getBlock(blockPos);
-            return block == null || block.isAir(null, blockPos);
+            Block block = getBlock(pos);
+            return block == null || block.isAir(null, pos);
         }
 
         @Override
@@ -618,7 +619,7 @@ public class SchematicLoader
 
         public NBTTagCompound getTileEntity(int x, int y, int z)
         {
-            return tileEntities.get(WorldBlockCoord.of(blockPos));
+            return tileEntities.get(WorldBlockCoord.of(pos));
         }
     }
 
@@ -643,9 +644,9 @@ public class SchematicLoader
     {
         private final ImmutableTriple<Integer, Integer, Integer> data;
 
-        private WorldBlockCoord(int x, int y, int z) { data = ImmutableTriple.of(blockPos); }
+        private WorldBlockCoord(int x, int y, int z) { data = ImmutableTriple.of(pos); }
 
-        public static WorldBlockCoord of(int x, int y, int z) { return new WorldBlockCoord(blockPos); }
+        public static WorldBlockCoord of(int x, int y, int z) { return new WorldBlockCoord(pos); }
 
         public int getX() { return data.left; }
 

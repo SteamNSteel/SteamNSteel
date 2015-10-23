@@ -22,8 +22,10 @@ import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.texturing.wall.RemnantRuinFloorSideTexture;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -43,31 +45,31 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
     }
 
     @Override
-    public IIcon getIcon(IBlockAccess world, BlockPos blockPos int side)
+    public IIcon getIcon(IBlockAccess world, BlockPos pos, int side)
     {
         if (side == EnumFacing.UP.ordinal() || side == EnumFacing.DOWN.ordinal()) {
-            int xPos = x % 3;
+            int xPos = pos.getX() % 3;
             if (xPos < 0) xPos += 3;
-            int zPos = z % 9;
+            int zPos = pos.getZ() % 9;
             if (zPos < 0) zPos += 9;
 
             final int index = zPos * 3 + xPos;
             return floorIcons[index];
         } else {
-            final IIcon iconForSide = textureManager.getIconForSide(world, WorldBlockCoord.of(blockPos), side);
+            final IIcon iconForSide = textureManager.getIconForSide(world, pos, side);
             return iconForSide;
         }
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos blockPos EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if (world.isRemote)
+        if (worldIn.isRemote)
         {
-            String description = textureManager.describeTextureAt(world, WorldBlockCoord.of(blockPos), side);
-            player.addChatComponentMessage(new ChatComponentText(description));
+            String description = textureManager.describeTextureAt(worldIn, pos, side);
+            playerIn.addChatComponentMessage(new ChatComponentText(description));
         }
-        return super.onBlockActivated(world, blockPos, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
     }
 
     @Override

@@ -57,7 +57,7 @@ public class OreGenerator extends WorldGenMinable
 
         for (final Block target : targetBlocks)
         {
-            if (block.isReplaceableOreGen(world, blockPos, target)) return true;
+            if (block.isReplaceableOreGen(world, pos, target)) return true;
         }
 
         return false;
@@ -78,7 +78,7 @@ public class OreGenerator extends WorldGenMinable
                 final int x = worldX + rand.nextInt(16);
                 final int y = rand.nextInt(maxHeight - minHeight) + minHeight;
                 final int z = worldZ + rand.nextInt(16);
-                super.generate(world, rand, blockPos);
+                super.generate(world, rand, pos);
             }
 
             RetroGenHandler.markChunk(ChunkCoord.of(worldX >> 4, worldZ >> 4));

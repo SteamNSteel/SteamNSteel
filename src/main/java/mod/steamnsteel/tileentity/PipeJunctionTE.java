@@ -7,12 +7,6 @@ import net.minecraft.util.EnumFacing;
 public class PipeJunctionTE extends SteamNSteelTE implements IPipeTileEntity
 {
     @Override
-    public void updateEntity()
-    {
-        super.updateEntity();
-    }
-
-    @Override
     public boolean isSideConnected(EnumFacing opposite)
     {
         return false;

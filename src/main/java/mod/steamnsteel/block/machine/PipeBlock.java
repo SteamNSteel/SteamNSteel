@@ -24,11 +24,13 @@ import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -51,47 +53,33 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
     }
 
     @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-
-    @Override
-    public int getRenderType()
-    {
-        return RenderId;
-    }
-
-    public static void setRenderType(int renderId) { RenderId = renderId; }
-
-    @Override
     public boolean isOpaqueCube()
     {
         return false;
     }
 
     @Override
-    public void onNeighborBlockChange(World world, BlockPos blockPos Block newBlockType)
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock)
     {
-        PipeTE entity = (PipeTE)world.getTileEntity(blockPos);
+        PipeTE entity = (PipeTE)world.getTileEntity(pos);
         entity.checkEnds();
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos blockPos EntityPlayer player, int side, float u, float v, float w)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if (player != null) {
-            ItemStack itemInUse = player.inventory.mainInventory[player.inventory.currentItem];
+        if (playerIn != null) {
+            ItemStack itemInUse = playerIn.inventory.mainInventory[playerIn.inventory.currentItem];
             if (itemInUse != null && itemInUse.getItem() == Items.bone)
             {
-                if (!world.isRemote) {
-                    PipeTE entity = (PipeTE) world.getTileEntity(blockPos);
+                if (!worldIn.isRemote) {
+                    PipeTE entity = (PipeTE) worldIn.getTileEntity(pos);
                     entity.rotatePipe();
                 }
                 return true;
             }
             /*if (itemInUse != null && itemInUse.getItem() == Items.name_tag) {
-                BasePlumbingTE entity = (BasePlumbingTE) world.getTileEntity(blockPos);
+                BasePlumbingTE entity = (BasePlumbingTE) world.getTileEntity(pos);
                 Logger.info("%s - Entity Check - %s", world.isRemote ? "client" : "server", entity.toString());
             }*/
         }
@@ -99,11 +87,12 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
         return false;
     }
 
+    //QUESTION: What is the life cycle of a TileEntity
     @Override
-    public void onBlockPreDestroy(World world, BlockPos blockPos int metadata)
+    public void onBlockPreDestroy(World world, BlockPos pos, int metadata)
     {
         if (!world.isRemote) {
-            PipeTE entity = (PipeTE) world.getTileEntity(blockPos);
+            PipeTE entity = (PipeTE) world.getTileEntity(pos);
             if (entity != null)
             {
                 entity.detach();
@@ -112,15 +101,15 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos blockPos EntityLivingBase entityLiving, ItemStack itemStack)
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
-        final TileEntity tileEntity = world.getTileEntity(blockPos);
+        final TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof PipeTE)
         {
             PipeTE te = (PipeTE)tileEntity;
 
             EnumFacing direction = EnumFacing.EAST;
-            int facing = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+            int facing = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
             if (facing == 0)
             {

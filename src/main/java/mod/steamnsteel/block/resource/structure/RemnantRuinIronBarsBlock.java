@@ -6,11 +6,9 @@ import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelPaneBlock;
 import mod.steamnsteel.client.renderer.block.SteamNSteelPaneRenderer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import java.util.List;
 
 public class RemnantRuinIronBarsBlock extends SteamNSteelPaneBlock

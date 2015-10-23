@@ -20,9 +20,11 @@ import mod.steamnsteel.block.*;
 import mod.steamnsteel.tileentity.RemnantRuinPillarTE;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -38,46 +40,26 @@ public class RemnantRuinPillarBlock extends SteamNSteelBlock
     }
 
     @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-
-    @Override
     public boolean isOpaqueCube()
     {
         return false;
     }
 
-
-    public static void setRenderType(int renderType)
-    {
-        renderId = renderType;
-    }
-
     @Override
-    public int getRenderType()
-    {
-        return renderId;
-    }
-
-    @Override
-    public TileEntity createTileEntity(World world, int metadata)
+    public TileEntity createTileEntity(World world, IBlockState blockState)
     {
         return new RemnantRuinPillarTE();
     }
 
     @Override
-    public boolean hasTileEntity(int metadata)
+    public boolean hasTileEntity(IBlockState blockState)
     {
         return true;
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos blockPos EntityLivingBase entity, ItemStack itemStack) {
-        final int orientation = BlockDirectional.getDirection(MathHelper.floor_double(entity.rotationYaw * 4.0f / 360.0f + 0.5));
-        world.setBlockMetadataWithNotify(blockPos, orientation & 1, 0);
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        final int orientation = BlockDirectional.getDirection(MathHelper.floor_double(placer.rotationYaw * 4.0f / 360.0f + 0.5));
+        worldIn.setBlockMetadataWithNotify(pos, orientation & 1, 0);
     }
-
-
 }

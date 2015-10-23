@@ -23,6 +23,7 @@ import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
@@ -48,14 +49,14 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
     }
 
     /*@Override
-    public boolean onBlockActivated(World world, BlockPos blockPos EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+    public boolean onBlockActivated(World world, BlockPos pos EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
     {
         if (world.isRemote)
         {
-            String description = textureManager.describeTextureAt(world, WorldBlockCoord.of(blockPos), side);
+            String description = textureManager.describeTextureAt(world, WorldBlockCoord.of(pos), side);
             player.addChatComponentMessage(new ChatComponentText(description));
         }
-        return super.onBlockActivated(world, blockPos, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
+        return super.onBlockActivated(world, pos, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
     }*/
 
     long[] durations = new long[10];
@@ -63,7 +64,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
     int sidesCalculated = 0;
     long currentMillis;
     @Override
-    public IIcon getIcon(IBlockAccess blockAccess, BlockPos blockPos int side)
+    public IIcon getIcon(IBlockAccess blockAccess, BlockPos pos, int side)
     {
         long startTime = System.currentTimeMillis();
         if (startTime - currentMillis > 1000) {
@@ -71,7 +72,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
             currentMillis = startTime;
             sidesCalculated = 0;
         }
-        final IIcon iconForSide = textureManager.getIconForSide(blockAccess, WorldBlockCoord.of(blockPos), side);
+        final IIcon iconForSide = textureManager.getIconForSide(blockAccess, WorldBlockCoord.of(pos), side);
         long endTime = System.currentTimeMillis();
         sidesCalculated++;
         /*long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.

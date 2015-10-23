@@ -35,7 +35,7 @@ public class ChunkBlockCoord implements Comparable<ChunkBlockCoord>
         data = ImmutableTriple.of((byte) x, y, (byte) z);
     }
 
-    public static ChunkBlockCoord of(int x, int y, int z) { return new ChunkBlockCoord(blockPos); }
+    public static ChunkBlockCoord of(int x, int y, int z) { return new ChunkBlockCoord(pos); }
 
     public static ChunkBlockCoord of(WorldBlockCoord coord)
     {

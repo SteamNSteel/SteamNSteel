@@ -18,8 +18,8 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
     {
         Logger.info("%s - Notifying Block Change - %s", worldObj.isRemote ? "client" : "server", toString());
         markDirty();
-        worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.notifyBlockChange(getPos(), getBlockType());
+        worldObj.markBlockForUpdate(getPos());
     }
 
     protected IPipeTileEntity getPipeTileEntityInDirection(EnumFacing offset) {
@@ -62,13 +62,13 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
     {
         final NBTTagCompound nbt = new NBTTagCompound();
         writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
+        return new S35PacketUpdateTileEntity(getPos(), 1, nbt);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
     {
-        readFromNBT(packet.func_148857_g());
+        readFromNBT(packet.getNbtCompound());
     }
 
     @Override

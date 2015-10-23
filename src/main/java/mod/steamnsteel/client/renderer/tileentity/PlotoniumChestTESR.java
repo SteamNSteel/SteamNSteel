@@ -22,6 +22,7 @@ import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
@@ -48,7 +49,7 @@ public class PlotoniumChestTESR extends SteamNSteelTESR
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick)
+    public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float tick, int whatDoesThisDo)
     {
         if (tileEntity instanceof RemnantRuinChestTE)
         {
@@ -59,7 +60,7 @@ public class PlotoniumChestTESR extends SteamNSteelTESR
 
             // Position Renderer
             //noinspection NumericCastThatLosesPrecision
-            GL11.glTranslatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
+            GL11.glTranslatef((float) posX, (float) posY + 1.0F, (float) posZ + 1.0F);
 
             renderPlotoniumChest(te, tick);
 
@@ -70,11 +71,8 @@ public class PlotoniumChestTESR extends SteamNSteelTESR
 
     private void renderPlotoniumChest(RemnantRuinChestTE te, float tick)
     {
-        final int x = te.xCoord;
-        final int y = te.yCoord;
-        final int z = te.zCoord;
-        final World world = te.getWorldObj();
-
+        final World world = te.getWorld();
+        final BlockPos pos = te.getPos();
         GL11.glPushMatrix();
 
         // Position Renderer
@@ -83,7 +81,7 @@ public class PlotoniumChestTESR extends SteamNSteelTESR
         GL11.glScalef(1.0F, -1.0F, -1.0F);  //flip & rotate
         GL11.glTranslatef(0.5F, 0.5F, 0.5F); //translate block pos around fromBLK ORG
 
-        final IBlockState metadata = world.getBlockMetadata(blockPos);
+        final IBlockState metadata = world.getBlockState(pos);
         final Orientation orientation = Orientation.getdecodedOrientation(metadata);
         GL11.glRotatef(getAngleFromOrientation(orientation), 0.0F, -1.0F, 0.0F);
 

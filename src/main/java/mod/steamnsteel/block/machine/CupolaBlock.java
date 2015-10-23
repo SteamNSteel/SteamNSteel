@@ -164,17 +164,17 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public void breakBlock(World world, BlockPos blockPos, IBlockState state)
+    public void breakBlock(World world, BlockPos pos, IBlockState state)
     {
-        final CupolaTE te = (CupolaTE) world.getTileEntity(blockPos);
+        final CupolaTE te = (CupolaTE) world.getTileEntity(pos);
 
         if (te != null && !te.isSlave())
         {
-            dropInventory(world, blockPos, te);
-            world.notifyNeighborsOfStateChange(blockPos, state.getBlock()); // notify neighbors
+            dropInventory(world, pos, te);
+            world.notifyNeighborsOfStateChange(pos, state.getBlock()); // notify neighbors
         }
 
-        super.breakBlock(world, blockPos, state);
+        super.breakBlock(world, pos, state);
     }
 
     @Override
@@ -186,15 +186,15 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, BlockPos blockPos)
+    public boolean canPlaceBlockAt(World world, BlockPos pos)
     {
-        return super.canPlaceBlockAt(world, blockPos) && super.canPlaceBlockAt(world, x, y + 1, z);
+        return super.canPlaceBlockAt(world, pos) && super.canPlaceBlockAt(world, x, y + 1, z);
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos blockPos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        BlockPos actualBlockPos = blockPos;
+        BlockPos actualBlockPos = pos;
         final TileEntity te = world.getTileEntity(actualBlockPos);
         if (((CupolaTE) te).isSlave()) actualBlockPos.down();
 
@@ -203,9 +203,9 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess block, BlockPos blockPos)
+    public void setBlockBoundsBasedOnState(IBlockAccess block, BlockPos pos)
     {
-        final int meta = block.getBlockMetadata(blockPos);
+        final int meta = block.getBlockMetadata(pos);
 
         if ((meta & flagSlave) == 0)
         {
@@ -219,9 +219,9 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public void onPostBlockPlaced(World world, BlockPos blockPos, IBlockState blockState)
+    public void onPostBlockPlaced(World world, BlockPos pos, IBlockState blockState)
     {
-        super.onPostBlockPlaced(world, blockPos, blockState);
+        super.onPostBlockPlaced(world, pos, blockState);
 
         final int fillerY = y + 1;
         world.setBlock(x, fillerY, z, ModBlock.cupola, flagSlave, 2);
@@ -230,34 +230,34 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public int getLightValue(IBlockAccess world, BlockPos blockPos)
+    public int getLightValue(IBlockAccess world, BlockPos pos)
     {
-        TileEntity te = world.getTileEntity(blockPos);
+        TileEntity te = world.getTileEntity(pos);
 
         if (((CupolaTE) te).isSlave())
         {
-            te = world.getTileEntity(blockPos.down());
+            te = world.getTileEntity(pos.down());
         }
 
         if (te != null && ((CupolaTE) te).isActive()) return 15;
 
-        return super.getLightValue(world, blockPos);
+        return super.getLightValue(world, pos);
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos blockPos, EntityPlayer player, boolean willHarvest)
+    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
     {
         if (player.capabilities.isCreativeMode)
         {
-            final TileEntity te = world.getTileEntity(blockPos);
+            final TileEntity te = world.getTileEntity(pos);
             if (((CupolaTE) te).isSlave())
             {
-                world.setBlockToAir(blockPos.down());
+                world.setBlockToAir(pos.down());
                 return false;
             }
         }
 
-        return super.removedByPlayer(world, blockPos, player, willHarvest);
+        return super.removedByPlayer(world, pos, player, willHarvest);
     }
 }
 

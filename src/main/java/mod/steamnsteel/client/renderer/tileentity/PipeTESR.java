@@ -23,7 +23,7 @@ public class PipeTESR extends SteamNSteelTESR
     private static final ImmutableTriple<Float, Float, Float> OFFSET = ImmutableTriple.of(0.5f, 0.0f, 0.5f);
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick)
+    public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float tick, int whatDoesThisDo)
     {
         if (tileEntity instanceof PipeTE)
         {
@@ -33,7 +33,7 @@ public class PipeTESR extends SteamNSteelTESR
             GL11.glPushMatrix();
 
             // Position Renderer
-            GL11.glTranslatef((float) x, (float) y, (float) z);
+            GL11.glTranslatef((float) posX, (float) posY, (float) posZ);
 
             renderPipe(te);
 

@@ -22,16 +22,8 @@ import net.minecraft.tileentity.TileEntity;
 
 public abstract class SteamNSteelTE extends TileEntity
 {
-    private WorldBlockCoord worldBlockCoord;
     public static String containerName(String name)
     {
         return "container." + TheMod.MOD_ID + ':' + name;
-    }
-    public WorldBlockCoord getWorldBlockCoord()
-    {
-        if (worldBlockCoord == null) {
-            worldBlockCoord = WorldBlockCoord.of(xCoord, yCoord, zCoord);
-        }
-        return worldBlockCoord;
     }
 }

@@ -20,9 +20,11 @@ import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.tileentity.PipeValveTE;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -45,47 +47,33 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
     }
 
     @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-
-    @Override
-    public int getRenderType()
-    {
-        return RenderId;
-    }
-
-    public static void setRenderType(int renderId) { RenderId = renderId; }
-
-    @Override
     public boolean isOpaqueCube()
     {
         return false;
     }
 
     /*@Override
-    public void onNeighborBlockChange(World world, BlockPos blockPos Block newBlockType)
+    public void onNeighborBlockChange(World world, BlockPos pos Block newBlockType)
     {
-        PipeTE entity = (PipeTE)world.getTileEntity(blockPos);
+        PipeTE entity = (PipeTE)world.getTileEntity(pos);
         entity.checkEnds();
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos blockPos EntityPlayer player, int side, float u, float v, float w)
+    public boolean onBlockActivated(World world, BlockPos pos EntityPlayer player, int side, float u, float v, float w)
     {
         if (player != null) {
             ItemStack itemInUse = player.inventory.mainInventory[player.inventory.currentItem];
             if (itemInUse != null && itemInUse.getItem() == Items.bone)
             {
                 if (!world.isRemote) {
-                    PipeTE entity = (PipeTE) world.getTileEntity(blockPos);
+                    PipeTE entity = (PipeTE) world.getTileEntity(pos);
                     entity.rotatePipe();
                 }
                 return true;
             }
             if (itemInUse != null && itemInUse.getItem() == Items.name_tag) {
-                PipeTE entity = (PipeTE) world.getTileEntity(blockPos);
+                PipeTE entity = (PipeTE) world.getTileEntity(pos);
                 Logger.info("%s - Entity Check - %s", world.isRemote ? "client" : "server", entity.toString());
             }
         }
@@ -94,10 +82,10 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
     }
 
     @Override
-    public void onBlockPreDestroy(World world, BlockPos blockPos int metadata)
+    public void onBlockPreDestroy(World world, BlockPos pos int metadata)
     {
         if (!world.isRemote) {
-            PipeTE entity = (PipeTE) world.getTileEntity(blockPos);
+            PipeTE entity = (PipeTE) world.getTileEntity(pos);
             if (entity != null)
             {
                 entity.detach();
@@ -106,15 +94,15 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
     }*/
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos blockPos EntityLivingBase entityLiving, ItemStack itemStack)
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
-        final TileEntity tileEntity = world.getTileEntity(blockPos);
+        final TileEntity tileEntity = worldIn.getTileEntity(pos);
         if (tileEntity instanceof PipeValveTE)
         {
             PipeValveTE te = (PipeValveTE)tileEntity;
 
             EnumFacing direction = EnumFacing.EAST;
-            int facing = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+            int facing = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
             if (facing == 0)
             {

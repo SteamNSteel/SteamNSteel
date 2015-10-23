@@ -17,7 +17,7 @@ public class PipeValveTESR extends SteamNSteelTESR
     private static final ImmutableTriple<Float, Float, Float> OFFSET = ImmutableTriple.of(0.5f, 0.5f, 0.5f);
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick)
+    public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float tick, int whatDoesThisDo)
     {
         if (tileEntity instanceof PipeValveTE)
         {
@@ -27,7 +27,7 @@ public class PipeValveTESR extends SteamNSteelTESR
             GL11.glPushMatrix();
 
             // Position Renderer
-            GL11.glTranslatef((float) x, (float) y, (float) z);
+            GL11.glTranslatef((float) posX, (float) posY, (float) posZ);
 
             renderValve(te);
 
@@ -38,12 +38,6 @@ public class PipeValveTESR extends SteamNSteelTESR
 
     private void renderValve(PipeValveTE te)
     {
-
-        final int x = te.xCoord;
-        final int y = te.yCoord;
-        final int z = te.zCoord;
-        final World world = te.getWorldObj();
-
         // Open Render buffer
         GL11.glPushMatrix();
 

@@ -4,6 +4,7 @@ import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
@@ -26,9 +27,9 @@ public class SteamNSteelPaneRenderer implements ISimpleBlockRenderingHandler
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, BlockPos blockPos Block block, int modelId, RenderBlocks renderer)
+    public boolean renderWorldBlock(IBlockAccess world, BlockPos pos, Block block, int modelId, RenderBlocks renderer)
     {
-        return renderBlockPane((RemnantRuinIronBarsBlock)block, blockPos, renderer);
+        return renderBlockPane((RemnantRuinIronBarsBlock)block, pos, renderer);
     }
 
     @Override
@@ -43,12 +44,12 @@ public class SteamNSteelPaneRenderer implements ISimpleBlockRenderingHandler
         return id;
     }
 
-    public boolean renderBlockPane(RemnantRuinIronBarsBlock block, BlockPos blockPos RenderBlocks renderer)
+    public boolean renderBlockPane(RemnantRuinIronBarsBlock block, BlockPos pos, RenderBlocks renderer)
     {
         int worldHeight = renderer.blockAccess.getHeight();
         Tessellator tessellator = Tessellator.instance;
-        tessellator.setBrightness(block.getMixedBrightnessForBlock(renderer.blockAccess, blockPos));
-        int colourMultiplier = block.colorMultiplier(renderer.blockAccess, blockPos);
+        tessellator.setBrightness(block.getMixedBrightnessForBlock(renderer.blockAccess, pos));
+        int colourMultiplier = block.colorMultiplier(renderer.blockAccess, pos);
         float red = (float)(colourMultiplier >> 16 & 255) / 255.0F;
         float green = (float)(colourMultiplier >> 8 & 255) / 255.0F;
         float blue = (float)(colourMultiplier & 255) / 255.0F;
@@ -74,7 +75,7 @@ public class SteamNSteelPaneRenderer implements ISimpleBlockRenderingHandler
         }
         else
         {
-            int metadata = renderer.blockAccess.getBlockMetadata(blockPos);
+            int metadata = renderer.blockAccess.getBlockMetadata(pos);
             sideIcon = renderer.getBlockIconFromSideAndMetadata(block, 0, metadata);
             topBottomIcon = block.getTopAndBottomIcon(metadata);
         }
@@ -99,8 +100,8 @@ public class SteamNSteelPaneRenderer implements ISimpleBlockRenderingHandler
         double blockXMidPlus1px = (double)x + 0.5D + 0.0625D;
         double blockZMidMinus1px = (double)z + 0.5D - 0.0625D;
         double blockZMidPlus1px = (double)z + 0.5D + 0.0625D;
-        boolean shouldConnectZMinus  = block.canPaneConnectTo(renderer.blockAccess, blockPos - 1, NORTH);
-        boolean shouldConnectZPlus = block.canPaneConnectTo(renderer.blockAccess, blockPos + 1, SOUTH);
+        boolean shouldConnectZMinus  = block.canPaneConnectTo(renderer.blockAccess, pos - 1, NORTH);
+        boolean shouldConnectZPlus = block.canPaneConnectTo(renderer.blockAccess, pos + 1, SOUTH);
         boolean shouldConnectXMinus = block.canPaneConnectTo(renderer.blockAccess, x - 1, y, z, WEST);
         boolean shouldConnectXPlus = block.canPaneConnectTo(renderer.blockAccess, x + 1, y, z, EAST);
         boolean shouldConnectAbove = block.shouldSideBeRendered(renderer.blockAccess, x, y + 1, z, 1);

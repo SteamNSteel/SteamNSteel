@@ -37,18 +37,18 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
     }
 
     @Override
-    public void breakBlock(World world, BlockPos blockPos, IBlockState blockState)
+    public void breakBlock(World world, BlockPos pos, IBlockState blockState)
     {
-        final RemnantRuinChestTE te = (RemnantRuinChestTE) world.getTileEntity(blockPos);
+        final RemnantRuinChestTE te = (RemnantRuinChestTE) world.getTileEntity(pos);
 
         if (te != null)
         {
-            dropInventory(world, blockPos, te);
+            dropInventory(world, pos, te);
 
-            world.notifyNeighborsOfStateChange(blockPos, blockState.getBlock());
+            world.notifyNeighborsOfStateChange(pos, blockState.getBlock());
         }
 
-        super.breakBlock(world, blockPos, blockState);
+        super.breakBlock(world, pos, blockState);
     }
 
     @Override

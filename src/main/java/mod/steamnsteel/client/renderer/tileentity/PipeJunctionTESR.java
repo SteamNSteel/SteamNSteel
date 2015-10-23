@@ -5,6 +5,7 @@ import mod.steamnsteel.client.renderer.model.PipeModel;
 import mod.steamnsteel.tileentity.PipeJunctionTE;
 import mod.steamnsteel.tileentity.PipeTE;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -21,7 +22,7 @@ public class PipeJunctionTESR extends SteamNSteelTESR
     private static final ImmutableTriple<Float, Float, Float> OFFSET = ImmutableTriple.of(0.5f, 0.0f, 0.5f);
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick)
+    public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float tick, int whatDoesThisDo)
     {
         if (tileEntity instanceof PipeJunctionTE)
         {
@@ -31,7 +32,7 @@ public class PipeJunctionTESR extends SteamNSteelTESR
             GL11.glPushMatrix();
 
             // Position Renderer
-            GL11.glTranslatef((float) x, (float) y, (float) z);
+            GL11.glTranslatef((float) posX, (float) posY, (float) posZ);
 
             renderJunction(te);
 
@@ -43,10 +44,8 @@ public class PipeJunctionTESR extends SteamNSteelTESR
     private void renderJunction(PipeJunctionTE te)
     {
 
-        final int x = te.xCoord;
-        final int y = te.yCoord;
-        final int z = te.zCoord;
-        final World world = te.getWorldObj();
+        final BlockPos pos = te.getPos();
+        final World world = te.getWorld();
 
         // Open Render buffer
         GL11.glPushMatrix();
