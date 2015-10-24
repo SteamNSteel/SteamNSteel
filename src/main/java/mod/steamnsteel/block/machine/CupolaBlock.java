@@ -20,7 +20,6 @@ import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.gui.ModGuis;
 import mod.steamnsteel.tileentity.CupolaTE;
-import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
@@ -80,6 +79,25 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
+    public IBlockState getStateFromMeta(int meta) {
+        EnumFacing facing = EnumFacing.getHorizontal(meta & 3);
+        boolean isSlave = (meta & 4) == 4;
+
+        return this.getDefaultState()
+                .withProperty(BlockDirectional.FACING, facing)
+                .withProperty(IS_SLAVE, isSlave);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        int meta = 0;
+
+        meta |= (((EnumFacing) state.getValue(BlockDirectional.FACING)).ordinal() - 2);
+        meta |= (boolean)state.getValue(IS_SLAVE) ? 4 : 0;
+        return meta;
+    }
+
+    @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
         return new CupolaTE();
@@ -120,7 +138,8 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
                 final float widthOffset = rng.nextFloat() * 0.6f - 0.3f;
 
                 final IBlockState metadata = world.getBlockState(pos);
-                final Orientation orientation = Orientation.getdecodedOrientation(metadata);
+
+                final EnumFacing orientation = (EnumFacing)metadata.getValue(BlockDirectional.FACING);
 
                 switch (orientation)
                 {

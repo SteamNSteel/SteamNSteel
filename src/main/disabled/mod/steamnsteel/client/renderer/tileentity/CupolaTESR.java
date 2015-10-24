@@ -22,7 +22,6 @@ import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.client.renderer.model.CupolaModel;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
-import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;

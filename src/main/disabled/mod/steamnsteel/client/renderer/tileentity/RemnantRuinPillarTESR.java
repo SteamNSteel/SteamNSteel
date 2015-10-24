@@ -2,10 +2,8 @@ package mod.steamnsteel.client.renderer.tileentity;
 
 import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
 import mod.steamnsteel.client.renderer.model.RemnantRuinPillarModel;
-import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.state.pattern.BlockStateHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;

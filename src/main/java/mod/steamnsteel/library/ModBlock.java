@@ -54,11 +54,10 @@ public final class ModBlock
     public static final SteamNSteelBlock pipeValve = new PipeValveBlock();
     public static final SteamNSteelBlock pipeRedstoneValve = new PipeRedstoneValveBlock();
     public static final SteamNSteelBlock pipeJunction = new PipeJunctionBlock();
-
-    public static final SteamNSteelOreBlock oreNiter = new NiterOre();
 */
     public static final SteamNSteelBlock remnantRuinChest = new RemnantRuinChestBlock();
 
+    public static final SteamNSteelOreBlock oreNiter = new NiterOre();
     public static final SteamNSteelOreBlock oreCopper = new CopperOre();
     public static final SteamNSteelOreBlock oreSulfur = new SulfurOre();
     public static final SteamNSteelOreBlock oreTin = new TinOre();
@@ -101,9 +100,8 @@ public final class ModBlock
         GameRegistry.registerBlock(pipeValve, PipeValveBlock.NAME);
         GameRegistry.registerBlock(pipeRedstoneValve, PipeRedstoneValveBlock.NAME);
         GameRegistry.registerBlock(pipeJunction, PipeJunctionBlock.NAME);
-
-        registerBlockAndOre(oreNiter, NiterOre.NAME);
         */
+        registerBlockAndOre(oreNiter, NiterOre.NAME);
         registerBlockAndOre(oreCopper, CopperOre.NAME);
         registerBlockAndOre(oreSulfur, SulfurOre.NAME);
         registerBlockAndOre(oreTin, TinOre.NAME);

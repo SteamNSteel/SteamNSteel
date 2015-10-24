@@ -52,4 +52,14 @@ abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 
         worldIn.setBlockState(pos, newState, 0);
     }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return super.getMetaFromState(state);
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return super.getStateFromMeta(meta);
+    }
 }

@@ -18,7 +18,6 @@ package mod.steamnsteel.client.renderer.tileentity;
 
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.tileentity.RemnantRuinChestTE;
-import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.tileentity.TileEntity;
