@@ -68,10 +68,4 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
     {
         return new RemnantRuinChestTE();
     }
-
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
-    }
 }

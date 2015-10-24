@@ -19,6 +19,7 @@ package mod.steamnsteel.world.ore;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -44,7 +45,7 @@ public enum RetroGenHandler
     private static boolean isChunkEligibleForRetroGen(ChunkDataEvent.Load event)
     {
         return Settings.World.doRetroOreGen()
-                && event.world.provider.dimensionId == 0
+                && event.world.provider.getDimensionId() == 0
                 && event.getData().getString(RETROGEN_TAG).isEmpty();
     }
 
@@ -96,7 +97,7 @@ public enum RetroGenHandler
 
                     for (final OreGenerator oreGen : retroGens)
                     {
-                        oreGen.generate(world, rng, coord);
+                        oreGen.generate(world, rng, new BlockPos(coord.getX() << 4, 0, coord.getZ() << 4));
                     }
                 }
             }

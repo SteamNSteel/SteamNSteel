@@ -1,12 +1,12 @@
 package mod.steamnsteel.utility.blockParts;
 
 import com.google.common.base.Objects;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -54,11 +54,12 @@ public class BlockPart
     protected void renderBoundingBox(TileEntity location, double playerX, double playerY, double playerZ)
     {
         float e = 0.01f;
-        AxisAlignedBB drawBoundingBox = AxisAlignedBB.getBoundingBox(
-                location.xCoord + boundingBox.minX, location.yCoord + boundingBox.minY, location.zCoord + boundingBox.minZ,
-                location.xCoord + boundingBox.maxX, location.yCoord + boundingBox.maxY, location.zCoord + boundingBox.maxZ
+        final BlockPos pos = location.getPos();
+        AxisAlignedBB drawBoundingBox = AxisAlignedBB.fromBounds(
+                pos.getX() + boundingBox.minX, pos.getY() + boundingBox.minY, pos.getZ() + boundingBox.minZ,
+                pos.getX() + boundingBox.maxX, pos.getY()+ boundingBox.maxY, pos.getZ() + boundingBox.maxZ
         );
-        RenderGlobal.drawOutlinedBoundingBox(drawBoundingBox.expand(e, e, e).getOffsetBoundingBox(-playerX, -playerY, -playerZ), -1);
+        RenderGlobal.drawOutlinedBoundingBox(drawBoundingBox.expand(e, e, e).offset(-playerX, -playerY, -playerZ), -1);
     }
 
     public boolean isEnabledByDefault()
@@ -85,7 +86,7 @@ public class BlockPart
 
     public BlockPart setBoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
     {
-        this.boundingBox = AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+        this.boundingBox = AxisAlignedBB.fromBounds(minX, minY, minZ, maxX, maxY, maxZ);
         return this;
     }
 

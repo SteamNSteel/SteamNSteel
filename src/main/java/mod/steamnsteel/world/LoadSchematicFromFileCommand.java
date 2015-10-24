@@ -14,7 +14,7 @@ public class LoadSchematicFromFileCommand extends CommandBase
 {
 
     @Override
-    public String getCommandName()
+    public String getName()
     {
         return "snsLoadSchematicFromFile";
     }
@@ -26,8 +26,7 @@ public class LoadSchematicFromFileCommand extends CommandBase
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args)
-    {
+    public void execute(ICommandSender sender, String[] args) throws CommandException {
 
         if (sender instanceof EntityPlayerMP) {
             if (args.length < 1) {
@@ -39,7 +38,7 @@ public class LoadSchematicFromFileCommand extends CommandBase
             SchematicLoader loader = new SchematicLoader();
 
             ResourceLocation schematicLocation = loader.loadSchematic(new File(Minecraft.getMinecraft().mcDataDir, "\\Schematics\\" + filename + ".schematic"));
-            loader.renderSchematicInOneShot(schematicLocation, player.getEntityWorld(), (int) player.posX, (int) player.posY, (int) player.posZ, EnumFacing.NORTH, false);
+            loader.renderSchematicInOneShot(schematicLocation, player.getEntityWorld(), player.getPosition(), EnumFacing.NORTH, false);
             sender.addChatMessage(new ChatComponentText("Rendered schematic " + filename));
         }
     }

@@ -32,6 +32,9 @@ configFile.withReader {
 version = config.mod_version
 group = config.group_name
 archivesBaseName = "[${config.minecraft_version}]${config.mod_id}"
+def commonManifest = {
+    attributes 'FMLAT': 'steamnsteel_at.cfg'
+}
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version // grab latest forge
@@ -107,6 +110,11 @@ processResources
     }
 }
 
+jar {
+    classifier = 'universal'
+    manifest commonManifest
+}
+
 // add a source jar
 /*task sourceJar(type: Jar) {
     from sourceSets.main.allSource
@@ -134,8 +142,8 @@ task copyChicken(type: Copy, dependsOn: "extractUserdev") {
     include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
     exclude "**/CodeChickenLib*" // because CCC downloads it anyways.. -_-
     into file("./run/mods") // paralell to the assets dir
-    mustRunAfter "deobfBinJar"
-    mustRunAfter "repackMinecraft"
+    //mustRunAfter "deobfBinJar"
+    //mustRunAfter "repackMinecraft"
 }
 tasks.setupDevWorkspace.dependsOn copyChicken
 tasks.setupDecompWorkspace.dependsOn copyChicken

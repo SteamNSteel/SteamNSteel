@@ -3,6 +3,7 @@ package mod.steamnsteel.world.structure;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.world.WorldGen;
 import mod.steamnsteel.world.structure.remnantruins.Ruin;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.util.EnumFacing;
@@ -44,7 +45,7 @@ public class StructureChunkGenerator
         WorldGen.schematicLoader.renderSchematicToSingleChunk(
                 ruin.schematic.resource,
                 world,
-                intersection.getX(), ruin.height, intersection.getY(),
+                new BlockPos(intersection.getX(), ruin.height, intersection.getY()),
                 chunkX, chunkZ,
                 EnumFacing.NORTH,
                 false);

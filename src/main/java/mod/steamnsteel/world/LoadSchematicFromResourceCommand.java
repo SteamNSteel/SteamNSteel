@@ -12,7 +12,7 @@ public class LoadSchematicFromResourceCommand extends CommandBase
 {
 
     @Override
-    public String getCommandName()
+    public String getName()
     {
         return "snsLoadSchematicFromResource";
     }
@@ -24,8 +24,7 @@ public class LoadSchematicFromResourceCommand extends CommandBase
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args)
-    {
+    public void execute(ICommandSender sender, String[] args) throws CommandException {
         if (sender instanceof EntityPlayerMP) {
 
             if (args.length < 1) {
@@ -38,7 +37,7 @@ public class LoadSchematicFromResourceCommand extends CommandBase
             final ResourceLocation schematicLocation = new ResourceLocation(String.format("SteamNSteel:schematics/%s.schematic", filename));
 
             loader.loadSchematic(schematicLocation);
-            loader.renderSchematicInOneShot(schematicLocation, player.getEntityWorld(), (int) player.posX, (int) player.posY, (int) player.posZ, EnumFacing.NORTH, false);
+            loader.renderSchematicInOneShot(schematicLocation, player.getEntityWorld(), sender.getPosition(), EnumFacing.NORTH, false);
             sender.addChatMessage(new ChatComponentText("Potato Spawned."));
         }
     }

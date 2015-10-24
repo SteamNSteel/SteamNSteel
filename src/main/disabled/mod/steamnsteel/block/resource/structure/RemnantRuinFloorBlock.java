@@ -20,7 +20,6 @@ import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.texturing.wall.RemnantRuinFloorSideTexture;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;

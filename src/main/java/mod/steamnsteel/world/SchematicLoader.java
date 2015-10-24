@@ -1,6 +1,7 @@
 package mod.steamnsteel.world;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.command.server.CommandBlockLogic;
@@ -50,16 +51,18 @@ public class SchematicLoader
                     Boolean commandBlockOutputSetting = gameRules.getGameRuleBooleanValue("commandBlockOutput");
                     gameRules.setOrCreateGameRule("commandBlockOutput", "false");
 
-                    final World worldObj = tileEntity.getWorldObj();
-                    TileEntityCommandBlock commandBlock = (TileEntityCommandBlock) tileEntity;
-                    Block block = worldObj.getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
-                    CommandBlockLogic commandblocklogic = commandBlock.func_145993_a();
-                    commandblocklogic.func_145755_a(worldObj);
-                    worldObj.func_147453_f(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord, block);
+                    final World world = tileEntity.getWorld();
 
-                    if (worldObj.getTileEntity(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord) instanceof TileEntityCommandBlock)
+                    TileEntityCommandBlock commandBlock = (TileEntityCommandBlock) tileEntity;
+                    final BlockPos pos = tileEntity.getPos();
+                    IBlockState block = world.getBlockState(pos);
+                    CommandBlockLogic commandblocklogic = commandBlock.getCommandBlockLogic();
+                    commandblocklogic.trigger(world);
+                    world.updateComparatorOutputLevel(pos, block.getBlock());
+
+                    if (world.getTileEntity(pos) instanceof TileEntityCommandBlock)
                     {
-                        worldObj.setBlock(commandBlock.xCoord, commandBlock.yCoord, commandBlock.zCoord, Blocks.air, 0, 3);
+                        world.setBlockState(pos, Blocks.air.getDefaultState(), 3);
                     }
                     gameRules.setOrCreateGameRule("commandBlockOutput", commandBlockOutputSetting.toString());
                     return true;
@@ -143,7 +146,7 @@ public class SchematicLoader
     }
 
     public void renderSchematicToSingleChunk(ResourceLocation resource, World world,
-                                             int originX, int originY, int originZ,
+                                             BlockPos origin,
                                              int chunkX, int chunkZ, EnumFacing rotation, boolean flip)
     {
         if (rotation == EnumFacing.DOWN || rotation == EnumFacing.UP)
@@ -160,12 +163,12 @@ public class SchematicLoader
         }
 
 
-        final int minX = originX;
-        final int maxX = originX + schematic.getWidth();
-        final int minY = originY;
-        final int maxY = originY + schematic.getHeight();
-        final int minZ = originZ;
-        final int maxZ = originZ + schematic.getLength();
+        final int minX = origin.getX();
+        final int maxX = minX + schematic.getWidth();
+        final int minY = origin.getY();
+        final int maxY = minY + schematic.getHeight();
+        final int minZ = origin.getZ();
+        final int maxZ = minZ + schematic.getLength();
 
         final int localMinX = minX < (chunkX << 4) ? 0 : (minX & 15);
         final int localMaxX = maxX > ((chunkX << 4) + 15) ? 15 : (maxX & 15);
@@ -195,8 +198,8 @@ public class SchematicLoader
 
                     try
                     {
-                        WorldBlockCoord worldCoord = new WorldBlockCoord(chunkX << 4 | chunkLocalX, y, chunkZ << 4 | chunkLocalZ);
-                        WorldBlockCoord schematicCoord = new WorldBlockCoord(schematicX, schematicY, schematicZ);
+                        BlockPos worldCoord = new BlockPos(chunkX << 4 | chunkLocalX, y, chunkZ << 4 | chunkLocalZ);
+                        BlockPos schematicCoord = new BlockPos(schematicX, schematicY, schematicZ);
                         PreSetBlockEvent event = new PreSetBlockEvent(schematic, world, worldCoord, schematicCoord);
 
                         if (setBlockEventListeners != null)
@@ -207,15 +210,16 @@ public class SchematicLoader
                             }
                         }
 
-                        if (event.block != null && c.func_150807_a(chunkLocalX, y, chunkLocalZ, event.block, event.metadata))
+                        if (event.blockState != null && c.setBlockState(worldCoord, event.blockState) != null)
                         {
-                            world.markBlockForUpdate(pos);
-                            final NBTTagCompound tileEntityData = schematic.getTileEntity(schematicX, schematicY, schematicZ);
-                            if (event.block.hasTileEntity(event.metadata) && tileEntityData != null)
+                            world.markBlockForUpdate(new BlockPos(x, y, z));
+                            final NBTTagCompound tileEntityData = schematic.getTileEntity(schematicCoord);
+                            final Block block = event.blockState.getBlock();
+                            if (block.hasTileEntity(event.blockState) && tileEntityData != null)
                             {
                                 TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntityData);
 
-                                c.func_150812_a(chunkLocalX, y, chunkLocalZ, tileEntity);
+                                c.addTileEntity(new BlockPos(chunkLocalX, y, chunkLocalZ), tileEntity);
                                 tileEntity.getBlockType();
                                 try
                                 {
@@ -273,10 +277,10 @@ public class SchematicLoader
 
         if (useChunkRendering)
         {
-            int chunkXStart = x >> 4;
-            int chunkXEnd = ((x + schematic.getWidth()) >> 4) + 1;
-            int chunkZStart = z >> 4;
-            int chunkZEnd = ((z + schematic.getLength()) >> 4) + 1;
+            int chunkXStart = pos.getX() >> 4;
+            int chunkXEnd = ((pos.getX() + schematic.getWidth()) >> 4) + 1;
+            int chunkZStart = pos.getZ() >> 4;
+            int chunkZEnd = ((pos.getZ() + schematic.getLength()) >> 4) + 1;
 
             for (int chunkX = chunkXStart; chunkX <= chunkXEnd; ++chunkX)
             {
@@ -296,14 +300,12 @@ public class SchematicLoader
                 {
                     for (int schematicY = 0; schematicY < schematic.getHeight(); ++schematicY)
                     {
-                        final int xPos = schematicX + x;
-                        final int yPos = schematicY + y;
-                        final int zPos = schematicZ + z;
-                        Block block = schematic.getBlock(schematicX, schematicY, schematicZ);
-                        if (block != Blocks.air)
+                        final BlockPos worldCoord = pos.add(schematicX, schematicY, schematicZ);
+
+                        IBlockState blockState = schematic.getBlockState(worldCoord);
+                        if (blockState.getBlock() != Blocks.air)
                         {
-                            WorldBlockCoord worldCoord = new WorldBlockCoord(xPos, yPos, zPos);
-                            WorldBlockCoord schematicCoord = new WorldBlockCoord(schematicX, schematicY, schematicZ);
+                            BlockPos schematicCoord = new BlockPos(schematicX, schematicY, schematicZ);
                             PreSetBlockEvent event = new PreSetBlockEvent(schematic, world, worldCoord, schematicCoord);
 
                             if (setBlockEventListeners != null)
@@ -314,7 +316,7 @@ public class SchematicLoader
                                 }
                             }
 
-                            world.setBlock(xPos, yPos, zPos, event.block, event.metadata, 2);
+                            world.setBlockState(worldCoord, event.blockState, 2);
                         }
                     }
                 }
@@ -324,7 +326,7 @@ public class SchematicLoader
             for (NBTTagCompound entity : schematic.getTileEntityData())
             {
                 TileEntity tileEntity = TileEntity.createAndLoadEntity(entity);
-                world.setTileEntity(tileEntity.xCoord + x, tileEntity.yCoord + y, tileEntity.zCoord + z, tileEntity);
+                world.setTileEntity(tileEntity.getPos().add(pos), tileEntity);
                 tileEntity.getBlockType();
                 try
                 {
@@ -409,7 +411,7 @@ public class SchematicLoader
         {
             NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING_SCHEMATICA);
             @SuppressWarnings("unchecked")
-            Set<String> names = mapping.func_150296_c();
+            Set<String> names = mapping.getKeySet();
             for (String name : names)
             {
                 if (GameData.getBlockRegistry().containsKey(name))
@@ -459,7 +461,7 @@ public class SchematicLoader
             }
         }
 
-        Map<WorldBlockCoord, NBTTagCompound> tileEntities = new HashMap<WorldBlockCoord, NBTTagCompound>();
+        Map<BlockPos, NBTTagCompound> tileEntities = new HashMap<BlockPos, NBTTagCompound>();
         NBTTagList tileEntitiesList = tagCompound.getTagList(Names.NBT.TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < tileEntitiesList.tagCount(); i++)
@@ -474,7 +476,7 @@ public class SchematicLoader
                     int y = tileEntity.getInteger("y");
                     int z = tileEntity.getInteger("z");
 
-                    WorldBlockCoord loc = WorldBlockCoord.of(pos);
+                    BlockPos loc = new BlockPos(x, y, z);
 
                     tileEntities.put(loc, tileEntity);
                 }
@@ -518,7 +520,7 @@ public class SchematicLoader
 
     public static class SchematicWorld implements ISchematicMetadata
     {
-        private final Map<WorldBlockCoord, NBTTagCompound> tileEntities = new HashMap<WorldBlockCoord, NBTTagCompound>();
+        private final Map<BlockPos, NBTTagCompound> tileEntities = new HashMap<BlockPos, NBTTagCompound>();
         private NBTTagCompound extendedMetadata;
         private short[] blocks;
         private byte[] metadata;
@@ -536,7 +538,7 @@ public class SchematicLoader
             this.length = 0;
         }
 
-        public SchematicWorld(short[] blocks, byte[] metadata, Map<WorldBlockCoord, NBTTagCompound> tileEntities, short width, short height, short length, NBTTagCompound extendedMetadata)
+        public SchematicWorld(short[] blocks, byte[] metadata, Map<BlockPos, NBTTagCompound> tileEntities, short width, short height, short length, NBTTagCompound extendedMetadata)
         {
             this();
             this.extendedMetadata = extendedMetadata;
@@ -554,37 +556,32 @@ public class SchematicLoader
             }
         }
 
-        public Block getBlock(int x, int y, int z)
+        public IBlockState getBlockState(BlockPos pos)
         {
+            int x = pos.getX();
+            int y = pos.getY();
+            int z = pos.getZ();
+
             if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length)
             {
                 //return BLOCK_REGISTRY.getObjectById(0);
                 return null;
             }
             int index = x + (y * length + z) * width;
+            int metadata = this.metadata[index];
             final short blockId = this.blocks[index];
 
-            if (!BLOCK_REGISTRY.containsId(blockId))
+            if (!BLOCK_REGISTRY.containsKey(blockId))
             {
                 return null;
             }
-            return BLOCK_REGISTRY.getObjectById(blockId);
+            return BLOCK_REGISTRY.getObjectById(blockId).getStateFromMeta(metadata);
         }
 
-        public int getBlockMetadata(int x, int y, int z)
+        public boolean isAirBlock(BlockPos pos)
         {
-            if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length)
-            {
-                return 0;
-            }
-            int index = x + (y * length + z) * width;
-            return this.metadata[index];
-        }
-
-        public boolean isAirBlock(int x, int y, int z)
-        {
-            Block block = getBlock(pos);
-            return block == null || block.isAir(null, pos);
+            IBlockState block = getBlockState(pos);
+            return block == null || block.getBlock().isAir(null, pos);
         }
 
         @Override
@@ -617,9 +614,9 @@ public class SchematicLoader
             return this.tileEntities.values();
         }
 
-        public NBTTagCompound getTileEntity(int x, int y, int z)
+        public NBTTagCompound getTileEntity(BlockPos pos)
         {
-            return tileEntities.get(WorldBlockCoord.of(pos));
+            return tileEntities.get(pos);
         }
     }
 
@@ -637,59 +634,6 @@ public class SchematicLoader
             public static final String MAPPING_SCHEMATICA = "SchematicaMapping";
             public static final String EXTENDED_METADATA = "ExtendedMetadata";
             public static final String TILE_ENTITIES = "TileEntities";
-        }
-    }
-
-    public static class WorldBlockCoord implements Comparable<WorldBlockCoord>
-    {
-        private final ImmutableTriple<Integer, Integer, Integer> data;
-
-        private WorldBlockCoord(int x, int y, int z) { data = ImmutableTriple.of(pos); }
-
-        public static WorldBlockCoord of(int x, int y, int z) { return new WorldBlockCoord(pos); }
-
-        public int getX() { return data.left; }
-
-        public int getY() { return data.middle; }
-
-        public int getZ() { return data.right; }
-
-        @Override
-        public int hashCode()
-        {
-            return com.google.common.base.Objects.hashCode(data.left, data.middle, data.right);
-        }
-
-        @Override
-        public boolean equals(Object o)
-        {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            final WorldBlockCoord that = (WorldBlockCoord) o;
-            return data.left.equals(that.data.left)
-                    && data.middle.equals(that.data.middle)
-                    && data.right.equals(that.data.right);
-        }
-
-        @Override
-        public String toString()
-        {
-            return com.google.common.base.Objects.toStringHelper(this)
-                    .add("X", data.left)
-                    .add("Y", data.middle)
-                    .add("Z", data.right)
-                    .toString();
-        }
-
-        @Override
-        public int compareTo(WorldBlockCoord o)
-        {
-            if (data.left.equals(o.data.left)) return data.middle.equals(o.data.middle)
-                    ? data.right.compareTo(o.data.right)
-                    : data.middle.compareTo(o.data.middle);
-
-            else return data.left.compareTo(o.data.left);
         }
     }
 
@@ -734,35 +678,27 @@ public class SchematicLoader
     {
         public final SchematicWorld schematic;
         public final World world;
-        public final WorldBlockCoord worldCoord;
-        public final WorldBlockCoord schematicCoord;
-        private int metadata;
-        private Block block;
+        public final BlockPos worldCoord;
+        public final BlockPos schematicCoord;
+        private IBlockState blockState;
 
-        public PreSetBlockEvent(SchematicWorld schematic, World world, WorldBlockCoord worldCoord, WorldBlockCoord schematicCoord)
+        public PreSetBlockEvent(SchematicWorld schematic, World world, BlockPos worldCoord, BlockPos schematicCoord)
         {
-            this.block = schematic.getBlock(schematicCoord.getX(), schematicCoord.getY(), schematicCoord.getZ());
-            this.metadata = schematic.getBlockMetadata(schematicCoord.getX(), schematicCoord.getY(), schematicCoord.getZ());
+            this.blockState = schematic.getBlockState(schematicCoord);
             this.schematic = schematic;
             this.world = world;
             this.worldCoord = worldCoord;
             this.schematicCoord = schematicCoord;
         }
 
-        public Block getBlock()
+        public IBlockState getBlock()
         {
-            return block;
+            return blockState;
         }
 
-        public int getMetadata()
+        public void replaceBlock(IBlockState blockState)
         {
-            return metadata;
-        }
-
-        public void replaceBlock(Block replacementBlock, int metadata)
-        {
-            this.block = replacementBlock;
-            this.metadata = metadata;
+            this.blockState = blockState;
         }
     }
 

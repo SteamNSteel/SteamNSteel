@@ -4,7 +4,6 @@ import mod.steamnsteel.api.plumbing.IPipeTileEntity;
 import mod.steamnsteel.utility.PartSets;
 import mod.steamnsteel.utility.blockParts.BlockPartConfiguration;
 import mod.steamnsteel.utility.blockParts.ITileEntityWithParts;
-import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -14,7 +13,6 @@ import net.minecraft.util.EnumFacing;
 public class PipeValveTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntityWithParts
 {
     private BlockPartConfiguration blockPartConfiguration = new BlockPartConfiguration(PartSets.Pipe);
-
 
     private EnumFacing valveDirection;
     private EnumFacing orientation;
@@ -98,8 +96,8 @@ public class PipeValveTE extends SteamNSteelTE implements IPipeTileEntity, ITile
     private void sendUpdate()
     {
         markDirty();
-        worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
+        worldObj.markBlockForUpdate(getPos());
     }
 
     @Override
@@ -107,14 +105,14 @@ public class PipeValveTE extends SteamNSteelTE implements IPipeTileEntity, ITile
     {
         final NBTTagCompound nbt = new NBTTagCompound();
         writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
+        return new S35PacketUpdateTileEntity(getPos(), 1, nbt);
     }
 
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
     {
-        readFromNBT(packet.func_148857_g());
+        readFromNBT(packet.getNbtCompound());
     }
 
     @Override

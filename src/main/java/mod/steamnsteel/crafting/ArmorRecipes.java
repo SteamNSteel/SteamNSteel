@@ -39,6 +39,8 @@ enum ArmorRecipes
 
         final List<IRecipe> recipes = Lists.newArrayList();
 
+        //FIXME: Disabled while we don't have armour
+        /*
         recipes.add(assembleRecipe(ModItem.helmetBronze, helmet, ModItem.Names.BRONZE_INGOT));
         recipes.add(assembleRecipe(ModItem.chestplateBronze, chestplate, ModItem.Names.BRONZE_INGOT));
         recipes.add(assembleRecipe(ModItem.leggingsBronze, leggings, ModItem.Names.BRONZE_INGOT));
@@ -48,6 +50,7 @@ enum ArmorRecipes
         recipes.add(assembleRecipe(ModItem.chestplateSteel, chestplate, ModItem.Names.STEEL_INGOT));
         recipes.add(assembleRecipe(ModItem.leggingsSteel, leggings, ModItem.Names.STEEL_INGOT));
         recipes.add(assembleRecipe(ModItem.bootsSteel, boots, ModItem.Names.STEEL_INGOT));
+        */
 
         return ImmutableList.copyOf(recipes);
     }

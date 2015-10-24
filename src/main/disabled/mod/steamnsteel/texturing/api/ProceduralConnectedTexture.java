@@ -5,7 +5,6 @@ import mod.steamnsteel.texturing.api.traiticonregistry.TraitIconRegistry;
 import mod.steamnsteel.texturing.api.traitregistry.FeatureRegistry;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import mod.steamnsteel.utility.log.Logger;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;

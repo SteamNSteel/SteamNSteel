@@ -3,13 +3,13 @@ package mod.steamnsteel.tileentity;
 import mod.steamnsteel.api.plumbing.IDelegatedTileEntityBlock;
 import mod.steamnsteel.api.plumbing.IPipeTileEntity;
 import mod.steamnsteel.utility.log.Logger;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileEntity
@@ -18,7 +18,7 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
     {
         Logger.info("%s - Notifying Block Change - %s", worldObj.isRemote ? "client" : "server", toString());
         markDirty();
-        worldObj.notifyBlockChange(getPos(), getBlockType());
+        worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
         worldObj.markBlockForUpdate(getPos());
     }
 
@@ -26,12 +26,12 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
         if (offset == null) {
             return null;
         }
-        final WorldBlockCoord blockCoord = getWorldBlockCoord().offset(offset);
+        final BlockPos blockCoord = getPos().offset(offset);
 
-        TileEntity te = blockCoord.getTileEntity(worldObj);
+        TileEntity te = worldObj.getTileEntity(blockCoord);
         if (!(te instanceof IPipeTileEntity))
         {
-            Block b = blockCoord.getBlock(worldObj);
+            Block b = worldObj.getBlockState(blockCoord).getBlock();
             if (b instanceof IDelegatedTileEntityBlock) {
                 te = ((IDelegatedTileEntityBlock) b).getDelegatedTileEntity(worldObj, blockCoord);
             }

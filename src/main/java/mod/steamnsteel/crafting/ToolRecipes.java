@@ -40,6 +40,8 @@ enum ToolRecipes
 
         final List<IRecipe> recipes = Lists.newArrayList();
 
+        //FIXME: readd these are the items start working again
+        /*
         recipes.add(assembleRecipe(ModItem.pickBronze, pick, ModItem.Names.BRONZE_INGOT));
         recipes.add(assembleRecipe(ModItem.shovelBronze, shovel, ModItem.Names.BRONZE_INGOT));
         recipes.add(assembleRecipe(ModItem.axeBronze, axe, ModItem.Names.BRONZE_INGOT));
@@ -51,6 +53,7 @@ enum ToolRecipes
         recipes.add(assembleRecipe(ModItem.axeSteel, axe, ModItem.Names.STEEL_INGOT));
         recipes.add(assembleRecipe(ModItem.hoeSteel, hoe, ModItem.Names.STEEL_INGOT));
         recipes.add(assembleRecipe(ModItem.swordSteel, sword, ModItem.Names.STEEL_INGOT));
+        */
 
         return ImmutableList.copyOf(recipes);
     }

@@ -20,8 +20,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.utility.position.ChunkCoord;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import mod.steamnsteel.world.ore.niter.NiterVeinGeneratorStateMachine;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
@@ -68,7 +68,7 @@ public class NiterOreGenerator extends OreGenerator
 
         for (int i = 0; i < CLUSTER_COUNT; i++)
         {
-            final WorldBlockCoord coord = WorldBlockCoord.of(worldX + rand.nextInt(16), 0, worldZ + rand.nextInt(16));
+            final BlockPos coord = BlockPos.of(worldX + rand.nextInt(16), 0, worldZ + rand.nextInt(16));
 
             // world getBiome method is safer than chunk version (does not throw exceptions for unloaded chunks)
             // also, block columns are assigned biomes
@@ -76,7 +76,7 @@ public class NiterOreGenerator extends OreGenerator
 
             if (isQualifiedBiome(biome))
             {
-                final WorldBlockCoord startingSearchPos = WorldBlockCoord.of(
+                final BlockPos startingSearchPos = BlockPos.of(
                         coord.getX(),
                         Math.min(coord.getHeightofTopBlock(world), MAX_HEIGHT),
                         coord.getZ());

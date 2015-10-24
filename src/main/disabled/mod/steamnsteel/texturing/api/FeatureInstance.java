@@ -1,7 +1,5 @@
 package mod.steamnsteel.texturing.api;
 
-import mod.steamnsteel.utility.position.WorldBlockCoord;
-
 /**
  * Describes a 3D space of a feature within a chunk.
  */

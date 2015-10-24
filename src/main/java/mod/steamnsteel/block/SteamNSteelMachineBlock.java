@@ -73,13 +73,6 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
         return 2;
     }
 
-    @SuppressWarnings("NoopMethodInAbstractClass")
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        // no op
-    }
-
     protected void dropInventory(World world, BlockPos pos, IInventory inventory)
     {
         for (int slotIndex = 0; slotIndex < inventory.getSizeInventory(); slotIndex++)

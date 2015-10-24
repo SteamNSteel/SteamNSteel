@@ -4,7 +4,7 @@ import com.google.common.collect.Iterables;
 import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
+
 import java.util.*;
 
 public class FeatureRegistry implements IFeatureRegistry

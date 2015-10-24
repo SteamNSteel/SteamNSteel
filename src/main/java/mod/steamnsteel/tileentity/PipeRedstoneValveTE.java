@@ -68,8 +68,8 @@ public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntit
     private void sendUpdate()
     {
         markDirty();
-        worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
+        worldObj.markBlockForUpdate(getPos());
     }
 
     @Override
@@ -77,14 +77,14 @@ public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntit
     {
         final NBTTagCompound nbt = new NBTTagCompound();
         writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
+        return new S35PacketUpdateTileEntity(getPos(), 1, nbt);
     }
 
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
     {
-        readFromNBT(packet.func_148857_g());
+        readFromNBT(packet.getNbtCompound());
     }
 
     @Override

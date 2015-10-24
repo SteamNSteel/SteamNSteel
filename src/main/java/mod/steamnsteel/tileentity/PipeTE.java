@@ -85,9 +85,9 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         //If none were found, find the first single end that is connected and connect to that and it's opposite.
         if (connectionToMake == null)
         {
-            for (int i = 0; i < EnumFacing.VALID_DIRECTIONS.length; ++i)
+            for (int i = 0; i < EnumFacing.VALUES.length; ++i)
             {
-                final EnumFacing direction = EnumFacing.VALID_DIRECTIONS[i];
+                final EnumFacing direction = EnumFacing.VALUES[i];
                 pipeEntity = getPipeTileEntityInDirection(direction);
                 if (pipeEntity != null && pipeEntity.canConnect(direction.getOpposite()))
                 {
@@ -143,8 +143,8 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         }
 
         //We'll now update the BlockPart configuration and enable the sides that have neighbouring blocks.
-        for (int i = 0; i < EnumFacing.VALID_DIRECTIONS.length; ++i) {
-            final EnumFacing direction = EnumFacing.VALID_DIRECTIONS[i];
+        for (int i = 0; i < EnumFacing.VALUES.length; ++i) {
+            final EnumFacing direction = EnumFacing.VALUES[i];
             BlockPart part = blockPartConfiguration.getBlockPartByKey(direction);
 
             IPipeTileEntity tileEntity = getPipeTileEntityInDirection(direction);
@@ -186,11 +186,11 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
     private synchronized static void calculatePipeRotations() {
         if (PIPE_ROTATIONS.isEmpty())
         {
-            for (int i = 0; i < EnumFacing.VALID_DIRECTIONS.length; ++i)
+            for (int i = 0; i < EnumFacing.VALUES.length; ++i)
             {
-                for (int j = i + 1; j < EnumFacing.VALID_DIRECTIONS.length; ++j)
+                for (int j = i + 1; j < EnumFacing.VALUES.length; ++j)
                 {
-                    PIPE_ROTATIONS.add(new ImmutablePair<EnumFacing, EnumFacing>(EnumFacing.VALID_DIRECTIONS[i], EnumFacing.VALID_DIRECTIONS[j]));
+                    PIPE_ROTATIONS.add(new ImmutablePair<EnumFacing, EnumFacing>(EnumFacing.VALUES[i], EnumFacing.VALUES[j]));
                 }
             }
         }
@@ -356,7 +356,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
     public String toString()
     {
         Objects.ToStringHelper stringHelper = Objects.toStringHelper(this)
-                .add("worldBlockCoord", this.getWorldBlockCoord())
+                .add("worldBlockCoord", this.getPos())
                 .add("endA", endA)
                 .add("endAConnected", endAIsConnected)
                 .add("endB", endB)

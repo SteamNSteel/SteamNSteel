@@ -17,7 +17,6 @@
 package mod.steamnsteel.tileentity;
 
 import mod.steamnsteel.TheMod;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class SteamNSteelTE extends TileEntity

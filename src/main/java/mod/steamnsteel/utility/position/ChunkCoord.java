@@ -17,6 +17,8 @@
 package mod.steamnsteel.utility.position;
 
 import com.google.common.base.Objects;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.world.ChunkEvent;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -33,14 +35,18 @@ public class ChunkCoord implements Comparable<ChunkCoord>
 
     public static ChunkCoord of(int x, int z) { return new ChunkCoord(x, z); }
 
-    public static ChunkCoord of(WorldBlockCoord coord)
+    public static ChunkCoord of(BlockPos coord)
     {
         return new ChunkCoord(coord.getX() >> 4, coord.getZ() >> 4);
     }
 
     public static ChunkCoord of(ChunkEvent event) { return new ChunkCoord(event); }
 
-    public boolean containsWorldCoord(WorldBlockCoord coord)
+    public boolean exists(World world) {
+        return world.getChunkProvider().chunkExists(data.getLeft(), data.getRight());
+    }
+
+    public boolean containsWorldCoord(BlockPos coord)
     {
         return equals(of(coord));
     }
@@ -49,9 +55,9 @@ public class ChunkCoord implements Comparable<ChunkCoord>
 
     public int getZ() { return data.right; }
 
-    public WorldBlockCoord localToWorldCoords(ChunkBlockCoord coord)
+    public BlockPos localToWorldCoords(ChunkBlockCoord coord)
     {
-        return WorldBlockCoord.of((data.left << 4) + coord.getX(), coord.getY(), (data.right << 4) + coord.getZ());
+        return new BlockPos((data.left << 4) + coord.getX(), coord.getY(), (data.right << 4) + coord.getZ());
     }
 
     @Override

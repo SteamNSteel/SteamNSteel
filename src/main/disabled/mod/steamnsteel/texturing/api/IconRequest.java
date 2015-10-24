@@ -1,6 +1,5 @@
 package mod.steamnsteel.texturing.api;
 
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.EnumFacing;
 import java.util.Random;

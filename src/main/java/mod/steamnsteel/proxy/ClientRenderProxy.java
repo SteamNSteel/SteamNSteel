@@ -16,15 +16,6 @@
 
 package mod.steamnsteel.proxy;
 
-import mod.steamnsteel.client.renderer.item.*;
-import mod.steamnsteel.client.renderer.tileentity.*;
-import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.tileentity.*;
-import net.minecraft.item.Item;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends RenderProxy
 {
@@ -38,6 +29,8 @@ public class ClientRenderProxy extends RenderProxy
 
     private void registerItemRenderers()
     {
+        //TODO: reenable these once I have them working
+        /*
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.cupola), new CupolaItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipe), new PipeItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeValve), new PipeValveItemRenderer());
@@ -45,10 +38,12 @@ public class ClientRenderProxy extends RenderProxy
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeJunction), new PipeJunctionItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinChest), new PlotoniumChestItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinPillar), new RemnantRuinPillarItemRenderer());
+        */
     }
 
     private void registerTESRs()
     {
+        /*
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeValveTE.class, new PipeValveTESR());
@@ -56,6 +51,7 @@ public class ClientRenderProxy extends RenderProxy
         ClientRegistry.bindTileEntitySpecialRenderer(PipeJunctionTE.class, new PipeJunctionTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(RemnantRuinChestTE.class, new PlotoniumChestTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(RemnantRuinPillarTE.class, new RemnantRuinPillarTESR());
+        */
     }
 
     private void registerEventHandlers() {

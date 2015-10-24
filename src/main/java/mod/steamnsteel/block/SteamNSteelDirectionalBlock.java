@@ -18,6 +18,8 @@ package mod.steamnsteel.block;
 
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -33,11 +35,16 @@ abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
     }
 
     @Override
+    protected BlockState createBlockState() {
+        return new BlockState(this, BlockDirectional.FACING);
+    }
+
+    @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
         final int orientation = BlockDirectional.getDirection(MathHelper.floor_double(placer.rotationYaw * 4.0f / 360.0f + 0.5));
-        worldIn.setBlockMetadataWithNotify(pos, orientation, 0);
+        worldIn.setBlockState(pos, orientation, 0);
     }
 }

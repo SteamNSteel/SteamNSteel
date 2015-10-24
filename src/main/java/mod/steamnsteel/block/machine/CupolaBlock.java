@@ -16,18 +16,20 @@
 
 package mod.steamnsteel.block.machine;
 
-import com.google.common.base.Optional;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.gui.ModGuis;
-import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.tileentity.CupolaTE;
 import mod.steamnsteel.utility.Orientation;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -43,13 +45,21 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 {
     public static final String NAME = "cupola";
 
+    public static final PropertyBool IS_SLAVE = PropertyBool.create("isSlave");
+
     private static final int flagSlave = 1 << 2;
-    private Optional<IIcon> iconMaster = Optional.absent();
-    private Optional<IIcon> iconSlave = Optional.absent();
+    /*private Optional<IIcon> iconMaster = Optional.absent();
+    private Optional<IIcon> iconSlave = Optional.absent();*/
 
     public CupolaBlock()
     {
         setUnlocalizedName(NAME);
+        setDefaultState(
+                this.blockState
+                        .getBaseState()
+                        .withProperty(BlockDirectional.FACING, EnumFacing.NORTH)
+                        .withProperty(IS_SLAVE, false)
+        );
     }
 
     private static void renderSmokeOnTop(World world, BlockPos pos, Random rng)
@@ -75,7 +85,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         return new CupolaTE();
     }
 
-    @Override
+    /*@Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister)
     {
@@ -83,15 +93,16 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 
         if (!iconMaster.isPresent()) iconMaster = Optional.of(iconRegister.registerIcon(objName + "/bSide"));
         if (!iconSlave.isPresent()) iconSlave = Optional.of(iconRegister.registerIcon(objName + "/tSide"));
-    }
+    }*/
 
+    /*
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta)
     {
         return (meta & flagSlave) == 0 ? iconMaster.get() : iconSlave.get();
     }
-
+*/
     @SideOnly(Side.CLIENT)
     @Override
     public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rng)
@@ -178,17 +189,17 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public Item getItemDropped(int metadata, Random rng, int fortune)
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         if (metadata != 8) // if we get 8, we will spawn 2 items...so skip one
-            return super.getItemDropped(metadata, rng, fortune);
+            return super.getItemDropped(state, rand, fortune);
         return Item.getItemById(0);
     }
 
     @Override
     public boolean canPlaceBlockAt(World world, BlockPos pos)
     {
-        return super.canPlaceBlockAt(world, pos) && super.canPlaceBlockAt(world, x, y + 1, z);
+        return super.canPlaceBlockAt(world, pos) && super.canPlaceBlockAt(world, pos.up());
     }
 
     @Override
@@ -205,7 +216,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess block, BlockPos pos)
     {
-        final int meta = block.getBlockMetadata(pos);
+        final IBlockState meta = block.getBlockState(pos);
 
         if ((meta & flagSlave) == 0)
         {
@@ -219,13 +230,13 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public void onPostBlockPlaced(World world, BlockPos pos, IBlockState blockState)
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
-        super.onPostBlockPlaced(world, pos, blockState);
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
-        final int fillerY = y + 1;
-        world.setBlock(x, fillerY, z, ModBlock.cupola, flagSlave, 2);
-        final TileEntity te = world.getTileEntity(x, fillerY, z);
+        final BlockPos fillerY = pos.up();
+        worldIn.setBlockState(fillerY, slaveState, 2);
+        final TileEntity te = worldIn.getTileEntity(fillerY);
         ((CupolaTE) te).setSlave();
     }
 

@@ -61,7 +61,7 @@ public class CupolaGui extends SteamNSteelGui
     @Override
     public String getInventoryName()
     {
-        return te.getInventoryName();
+        return te.getName();
     }
 
     @Override

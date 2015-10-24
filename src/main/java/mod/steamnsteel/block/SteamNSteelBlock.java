@@ -44,12 +44,4 @@ public abstract class SteamNSteelBlock extends Block
         //noinspection StringConcatenationMissingWhitespace
         return "tile." + TheMod.RESOURCE_PREFIX + getUnwrappedUnlocalizedName(super.getUnlocalizedName());
     }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
-    }
-
 }
