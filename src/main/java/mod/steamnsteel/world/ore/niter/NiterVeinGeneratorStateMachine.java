@@ -97,7 +97,7 @@ public class NiterVeinGeneratorStateMachine
             if (OreGenerator.isBlockReplaceable(world, target, TARGET_BLOCKS))
                 placeNiterOre(target);
 
-            final EnumFacing offsetToNext = EnumFacing.getOrientation(rng.nextInt(6));
+            final EnumFacing offsetToNext = EnumFacing.random(rng);
             target = target.offset(offsetToNext);
 
             // Has vein strayed into an unloaded chunk? If so, STOP!
@@ -121,7 +121,7 @@ public class NiterVeinGeneratorStateMachine
         for (int i = 0; i < DIRECTIONS.size(); i++)
         {
             // get random neighbor
-            final EnumFacing offset = EnumFacing.getOrientation(rng.nextInt(directions.size()));
+            final EnumFacing offset = EnumFacing.random(rng);
             directions.remove(offset);
             if (rng.nextFloat() < paddingChancePercent)
             {

@@ -473,9 +473,9 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
     @Override
     public void readPlumbingFromNBT(NBTTagCompound nbt)
     {
-        endA = EnumFacing.getOrientation(nbt.getByte(NBT_END_A));
+        endA = EnumFacing.VALUES[nbt.getByte(NBT_END_A)];
         endAIsConnected = nbt.getBoolean(NBT_END_A_CONNECTED);
-        endB = EnumFacing.getOrientation(nbt.getByte(NBT_END_B));
+        endB = EnumFacing.VALUES[nbt.getByte(NBT_END_B)];
         endBIsConnected = nbt.getBoolean(NBT_END_B_CONNECTED);
 
         if (worldObj != null && worldObj.isRemote)

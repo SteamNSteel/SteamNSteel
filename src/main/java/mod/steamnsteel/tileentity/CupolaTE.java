@@ -299,6 +299,28 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, IUpdateP
     }
 
     @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        for (int i = inventory.getSize() - 1; i >= 0; --i) {
+            inventory.clearSlot(i);
+        }
+    }
+
+    @Override
     public void update()
     {
         final boolean isBurning = deviceCookTime > 0;

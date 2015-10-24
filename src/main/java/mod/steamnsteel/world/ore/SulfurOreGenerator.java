@@ -85,7 +85,7 @@ public class SulfurOreGenerator extends OreGenerator
             if (isBlockReplaceable(world, target, TARGET_BLOCKS))
                 placeSulfurOre(world, target);
 
-            final EnumFacing offsetToNext = EnumFacing.getOrientation(rand.nextInt(6));
+            final EnumFacing offsetToNext = EnumFacing.random(rand);
             target = target.offset(offsetToNext);
 
             // Has vein strayed into an unloaded chunk? If so, STOP!

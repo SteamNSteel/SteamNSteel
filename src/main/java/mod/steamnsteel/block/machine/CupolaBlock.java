@@ -191,9 +191,10 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        if (metadata != 8) // if we get 8, we will spawn 2 items...so skip one
+        //QUESTION: Verify if dupe glitch still exists
+        //if (metadata != 8) // if we get 8, we will spawn 2 items...so skip one
             return super.getItemDropped(state, rand, fortune);
-        return Item.getItemById(0);
+        //return Item.getItemById(0);
     }
 
     @Override
@@ -218,7 +219,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     {
         final IBlockState meta = block.getBlockState(pos);
 
-        if ((meta & flagSlave) == 0)
+        if (!((boolean)meta.getValue(IS_SLAVE)))
         {
             maxY = 2;   //is Master
             minY = 0;
@@ -235,7 +236,9 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
         final BlockPos fillerY = pos.up();
-        worldIn.setBlockState(fillerY, slaveState, 2);
+        final IBlockState iBlockState = worldIn.getBlockState(pos)
+                .withProperty(IS_SLAVE, true);
+        worldIn.setBlockState(fillerY, iBlockState, 2);
         final TileEntity te = worldIn.getTileEntity(fillerY);
         ((CupolaTE) te).setSlave();
     }
