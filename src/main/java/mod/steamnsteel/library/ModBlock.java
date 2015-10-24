@@ -114,7 +114,7 @@ public final class ModBlock
         GameRegistry.registerBlock(remnantRuinFloor, RemnantRuinFloorBlock.NAME);
         GameRegistry.registerBlock(remnantRuinPillar, RemnantRuinPillarBlock.NAME);
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
-        GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlockItem.class, RemnantRuinIronBarsBlock.NAME);
+        GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlock.NAME);
 
         //Compat
         TileEntity.addMapping(RemnantRuinChestTE.class, "tile.chestPlotonium");

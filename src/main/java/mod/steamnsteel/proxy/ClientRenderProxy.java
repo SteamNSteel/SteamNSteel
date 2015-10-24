@@ -36,12 +36,6 @@ public class ClientRenderProxy extends RenderProxy
         registerEventHandlers();
     }
 
-    @Override
-    public int addNewArmourRenderers(String armor)
-    {
-        return RenderingRegistry.addNewArmourRendererPrefix(armor);
-    }
-
     private void registerItemRenderers()
     {
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.cupola), new CupolaItemRenderer());
