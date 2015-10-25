@@ -23,6 +23,7 @@ import mod.steamnsteel.item.artifact.*;
 import mod.steamnsteel.item.resource.Niter;
 import mod.steamnsteel.item.resource.Sulfur;
 import mod.steamnsteel.item.resource.ingot.*;
+import mod.steamnsteel.item.tool.*;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -47,7 +48,7 @@ public final class ModItem
     public static final SteamNSteelItemArmor chestplateSteel = new SSArmorChest(STEEL);
     public static final SteamNSteelItemArmor helmetSteel = new SSArmorHelmet(STEEL);
     public static final SteamNSteelItemArmor leggingsSteel = new SSArmorLegs(STEEL);
-/*
+
     public static final SSToolAxe axeBronze = new SSToolAxe(BRONZE);
     public static final SSToolAxe axeSteel = new SSToolAxe(STEEL);
     public static final SSToolHoe hoeBronze = new SSToolHoe(BRONZE);
@@ -57,7 +58,7 @@ public final class ModItem
     public static final SSToolShovel shovelBronze = new SSToolShovel(BRONZE);
     public static final SSToolShovel shovelSteel = new SSToolShovel(STEEL);
     public static final SSToolSword swordBronze = new SSToolSword(BRONZE);
-    public static final SSToolSword swordSteel = new SSToolSword(STEEL);*/
+    public static final SSToolSword swordSteel = new SSToolSword(STEEL);
 
     public static final SteamNSteelItem anachDoodad = new AnachDoodad();
     public static final SteamNSteelItem dustNiter = new Niter();
@@ -130,8 +131,6 @@ public final class ModItem
 
     private static void registerTools()
     {
-        //TODO: resurrect Tools
-        /*
         GameRegistry.registerItem(shovelBronze, shovelBronze.getUndecoratedName());
         GameRegistry.registerItem(pickBronze, pickBronze.getUndecoratedName());
         GameRegistry.registerItem(axeBronze, axeBronze.getUndecoratedName());
@@ -141,15 +140,12 @@ public final class ModItem
         GameRegistry.registerItem(pickSteel, pickSteel.getUndecoratedName());
         GameRegistry.registerItem(axeSteel, axeSteel.getUndecoratedName());
         GameRegistry.registerItem(hoeSteel, hoeSteel.getUndecoratedName());
-        */
     }
 
     private static void registerWeapons()
     {
-        /*
         GameRegistry.registerItem(swordBronze, swordBronze.getUndecoratedName());
         GameRegistry.registerItem(swordSteel, swordSteel.getUndecoratedName());
-        */
     }
 
     private static void registerItemAndOre(Item item, String name)

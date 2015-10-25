@@ -21,21 +21,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.library.Material;
-import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 
 import static mod.steamnsteel.item.SteamNSteelItem.getFormattedName;
 import static mod.steamnsteel.item.SteamNSteelItem.getUnwrappedUnlocalizedName;
 
-public class SSToolHoe extends ItemHoe
+public class SSToolShovel extends ItemSpade
 {
     private final String undecoratedName;
 
-    public SSToolHoe(Material material)
+    public SSToolShovel(Material material)
     {
         super(material.getToolMaterial());
         //noinspection StringConcatenationMissingWhitespace
-        undecoratedName = "hoe" + getFormattedName(material);
+        undecoratedName = "shovel" + getFormattedName(material);
         setUnlocalizedName(undecoratedName);
         setCreativeTab(TheMod.CREATIVE_TAB);
     }
@@ -55,14 +55,6 @@ public class SSToolHoe extends ItemHoe
     public String getUnlocalizedName(ItemStack itemStack)
     {
         return getUnlocalizedName();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister)
-    {
-        final String unlocalizedName = getUnlocalizedName();
-        itemIcon = iconRegister.registerIcon(unlocalizedName.substring(unlocalizedName.indexOf('.') + 1));
     }
 
     @Override
