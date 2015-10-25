@@ -18,6 +18,7 @@ package mod.steamnsteel.library;
 
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.item.SteamNSteelItem;
+import mod.steamnsteel.item.armor.*;
 import mod.steamnsteel.item.artifact.*;
 import mod.steamnsteel.item.resource.Niter;
 import mod.steamnsteel.item.resource.Sulfur;
@@ -25,6 +26,9 @@ import mod.steamnsteel.item.resource.ingot.*;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+
+import static mod.steamnsteel.library.Material.BRONZE;
+import static mod.steamnsteel.library.Material.STEEL;
 
 @SuppressWarnings({"UtilityClass", "WeakerAccess"})
 @GameRegistry.ObjectHolder(TheMod.MOD_ID)
@@ -34,7 +38,7 @@ public final class ModItem
     // * NOTE: @GameRegistry.ObjectHolder requires these fields to have the same name as the unlocalized name of the
     // *       object.
     // *
-    /*public static final SteamNSteelItemArmor bootsBronze = new SSArmorBoots(BRONZE);
+    public static final SteamNSteelItemArmor bootsBronze = new SSArmorBoots(BRONZE);
     public static final SteamNSteelItemArmor chestplateBronze = new SSArmorChest(BRONZE);
     public static final SteamNSteelItemArmor helmetBronze = new SSArmorHelmet(BRONZE);
     public static final SteamNSteelItemArmor leggingsBronze = new SSArmorLegs(BRONZE);
@@ -43,7 +47,7 @@ public final class ModItem
     public static final SteamNSteelItemArmor chestplateSteel = new SSArmorChest(STEEL);
     public static final SteamNSteelItemArmor helmetSteel = new SSArmorHelmet(STEEL);
     public static final SteamNSteelItemArmor leggingsSteel = new SSArmorLegs(STEEL);
-
+/*
     public static final SSToolAxe axeBronze = new SSToolAxe(BRONZE);
     public static final SSToolAxe axeSteel = new SSToolAxe(STEEL);
     public static final SSToolHoe hoeBronze = new SSToolHoe(BRONZE);
@@ -87,8 +91,7 @@ public final class ModItem
 
     private static void registerArmor()
     {
-        //QUESTION: How do we register armour
-        /*GameRegistry.registerItem(helmetBronze, helmetBronze.getUndecoratedName());
+        GameRegistry.registerItem(helmetBronze, helmetBronze.getUndecoratedName());
         GameRegistry.registerItem(chestplateBronze, chestplateBronze.getUndecoratedName());
         GameRegistry.registerItem(leggingsBronze, leggingsBronze.getUndecoratedName());
         GameRegistry.registerItem(bootsBronze, bootsBronze.getUndecoratedName());
@@ -96,7 +99,7 @@ public final class ModItem
         GameRegistry.registerItem(helmetSteel, helmetSteel.getUndecoratedName());
         GameRegistry.registerItem(chestplateSteel, chestplateSteel.getUndecoratedName());
         GameRegistry.registerItem(leggingsSteel, leggingsSteel.getUndecoratedName());
-        GameRegistry.registerItem(bootsSteel, bootsSteel.getUndecoratedName());*/
+        GameRegistry.registerItem(bootsSteel, bootsSteel.getUndecoratedName());
     }
 
     private static void registerArtifacts()

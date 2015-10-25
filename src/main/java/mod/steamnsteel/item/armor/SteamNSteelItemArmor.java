@@ -36,9 +36,9 @@ public abstract class SteamNSteelItemArmor extends ItemArmor
     private final String undecoratedName;
     private final String materialName;
 
-    SteamNSteelItemArmor(Material material, int renderIndex, String name)
+    SteamNSteelItemArmor(Material material, int renderIndex, int armourType, String name)
     {
-        super(material.getArmorMaterial(), Proxies.render.addNewArmourRenderers(getRendererName(material)), renderIndex);
+        super(material.getArmorMaterial(), renderIndex, armourType);
         setCreativeTab(TheMod.CREATIVE_TAB);
         undecoratedName = name + getFormattedName(material);
         setUnlocalizedName(undecoratedName);
@@ -73,14 +73,6 @@ public abstract class SteamNSteelItemArmor extends ItemArmor
     public String getUnlocalizedName(ItemStack itemStack)
     {
         return getUnlocalizedName();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister)
-    {
-        final String unlocalizedName = getUnlocalizedName();
-        itemIcon = iconRegister.registerIcon(unlocalizedName.substring(unlocalizedName.indexOf('.') + 1));
     }
 
     @Override

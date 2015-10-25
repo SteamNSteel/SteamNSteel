@@ -18,11 +18,12 @@ package mod.steamnsteel.item.armor;
 
 import mod.steamnsteel.library.Material;
 
-public class SSArmorBoots extends SteamNSteelItemArmor
+public class SSArmorChest extends SteamNSteelItemArmor
 {
-    public SSArmorBoots(Material material)
+
+    public SSArmorChest(Material material)
     {
-        super(material, 3, "boots");
+        super(material, 3, 1, "chestplate");
     }
 
     @Override
