@@ -35,8 +35,6 @@ enum IngotRecipes
     {
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        //TODO: Reenable these as I get them working
-        /*
         recipes.add(assembleRecipe(ModBlock.blockBrass, ModItem.Names.BRASS_INGOT));
         recipes.add(assembleRecipe(ModBlock.blockBronze, ModItem.Names.BRONZE_INGOT));
         recipes.add(assembleRecipe(ModBlock.blockCopper, ModItem.Names.COPPER_INGOT));
@@ -44,7 +42,6 @@ enum IngotRecipes
         recipes.add(assembleRecipe(ModBlock.blockSteel, ModItem.Names.STEEL_INGOT));
         recipes.add(assembleRecipe(ModBlock.blockTin, ModItem.Names.TIN_INGOT));
         recipes.add(assembleRecipe(ModBlock.blockZinc, ModItem.Names.ZINC_INGOT));
-        */
 
         return ImmutableList.copyOf(recipes);
     }

@@ -45,10 +45,10 @@ public final class Recipes
     {
         final RecipePattern pattern = RecipePattern.of("#X#", "X X", "#X#");
         //TODO: reenable once I get the cupola fixed
-        /*
+
         final IRecipe recipe = new ShapedOreRecipe(ModBlock.cupola, pattern.get(), '#', "ingotIron", 'X', Blocks.brick_block);
         GameRegistry.addRecipe(recipe);
-         */
+
 
     }
 }
