@@ -53,6 +53,11 @@ import java.util.Random;
  */
 public class SulfurOreGenerator extends OreGenerator
 {
+    public SulfurOreGenerator() {
+        //Most of these properties aren't used.
+        super(ModBlock.oreSulfur, 0, 0, 0);
+    }
+
     // Highest "Y" to begin vein
     // 0 - 16 should encompass most naturally occurring lava
     private static final int MAX_HEIGHT = 16;

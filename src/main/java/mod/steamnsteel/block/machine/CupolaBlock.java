@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,6 +40,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
+
+import static net.minecraft.block.BlockDirectional.FACING;
 
 public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
@@ -79,20 +82,20 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        EnumFacing facing = EnumFacing.getHorizontal(meta & 3);
-        boolean isSlave = (meta & 4) == 4;
+    protected BlockState createBlockState() {
+        return new BlockState(this, FACING, IS_SLAVE);
+    }
 
-        return this.getDefaultState()
-                .withProperty(BlockDirectional.FACING, facing)
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        boolean isSlave = (meta & 4) == 4;
+        return super.getStateFromMeta(meta)
                 .withProperty(IS_SLAVE, isSlave);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        int meta = 0;
-
-        meta |= (((EnumFacing) state.getValue(BlockDirectional.FACING)).ordinal() - 2);
+        int meta = super.getMetaFromState(state);
         meta |= (boolean)state.getValue(IS_SLAVE) ? 4 : 0;
         return meta;
     }

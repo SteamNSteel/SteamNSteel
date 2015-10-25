@@ -17,6 +17,7 @@
 package mod.steamnsteel.library;
 
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;
+import mod.steamnsteel.block.machine.CupolaBlock;
 import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
@@ -48,8 +49,8 @@ public final class ModBlock
     public static final SteamNSteelBlock blockTin = new SteamNSteelStorageBlock(SteamNSteelStorageBlock.TIN_BLOCK);
     public static final SteamNSteelBlock blockZinc = new SteamNSteelStorageBlock(SteamNSteelStorageBlock.ZINC_BLOCK);
 
-/*
     public static final SteamNSteelBlock cupola = new CupolaBlock();
+/*
     public static final SteamNSteelBlock pipe = new PipeBlock();
     public static final SteamNSteelBlock pipeValve = new PipeValveBlock();
     public static final SteamNSteelBlock pipeRedstoneValve = new PipeRedstoneValveBlock();
@@ -78,7 +79,8 @@ public final class ModBlock
     public static void registerTileEntities()
     {
         GameRegistry.registerTileEntity(RemnantRuinChestTE.class, getTEName(RemnantRuinChestBlock.NAME));
-        /*GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
+        GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
+        /*
         GameRegistry.registerTileEntity(PipeTE.class, getTEName(PipeBlock.NAME));
         GameRegistry.registerTileEntity(PipeValveTE.class, getTEName(PipeValveBlock.NAME));
         GameRegistry.registerTileEntity(PipeRedstoneValveTE.class, getTEName(PipeRedstoneValveBlock.NAME));
@@ -93,9 +95,10 @@ public final class ModBlock
     {
         GameRegistry.registerBlock(remnantRuinChest, RemnantRuinChestBlock.NAME);
 
+        GameRegistry.registerBlock(cupola, CupolaBlock.NAME);
         /*
 
-        GameRegistry.registerBlock(cupola, CupolaBlock.NAME);
+
         GameRegistry.registerBlock(pipe, PipeBlock.NAME);
         GameRegistry.registerBlock(pipeValve, PipeValveBlock.NAME);
         GameRegistry.registerBlock(pipeRedstoneValve, PipeRedstoneValveBlock.NAME);

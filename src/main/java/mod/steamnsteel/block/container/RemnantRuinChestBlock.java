@@ -18,8 +18,11 @@ package mod.steamnsteel.block.container;
 
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.RemnantRuinChestTE;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -33,12 +36,16 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
     public static final String NAME = "remnantRuinChest";
 
     public RemnantRuinChestBlock() {
+        super();
         setUnlocalizedName(NAME);
         setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-        setDefaultState(getDefaultState().withProperty(BlockDirectional.FACING, EnumFacing.NORTH));
+        setDefaultState(getDefaultState());
     }
 
-
+    @Override
+    protected BlockState createBlockState() {
+        return new BlockState(this, new IProperty[] {BlockDirectional.FACING});
+    }
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState blockState)

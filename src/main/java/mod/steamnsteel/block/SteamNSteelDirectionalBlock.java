@@ -29,16 +29,19 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import static net.minecraft.block.BlockDirectional.*;
+
 abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
     SteamNSteelDirectionalBlock(Material material)
     {
         super(material);
+        setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));
     }
 
     @Override
     protected BlockState createBlockState() {
-        return new BlockState(this, BlockDirectional.FACING);
+        return new BlockState(this, FACING);
     }
 
     @Override
@@ -48,18 +51,21 @@ abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 
         final int orientation = (MathHelper.floor_double(placer.rotationYaw * 4.0f / 360.0f + 0.5)) & 3;
         final IBlockState newState = worldIn.getBlockState(pos)
-                .withProperty(BlockDirectional.FACING, EnumFacing.getHorizontal(orientation));
+                .withProperty(FACING, EnumFacing.getHorizontal(orientation));
 
         worldIn.setBlockState(pos, newState, 0);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return super.getMetaFromState(state);
+        int meta = 0;
+        meta |= ((EnumFacing)state.getValue(FACING)).ordinal() - 2;
+        return meta;
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return super.getStateFromMeta(meta);
+        return super.getStateFromMeta(meta)
+                .withProperty(FACING, EnumFacing.getHorizontal(meta & 3));
     }
 }
