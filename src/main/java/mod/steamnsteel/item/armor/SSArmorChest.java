@@ -23,7 +23,7 @@ public class SSArmorChest extends SteamNSteelItemArmor
 
     public SSArmorChest(Material material)
     {
-        super(material, 3, 1, "chestplate");
+        super(material, 1, "chestplate");
     }
 
     @Override

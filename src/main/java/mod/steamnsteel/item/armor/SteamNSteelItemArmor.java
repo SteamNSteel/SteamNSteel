@@ -35,10 +35,12 @@ public abstract class SteamNSteelItemArmor extends ItemArmor
     private static final String TEXTURE_LOCATION = "textures/armor/";
     private final String undecoratedName;
     private final String materialName;
+    final static int renderTypeIsNotUsedAnymore = -1;
 
-    SteamNSteelItemArmor(Material material, int renderIndex, int armourType, String name)
+    SteamNSteelItemArmor(Material material, int armourType, String name)
     {
-        super(material.getArmorMaterial(), renderIndex, armourType);
+
+        super(material.getArmorMaterial(), renderTypeIsNotUsedAnymore, armourType);
         setCreativeTab(TheMod.CREATIVE_TAB);
         undecoratedName = name + getFormattedName(material);
         setUnlocalizedName(undecoratedName);

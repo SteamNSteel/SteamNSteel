@@ -80,7 +80,7 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, IUp
     }
 
     @Override
-    public String getName()
+    public String getCommandSenderName()
     {
         return containerName(RemnantRuinChestBlock.NAME);
     }
@@ -88,12 +88,12 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, IUp
     @Override
     public boolean hasCustomName()
     {
-        return getName().length() > 0;
+        return getCommandSenderName().length() > 0;
     }
 
     @Override
     public IChatComponent getDisplayName() {
-        return new ChatComponentText(getName());
+        return new ChatComponentText(getCommandSenderName());
     }
 
     @Override

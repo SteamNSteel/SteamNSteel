@@ -12,7 +12,7 @@ public class LoadSchematicFromResourceCommand extends CommandBase
 {
 
     @Override
-    public String getName()
+    public String getCommandName()
     {
         return "snsLoadSchematicFromResource";
     }
@@ -24,7 +24,7 @@ public class LoadSchematicFromResourceCommand extends CommandBase
     }
 
     @Override
-    public void execute(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (sender instanceof EntityPlayerMP) {
 
             if (args.length < 1) {

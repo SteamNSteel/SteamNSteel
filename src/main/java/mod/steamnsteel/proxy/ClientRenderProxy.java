@@ -16,19 +16,103 @@
 
 package mod.steamnsteel.proxy;
 
+import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.library.ModItem;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraftforge.client.model.ModelLoader;
+
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends RenderProxy
 {
     @Override
     public void init()
     {
+        registerBlocks();
         registerItemRenderers();
         registerTESRs();
         registerEventHandlers();
     }
 
+    private void registerBlocks() {
+        //Ores
+        registerBlock(ModBlock.oreCopper);
+        registerBlock(ModBlock.oreNiter);
+        registerBlock(ModBlock.oreSulfur);
+        registerBlock(ModBlock.oreTin);
+        registerBlock(ModBlock.oreZinc);
+
+        //Compressed Blocks
+        registerBlock(ModBlock.blockBrass);
+        registerBlock(ModBlock.blockBronze);
+        registerBlock(ModBlock.blockCopper);
+        registerBlock(ModBlock.blockPlotonium);
+        registerBlock(ModBlock.blockSteel);
+        registerBlock(ModBlock.blockTin);
+        registerBlock(ModBlock.blockZinc);
+    }
+
+    private void registerBlock(Block block) {
+        final String resourceName = block.getUnlocalizedName().substring(5);
+        ModelLoader.setCustomModelResourceLocation(
+                Item.getItemFromBlock(block),
+                0,
+                new ModelResourceLocation(resourceName, "inventory")
+        );
+    }
+
+    private void registerItem(Item item) {
+        final String resourceName = item.getUnlocalizedName().substring(5);
+        ModelLoader.setCustomModelResourceLocation(
+                item,
+                0,
+                new ModelResourceLocation(resourceName, "inventory")
+        );
+    }
+
     private void registerItemRenderers()
     {
+        registerItem(ModItem.anachDoodad);
+        registerItem(ModItem.mustyJournal);
+        registerItem(ModItem.perGuiVox);
+        registerItem(ModItem.plotoniumScrap);
+        registerItem(ModItem.voxBox);
+
+        registerItem(ModItem.dustNiter);
+        registerItem(ModItem.dustSulfur);
+
+        registerItem(ModItem.ingotBrass);
+        registerItem(ModItem.ingotBronze);
+        registerItem(ModItem.ingotCopper);
+        registerItem(ModItem.ingotPlotonium);
+        registerItem(ModItem.ingotSteel);
+        registerItem(ModItem.ingotTin);
+        registerItem(ModItem.ingotZinc);
+
+        registerItem(ModItem.helmetBronze);
+        registerItem(ModItem.chestplateBronze);
+        registerItem(ModItem.leggingsBronze);
+        registerItem(ModItem.bootsBronze);
+        registerItem(ModItem.helmetSteel);
+        registerItem(ModItem.chestplateSteel);
+        registerItem(ModItem.leggingsSteel);
+        registerItem(ModItem.bootsSteel);
+
+        registerItem(ModItem.axeBronze);
+        registerItem(ModItem.pickBronze);
+        registerItem(ModItem.shovelBronze);
+        registerItem(ModItem.swordBronze);
+        registerItem(ModItem.hoeBronze);
+        registerItem(ModItem.axeSteel);
+        registerItem(ModItem.pickSteel);
+        registerItem(ModItem.shovelSteel);
+        registerItem(ModItem.swordSteel);
+        registerItem(ModItem.hoeSteel);
+
         //TODO: reenable these once I have them working
         /*
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.cupola), new CupolaItemRenderer());

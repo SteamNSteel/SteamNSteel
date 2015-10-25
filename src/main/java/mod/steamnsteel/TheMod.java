@@ -72,6 +72,7 @@ public class TheMod
         ModItem.init();
         ModBlock.init();
         ModBlockParts.init();
+        Proxies.render.init();
     }
 
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
@@ -88,7 +89,6 @@ public class TheMod
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
 
         Recipes.init();
-        Proxies.render.init();
         WorldGen.init();
         ModBlock.registerTileEntities();
     }

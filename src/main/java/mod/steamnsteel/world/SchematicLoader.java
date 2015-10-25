@@ -180,7 +180,7 @@ public class SchematicLoader
         int blockCount = 0;
         Block ignore = Blocks.air;
 
-        LinkedList<TileEntity> createdTileEntities = new LinkedList<TileEntity>();
+        LinkedList<TileEntity> createdTileEntities = new LinkedList<>();
 
         for (int chunkLocalZ = localMinZ; chunkLocalZ <= localMaxZ; chunkLocalZ++)
         {
@@ -198,7 +198,7 @@ public class SchematicLoader
 
                     try
                     {
-                        BlockPos worldCoord = new BlockPos(chunkX << 4 | chunkLocalX, y, chunkZ << 4 | chunkLocalZ);
+                        BlockPos worldCoord = new BlockPos(x, y, z);
                         BlockPos schematicCoord = new BlockPos(schematicX, schematicY, schematicZ);
                         PreSetBlockEvent event = new PreSetBlockEvent(schematic, world, worldCoord, schematicCoord);
 

@@ -84,17 +84,18 @@ public class PipeBlock extends SteamNSteelBlock implements ITileEntityProvider
         return false;
     }
 
-    //QUESTION: What is the life cycle of a TileEntity
     @Override
-    public void onBlockPreDestroy(World world, BlockPos pos, int metadata)
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
-        if (!world.isRemote) {
-            PipeTE entity = (PipeTE) world.getTileEntity(pos);
+        if (!worldIn.isRemote) {
+            PipeTE entity = (PipeTE) worldIn.getTileEntity(pos);
             if (entity != null)
             {
                 entity.detach();
             }
         }
+
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override

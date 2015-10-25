@@ -83,7 +83,7 @@ public class NiterOreGenerator extends OreGenerator
             {
                 final BlockPos startingSearchPos = new BlockPos(
                         coord.getX(),
-                        Math.min(world.getHorizon(coord).getY(), MAX_HEIGHT),
+                        Math.min(world.getHeight(coord).getY(), MAX_HEIGHT),
                         coord.getZ());
 
                 NiterVeinGeneratorStateMachine.growVein(world, rand, startingSearchPos);

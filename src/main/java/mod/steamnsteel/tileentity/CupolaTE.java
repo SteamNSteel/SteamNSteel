@@ -234,8 +234,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, IUpdateP
     }
 
     @Override
-    public String getName()
-    {
+    public String getCommandSenderName() {
         return containerName(CupolaBlock.NAME);
     }
 
@@ -245,10 +244,8 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, IUpdateP
         return false;
     }
 
-    @Override
     public IChatComponent getDisplayName() {
-        //QUESTION: wtf is this supposed to do.
-        return new ChatComponentText(containerName(CupolaBlock.NAME));
+        return new ChatComponentText(getCommandSenderName());
     }
 
     @Override
