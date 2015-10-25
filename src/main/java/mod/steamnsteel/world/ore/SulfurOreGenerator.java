@@ -55,7 +55,7 @@ public class SulfurOreGenerator extends OreGenerator
 {
     public SulfurOreGenerator() {
         //Most of these properties aren't used.
-        super(ModBlock.oreSulfur, 0, 0, 0);
+        super(ModBlock.oreSulfur);
     }
 
     // Highest "Y" to begin vein

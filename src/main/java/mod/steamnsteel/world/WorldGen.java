@@ -19,6 +19,7 @@ package mod.steamnsteel.world;
 import com.google.common.collect.Lists;
 import mod.steamnsteel.configuration.Settings;
 import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.world.ore.NiterOreGenerator;
 import mod.steamnsteel.world.ore.OreGenerator;
 import mod.steamnsteel.world.ore.RetroGenHandler;
 import mod.steamnsteel.world.ore.SulfurOreGenerator;
@@ -64,11 +65,9 @@ public enum WorldGen
         final OreGenerator copperGen = new OreGenerator(ModBlock.oreCopper, 20, 6, 64);
         oreGens.add(copperGen);
 
-        //FIXME: Reenable when Niter is fixed
-        /*
         final NiterOreGenerator niterGen = new NiterOreGenerator();
         oreGens.add(niterGen);
-        */
+
         final SulfurOreGenerator sulfurGen = new SulfurOreGenerator();
         oreGens.add(sulfurGen);
 
@@ -81,8 +80,7 @@ public enum WorldGen
         if (Settings.World.doRetroOreGen())
         {
             RetroGenHandler.INSTANCE.register(copperGen);
-            //FIXME: Reenable when Niter is fixed
-            //RetroGenHandler.INSTANCE.register(niterGen);
+            RetroGenHandler.INSTANCE.register(niterGen);
             RetroGenHandler.INSTANCE.register(sulfurGen);
             RetroGenHandler.INSTANCE.register(tinGen);
             RetroGenHandler.INSTANCE.register(zincGen);
