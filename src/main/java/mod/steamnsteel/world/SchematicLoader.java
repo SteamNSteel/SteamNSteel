@@ -180,7 +180,7 @@ public class SchematicLoader
         int blockCount = 0;
         Block ignore = Blocks.air;
 
-        LinkedList<TileEntity> createdTileEntities = new LinkedList<>();
+        LinkedList<TileEntity> createdTileEntities = new LinkedList<TileEntity>();
 
         for (int chunkLocalZ = localMinZ; chunkLocalZ <= localMaxZ; chunkLocalZ++)
         {

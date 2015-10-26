@@ -17,6 +17,7 @@
 package mod.steamnsteel.proxy;
 
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.client.model.OpenGEXModelLoader;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
 import net.minecraft.block.Block;
@@ -24,11 +25,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends RenderProxy
 {
+    OpenGEXModelLoader openGexLoader = new OpenGEXModelLoader();
+
     @Override
     public void init()
     {
@@ -36,6 +41,10 @@ public class ClientRenderProxy extends RenderProxy
         registerItemRenderers();
         registerTESRs();
         registerEventHandlers();
+
+        openGexLoader.addDomain(TheMod.MOD_ID);
+        ModelLoaderRegistry.registerLoader(openGexLoader);
+
     }
 
     private void registerBlocks() {
@@ -54,6 +63,8 @@ public class ClientRenderProxy extends RenderProxy
         registerBlock(ModBlock.blockSteel);
         registerBlock(ModBlock.blockTin);
         registerBlock(ModBlock.blockZinc);
+
+        registerBlock(ModBlock.cupola);
     }
 
     private void registerBlock(Block block) {

@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "#texture": "steamsteel:SSFanLarge"
+    },
+    "model": "steamnsteel:SSFanLarge.ogex"
+  },
+  "variants": {
+    "normal": [{
+    }],
+    "inventory": [{
+      "transform": "forge:default-block"
+    }],
+    "facing": {
+      "north": {"model": "steamnsteel:SSFanLarge.ogex"},
+      "south": {"model": "steamnsteel:SSFanLarge.ogex", "y": 180},
+      "west": {"model": "steamnsteel:SSFanLarge.ogex", "y": 270},
+      "east": {"model": "steamnsteel:SSFanLarge.ogex", "y": 90}
+    },
+    "facing=north,is_slave=false": { "model": null },
+    "facing=south,is_slave=false": { "model": null },
+    "facing=east,is_slave=false": { "model": null },
+    "facing=west,is_slave=false": { "model": null }
+  }
+}

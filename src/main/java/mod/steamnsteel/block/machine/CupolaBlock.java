@@ -47,7 +47,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 {
     public static final String NAME = "cupola";
 
-    public static final PropertyBool IS_SLAVE = PropertyBool.create("isSlave");
+    public static final PropertyBool IS_SLAVE = PropertyBool.create("is_slave");
 
     private static final int flagSlave = 1 << 2;
     /*private Optional<IIcon> iconMaster = Optional.absent();
@@ -96,7 +96,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     @Override
     public int getMetaFromState(IBlockState state) {
         int meta = super.getMetaFromState(state);
-        meta |= (boolean)state.getValue(IS_SLAVE) ? 4 : 0;
+        meta |= (Boolean)state.getValue(IS_SLAVE) ? 4 : 0;
         return meta;
     }
 
@@ -241,7 +241,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     {
         final IBlockState meta = block.getBlockState(pos);
 
-        if (!((boolean)meta.getValue(IS_SLAVE)))
+        if (!((Boolean)meta.getValue(IS_SLAVE)))
         {
             maxY = 2;   //is Master
             minY = 0;

@@ -207,7 +207,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
             calculatePipeRotations();
         }
 
-        List<ImmutablePair<EnumFacing, EnumFacing>> validDirections = new LinkedList<>();
+        List<ImmutablePair<EnumFacing, EnumFacing>> validDirections = new LinkedList<ImmutablePair<EnumFacing, EnumFacing>>();
         for (ImmutablePair<EnumFacing, EnumFacing> pair : PIPE_ROTATIONS)
         {
             if (getPipeTileEntityInDirection(pair.left) != null && getPipeTileEntityInDirection(pair.right) != null) {
