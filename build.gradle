@@ -139,7 +139,7 @@ idea {
 
 task copyChicken(type: Copy, dependsOn: "extractUserdev") {
     from { configurations.compile }
-    include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
+    //include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
     exclude "**/CodeChickenLib*" // because CCC downloads it anyways.. -_-
     into file("./run/mods") // paralell to the assets dir
     //mustRunAfter "deobfBinJar"

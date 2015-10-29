@@ -17,6 +17,7 @@
 package mod.steamnsteel.proxy;
 
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.client.model.OpenGEXModel;
 import mod.steamnsteel.client.model.OpenGEXModelLoader;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
@@ -28,12 +29,11 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.obj.OBJLoader;
 
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends RenderProxy
 {
-    OpenGEXModelLoader openGexLoader = new OpenGEXModelLoader();
-
     @Override
     public void init()
     {
@@ -42,8 +42,9 @@ public class ClientRenderProxy extends RenderProxy
         registerTESRs();
         registerEventHandlers();
 
-        openGexLoader.addDomain(TheMod.MOD_ID);
-        ModelLoaderRegistry.registerLoader(openGexLoader);
+        OpenGEXModelLoader.instance.addDomain(TheMod.MOD_ID);
+        OBJLoader.instance.addDomain(TheMod.MOD_ID);
+        ModelLoaderRegistry.registerLoader(OpenGEXModelLoader.instance);
 
     }
 

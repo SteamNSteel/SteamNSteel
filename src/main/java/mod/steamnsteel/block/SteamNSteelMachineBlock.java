@@ -46,13 +46,6 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
     }
 
     @Override
-    public int getRenderType()
-    {
-        // Disable normal block rendering.
-        return -1;
-    }
-
-    @Override
     public boolean isOpaqueCube()
     {
         return false;

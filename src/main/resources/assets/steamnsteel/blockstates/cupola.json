@@ -2,25 +2,42 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "#texture": "steamsteel:SSFanLarge"
+      "#texture": "steamsteel:cupola"
     },
-    "model": "steamnsteel:SSFanLarge.ogex"
+    "transform": "forge:default-block",
+    "model": "steamnsteel:SSCupola.obj"
   },
   "variants": {
     "normal": [{
     }],
     "inventory": [{
-      "transform": "forge:default-block"
+      "model": "steamnsteel:SSCupola.obj",
+      "transform": {
+        "thirdperson": {
+          "translation": [0, 0.0, -0.15],
+          "rotation": [{"y": 180}, {"x": 125 }],
+          "scale": 0.50
+        },
+        "firstperson": {"rotation": {"y": 180 }, "scale": 0.66},
+        "gui": {"rotation": {"y": 180 }}
+      }
+
     }],
     "facing": {
-      "north": {"model": "steamnsteel:SSFanLarge.ogex"},
-      "south": {"model": "steamnsteel:SSFanLarge.ogex", "y": 180},
-      "west": {"model": "steamnsteel:SSFanLarge.ogex", "y": 270},
-      "east": {"model": "steamnsteel:SSFanLarge.ogex", "y": 90}
-    },
-    "facing=north,is_slave=false": { "model": null },
-    "facing=south,is_slave=false": { "model": null },
-    "facing=east,is_slave=false": { "model": null },
-    "facing=west,is_slave=false": { "model": null }
+        "north": { },
+        "south": { "transform": {
+          "rotation": {"y": 180 }
+        }},
+        "east": { "transform": {
+          "rotation": {"y": 270 }
+        }},
+        "west": { "transform": {
+          "rotation": {"y": 90 }
+        }}
+      },
+    "is_slave": {
+      "false": {  },
+      "true": { "model": "steamnsteel:SSCupolaTopImSorryRorax.obj" }
+    }
   }
 }

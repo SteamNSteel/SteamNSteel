@@ -17,11 +17,13 @@ import java.io.Reader;
 import java.util.Map;
 import java.util.Set;
 
-public class OpenGEXModelLoader implements ICustomModelLoader {
+public enum OpenGEXModelLoader implements ICustomModelLoader {
+    instance;
+
     private IResourceManager manager;
     private final Map<ResourceLocation, OgexScene> cache = Maps.newHashMap();
 
-    public OpenGEXModelLoader() {
+    OpenGEXModelLoader() {
         enabledDomains.add("steamnsteel_opengex");
     }
 

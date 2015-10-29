@@ -50,8 +50,9 @@ abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
         final int orientation = (MathHelper.floor_double(placer.rotationYaw * 4.0f / 360.0f + 0.5)) & 3;
+        final EnumFacing horizontal = EnumFacing.getHorizontal(orientation);
         final IBlockState newState = worldIn.getBlockState(pos)
-                .withProperty(FACING, EnumFacing.getHorizontal(orientation));
+                .withProperty(FACING, horizontal);
 
         worldIn.setBlockState(pos, newState, 0);
     }
