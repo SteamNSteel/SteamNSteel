@@ -50,6 +50,7 @@ public final class ModBlock
     public static final SteamNSteelBlock blockZinc = new SteamNSteelStorageBlock(SteamNSteelStorageBlock.ZINC_BLOCK);
 
     public static final SteamNSteelBlock cupola = new CupolaBlock();
+    public static final SteamNSteelBlock fanLarge = new FanLargeBlock();
 
     public static final SteamNSteelBlock pipe = new PipeBlock();
     public static final SteamNSteelBlock pipeValve = new PipeValveBlock();
@@ -79,6 +80,7 @@ public final class ModBlock
     {
         GameRegistry.registerTileEntity(RemnantRuinChestTE.class, getTEName(RemnantRuinChestBlock.NAME));
         GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
+        GameRegistry.registerTileEntity(LargeFanTE.class, getTEName(FanLargeBlock.NAME));
         GameRegistry.registerTileEntity(PipeTE.class, getTEName(PipeBlock.NAME));
         GameRegistry.registerTileEntity(PipeValveTE.class, getTEName(PipeValveBlock.NAME));
         GameRegistry.registerTileEntity(PipeRedstoneValveTE.class, getTEName(PipeRedstoneValveBlock.NAME));
@@ -93,6 +95,7 @@ public final class ModBlock
         GameRegistry.registerBlock(remnantRuinChest, RemnantRuinChestBlock.NAME);
 
         GameRegistry.registerBlock(cupola, CupolaBlock.NAME);
+        GameRegistry.registerBlock(fanLarge, FanLargeBlock.NAME);
 
         GameRegistry.registerBlock(pipe, PipeBlock.NAME);
         GameRegistry.registerBlock(pipeValve, PipeValveBlock.NAME);

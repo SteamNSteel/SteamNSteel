@@ -32,9 +32,9 @@ configFile.withReader {
 version = config.mod_version
 group = config.group_name
 archivesBaseName = "[${config.minecraft_version}]${config.mod_id}"
-def commonManifest = {
+/*def commonManifest = {
     attributes 'FMLAT': 'steamnsteel_at.cfg'
-}
+}*/
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version // grab latest forge
@@ -81,8 +81,8 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.codechicken_core_version}:dev"
-    compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.codechicken_nei_version}:dev"
+    provided "codechicken:CodeChickenCore:${config.minecraft_version}-${config.codechicken_core_version}:dev"
+    provided "codechicken:NotEnoughItems:${config.minecraft_version}-${config.codechicken_nei_version}:dev"
 }
 
 processResources
@@ -112,7 +112,7 @@ processResources
 
 jar {
     classifier = 'universal'
-    manifest commonManifest
+    //manifest commonManifest
 }
 
 // add a source jar
@@ -139,7 +139,7 @@ idea {
 
 task copyChicken(type: Copy, dependsOn: "extractUserdev") {
     from { configurations.compile }
-    //include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
+    include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
     exclude "**/CodeChickenLib*" // because CCC downloads it anyways.. -_-
     into file("./run/mods") // paralell to the assets dir
     //mustRunAfter "deobfBinJar"

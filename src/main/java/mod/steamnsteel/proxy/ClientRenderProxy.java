@@ -66,6 +66,7 @@ public class ClientRenderProxy extends RenderProxy
         registerBlock(ModBlock.blockZinc);
 
         registerBlock(ModBlock.cupola);
+        registerBlock(ModBlock.fanLarge);
     }
 
     private void registerBlock(Block block) {

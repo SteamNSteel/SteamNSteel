@@ -1,18 +1,16 @@
 {
   "forge_marker": 1,
   "defaults": {
-    /*"textures": {
-      "#steamnsteel:models/SSCupolaOff": "steamnsteel:models/SSCupolaOff"
-    },*/
+    "textures": {
+      "#//D/The Forge/Minecraft/SteamNSteel/Models/SSFanLarge": "steamnsteel:models/SSFanLarge"
+    },
     "transform": "forge:default-block",
-    "model": "steamnsteel:SSCupola.obj",
-    "flip-v": "true"
+    "model": "steamnsteel:SSFanLarge.ogex"
   },
   "variants": {
     "normal": [{
     }],
     "inventory": [{
-      "model": "steamnsteel:SSCupola.obj",
       "transform": {
         "thirdperson": {
           "translation": [0, 0.0, -0.15],
@@ -35,22 +33,6 @@
         "west": { "transform": {
           "rotation": {"y": 90 }
         }}
-      },
-    "is_slave": {
-      "false": {  },
-      "true": { "model": "steamnsteel:SSCupolaTopImSorryRorax.obj" }
-    },
-    "is_active": {
-      "false": {
-        "textures": {
-          "#steamnsteel:models/SSCupolaOff": "steamnsteel:models/SSCupolaOff"
-        }
-      },
-      "true": {
-        "textures": {
-          "#steamnsteel:models/SSCupolaOff": "steamnsteel:models/SSCupolaOn"
-        }
       }
-    }
   }
 }

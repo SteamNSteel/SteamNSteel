@@ -15,6 +15,7 @@ tile.steamnsteel:blockTin.name=Tin Block
 tile.steamnsteel:blockZinc.name=Zinc Block
 tile.steamnsteel:remnantRuinChest.name=Remnant Ruin Chest
 tile.steamnsteel:cupola.name=Cupola
+tile.steamnsteel:fanLarge.name=Your Largest Fan
 tile.steamnsteel:pipe.name=Pipe
 tile.steamnsteel:pipeValve.name=Valve
 tile.steamnsteel:pipeRedstoneValve.name=Redstone Valve

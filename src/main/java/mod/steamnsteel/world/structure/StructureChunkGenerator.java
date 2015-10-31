@@ -38,7 +38,7 @@ public class StructureChunkGenerator
 
         if (ruin.height == null) {
             Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
-            ruin.height = chunk.heightMapMinimum - ruin.schematic.heightOffset;
+            ruin.height = chunk.getLowestHeight() - ruin.schematic.heightOffset;
             //TODO: Persist to world?
         }
 

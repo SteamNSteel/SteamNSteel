@@ -9,6 +9,9 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.fml.common.FMLLog;
+import org.apache.logging.log4j.Level;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -52,7 +55,7 @@ public enum OpenGEXModelLoader implements ICustomModelLoader {
         {
             try
             {
-                IResource resource = null;
+                IResource resource;
                 try
                 {
                     resource = manager.getResource(file);
@@ -75,14 +78,18 @@ public enum OpenGEXModelLoader implements ICustomModelLoader {
             }
             catch(IOException e)
             {
-                //FMLLog.log(Level.ERROR, e, "Exception loading model %s with B3D loader, skipping", modelLocation);
+                FMLLog.log(Level.ERROR, e, "Exception loading model %s with OGEX loader, skipping", modelLocation);
                 cache.put(file, null);
                 throw e;
             }
         }
 
+        final OgexScene scene = cache.get(file);
+        if (scene == null) {
+            return ModelLoaderRegistry.getMissingModel();
+        }
         //Just making it compile.
-        return null;
+        return new OpenGEXModel(file, scene);
     }
 
 

@@ -37,6 +37,7 @@
 package mod.steamnsteel.client.model.opengex.ogex;
 
 import com.google.common.collect.Maps;
+import mod.steamnsteel.client.model.opengex.OpenGEXNode;
 
 import java.util.*;
 
@@ -45,7 +46,7 @@ import java.util.*;
  *
  *  @author    Paul Speed
  */
-public class OgexNode implements Iterable<OgexNode> {
+public class OgexNode implements OpenGEXNode {
     private String name;
     private final List<OgexTransform> transforms = new ArrayList<OgexTransform>();
     private final Map<Integer, OgexAnimation> animations = Maps.newHashMap();

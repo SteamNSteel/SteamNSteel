@@ -36,6 +36,8 @@
 
 package mod.steamnsteel.client.model.opengex.ogex;
 
+import mod.steamnsteel.client.model.opengex.OpenGEXNode;
+
 import java.util.*;
 
 /**
@@ -43,7 +45,7 @@ import java.util.*;
  *
  *  @author    Paul Speed
  */
-public class OgexScene implements Iterable<OgexNode> { //extends ArrayList<OgexNode> {
+public class OgexScene implements OpenGEXNode {
     private OgexMetrics metrics = new OgexMetrics();
     private List<OgexMaterial> materials = new ArrayList<OgexMaterial>();
     private List<OgexLightObject> lights = new ArrayList<OgexLightObject>();

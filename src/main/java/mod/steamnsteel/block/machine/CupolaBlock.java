@@ -48,10 +48,9 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     public static final String NAME = "cupola";
 
     public static final PropertyBool IS_SLAVE = PropertyBool.create("is_slave");
+    public static final PropertyBool IS_ACTIVE = PropertyBool.create("is_active");
 
     private static final int flagSlave = 1 << 2;
-    /*private Optional<IIcon> iconMaster = Optional.absent();
-    private Optional<IIcon> iconSlave = Optional.absent();*/
 
     public CupolaBlock()
     {
@@ -61,6 +60,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
                         .getBaseState()
                         .withProperty(BlockDirectional.FACING, EnumFacing.NORTH)
                         .withProperty(IS_SLAVE, false)
+                        .withProperty(IS_ACTIVE, false)
         );
     }
 
@@ -83,7 +83,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 
     @Override
     protected BlockState createBlockState() {
-        return new BlockState(this, FACING, IS_SLAVE);
+        return new BlockState(this, FACING, IS_SLAVE, IS_ACTIVE);
     }
 
     @Override
@@ -101,29 +101,21 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        final TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof CupolaTE) {
+            final CupolaTE cupolaTE = (CupolaTE) te;
+            state = state.withProperty(IS_ACTIVE, cupolaTE.isActive());
+        }
+        return state;
+    }
+
+    @Override
     public TileEntity createNewTileEntity(World world, int metadata)
     {
         return new CupolaTE();
     }
 
-    /*@Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        final String objName = getUnwrappedUnlocalizedName(getUnlocalizedName());
-
-        if (!iconMaster.isPresent()) iconMaster = Optional.of(iconRegister.registerIcon(objName + "/bSide"));
-        if (!iconSlave.isPresent()) iconSlave = Optional.of(iconRegister.registerIcon(objName + "/tSide"));
-    }*/
-
-    /*
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta)
-    {
-        return (meta & flagSlave) == 0 ? iconMaster.get() : iconSlave.get();
-    }
-*/
     @SideOnly(Side.CLIENT)
     @Override
     public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rng)
