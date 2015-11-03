@@ -103,7 +103,7 @@ public class RemnantRuinsGenerator extends StructureGenerator
         } catch (IOException e)
         {
             e.printStackTrace();
-            throw new MinecraftError();
+            throw new RuntimeException();
         }
 
     }

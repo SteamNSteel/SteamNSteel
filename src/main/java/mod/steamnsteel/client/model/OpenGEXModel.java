@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 import mod.steamnsteel.client.model.opengex.OpenGEXNode;
 import mod.steamnsteel.client.model.opengex.ogex.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -11,16 +12,25 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.fml.common.FMLLog;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 
 public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
-    private final ImmutableMap<String, ResourceLocation> textures;
+    private final ImmutableMap<String, ResourceLocation> textureMap;
     OgexTexture defaultTexture = new OgexTexture();
+    //FIXME: Is there somewhere more appropriate for this?
+    public static OgexTexture white;
+
+    static {
+        white = new OgexTexture();
+        white.setTexture("builtin/white");
+        final OgexMatrixTransform ogexMatrixTransform = new OgexMatrixTransform();
+        ogexMatrixTransform.setMatrix(OgexMatrixTransform.identity());
+        white.addTransform(ogexMatrixTransform);
+    }
 
     private final ResourceLocation location;
     private final OpenGEXNode node;
@@ -33,12 +43,12 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
     public OpenGEXModel(ResourceLocation location, OpenGEXNode node, ImmutableMap<String, ResourceLocation> textures) {
         this.location = location;
         this.node = node;
-        this.textures = textures;
+        this.textureMap = textures;
     }
 
     private static ImmutableMap<String, ResourceLocation> buildTextures(List<OgexMaterial> materials)
     {
-        ImmutableMap.Builder<String, ResourceLocation> builder = ImmutableMap.builder();
+        Builder<String, ResourceLocation> builder = ImmutableMap.builder();
 
         for(OgexMaterial t : materials)
         {
@@ -67,7 +77,7 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
 
     @Override
     public Collection<ResourceLocation> getTextures() {
-        return Collections2.filter(textures.values(), new Predicate<ResourceLocation>() {
+        return Collections2.filter(getTextureMap().values(), new Predicate<ResourceLocation>() {
             public boolean apply(ResourceLocation loc) {
                 return !loc.getResourcePath().startsWith("#");
             }
@@ -76,10 +86,10 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
 
     @Override
     public IFlexibleBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-        ImmutableMap.Builder<String, TextureAtlasSprite> builder = ImmutableMap.builder();
+        Builder<String, TextureAtlasSprite> builder = ImmutableMap.builder();
         TextureAtlasSprite missing = bakedTextureGetter.apply(new ResourceLocation("missingno"));
 
-        for (Map.Entry<String, ResourceLocation> e : textures.entrySet()) {
+        for (Entry<String, ResourceLocation> e : getTextureMap().entrySet()) {
             final String key = e.getKey();
             if(e.getValue().getResourcePath().startsWith("#"))
             {
@@ -110,8 +120,8 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
 
     @Override
     public IModel retexture(ImmutableMap<String, String> textures) {
-        ImmutableMap.Builder<String, ResourceLocation> builder = ImmutableMap.builder();
-        for(Map.Entry<String, ResourceLocation> e : this.textures.entrySet())
+        Builder<String, ResourceLocation> builder = ImmutableMap.builder();
+        for(Entry<String, ResourceLocation> e : this.getTextureMap().entrySet())
         {
             String path = e.getKey();
             String loc = getLocation(path);
@@ -131,5 +141,16 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
 
     public OpenGEXNode getNode() {
         return node;
+    }
+
+    public ResourceLocation getLocation()
+    {
+        return location;
+    }
+
+
+    public ImmutableMap<String, ResourceLocation> getTextureMap()
+    {
+        return textureMap;
     }
 }

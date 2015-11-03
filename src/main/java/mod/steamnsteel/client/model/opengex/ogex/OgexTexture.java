@@ -49,6 +49,7 @@ public class OgexTexture {
     private List<OgexTransform> transforms;
     
     public OgexTexture() {
+
     }
     
     public void setTexture( String texture ) {

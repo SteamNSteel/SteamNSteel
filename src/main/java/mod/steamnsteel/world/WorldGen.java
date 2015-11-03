@@ -54,8 +54,8 @@ public enum WorldGen
     }
 
     private static void register() {
-        MinecraftForge.ORE_GEN_BUS.register(INSTANCE);
-        MinecraftForge.EVENT_BUS.register(INSTANCE);
+        //MinecraftForge.ORE_GEN_BUS.register(INSTANCE);
+        //MinecraftForge.EVENT_BUS.register(INSTANCE);
     }
 
     private static void createOreGenerators()
