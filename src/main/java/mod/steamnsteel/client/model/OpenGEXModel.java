@@ -2,25 +2,21 @@ package mod.steamnsteel.client.model;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.*;
 import com.google.common.collect.ImmutableMap.Builder;
 import mod.steamnsteel.client.model.opengex.OpenGEXNode;
 import mod.steamnsteel.client.model.opengex.ogex.*;
+import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.fml.common.FMLLog;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
-    private final ImmutableMap<String, ResourceLocation> textureMap;
-    OgexTexture defaultTexture = new OgexTexture();
     //FIXME: Is there somewhere more appropriate for this?
     public static OgexTexture white;
 
@@ -32,19 +28,73 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
         white.addTransform(ogexMatrixTransform);
     }
 
+    private final OgexScene scene;
+    private final ImmutableMap<String, ResourceLocation> textureMap;
+    private final OgexTexture defaultTexture = new OgexTexture();
     private final ResourceLocation location;
     private final OpenGEXNode node;
+    private Integer[] nodeParents;
+    private OgexNode[] allNodes;
 
     public OpenGEXModel(ResourceLocation location, OgexScene scene) {
-        this(location, scene, buildTextures(scene.getMaterials()));
+        this(location, scene, scene, buildTextures(scene.getMaterials()));
         defaultTexture.setTexture("missingno");
+
     }
 
-    public OpenGEXModel(ResourceLocation location, OpenGEXNode node, ImmutableMap<String, ResourceLocation> textures) {
+    public OpenGEXModel(ResourceLocation location, OpenGEXNode node, OgexScene scene, ImmutableMap<String, ResourceLocation> textures) {
         this.location = location;
         this.node = node;
+        this.scene = scene;
         this.textureMap = textures;
+        arrangeForRendering();
     }
+
+    private void arrangeForRendering()
+    {
+        //FIXME: Might not need multiple instances of the renderer. They should be stateless.
+        Stack<Iterable<OgexNode>> queue = new Stack<Iterable<OgexNode>>();
+        queue.push(scene);
+
+        BiMap<OgexNode, Integer> nodeIndices = HashBiMap.create();
+        Map<Integer, Integer> nodeParents = Maps.newHashMap();
+        int currentIndex = 0;
+
+        while (!queue.empty()) {
+            Iterable<OgexNode> node = queue.pop();
+            if (node instanceof OgexNode) {
+                OgexNode ogexNode = (OgexNode) node;
+
+                if (!nodeIndices.containsKey(node)) {
+                    nodeIndices.put(ogexNode, currentIndex);
+                    (ogexNode).setIndex(currentIndex);
+                    currentIndex++;
+                }
+            }
+
+            for (OgexNode childNode : node) {
+                nodeIndices.put(childNode, currentIndex);
+                nodeParents.put(currentIndex, nodeIndices.get(node));
+                queue.push(childNode);
+                childNode.setIndex(currentIndex);
+                currentIndex++;
+            }
+        }
+
+        allNodes = new OgexNode[nodeParents.size()];
+        this.nodeParents = new Integer[nodeParents.size()];
+        final BiMap<Integer, OgexNode> inverse = nodeIndices.inverse();
+        for (Entry<Integer, Integer> family : nodeParents.entrySet()) {
+            final Integer key = family.getKey();
+            final OgexNode ogexNode = inverse.get(key);
+            final Integer value = family.getValue();
+            allNodes[key] = ogexNode;
+            this.nodeParents[key] = value;
+        }
+
+        Logger.info("breakpoint");
+    }
+
 
     private static ImmutableMap<String, ResourceLocation> buildTextures(List<OgexMaterial> materials)
     {
@@ -136,7 +186,7 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
                 builder.put(e);
             }
         }
-        return new OpenGEXModel(location, this.getNode(), builder.build());
+        return new OpenGEXModel(location, this.getNode(), scene, builder.build());
     }
 
     public OpenGEXNode getNode() {
@@ -152,5 +202,17 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
     public ImmutableMap<String, ResourceLocation> getTextureMap()
     {
         return textureMap;
+    }
+
+    public OgexNode[] getAllNodes() {
+        return allNodes;
+    }
+    public Integer[] getNodeParents() {
+        return nodeParents;
+    }
+
+    public OgexScene getScene()
+    {
+        return scene;
     }
 }

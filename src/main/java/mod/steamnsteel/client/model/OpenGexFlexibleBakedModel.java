@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableMap;
+import mod.steamnsteel.client.model.opengex.Animation;
 import mod.steamnsteel.client.model.opengex.OpenGEXNode;
 import mod.steamnsteel.client.model.opengex.ogex.*;
 import net.minecraft.block.state.IBlockState;
@@ -24,10 +25,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.*;
 import java.util.*;
 
 public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlockModel, ISmartItemModel, IPerspectiveAwareModel {
@@ -54,12 +52,12 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
     public List<BakedQuad> getGeneralQuads() {
         if (quads == null)
         {
-
+            final float[][] nodeMatrices = Animation.calculateTransforms(model.getScene(), model.getAllNodes(), model.getNodeParents());
             final OpenGEXNode node = model.getNode();
             Builder<BakedQuad> builder = ImmutableList.builder();
             for (final OgexNode ogexNode : node)
             {
-                builder.addAll(new OpenGEXFlexibleBakedModel(new OpenGEXModel(model.getLocation(), ogexNode, model.getTextureMap()), state, format, textures).getGeneralQuads());
+                builder.addAll(new OpenGEXFlexibleBakedModel(new OpenGEXModel(model.getLocation(), ogexNode, model.getScene(), model.getTextureMap()), state, format, textures).getGeneralQuads());
             }
 
             if (node instanceof OgexGeometryNode) {
@@ -83,8 +81,11 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
 
                 final List<OgexVertexArray> vertexArrays = mesh.getVertexArrays();
 
-                Vector3f vertex = new Vector3f();
+                Vector4f vertex = new Vector4f();
                 Vector3f normal = new Vector3f();
+
+                final Matrix4f nodeTransformation = new Matrix4f(nodeMatrices[geometryNode.getIndex()]);
+                //nodeTransformation.transpose();
 
                 for (OgexIndexArray indexArray : mesh.getIndexArrays()) {
                     for (long[] polyGroup : (long[][]) indexArray.getArray()) {
@@ -119,14 +120,34 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
                             }
 
                             //FIXME: don't assume arrays are populated, update for appropriate format.
-
                             vertex.x = positionArray[0];
                             vertex.y = positionArray[1];
                             vertex.z = positionArray[2];
+                            vertex.w = 1;
+
+                            //nodeTransformation.transform(vertex);
 
                             normal.x = normalArray[0];
                             normal.y = normalArray[1];
                             normal.z = normalArray[2];
+
+                            // pos
+                            nodeTransformation.transform(vertex);
+                            //Vector3f rPos = new Vector3f(newPos.x / newPos.w, newPos.y / newPos.w, newPos.z / newPos.w);
+                            vertex.x /= vertex.w;
+                            vertex.y /= vertex.w;
+                            vertex.z /= vertex.w;
+
+                            // normal
+                            Matrix3f tm = new Matrix3f();
+                            nodeTransformation.getRotationScale(tm);
+                            tm.invert();
+                            tm.transpose();
+                            tm.transform(normal);
+                            normal.normalize();
+
+                            //nodeTransformation.transform(normal);
+
 
                             //FIXME: do this.
                             /*faces = mesh.getKind().bake(new Function<B3DModel.Node<?>, Matrix4f>()
@@ -155,7 +176,7 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
                                 putVertexData(quadBuilder, vertex, faceNormal, normal, texcoordArray, colorArray, sprite);
                             }
                         }
-                        quads = builder.build();
+                        builder.add(quadBuilder.build());
                     }
                 }
             }
@@ -165,7 +186,7 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
         return quads;
     }
 
-    private final void putVertexData(UnpackedBakedQuad.Builder builder, Vector3f vertex, Vector3f faceNormal, Vector3f vertexNormal, float[] textureCoordinates, float[] color, TextureAtlasSprite sprite)
+    private final void putVertexData(UnpackedBakedQuad.Builder builder, Vector4f vertex, Vector3f faceNormal, Vector3f vertexNormal, float[] textureCoordinates, float[] color, TextureAtlasSprite sprite)
     {
         System.out.println(vertex);
 
@@ -197,7 +218,7 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
                     {
                         builder.put(e,
                                 sprite.getInterpolatedU(textureCoordinates[index * 2] * 16),
-                                sprite.getInterpolatedV(textureCoordinates[index * 2 + 1] * 16),
+                                sprite.getInterpolatedV((1 - textureCoordinates[index * 2 + 1]) * 16),
                                 0,
                                 1
                         );
