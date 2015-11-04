@@ -1,13 +1,8 @@
-package mod.steamnsteel.client.model;
+package mod.steamnsteel.client.model.opengex;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import mod.steamnsteel.client.model.opengex.ogex.OgexNode;
-import mod.steamnsteel.client.model.opengex.ogex.OgexParser;
-import mod.steamnsteel.client.model.opengex.ogex.OgexScene;
-import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.client.model.opengex.ogex.*;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -23,7 +18,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 public enum OpenGEXModelLoader implements ICustomModelLoader {
     instance;
@@ -93,6 +87,25 @@ public enum OpenGEXModelLoader implements ICustomModelLoader {
         if (scene == null) {
             return ModelLoaderRegistry.getMissingModel();
         }
+
+
+
+        if (scene.getMetrics().getUp() == Axis.Z) {
+            float[] cycleMatrix = {
+                    0, 0, 1, 0,
+                    1, 0, 0, 0,
+                    0, 1, 0, 0,
+                    0, 0, 0, 1
+            };
+
+            for (final OgexNode ogexNode : scene)
+            {
+                OgexMatrixTransform matrixTransform = new OgexMatrixTransform();
+                matrixTransform.setMatrix(cycleMatrix);
+                ogexNode.getTransforms().add(0, matrixTransform);
+            }
+        }
+
         //Just making it compile.
         return new OpenGEXModel(file, scene);
     }

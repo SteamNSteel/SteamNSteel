@@ -1,10 +1,9 @@
-package mod.steamnsteel.client.model;
+package mod.steamnsteel.client.model.opengex;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.*;
 import com.google.common.collect.ImmutableMap.Builder;
-import mod.steamnsteel.client.model.opengex.OpenGEXNode;
 import mod.steamnsteel.client.model.opengex.ogex.*;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -153,7 +152,7 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
             }
         }
         builder.put("missingno", missing);
-        return new OpenGEXFlexibleBakedModel(this, state, format, builder.build());
+        return new OpenGEXFlexibleBakedModel(this, state, format, builder.build(), null);
 
     }
 

@@ -1,6 +1,5 @@
 package mod.steamnsteel.client.model.opengex;
 
-import mod.steamnsteel.client.model.OpenGEXModel;
 import mod.steamnsteel.client.model.opengex.ogex.*;
 import mod.steamnsteel.utility.log.Logger;
 
@@ -9,9 +8,10 @@ import mod.steamnsteel.utility.log.Logger;
  */
 public class Animation
 {
-    public static float[][] calculateTransforms(OgexScene scene, OgexNode[] nodes, Integer[] nodeParentMap) {
-        long currentAnimationFrameTime = 0;
-        long animationTime = 0;
+    //WARNING: THIS METHOD IS NOT THREAD SAFE. DO NOT GET CREATIVE WITH IT.
+    public static float[][] calculateTransforms(OgexScene scene, float animationTime, OgexNode[] nodes, Integer[] nodeParentMap) {
+        //long currentAnimationFrameTime = 0;
+        //long animationTime = 0;
 
         final float[][] nodeTransforms = new float[nodes.length][16];
         final float[][] parentTransforms = new float[nodes.length][16];

@@ -17,16 +17,12 @@
 package mod.steamnsteel.proxy;
 
 import mod.steamnsteel.TheMod;
-import mod.steamnsteel.client.model.OpenGEXModel;
-import mod.steamnsteel.client.model.OpenGEXModelLoader;
+import mod.steamnsteel.client.model.opengex.OpenGEXModelLoader;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;

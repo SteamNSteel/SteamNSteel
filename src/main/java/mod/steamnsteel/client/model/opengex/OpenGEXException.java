@@ -1,4 +1,4 @@
-package mod.steamnsteel.client.model;
+package mod.steamnsteel.client.model.opengex;
 
 /**
  * Created by codew on 4/11/2015.

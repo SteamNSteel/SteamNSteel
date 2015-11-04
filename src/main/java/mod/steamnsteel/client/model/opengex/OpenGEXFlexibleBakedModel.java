@@ -1,11 +1,8 @@
-package mod.steamnsteel.client.model;
+package mod.steamnsteel.client.model.opengex;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableMap;
-import mod.steamnsteel.client.model.opengex.Animation;
-import mod.steamnsteel.client.model.opengex.OpenGEXNode;
 import mod.steamnsteel.client.model.opengex.ogex.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -16,14 +13,10 @@ import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.*;
-import net.minecraftforge.client.model.b3d.B3DLoader;
-import net.minecraftforge.client.model.b3d.B3DModel;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.property.IExtendedBlockState;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
 
 import javax.vecmath.*;
 import java.util.*;
@@ -33,13 +26,15 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
     private final IModelState state;
     private final VertexFormat format;
     private final ImmutableMap<String, TextureAtlasSprite> textures;
+    private final float[][] nodeMatrices;
     private ImmutableList<BakedQuad> quads;
 
-    public OpenGEXFlexibleBakedModel(OpenGEXModel openGEXModel, IModelState state, VertexFormat format, ImmutableMap<String, TextureAtlasSprite> textureSpriteMap) {
+    public OpenGEXFlexibleBakedModel(OpenGEXModel openGEXModel, IModelState state, VertexFormat format, ImmutableMap<String, TextureAtlasSprite> textureSpriteMap, float[][] nodeMatrices) {
         this.model = openGEXModel;
         this.state = state;
         this.format = format;
         this.textures = textureSpriteMap;
+        this.nodeMatrices = nodeMatrices;
     }
 
     @Override
@@ -52,12 +47,21 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
     public List<BakedQuad> getGeneralQuads() {
         if (quads == null)
         {
-            final float[][] nodeMatrices = Animation.calculateTransforms(model.getScene(), model.getAllNodes(), model.getNodeParents());
+            float animationTime = 0;
+            if (state instanceof OpenGEXState) {
+                animationTime = ((OpenGEXState) state).getTime();
+            }
+            float[][] nodeMatrices = this.nodeMatrices;
+            if (nodeMatrices == null)
+            {
+                nodeMatrices = Animation.calculateTransforms(model.getScene(), animationTime, model.getAllNodes(), model.getNodeParents());
+            }
+
             final OpenGEXNode node = model.getNode();
             Builder<BakedQuad> builder = ImmutableList.builder();
             for (final OgexNode ogexNode : node)
             {
-                builder.addAll(new OpenGEXFlexibleBakedModel(new OpenGEXModel(model.getLocation(), ogexNode, model.getScene(), model.getTextureMap()), state, format, textures).getGeneralQuads());
+                builder.addAll(new OpenGEXFlexibleBakedModel(new OpenGEXModel(model.getLocation(), ogexNode, model.getScene(), model.getTextureMap()), state, format, textures, nodeMatrices).getGeneralQuads());
             }
 
             if (node instanceof OgexGeometryNode) {
@@ -67,6 +71,11 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
                 if (type != MeshType.Quads && type != MeshType.Triangles) {
                     throw new OpenGEXException("Attempting to generate a model for an unsupported OpenGL Mesh Type: " + type);
                 }
+
+                //TRSRTransformation finalTransform = state.apply(new OpenGEXModelPart(nodeMatrices[geometryNode.getIndex()]));
+
+                //final Matrix4f nodeTransformation = finalTransform.getMatrix();
+
 
                 List<OgexTexture> textures = new ArrayList<OgexTexture>();
                 for (final OgexMaterial ogexMaterial : geometryNode.getMaterials())
@@ -188,8 +197,6 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
 
     private final void putVertexData(UnpackedBakedQuad.Builder builder, Vector4f vertex, Vector3f faceNormal, Vector3f vertexNormal, float[] textureCoordinates, float[] color, TextureAtlasSprite sprite)
     {
-        System.out.println(vertex);
-
         // TODO handle everything not handled (texture transformations, bones, transformations, normals, e.t.c)
         for(int e = 0; e < format.getElementCount(); e++)
         {
@@ -292,28 +299,18 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
         if(state instanceof IExtendedBlockState)
         {
             IExtendedBlockState exState = (IExtendedBlockState)state;
-            if(exState.getUnlistedNames().contains(B3DLoader.B3DFrameProperty.instance))
+            if(exState.getUnlistedNames().contains(OpenGEXAnimationFrameProperty.instance))
             {
-                B3DLoader.B3DState s = exState.getValue(B3DLoader.B3DFrameProperty.instance);
+                OpenGEXState s = exState.getValue(OpenGEXAnimationFrameProperty.instance);
                 if(s != null)
                 {
-                    throw new NotImplementedException("Need to be able to determine the animation being played.");
-                    //return getCachedModel(s.getFrame(), null);
+                    //FIXME: Need to find a multi-animation-track ogex file to determine how this is going to work
+                    OgexAnimation animation = null;
+                    return new OpenGEXFlexibleBakedModel(model, new OpenGEXState(animation, s.getTime(), this.state), format, textures, nodeMatrices);
                 }
             }
         }
         return this;
-    }
-
-    private final Map<Integer, OpenGEXFlexibleBakedModel> cache = new HashMap<Integer, OpenGEXFlexibleBakedModel>();
-
-    public OpenGEXFlexibleBakedModel getCachedModel(int frame, OgexAnimation animation)
-    {
-        if(!cache.containsKey(frame))
-        {
-            cache.put(frame, new OpenGEXFlexibleBakedModel(model, new OpenGEXState(animation, frame, state), format, textures));
-        }
-        return cache.get(frame);
     }
 
     @Override
