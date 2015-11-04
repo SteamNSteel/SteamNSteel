@@ -90,8 +90,6 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
             allNodes[key] = ogexNode;
             this.nodeParents[key] = value;
         }
-
-        Logger.info("breakpoint");
     }
 
 

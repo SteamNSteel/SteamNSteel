@@ -67,18 +67,14 @@ GeometryNode $node1
 		{
 			Track (target = %yrot)
 			{
-				Time (curve = "bezier")
+				Time (curve = "linear")
 				{
 					Key {float {0, 1.66667}}
-					Key (kind = "-control") {float {0, 1.11111}}
-					Key (kind = "+control") {float {0.555555, 1.66667}}
 				}
 
-				Value (curve = "bezier")
+				Value (curve = "linear")
 				{
 					Key {float {-12.5664, -6.28319}}
-					Key (kind = "-control") {float {-12.5664, -6.28319}}
-					Key (kind = "+control") {float {-12.5664, -6.28319}}
 				}
 			}
 		}

@@ -72,11 +72,6 @@ public class OpenGEXFlexibleBakedModel implements IFlexibleBakedModel, ISmartBlo
                     throw new OpenGEXException("Attempting to generate a model for an unsupported OpenGL Mesh Type: " + type);
                 }
 
-                //TRSRTransformation finalTransform = state.apply(new OpenGEXModelPart(nodeMatrices[geometryNode.getIndex()]));
-
-                //final Matrix4f nodeTransformation = finalTransform.getMatrix();
-
-
                 List<OgexTexture> textures = new ArrayList<OgexTexture>();
                 for (final OgexMaterial ogexMaterial : geometryNode.getMaterials())
                 {
