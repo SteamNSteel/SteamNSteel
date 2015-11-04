@@ -18,30 +18,38 @@ package mod.steamnsteel.proxy;
 
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.client.model.opengex.OpenGEXModelLoader;
+import mod.steamnsteel.client.renderer.tileentity.LargeFanTESR;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
+import mod.steamnsteel.tileentity.LargeFanTE;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends RenderProxy
 {
     @Override
-    public void init()
+    public void preInit()
     {
         registerBlocks();
         registerItemRenderers();
-        registerTESRs();
+
         registerEventHandlers();
 
         OpenGEXModelLoader.instance.addDomain(TheMod.MOD_ID);
         OBJLoader.instance.addDomain(TheMod.MOD_ID);
         ModelLoaderRegistry.registerLoader(OpenGEXModelLoader.instance);
 
+    }
+
+    @Override
+    public void init() {
+        registerTESRs();
     }
 
     private void registerBlocks() {
@@ -124,7 +132,6 @@ public class ClientRenderProxy extends RenderProxy
 
         //TODO: reenable these once I have them working
         /*
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.cupola), new CupolaItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipe), new PipeItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeValve), new PipeValveItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeRedstoneValve), new PipeRedstoneValveItemRenderer());
@@ -136,6 +143,7 @@ public class ClientRenderProxy extends RenderProxy
 
     private void registerTESRs()
     {
+        ClientRegistry.bindTileEntitySpecialRenderer(LargeFanTE.class, new LargeFanTESR());
         /*
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());

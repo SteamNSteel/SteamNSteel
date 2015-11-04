@@ -18,5 +18,6 @@ package mod.steamnsteel.proxy;
 
 public class RenderProxy
 {
-    public void init() { }
+    public void preInit() { }
+    public void init() {}
 }

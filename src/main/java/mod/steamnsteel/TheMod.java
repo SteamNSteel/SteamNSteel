@@ -72,7 +72,7 @@ public class TheMod
         ModItem.init();
         ModBlock.init();
         ModBlockParts.init();
-        Proxies.render.init();
+        Proxies.render.preInit();
     }
 
     @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
@@ -91,6 +91,7 @@ public class TheMod
         Recipes.init();
         WorldGen.init();
         ModBlock.registerTileEntities();
+        Proxies.render.init();
     }
 
     @SuppressWarnings("UnusedParameters")

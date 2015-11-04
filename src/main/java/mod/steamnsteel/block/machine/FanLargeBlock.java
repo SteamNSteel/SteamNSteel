@@ -60,14 +60,6 @@ public class FanLargeBlock extends SteamNSteelMachineBlock implements ITileEntit
     }
 
     @Override
-    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos)
-    {
-        final OpenGEXState openGEXState = new OpenGEXState(null, counter / 30.0f);
-        return ((IExtendedBlockState)state).withProperty(OpenGEXAnimationFrameProperty.instance, openGEXState);
-
-    }
-
-    @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         if (world.isRemote)
