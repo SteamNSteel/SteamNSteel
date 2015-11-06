@@ -27,6 +27,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.b3d.B3DLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
@@ -36,15 +37,15 @@ public class ClientRenderProxy extends RenderProxy
     @Override
     public void preInit()
     {
-        registerBlocks();
+        registerBlocksItemModels();
         registerItemRenderers();
 
         registerEventHandlers();
 
         OpenGEXModelLoader.instance.addDomain(TheMod.MOD_ID);
         OBJLoader.instance.addDomain(TheMod.MOD_ID);
+        B3DLoader.instance.addDomain(TheMod.MOD_ID);
         ModelLoaderRegistry.registerLoader(OpenGEXModelLoader.instance);
-
     }
 
     @Override
@@ -52,28 +53,35 @@ public class ClientRenderProxy extends RenderProxy
         registerTESRs();
     }
 
-    private void registerBlocks() {
+    private void registerBlocksItemModels() {
         //Ores
-        registerBlock(ModBlock.oreCopper);
-        registerBlock(ModBlock.oreNiter);
-        registerBlock(ModBlock.oreSulfur);
-        registerBlock(ModBlock.oreTin);
-        registerBlock(ModBlock.oreZinc);
+        registerBlockItemModel(ModBlock.oreCopper);
+        registerBlockItemModel(ModBlock.oreNiter);
+        registerBlockItemModel(ModBlock.oreSulfur);
+        registerBlockItemModel(ModBlock.oreTin);
+        registerBlockItemModel(ModBlock.oreZinc);
 
         //Compressed Blocks
-        registerBlock(ModBlock.blockBrass);
-        registerBlock(ModBlock.blockBronze);
-        registerBlock(ModBlock.blockCopper);
-        registerBlock(ModBlock.blockPlotonium);
-        registerBlock(ModBlock.blockSteel);
-        registerBlock(ModBlock.blockTin);
-        registerBlock(ModBlock.blockZinc);
+        registerBlockItemModel(ModBlock.blockBrass);
+        registerBlockItemModel(ModBlock.blockBronze);
+        registerBlockItemModel(ModBlock.blockCopper);
+        registerBlockItemModel(ModBlock.blockPlotonium);
+        registerBlockItemModel(ModBlock.blockSteel);
+        registerBlockItemModel(ModBlock.blockTin);
+        registerBlockItemModel(ModBlock.blockZinc);
 
-        registerBlock(ModBlock.cupola);
-        registerBlock(ModBlock.fanLarge);
+        registerBlockItemModel(ModBlock.cupola);
+        registerBlockItemModel(ModBlock.fanLarge);
+        registerBlockItemModel(ModBlock.pipe);
+        registerBlockItemModel(ModBlock.pipeValve);
+        registerBlockItemModel(ModBlock.pipeValveRedstone);
+        registerBlockItemModel(ModBlock.pipeJunction);
+
+        registerBlockItemModel(ModBlock.remnantRuinPillar);
+        registerBlockItemModel(ModBlock.remnantRuinChest);
     }
 
-    private void registerBlock(Block block) {
+    private void registerBlockItemModel(Block block) {
         final String resourceName = block.getUnlocalizedName().substring(5);
         ModelLoader.setCustomModelResourceLocation(
                 Item.getItemFromBlock(block),
@@ -82,7 +90,7 @@ public class ClientRenderProxy extends RenderProxy
         );
     }
 
-    private void registerItem(Item item) {
+    private void registerItemModel(Item item) {
         final String resourceName = item.getUnlocalizedName().substring(5);
         ModelLoader.setCustomModelResourceLocation(
                 item,
@@ -93,48 +101,48 @@ public class ClientRenderProxy extends RenderProxy
 
     private void registerItemRenderers()
     {
-        registerItem(ModItem.anachDoodad);
-        registerItem(ModItem.mustyJournal);
-        registerItem(ModItem.perGuiVox);
-        registerItem(ModItem.plotoniumScrap);
-        registerItem(ModItem.voxBox);
+        registerItemModel(ModItem.anachDoodad);
+        registerItemModel(ModItem.mustyJournal);
+        registerItemModel(ModItem.perGuiVox);
+        registerItemModel(ModItem.plotoniumScrap);
+        registerItemModel(ModItem.voxBox);
 
-        registerItem(ModItem.dustNiter);
-        registerItem(ModItem.dustSulfur);
+        registerItemModel(ModItem.dustNiter);
+        registerItemModel(ModItem.dustSulfur);
 
-        registerItem(ModItem.ingotBrass);
-        registerItem(ModItem.ingotBronze);
-        registerItem(ModItem.ingotCopper);
-        registerItem(ModItem.ingotPlotonium);
-        registerItem(ModItem.ingotSteel);
-        registerItem(ModItem.ingotTin);
-        registerItem(ModItem.ingotZinc);
+        registerItemModel(ModItem.ingotBrass);
+        registerItemModel(ModItem.ingotBronze);
+        registerItemModel(ModItem.ingotCopper);
+        registerItemModel(ModItem.ingotPlotonium);
+        registerItemModel(ModItem.ingotSteel);
+        registerItemModel(ModItem.ingotTin);
+        registerItemModel(ModItem.ingotZinc);
 
-        registerItem(ModItem.helmetBronze);
-        registerItem(ModItem.chestplateBronze);
-        registerItem(ModItem.leggingsBronze);
-        registerItem(ModItem.bootsBronze);
-        registerItem(ModItem.helmetSteel);
-        registerItem(ModItem.chestplateSteel);
-        registerItem(ModItem.leggingsSteel);
-        registerItem(ModItem.bootsSteel);
+        registerItemModel(ModItem.helmetBronze);
+        registerItemModel(ModItem.chestplateBronze);
+        registerItemModel(ModItem.leggingsBronze);
+        registerItemModel(ModItem.bootsBronze);
+        registerItemModel(ModItem.helmetSteel);
+        registerItemModel(ModItem.chestplateSteel);
+        registerItemModel(ModItem.leggingsSteel);
+        registerItemModel(ModItem.bootsSteel);
 
-        registerItem(ModItem.axeBronze);
-        registerItem(ModItem.pickBronze);
-        registerItem(ModItem.shovelBronze);
-        registerItem(ModItem.swordBronze);
-        registerItem(ModItem.hoeBronze);
-        registerItem(ModItem.axeSteel);
-        registerItem(ModItem.pickSteel);
-        registerItem(ModItem.shovelSteel);
-        registerItem(ModItem.swordSteel);
-        registerItem(ModItem.hoeSteel);
+        registerItemModel(ModItem.axeBronze);
+        registerItemModel(ModItem.pickBronze);
+        registerItemModel(ModItem.shovelBronze);
+        registerItemModel(ModItem.swordBronze);
+        registerItemModel(ModItem.hoeBronze);
+        registerItemModel(ModItem.axeSteel);
+        registerItemModel(ModItem.pickSteel);
+        registerItemModel(ModItem.shovelSteel);
+        registerItemModel(ModItem.swordSteel);
+        registerItemModel(ModItem.hoeSteel);
 
         //TODO: reenable these once I have them working
         /*
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipe), new PipeItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeValve), new PipeValveItemRenderer());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeRedstoneValve), new PipeRedstoneValveItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeValveRedstone), new PipeRedstoneValveItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeJunction), new PipeJunctionItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinChest), new PlotoniumChestItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinPillar), new RemnantRuinPillarItemRenderer());

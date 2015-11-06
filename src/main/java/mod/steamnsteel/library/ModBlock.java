@@ -18,6 +18,7 @@ package mod.steamnsteel.library;
 
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.block.machine.*;
+import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
 import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
@@ -54,9 +55,11 @@ public final class ModBlock
 
     public static final SteamNSteelBlock pipe = new PipeBlock();
     public static final SteamNSteelBlock pipeValve = new PipeValveBlock();
-    public static final SteamNSteelBlock pipeRedstoneValve = new PipeRedstoneValveBlock();
+    public static final SteamNSteelBlock pipeValveRedstone = new PipeRedstoneValveBlock();
     public static final SteamNSteelBlock pipeJunction = new PipeJunctionBlock();
+
     public static final SteamNSteelBlock remnantRuinChest = new RemnantRuinChestBlock();
+    public static final SteamNSteelBlock remnantRuinPillar = new RemnantRuinPillarBlock();
 
     public static final SteamNSteelOreBlock oreNiter = new NiterOre();
     public static final SteamNSteelOreBlock oreCopper = new CopperOre();
@@ -66,7 +69,6 @@ public final class ModBlock
 
     /*
     public static final SteamNSteelBlock remnantRuinFloor = new RemnantRuinFloorBlock();
-    public static final SteamNSteelBlock remnantRuinPillar = new RemnantRuinPillarBlock();
     public static final SteamNSteelBlock remnantRuinWall = new RemnantRuinWallBlock();
     public static final SteamNSteelPaneBlock remnantRuinIronBars = new RemnantRuinIronBarsBlock();
     */
@@ -85,7 +87,7 @@ public final class ModBlock
         GameRegistry.registerTileEntity(PipeValveTE.class, getTEName(PipeValveBlock.NAME));
         GameRegistry.registerTileEntity(PipeRedstoneValveTE.class, getTEName(PipeRedstoneValveBlock.NAME));
         GameRegistry.registerTileEntity(PipeJunctionTE.class, getTEName(PipeJunctionBlock.NAME));
-        //GameRegistry.registerTileEntity(RemnantRuinPillarTE.class, getTEName(RemnantRuinPillarBlock.NAME));
+        GameRegistry.registerTileEntity(RemnantRuinPillarTE.class, getTEName(RemnantRuinPillarBlock.NAME));
     }
 
     private static String getTEName(String name) { return "tile." + name;}
@@ -99,7 +101,7 @@ public final class ModBlock
 
         GameRegistry.registerBlock(pipe, PipeBlock.NAME);
         GameRegistry.registerBlock(pipeValve, PipeValveBlock.NAME);
-        GameRegistry.registerBlock(pipeRedstoneValve, PipeRedstoneValveBlock.NAME);
+        GameRegistry.registerBlock(pipeValveRedstone, PipeRedstoneValveBlock.NAME);
         GameRegistry.registerBlock(pipeJunction, PipeJunctionBlock.NAME);
 
         registerBlockAndOre(oreNiter, NiterOre.NAME);
@@ -108,7 +110,6 @@ public final class ModBlock
         registerBlockAndOre(oreTin, TinOre.NAME);
         registerBlockAndOre(oreZinc, ZincOre.NAME);
 
-
         registerBlockAndOre(blockBrass, SteamNSteelStorageBlock.BRASS_BLOCK);
         registerBlockAndOre(blockBronze, SteamNSteelStorageBlock.BRONZE_BLOCK);
         registerBlockAndOre(blockCopper, SteamNSteelStorageBlock.COPPER_BLOCK);
@@ -116,12 +117,14 @@ public final class ModBlock
         registerBlockAndOre(blockSteel, SteamNSteelStorageBlock.STEEL_BLOCK);
         registerBlockAndOre(blockTin, SteamNSteelStorageBlock.TIN_BLOCK);
         registerBlockAndOre(blockZinc, SteamNSteelStorageBlock.ZINC_BLOCK);
+
+        GameRegistry.registerBlock(remnantRuinPillar, RemnantRuinPillarBlock.NAME);
 /*
         GameRegistry.registerBlock(remnantRuinFloor, RemnantRuinFloorBlock.NAME);
-        GameRegistry.registerBlock(remnantRuinPillar, RemnantRuinPillarBlock.NAME);
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
         GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlock.NAME);
 */
+
         //Compat
         TileEntity.addMapping(RemnantRuinChestTE.class, "tile.chestPlotonium");
     }

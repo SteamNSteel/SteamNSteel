@@ -1,10 +1,10 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
 # File Created: 30.10.2015 01:29:09
 
-mtllib SSCupola.mtl
+mtllib SSMultiblockPlaceholder.mtl
 
 #
-# object Box001
+# object noop
 #
 
 v 0.0000 0.0000 0.0000
@@ -16,6 +16,6 @@ vn 0.0000 0.0000 -0.0000
 vt 0.6667 0.6681 0.0005
 # 21 texture coords
 
-g Box001
-usemtl Material__0
+g noop
+usemtl Transparent
 f 1/1/1 1/1/1 1/1/1

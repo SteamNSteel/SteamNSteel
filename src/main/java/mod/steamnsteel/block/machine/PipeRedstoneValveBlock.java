@@ -32,7 +32,7 @@ import net.minecraft.util.EnumFacing;
 
 public class PipeRedstoneValveBlock extends SteamNSteelBlock implements ITileEntityProvider
 {
-    public static final String NAME = "pipeRedstoneValve";
+    public static final String NAME = "pipeValveRedstone";
     private static int RenderId;
 
     public PipeRedstoneValveBlock()

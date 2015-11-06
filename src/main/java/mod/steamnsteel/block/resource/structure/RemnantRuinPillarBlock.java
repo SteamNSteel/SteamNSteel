@@ -28,7 +28,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class RemnantRuinPillarBlock extends SteamNSteelBlock
+public class RemnantRuinPillarBlock extends SteamNSteelDirectionalBlock
 {
     public static final String NAME = "remnantRuinPillar";
     private static int renderId;
@@ -55,11 +55,5 @@ public class RemnantRuinPillarBlock extends SteamNSteelBlock
     public boolean hasTileEntity(IBlockState blockState)
     {
         return true;
-    }
-
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        final int orientation = BlockDirectional.getDirection(MathHelper.floor_double(placer.rotationYaw * 4.0f / 360.0f + 0.5));
-        worldIn.setBlockMetadataWithNotify(pos, orientation & 1, 0);
     }
 }

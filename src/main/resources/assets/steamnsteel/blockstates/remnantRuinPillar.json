@@ -1,0 +1,37 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "model": "steamnsteel:SSRemnantPillar.obj",
+    "custom": {
+      "flip-v": true
+    }
+  },
+  "variants": {
+    "normal": [{
+    }],
+    "inventory": [{
+      "transform": {
+        "thirdperson": {
+          "translation": [0, 0.0, -0.15],
+          "rotation": [{"y": 180}, {"x": 125 }],
+          "scale": 0.50
+        },
+        "firstperson": {"rotation": {"y": 180 }, "scale": 0.66},
+        "gui": {"rotation": {"y": 180 }}
+      }
+    }],
+    "facing": {
+      "north": { },
+      "south": { "transform": {
+        "rotation": {"y": 180 }
+      }},
+      "east": { "transform": {
+        "rotation": {"y": 270 }
+      }},
+      "west": { "transform": {
+        "rotation": {"y": 90 }
+      }}
+    }
+  }
+}

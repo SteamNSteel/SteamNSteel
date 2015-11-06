@@ -31,9 +31,9 @@ import net.minecraft.world.World;
 
 import static net.minecraft.block.BlockDirectional.*;
 
-abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
+public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
-    SteamNSteelDirectionalBlock(Material material)
+    protected SteamNSteelDirectionalBlock(Material material)
     {
         super(material);
         setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));

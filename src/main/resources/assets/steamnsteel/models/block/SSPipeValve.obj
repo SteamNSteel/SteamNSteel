@@ -1,6 +1,9 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
 # File Created: 24.10.2014 14:44:02
 
+mtllib SSPipeValve.mtl
+usemtl Pipes
+
 #
 # object VPPipe
 #

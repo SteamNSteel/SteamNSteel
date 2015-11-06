@@ -52,7 +52,7 @@ public class LargeFanTESR extends TileEntitySpecialRenderer
 
         worldRenderer.startDrawingQuads();
         worldRenderer.setVertexFormat(DefaultVertexFormats.BLOCK);
-        worldRenderer.setTranslation(x - blockpos.getX(), y - blockpos.getY() + 0.3f, z - blockpos.getZ());
+        worldRenderer.setTranslation(x - blockpos.getX(), y - blockpos.getY(), z - blockpos.getZ());
         worldRenderer.setColorOpaque_F(1.0F, 1.0F, 1.0F);
 
         if (model instanceof ISmartBlockModel) {

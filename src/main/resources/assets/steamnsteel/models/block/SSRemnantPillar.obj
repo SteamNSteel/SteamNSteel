@@ -1,6 +1,9 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
 # File Created: 26.02.2015 03:42:01
 
+mtllib SSRemnantPillar.mtl
+usemtl RemnantPillar
+
 #
 # object SSRemnantPillar_CapBottom
 #

@@ -1,6 +1,9 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
 # File Created: 01.11.2014 14:37:35
 
+mtllib SSPipes.mtl
+usemtl Pipes
+
 #
 # object PipeOpening
 #

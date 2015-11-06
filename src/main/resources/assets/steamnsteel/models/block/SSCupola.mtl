@@ -12,5 +12,5 @@ newmtl Material__0
 #Kd 0.5880 0.5880 0.5880
 #Ks 0.0000 0.0000 0.0000
 #Ke 0.0000 0.0000 0.0000
-map_Ka steamnsteel:models/SSCupolaOff
+map_Ka steamnsteel:models/SSCupola
 #map_Kd steamnsteel:models/SSCupolaOff

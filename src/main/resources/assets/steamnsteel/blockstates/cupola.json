@@ -1,18 +1,19 @@
 {
   "forge_marker": 1,
   "defaults": {
-    /*"textures": {
-      "#steamnsteel:models/SSCupolaOff": "steamnsteel:models/SSCupolaOff"
-    },*/
+    "textures": {
+      "#all": "steamnsteel:models/SSCupolaOff"
+    },
     "transform": "forge:default-block",
     "model": "steamnsteel:SSCupola.obj",
-    "flip-v": "true"
+    "custom": {
+      "flip-v": true
+    }
   },
   "variants": {
     "normal": [{
     }],
     "inventory": [{
-      "model": "steamnsteel:SSCupola.obj",
       "transform": {
         "thirdperson": {
           "translation": [0, 0.0, -0.15],
@@ -38,17 +39,17 @@
       },
     "is_slave": {
       "false": {  },
-      "true": { "model": "steamnsteel:SSCupolaTopImSorryRorax.obj" }
+      "true": { "model": "steamnsteel:SSMultiblockPlaceholder.obj" }
     },
     "is_active": {
       "false": {
         "textures": {
-          "#steamnsteel:models/SSCupolaOff": "steamnsteel:models/SSCupolaOff"
+          "#steamnsteel:models/SSCupola": "steamnsteel:models/SSCupolaOff"
         }
       },
       "true": {
         "textures": {
-          "#steamnsteel:models/SSCupolaOff": "steamnsteel:models/SSCupolaOn"
+          "#steamnsteel:models/SSCupola": "steamnsteel:models/SSCupolaOn"
         }
       }
     }

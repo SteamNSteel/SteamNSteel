@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      //"#texture": "forgedebugmodelloaderregistry:texture",
+      "#chest": "steamnsteel:models/remnantRuinChest"
+    },
+    "model": "steamnsteel:chest.b3d",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{
+      "y": 180
+    }],
+    "facing": {
+      "down": {"x": 90},
+      "up": {"x": 270},
+      "north": {"y": 180},
+      "south": {},
+      "west": {"y": 90},
+      "east": {"y": 270}
+    }
+  }
+}
