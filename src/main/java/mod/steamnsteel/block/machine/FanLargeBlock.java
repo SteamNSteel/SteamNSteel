@@ -18,11 +18,10 @@ package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.client.model.opengex.OpenGEXAnimationFrameProperty;
-import mod.steamnsteel.client.model.opengex.OpenGEXState;
 import mod.steamnsteel.tileentity.LargeFanTE;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,13 +31,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
 import static net.minecraft.block.BlockDirectional.FACING;
 
 public class FanLargeBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
+
+    public static final PropertyBool RENDER_DYNAMIC = PropertyBool.create("render-dynamic");
+
     public static final String NAME = "fanLarge";
 
     public static int counter;
@@ -50,13 +51,14 @@ public class FanLargeBlock extends SteamNSteelMachineBlock implements ITileEntit
                 blockState
                         .getBaseState()
                         .withProperty(FACING, EnumFacing.NORTH)
+                        .withProperty(RENDER_DYNAMIC, false)
         );
     }
 
     @Override
     protected BlockState createBlockState()
     {
-        return new ExtendedBlockState(this, new IProperty[]{FACING}, new IUnlistedProperty[]{OpenGEXAnimationFrameProperty.instance});
+        return new ExtendedBlockState(this, new IProperty[]{FACING, RENDER_DYNAMIC}, new IUnlistedProperty[]{OpenGEXAnimationFrameProperty.instance});
     }
 
     @Override
@@ -77,6 +79,12 @@ public class FanLargeBlock extends SteamNSteelMachineBlock implements ITileEntit
     public IBlockState getStateFromMeta(int meta)
     {
         return super.getStateFromMeta(meta);
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+    {
+        return super.getActualState(state, worldIn, pos);
     }
 
     @Override

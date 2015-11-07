@@ -26,13 +26,13 @@ public class Animation
                 nodeMatrix = parentMatrix.clone();
             }
 
-            for (OgexAnimation animation : node.getAnimations()) {
+            for (final OgexAnimation animation : node.getAnimations()) {
                 float actualAnimationTime = animation.getBegin() + animationTime;
                 while (actualAnimationTime > animation.getEnd()) {
                     actualAnimationTime -= animation.getEnd();
                 }
 
-                for (OgexTrack track : animation) {
+                for (final OgexTrack track : animation) {
                     Object target = track.getTarget();
                     float value = getCurrentValueForTrack(scene, track, actualAnimationTime);
 

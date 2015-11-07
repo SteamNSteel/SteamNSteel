@@ -1,7 +1,9 @@
 package mod.steamnsteel.client.renderer.tileentity;
 
+import mod.steamnsteel.block.machine.FanLargeBlock;
 import mod.steamnsteel.client.model.opengex.OpenGEXAnimationFrameProperty;
 import mod.steamnsteel.client.model.opengex.OpenGEXState;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
@@ -21,14 +23,16 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 public class LargeFanTESR extends TileEntitySpecialRenderer
 {
 
+
+
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)
     {
         final BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
         IBlockState blockState = te.getWorld().getBlockState(te.getPos());
         BlockPos blockpos = te.getPos();
-        final OpenGEXState openGEXState = new OpenGEXState(null, getWorld().getTotalWorldTime() / 30.0f);
-        IBakedModel model = blockRenderer.getModelFromBlockState(blockState, getWorld(), te.getPos());
+        final OpenGEXState openGEXState = new OpenGEXState(null, getWorld().getTotalWorldTime() / 5.0f);
+        IBakedModel model = blockRenderer.getModelFromBlockState(blockState.withProperty(FanLargeBlock.RENDER_DYNAMIC, true), getWorld(), te.getPos());
         blockState = ((IExtendedBlockState)blockState).withProperty(OpenGEXAnimationFrameProperty.instance, openGEXState);
 
 

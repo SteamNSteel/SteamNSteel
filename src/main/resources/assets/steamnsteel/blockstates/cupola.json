@@ -1,9 +1,6 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "textures": {
-      "#all": "steamnsteel:models/SSCupolaOff"
-    },
     "transform": "forge:default-block",
     "model": "steamnsteel:SSCupola.obj",
     "custom": {
@@ -23,7 +20,6 @@
         "firstperson": {"rotation": {"y": 180 }, "scale": 0.66},
         "gui": {"rotation": {"y": 180 }}
       }
-
     }],
     "facing": {
         "north": { },
@@ -44,12 +40,12 @@
     "is_active": {
       "false": {
         "textures": {
-          "#steamnsteel:models/SSCupola": "steamnsteel:models/SSCupolaOff"
+          "SSCupola": "steamnsteel:models/SSCupolaOff"
         }
       },
       "true": {
         "textures": {
-          "#steamnsteel:models/SSCupola": "steamnsteel:models/SSCupolaOn"
+          "SSCupola": "steamnsteel:models/SSCupolaOn"
         }
       }
     }

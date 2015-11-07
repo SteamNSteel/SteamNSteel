@@ -33,6 +33,22 @@
         "west": { "transform": {
           "rotation": {"y": 90 }
         }}
+      },
+    "render-dynamic": {
+      "false": {
+        "custom": {
+          "enabled-nodes": [
+            "SSLargeFanChasis"
+          ]
+        }
+      },
+      "true": {
+        "custom": {
+          "enabled-nodes": [
+            "SSLargeFanRotor"
+          ]
+        }
       }
+    }
   }
 }

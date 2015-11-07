@@ -4,8 +4,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.*;
 import com.google.common.collect.ImmutableMap.Builder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import mod.steamnsteel.client.model.opengex.ogex.*;
-import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
@@ -29,6 +30,7 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
 
     private final OgexScene scene;
     private final ImmutableMap<String, ResourceLocation> textureMap;
+    private final List<String> enabledNodes;
     private final OgexTexture defaultTexture = new OgexTexture();
     private final ResourceLocation location;
     private final OpenGEXNode node;
@@ -36,16 +38,17 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
     private OgexNode[] allNodes;
 
     public OpenGEXModel(ResourceLocation location, OgexScene scene) {
-        this(location, scene, scene, buildTextures(scene.getMaterials()));
+        this(location, scene, scene, buildTextures(scene.getMaterials()), null);
         defaultTexture.setTexture("missingno");
 
     }
 
-    public OpenGEXModel(ResourceLocation location, OpenGEXNode node, OgexScene scene, ImmutableMap<String, ResourceLocation> textures) {
+    public OpenGEXModel(ResourceLocation location, OpenGEXNode node, OgexScene scene, ImmutableMap<String, ResourceLocation> textures, List<String> enabledNodes) {
         this.location = location;
         this.node = node;
         this.scene = scene;
         this.textureMap = textures;
+        this.enabledNodes = enabledNodes;
         arrangeForRendering();
     }
 
@@ -150,7 +153,7 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
             }
         }
         builder.put("missingno", missing);
-        return new OpenGEXFlexibleBakedModel(this, state, format, builder.build(), null);
+        return new OpenGEXModelInstance(this, state, format, builder.build(), null);
 
     }
 
@@ -161,8 +164,19 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
 
     @Override
     public IModel process(ImmutableMap<String, String> customData) {
-        //Follow up with Fry how this is supposed to work.
-        return null;
+        List<String> enabledNodes = null;
+
+        for (final Entry<String, String> entrySet : customData.entrySet())
+        {
+            if ("enabled-nodes".equals(entrySet.getKey())) {
+                enabledNodes = Lists.newArrayList();
+                for (final JsonElement jsonElement : (new JsonParser()).parse(entrySet.getValue()).getAsJsonArray())
+                {
+                    enabledNodes.add(jsonElement.getAsString());
+                }
+            }
+        }
+        return new OpenGEXModel(location, node, scene, textureMap, enabledNodes);
     }
 
     @Override
@@ -183,7 +197,7 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
                 builder.put(e);
             }
         }
-        return new OpenGEXModel(location, this.getNode(), scene, builder.build());
+        return new OpenGEXModel(location, this.getNode(), scene, builder.build(), getEnabledNodes());
     }
 
     public OpenGEXNode getNode() {
@@ -211,5 +225,10 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
     public OgexScene getScene()
     {
         return scene;
+    }
+
+    public List<String> getEnabledNodes()
+    {
+        return enabledNodes;
     }
 }
