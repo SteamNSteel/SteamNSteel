@@ -3,6 +3,7 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
+import net.minecraft.util.BlockPos;
 
 import java.util.*;
 
@@ -55,7 +56,7 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
             int yPos = random.nextInt(16);
             int zPos = random.nextInt(18) - 1;
 
-            features.add(new FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 1, 1, 1));
+            features.add(new FeatureInstance(this, new BlockPos(xPos, yPos, zPos), 1, 1, 1));
         }
         return features;
     }

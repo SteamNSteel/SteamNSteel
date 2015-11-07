@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
+import net.minecraft.util.BlockPos;
 
 import java.util.*;
 
@@ -77,7 +78,7 @@ public class FeatureRegistry implements IFeatureRegistry
      * @param layer           The layer the feature appears on
      * @return The feature present at that location on the layer.
      */
-    public IProceduralWallFeature getFeatureAt(WorldBlockCoord worldBlockCoord, Layer layer)
+    public IProceduralWallFeature getFeatureAt(BlockPos worldBlockCoord, Layer layer)
     {
         final ChunkCoord chunkCoord = ChunkCoord.of(worldBlockCoord);
         Map<Layer, long[]> layerFeatures = cachedLayerFeatures.get(chunkCoord);
@@ -106,7 +107,7 @@ public class FeatureRegistry implements IFeatureRegistry
             int offsetAmount = layer.allowRandomization() ? (localCoord.getY() >> 4) : 0;
             for (FeatureInstance feature : getFeaturesIn(chunkCoord, layer))
             {
-                final WorldBlockCoord featureBlockCoord = feature.getBlockCoord();
+                final BlockPos featureBlockCoord = feature.getBlockCoord();
                 final int featureX = (featureBlockCoord.getX() + offsetAmount) & 15;
                 if (x >= featureX && x < featureX + feature.getWidth())
                 {

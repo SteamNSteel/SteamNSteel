@@ -5,7 +5,7 @@ import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.texturing.api.traiticonregistry.IIconDefinitionStart;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import mod.steamnsteel.texturing.feature.*;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 
 /**
  * Defines the Ruin wall texture.
@@ -353,7 +353,7 @@ public class RemnantRuinWallTexture extends ProceduralConnectedTexture
 
 
     @Override
-    protected boolean isCompatibleBlock(IconRequest request, Block block)
+    protected boolean isCompatibleBlock(IconRequest request, IBlockState block)
     {
         return (block instanceof RemnantRuinWallBlock);
     }

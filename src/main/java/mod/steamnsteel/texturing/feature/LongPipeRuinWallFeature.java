@@ -3,6 +3,7 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
+import net.minecraft.util.BlockPos;
 
 import java.util.*;
 
@@ -120,10 +121,10 @@ public class LongPipeRuinWallFeature extends ProceduralWallFeatureBase
 
             if (random.nextBoolean())
             {
-                features.add(new FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), width, 1, 1));
+                features.add(new FeatureInstance(this, new BlockPos(xPos, yPos, zPos), width, 1, 1));
             } else
             {
-                features.add(new FeatureInstance(this, WorldBlockCoord.of(zPos, yPos, xPos), 1, 1, width));
+                features.add(new FeatureInstance(this, new BlockPos(zPos, yPos, xPos), 1, 1, width));
             }
         }
         return features;

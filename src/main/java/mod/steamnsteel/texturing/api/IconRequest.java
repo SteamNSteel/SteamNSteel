@@ -1,5 +1,6 @@
 package mod.steamnsteel.texturing.api;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.EnumFacing;
 import java.util.Random;
@@ -74,7 +75,7 @@ public class IconRequest
     /**
      * @return the coordinate of the block being studied.
      */
-    public WorldBlockCoord getWorldBlockCoord()
+    public BlockPos getWorldBlockCoord()
     {
         return worldBlockCoord;
     }
@@ -85,15 +86,15 @@ public class IconRequest
     private EnumFacing upDirection;
     private EnumFacing downDirection;
     private IBlockAccess blockAccess;
-    private WorldBlockCoord worldBlockCoord;
+    private BlockPos worldBlockCoord;
 
     private IconRequest() {}
 
-    public IconRequest(IBlockAccess blockAccess, WorldBlockCoord worldBlockCoord, int side)
+    public IconRequest(IBlockAccess blockAccess, BlockPos worldBlockCoord, EnumFacing side)
     {
         this.blockAccess = blockAccess;
         this.worldBlockCoord = worldBlockCoord;
-        orientation = EnumFacing.getOrientation(side);
+        orientation = side;
         leftDirection = BlockSideRotation.forOrientation(TextureDirection.LEFT, orientation);
         rightDirection = BlockSideRotation.forOrientation(TextureDirection.RIGHT, orientation);
         backDirection = BlockSideRotation.forOrientation(TextureDirection.BACKWARDS, orientation);
@@ -116,7 +117,7 @@ public class IconRequest
      * @param blockCoord the new coordinate to relate to
      * @return a new TextureContext for that location
      */
-    public IconRequest forLocation(WorldBlockCoord blockCoord)
+    public IconRequest forLocation(BlockPos blockCoord)
     {
         IconRequest newContext = new IconRequest();
         newContext.blockAccess = blockAccess;

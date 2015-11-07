@@ -5,7 +5,7 @@ import mod.steamnsteel.texturing.api.IconRequest;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.texturing.api.traiticonregistry.IIconDefinitionStart;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 
 public class RemnantRuinFloorSideTexture extends ProceduralConnectedTexture
 {
@@ -42,7 +42,7 @@ public class RemnantRuinFloorSideTexture extends ProceduralConnectedTexture
     }
 
     @Override
-    protected boolean isCompatibleBlock(IconRequest request, Block block)
+    protected boolean isCompatibleBlock(IconRequest request, IBlockState block)
     {
         return (block instanceof RemnantRuinFloorBlock);
     }

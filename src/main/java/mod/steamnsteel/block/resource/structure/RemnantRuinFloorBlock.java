@@ -16,25 +16,21 @@
 
 package mod.steamnsteel.block.resource.structure;
 
-import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
-import mod.steamnsteel.texturing.wall.RemnantRuinFloorSideTexture;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 public class RemnantRuinFloorBlock extends SteamNSteelBlock
 {
     public static final String NAME = "remnantRuinFloor";
-    public static IIcon[] floorIcons;
+    public static TextureAtlasSprite[] floorIcons;
     ProceduralConnectedTexture textureManager;
 
     public RemnantRuinFloorBlock()
@@ -43,8 +39,9 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
         setUnlocalizedName(NAME);
     }
 
+    /*
     @Override
-    public IIcon getIcon(IBlockAccess world, BlockPos pos, int side)
+    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side)
     {
         if (side == EnumFacing.UP.ordinal() || side == EnumFacing.DOWN.ordinal()) {
             int xPos = pos.getX() % 3;
@@ -55,10 +52,10 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
             final int index = zPos * 3 + xPos;
             return floorIcons[index];
         } else {
-            final IIcon iconForSide = textureManager.getIconForSide(world, pos, side);
+            final TextureAtlasSprite iconForSide = textureManager.getIconForSide(world, pos, side);
             return iconForSide;
         }
-    }
+    }*/
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
@@ -71,6 +68,7 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
         return super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
     }
 
+    /*
     @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
@@ -87,4 +85,5 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
 
         blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinFloorSide/RemnantRuinFloorSideSingle");
     }
+    */
 }

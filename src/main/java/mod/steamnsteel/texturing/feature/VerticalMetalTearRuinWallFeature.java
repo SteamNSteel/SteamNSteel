@@ -3,6 +3,7 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
+import net.minecraft.util.BlockPos;
 
 import java.util.*;
 
@@ -116,7 +117,7 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
             int xPos = random.nextInt(18) - 1;
             int yPos = random.nextInt(13);
             int zPos = random.nextInt(18) - 1;
-            features.add(new FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 1, 3, 1));
+            features.add(new FeatureInstance(this, new BlockPos(xPos, yPos, zPos), 1, 3, 1));
         }
         return features;
     }

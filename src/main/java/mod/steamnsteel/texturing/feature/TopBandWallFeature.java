@@ -3,18 +3,20 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
+import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-public class BottomBandWallFeature extends ProceduralWallFeatureBase
+public class TopBandWallFeature extends ProceduralWallFeatureBase
 {
     private final ProceduralConnectedTexture texture;
 
-    public BottomBandWallFeature(ProceduralConnectedTexture texture, String name, Layer layer)
+    public TopBandWallFeature(ProceduralConnectedTexture texture, String name, Layer layer)
     {
+
         super(name, layer);
         this.texture = texture;
     }
@@ -22,14 +24,14 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     @Override
     public boolean isFeatureValid(IconRequest request)
     {
-        return !texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.BELOW);
+        return !texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.ABOVE);
     }
 
     @Override
     public Collection<FeatureInstance> getFeaturesIn(ChunkCoord chunkCoord)
     {
         List<FeatureInstance> oneInstance = new ArrayList<FeatureInstance>(1);
-        oneInstance.add(new FeatureInstance(this, WorldBlockCoord.of(0, 0, 0), 16, 256, 16));
+        oneInstance.add(new FeatureInstance(this, new BlockPos(0, 0, 0), 16, 256, 16));
         return oneInstance;
     }
 
@@ -37,11 +39,11 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     public long getTraits(IconRequest request)
     {
         long properties = 0;
-        if (texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.LEFT, TextureDirection.BELOW))
+        if (texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.LEFT, TextureDirection.ABOVE))
         {
             properties |= ProceduralConnectedTexture.LEFT;
         }
-        if (texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.RIGHT, TextureDirection.BELOW))
+        if (texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.RIGHT, TextureDirection.ABOVE))
         {
             properties |= ProceduralConnectedTexture.RIGHT;
         }
@@ -56,35 +58,33 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
             properties |= ProceduralConnectedTexture.RIGHT;
         }
 
-        properties |= ProceduralConnectedTexture.BOTTOM;
+        properties |= ProceduralConnectedTexture.TOP;
+
         return properties;
+    }
+
+    @Override
+    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long traits)
+    {
+        if (otherLayerFeature instanceof BottomBandWallFeature)
+        {
+            return Behaviour.CANNOT_EXIST;
+        }
+        return Behaviour.COEXIST;
     }
 
     @Override
     public long getIncompatibleTraits()
     {
-        return ProceduralConnectedTexture.TOP | RemnantRuinWallTexture.ALTERNATE;
+        return RemnantRuinWallTexture.ALTERNATE;
     }
 
-    private int getCrownSplitOpportunity(WorldBlockCoord worldBlockCoord)
+    private int getCrownSplitOpportunity(BlockPos worldBlockCoord)
     {
-        //I duplicated this because it's currently inconvenient to create a new IconRequest for the offset.
         int x = worldBlockCoord.getX();
         int y = worldBlockCoord.getY();
         int z = worldBlockCoord.getZ();
         Random r = new Random(x * y * z * 31);
         return r.nextInt();
     }
-
-    @Override
-    public Behaviour getBehaviourAgainst(IProceduralWallFeature otherLayerFeature, long traits)
-    {
-        if (otherLayerFeature instanceof TopBandWallFeature)
-        {
-            return Behaviour.REPLACES;
-        }
-        return Behaviour.COEXIST;
-    }
-
-
 }

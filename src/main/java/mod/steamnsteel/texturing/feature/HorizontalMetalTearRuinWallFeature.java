@@ -3,6 +3,7 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
+import net.minecraft.util.BlockPos;
 
 import java.util.*;
 
@@ -119,10 +120,10 @@ public class HorizontalMetalTearRuinWallFeature extends ProceduralWallFeatureBas
 
             if (random.nextBoolean())
             {
-                features.add(new FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 3, 1, 1));
+                features.add(new FeatureInstance(this, new BlockPos(xPos, yPos, zPos), 3, 1, 1));
             } else
             {
-                features.add(new FeatureInstance(this, WorldBlockCoord.of(xPos, yPos, zPos), 1, 1, 3));
+                features.add(new FeatureInstance(this, new BlockPos(xPos, yPos, zPos), 1, 1, 3));
             }
         }
         return features;

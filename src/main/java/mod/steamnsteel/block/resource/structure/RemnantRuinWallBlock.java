@@ -16,15 +16,9 @@
 
 package mod.steamnsteel.block.resource.structure;
 
-import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
-import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
 
 public class RemnantRuinWallBlock extends SteamNSteelBlock
 {
@@ -37,6 +31,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
         setUnlocalizedName(NAME);
     }
 
+    /*
     @Override
     public void registerBlockIcons(IIconRegister iconRegister)
     {
@@ -46,6 +41,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
         textureManager.registerIcons(iconRegister);
         blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinWall/Wall_Default");
     }
+    */
 
     /*@Override
     public boolean onBlockActivated(World world, BlockPos pos EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
@@ -58,10 +54,11 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
         return super.onBlockActivated(world, pos, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
     }*/
 
-    long[] durations = new long[10];
+    /*long[] durations = new long[10];
     int index = 0;
     int sidesCalculated = 0;
     long currentMillis;
+
     @Override
     public IIcon getIcon(IBlockAccess blockAccess, BlockPos pos, int side)
     {
@@ -71,10 +68,10 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
             currentMillis = startTime;
             sidesCalculated = 0;
         }
-        final IIcon iconForSide = textureManager.getIconForSide(blockAccess, WorldBlockCoord.of(pos), side);
+        final IIcon iconForSide = textureManager.getIconForSide(blockAccess, pos, side);
         long endTime = System.currentTimeMillis();
         sidesCalculated++;
-        /*long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+        long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
         durations[index++] = duration;
         if (index == durations.length) {
             index = 0;
@@ -85,9 +82,9 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
             }
             //Logger.info("ProceduralWall took %f milliseconds", (sum / (float)durations.length));
             durations = new long[100];
-        }*/
+        }
 
 
         return iconForSide;
-    }
+    }*/
 }

@@ -2,6 +2,7 @@ package mod.steamnsteel.texturing.api.traiticonregistry;
 
 import mod.steamnsteel.TheMod;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.IIcon;
 import java.util.HashMap;
 
@@ -12,8 +13,8 @@ public class TraitIconRegistry implements IIconDefinitionStart, ITraitSetOrNewIc
 {
     private final IIconRegister iconRegister;
 
-    private IIcon currentIcon = null;
-    private HashMap<Long, IIcon> icons = new HashMap<Long, IIcon>();
+    private TextureAtlasSprite currentIcon = null;
+    private HashMap<Long, TextureAtlasSprite> icons = new HashMap<Long, IIcon>();
 
     public TraitIconRegistry(IIconRegister iconRegister)
     {
@@ -62,7 +63,7 @@ public class TraitIconRegistry implements IIconDefinitionStart, ITraitSetOrNewIc
      * @param traitSet The Trait Set to match
      * @return The appropriate IIcon.
      */
-    public IIcon getTextureFor(long traitSet)
+    public TextureAtlasSprite getTextureFor(long traitSet)
     {
         return icons.get(traitSet);
     }
