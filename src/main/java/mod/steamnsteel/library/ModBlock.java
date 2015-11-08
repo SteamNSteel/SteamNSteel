@@ -18,7 +18,9 @@ package mod.steamnsteel.library;
 
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.block.machine.*;
+import mod.steamnsteel.block.resource.structure.RemnantRuinFloorBlock;
 import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
+import mod.steamnsteel.block.resource.structure.RemnantRuinWallBlock;
 import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
@@ -67,9 +69,10 @@ public final class ModBlock
     public static final SteamNSteelOreBlock oreTin = new TinOre();
     public static final SteamNSteelOreBlock oreZinc = new ZincOre();
 
-    /*
+
     public static final SteamNSteelBlock remnantRuinFloor = new RemnantRuinFloorBlock();
     public static final SteamNSteelBlock remnantRuinWall = new RemnantRuinWallBlock();
+    /*
     public static final SteamNSteelPaneBlock remnantRuinIronBars = new RemnantRuinIronBarsBlock();
     */
 
@@ -119,10 +122,10 @@ public final class ModBlock
         registerBlockAndOre(blockZinc, SteamNSteelStorageBlock.ZINC_BLOCK);
 
         GameRegistry.registerBlock(remnantRuinPillar, RemnantRuinPillarBlock.NAME);
-/*
+
         GameRegistry.registerBlock(remnantRuinFloor, RemnantRuinFloorBlock.NAME);
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
-        GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlock.NAME);
+/*        GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlock.NAME);
 */
 
         //Compat

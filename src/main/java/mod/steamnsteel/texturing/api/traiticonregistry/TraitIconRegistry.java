@@ -1,9 +1,9 @@
 package mod.steamnsteel.texturing.api.traiticonregistry;
 
 import mod.steamnsteel.TheMod;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.ResourceLocation;
 import java.util.HashMap;
 
 /**
@@ -11,12 +11,12 @@ import java.util.HashMap;
  */
 public class TraitIconRegistry implements IIconDefinitionStart, ITraitSetOrNewIconDefinition, IAdditionalTraitSetOrNewIconDefinition
 {
-    private final IIconRegister iconRegister;
+    private final TextureMap iconRegister;
 
     private TextureAtlasSprite currentIcon = null;
-    private HashMap<Long, TextureAtlasSprite> icons = new HashMap<Long, IIcon>();
+    private HashMap<Long, TextureAtlasSprite> icons = new HashMap<Long, TextureAtlasSprite>();
 
-    public TraitIconRegistry(IIconRegister iconRegister)
+    public TraitIconRegistry(TextureMap iconRegister)
     {
         this.iconRegister = iconRegister;
     }
@@ -24,12 +24,12 @@ public class TraitIconRegistry implements IIconDefinitionStart, ITraitSetOrNewIc
     /**
      * Starts a new set of Trait Sets for an Icon
      *
-     * @param iconName The name of the icon
+     * @param icon The name of the icon
      * @return an interface to add Trait Sets, or create a new Icon Definition
      */
-    public ITraitSetOrNewIconDefinition useIconNamed(String iconName)
+    public ITraitSetOrNewIconDefinition useIconNamed(ResourceLocation icon)
     {
-        currentIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + iconName);
+        currentIcon = iconRegister.registerSprite(icon);
         return this;
     }
 

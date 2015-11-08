@@ -5,14 +5,12 @@ import mod.steamnsteel.texturing.api.traiticonregistry.TraitIconRegistry;
 import mod.steamnsteel.texturing.api.traitregistry.FeatureRegistry;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import mod.steamnsteel.utility.log.Logger;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 
 public abstract class ProceduralConnectedTexture
 {
@@ -60,7 +58,7 @@ public abstract class ProceduralConnectedTexture
         registerFeatures();
     }
 
-    public void registerIcons(IIconRegister iconRegister)
+    public void registerIcons(TextureMap iconRegister)
     {
         registerFeatures();
 

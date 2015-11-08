@@ -17,18 +17,36 @@
 package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
-import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
+import mod.steamnsteel.library.ModProperties;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockPos.MutableBlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class RemnantRuinWallBlock extends SteamNSteelBlock
 {
     public static final String NAME = "remnantRuinWall";
-    ProceduralConnectedTexture textureManager;
+    //ProceduralConnectedTexture textureManager;
 
     public RemnantRuinWallBlock()
     {
         super(Material.rock);
         setUnlocalizedName(NAME);
+    }
+
+    @Override
+    protected BlockState createBlockState()
+    {
+        return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[] {
+                ModProperties.PROPERTY_BLOCK_POS,
+                ModProperties.PROPERTY_BLOCK_ACCESS
+        });
     }
 
     /*
@@ -87,4 +105,22 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
 
         return iconForSide;
     }*/
+
+    @Override
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos)
+    {
+        if (state instanceof IExtendedBlockState) {
+            BlockPos blockPos = pos;
+            if (blockPos instanceof MutableBlockPos) {
+                blockPos = new BlockPos(pos);
+            }
+
+            return ((IExtendedBlockState) state)
+                    .withProperty(ModProperties.PROPERTY_BLOCK_POS, blockPos)
+                    .withProperty(ModProperties.PROPERTY_BLOCK_ACCESS, world);
+        }
+
+        //Shouldn't ever happen, but just in case.
+        return state;
+    }
 }
