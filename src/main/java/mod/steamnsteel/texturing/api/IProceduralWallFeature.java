@@ -18,12 +18,12 @@ public interface IProceduralWallFeature
     long getFeatureTraitId();
 
     /**
-     * gets the traits present at the location of the IconRequest
+     * gets the traits present at the location of the SpriteRequest
      *
      * @param request the request to examine
      * @return the traits present at the specified location
      */
-    long getTraits(IconRequest request);
+    long getTraits(SpriteRequest request);
 
     /**
      * @param featureTraitId The Id of this feature.
@@ -53,7 +53,7 @@ public interface IProceduralWallFeature
      * @param request the request containing the location
      * @return true if the feature can exist at the location
      */
-    boolean isFeatureValid(IconRequest request);
+    boolean isFeatureValid(SpriteRequest request);
 
     /**
      * returns a list of traits that this feature is incompatible with. These features will be removed from the Trait Set

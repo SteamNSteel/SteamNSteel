@@ -22,7 +22,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
         FEATURE_EDGE_LEFT_AND_RIGHT = ProceduralConnectedTexture.FEATURE_EDGE_LEFT | ProceduralConnectedTexture.FEATURE_EDGE_RIGHT;
     }
 
-    public boolean isFeatureValid(IconRequest request)
+    public boolean isFeatureValid(SpriteRequest request)
     {
         if (!ruinWallTexture.isBlockPartOfWallAndUnobstructed(request))
         {
@@ -101,7 +101,7 @@ public class PlateRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getTraits(IconRequest request)
+    public long getTraits(SpriteRequest request)
     {
         long subProperties = 0;
         boolean isLeftBlockValid = ruinWallTexture.isFeatureAtOffsetPartOfWallUnobstructedAndOfType(request, getLayer(), this, true, TextureDirection.LEFT);

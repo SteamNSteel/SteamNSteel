@@ -52,7 +52,7 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
             final int index = zPos * 3 + xPos;
             return floorIcons[index];
         } else {
-            final TextureAtlasSprite iconForSide = textureManager.getIconForSide(world, pos, side);
+            final TextureAtlasSprite iconForSide = textureManager.getSpriteForSide(world, pos, side);
             return iconForSide;
         }
     }*/
@@ -81,7 +81,7 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
         }
 
         textureManager = new RemnantRuinFloorSideTexture();
-        textureManager.registerIcons(iconRegister);
+        textureManager.registerSprites(iconRegister);
 
         blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinFloorSide/RemnantRuinFloorSideSingle");
     }

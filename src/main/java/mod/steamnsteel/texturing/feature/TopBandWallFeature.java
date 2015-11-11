@@ -22,7 +22,7 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(IconRequest request)
+    public boolean isFeatureValid(SpriteRequest request)
     {
         return !texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.ABOVE);
     }
@@ -36,7 +36,7 @@ public class TopBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getTraits(IconRequest request)
+    public long getTraits(SpriteRequest request)
     {
         long properties = 0;
         if (texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.LEFT, TextureDirection.ABOVE))

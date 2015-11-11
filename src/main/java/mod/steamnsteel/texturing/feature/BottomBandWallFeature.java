@@ -21,7 +21,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(IconRequest request)
+    public boolean isFeatureValid(SpriteRequest request)
     {
         return !texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.BELOW);
     }
@@ -35,7 +35,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getTraits(IconRequest request)
+    public long getTraits(SpriteRequest request)
     {
         long properties = 0;
         if (texture.isBlockPartOfWallAndUnobstructed(request, TextureDirection.LEFT, TextureDirection.BELOW))
@@ -69,7 +69,7 @@ public class BottomBandWallFeature extends ProceduralWallFeatureBase
 
     private int getCrownSplitOpportunity(BlockPos worldBlockCoord)
     {
-        //I duplicated this because it's currently inconvenient to create a new IconRequest for the offset.
+        //I duplicated this because it's currently inconvenient to create a new SpriteRequest for the offset.
         int x = worldBlockCoord.getX();
         int y = worldBlockCoord.getY();
         int z = worldBlockCoord.getZ();

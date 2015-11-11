@@ -54,13 +54,13 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     }
 
     /**
-     * gets the traits present at the location of the IconRequest
+     * gets the traits present at the location of the SpriteRequest
      *
      * @param request the request to examine
      * @return the traits present at the specified location
      */
     @Override
-    public long getTraits(IconRequest request)
+    public long getTraits(SpriteRequest request)
     {
         return 0;
     }

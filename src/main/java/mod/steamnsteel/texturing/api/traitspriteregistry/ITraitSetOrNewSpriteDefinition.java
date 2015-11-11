@@ -1,9 +1,9 @@
-package mod.steamnsteel.texturing.api.traiticonregistry;
+package mod.steamnsteel.texturing.api.traitspriteregistry;
 
 /**
  * Applies a Trait Set to an Icon
  */
-public interface ITraitSetOrNewIconDefinition extends IIconDefinitionStart
+public interface ITraitSetOrNewSpriteDefinition extends ISpriteDefinitionStart
 {
     /**
      * Applies a Trait Set to an Icon
@@ -11,5 +11,5 @@ public interface ITraitSetOrNewIconDefinition extends IIconDefinitionStart
      * @param traitSet the Trait Set to apply to an Icon
      * @return an interface that will allow you to specify additional Trait Sets, or create a new Icon Definition.
      */
-    IAdditionalTraitSetOrNewIconDefinition forTraitSet(long traitSet);
+    IAdditionalTraitSetOrNewSpriteDefinition forTraitSet(long traitSet);
 }

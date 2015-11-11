@@ -56,7 +56,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
         //blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
 
         textureManager = new RemnantRuinWallTexture();
-        textureManager.registerIcons(iconRegister);
+        textureManager.registerSprites(iconRegister);
         blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinWall/Wall_Default");
     }
     */
@@ -86,7 +86,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
             currentMillis = startTime;
             sidesCalculated = 0;
         }
-        final IIcon iconForSide = textureManager.getIconForSide(blockAccess, pos, side);
+        final IIcon iconForSide = textureManager.getSpriteForSide(blockAccess, pos, side);
         long endTime = System.currentTimeMillis();
         sidesCalculated++;
         long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.

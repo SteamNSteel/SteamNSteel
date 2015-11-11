@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * The texture context is used to pass around many common properties required to calculate a feature set.
  */
-public class IconRequest
+public class SpriteRequest
 {
     private EnumFacing orientation;
     private EnumFacing[] directions;
@@ -88,9 +88,9 @@ public class IconRequest
     private IBlockAccess blockAccess;
     private BlockPos worldBlockCoord;
 
-    private IconRequest() {}
+    private SpriteRequest() {}
 
-    public IconRequest(IBlockAccess blockAccess, BlockPos worldBlockCoord, EnumFacing side)
+    public SpriteRequest(IBlockAccess blockAccess, BlockPos worldBlockCoord, EnumFacing side)
     {
         this.blockAccess = blockAccess;
         this.worldBlockCoord = worldBlockCoord;
@@ -117,9 +117,9 @@ public class IconRequest
      * @param blockCoord the new coordinate to relate to
      * @return a new TextureContext for that location
      */
-    public IconRequest forLocation(BlockPos blockCoord)
+    public SpriteRequest forLocation(BlockPos blockCoord)
     {
-        IconRequest newContext = new IconRequest();
+        SpriteRequest newContext = new SpriteRequest();
         newContext.blockAccess = blockAccess;
         newContext.worldBlockCoord = blockCoord;
         newContext.orientation = orientation;

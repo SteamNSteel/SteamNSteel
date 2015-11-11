@@ -52,7 +52,7 @@ public enum PCTModelLoader implements ICustomModelLoader
     public void onPreTextureStitch(TextureStitchEvent.Pre event) {
         for (final ProceduralConnectedTexture proceduralConnectedTexture : textures.values())
         {
-            proceduralConnectedTexture.registerIcons(event.map);
+            proceduralConnectedTexture.registerSprites(event.map);
         }
     }
 

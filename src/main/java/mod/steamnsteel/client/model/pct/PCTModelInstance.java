@@ -60,7 +60,7 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
             final Block block = blockAccess.getBlockState(blockPos).getBlock();
             if (block.shouldSideBeRendered(blockAccess, blockPos.offset(side), side))
             {
-                final TextureAtlasSprite sprite = proceduralConnectedTexture.getIconForSide(blockAccess, blockPos, side);
+                final TextureAtlasSprite sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, blockPos, side);
                 final String iconName = sprite.getIconName();
                 final String key = side.toString().toLowerCase();
                 textures.put(key, iconName);

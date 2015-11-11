@@ -26,7 +26,7 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(IconRequest request)
+    public boolean isFeatureValid(SpriteRequest request)
     {
         if (!texture.isBlockPartOfWallAndUnobstructed(request))
         {
@@ -123,7 +123,7 @@ public class VerticalMetalTearRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getTraits(IconRequest request)
+    public long getTraits(SpriteRequest request)
     {
         long subProperties = 0;
 

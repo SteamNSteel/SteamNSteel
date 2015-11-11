@@ -144,7 +144,7 @@ public class FeatureRegistry implements IFeatureRegistry
     }
 
     /**
-     * Calculates the final Trait Set for a given IconRequest. Part of the Trait Set is already calculated at this
+     * Calculates the final Trait Set for a given SpriteRequest. Part of the Trait Set is already calculated at this
      * point, but it can be overriden by features.
      *
      * @param request           The Icon Request
@@ -152,7 +152,7 @@ public class FeatureRegistry implements IFeatureRegistry
      *                          calculated
      * @return the Trait Set.
      */
-    public long getTraitSet(IconRequest request, long currentTraits)
+    public long getTraitSet(SpriteRequest request, long currentTraits)
     {
         Map<IProceduralWallFeature, Long> featuresToApply = new Hashtable<IProceduralWallFeature, Long>() {};
 

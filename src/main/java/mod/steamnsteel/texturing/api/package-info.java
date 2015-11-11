@@ -9,7 +9,7 @@ package mod.steamnsteel.texturing.api;
  *      The texture applied to the side of a block.
  * Feature:
  *      An item of interest applied "on top" of a texture.
- * IconRequest: (TextureContext)
+ * SpriteRequest: (TextureContext)
  *      A request object that represents the location of the block, the side, and the
  *          TextureDirections relative to that side. It also tracks the object by which
  *          the world around can be examined.
@@ -40,12 +40,12 @@ package mod.steamnsteel.texturing.api;
  *
  * <h1>How it works</h1>
  * The process starts with the Block.registerBlockIcons(IIconRegister iconRegister) method. When this method is called,
- * an instance of your ProceduralConnectedTexture should be instantiated, and you should call .registerIcons(iconRegister)
+ * an instance of your ProceduralConnectedTexture should be instantiated, and you should call .registerSprites(iconRegister)
  * on it to configure the texture manager. This means that it will participate well with texture packs and aid in
  * debugging any issues.
  *
  * When minecraft calls Block.getIcon(IBlockAccess blockAccess, BlockPos pos int side), the call should be
- * proxied to your texture using texture.getIconForSide(blockAccess, WorldBlockCoord.of(pos), side).
+ * proxied to your texture using texture.getSpriteForSide(blockAccess, WorldBlockCoord.of(pos), side).
  *
  * Inside of that method, we start by calculating some initial traits, TOP, BOTTOM, LEFT and RIGHT which is done by
  * checking the blocks in the appropriate directions. The traits are set if the block is not compatible with the current
@@ -95,7 +95,7 @@ package mod.steamnsteel.texturing.api;
  * <h1>Creating a Texture</h1>
  * Textures start by implementing a ProceduralWallTexture and implementing the following methods:
  *
- * <h2>boolean isCompatibleBlock(IconRequest request, Block block)</h2>
+ * <h2>boolean isCompatibleBlock(SpriteRequest request, Block block)</h2>
  * this method should return true for every type of block you wish to participate in the connected texturing.
  *
  * <h2>void registerFeatures(IFeatureRegistry features)</h2>
@@ -105,11 +105,11 @@ package mod.steamnsteel.texturing.api;
  * IFeatureRegistry.
  * Finally, register any additional traits you wish to use.
  *
- * <h2>void registerIcons(IIconDefinitionStart textures)</h2>
+ * <h2>void registerSprites(ISpriteDefinitionStart textures)</h2>
  * This is where you assign TraitSets to Icons. TraitSets are defined as a series of 'Or'd traitIds together. A simple
  * assignment of a texture to a TraitSet looks like this:
  *      final long plateTraitId = featurePlate.getFeatureTraitId();
- *      textures.useIconNamed("remnantRuinWall")
+ *      textures.useSpriteNamed("remnantRuinWall")
  *              .forTraitSet(DEFAULT)
  *              .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM)
  * This particular example uses the remnantRuinWall texture for the default texture, as well as a feature with the
@@ -124,12 +124,12 @@ package mod.steamnsteel.texturing.api;
  * is going to be part of a layer that has randomization enabled, you should limit your randomization in the Y axis to
  * 16 as well.
  *
- * <h2>long getTraits(IconRequest request)</h2>
+ * <h2>long getTraits(SpriteRequest request)</h2>
  * This method should return traits 'Or'd together that describe the feature at that location. If other traits have
  * been specified, such as the edges of a plate, then if a block has the plate feature, but the block to the left does
  * not, getTraits might return a trait that represents an edge on the left hand side of the plate.
  *
- * <h2>boolean isFeatureValid(IconRequest request)</h2>
+ * <h2>boolean isFeatureValid(SpriteRequest request)</h2>
  * This method is called to verify if a feature can be used at a location. It is possible that a feature should exist
  * at a point, but the blocks surrounding it may prevent it from being usable. For example, a 2x2 texture on a wall that
  * is 1x2.
@@ -144,15 +144,15 @@ package mod.steamnsteel.texturing.api;
  * parameter list of TextureDirections, which allows you to apply multiple transformations against the request location
  * when calculating offsets.
  *
- * <h2>isFeatureAtOffsetOfType(IconRequest request, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... direction)</h2>
+ * <h2>isFeatureAtOffsetOfType(SpriteRequest request, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... direction)</h2>
  * This method will verify that the block at an offset from the request location has a feature available on the layer specified of the specified type.
  * If checkValidity is true, then the feature will also be checked to see if it is acutally valid at that offset.
  *
- * <h2>boolean isBlockPartOfWallAndUnobstructed(IconRequest request, TextureDirection... direction)</h2>
+ * <h2>boolean isBlockPartOfWallAndUnobstructed(SpriteRequest request, TextureDirection... direction)</h2>
  * This method will verify that the block at an offset from the request location is a block that is compatible with the
  * wall, and is not being obstructed by a block does not pass ProceduralConnectedTexture.canBlockObscure()
  *
- * <h2>isFeatureAtOffsetPartOfWallUnobstructedAndOfType(IconRequest request, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... offsets)</h2>
+ * <h2>isFeatureAtOffsetPartOfWallUnobstructedAndOfType(SpriteRequest request, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... offsets)</h2>
  * This method combines the above two methods into a single call.
  *
  */

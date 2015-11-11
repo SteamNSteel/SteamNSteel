@@ -1,7 +1,7 @@
 package mod.steamnsteel.texturing.api;
 
-import mod.steamnsteel.texturing.api.traiticonregistry.IIconDefinitionStart;
-import mod.steamnsteel.texturing.api.traiticonregistry.TraitIconRegistry;
+import mod.steamnsteel.texturing.api.traitspriteregistry.ISpriteDefinitionStart;
+import mod.steamnsteel.texturing.api.traitspriteregistry.TraitSpriteRegistry;
 import mod.steamnsteel.texturing.api.traitregistry.FeatureRegistry;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import mod.steamnsteel.utility.log.Logger;
@@ -51,19 +51,19 @@ public abstract class ProceduralConnectedTexture
 
     private FeatureRegistry featureRegistry;
 
-    private TraitIconRegistry textures;
+    private TraitSpriteRegistry textures;
 
     protected ProceduralConnectedTexture()
     {
         registerFeatures();
     }
 
-    public void registerIcons(TextureMap iconRegister)
+    public void registerSprites(TextureMap textureMap)
     {
         registerFeatures();
 
-        textures = new TraitIconRegistry(iconRegister);
-        registerIcons(textures);
+        textures = new TraitSpriteRegistry(textureMap);
+        registerSprites(textures);
     }
 
     private void registerFeatures()
@@ -104,7 +104,7 @@ public abstract class ProceduralConnectedTexture
      *
      * @param textures A fluent interface to register textures.
      */
-    protected abstract void registerIcons(IIconDefinitionStart textures);
+    protected abstract void registerSprites(ISpriteDefinitionStart textures);
 
     /**
      * Calculates the IIcon to use to represent the side of a block
@@ -114,21 +114,21 @@ public abstract class ProceduralConnectedTexture
      * @param side            the side of the block to describe
      * @return the icon to use when rendering the side of the block.
      */
-    public TextureAtlasSprite getIconForSide(IBlockAccess blockAccess, BlockPos worldBlockCoord, EnumFacing side)
+    public TextureAtlasSprite getSpriteForSide(IBlockAccess blockAccess, BlockPos worldBlockCoord, EnumFacing side)
     {
-        IconRequest request = new IconRequest(blockAccess, worldBlockCoord, side);
+        SpriteRequest request = new SpriteRequest(blockAccess, worldBlockCoord, side);
 
         long blockProperties = getTraitSetForSide(request);
 
-        TextureAtlasSprite icon = textures.getTextureFor(blockProperties);
+        TextureAtlasSprite sprite = textures.getTextureFor(blockProperties);
 
-        if (icon == null)
+        if (sprite == null)
         {
             String blockPropertiesDescription = featureRegistry.describeTraitSet(blockProperties);
 
             Logger.warning("Unknown texture: %d (%s) - %s @ (%s) - %d", blockProperties, Long.toBinaryString(blockProperties), blockPropertiesDescription, worldBlockCoord, side);
         }
-        return icon;
+        return sprite;
     }
 
     /**
@@ -137,7 +137,7 @@ public abstract class ProceduralConnectedTexture
      * @param request The Icon Request
      * @return the feature mask
      */
-    private long getTraitSetForSide(IconRequest request)
+    private long getTraitSetForSide(SpriteRequest request)
     {
         long initialTraits = 0;
         EnumFacing orientation = request.getOrientation();
@@ -183,7 +183,7 @@ public abstract class ProceduralConnectedTexture
      */
     public final String describeTextureAt(IBlockAccess blockAccess, BlockPos worldBlockCoord, EnumFacing side)
     {
-        IconRequest request = new IconRequest(blockAccess, worldBlockCoord, side);
+        SpriteRequest request = new SpriteRequest(blockAccess, worldBlockCoord, side);
 
         long blockProperties = getTraitSetForSide(request);
         return featureRegistry.describeTraitSet(blockProperties);
@@ -197,7 +197,7 @@ public abstract class ProceduralConnectedTexture
      * @param obscuringBlock the block that is beinc checked
      * @return true if the block is obscuring a texture.
      */
-    protected boolean canBlockObscure(IconRequest request, IBlockState obscuringBlock)
+    protected boolean canBlockObscure(SpriteRequest request, IBlockState obscuringBlock)
     {
         return isCompatibleBlock(request, obscuringBlock);
     }
@@ -209,7 +209,7 @@ public abstract class ProceduralConnectedTexture
      * @param direction The directions to apply
      * @return the world space coordinates after transformation
      */
-    private BlockPos getOffsetCoordinate(IconRequest request, TextureDirection[] direction)
+    private BlockPos getOffsetCoordinate(SpriteRequest request, TextureDirection[] direction)
     {
         BlockPos coord = request.getWorldBlockCoord();
         for (TextureDirection textureDirection : direction)
@@ -226,7 +226,7 @@ public abstract class ProceduralConnectedTexture
      * @param block   the block to check compatibility with
      * @return true if the block is considered compatible with this texture.
      */
-    protected abstract boolean isCompatibleBlock(IconRequest request, IBlockState block);
+    protected abstract boolean isCompatibleBlock(SpriteRequest request, IBlockState block);
 
     /**
      * gets a wall feature present on a given layer at a given location, or null if no feature found.
@@ -236,7 +236,7 @@ public abstract class ProceduralConnectedTexture
      * @param direction The offsets to the block that is being checked
      * @return The potential feature at a point.
      */
-    public IProceduralWallFeature getValidFeature(IconRequest request, Layer layer, TextureDirection... direction)
+    public IProceduralWallFeature getValidFeature(SpriteRequest request, Layer layer, TextureDirection... direction)
     {
         BlockPos coord = getOffsetCoordinate(request, direction);
         IProceduralWallFeature desiredFeature = featureRegistry.getFeatureAt(coord, layer);
@@ -262,12 +262,12 @@ public abstract class ProceduralConnectedTexture
      * @param offsets     A series of offsets to apply
      * @return true if the feature is valid at the requested location.
      */
-    public boolean isFeatureAtOffsetPartOfWallUnobstructedAndOfType(IconRequest request, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... offsets)
+    public boolean isFeatureAtOffsetPartOfWallUnobstructedAndOfType(SpriteRequest request, Layer layer, IProceduralWallFeature wallFeature, boolean checkValidity, TextureDirection... offsets)
     {
         return isBlockPartOfWallAndUnobstructed(request, offsets) && isFeatureAtOffsetOfType(request, layer, wallFeature, checkValidity, offsets);
     }
 
-    public boolean isFeatureAtOffsetOfType(IconRequest request, Layer layer, IProceduralWallFeature feature, boolean checkValidity, TextureDirection... offsets)
+    public boolean isFeatureAtOffsetOfType(SpriteRequest request, Layer layer, IProceduralWallFeature feature, boolean checkValidity, TextureDirection... offsets)
     {
         BlockPos coord = getOffsetCoordinate(request, offsets);
         final IProceduralWallFeature featureAtCoord = featureRegistry.getFeatureAt(coord, layer);
@@ -286,7 +286,7 @@ public abstract class ProceduralConnectedTexture
      * @param direction The directions to apply
      * @return true if the block is part of the wall and can be seen.
      */
-    public final boolean isBlockPartOfWallAndUnobstructed(IconRequest request, TextureDirection... direction)
+    public final boolean isBlockPartOfWallAndUnobstructed(SpriteRequest request, TextureDirection... direction)
     {
         BlockPos coord = getOffsetCoordinate(request, direction);
 

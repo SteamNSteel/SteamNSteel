@@ -1,6 +1,5 @@
-package mod.steamnsteel.texturing.api.traiticonregistry;
+package mod.steamnsteel.texturing.api.traitspriteregistry;
 
-import mod.steamnsteel.TheMod;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
@@ -9,27 +8,27 @@ import java.util.HashMap;
 /**
  * A Fluent Interface for registering IIcons for use in a procedural texture
  */
-public class TraitIconRegistry implements IIconDefinitionStart, ITraitSetOrNewIconDefinition, IAdditionalTraitSetOrNewIconDefinition
+public class TraitSpriteRegistry implements ISpriteDefinitionStart, ITraitSetOrNewSpriteDefinition, IAdditionalTraitSetOrNewSpriteDefinition
 {
-    private final TextureMap iconRegister;
+    private final TextureMap textureMap;
 
-    private TextureAtlasSprite currentIcon = null;
-    private HashMap<Long, TextureAtlasSprite> icons = new HashMap<Long, TextureAtlasSprite>();
+    private TextureAtlasSprite currentSprite = null;
+    private HashMap<Long, TextureAtlasSprite> sprites = new HashMap<Long, TextureAtlasSprite>();
 
-    public TraitIconRegistry(TextureMap iconRegister)
+    public TraitSpriteRegistry(TextureMap textureMap)
     {
-        this.iconRegister = iconRegister;
+        this.textureMap = textureMap;
     }
 
     /**
      * Starts a new set of Trait Sets for an Icon
      *
-     * @param icon The name of the icon
+     * @param spriteLocation The name of the icon
      * @return an interface to add Trait Sets, or create a new Icon Definition
      */
-    public ITraitSetOrNewIconDefinition useIconNamed(ResourceLocation icon)
+    public ITraitSetOrNewSpriteDefinition useSpriteNamed(ResourceLocation spriteLocation)
     {
-        currentIcon = iconRegister.registerSprite(icon);
+        currentSprite = textureMap.registerSprite(spriteLocation);
         return this;
     }
 
@@ -39,9 +38,9 @@ public class TraitIconRegistry implements IIconDefinitionStart, ITraitSetOrNewIc
      * @param traitSet the Trait Set to apply to an Icon
      * @return an interface that will allow you to specify additional Trait Sets, or create a new Icon Definition.
      */
-    public IAdditionalTraitSetOrNewIconDefinition forTraitSet(long traitSet)
+    public IAdditionalTraitSetOrNewSpriteDefinition forTraitSet(long traitSet)
     {
-        icons.put(traitSet, currentIcon);
+        sprites.put(traitSet, currentSprite);
         return this;
     }
 
@@ -52,7 +51,7 @@ public class TraitIconRegistry implements IIconDefinitionStart, ITraitSetOrNewIc
      * @return an interface that will allow you to specify additional Trait Sets, or create a new icon.
      */
     @Override
-    public IAdditionalTraitSetOrNewIconDefinition andTraitSet(long traitSet)
+    public IAdditionalTraitSetOrNewSpriteDefinition andTraitSet(long traitSet)
     {
         return forTraitSet(traitSet);
     }
@@ -65,6 +64,6 @@ public class TraitIconRegistry implements IIconDefinitionStart, ITraitSetOrNewIc
      */
     public TextureAtlasSprite getTextureFor(long traitSet)
     {
-        return icons.get(traitSet);
+        return sprites.get(traitSet);
     }
 }

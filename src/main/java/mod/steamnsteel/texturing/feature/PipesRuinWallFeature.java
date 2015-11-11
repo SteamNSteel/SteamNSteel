@@ -24,7 +24,7 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(IconRequest request)
+    public boolean isFeatureValid(SpriteRequest request)
     {
         if (!texture.isBlockPartOfWallAndUnobstructed(request))
         {
@@ -108,7 +108,7 @@ public class PipesRuinWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public long getTraits(IconRequest request)
+    public long getTraits(SpriteRequest request)
     {
         long subProperties = 0;
         IProceduralWallFeature aboveBlockFeature = texture.getValidFeature(request, getLayer(), TextureDirection.ABOVE);

@@ -24,7 +24,7 @@ public class OneByOneWallFeature extends ProceduralWallFeatureBase
     }
 
     @Override
-    public boolean isFeatureValid(IconRequest request)
+    public boolean isFeatureValid(SpriteRequest request)
     {
         if (!ruinWallTexture.isBlockPartOfWallAndUnobstructed(request))
         {
