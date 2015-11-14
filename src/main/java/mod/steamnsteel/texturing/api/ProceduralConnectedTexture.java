@@ -126,7 +126,7 @@ public abstract class ProceduralConnectedTexture
         {
             String blockPropertiesDescription = featureRegistry.describeTraitSet(blockProperties);
 
-            Logger.warning("Unknown texture: %d (%s) - %s @ (%s) - %d", blockProperties, Long.toBinaryString(blockProperties), blockPropertiesDescription, worldBlockCoord, side);
+            Logger.warning("Unknown texture: %d (%s) - %s @ (%s) - %s", blockProperties, Long.toBinaryString(blockProperties), blockPropertiesDescription, worldBlockCoord, side);
         }
         return sprite;
     }
