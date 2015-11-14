@@ -1,5 +1,6 @@
 package mod.steamnsteel.texturing.api;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.EnumFacing;
@@ -92,7 +93,8 @@ public class SpriteRequest
 
     public SpriteRequest(IBlockAccess blockAccess, BlockPos worldBlockCoord, EnumFacing side)
     {
-        this.blockAccess = blockAccess;
+//        this.blockAccess = blockAccess;
+        this.blockAccess = Minecraft.getMinecraft().theWorld;
         this.worldBlockCoord = worldBlockCoord;
         orientation = side;
         leftDirection = BlockSideRotation.forOrientation(TextureDirection.LEFT, orientation);
