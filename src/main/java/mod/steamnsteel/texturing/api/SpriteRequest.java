@@ -1,9 +1,15 @@
 package mod.steamnsteel.texturing.api;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RegionRenderCache;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import java.lang.reflect.Field;
 import java.util.Random;
 
 /**
@@ -91,10 +97,24 @@ public class SpriteRequest
 
     private SpriteRequest() {}
 
+    final static Field worldObjField;
+
+    static {
+        final String[] remappedFieldNames = ObfuscationReflectionHelper.remapFieldNames(ChunkCache.class.getName(), "worldObj", "field_72815_e");
+        worldObjField = ReflectionHelper.findField(ChunkCache.class, remappedFieldNames);
+    }
+
     public SpriteRequest(IBlockAccess blockAccess, BlockPos worldBlockCoord, EnumFacing side)
     {
-//        this.blockAccess = blockAccess;
-        this.blockAccess = Minecraft.getMinecraft().theWorld;
+        if (blockAccess instanceof ChunkCache) {
+            try {
+                blockAccess = (IBlockAccess)worldObjField.get(blockAccess);
+            } catch (IllegalAccessException e) {
+                throw new TexturingException("Unable to access worldObj on ChunkCache");
+            }
+        }
+        this.blockAccess = blockAccess;
+        //this.blockAccess = Minecraft.getMinecraft().theWorld;
         this.worldBlockCoord = worldBlockCoord;
         orientation = side;
         leftDirection = BlockSideRotation.forOrientation(TextureDirection.LEFT, orientation);
