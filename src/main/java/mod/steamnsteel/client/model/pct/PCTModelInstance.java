@@ -67,10 +67,10 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
                 TextureAtlasSprite sprite = null;
                 try
                 {
-                    sprite = proceduralConnectedTexture.getIconForSide(blockAccess, blockPos, side);
+                    sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, blockPos, side);
                 } catch (Exception e) {
                     Logger.info("blockPos: %s, side: %s", blockPos, side);
-                    sprite = proceduralConnectedTexture.getIconForSide(blockAccess, blockPos, side);
+                    sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, blockPos, side);
                 }
                 if (sprite != null)
                 {
