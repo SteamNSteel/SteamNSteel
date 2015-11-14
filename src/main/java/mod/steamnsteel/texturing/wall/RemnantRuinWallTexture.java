@@ -100,7 +100,10 @@ public class RemnantRuinWallTexture extends ProceduralConnectedTexture
                 .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM)
                 .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | RIGHT)
                 .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT)
-                .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT | RIGHT);
+                .andTraitSet(pipesTraitId | FEATURE_EDGE_TOP | FEATURE_EDGE_BOTTOM | LEFT | RIGHT)
+                .andTraitSet(longPipeTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_RIGHT | plateTraitId)
+                .andTraitSet(longPipeTraitId | FEATURE_EDGE_LEFT | FEATURE_EDGE_RIGHT);
+
 
         textures.useSpriteNamed(makeResourceLocation("remnantRuinWall/Wall_DD1_PipeA"))
                 .forTraitSet(pipesTraitId | FEATURE_EDGE_TOP)
