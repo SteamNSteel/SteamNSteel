@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.library.ModProperties;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
+import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -58,16 +59,28 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
         for (final EnumFacing side : EnumFacing.VALUES)
         {
             final Block block = blockAccess.getBlockState(blockPos).getBlock();
+            String texture = "missingno";
+            final String key = side.toString().toLowerCase();
             if (block.shouldSideBeRendered(blockAccess, blockPos.offset(side), side))
             {
-                final TextureAtlasSprite sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, blockPos, side);
-                final String iconName = sprite.getIconName();
-                final String key = side.toString().toLowerCase();
-                textures.put(key, iconName);
-            } else {
-                //Use transparent texture
-                textures.put(side.getName(), "missingno");
+
+                TextureAtlasSprite sprite = null;
+                try
+                {
+                    sprite = proceduralConnectedTexture.getIconForSide(blockAccess, blockPos, side);
+                } catch (Exception e) {
+                    Logger.info("blockPos: %s, side: %s", blockPos, side);
+                    sprite = proceduralConnectedTexture.getIconForSide(blockAccess, blockPos, side);
+                }
+                if (sprite != null)
+                {
+                    texture = sprite.getIconName();
+                } else{
+                    System.out.print("woof");
+
+                }
             }
+            textures.put(key, texture);
         }
 
         IModel newModel = baseModel;
