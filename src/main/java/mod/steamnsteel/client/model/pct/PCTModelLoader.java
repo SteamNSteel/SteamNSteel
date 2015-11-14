@@ -3,8 +3,13 @@ package mod.steamnsteel.client.model.pct;
 import com.google.common.collect.Maps;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
+import net.minecraft.client.renderer.BlockModelRenderer;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
@@ -58,5 +63,9 @@ public enum PCTModelLoader implements ICustomModelLoader
 
     public void registerTexture(String textureName, ProceduralConnectedTexture texture) {
         textures.put(textureName, texture);
+    }
+
+    public ProceduralConnectedTexture getTexture(String textureName) {
+        return textures.get(textureName);
     }
 }
