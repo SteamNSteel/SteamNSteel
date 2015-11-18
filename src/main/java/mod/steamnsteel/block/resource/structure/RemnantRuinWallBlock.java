@@ -69,7 +69,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote) {
-            String description = PCTModelLoader.instance.getTexture("ruinWall").describeTextureAt(worldIn, pos, side);
+            String description = PCTModelLoader.describeTextureAt(worldIn, pos, side);
             playerIn.addChatComponentMessage(new ChatComponentText(description));
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
