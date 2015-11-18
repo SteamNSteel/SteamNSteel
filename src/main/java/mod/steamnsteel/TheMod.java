@@ -19,6 +19,8 @@ package mod.steamnsteel;
 import com.google.common.base.Optional;
 import mod.steamnsteel.api.crafting.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
+import mod.steamnsteel.api.steamtransport.ISteamTransportRegistry;
+import mod.steamnsteel.api.SteamNSteelInitializedEvent;
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
@@ -32,6 +34,7 @@ import mod.steamnsteel.world.LoadSchematicFromResourceCommand;
 import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
@@ -98,7 +101,10 @@ public class TheMod
     @Mod.EventHandler
     public void onFMLPostInitialization(FMLPostInitializationEvent event)
     {
-        // TODO: Handle interaction with other mods, complete your setup based on this.
+        ISteamTransportRegistry steamTransportRegistry = null;
+        SteamNSteelInitializedEvent initializedEvent = new SteamNSteelInitializedEvent(steamTransportRegistry);
+
+        MinecraftForge.EVENT_BUS.post(initializedEvent);
     }
 
     @Mod.EventHandler
