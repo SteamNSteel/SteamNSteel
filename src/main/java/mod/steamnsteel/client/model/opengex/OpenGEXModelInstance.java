@@ -6,10 +6,8 @@ import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.client.model.opengex.ogex.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.*;
@@ -18,9 +16,15 @@ import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.vecmath.*;
-import java.util.*;
+import javax.vecmath.Matrix3f;
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+//@SuppressWarnings("deprecation") //Seriously, screw deprecated methods on interfaces. I *HATE* having to do this.
 public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockModel, ISmartItemModel, IPerspectiveAwareModel
 {
     private final OpenGEXModel model;
@@ -82,7 +86,7 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
                         throw new OpenGEXException("Attempting to generate a model for an unsupported OpenGL Mesh Type: " + type);
                     }
 
-                    final List<OgexTexture> textures = new ArrayList<OgexTexture>();
+                    final List<OgexTexture> textures = new ArrayList<>();
                     for (final OgexMaterial ogexMaterial : geometryNode.getMaterials())
                     {
                         textures.add(ogexMaterial.getTexture("diffuse"));
@@ -162,8 +166,9 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
                                 quadBuilder.setQuadOrientation(EnumFacing.getFacingFromVector(normal.x, normal.y, normal.z));
 
                                 TextureAtlasSprite sprite;
-                                if (this.textures == null || this.textures.isEmpty())
+                                if (this.textures.isEmpty()){
                                     sprite = this.textures.get("missingno");
+                                }
                                 else if (textures.get(0) == OpenGEXModel.white) sprite = ModelLoader.White.instance;
                                 else sprite = this.textures.get(textures.get(0).getTexture());
 
@@ -186,7 +191,7 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
         return quads;
     }
 
-    private final void putVertexData(UnpackedBakedQuad.Builder builder, Vector4f vertex, Vector3f faceNormal, Vector3f vertexNormal, float[] textureCoordinates, float[] color, TextureAtlasSprite sprite)
+    private void putVertexData(UnpackedBakedQuad.Builder builder, Vector4f vertex, Vector3f faceNormal, Vector3f vertexNormal, float[] textureCoordinates, float[] color, TextureAtlasSprite sprite)
     {
         // TODO handle everything not handled (texture transformations, bones, transformations, normals, e.t.c)
         for (int e = 0; e < format.getElementCount(); e++)
@@ -259,16 +264,14 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
     }
 
     @Override
-    public TextureAtlasSprite getTexture()
-    {
-        //Speak to fry once he figures out how he wants to define the particle texture and locate that in the map.
+    public TextureAtlasSprite getParticleTexture() {
         return textures.values().asList().get(0);
     }
 
     @Override
-    public ItemCameraTransforms getItemCameraTransforms()
+    public net.minecraft.client.renderer.block.model.ItemCameraTransforms getItemCameraTransforms()
     {
-        return ItemCameraTransforms.DEFAULT;
+        return net.minecraft.client.renderer.block.model.ItemCameraTransforms.DEFAULT;
     }
 
     @Override
@@ -278,13 +281,9 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
     }
 
     @Override
-    public Pair<IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType)
+    public Pair<? extends IFlexibleBakedModel, Matrix4f> handlePerspective(net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType cameraTransformType)
     {
-        if (state instanceof IPerspectiveState)
-        {
-            return Pair.of((IBakedModel) this, TRSRTransformation.blockCornerToCenter(((IPerspectiveState) state).forPerspective(cameraTransformType).apply(model)).getMatrix());
-        }
-        return Pair.of((IBakedModel) this, null);
+        return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, state, cameraTransformType);
     }
 
     @Override

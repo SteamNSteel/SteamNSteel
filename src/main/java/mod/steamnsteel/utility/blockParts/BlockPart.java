@@ -59,7 +59,8 @@ public class BlockPart
                 pos.getX() + boundingBox.minX, pos.getY() + boundingBox.minY, pos.getZ() + boundingBox.minZ,
                 pos.getX() + boundingBox.maxX, pos.getY()+ boundingBox.maxY, pos.getZ() + boundingBox.maxZ
         );
-        RenderGlobal.drawOutlinedBoundingBox(drawBoundingBox.expand(e, e, e).offset(-playerX, -playerY, -playerZ), -1);
+        //drawOutlinedBoundingBox
+        RenderGlobal.func_181561_a(drawBoundingBox.expand(e, e, e).offset(-playerX, -playerY, -playerZ));
     }
 
     public boolean isEnabledByDefault()

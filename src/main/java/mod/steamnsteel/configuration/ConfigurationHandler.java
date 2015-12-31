@@ -20,6 +20,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.utility.log.Logger;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -43,7 +44,7 @@ public enum ConfigurationHandler
     public static void init(File configFile)
     {
         INSTANCE.setConfig(configFile);
-        FMLCommonHandler.instance().bus().register(INSTANCE);
+        MinecraftForge.EVENT_BUS.register(INSTANCE);
     }
 
     public Configuration getConfig()

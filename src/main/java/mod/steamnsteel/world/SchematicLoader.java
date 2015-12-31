@@ -48,7 +48,7 @@ public class SchematicLoader
                     _logger.info("Activating command Block");
 
                     final GameRules gameRules = MinecraftServer.getServer().worldServers[0].getGameRules();
-                    Boolean commandBlockOutputSetting = gameRules.getGameRuleBooleanValue("commandBlockOutput");
+                    Boolean commandBlockOutputSetting = gameRules.getBoolean("commandBlockOutput");
                     gameRules.setOrCreateGameRule("commandBlockOutput", "false");
 
                     final World world = tileEntity.getWorld();
@@ -414,9 +414,11 @@ public class SchematicLoader
             Set<String> names = mapping.getKeySet();
             for (String name : names)
             {
-                if (GameData.getBlockRegistry().containsKey(name))
+                ResourceLocation resourceLocation = new ResourceLocation(name);
+
+                if (GameData.getBlockRegistry().containsKey(resourceLocation))
                 {
-                    final short id1 = (short) GameData.getBlockRegistry().getId(name);
+                    final short id1 = (short) GameData.getBlockRegistry().getId(resourceLocation);
                     oldToNew.put(mapping.getShort(name), id1);
                 } else
                 {
@@ -571,11 +573,12 @@ public class SchematicLoader
             int metadata = this.metadata[index];
             final short blockId = this.blocks[index];
 
-            if (!BLOCK_REGISTRY.containsKey(blockId))
+            Block block = BLOCK_REGISTRY.getObjectById(blockId);
+            if (block == null)
             {
                 return null;
             }
-            return BLOCK_REGISTRY.getObjectById(blockId).getStateFromMeta(metadata);
+            return block.getStateFromMeta(metadata);
         }
 
         public boolean isAirBlock(BlockPos pos)

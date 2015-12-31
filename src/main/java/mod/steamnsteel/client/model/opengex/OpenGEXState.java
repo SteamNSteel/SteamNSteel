@@ -1,5 +1,6 @@
 package mod.steamnsteel.client.model.opengex;
 
+import com.google.common.base.Optional;
 import mod.steamnsteel.client.model.opengex.ogex.OgexAnimation;
 import net.minecraftforge.client.model.IModelPart;
 import net.minecraftforge.client.model.IModelState;
@@ -21,9 +22,9 @@ public class OpenGEXState implements IModelState {
     }
 
     @Override
-    public TRSRTransformation apply(IModelPart part) {
+    public Optional<TRSRTransformation> apply(Optional<? extends IModelPart> part) {
 
-        return null;
+        return Optional.absent();
     }
 
     public OgexAnimation getAnimation()

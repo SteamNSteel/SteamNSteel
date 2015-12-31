@@ -1,5 +1,14 @@
 import org.gradle.plugins.ide.idea.model.*
 
+// define the properties file
+ext.configFile = file "build.properties"
+configFile.withReader {
+    // read config.  it shall from now on be referenced as simply config or as project.config
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
 // For those who want the bleeding edge
 buildscript {
     repositories {
@@ -10,7 +19,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -20,18 +29,10 @@ apply plugin: 'net.minecraftforge.gradle.forge'
     id "net.minecraftforge.gradle.forge" version "2.0.1"
 }*/
 
-// define the properties file
-ext.configFile = file "build.properties"
-configFile.withReader {
-    // read config.  it shall from now on be referenced as simply config or as project.config
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
-}
-
 version = config.mod_version
 group = config.group_name
 archivesBaseName = "[${config.minecraft_version}]${config.mod_id}"
+
 /*def commonManifest = {
     attributes 'FMLAT': 'steamnsteel_at.cfg'
 }*/
@@ -45,7 +46,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20151025"
+    mappings = "snapshot_20151221"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     replace '@MOD_VERSION@', version
@@ -81,8 +82,8 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    provided "codechicken:CodeChickenCore:${config.minecraft_version}-${config.codechicken_core_version}:dev"
-    provided "codechicken:NotEnoughItems:${config.minecraft_version}-${config.codechicken_nei_version}:dev"
+    provided "codechicken:CodeChickenCore:${config.codechicken_core_version}:dev"
+    provided "codechicken:NotEnoughItems:${config.codechicken_nei_version}:dev"
 }
 
 processResources
@@ -138,12 +139,16 @@ idea {
 }
 
 task copyChicken(type: Copy, dependsOn: "extractUserdev") {
+
     from { configurations.compile }
     include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
     exclude "**/CodeChickenLib*" // because CCC downloads it anyways.. -_-
-    into file("./run/mods") // paralell to the assets dir
+    into file("./run/mods") // parallel to the assets dir
     //mustRunAfter "deobfBinJar"
     //mustRunAfter "repackMinecraft"
 }
+
 tasks.setupDevWorkspace.dependsOn copyChicken
 tasks.setupDecompWorkspace.dependsOn copyChicken
+
+copyChicken.onlyIf { config.include_codechicken }

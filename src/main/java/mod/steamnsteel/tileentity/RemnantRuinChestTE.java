@@ -68,9 +68,8 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, IUp
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slotIndex)
-    {
-        return inventory.getStackOnClosing(slotIndex);
+    public ItemStack removeStackFromSlot(int index) {
+        return inventory.getStackOnClosing(index);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, IUp
     }
 
     @Override
-    public String getCommandSenderName()
+    public String getName()
     {
         return containerName(RemnantRuinChestBlock.NAME);
     }
@@ -88,12 +87,12 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, IUp
     @Override
     public boolean hasCustomName()
     {
-        return getCommandSenderName().length() > 0;
+        return getName().length() > 0;
     }
 
     @Override
     public IChatComponent getDisplayName() {
-        return new ChatComponentText(getCommandSenderName());
+        return new ChatComponentText(getName());
     }
 
     @Override
