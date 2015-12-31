@@ -54,7 +54,6 @@ public enum RetroGenHandler
         if (INSTANCE.retroGens.isEmpty())
             return;
 
-        FMLCommonHandler.instance().bus().register(INSTANCE);
         MinecraftForge.EVENT_BUS.register(INSTANCE);
     }
 

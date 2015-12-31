@@ -222,7 +222,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, IUpdateP
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slotIndex)
+    public ItemStack removeStackFromSlot(int slotIndex)
     {
         return getTargetInventory().getStackOnClosing(slotIndex);
     }
@@ -234,7 +234,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, IUpdateP
     }
 
     @Override
-    public String getCommandSenderName() {
+    public String getName() {
         return containerName(CupolaBlock.NAME);
     }
 
@@ -245,7 +245,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, IUpdateP
     }
 
     public IChatComponent getDisplayName() {
-        return new ChatComponentText(getCommandSenderName());
+        return new ChatComponentText(getName());
     }
 
     @Override

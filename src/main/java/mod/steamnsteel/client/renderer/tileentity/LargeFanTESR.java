@@ -3,6 +3,7 @@ package mod.steamnsteel.client.renderer.tileentity;
 import mod.steamnsteel.block.machine.FanLargeBlock;
 import mod.steamnsteel.client.model.opengex.OpenGEXAnimationFrameProperty;
 import mod.steamnsteel.client.model.opengex.OpenGEXState;
+import mod.steamnsteel.tileentity.LargeFanTE;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -16,17 +17,18 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ISmartBlockModel;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Created by codew on 5/11/2015.
  */
-public class LargeFanTESR extends TileEntitySpecialRenderer
+public class LargeFanTESR extends TileEntitySpecialRenderer<LargeFanTE>
 {
 
 
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)
+    public void renderTileEntityAt(LargeFanTE te, double x, double y, double z, float partialTicks, int destroyStage)
     {
         final BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
         IBlockState blockState = te.getWorld().getBlockState(te.getPos());
@@ -54,10 +56,9 @@ public class LargeFanTESR extends TileEntitySpecialRenderer
             GlStateManager.shadeModel(7424);
         }
 
-        worldRenderer.startDrawingQuads();
-        worldRenderer.setVertexFormat(DefaultVertexFormats.BLOCK);
+        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         worldRenderer.setTranslation(x - blockpos.getX(), y - blockpos.getY(), z - blockpos.getZ());
-        worldRenderer.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+        worldRenderer.color(255, 255, 255, 255);
 
         if (model instanceof ISmartBlockModel) {
             model = ((ISmartBlockModel) model).handleBlockState(blockState);

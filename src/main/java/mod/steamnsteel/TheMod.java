@@ -32,6 +32,7 @@ import mod.steamnsteel.world.LoadSchematicFromResourceCommand;
 import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
@@ -86,7 +87,7 @@ public class TheMod
     public void onFMLInitialization(FMLInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, GuiHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(ConfigurationHandler.INSTANCE);
 
         Recipes.init();
         WorldGen.init();
