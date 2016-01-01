@@ -17,15 +17,15 @@
 package mod.steamnsteel.block;
 
 import com.google.common.base.Objects;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import java.util.Random;
 
@@ -46,29 +46,16 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
     }
 
     @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-
-    @Override
-    public int getRenderType()
-    {
-        // Disable normal block rendering.
-        return -1;
-    }
-
-    @Override
     public boolean isOpaqueCube()
     {
         return false;
     }
 
     @Override
-    public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParameter)
+    public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState blockState, int eventId, int eventParameter)
     {
-        super.onBlockEventReceived(world, x, y, z, eventId, eventParameter);
-        final TileEntity te = world.getTileEntity(x, y, z);
+        super.onBlockEventReceived(world, pos, blockState, eventId, eventParameter);
+        final TileEntity te = world.getTileEntity(pos);
         return te != null && te.receiveClientEvent(eventId, eventParameter);
     }
 
@@ -79,22 +66,15 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
         return 2;
     }
 
-    @SuppressWarnings("NoopMethodInAbstractClass")
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        // no op
-    }
-
-    protected void dropInventory(World world, WorldBlockCoord coord, IInventory inventory)
+    protected void dropInventory(World world, BlockPos pos, IInventory inventory)
     {
         for (int slotIndex = 0; slotIndex < inventory.getSizeInventory(); slotIndex++)
         {
-            dropSlotContents(world, coord, inventory, slotIndex);
+            dropSlotContents(world, pos, inventory, slotIndex);
         }
     }
 
-    void dropSlotContents(World world, WorldBlockCoord coord, IInventory inventory, int slotIndex)
+    void dropSlotContents(World world, BlockPos pos, IInventory inventory, int slotIndex)
     {
         final ItemStack itemstack = inventory.getStackInSlot(slotIndex);
 
@@ -116,7 +96,7 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
                 itemstack.stackSize -= j1;
                 //noinspection ObjectAllocationInLoop
                 final EntityItem entityitem = new EntityItem(world,
-                        coord.getX() + xOffset, coord.getY() + yOffset, coord.getZ() + zOffset,
+                        pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset,
                         new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
                 final float motionMax = 0.05F;
                 //noinspection NumericCastThatLosesPrecision

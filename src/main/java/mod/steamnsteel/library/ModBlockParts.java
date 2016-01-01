@@ -3,7 +3,7 @@ package mod.steamnsteel.library;
 import mod.steamnsteel.utility.blockParts.BlockPartConfiguration;
 import mod.steamnsteel.utility.blockParts.PartSet;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Created by steblo on 31/10/2014.
@@ -17,32 +17,32 @@ public final class ModBlockParts {
 
         pipePartSet = BlockPartConfiguration.registerPartSet("pipes");
         pipePartSet.createBlockPart("North Connection")
-                .setKey(ForgeDirection.NORTH)
+                .setKey(EnumFacing.NORTH)
                 .setBoundingBox(2f * scale - e, 2f * scale - e, 0f * scale - e,
                         14f * scale + e, 14f * scale, 3f * scale + e);
 
         pipePartSet.createBlockPart("South Connection")
-                .setKey(ForgeDirection.SOUTH)
+                .setKey(EnumFacing.SOUTH)
                 .setBoundingBox(2f * scale - e, 2f * scale - e, 14f * scale - e,
                         14f * scale + e, 14f * scale, 16f * scale + e);
 
         pipePartSet.createBlockPart("East Connection")
-                .setKey(ForgeDirection.EAST)
+                .setKey(EnumFacing.EAST)
                 .setBoundingBox(0f * scale - e, 2f * scale - e, 2f * scale - e,
                         3f * scale + e, 14f * scale + e, 14f * scale + e);
 
         pipePartSet.createBlockPart("West Connection")
-                .setKey(ForgeDirection.WEST)
+                .setKey(EnumFacing.WEST)
                 .setBoundingBox(14f * scale - e, 2f * scale - e, 2f * scale - e,
                         16f * scale + e, 14f * scale + e, 14f * scale + e);
 
         pipePartSet.createBlockPart("Top Connection")
-                .setKey(ForgeDirection.UP)
+                .setKey(EnumFacing.UP)
                 .setBoundingBox(2f * scale - e, 0f * scale - e, 2f * scale - e,
                         14f * scale + e, 3f * scale + e, 14f * scale + e);
 
         pipePartSet.createBlockPart("Bottom Connection")
-                .setKey(ForgeDirection.DOWN)
+                .setKey(EnumFacing.DOWN)
                 .setBoundingBox(2f * scale - e, 14f * scale - e, 2f * scale - e,
                         14f * scale + e, 16f * scale + e, 14f * scale + e);
 

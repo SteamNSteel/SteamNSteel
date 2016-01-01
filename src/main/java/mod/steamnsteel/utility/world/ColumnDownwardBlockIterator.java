@@ -17,20 +17,18 @@
 package mod.steamnsteel.utility.world;
 
 import com.google.common.base.Objects;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import static net.minecraftforge.common.util.ForgeDirection.DOWN;
 
 @SuppressWarnings("NewExceptionWithoutArguments")
 public class ColumnDownwardBlockIterator implements Iterator<BlockWorldCoordPair>
 {
     private final World world;
-    private WorldBlockCoord nextPos;
+    private BlockPos nextPos;
 
-    public ColumnDownwardBlockIterator(World world, WorldBlockCoord startingPos)
+    public ColumnDownwardBlockIterator(World world, BlockPos startingPos)
     {
         this.world = world;
         nextPos = startingPos;
@@ -48,8 +46,10 @@ public class ColumnDownwardBlockIterator implements Iterator<BlockWorldCoordPair
         if (!hasNext())
             throw new NoSuchElementException();
 
-        final BlockWorldCoordPair result = BlockWorldCoordPair.of(nextPos.getBlock(world), nextPos);
-        nextPos = nextPos.offset(DOWN);
+
+
+        final BlockWorldCoordPair result = BlockWorldCoordPair.of(world.getBlockState(nextPos).getBlock(), nextPos);
+        nextPos = nextPos.down();
         return result;
     }
 

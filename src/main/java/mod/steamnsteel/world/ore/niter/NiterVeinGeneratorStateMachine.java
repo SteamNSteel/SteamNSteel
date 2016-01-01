@@ -19,14 +19,17 @@ package mod.steamnsteel.world.ore.niter;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
+import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.world.ore.OreGenerator;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Random;
@@ -41,31 +44,36 @@ public class NiterVeinGeneratorStateMachine
     private static final int NUM_BLOCKS_IN_VEIN = 16;
     private static final int NUM_BLOCKS_IN_VEIN_VARIATION = NUM_BLOCKS_IN_VEIN / 2;
 
-    private static final ImmutableSet<Block> TARGET_BLOCKS =
-            ImmutableSet.of(Blocks.stone, Blocks.dirt, Blocks.sand, Blocks.sandstone);
+    private static final ImmutableSet<IBlockState> TARGET_BLOCKS =
+            ImmutableSet.of(
+                    Blocks.stone.getDefaultState(),
+                    Blocks.dirt.getDefaultState(),
+                    Blocks.sand.getDefaultState(),
+                    Blocks.sandstone.getDefaultState()
+            );
 
     private static final ImmutableSet<BiomeDictionary.Type> PREFERRED_BIOME_TYPES = ImmutableSet.copyOf(EnumSet.of(DRY, HOT));
 
     private static final float PREF_BIOME_PADDING_CHANCE_PERCENT = 0.25f;
     private static final float OTHER_BIOME_PADDING_CHANCE_PERCENT = 0.5f;
 
-    private static final ImmutableSet<ForgeDirection> DIRECTIONS =
-            ImmutableSet.copyOf(EnumSet.of(ForgeDirection.UP, ForgeDirection.DOWN, ForgeDirection.EAST,
-                    ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH));
+    private static final ImmutableSet<EnumFacing> DIRECTIONS =
+            ImmutableSet.copyOf(EnumSet.of(EnumFacing.UP, EnumFacing.DOWN, EnumFacing.EAST,
+                    EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH));
 
     private final ColumnMaterialDownwardIterator iterator;
     private final World world;
     private final Random rng;
     private NiterVeinGeneratorStates state = NiterVeinGeneratorStates.INITIAL;
 
-    private NiterVeinGeneratorStateMachine(World world, Random rng, WorldBlockCoord startingPos)
+    private NiterVeinGeneratorStateMachine(World world, Random rng, BlockPos startingPos)
     {
         this.world = world;
         this.rng = rng;
         iterator = new ColumnMaterialDownwardIterator(world, startingPos);
     }
 
-    public static void growVein(World world, Random rng, WorldBlockCoord coord)
+    public static void growVein(World world, Random rng, BlockPos coord)
     {
         // invoke a state machine to find the rock layer and spawn the vein if possible
         final NiterVeinGeneratorStateMachine context = new NiterVeinGeneratorStateMachine(world, rng, coord);
@@ -82,55 +90,62 @@ public class NiterVeinGeneratorStateMachine
     {
         final int veinSize = NUM_BLOCKS_IN_VEIN + rng.nextInt(NUM_BLOCKS_IN_VEIN) - NUM_BLOCKS_IN_VEIN_VARIATION;
 
-        WorldBlockCoord target = iterator.currentCoord();
-        target = WorldBlockCoord.of(target.getX(), Math.max(target.getY() + 1 - rng.nextInt(5), 0), target.getZ());
+        BlockPos target = iterator.currentCoord();
+        target = new BlockPos(target.getX(), Math.max(target.getY() + 1 - rng.nextInt(5), 0), target.getZ());
         for (int blockCount = 0; blockCount < veinSize; blockCount++)
         {
             if (OreGenerator.isBlockReplaceable(world, target, TARGET_BLOCKS))
                 placeNiterOre(target);
 
-            final ForgeDirection offsetToNext = ForgeDirection.getOrientation(rng.nextInt(6));
+            final EnumFacing offsetToNext = EnumFacing.random(rng);
             target = target.offset(offsetToNext);
 
             // Has vein strayed into an unloaded chunk? If so, STOP!
-            if (!target.blockExists(world)) return;
+            if (!ChunkCoord.of(target).exists(world)) return;
         }
     }
 
-    private void placeNiterOre(WorldBlockCoord target)
+    private void placeNiterOre(BlockPos target)
     {
-        if (OreGenerator.isBlockReplaceable(world, target, TARGET_BLOCKS) && !isBlockLiquidNeighbor(target))
-            target.setBlock(world, ModBlock.oreNiter, 0, 2);
+        if (OreGenerator.isBlockReplaceable(world, target, TARGET_BLOCKS) && !isBlockLiquidNeighbor(target)) {
+            world.setBlockState(target, ModBlock.oreNiter.getDefaultState(), 2);
+        }
 
-        float paddingChancePercent = isPreferredBiome(target.getBiome(world)) ?
+
+        float paddingChancePercent = isPreferredBiome(world.getBiomeGenForCoords(target)) ?
                 PREF_BIOME_PADDING_CHANCE_PERCENT :
                 OTHER_BIOME_PADDING_CHANCE_PERCENT;
 
         // encrust ore in sandstone (each additional block of crust is rarer)
-        final Set<ForgeDirection> directions = EnumSet.copyOf(DIRECTIONS);
+        final Set<EnumFacing> directions = EnumSet.copyOf(DIRECTIONS);
         for (int i = 0; i < DIRECTIONS.size(); i++)
         {
             // get random neighbor
-            final ForgeDirection offset = ForgeDirection.getOrientation(rng.nextInt(directions.size()));
+            final EnumFacing offset = EnumFacing.random(rng);
             directions.remove(offset);
             if (rng.nextFloat() < paddingChancePercent)
             {
-                final WorldBlockCoord crustTarget = target.offset(offset);
-                if (crustTarget.blockExists(world) && OreGenerator.isBlockReplaceable(world, crustTarget, TARGET_BLOCKS))
-                    crustTarget.setBlock(world, Blocks.sandstone, 0, 2);
+                final BlockPos crustTarget = target.offset(offset);
+
+                if (ChunkCoord.of(crustTarget).exists(world) && OreGenerator.isBlockReplaceable(world, crustTarget, TARGET_BLOCKS)) {
+                    world.setBlockState(crustTarget, Blocks.sandstone.getDefaultState(), 2);
+                }
             }
             paddingChancePercent *= 0.75f;
         }
     }
 
-    private boolean isBlockLiquidNeighbor(WorldBlockCoord coord)
+    private boolean isBlockLiquidNeighbor(BlockPos coord)
     {
-        for (final ForgeDirection offset : DIRECTIONS)
+        for (final EnumFacing offset : DIRECTIONS)
         {
-            final WorldBlockCoord target = coord.offset(offset);
-            if (target.blockExists(world))
-                if (target.getBlock(world).getMaterial().isLiquid())
+            final BlockPos target = coord.offset(offset);
+
+            if (ChunkCoord.of(target).exists(world)) {
+                if (world.getBlockState(target).getBlock().getMaterial().isLiquid()) {
                     return true;
+                }
+            }
         }
         return false;
     }

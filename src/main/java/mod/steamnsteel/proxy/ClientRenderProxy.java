@@ -16,59 +16,143 @@
 
 package mod.steamnsteel.proxy;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import mod.steamnsteel.block.machine.PipeBlock;
-import mod.steamnsteel.block.machine.PipeJunctionBlock;
-import mod.steamnsteel.block.machine.PipeRedstoneValveBlock;
-import mod.steamnsteel.block.machine.PipeValveBlock;
-import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
-import mod.steamnsteel.client.renderer.block.SteamNSteelPaneRenderer;
-import mod.steamnsteel.client.renderer.item.*;
-import mod.steamnsteel.client.renderer.tileentity.*;
+import mod.steamnsteel.TheMod;
+import mod.steamnsteel.client.model.opengex.OpenGEXModelLoader;
+import mod.steamnsteel.client.renderer.tileentity.LargeFanTESR;
 import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.tileentity.*;
+import mod.steamnsteel.library.ModItem;
+import mod.steamnsteel.tileentity.LargeFanTE;
+import net.minecraft.block.Block;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.b3d.B3DLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends RenderProxy
 {
     @Override
-    public void init()
+    public void preInit()
     {
+        registerBlocksItemModels();
         registerItemRenderers();
-        registerTESRs();
+
         registerEventHandlers();
+
+        OpenGEXModelLoader.instance.addDomain(TheMod.MOD_ID);
+        OBJLoader.instance.addDomain(TheMod.MOD_ID);
+        B3DLoader.instance.addDomain(TheMod.MOD_ID);
+        ModelLoaderRegistry.registerLoader(OpenGEXModelLoader.instance);
     }
 
     @Override
-    public int addNewArmourRenderers(String armor)
-    {
-        return RenderingRegistry.addNewArmourRendererPrefix(armor);
+    public void init() {
+        registerTESRs();
+    }
+
+    private void registerBlocksItemModels() {
+        //Ores
+        registerBlockItemModel(ModBlock.oreCopper);
+        registerBlockItemModel(ModBlock.oreNiter);
+        registerBlockItemModel(ModBlock.oreSulfur);
+        registerBlockItemModel(ModBlock.oreTin);
+        registerBlockItemModel(ModBlock.oreZinc);
+
+        //Compressed Blocks
+        registerBlockItemModel(ModBlock.blockBrass);
+        registerBlockItemModel(ModBlock.blockBronze);
+        registerBlockItemModel(ModBlock.blockCopper);
+        registerBlockItemModel(ModBlock.blockPlotonium);
+        registerBlockItemModel(ModBlock.blockSteel);
+        registerBlockItemModel(ModBlock.blockTin);
+        registerBlockItemModel(ModBlock.blockZinc);
+
+        registerBlockItemModel(ModBlock.cupola);
+        registerBlockItemModel(ModBlock.fanLarge);
+        registerBlockItemModel(ModBlock.pipe);
+        registerBlockItemModel(ModBlock.pipeValve);
+        registerBlockItemModel(ModBlock.pipeValveRedstone);
+        registerBlockItemModel(ModBlock.pipeJunction);
+
+        registerBlockItemModel(ModBlock.remnantRuinPillar);
+        registerBlockItemModel(ModBlock.remnantRuinChest);
+    }
+
+    private void registerBlockItemModel(Block block) {
+        final String resourceName = block.getUnlocalizedName().substring(5);
+        ModelLoader.setCustomModelResourceLocation(
+                Item.getItemFromBlock(block),
+                0,
+                new ModelResourceLocation(resourceName, "inventory")
+        );
+    }
+
+    private void registerItemModel(Item item) {
+        final String resourceName = item.getUnlocalizedName().substring(5);
+        ModelLoader.setCustomModelResourceLocation(
+                item,
+                0,
+                new ModelResourceLocation(resourceName, "inventory")
+        );
     }
 
     private void registerItemRenderers()
     {
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.cupola), new CupolaItemRenderer());
+        registerItemModel(ModItem.anachDoodad);
+        registerItemModel(ModItem.mustyJournal);
+        registerItemModel(ModItem.perGuiVox);
+        registerItemModel(ModItem.plotoniumScrap);
+        registerItemModel(ModItem.voxBox);
+
+        registerItemModel(ModItem.dustNiter);
+        registerItemModel(ModItem.dustSulfur);
+
+        registerItemModel(ModItem.ingotBrass);
+        registerItemModel(ModItem.ingotBronze);
+        registerItemModel(ModItem.ingotCopper);
+        registerItemModel(ModItem.ingotPlotonium);
+        registerItemModel(ModItem.ingotSteel);
+        registerItemModel(ModItem.ingotTin);
+        registerItemModel(ModItem.ingotZinc);
+
+        registerItemModel(ModItem.helmetBronze);
+        registerItemModel(ModItem.chestplateBronze);
+        registerItemModel(ModItem.leggingsBronze);
+        registerItemModel(ModItem.bootsBronze);
+        registerItemModel(ModItem.helmetSteel);
+        registerItemModel(ModItem.chestplateSteel);
+        registerItemModel(ModItem.leggingsSteel);
+        registerItemModel(ModItem.bootsSteel);
+
+        registerItemModel(ModItem.axeBronze);
+        registerItemModel(ModItem.pickBronze);
+        registerItemModel(ModItem.shovelBronze);
+        registerItemModel(ModItem.swordBronze);
+        registerItemModel(ModItem.hoeBronze);
+        registerItemModel(ModItem.axeSteel);
+        registerItemModel(ModItem.pickSteel);
+        registerItemModel(ModItem.shovelSteel);
+        registerItemModel(ModItem.swordSteel);
+        registerItemModel(ModItem.hoeSteel);
+
+        //TODO: reenable these once I have them working
+        /*
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipe), new PipeItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeValve), new PipeValveItemRenderer());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeRedstoneValve), new PipeRedstoneValveItemRenderer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeValveRedstone), new PipeRedstoneValveItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.pipeJunction), new PipeJunctionItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinChest), new PlotoniumChestItemRenderer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlock.remnantRuinPillar), new RemnantRuinPillarItemRenderer());
+        */
     }
 
     private void registerTESRs()
     {
-        PipeBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
-        PipeValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
-        PipeRedstoneValveBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
-        PipeJunctionBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
-        RemnantRuinPillarBlock.setRenderType(RenderingRegistry.getNextAvailableRenderId());
-
-        RenderingRegistry.registerBlockHandler(SteamNSteelPaneRenderer.INSTANCE);
-
+        ClientRegistry.bindTileEntitySpecialRenderer(LargeFanTE.class, new LargeFanTESR());
+        /*
         ClientRegistry.bindTileEntitySpecialRenderer(CupolaTE.class, new CupolaTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeTE.class, new PipeTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(PipeValveTE.class, new PipeValveTESR());
@@ -76,6 +160,7 @@ public class ClientRenderProxy extends RenderProxy
         ClientRegistry.bindTileEntitySpecialRenderer(PipeJunctionTE.class, new PipeJunctionTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(RemnantRuinChestTE.class, new PlotoniumChestTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(RemnantRuinPillarTE.class, new RemnantRuinPillarTESR());
+        */
     }
 
     private void registerEventHandlers() {

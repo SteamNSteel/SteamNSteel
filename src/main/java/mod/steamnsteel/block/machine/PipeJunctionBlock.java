@@ -7,7 +7,10 @@ import mod.steamnsteel.tileentity.SteamNSteelTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class PipeJunctionBlock extends SteamNSteelBlock implements ITileEntityProvider
@@ -18,7 +21,7 @@ public class PipeJunctionBlock extends SteamNSteelBlock implements ITileEntityPr
     public PipeJunctionBlock()
     {
         super(Material.circuits, true);
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
     }
 
 
@@ -29,31 +32,17 @@ public class PipeJunctionBlock extends SteamNSteelBlock implements ITileEntityPr
     }
 
     @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-
-    @Override
-    public int getRenderType()
-    {
-        return RenderId;
-    }
-
-    public static void setRenderType(int renderId) {
-        RenderId = renderId;
-    }
-
-    @Override
     public boolean isOpaqueCube()
     {
         return false;
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block newBlockType)
+    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
     {
-        SteamNSteelTE entity = (SteamNSteelTE)world.getTileEntity(x, y, z);
-        entity.updateEntity();
+        TileEntity entity = worldIn.getTileEntity(pos);
+        if (entity instanceof IUpdatePlayerListBox) {
+            ((IUpdatePlayerListBox) entity).update();
+        }
     }
 }

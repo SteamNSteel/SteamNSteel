@@ -18,6 +18,7 @@ package mod.steamnsteel.utility.position;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import net.minecraft.util.BlockPos;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 /**
@@ -37,7 +38,7 @@ public class ChunkBlockCoord implements Comparable<ChunkBlockCoord>
 
     public static ChunkBlockCoord of(int x, int y, int z) { return new ChunkBlockCoord(x, y, z); }
 
-    public static ChunkBlockCoord of(WorldBlockCoord coord)
+    public static ChunkBlockCoord of(BlockPos coord)
     {
         return new ChunkBlockCoord(coord.getX() & 15, coord.getY(), coord.getZ() & 15);
     }

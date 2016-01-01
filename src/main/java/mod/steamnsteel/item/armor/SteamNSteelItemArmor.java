@@ -17,12 +17,11 @@
 package mod.steamnsteel.item.armor;
 
 import com.google.common.base.Objects;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.library.Material;
 import mod.steamnsteel.proxy.Proxies;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -36,10 +35,12 @@ public abstract class SteamNSteelItemArmor extends ItemArmor
     private static final String TEXTURE_LOCATION = "textures/armor/";
     private final String undecoratedName;
     private final String materialName;
+    final static int renderTypeIsNotUsedAnymore = -1;
 
-    SteamNSteelItemArmor(Material material, int renderIndex, String name)
+    SteamNSteelItemArmor(Material material, int armourType, String name)
     {
-        super(material.getArmorMaterial(), Proxies.render.addNewArmourRenderers(getRendererName(material)), renderIndex);
+
+        super(material.getArmorMaterial(), renderTypeIsNotUsedAnymore, armourType);
         setCreativeTab(TheMod.CREATIVE_TAB);
         undecoratedName = name + getFormattedName(material);
         setUnlocalizedName(undecoratedName);
@@ -74,14 +75,6 @@ public abstract class SteamNSteelItemArmor extends ItemArmor
     public String getUnlocalizedName(ItemStack itemStack)
     {
         return getUnlocalizedName();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister)
-    {
-        final String unlocalizedName = getUnlocalizedName();
-        itemIcon = iconRegister.registerIcon(unlocalizedName.substring(unlocalizedName.indexOf('.') + 1));
     }
 
     @Override

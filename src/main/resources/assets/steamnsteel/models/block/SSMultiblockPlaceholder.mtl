@@ -1,0 +1,5 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 30.10.2015 01:18:11
+
+newmtl Transparent
+map_Ka steamnsteel:models/SSMultiblockPlaceholder

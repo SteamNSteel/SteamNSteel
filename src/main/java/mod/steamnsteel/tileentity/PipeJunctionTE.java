@@ -2,30 +2,24 @@ package mod.steamnsteel.tileentity;
 
 import mod.steamnsteel.api.plumbing.IPipeTileEntity;
 import mod.steamnsteel.block.SteamNSteelBlock;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class PipeJunctionTE extends SteamNSteelTE implements IPipeTileEntity
 {
     @Override
-    public void updateEntity()
-    {
-        super.updateEntity();
-    }
-
-    @Override
-    public boolean isSideConnected(ForgeDirection opposite)
+    public boolean isSideConnected(EnumFacing opposite)
     {
         return false;
     }
 
     @Override
-    public boolean tryConnect(ForgeDirection opposite)
+    public boolean tryConnect(EnumFacing opposite)
     {
         return false;
     }
 
     @Override
-    public boolean canConnect(ForgeDirection opposite)
+    public boolean canConnect(EnumFacing opposite)
     {
         return false;
     }
@@ -37,7 +31,7 @@ public class PipeJunctionTE extends SteamNSteelTE implements IPipeTileEntity
     }
 
     @Override
-    public void disconnect(ForgeDirection opposite)
+    public void disconnect(EnumFacing opposite)
     {
 
     }

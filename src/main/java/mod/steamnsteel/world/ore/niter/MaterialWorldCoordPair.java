@@ -17,23 +17,23 @@
 package mod.steamnsteel.world.ore.niter;
 
 import com.google.common.base.Objects;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.BlockPos;
 
 import static com.google.common.base.Preconditions.*;
 
 public class MaterialWorldCoordPair
 {
     private final Material material;
-    private final WorldBlockCoord coord;
+    private final BlockPos coord;
 
-    private MaterialWorldCoordPair(Material material, WorldBlockCoord coord)
+    private MaterialWorldCoordPair(Material material, BlockPos coord)
     {
         this.material = checkNotNull(material);
         this.coord = checkNotNull(coord);
     }
 
-    public static MaterialWorldCoordPair of(Material material, WorldBlockCoord coord)
+    public static MaterialWorldCoordPair of(Material material, BlockPos coord)
     {
         return new MaterialWorldCoordPair(material, coord);
     }

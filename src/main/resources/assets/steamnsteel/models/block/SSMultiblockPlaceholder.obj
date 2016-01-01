@@ -1,0 +1,21 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 30.10.2015 01:29:09
+
+mtllib SSMultiblockPlaceholder.mtl
+
+#
+# object noop
+#
+
+v 0.0000 0.0000 0.0000
+# 8 vertices
+
+vn 0.0000 0.0000 -0.0000
+# 6 vertex normals
+
+vt 0.6667 0.6681 0.0005
+# 21 texture coords
+
+g noop
+usemtl Transparent
+f 1/1/1 1/1/1 1/1/1

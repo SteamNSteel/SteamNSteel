@@ -19,8 +19,10 @@ package mod.steamnsteel.world.ore;
 import com.google.common.base.Objects;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.utility.position.ChunkCoord;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.pattern.BlockHelper;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import java.util.Random;
@@ -32,14 +34,13 @@ public class OreGenerator extends WorldGenMinable
     private final int minHeight;
     private final int maxHeight;
 
-    OreGenerator()
-    {
-        this(null, 0, 0, 0);
+    protected OreGenerator(SteamNSteelOreBlock block) {
+        this(block, 0, 0, 0);
     }
 
     public OreGenerator(SteamNSteelOreBlock block, int clusterCount, int blocksPerCluster, int maxHeight)
     {
-        super(block, blocksPerCluster);
+        super(block.getDefaultState(), blocksPerCluster);
 
         this.block = block;
         this.clusterCount = clusterCount;
@@ -47,38 +48,37 @@ public class OreGenerator extends WorldGenMinable
         this.maxHeight = maxHeight;
     }
 
-    public static boolean isBlockReplaceable(World world, WorldBlockCoord coord, Iterable<Block> targetBlocks)
+    public static boolean isBlockReplaceable(World world, BlockPos pos, Iterable<IBlockState> targetBlockStates)
     {
-        final Block block = coord.getBlock(world);
+        final Block block = world.getBlockState(pos).getBlock();
 
-        final int x = coord.getX();
-        final int y = coord.getY();
-        final int z = coord.getZ();
-
-        for (final Block target : targetBlocks)
+        for (final IBlockState target : targetBlockStates)
         {
-            if (block.isReplaceableOreGen(world, x, y, z, target)) return true;
+            if (block.isReplaceableOreGen(world, pos, BlockHelper.forBlock(target.getBlock()))) return true;
         }
 
         return false;
     }
 
-    public void generate(World world, Random rng, ChunkCoord coord)
+    /*public void generate(World world, Random rng, ChunkCoord coord)
     {
         generate(world, rng, coord.getX() << 4, 0, coord.getZ() << 4);
-    }
+    }*/
 
     @Override
-    public boolean generate(World world, Random rand, int worldX, int unused, int worldZ)
+    public boolean generate(World world, Random rand, BlockPos pos)
     {
         if (block.isGenEnabled())
         {
+            int worldX = pos.getX();
+            int worldZ = pos.getZ();
+
             for (int cluster = 0; cluster < clusterCount; cluster++)
             {
                 final int x = worldX + rand.nextInt(16);
                 final int y = rand.nextInt(maxHeight - minHeight) + minHeight;
                 final int z = worldZ + rand.nextInt(16);
-                super.generate(world, rand, x, y, z);
+                super.generate(world, rand, pos);
             }
 
             RetroGenHandler.markChunk(ChunkCoord.of(worldX >> 4, worldZ >> 4));

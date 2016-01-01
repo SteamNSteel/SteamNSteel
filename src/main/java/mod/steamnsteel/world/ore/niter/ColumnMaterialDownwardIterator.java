@@ -17,22 +17,21 @@
 package mod.steamnsteel.world.ore.niter;
 
 import com.google.common.base.Objects;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static net.minecraftforge.common.util.ForgeDirection.DOWN;
 
 @SuppressWarnings("NewExceptionWithoutArguments")
 public class ColumnMaterialDownwardIterator implements Iterator<MaterialWorldCoordPair>
 
 {
     private final World world;
-    private WorldBlockCoord nextPos;
-    private WorldBlockCoord currentCoord = null;
+    private BlockPos nextPos;
+    private BlockPos currentCoord = null;
 
-    public ColumnMaterialDownwardIterator(World world, WorldBlockCoord startingPos)
+    public ColumnMaterialDownwardIterator(World world, BlockPos startingPos)
     {
         this.world = world;
         nextPos = startingPos;
@@ -50,9 +49,9 @@ public class ColumnMaterialDownwardIterator implements Iterator<MaterialWorldCoo
         if (!hasNext())
             throw new NoSuchElementException();
 
-        final MaterialWorldCoordPair result = MaterialWorldCoordPair.of(nextPos.getBlock(world).getMaterial(), nextPos);
+        final MaterialWorldCoordPair result = MaterialWorldCoordPair.of(world.getBlockState(nextPos).getBlock().getMaterial(), nextPos);
         currentCoord = nextPos;
-        nextPos = nextPos.offset(DOWN);
+        nextPos = nextPos.down();
         return result;
     }
 
@@ -62,7 +61,7 @@ public class ColumnMaterialDownwardIterator implements Iterator<MaterialWorldCoo
         throw new UnsupportedOperationException();
     }
 
-    public WorldBlockCoord currentCoord()
+    public BlockPos currentCoord()
     {
         if (currentCoord == null)
             throw new IllegalStateException();

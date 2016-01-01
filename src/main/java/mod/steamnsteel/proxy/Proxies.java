@@ -16,7 +16,8 @@
 
 package mod.steamnsteel.proxy;
 
-import cpw.mods.fml.common.SidedProxy;
+
+import net.minecraftforge.fml.common.SidedProxy;
 
 @SuppressWarnings({"StaticNonFinalField", "PublicField"})
 public enum Proxies

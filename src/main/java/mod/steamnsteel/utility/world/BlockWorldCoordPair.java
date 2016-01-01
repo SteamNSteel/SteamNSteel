@@ -17,30 +17,30 @@
 package mod.steamnsteel.utility.world;
 
 import com.google.common.base.Objects;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 
 import static com.google.common.base.Preconditions.*;
 
 public class BlockWorldCoordPair
 {
     private final Block block;
-    private final WorldBlockCoord coord;
+    private final BlockPos coord;
 
-    public BlockWorldCoordPair(Block block, WorldBlockCoord coord)
+    public BlockWorldCoordPair(Block block, BlockPos coord)
     {
         this.block = checkNotNull(block);
         this.coord = checkNotNull(coord);
     }
 
-    public static BlockWorldCoordPair of(Block block, WorldBlockCoord coord)
+    public static BlockWorldCoordPair of(Block block, BlockPos coord)
     {
         return new BlockWorldCoordPair(block, coord);
     }
 
     public Block getBlock() { return block; }
 
-    public WorldBlockCoord getCoord() { return coord; }
+    public BlockPos getCoord() { return coord; }
 
     @Override
     public int hashCode()

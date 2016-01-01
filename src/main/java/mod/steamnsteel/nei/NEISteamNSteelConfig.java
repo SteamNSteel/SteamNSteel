@@ -16,12 +16,12 @@
 
 package mod.steamnsteel.nei;
 
-import mod.steamnsteel.TheMod;
-import mod.steamnsteel.block.machine.CupolaBlock;
-import mod.steamnsteel.client.gui.CupolaGui;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import codechicken.nei.recipe.DefaultOverlayHandler;
+import mod.steamnsteel.TheMod;
+import mod.steamnsteel.block.machine.CupolaBlock;
+import mod.steamnsteel.client.gui.CupolaGui;
 
 @SuppressWarnings("WeakerAccess")
 public class NEISteamNSteelConfig implements IConfigureNEI
@@ -33,6 +33,7 @@ public class NEISteamNSteelConfig implements IConfigureNEI
     {
         API.registerRecipeHandler(new CupolaRecipeHandler());
         API.registerUsageHandler(new CupolaRecipeHandler());
+        //FIXME: Reenable with the cupola
         API.registerGuiOverlay(CupolaGui.class, TheMod.MOD_ID + CupolaBlock.NAME, 5, 11);
         API.registerGuiOverlayHandler(CupolaGui.class, new DefaultOverlayHandler(5, 11), TheMod.MOD_ID + CupolaBlock.NAME);
     }

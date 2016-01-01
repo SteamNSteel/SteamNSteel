@@ -3,9 +3,10 @@ package mod.steamnsteel.world.structure;
 import mod.steamnsteel.utility.log.Logger;
 import mod.steamnsteel.world.WorldGen;
 import mod.steamnsteel.world.structure.remnantruins.Ruin;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import org.lwjgl.util.Rectangle;
 
 public class StructureChunkGenerator
@@ -37,16 +38,16 @@ public class StructureChunkGenerator
 
         if (ruin.height == null) {
             Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
-            ruin.height = chunk.heightMapMinimum - ruin.schematic.heightOffset;
+            ruin.height = chunk.getLowestHeight() - ruin.schematic.heightOffset;
             //TODO: Persist to world?
         }
 
         WorldGen.schematicLoader.renderSchematicToSingleChunk(
                 ruin.schematic.resource,
                 world,
-                intersection.getX(), ruin.height, intersection.getY(),
+                new BlockPos(intersection.getX(), ruin.height, intersection.getY()),
                 chunkX, chunkZ,
-                ForgeDirection.NORTH,
+                EnumFacing.NORTH,
                 false);
 
     }

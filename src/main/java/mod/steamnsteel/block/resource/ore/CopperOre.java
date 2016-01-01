@@ -25,7 +25,7 @@ public class CopperOre extends SteamNSteelOreBlock
 
     public CopperOre()
     {
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
         setHarvestLevel("pickaxe", 1); // stone pick
     }
 

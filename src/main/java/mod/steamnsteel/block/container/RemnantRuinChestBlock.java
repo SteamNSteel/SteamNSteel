@@ -18,13 +18,17 @@ package mod.steamnsteel.block.container;
 
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.RemnantRuinChestTE;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
@@ -32,28 +36,36 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
     public static final String NAME = "remnantRuinChest";
 
     public RemnantRuinChestBlock() {
-        setBlockName(NAME);
+        super();
+        setUnlocalizedName(NAME);
         setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+        setDefaultState(getDefaultState());
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
+    protected BlockState createBlockState() {
+        return new BlockState(this, new IProperty[] {BlockDirectional.FACING});
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState blockState)
     {
-        final RemnantRuinChestTE te = (RemnantRuinChestTE) world.getTileEntity(x, y, z);
+        final RemnantRuinChestTE te = (RemnantRuinChestTE) world.getTileEntity(pos);
 
         if (te != null)
         {
-            dropInventory(world, WorldBlockCoord.of(x, y, z), te);
-            world.func_147453_f(x, y, z, block); // notify neighbors
+            dropInventory(world, pos, te);
+
+            world.notifyNeighborsOfStateChange(pos, blockState.getBlock());
         }
 
-        super.breakBlock(world, x, y, z, block, metadata);
+        super.breakBlock(world, pos, blockState);
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        final TileEntity te = world.getTileEntity(x, y, z);
+        final TileEntity te = world.getTileEntity(pos);
 
         if (!player.isSneaking())
             if (!world.isRemote && te != null && te instanceof RemnantRuinChestTE)
@@ -66,11 +78,5 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
     public TileEntity createNewTileEntity(World world, int metadata)
     {
         return new RemnantRuinChestTE();
-    }
-
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
     }
 }

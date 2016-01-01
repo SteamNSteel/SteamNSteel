@@ -18,8 +18,10 @@ package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.util.*;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.api.crafting.IAlloyResult;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
@@ -32,11 +34,9 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
 
 @SuppressWarnings("ClassWithTooManyMethods")
-public class CupolaTE extends SteamNSteelTE implements ISidedInventory
+public class CupolaTE extends SteamNSteelTE implements ISidedInventory, IUpdatePlayerListBox
 {
     private Optional<AxisAlignedBB> renderBounds = Optional.absent();
 
@@ -133,13 +133,13 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
     {
         final NBTTagCompound nbt = new NBTTagCompound();
         writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
+        return new S35PacketUpdateTileEntity(getPos(), 1, nbt);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
     {
-        readFromNBT(packet.func_148857_g());
+        readFromNBT(packet.getNbtCompound());
     }
 
     @Override
@@ -178,10 +178,9 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
 
     @SuppressWarnings("ReturnOfCollectionOrArrayField")
     @Override
-    public int[] getAccessibleSlotsFromSide(int side)
+    public int[] getSlotsForFace(EnumFacing side)
     {
-        final ForgeDirection direction = ForgeDirection.values()[side];
-        switch (direction)
+        switch (side)
         {
             case DOWN:
                 return slotsBottom;
@@ -193,15 +192,15 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
     }
 
     @Override
-    public boolean canInsertItem(int slotIndex, ItemStack itemStack, int side)
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
     {
-        return isItemValidForSlot(slotIndex, itemStack);
+        return isItemValidForSlot(index, itemStackIn);
     }
 
     @Override
-    public boolean canExtractItem(int slotIndex, ItemStack itemStack, int side)
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
     {
-        return slotIndex == OUTPUT;
+        return index == OUTPUT;
     }
 
     @Override
@@ -223,7 +222,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slotIndex)
+    public ItemStack removeStackFromSlot(int slotIndex)
     {
         return getTargetInventory().getStackOnClosing(slotIndex);
     }
@@ -235,15 +234,18 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
     }
 
     @Override
-    public String getInventoryName()
-    {
+    public String getName() {
         return containerName(CupolaBlock.NAME);
     }
 
     @Override
-    public boolean hasCustomInventoryName()
+    public boolean hasCustomName()
     {
         return false;
+    }
+
+    public IChatComponent getDisplayName() {
+        return new ChatComponentText(getName());
     }
 
     @Override
@@ -262,7 +264,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
         // Lazy initialization of masterInventory
         if (!masterInventory.isPresent())
         {
-            final CupolaTE te = (CupolaTE) worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
+            final CupolaTE te = (CupolaTE) worldObj.getTileEntity(getPos().down());
             masterInventory = Optional.of(te.inventory);
         }
         return masterInventory.get();
@@ -275,13 +277,13 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
     }
 
     @Override
-    public void openInventory()
+    public void openInventory(EntityPlayer player)
     {
         // noop
     }
 
     @Override
-    public void closeInventory()
+    public void closeInventory(EntityPlayer player)
     {
         // noop
     }
@@ -294,7 +296,29 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
     }
 
     @Override
-    public void updateEntity()
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        for (int i = inventory.getSize() - 1; i >= 0; --i) {
+            inventory.clearSlot(i);
+        }
+    }
+
+    @Override
+    public void update()
     {
         final boolean isBurning = deviceCookTime > 0;
 
@@ -325,8 +349,8 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
     {
         markDirty();
         isActive = deviceCookTime > 0;
-        worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 1, isActive ? 1 : 0);
-        worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType());
+        worldObj.addBlockEvent(getPos(), getBlockType(), 1, isActive ? 1 : 0);
+        worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
     }
 
     private boolean didCookItem()
@@ -378,7 +402,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
         {
 
             isActive = eventData != 0;
-            worldObj.func_147451_t(xCoord, yCoord, zCoord);
+            worldObj.checkLight(getPos());
             return true;
         }
         return super.receiveClientEvent(eventId, eventData);
@@ -462,7 +486,16 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory
     public AxisAlignedBB getRenderBoundingBox() {
         if (!isSlave){
             if (!renderBounds.isPresent())
-                renderBounds = Optional.of(AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord, zCoord - 1, xCoord + 1, yCoord + 2, zCoord + 1));
+            {
+                final BlockPos pos = getPos();
+                renderBounds = Optional.of(AxisAlignedBB.fromBounds(
+                        pos.getX() - 1,
+                        pos.getY(),
+                        pos.getZ() - 1,
+                        pos.getX() + 1,
+                        pos.getY() + 2,
+                        pos.getZ() + 1));
+            }
 
             return renderBounds.get();
         }

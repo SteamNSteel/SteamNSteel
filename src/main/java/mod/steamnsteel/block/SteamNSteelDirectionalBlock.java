@@ -16,26 +16,57 @@
 
 package mod.steamnsteel.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
+import static net.minecraft.block.BlockDirectional.*;
+
+public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
-    SteamNSteelDirectionalBlock(Material material)
+    protected SteamNSteelDirectionalBlock(Material material)
     {
         super(material);
+        setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack)
-    {
-        super.onBlockPlacedBy(world, x, y, x, entity, itemStack);
+    protected BlockState createBlockState() {
+        return new BlockState(this, FACING);
+    }
 
-        final int orientation = BlockDirectional.getDirection(MathHelper.floor_double(entity.rotationYaw * 4.0f / 360.0f + 0.5));
-        world.setBlockMetadataWithNotify(x, y, z, orientation, 0);
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+    {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+
+        final int orientation = (MathHelper.floor_double(placer.rotationYaw * 4.0f / 360.0f + 0.5)) & 3;
+        final EnumFacing horizontal = EnumFacing.getHorizontal(orientation);
+        final IBlockState newState = worldIn.getBlockState(pos)
+                .withProperty(FACING, horizontal);
+
+        worldIn.setBlockState(pos, newState, 0);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        int meta = 0;
+        meta |= ((EnumFacing)state.getValue(FACING)).ordinal() - 2;
+        return meta;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return super.getStateFromMeta(meta)
+                .withProperty(FACING, EnumFacing.getHorizontal(meta & 3));
     }
 }

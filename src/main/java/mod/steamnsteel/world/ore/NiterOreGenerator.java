@@ -20,8 +20,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.utility.position.ChunkCoord;
-import mod.steamnsteel.utility.position.WorldBlockCoord;
 import mod.steamnsteel.world.ore.niter.NiterVeinGeneratorStateMachine;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
@@ -47,6 +47,10 @@ import static net.minecraftforge.common.BiomeDictionary.Type.WET;
  */
 public class NiterOreGenerator extends OreGenerator
 {
+    public NiterOreGenerator() {
+        super(ModBlock.oreNiter);
+    }
+
     private static final ImmutableSet<BiomeDictionary.Type> BLACKLISTED_BIOME_TYPES = ImmutableSet.copyOf(EnumSet.of(WET));
 
     private static final int CLUSTER_COUNT = 2;
@@ -59,7 +63,7 @@ public class NiterOreGenerator extends OreGenerator
     }
 
     @Override
-    public boolean generate(World world, Random rand, int worldX, int unused, int worldZ)
+    public boolean generate(World world, Random rand, BlockPos pos)
     {
         if (!ModBlock.oreNiter.isGenEnabled())
         {
@@ -68,24 +72,25 @@ public class NiterOreGenerator extends OreGenerator
 
         for (int i = 0; i < CLUSTER_COUNT; i++)
         {
-            final WorldBlockCoord coord = WorldBlockCoord.of(worldX + rand.nextInt(16), 0, worldZ + rand.nextInt(16));
+            final BlockPos coord = pos.add(rand.nextInt(16), 0, rand.nextInt(16));
 
             // world getBiome method is safer than chunk version (does not throw exceptions for unloaded chunks)
             // also, block columns are assigned biomes
-            final BiomeGenBase biome = coord.getBiome(world);
+
+            final BiomeGenBase biome = world.getBiomeGenForCoords(coord);
 
             if (isQualifiedBiome(biome))
             {
-                final WorldBlockCoord startingSearchPos = WorldBlockCoord.of(
+                final BlockPos startingSearchPos = new BlockPos(
                         coord.getX(),
-                        Math.min(coord.getHeightofTopBlock(world), MAX_HEIGHT),
+                        Math.min(world.getHeight(coord).getY(), MAX_HEIGHT),
                         coord.getZ());
 
                 NiterVeinGeneratorStateMachine.growVein(world, rand, startingSearchPos);
             }
         }
 
-        RetroGenHandler.markChunk(ChunkCoord.of(worldX >> 4, worldZ >> 4));
+        RetroGenHandler.markChunk(ChunkCoord.of(pos));
         return true;
     }
 }

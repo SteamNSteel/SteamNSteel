@@ -24,8 +24,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 
-public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory
+public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, IUpdatePlayerListBox
 {
     private static final int INVENTORY_SIZE = 27;
     private final Inventory inventory = new Inventory(INVENTORY_SIZE);
@@ -65,9 +68,8 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slotIndex)
-    {
-        return inventory.getStackOnClosing(slotIndex);
+    public ItemStack removeStackFromSlot(int index) {
+        return inventory.getStackOnClosing(index);
     }
 
     @Override
@@ -77,15 +79,20 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory
     }
 
     @Override
-    public String getInventoryName()
+    public String getName()
     {
         return containerName(RemnantRuinChestBlock.NAME);
     }
 
     @Override
-    public boolean hasCustomInventoryName()
+    public boolean hasCustomName()
     {
-        return false;
+        return getName().length() > 0;
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return new ChatComponentText(getName());
     }
 
     @Override
@@ -101,23 +108,44 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory
     }
 
     @Override
-    public void openInventory()
+    public void openInventory(EntityPlayer player)
     {
         ++numUsingPlayers;
-        worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.remnantRuinChest, 1, numUsingPlayers);
+        worldObj.addBlockEvent(getPos(), ModBlock.remnantRuinChest, 1, numUsingPlayers);
     }
 
     @Override
-    public void closeInventory()
+    public void closeInventory(EntityPlayer player)
     {
         --numUsingPlayers;
-        worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.remnantRuinChest, 1, numUsingPlayers);
+        worldObj.addBlockEvent(getPos(), ModBlock.remnantRuinChest, 1, numUsingPlayers);
     }
 
     @Override
     public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack)
     {
         return true;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < inventory.getSize(); ++i) {
+            inventory.clearSlot(i);
+        }
     }
 
     @Override
@@ -135,20 +163,18 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory
     }
 
     @Override
-    public void updateEntity()
+    public void update()
     {
-        super.updateEntity();
-
         ++ticksSinceSync;
         if (ticksSinceSync % 20 * 4 == 0)
         {
-            worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlock.remnantRuinChest, 1, numUsingPlayers);
+            worldObj.addBlockEvent(getPos(), ModBlock.remnantRuinChest, 1, numUsingPlayers);
         }
 
         prevLidAngle = lidAngle;
 
         if (numUsingPlayers != 0 && lidAngle == 0.0F)
-            worldObj.playSoundEffect(xCoord, yCoord + 0.5F, zCoord, "random.chestopen", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            worldObj.playSoundEffect(getPos().getX(), getPos().getY() + 0.5F, getPos().getZ(), "random.chestopen", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
 
         if (isChestOpen())
         {
@@ -167,7 +193,7 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory
 
             if (lidAngle < 0.5 && prevLidAngle > 0.5)
             {
-                worldObj.playSoundEffect(xCoord, yCoord + 0.5F, zCoord, "random.chestclosed", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                worldObj.playSoundEffect(getPos().getX(), getPos().getY() + 0.5F, getPos().getZ(), "random.chestclosed", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
             }
         }
     }

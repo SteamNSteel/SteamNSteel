@@ -1,0 +1,10 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "inventory": [{
+      "textures": { "layer0": "steamnsteel:items/anachDoodad" },
+      "model": "builtin/generated",
+      "transform": "forge:default-item"
+    }]
+  }
+}

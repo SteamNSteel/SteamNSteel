@@ -1,16 +1,15 @@
 package mod.steamnsteel.utility.world;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import java.util.Iterator;
 
 public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
 {
     private final World _world;
-    private final Vec3 _startLocation;
+    //private final Vec3 _startLocation;
     private final Vec3 _direction;
     //private MovingObjectPosition _currentBlock;
     private int _currentLocationX;
@@ -22,11 +21,16 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
     private boolean _valid;
     private int _blockLimit;
     private boolean _isFirstBlock = true;
+    private double _startLocationXCoord;
+    private double _startLocationYCoord;
+    private double _startLocationZCoord;
 
     public WorldRaytraceIterator(World world, Vec3 location, Vec3 direction)
     {
         this._world = world;
-        this._startLocation = location;
+        this._startLocationXCoord = location.xCoord;
+        this._startLocationYCoord = location.yCoord;
+        this._startLocationZCoord = location.zCoord;
         this._direction = direction;
 
 
@@ -103,13 +107,18 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
         boolean p_147447_3_ = false;
         boolean p_147447_4_ = false;
 
-        Block block = _world.getBlock(_locationX, _locationY, _locationZ);
-        int metadata = _world.getBlockMetadata(_locationX, _locationY, _locationZ);
+        final BlockPos pos = new BlockPos(_locationX, _locationY, _locationZ);
+        IBlockState blockState = _world.getBlockState(pos);
+        final Block block = blockState.getBlock();
 
         MovingObjectPosition movingobjectposition = null;
-        if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(_world, _locationX, _locationY, _locationZ) != null) && block.canCollideCheck(metadata, p_147447_3_))
+        if ((!p_147447_4_ || block.getCollisionBoundingBox(_world, pos, blockState) != null) && block.canCollideCheck(blockState, p_147447_3_))
         {
-            movingobjectposition = block.collisionRayTrace(_world, _locationX, _locationY, _locationZ, _startLocation, _direction);
+            movingobjectposition = block.collisionRayTrace(
+                    _world,
+                    pos,
+                    new Vec3(_startLocationXCoord, _startLocationYCoord, _startLocationZCoord),
+                    _direction);
 
             if (movingobjectposition != null)
             {
@@ -130,7 +139,7 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
         MovingObjectPosition movingObjectPosition = null;
 
         if (_blockLimit < 0) return null;
-        if (Double.isNaN(_startLocation.xCoord) || Double.isNaN(_startLocation.yCoord) || Double.isNaN(_startLocation.zCoord))
+        if (Double.isNaN(_startLocationXCoord) || Double.isNaN(_startLocationYCoord) || Double.isNaN(_startLocationZCoord))
         {
             return null;
         }
@@ -183,23 +192,23 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
         double d3 = 999.0D;
         double d4 = 999.0D;
         double d5 = 999.0D;
-        double d6 = _direction.xCoord - _startLocation.xCoord;
-        double d7 = _direction.yCoord - _startLocation.yCoord;
-        double d8 = _direction.zCoord - _startLocation.zCoord;
+        double d6 = _direction.xCoord - _startLocationXCoord;
+        double d7 = _direction.yCoord - _startLocationYCoord;
+        double d8 = _direction.zCoord - _startLocationZCoord;
 
         if (movingInDirectionX)
         {
-            d3 = (d0 - _startLocation.xCoord) / d6;
+            d3 = (d0 - _startLocationXCoord) / d6;
         }
 
         if (movingInDirectionY)
         {
-            d4 = (d1 - _startLocation.yCoord) / d7;
+            d4 = (d1 - _startLocationYCoord) / d7;
         }
 
         if (movingInDirectionZ)
         {
-            d5 = (d2 - _startLocation.zCoord) / d8;
+            d5 = (d2 - _startLocationZCoord) / d8;
         }
 
         byte hitSide;
@@ -208,28 +217,28 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
         {
             hitSide = _currentLocationX > _locationX ? (byte) 4 : 5;
 
-            _startLocation.xCoord = d0;
-            _startLocation.yCoord += d7 * d3;
-            _startLocation.zCoord += d8 * d3;
+            _startLocationXCoord = d0;
+            _startLocationYCoord += d7 * d3;
+            _startLocationZCoord += d8 * d3;
         } else if (d4 < d5)
         {
             hitSide = _currentLocationY > _locationY ? (byte) 0 : 1;
 
-            _startLocation.xCoord += d6 * d4;
-            _startLocation.yCoord = d1;
-            _startLocation.zCoord += d8 * d4;
+            _startLocationXCoord += d6 * d4;
+            _startLocationYCoord = d1;
+            _startLocationZCoord += d8 * d4;
         } else
         {
             hitSide = _currentLocationZ > _locationZ ? (byte) 2 : 3;
 
-            _startLocation.xCoord += d6 * d5;
-            _startLocation.yCoord += d7 * d5;
-            _startLocation.zCoord = d2;
+            _startLocationXCoord += d6 * d5;
+            _startLocationYCoord += d7 * d5;
+            _startLocationZCoord = d2;
         }
 
-        _locationX = MathHelper.floor_double(_startLocation.xCoord);
-        _locationY = MathHelper.floor_double(_startLocation.yCoord);
-        _locationZ = MathHelper.floor_double(_startLocation.zCoord);
+        _locationX = MathHelper.floor_double(_startLocationXCoord);
+        _locationY = MathHelper.floor_double(_startLocationYCoord);
+        _locationZ = MathHelper.floor_double(_startLocationZCoord);
 
         switch (hitSide)
         {
@@ -244,14 +253,22 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
                 break;
         }
 
-        Block block = _world.getBlock(_locationX, _locationY, _locationZ);
-        int metadata = _world.getBlockMetadata(_locationX, _locationY, _locationZ);
+        final BlockPos pos = new BlockPos(_locationX, _locationY, _locationZ);
+        IBlockState blockState = _world.getBlockState(pos);
 
-        if (!p_147447_4_ || block.getCollisionBoundingBoxFromPool(_world, _locationX, _locationY, _locationZ) != null)
+        final Block block = blockState.getBlock();
+        if (!p_147447_4_ || block.getCollisionBoundingBox(_world, pos, blockState) != null)
         {
-            if (block.canCollideCheck(metadata, p_147447_3_))
+            if (block.canCollideCheck(blockState, p_147447_3_))
             {
-                movingObjectPosition = block.collisionRayTrace(_world, _locationX, _locationY, _locationZ, _startLocation, _direction);
+                movingObjectPosition = block.collisionRayTrace(
+                        _world,
+                        new BlockPos(_locationX,
+                                _locationY,
+                                _locationZ)
+                        ,
+                        new Vec3(_startLocationXCoord, _startLocationYCoord, _startLocationZCoord),
+                        _direction);
 
                 if (movingObjectPosition != null)
                 {
@@ -259,7 +276,12 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
                 }
             } else
             {
-                movingObjectPosition = new MovingObjectPosition(_locationX, _locationY, _locationZ, hitSide, _startLocation, false);
+                movingObjectPosition = new MovingObjectPosition(
+                        new Vec3(_startLocationXCoord, _startLocationYCoord, _startLocationZCoord),
+                        EnumFacing.values()[hitSide],
+                        new BlockPos(_locationX,
+                        _locationY,
+                        _locationZ));
             }
         }
 

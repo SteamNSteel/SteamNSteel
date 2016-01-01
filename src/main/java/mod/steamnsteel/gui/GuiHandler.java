@@ -16,12 +16,13 @@
 
 package mod.steamnsteel.gui;
 
-import cpw.mods.fml.common.network.IGuiHandler;
 import mod.steamnsteel.client.gui.CupolaGui;
 import mod.steamnsteel.inventory.CupolaContainer;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public enum GuiHandler implements IGuiHandler
 {
@@ -34,7 +35,7 @@ public enum GuiHandler implements IGuiHandler
         switch(gui)
         {
             case CUPOLA:
-                final CupolaTE te = (CupolaTE) world.getTileEntity(x, y, z);
+                final CupolaTE te = (CupolaTE) world.getTileEntity(new BlockPos(x, y, z));
                 return new CupolaContainer(player.inventory, te);
         }
         return null;
@@ -47,7 +48,7 @@ public enum GuiHandler implements IGuiHandler
         switch(gui)
         {
             case CUPOLA:
-                final CupolaTE te = (CupolaTE) world.getTileEntity(x, y, z);
+                final CupolaTE te = (CupolaTE) world.getTileEntity(new BlockPos(x, y, z));
                 return new CupolaGui(player.inventory, te);
         }
         return null;

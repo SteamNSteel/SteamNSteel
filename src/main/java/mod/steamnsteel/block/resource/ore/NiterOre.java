@@ -17,45 +17,20 @@
 package mod.steamnsteel.block.resource.ore;
 
 import com.google.common.base.Objects;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.configuration.Settings;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
 
 public class NiterOre extends SteamNSteelOreBlock
 {
     public static final String NAME = "oreNiter";
 
-    private IIcon blockIcon_bottom = null;
-    private IIcon blockIcon_top = null;
-
     public NiterOre()
     {
         super(Material.rock);
-        setBlockName(NAME);
+        setUnlocalizedName(NAME);
         setHardness(0.8F);
         setHarvestLevel("pickaxe", 0); // wooden pick
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        final String baseTextureName = getUnwrappedUnlocalizedName(getUnlocalizedName());
-        blockIcon_bottom = iconRegister.registerIcon(baseTextureName + "_bottom");
-        blockIcon_top = iconRegister.registerIcon(baseTextureName + "_top");
-        blockIcon = iconRegister.registerIcon(baseTextureName + "_normal");
-    }
-
-    @Override
-    public IIcon getIcon(int side, int metadata)
-    {
-        if (side == 0) return blockIcon_bottom;
-        if (side == 1) return blockIcon_top;
-        return super.getIcon(side, metadata);
     }
 
     @Override
@@ -68,8 +43,6 @@ public class NiterOre extends SteamNSteelOreBlock
     public String toString()
     {
         return Objects.toStringHelper(this)
-                .add("blockIcon_bottom", blockIcon_bottom)
-                .add("blockIcon_top", blockIcon_top)
                 .toString();
     }
 }

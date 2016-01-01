@@ -59,8 +59,18 @@ public class CupolaRecipeHandler extends TemplateRecipeHandler
     {
         hiddenBurnable.add(Item.getItemFromBlock(Blocks.brown_mushroom));
         hiddenBurnable.add(Item.getItemFromBlock(Blocks.daylight_detector));
-        hiddenBurnable.add(Item.getItemFromBlock(Blocks.fence));
-        hiddenBurnable.add(Item.getItemFromBlock(Blocks.fence_gate));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.acacia_fence));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.birch_fence));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.dark_oak_fence));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.jungle_fence));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.oak_fence));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.spruce_fence));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.acacia_fence_gate));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.birch_fence_gate));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.dark_oak_fence_gate));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.jungle_fence_gate));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.oak_fence_gate));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.spruce_fence_gate));
         hiddenBurnable.add(Item.getItemFromBlock(Blocks.jukebox));
         hiddenBurnable.add(Item.getItemFromBlock(Blocks.noteblock));
         hiddenBurnable.add(Item.getItemFromBlock(Blocks.red_mushroom));
@@ -68,7 +78,12 @@ public class CupolaRecipeHandler extends TemplateRecipeHandler
         hiddenBurnable.add(Item.getItemFromBlock(Blocks.trapdoor));
         hiddenBurnable.add(Item.getItemFromBlock(Blocks.trapped_chest));
         hiddenBurnable.add(Item.getItemFromBlock(Blocks.wall_sign));
-        hiddenBurnable.add(Item.getItemFromBlock(Blocks.wooden_door));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.acacia_door));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.birch_door));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.dark_oak_door));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.jungle_door));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.oak_door));
+        hiddenBurnable.add(Item.getItemFromBlock(Blocks.spruce_door));
         hiddenBurnable.add(Item.getItemFromBlock(Blocks.wooden_pressure_plate));
     }
 
