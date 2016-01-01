@@ -18,7 +18,6 @@ package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -36,7 +35,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 
 @SuppressWarnings("ClassWithTooManyMethods")
-public class CupolaTE extends SteamNSteelTE implements ISidedInventory, IUpdatePlayerListBox
+public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickable
 {
     private Optional<AxisAlignedBB> renderBounds = Optional.absent();
 
