@@ -4,6 +4,7 @@ import com.google.common.primitives.Doubles;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.utility.SteamNSteelException;
 import mod.steamnsteel.utility.json.DimensionJsonTypeAdapter;
 import mod.steamnsteel.utility.json.RuinTypeJsonTypeAdapter;
 import mod.steamnsteel.world.WorldGen;
@@ -103,7 +104,7 @@ public class RemnantRuinsGenerator extends StructureGenerator
         } catch (IOException e)
         {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new SteamNSteelException("Unable to load Schematics for ruin generation", e);
         }
 
     }
