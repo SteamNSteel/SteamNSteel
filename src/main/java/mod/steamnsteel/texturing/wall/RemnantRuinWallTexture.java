@@ -7,6 +7,8 @@ import mod.steamnsteel.texturing.api.traitspriteregistry.ISpriteDefinitionStart;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import mod.steamnsteel.texturing.feature.*;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -35,6 +37,7 @@ public class RemnantRuinWallTexture extends ProceduralConnectedTexture
     private BottomBandWallFeature featureBase;
     private LongPipeRuinWallFeature featureLongPipe;
     private VerticalMetalTearRuinWallFeature featureVerticalMetalTear;
+    private ResourceLocation defaultSpriteLocation;
 
     @Override
     protected void registerFeatures(IFeatureRegistry features)
@@ -88,7 +91,8 @@ public class RemnantRuinWallTexture extends ProceduralConnectedTexture
         final long verticalMetalTearTraitId = featureVerticalMetalTear.getFeatureTraitId();
         final long longPipeTraitId = featureLongPipe.getFeatureTraitId();
 
-        textures.useSpriteNamed(makeResourceLocation("remnantRuinWall/Wall_Default"))
+        defaultSpriteLocation = makeResourceLocation("remnantRuinWall/Wall_Default");
+        textures.useSpriteNamed(defaultSpriteLocation)
                 .forTraitSet(DEFAULT)
                 .andTraitSet(LEFT)
                 .andTraitSet(RIGHT)
@@ -364,6 +368,12 @@ public class RemnantRuinWallTexture extends ProceduralConnectedTexture
     @Override
     protected boolean isCompatibleBlock(SpriteRequest request, IBlockState blockState)
     {
-        return (blockState.getBlock() instanceof RemnantRuinWallBlock);
+        return blockState.getBlock() instanceof RemnantRuinWallBlock;
+    }
+
+    @Override
+    public TextureAtlasSprite getDefaultTextureForSide(EnumFacing side)
+    {
+        return getSpriteForTraitSet(DEFAULT);
     }
 }

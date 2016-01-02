@@ -125,10 +125,13 @@ public abstract class ProceduralConnectedTexture
         if (sprite == null)
         {
             String blockPropertiesDescription = featureRegistry.describeTraitSet(blockProperties);
-
             Logger.warning("Unknown texture: %d (%s) - %s @ (%s) - %s", blockProperties, Long.toBinaryString(blockProperties), blockPropertiesDescription, worldBlockCoord, side);
         }
         return sprite;
+    }
+
+    protected TextureAtlasSprite getSpriteForTraitSet(long traitSet) {
+        return textures.getTextureFor(traitSet);
     }
 
     /**
@@ -187,7 +190,6 @@ public abstract class ProceduralConnectedTexture
 
         long blockProperties = getTraitSetForSide(request);
         return featureRegistry.describeTraitSet(blockProperties);
-
     }
 
     /**
@@ -299,4 +301,6 @@ public abstract class ProceduralConnectedTexture
 
         return !canBlockObscure(request, obscuringBlock);
     }
+
+    public abstract TextureAtlasSprite getDefaultTextureForSide(EnumFacing side);
 }

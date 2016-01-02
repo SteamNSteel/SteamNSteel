@@ -7,6 +7,8 @@ import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.texturing.api.traitspriteregistry.ISpriteDefinitionStart;
 import mod.steamnsteel.texturing.api.traitregistry.IFeatureRegistry;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 public class RemnantRuinFloorSideTexture extends ProceduralConnectedTexture
@@ -51,6 +53,12 @@ public class RemnantRuinFloorSideTexture extends ProceduralConnectedTexture
     @Override
     protected boolean isCompatibleBlock(SpriteRequest request, IBlockState blockState)
     {
-        return (blockState.getBlock() instanceof RemnantRuinFloorBlock);
+        return blockState.getBlock() instanceof RemnantRuinFloorBlock;
+    }
+
+    @Override
+    public TextureAtlasSprite getDefaultTextureForSide(EnumFacing side)
+    {
+        return getSpriteForTraitSet(DEFAULT);
     }
 }

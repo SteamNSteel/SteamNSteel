@@ -2,8 +2,8 @@ package mod.steamnsteel.client.model.pct;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Maps;
-import com.sun.org.apache.bcel.internal.generic.IFLE;
 import mod.steamnsteel.library.ModProperties;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.utility.log.Logger;
@@ -21,14 +21,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import java.io.IOException;
-import java.net.CookieManager;
-import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by codew on 9/11/2015.
- */
 public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
 {
     private final IModelState state;
@@ -36,61 +31,80 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
     private final Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter;
     private final ProceduralConnectedTexture proceduralConnectedTexture;
     private final Map<Integer, IFlexibleBakedModel> cache = Maps.newHashMap();
-    private IFlexibleBakedModel bakedModel;
-    private IModel baseModel;
+    private IFlexibleBakedModel bakedModel = null;
+    private IModel baseModel = null;
 
-    public PCTModelInstance(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, ProceduralConnectedTexture proceduralConnectedTexture)
+    public PCTModelInstance(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, ProceduralConnectedTexture pct)
     {
-        this.state = state;
-        this.format = format;
-        this.bakedTextureGetter = bakedTextureGetter;
-        this.proceduralConnectedTexture = proceduralConnectedTexture;
+        this(state, format, bakedTextureGetter, pct, getBaseModel());
+        CalculateSides(null, null);
+    }
 
+    private static IModel getBaseModel()
+    {
         try
         {
-            baseModel = ModelLoaderRegistry.getModel(new ResourceLocation("block/cube"));
-            bakedModel = baseModel.bake(state, format, bakedTextureGetter);
+            return ModelLoaderRegistry.getModel(new ResourceLocation("block/cube"));
         } catch (IOException e)
         {
             e.printStackTrace();
+            return null;
         }
     }
 
-    public PCTModelInstance(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, ProceduralConnectedTexture proceduralConnectedTexture, BlockPos blockPos, IBlockAccess blockAccess, IModel baseModel)
+    private PCTModelInstance(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, ProceduralConnectedTexture pct, IModel baseModel) {
+        this.state = state;
+        this.format = format;
+        this.bakedTextureGetter = bakedTextureGetter;
+        proceduralConnectedTexture = pct;
+
+        this.baseModel = baseModel;
+        bakedModel = baseModel.bake(state, format, bakedTextureGetter);
+    }
+
+    public PCTModelInstance(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, ProceduralConnectedTexture pct, BlockPos blockPos, IBlockAccess blockAccess, IModel baseModel)
     {
-        this(state, format, bakedTextureGetter, proceduralConnectedTexture);
-        ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
+        this(state, format, bakedTextureGetter, pct, baseModel);
+        CalculateSides(blockPos, blockAccess);
+    }
+
+    private void CalculateSides(BlockPos blockPos, IBlockAccess blockAccess)
+    {
+        final Builder<String, String> textures = ImmutableMap.builder();
 
         int identifier = 31;
 
         for (final EnumFacing side : EnumFacing.VALUES)
         {
-            final Block block = blockAccess.getBlockState(blockPos).getBlock();
-            String texture = "missingno";
+
             final String key = side.toString().toLowerCase();
-            if (block.shouldSideBeRendered(blockAccess, blockPos.offset(side), side))
+            TextureAtlasSprite sprite = proceduralConnectedTexture.getDefaultTextureForSide(side);
+            if (blockAccess != null)
             {
+                final Block block = blockAccess.getBlockState(blockPos).getBlock();
 
-                TextureAtlasSprite sprite = null;
-                try
+                if (block.shouldSideBeRendered(blockAccess, blockPos.offset(side), side))
                 {
-                    sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, blockPos, side);
-                } catch (Exception e) {
-                    Logger.info("blockPos: %s, side: %s", blockPos, side);
-                    sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, blockPos, side);
-                }
-                if (sprite != null)
-                {
-                    texture = sprite.getIconName();
-                } else{
-                    System.out.print("woof");
-
+                    try
+                    {
+                        sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, blockPos, side);
+                    } catch (final Exception e)
+                    {
+                        Logger.info("blockPos: %s, side: %s", blockPos, side);
+                        sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, blockPos, side);
+                    }
                 }
             }
-
+            String texture = "missingno";
+            if (sprite != null)
+            {
+                texture = sprite.getIconName();
+            } else
+            {
+                System.out.print("woof");
+            }
 
             identifier ^= texture.hashCode() * 31;
-
             textures.put(key, texture);
         }
 
@@ -140,9 +154,9 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
     }
 
     @Override
-    public TextureAtlasSprite getTexture()
+    public TextureAtlasSprite getParticleTexture()
     {
-        return bakedModel.getTexture();
+        return bakedModel.getParticleTexture();
     }
 
     @Override

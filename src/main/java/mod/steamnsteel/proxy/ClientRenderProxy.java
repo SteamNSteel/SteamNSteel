@@ -22,6 +22,7 @@ import mod.steamnsteel.client.model.pct.PCTModelLoader;
 import mod.steamnsteel.client.renderer.tileentity.LargeFanTESR;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
+import mod.steamnsteel.texturing.wall.RemnantRuinFloorSideTexture;
 import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.tileentity.LargeFanTE;
 import net.minecraft.block.Block;
@@ -59,7 +60,7 @@ public class ClientRenderProxy extends RenderProxy
     private void registerConnectedTextures()
     {
         PCTModelLoader.instance.registerTexture("ruinWall", new RemnantRuinWallTexture());
-        PCTModelLoader.instance.registerTexture("ruinFloorSide", new RemnantRuinWallTexture());
+        PCTModelLoader.instance.registerTexture("ruinFloor", new RemnantRuinFloorSideTexture());
     }
 
     @Override
@@ -93,6 +94,9 @@ public class ClientRenderProxy extends RenderProxy
 
         registerBlockItemModel(ModBlock.remnantRuinPillar);
         registerBlockItemModel(ModBlock.remnantRuinChest);
+
+        registerBlockItemModel(ModBlock.remnantRuinWall);
+        registerBlockItemModel(ModBlock.remnantRuinFloor);
     }
 
     private void registerBlockItemModel(Block block) {

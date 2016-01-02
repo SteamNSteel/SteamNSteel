@@ -33,7 +33,7 @@ public class LargeFanTESR extends TileEntitySpecialRenderer<LargeFanTE>
         final BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
         IBlockState blockState = te.getWorld().getBlockState(te.getPos());
         BlockPos blockpos = te.getPos();
-        final OpenGEXState openGEXState = new OpenGEXState(null, getWorld().getTotalWorldTime() / 5.0f);
+        final OpenGEXState openGEXState = new OpenGEXState(null, getWorld().getTotalWorldTime() / 20.0f);
         IBakedModel model = blockRenderer.getModelFromBlockState(blockState.withProperty(FanLargeBlock.RENDER_DYNAMIC, true), getWorld(), te.getPos());
         blockState = ((IExtendedBlockState)blockState).withProperty(OpenGEXAnimationFrameProperty.instance, openGEXState);
 

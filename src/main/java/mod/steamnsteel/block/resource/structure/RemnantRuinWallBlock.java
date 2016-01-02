@@ -37,7 +37,6 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 public class RemnantRuinWallBlock extends SteamNSteelBlock
 {
     public static final String NAME = "remnantRuinWall";
-    //ProceduralConnectedTexture textureManager;
 
     public RemnantRuinWallBlock()
     {
@@ -54,18 +53,6 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
         });
     }
 
-    /*
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        //blockIcon = iconRegister.registerIcon(getUnwrappedUnlocalizedName(getUnlocalizedName()));
-
-        textureManager = new RemnantRuinWallTexture();
-        textureManager.registerSprites(iconRegister);
-        blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinWall/Wall_Default");
-    }
-    */
-
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote) {
@@ -74,51 +61,6 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
     }
-
-    /*@Override
-    public boolean onBlockActivated(World world, BlockPos pos EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
-    {
-        if (world.isRemote)
-        {
-            String description = textureManager.describeTextureAt(world, WorldBlockCoord.of(pos), side);
-            player.addChatComponentMessage(new ChatComponentText(description));
-        }
-        return super.onBlockActivated(world, pos, player, side, p_149727_7_, p_149727_8_, p_149727_9_);
-    }*/
-
-    /*long[] durations = new long[10];
-    int index = 0;
-    int sidesCalculated = 0;
-    long currentMillis;
-
-    @Override
-    public IIcon getIcon(IBlockAccess blockAccess, BlockPos pos, int side)
-    {
-        long startTime = System.currentTimeMillis();
-        if (startTime - currentMillis > 1000) {
-            //Logger.info("%d sides calculated in 1 seconds", sidesCalculated);
-            currentMillis = startTime;
-            sidesCalculated = 0;
-        }
-        final IIcon iconForSide = textureManager.getSpriteForSide(blockAccess, pos, side);
-        long endTime = System.currentTimeMillis();
-        sidesCalculated++;
-        long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
-        durations[index++] = duration;
-        if (index == durations.length) {
-            index = 0;
-
-            long sum = 0;
-            for (int i = 0; i < durations.length; i++) {
-                sum += durations[i];
-            }
-            //Logger.info("ProceduralWall took %f milliseconds", (sum / (float)durations.length));
-            durations = new long[100];
-        }
-
-
-        return iconForSide;
-    }*/
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos)

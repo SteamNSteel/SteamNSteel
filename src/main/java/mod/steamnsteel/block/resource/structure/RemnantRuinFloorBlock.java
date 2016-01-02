@@ -17,21 +17,28 @@
 package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.client.model.pct.PCTModelLoader;
+import mod.steamnsteel.library.ModProperties;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockPos.MutableBlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class RemnantRuinFloorBlock extends SteamNSteelBlock
 {
     public static final String NAME = "remnantRuinFloor";
-    public static TextureAtlasSprite[] floorIcons;
-    ProceduralConnectedTexture textureManager;
 
     public RemnantRuinFloorBlock()
     {
@@ -39,51 +46,40 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
         setUnlocalizedName(NAME);
     }
 
-    /*
     @Override
-    public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, int side)
+    protected BlockState createBlockState()
     {
-        if (side == EnumFacing.UP.ordinal() || side == EnumFacing.DOWN.ordinal()) {
-            int xPos = pos.getX() % 3;
-            if (xPos < 0) xPos += 3;
-            int zPos = pos.getZ() % 9;
-            if (zPos < 0) zPos += 9;
-
-            final int index = zPos * 3 + xPos;
-            return floorIcons[index];
-        } else {
-            final TextureAtlasSprite iconForSide = textureManager.getSpriteForSide(world, pos, side);
-            return iconForSide;
-        }
-    }*/
+        return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[] {
+                ModProperties.PROPERTY_BLOCK_POS,
+                ModProperties.PROPERTY_BLOCK_ACCESS
+        });
+    }
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if (worldIn.isRemote)
-        {
-            String description = textureManager.describeTextureAt(worldIn, pos, side);
+        if (worldIn.isRemote) {
+            String description = PCTModelLoader.describeTextureAt(worldIn, pos, side);
             playerIn.addChatComponentMessage(new ChatComponentText(description));
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
     }
 
-    /*
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos)
     {
-        floorIcons = new IIcon[3*9];
-        for (int y = 0; y < 9; ++y) {
-            for (int x = 0; x < 3; ++x) {
-                String filename = String.format("%s:steelfloor/steelfloor_%dx%d", TheMod.MOD_ID, x + 1, y + 1);
-                floorIcons[y * 3 + x] = iconRegister.registerIcon(filename);
+        if (state instanceof IExtendedBlockState) {
+            BlockPos blockPos = pos;
+            if (blockPos instanceof MutableBlockPos) {
+                blockPos = new BlockPos(pos);
             }
+
+            return ((IExtendedBlockState) state)
+                    .withProperty(ModProperties.PROPERTY_BLOCK_POS, blockPos)
+                    .withProperty(ModProperties.PROPERTY_BLOCK_ACCESS, world);
         }
 
-        textureManager = new RemnantRuinFloorSideTexture();
-        textureManager.registerSprites(iconRegister);
-
-        blockIcon = iconRegister.registerIcon(TheMod.MOD_ID + ":" + "remnantRuinFloorSide/RemnantRuinFloorSideSingle");
+        //Shouldn't ever happen, but just in case.
+        return state;
     }
-    */
 }

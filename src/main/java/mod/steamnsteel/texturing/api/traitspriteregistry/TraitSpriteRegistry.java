@@ -8,7 +8,7 @@ import java.util.HashMap;
 /**
  * A Fluent Interface for registering IIcons for use in a procedural texture
  */
-public class TraitSpriteRegistry implements ISpriteDefinitionStart, ITraitSetOrNewSpriteDefinition, IAdditionalTraitSetOrNewSpriteDefinition
+public class TraitSpriteRegistry implements ISpriteDefinitionStart, ITraitSetOrNewSpriteDefinition, IAdditionalTraitSetOrNewSpriteDefinition, ISpriteLibrary
 {
     private final TextureMap textureMap;
 

@@ -79,9 +79,9 @@ public enum PCTModelLoader implements ICustomModelLoader
         final BlockRendererDispatcher rendererDispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
         final IBakedModel model = rendererDispatcher.getModelFromBlockState(state, worldIn, pos);
         if (model instanceof PCTModelInstance) {
-            ((PCTModelInstance)model).getProceduralConnectedTexture();
+            final ProceduralConnectedTexture proceduralConnectedTexture = ((PCTModelInstance) model).getProceduralConnectedTexture();
             final String textureName = "ruinWall";
-            return instance.getTexture(textureName).describeTextureAt(worldIn, pos, side);
+            return proceduralConnectedTexture.describeTextureAt(worldIn, pos, side);
         }
         return "Not a Procedural Connected Texture";
     }
