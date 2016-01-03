@@ -5,6 +5,9 @@
     "model": "steamnsteel:SSCupola.obj",
     "custom": {
       "flip-v": true
+    },
+    "textures": {
+      "#steamnsteel:models/SSCupola": "steamnsteel:models/SSCupolaOff"
     }
   },
   "variants": {
@@ -40,12 +43,12 @@
     "is_active": {
       "false": {
         "textures": {
-          "SSCupola": "steamnsteel:models/SSCupolaOff"
+          "#steamnsteel:models/SSCupola": "steamnsteel:models/SSCupolaOff"
         }
       },
       "true": {
         "textures": {
-          "SSCupola": "steamnsteel:models/SSCupolaOn"
+          "#steamnsteel:models/SSCupola": "steamnsteel:models/SSCupolaOn"
         }
       }
     }
