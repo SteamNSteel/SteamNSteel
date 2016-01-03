@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Maps;
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.library.ModProperties;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.utility.log.Logger;
@@ -44,7 +45,7 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
     {
         try
         {
-            return ModelLoaderRegistry.getModel(new ResourceLocation("block/cube"));
+            return ModelLoaderRegistry.getModel(new ResourceLocation(TheMod.MOD_ID, "block/cube_mirrored_bottom"));
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -156,7 +157,7 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
     @Override
     public TextureAtlasSprite getParticleTexture()
     {
-        return bakedModel.getParticleTexture();
+        return proceduralConnectedTexture.getParticleTexture();
     }
 
     @Override

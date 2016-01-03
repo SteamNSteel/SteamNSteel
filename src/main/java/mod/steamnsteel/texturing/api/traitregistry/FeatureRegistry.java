@@ -2,9 +2,11 @@ package mod.steamnsteel.texturing.api.traitregistry;
 
 import com.google.common.collect.Iterables;
 import mod.steamnsteel.texturing.api.*;
+import mod.steamnsteel.texturing.feature.IMultiTraitFeature;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 import java.util.*;
 
@@ -17,6 +19,15 @@ public class FeatureRegistry implements IFeatureRegistry
     Map<Long, String> descriptions = new Hashtable<Long, String>();
 
     HashMap<ChunkCoord, Map<Layer, long[]>> cachedLayerFeatures = new HashMap<ChunkCoord, Map<Layer, long[]>>();
+    Map<EnumFacing, List<Layer>> layersEnabledBySide = new HashMap<>();
+
+    public FeatureRegistry()
+    {
+        for (final EnumFacing value : EnumFacing.VALUES)
+        {
+            layersEnabledBySide.put(value, new ArrayList<Layer>());
+        }
+    }
 
     /**
      * Registers a feature
@@ -36,9 +47,30 @@ public class FeatureRegistry implements IFeatureRegistry
 
         long featureTraitId = 1 << currentTraitIdBit;
         feature.setFeatureTraitId(featureTraitId);
-        features.put(featureTraitId, feature);
-        descriptions.put(featureTraitId, feature.getName());
-        currentTraitIdBit++;
+
+        int bitsToReserve = 1;
+        if (feature instanceof IMultiTraitFeature) {
+            int sequentialStates = ((IMultiTraitFeature)feature).getSequentialStateCount();
+            bitsToReserve = 0;
+            while ( (sequentialStates >>= 1) != 0) //http://stackoverflow.com/a/12349615
+            {
+                bitsToReserve++;
+            }
+
+            features.put(featureTraitId, feature);
+            for (int i = 0; i <= bitsToReserve; i++)
+            {
+                long additionalDescription = 1 << currentTraitIdBit;
+                descriptions.put(additionalDescription, feature.getName() + "_" + i);
+                currentTraitIdBit++;
+            }
+        } else {
+            features.put(featureTraitId, feature);
+            descriptions.put(featureTraitId, feature.getName());
+            currentTraitIdBit++;
+        }
+
+
     }
 
     /**
@@ -49,10 +81,21 @@ public class FeatureRegistry implements IFeatureRegistry
      * @param allowRandomization true, if the layer should be randomized
      * @return The created layer
      */
-    public Layer registerLayer(String name, boolean allowRandomization)
+    public Layer registerLayer(String name, boolean allowRandomization, EnumFacing... sides)
     {
+        if (sides == null || sides.length == 0) {
+            sides = EnumFacing.VALUES;
+        }
+
         Layer layer = new Layer(currentLayer, name, allowRandomization);
+        for (final EnumFacing side : sides)
+        {
+            layersEnabledBySide.get(side).add(layer);
+        }
+
         currentLayer++;
+
+
         return layer;
     }
 
@@ -158,6 +201,8 @@ public class FeatureRegistry implements IFeatureRegistry
 
         for (Layer layer : featureLayers.keySet())
         {
+            if (!layersEnabledBySide.get(request.getOrientation()).contains(layer)) { continue; }
+
             IProceduralWallFeature currentLayerFeature = getFeatureAt(request.getWorldBlockCoord(), layer);
             if (currentLayerFeature == null)
             {

@@ -80,7 +80,6 @@ public enum PCTModelLoader implements ICustomModelLoader
         final IBakedModel model = rendererDispatcher.getModelFromBlockState(state, worldIn, pos);
         if (model instanceof PCTModelInstance) {
             final ProceduralConnectedTexture proceduralConnectedTexture = ((PCTModelInstance) model).getProceduralConnectedTexture();
-            final String textureName = "ruinWall";
             return proceduralConnectedTexture.describeTextureAt(worldIn, pos, side);
         }
         return "Not a Procedural Connected Texture";

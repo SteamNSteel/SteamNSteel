@@ -2,7 +2,11 @@ package mod.steamnsteel.texturing.api.traitspriteregistry;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -13,11 +17,18 @@ public class TraitSpriteRegistry implements ISpriteDefinitionStart, ITraitSetOrN
     private final TextureMap textureMap;
 
     private TextureAtlasSprite currentSprite = null;
-    private HashMap<Long, TextureAtlasSprite> sprites = new HashMap<Long, TextureAtlasSprite>();
+    private HashMap<EnumFacing, HashMap<Long, TextureAtlasSprite>> sprites = new HashMap<>();
+    private Collection<EnumFacing> activeSides = new ArrayList<>();
 
     public TraitSpriteRegistry(TextureMap textureMap)
     {
         this.textureMap = textureMap;
+
+        for (final EnumFacing side : EnumFacing.VALUES)
+        {
+            activeSides.add(side);
+            sprites.put(side, new HashMap<Long, TextureAtlasSprite>());
+        }
     }
 
     /**
@@ -33,6 +44,22 @@ public class TraitSpriteRegistry implements ISpriteDefinitionStart, ITraitSetOrN
     }
 
     /**
+     * Sets the sides that will receive the following trait sets.
+     * @param sides The list of sides affected by the next set of sprite definitions.
+     */
+    @Override
+    public void forSides(EnumFacing[] sides, ISideTraitList sideTraitList)
+    {
+        final Collection<EnumFacing> existingSides = this.activeSides;
+        activeSides = new ArrayList<>();
+        activeSides.addAll(Arrays.asList(sides));
+
+        sideTraitList.register();
+
+        activeSides = existingSides;
+    }
+
+    /**
      * Applies a Trait Set to an Icon
      *
      * @param traitSet the Trait Set to apply to an Icon
@@ -40,7 +67,13 @@ public class TraitSpriteRegistry implements ISpriteDefinitionStart, ITraitSetOrN
      */
     public IAdditionalTraitSetOrNewSpriteDefinition forTraitSet(long traitSet)
     {
-        sprites.put(traitSet, currentSprite);
+        for (final EnumFacing activeSide : activeSides)
+        {
+            final HashMap<Long, TextureAtlasSprite> spriteList = sprites.get(activeSide);
+            spriteList.put(traitSet, currentSprite);
+        }
+
+
         return this;
     }
 
@@ -62,8 +95,8 @@ public class TraitSpriteRegistry implements ISpriteDefinitionStart, ITraitSetOrN
      * @param traitSet The Trait Set to match
      * @return The appropriate IIcon.
      */
-    public TextureAtlasSprite getTextureFor(long traitSet)
+    public TextureAtlasSprite getTextureFor(EnumFacing side, long traitSet)
     {
-        return sprites.get(traitSet);
+        return sprites.get(side).get(traitSet);
     }
 }

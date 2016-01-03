@@ -2,6 +2,7 @@ package mod.steamnsteel.texturing.api.traitregistry;
 
 import mod.steamnsteel.texturing.api.IProceduralWallFeature;
 import mod.steamnsteel.texturing.api.Layer;
+import net.minecraft.util.EnumFacing;
 
 public interface IFeatureRegistry
 {
@@ -22,5 +23,5 @@ public interface IFeatureRegistry
      * @param allowRandomization true, if the layer should be randomized
      * @return The created layer
      */
-    Layer registerLayer(String name, boolean allowRandomization);
+    Layer registerLayer(String name, boolean allowRandomization, EnumFacing... sides);
 }

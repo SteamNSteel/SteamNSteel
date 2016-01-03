@@ -120,7 +120,7 @@ public abstract class ProceduralConnectedTexture
 
         long blockProperties = getTraitSetForSide(request);
 
-        TextureAtlasSprite sprite = textures.getTextureFor(blockProperties);
+        TextureAtlasSprite sprite = textures.getTextureFor(side, blockProperties);
 
         if (sprite == null)
         {
@@ -130,8 +130,8 @@ public abstract class ProceduralConnectedTexture
         return sprite;
     }
 
-    protected TextureAtlasSprite getSpriteForTraitSet(long traitSet) {
-        return textures.getTextureFor(traitSet);
+    protected TextureAtlasSprite getSpriteForTraitSet(EnumFacing side, long traitSet) {
+        return textures.getTextureFor(side, traitSet);
     }
 
     /**
@@ -143,8 +143,7 @@ public abstract class ProceduralConnectedTexture
     private long getTraitSetForSide(SpriteRequest request)
     {
         long initialTraits = 0;
-        EnumFacing orientation = request.getOrientation();
-        if (orientation == EnumFacing.UP || orientation == EnumFacing.DOWN || isBlockPartOfWallAndUnobstructed(request, TextureDirection.BACKWARDS))
+        if (isBlockPartOfWallAndUnobstructed(request, TextureDirection.BACKWARDS))
         {
             return DEFAULT;
         }
@@ -303,4 +302,5 @@ public abstract class ProceduralConnectedTexture
     }
 
     public abstract TextureAtlasSprite getDefaultTextureForSide(EnumFacing side);
+    public abstract TextureAtlasSprite getParticleTexture();
 }
