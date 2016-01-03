@@ -50,24 +50,21 @@
     "east=true,north=true,south=true,type=mossy,west=true"        : { "model": "bars_nsew", "textures": { "edge": "steamnsteel:blocks/remnantRuinIronBars/Mossy", "bars": "steamnsteel:blocks/remnantRuinIronBars/Mossy", "particle": "steamnsteel:blocks/remnantRuinIronBars/Mossy" } },
     "east=true,north=true,south=true,type=rustedmossy,west=true"  : { "model": "bars_nsew", "textures": { "edge": "steamnsteel:blocks/remnantRuinIronBars/RustedMossy", "bars": "steamnsteel:blocks/remnantRuinIronBars/RustedMossy", "particle": "steamnsteel:blocks/remnantRuinIronBars/RustedMossy" } },
     "inventory,type=rusted": [{
-      "model": "bars_nsew",
+      "model": "builtin/generated",
       "textures": {
-        "edge": "steamnsteel:blocks/remnantRuinIronBars/Rusted",
-        "bars": "steamnsteel:blocks/remnantRuinIronBars/Rusted"
+        "layer0": "steamnsteel:blocks/remnantRuinIronBars/Rusted"
       }
     }],
     "inventory,type=mossy": [{
-      "model": "bars_nsew",
+      "model": "builtin/generated",
       "textures": {
-        "edge": "steamnsteel:blocks/remnantRuinIronBars/Mossy",
-        "bars": "steamnsteel:blocks/remnantRuinIronBars/Mossy"
+        "layer0": "steamnsteel:blocks/remnantRuinIronBars/Mossy"
       }
     }],
     "inventory,type=rustedmossy": [{
-      "model": "bars_nsew",
+      "model": "builtin/generated",
       "textures": {
-        "edge": "steamnsteel:blocks/remnantRuinIronBars/RustedMossy",
-        "bars": "steamnsteel:blocks/remnantRuinIronBars/RustedMossy"
+        "layer0": "steamnsteel:blocks/remnantRuinIronBars/RustedMossy"
       }
     }]
   }
