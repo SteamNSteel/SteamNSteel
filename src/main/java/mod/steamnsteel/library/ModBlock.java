@@ -19,8 +19,10 @@ package mod.steamnsteel.library;
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.block.machine.*;
 import mod.steamnsteel.block.resource.structure.RemnantRuinFloorBlock;
+import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock;
 import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
 import mod.steamnsteel.block.resource.structure.RemnantRuinWallBlock;
+import mod.steamnsteel.item.resource.structure.RemnantRuinIronBarsBlockItem;
 import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import mod.steamnsteel.TheMod;
@@ -72,6 +74,7 @@ public final class ModBlock
 
     public static final SteamNSteelBlock remnantRuinFloor = new RemnantRuinFloorBlock();
     public static final SteamNSteelBlock remnantRuinWall = new RemnantRuinWallBlock();
+    public static final RemnantRuinIronBarsBlock remnantRuinIronBars = new RemnantRuinIronBarsBlock();
     /*
     public static final SteamNSteelPaneBlock remnantRuinIronBars = new RemnantRuinIronBarsBlock();
     */
@@ -125,8 +128,7 @@ public final class ModBlock
 
         GameRegistry.registerBlock(remnantRuinFloor, RemnantRuinFloorBlock.NAME);
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
-/*        GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlock.NAME);
-*/
+        GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlockItem.class, RemnantRuinIronBarsBlock.NAME);
 
         //Compat
         TileEntity.addMapping(RemnantRuinChestTE.class, "tile.chestPlotonium");
