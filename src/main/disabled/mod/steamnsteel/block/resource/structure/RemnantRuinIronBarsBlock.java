@@ -14,7 +14,7 @@ import java.util.List;
 public class RemnantRuinIronBarsBlock extends SteamNSteelPaneBlock
 {
     public static final String NAME = "remnantRuinIronBars";
-    public static final String[] NAMES = {"Rusted", "Mossy", "RustedMossy" };
+    public static final String[] NAMES = {"Rusted", "Mossy", "RUSTED_MOSSY" };
 
     public RemnantRuinIronBarsBlock()
     {

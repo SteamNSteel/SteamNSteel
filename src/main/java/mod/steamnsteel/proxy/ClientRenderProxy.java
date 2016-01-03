@@ -48,8 +48,6 @@ public class ClientRenderProxy extends RenderProxy
 
         registerEventHandlers();
 
-
-
         OpenGEXModelLoader.instance.addDomain(TheMod.MOD_ID);
         OBJLoader.instance.addDomain(TheMod.MOD_ID);
         B3DLoader.instance.addDomain(TheMod.MOD_ID);
@@ -97,6 +95,8 @@ public class ClientRenderProxy extends RenderProxy
 
         registerBlockItemModel(ModBlock.remnantRuinWall);
         registerBlockItemModel(ModBlock.remnantRuinFloor);
+
+        registerBlockItemModel(ModBlock.remnantRuinIronBars);
     }
 
     private void registerBlockItemModel(Block block) {
