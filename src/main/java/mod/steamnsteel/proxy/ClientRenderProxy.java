@@ -17,6 +17,8 @@
 package mod.steamnsteel.proxy;
 
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock;
+import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock.IronBarsTextures;
 import mod.steamnsteel.client.model.opengex.OpenGEXModelLoader;
 import mod.steamnsteel.client.model.pct.PCTModelLoader;
 import mod.steamnsteel.client.renderer.tileentity.LargeFanTESR;
@@ -96,7 +98,19 @@ public class ClientRenderProxy extends RenderProxy
         registerBlockItemModel(ModBlock.remnantRuinWall);
         registerBlockItemModel(ModBlock.remnantRuinFloor);
 
-        registerBlockItemModel(ModBlock.remnantRuinIronBars);
+        registerIronBarsModel(ModBlock.remnantRuinIronBars);
+    }
+
+    private void registerIronBarsModel(Block block) {
+        final String resourceName = block.getUnlocalizedName().substring(5);
+        for (int i = 0; i < IronBarsTextures.VALUES.length; ++i)
+        {
+            ModelLoader.setCustomModelResourceLocation(
+                    Item.getItemFromBlock(block),
+                    i,
+                    new ModelResourceLocation(resourceName, "inventory,type=" + IronBarsTextures.VALUES[i].getName())
+            );
+        }
     }
 
     private void registerBlockItemModel(Block block) {

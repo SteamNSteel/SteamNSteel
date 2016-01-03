@@ -7,12 +7,18 @@ import com.google.common.collect.Lists;
 import mod.steamnsteel.TheMod;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import scala.actors.threadpool.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class RemnantRuinIronBarsBlock extends BlockPane
 {
@@ -27,6 +33,7 @@ public class RemnantRuinIronBarsBlock extends BlockPane
         setStepSound(soundTypeMetal);
         setUnlocalizedName(NAME);
         setCreativeTab(TheMod.CREATIVE_TAB);
+
         setDefaultState(
                 blockState.getBaseState()
                         .withProperty(NORTH, Boolean.valueOf(false))
@@ -35,6 +42,15 @@ public class RemnantRuinIronBarsBlock extends BlockPane
                         .withProperty(WEST, Boolean.valueOf(false))
                         .withProperty(IronBarsType, IronBarsTextures.RUSTED)
         );
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(Item item, CreativeTabs creativeTab, List list)
+    {
+        for (int i = 0; i < IronBarsTextures.VALUES.length; ++i)
+        {
+            list.add(new ItemStack(item, 1, i));
+        }
     }
 
     @Override
@@ -53,6 +69,19 @@ public class RemnantRuinIronBarsBlock extends BlockPane
     public String getUnlocalizedName()
     {
         return "tile." + TheMod.RESOURCE_PREFIX + getUnwrappedUnlocalizedName(super.getUnlocalizedName());
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return state.getValue(IronBarsType).ordinal();
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta)
+    {
+        return super.getStateFromMeta(meta)
+                .withProperty(IronBarsType, IronBarsTextures.VALUES[meta & 15]);
     }
 
     public enum IronBarsTextures implements IStringSerializable
