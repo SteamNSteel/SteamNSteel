@@ -17,7 +17,9 @@
 package mod.steamnsteel.gui;
 
 import mod.steamnsteel.client.gui.CupolaGui;
+import mod.steamnsteel.client.gui.ProjectTableGui;
 import mod.steamnsteel.inventory.CupolaContainer;
+import mod.steamnsteel.inventory.ProjectTableContainer;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
@@ -37,6 +39,8 @@ public enum GuiHandler implements IGuiHandler
             case CUPOLA:
                 final CupolaTE te = (CupolaTE) world.getTileEntity(new BlockPos(x, y, z));
                 return new CupolaContainer(player.inventory, te);
+            case PROJECT_TABLE:
+                return new ProjectTableContainer(player.inventory);
         }
         return null;
     }
@@ -50,6 +54,8 @@ public enum GuiHandler implements IGuiHandler
             case CUPOLA:
                 final CupolaTE te = (CupolaTE) world.getTileEntity(new BlockPos(x, y, z));
                 return new CupolaGui(player.inventory, te);
+            case PROJECT_TABLE:
+                return new ProjectTableGui(player.inventory);
         }
         return null;
     }
