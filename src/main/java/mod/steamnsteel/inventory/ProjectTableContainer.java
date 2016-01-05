@@ -8,7 +8,7 @@ import net.minecraft.entity.player.InventoryPlayer;
  */
 public class ProjectTableContainer extends SteamNSteelContainer{
     public ProjectTableContainer(InventoryPlayer inventoryPlayer) {
-        addPlayerInventory(inventoryPlayer, 8, 84);
+        addPlayerInventory(inventoryPlayer, 8, 145);
     }
 
     @Override
