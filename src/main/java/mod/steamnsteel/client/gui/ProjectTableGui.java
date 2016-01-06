@@ -1,35 +1,42 @@
 package mod.steamnsteel.client.gui;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import mod.steamnsteel.client.gui.components.ProjectTableRecipeGuiComponent;
+import mod.steamnsteel.client.gui.components.ScrollPaneGuiComponent;
+import mod.steamnsteel.client.gui.components.ScrollbarGuiComponent;
+import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
 import mod.steamnsteel.inventory.ProjectTableContainer;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import scala.actors.threadpool.Arrays;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by codew on 5/01/2016.
  */
 public class ProjectTableGui extends SteamNSteelGui {
-    private static final ResourceLocation TEXTURE = getResourceLocation("SSCraftingTableGUI");
+    private static final GuiTexture TEXTURE = new GuiTexture(getResourceLocation("SSCraftingTableGUI"), 273, 273);
+    private final Minecraft client;
     private GuiTextField searchField;
-    private List<SNSCraftingRecipe> recipeList;
-
+    private List<ProjectTableRecipe> recipeList;
+    private ProjectTableRecipeGuiComponent[] recipeGuiComponents;
+    private ScrollPaneGuiComponent recipeListGuiComponent;
+    private ArrayList<ProjectTableRecipe> filteredList;
+    private ScrollbarGuiComponent scrollbarGuiComponent;
 
     public ProjectTableGui(InventoryPlayer playerInventory) {
         super(new ProjectTableContainer(playerInventory));
+        client = Minecraft.getMinecraft();
     }
 
     @Override
@@ -51,73 +58,61 @@ public class ProjectTableGui extends SteamNSteelGui {
         searchField.setTextColor(16777215);
         searchField.setFocused(true);
 
-        //Temporary Item List:
-        recipeList = Arrays.asList(new SNSCraftingRecipe[]{
-                new SNSCraftingRecipe(new ItemStack(ModBlock.blockSteel, 1), new ItemStack(ModItem.ingotSteel, 15)),
-                new SNSCraftingRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
-                new SNSCraftingRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
-                new SNSCraftingRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
-                new SNSCraftingRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64))
+        scrollbarGuiComponent = new ScrollbarGuiComponent(mc.getTextureManager(), TEXTURE);
 
+        //Temporary Item List:
+        recipeList = Arrays.asList(new ProjectTableRecipe[]{
+                new ProjectTableRecipe(new ItemStack(ModBlock.blockSteel, 1), new ItemStack(ModItem.ingotSteel, 15)),
+                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
+                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
+                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
+                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
+                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
+                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64))
         });
+        filteredList = Lists.newArrayList(recipeList);
+
+        recipeListGuiComponent = new ScrollPaneGuiComponent(176, 66, mc)
+                .setScrollbar(scrollbarGuiComponent)
+                .setItemRendererTemplate(new ProjectTableRecipeGuiComponent(fontRendererObj, mc.getTextureManager(), itemRender, TEXTURE))
+                .setVisibleItemCount(5)
+                .setItems(filteredList);
+
+        for (final ProjectTableRecipe projectTableRecipe : recipeList)
+        {
+            if (projectTableRecipe.getRenderText() == null) {
+                String proposedName = projectTableRecipe.getDisplayName();
+
+                if (fontRendererObj.getStringWidth(proposedName) > 64) {
+                    while (fontRendererObj.getStringWidth(proposedName + "...") > 64) {
+                        proposedName = proposedName.substring(0, proposedName.length() - 2);
+                    }
+                    proposedName += "...";
+                }
+
+                projectTableRecipe.setRenderText(proposedName);
+            }
+        }
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        mc.getTextureManager().bindTexture(TEXTURE);
+        mc.getTextureManager().bindTexture(TEXTURE.getTextureLocation());
 
         final int xStart = (width - xSize) / 2;
         final int yStart = (height - ySize) / 2;
 
         drawModalRectWithCustomSizedTexture(xStart, yStart, 0, 0, xSize, ySize, 273, 273);
 
-        for (int i = 0; i < recipeList.size(); ++i) {
-            mc.getTextureManager().bindTexture(TEXTURE);
-            final int y = yStart + 24 + (23 * i);
-            final int x = xStart + 8;
-            drawModalRectWithCustomSizedTexture(x, y, 0, 227, 142, 23, 273, 273);
-
-
-            GlStateManager.enableRescaleNormal();
-            final SNSCraftingRecipe recipe = recipeList.get(i);
-            final ImmutableList<ItemStack> output = recipe.output;
-            final ItemStack outputItemStack = output.get(0);
-            if (output.size() == 1 && outputItemStack.getItem() != null)
-            {
-                RenderHelper.enableGUIStandardItemLighting();
-                itemRender.renderItemIntoGUI(outputItemStack, x + 2, y + 3);
-                RenderHelper.disableStandardItemLighting();
-
-                fontRendererObj.drawStringWithShadow(recipe.dislayName, x + 2 + 20, (float)y + 8, 16777215);
-            }
-
-            int inputItemCount = recipe.input.size();
-
-            for (int j = 0; j < inputItemCount; ++j) {
-                final ItemStack inputItemStack = recipe.input.get(j);
-
-                final String requiredItemCount = String.format("%d", inputItemStack.stackSize);
-                final int textWidth = fontRendererObj.getStringWidth(requiredItemCount);
-
-
-                RenderHelper.enableGUIStandardItemLighting();
-                itemRender.renderItemIntoGUI(inputItemStack, (xStart + 149) - ((16 + 2) * (j + 1)) , y + 3);
-                RenderHelper.disableStandardItemLighting();
-
-                GlStateManager.depthFunc(GL11.GL_ALWAYS);
-                fontRendererObj.drawStringWithShadow(requiredItemCount, (xStart + 149) - ((16 + 2) * (j + 0)) - textWidth - 1 , y + 12, 16777215);
-                GlStateManager.depthFunc(GL11.GL_LEQUAL);
-
-
-            }
-
-            GlStateManager.disableRescaleNormal();
-
-        }
+        recipeListGuiComponent.setLocation(xStart + 8, yStart + 24);
+        recipeListGuiComponent.drawComponent();
 
         searchField.drawTextBox();
+
+        scrollbarGuiComponent.setLocation(xStart + 156, yStart + 24);
+        scrollbarGuiComponent.drawComponent();
     }
 
     @Override
@@ -140,45 +135,28 @@ public class ProjectTableGui extends SteamNSteelGui {
         }
     }
 
-    private void updateSearch()
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
-        //FIXME: make something to search in.
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        
     }
 
-    private class SNSCraftingRecipe {
-        ImmutableList<ItemStack> output;
-        ImmutableList<ItemStack> input;
-        String dislayName;
-
-        public SNSCraftingRecipe(Collection<ItemStack> input, String displayName, Collection<ItemStack> output)
-        {
-            this.input = ImmutableList.copyOf(input);
-            this.dislayName = displayName;
-            this.output = ImmutableList.copyOf(output);
+    private void updateSearch()
+    {
+        String text = searchField.getText();
+        filteredList.clear();
+        if (text == null || text.isEmpty()) {
+            filteredList.addAll(recipeList);
+            return;
         }
-
-        public SNSCraftingRecipe(Collection<ItemStack> input, ItemStack output)
+        text = text.toLowerCase();
+        for (final ProjectTableRecipe projectTableRecipe : recipeList)
         {
-            this.input = ImmutableList.copyOf(input);
-            this.dislayName = output.getDisplayName();
-            this.output = ImmutableList.of(output);
-        }
-
-        public SNSCraftingRecipe(ItemStack output, ItemStack... input)
-        {
-            this.input = ImmutableList.copyOf(input);
-
-            String proposedName = output.getDisplayName();
-
-            if (fontRendererObj.getStringWidth(proposedName) > 64) {
-                while (fontRendererObj.getStringWidth(proposedName + "...") > 64) {
-                    proposedName = proposedName.substring(0, proposedName.length() - 2);
-                }
-                proposedName += "...";
+            if (projectTableRecipe.getDisplayName().toLowerCase().contains(text)) {
+                filteredList.add(projectTableRecipe);
             }
-
-            dislayName = proposedName;
-            this.output = ImmutableList.of(output);
         }
     }
 }
