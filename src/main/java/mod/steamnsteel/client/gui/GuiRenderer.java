@@ -143,9 +143,7 @@ public class GuiRenderer
 
         //noinspection NumericCastThatLosesPrecision
         final int x = (int) ((controlLocation.getX() + bounds.getX()) * scaleW);
-        final int startY = controlLocation.getY() + bounds.getY();
-        final double scaledY = startY * scaleH;
-        final int y = (int) (client.displayHeight - scaledY);
+        final int y = client.displayHeight - ((int) (controlLocation.getY() * scaleH) + (int) (bounds.getHeight() * scaleH));
         final int width = (int) (bounds.getWidth() * scaleW);
         final int height = (int) (bounds.getHeight() * scaleH);
         GL11.glScissor(x, y, width, height);
