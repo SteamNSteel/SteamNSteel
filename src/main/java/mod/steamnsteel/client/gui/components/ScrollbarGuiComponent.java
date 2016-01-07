@@ -1,8 +1,8 @@
 package mod.steamnsteel.client.gui.components;
 
+import mod.steamnsteel.client.gui.GuiRenderer;
 import mod.steamnsteel.client.gui.GuiTexture;
 import mod.steamnsteel.utility.SteamNSteelException;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import org.lwjgl.util.Rectangle;
 
@@ -11,7 +11,6 @@ import org.lwjgl.util.Rectangle;
  */
 public class ScrollbarGuiComponent extends GuiComponent
 {
-    private final TextureManager textureManager;
     private final GuiTexture texture;
 
     private static final Rectangle inactiveHandle = new Rectangle(176, 0, 12, 15);
@@ -21,18 +20,16 @@ public class ScrollbarGuiComponent extends GuiComponent
     private int maximumValue = 100;
     private int currentValue = 0;
 
-    public ScrollbarGuiComponent(TextureManager textureManager, GuiTexture texture)
+    public ScrollbarGuiComponent(GuiRenderer guiRenderer, GuiTexture texture)
     {
-        super(new Rectangle(0, 0, inactiveHandle.getWidth(), inactiveHandle.getHeight()));
-        this.textureManager = textureManager;
+        super(guiRenderer, new Rectangle(0, 0, inactiveHandle.getWidth(), inactiveHandle.getHeight()));
         this.texture = texture;
     }
 
     @Override
     public void drawComponent()
     {
-        textureManager.bindTexture(texture.getTextureLocation());
-        drawComponentTextureWithOffset(texture, inactiveHandle, 0, 0);
+        guiRenderer.drawComponentTextureWithOffset(this, texture, inactiveHandle, 0, 0);
     }
 
     public int getMinimumValue()
