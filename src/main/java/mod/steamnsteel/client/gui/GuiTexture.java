@@ -3,9 +3,6 @@ package mod.steamnsteel.client.gui;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.Rectangle;
 
-/**
- * Created by codew on 6/01/2016.
- */
 public class GuiTexture
 {
     private final ResourceLocation textureLocation;
@@ -41,19 +38,3 @@ public class GuiTexture
     }
 }
 
-class GuiSubTexture extends GuiTexture {
-
-    private final Rectangle subtextureBounds;
-
-    public GuiSubTexture(GuiTexture baseTexture, Rectangle subtextureBounds)
-    {
-        super(baseTexture.getTextureLocation(), baseTexture.getWidth(), baseTexture.getHeight());
-        this.subtextureBounds = subtextureBounds;
-    }
-
-    @Override
-    public Rectangle getBounds()
-    {
-        return subtextureBounds;
-    }
-}

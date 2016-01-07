@@ -1,12 +1,12 @@
 package mod.steamnsteel.client.gui.components;
 
 import mod.steamnsteel.client.gui.GuiRenderer;
-import net.minecraft.client.gui.Gui;
+import org.lwjgl.util.ReadablePoint;
 import org.lwjgl.util.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiComponent extends Gui
+public class GuiComponent
 {
     private final Rectangle componentBounds = new Rectangle();
     protected final GuiRenderer guiRenderer;
@@ -55,5 +55,43 @@ public class GuiComponent extends Gui
     public void setParent(GuiComponent parent)
     {
         this.parent = parent;
+    }
+
+    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    {
+        final Rectangle realControlBounds = new Rectangle(componentBounds);
+        realControlBounds.translate(GuiRenderer.getControlLocation(this));
+
+        if (realControlBounds.contains(mouseX, mouseY)) {
+            final int localX = mouseX - realControlBounds.getX();
+            final int localY = mouseY - realControlBounds.getY();
+
+            boolean handled = false;
+            for (final GuiComponent child : children)
+            {
+                if (child.mouseClicked(localX, localY, mouseButton)) {
+                    handled = true;
+                    break;
+                }
+            }
+
+            if (!handled) {
+                handled = onMouseClickInternal(localX, localY, mouseButton);
+            }
+            return handled;
+        }
+        return false;
+    }
+
+    private boolean onMouseClickInternal(int localX, int localY, int mouseButton)
+    {
+        //TODO: Handle dragging
+
+        return onMouseClick(localX, localY, mouseButton);
+    }
+
+    protected boolean onMouseClick(int localX, int localY, int mouseButton)
+    {
+        return false;
     }
 }

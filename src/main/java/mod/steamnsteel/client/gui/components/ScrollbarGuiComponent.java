@@ -11,25 +11,24 @@ import org.lwjgl.util.Rectangle;
  */
 public class ScrollbarGuiComponent extends GuiComponent
 {
-    private final GuiTexture texture;
-
-    private static final Rectangle inactiveHandle = new Rectangle(176, 0, 12, 15);
-    private static final Rectangle activeHandle = new Rectangle(inactiveHandle.getX() + inactiveHandle.getWidth(), 0, inactiveHandle.getWidth(), inactiveHandle.getHeight());
+    private final GuiTexture activeHandle;
+    private final GuiTexture inactiveHandle;
 
     private int minimumValue = 0;
     private int maximumValue = 100;
     private int currentValue = 0;
 
-    public ScrollbarGuiComponent(GuiRenderer guiRenderer, GuiTexture texture)
+    public ScrollbarGuiComponent(GuiRenderer guiRenderer, GuiTexture activeHandle, GuiTexture inactiveHandle)
     {
         super(guiRenderer, new Rectangle(0, 0, inactiveHandle.getWidth(), inactiveHandle.getHeight()));
-        this.texture = texture;
+        this.activeHandle = activeHandle;
+        this.inactiveHandle = inactiveHandle;
     }
 
     @Override
     public void drawComponent()
     {
-        guiRenderer.drawComponentTextureWithOffset(this, texture, inactiveHandle, 0, 0);
+        guiRenderer.drawComponentTextureWithOffset(this, inactiveHandle, 0, 0);
     }
 
     public int getMinimumValue()

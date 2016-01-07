@@ -27,8 +27,6 @@ public class TexturedPaneGuiComponent extends GuiComponent
     public void drawComponent()
     {
         guiRenderer.drawComponentTexture(this, texture);
-        //drawModalRectWithCustomSizedTexture(xStart, yStart, 0, 0, xSize, ySize, 273, 273);
-
         super.drawComponent();
     }
 }

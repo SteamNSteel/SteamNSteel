@@ -69,15 +69,16 @@ public class GuiRenderer
     /////////////////////////////////////////////////////////////////////////////
     // Image rendering
     /////////////////////////////////////////////////////////////////////////////
-    public void drawModelRectWithCustomSizedTexture(GuiComponent control, Rectangle componentSubtexture, GuiTexture texture)
+    public void drawModelRectWithCustomSizedTexture(GuiComponent control, GuiTexture texture)
     {
-        drawModelRectWithCustomSizedTexture(control, componentSubtexture, texture, 0, 0);
+        drawModelRectWithCustomSizedTexture(control, texture, 0, 0);
     }
 
-    public void drawModelRectWithCustomSizedTexture(GuiComponent control, Rectangle componentSubtexture, GuiTexture texture, int offsetX, int offsetY)
+    public void drawModelRectWithCustomSizedTexture(GuiComponent control, GuiTexture texture, int offsetX, int offsetY)
     {
         final ReadablePoint controlLocation = getControlLocation(control);
         verifyTexture(texture);
+        final Rectangle componentSubtexture = texture.getBounds();
         Gui.drawModalRectWithCustomSizedTexture(
                 controlLocation.getX() + offsetX, controlLocation.getY() + offsetY,
                 componentSubtexture.getX(), componentSubtexture.getY(),
@@ -85,21 +86,15 @@ public class GuiRenderer
                 texture.getWidth(), texture.getHeight());
     }
 
-    public void drawComponentTexture(GuiComponent control, GuiTexture texture, Rectangle componentSubtexture)
-    {
-        verifyTexture(texture);
-        drawModelRectWithCustomSizedTexture(control, componentSubtexture, texture, 0, 0);
-    }
-
     public void drawComponentTexture(GuiComponent control, GuiTexture texture)
     {
         verifyTexture(texture);
-        drawModelRectWithCustomSizedTexture(control, texture.getBounds(), texture, 0, 0);
+        drawModelRectWithCustomSizedTexture(control, texture, 0, 0);
     }
 
-    public void drawComponentTextureWithOffset(GuiComponent control, GuiTexture texture, Rectangle componentSubtexture, int offsetX, int offsetY)
+    public void drawComponentTextureWithOffset(GuiComponent control, GuiTexture texture, int offsetX, int offsetY)
     {
-        drawModelRectWithCustomSizedTexture(control, componentSubtexture, texture, offsetX, offsetY);
+        drawModelRectWithCustomSizedTexture(control, texture, offsetX, offsetY);
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -157,7 +152,7 @@ public class GuiRenderer
     /////////////////////////////////////////////////////////////////////////////
     // Utilities
     /////////////////////////////////////////////////////////////////////////////
-    private static ReadablePoint getControlLocation(GuiComponent control) {
+    public static ReadablePoint getControlLocation(GuiComponent control) {
         GuiComponent parent = control;
         int offsetX = 0;
         int offsetY = 0;

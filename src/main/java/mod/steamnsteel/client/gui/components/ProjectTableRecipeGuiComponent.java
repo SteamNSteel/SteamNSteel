@@ -12,24 +12,22 @@ import org.lwjgl.util.Rectangle;
 
 public class ProjectTableRecipeGuiComponent extends GuiComponent implements IGuiTemplate<ProjectTableRecipeGuiComponent>, IModelView<ProjectTableRecipe>
 {
-    private final GuiTexture texture;
-
+    private final GuiTexture craftableTexture;
+    private final GuiTexture uncraftableTexture;
     private ProjectTableRecipe recipe = null;
-    private static final Rectangle craftableSubtexture = new Rectangle(0, 227, 142, 23);
-    private static final Rectangle uncraftableSubtexture = new Rectangle(0, 227 + 23, craftableSubtexture.getWidth(), craftableSubtexture.getHeight());
-    private static final Rectangle componentBounds = new Rectangle(0, 0, craftableSubtexture.getWidth(), craftableSubtexture.getHeight());
 
-    public ProjectTableRecipeGuiComponent(GuiRenderer guiRenderer, GuiTexture texture)
+    public ProjectTableRecipeGuiComponent(GuiRenderer guiRenderer, GuiTexture craftableTexture, GuiTexture uncraftableTexture)
     {
-        super(guiRenderer, componentBounds);
-        this.texture = texture;
+        super(guiRenderer, new Rectangle(0, 0, craftableTexture.getBounds().getWidth(), craftableTexture.getBounds().getHeight()));
+        this.craftableTexture = craftableTexture;
+        this.uncraftableTexture = uncraftableTexture;
     }
 
     @Override
     public void drawComponent() {
         if (recipe == null) { return; }
 
-        guiRenderer.drawComponentTexture(this, texture, craftableSubtexture);
+        guiRenderer.drawComponentTexture(this, craftableTexture);
 
         GlStateManager.enableRescaleNormal();
         final ImmutableList<ItemStack> output = recipe.getOutput();
@@ -55,7 +53,6 @@ public class ProjectTableRecipeGuiComponent extends GuiComponent implements IGui
             final int padding = 2;
             final int itemSize = 16;
 
-
             guiRenderer.renderItem(this, inputItemStack, getBounds().getWidth() - border - (itemSize + padding) * (j + border), padding + border);
 
             GlStateManager.depthFunc(GL11.GL_ALWAYS);
@@ -80,7 +77,7 @@ public class ProjectTableRecipeGuiComponent extends GuiComponent implements IGui
     @Override
     public ProjectTableRecipeGuiComponent construct()
     {
-        return new ProjectTableRecipeGuiComponent(guiRenderer, texture);
+        return new ProjectTableRecipeGuiComponent(guiRenderer, craftableTexture, uncraftableTexture);
     }
 
     @Override
