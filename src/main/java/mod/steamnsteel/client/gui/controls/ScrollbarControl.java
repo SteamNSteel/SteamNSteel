@@ -8,7 +8,7 @@ import org.lwjgl.util.Rectangle;
 /**
  * Created by codew on 7/01/2016.
  */
-public class ScrollbarGuiComponent extends GuiComponent
+public class ScrollbarControl extends Control
 {
     private final GuiTexture activeHandle;
     private final GuiTexture inactiveHandle;
@@ -17,7 +17,7 @@ public class ScrollbarGuiComponent extends GuiComponent
     private int maximumValue = 100;
     private int currentValue = 0;
 
-    public ScrollbarGuiComponent(GuiRenderer guiRenderer, GuiTexture activeHandle, GuiTexture inactiveHandle)
+    public ScrollbarControl(GuiRenderer guiRenderer, GuiTexture activeHandle, GuiTexture inactiveHandle)
     {
         super(guiRenderer, new Rectangle(0, 0, inactiveHandle.getWidth(), inactiveHandle.getHeight()));
         this.activeHandle = activeHandle;
@@ -25,7 +25,7 @@ public class ScrollbarGuiComponent extends GuiComponent
     }
 
     @Override
-    public void drawComponent()
+    public void draw()
     {
         guiRenderer.drawComponentTextureWithOffset(this, inactiveHandle, 0, 0);
     }

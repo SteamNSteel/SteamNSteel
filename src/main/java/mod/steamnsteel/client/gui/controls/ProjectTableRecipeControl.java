@@ -10,13 +10,13 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
 
-public class ProjectTableRecipeGuiComponent extends GuiComponent implements IGuiTemplate<ProjectTableRecipeGuiComponent>, IModelView<ProjectTableRecipe>
+public class ProjectTableRecipeControl extends Control implements IGuiTemplate<ProjectTableRecipeControl>, IModelView<ProjectTableRecipe>
 {
     private final GuiTexture craftableTexture;
     private final GuiTexture uncraftableTexture;
     private ProjectTableRecipe recipe = null;
 
-    public ProjectTableRecipeGuiComponent(GuiRenderer guiRenderer, GuiTexture craftableTexture, GuiTexture uncraftableTexture)
+    public ProjectTableRecipeControl(GuiRenderer guiRenderer, GuiTexture craftableTexture, GuiTexture uncraftableTexture)
     {
         super(guiRenderer, new Rectangle(0, 0, craftableTexture.getBounds().getWidth(), craftableTexture.getBounds().getHeight()));
         this.craftableTexture = craftableTexture;
@@ -24,7 +24,7 @@ public class ProjectTableRecipeGuiComponent extends GuiComponent implements IGui
     }
 
     @Override
-    public void drawComponent() {
+    public void draw() {
         if (recipe == null) { return; }
 
         guiRenderer.drawComponentTexture(this, craftableTexture);
@@ -75,9 +75,9 @@ public class ProjectTableRecipeGuiComponent extends GuiComponent implements IGui
     }
 
     @Override
-    public ProjectTableRecipeGuiComponent construct()
+    public ProjectTableRecipeControl construct()
     {
-        return new ProjectTableRecipeGuiComponent(guiRenderer, craftableTexture, uncraftableTexture);
+        return new ProjectTableRecipeControl(guiRenderer, craftableTexture, uncraftableTexture);
     }
 
     @Override

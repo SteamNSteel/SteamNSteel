@@ -8,33 +8,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("TypeParameterNamingConvention")
-public class ScrollPaneGuiComponent<TModel, TChildComponentTemplate extends GuiComponent & IGuiTemplate<TChildComponentTemplate> & IModelView<TModel>> extends GuiComponent
+public class ScrollPaneControl<TModel, TChildComponentTemplate extends Control & IGuiTemplate<TChildComponentTemplate> & IModelView<TModel>> extends Control
 {
-    private GuiComponent[] itemRenderers = new GuiComponent[0];
+    private Control[] itemRenderers = new Control[0];
     private List<TModel> items = Lists.newArrayList();
     private TChildComponentTemplate template = null;
-    private ScrollbarGuiComponent scrollbar = null;
+    private ScrollbarControl scrollbar = null;
 
-    public ScrollPaneGuiComponent(GuiRenderer guiRenderer, Rectangle componentBounds)
+    public ScrollPaneControl(GuiRenderer guiRenderer, Rectangle componentBounds)
     {
         super(guiRenderer, componentBounds);
     }
 
-    public ScrollPaneGuiComponent(GuiRenderer guiRenderer, int width, int height) {
+    public ScrollPaneControl(GuiRenderer guiRenderer, int width, int height) {
         this(guiRenderer, new Rectangle(0, 0, width, height));
     }
 
-    public ScrollPaneGuiComponent<TModel, TChildComponentTemplate> setItemRendererTemplate(TChildComponentTemplate guiComponentTemplate) {
+    public ScrollPaneControl<TModel, TChildComponentTemplate> setItemRendererTemplate(TChildComponentTemplate guiComponentTemplate) {
         template = guiComponentTemplate;
         return this;
     }
 
-    public ScrollPaneGuiComponent<TModel, TChildComponentTemplate> setVisibleItemCount(int visibleItems) {
+    public ScrollPaneControl<TModel, TChildComponentTemplate> setVisibleItemCount(int visibleItems) {
         if (template == null) {
             throw new SteamNSteelException("Can't set the visible item count, a template hasn't been defined yet");
         }
         final int actualItems = visibleItems + 1;
-        itemRenderers = new GuiComponent[actualItems];
+        itemRenderers = new Control[actualItems];
         for (int i = 0; i < actualItems; ++i) {
             itemRenderers[i] = template.construct();
             addChild(itemRenderers[i]);
@@ -42,14 +42,14 @@ public class ScrollPaneGuiComponent<TModel, TChildComponentTemplate extends GuiC
         return this;
     }
 
-    public ScrollPaneGuiComponent<TModel, TChildComponentTemplate> setScrollbar(ScrollbarGuiComponent scrollbar)
+    public ScrollPaneControl<TModel, TChildComponentTemplate> setScrollbar(ScrollbarControl scrollbar)
     {
         this.scrollbar = scrollbar;
         return this;
     }
 
     @SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
-    public ScrollPaneGuiComponent<TModel, TChildComponentTemplate> setItems(List<TModel> items) {
+    public ScrollPaneControl<TModel, TChildComponentTemplate> setItems(List<TModel> items) {
         this.items = items == null ? new ArrayList<TModel>(0) : items;
         final int maximumValue = this.items.size() * template.getBounds().getHeight();
         scrollbar.setMaximumValue(maximumValue);
@@ -57,7 +57,7 @@ public class ScrollPaneGuiComponent<TModel, TChildComponentTemplate extends GuiC
     }
 
     @Override
-    public void drawComponent()
+    public void draw()
     {
         if (itemRenderers.length == 0 || items.isEmpty()) {
             return;
@@ -74,7 +74,7 @@ public class ScrollPaneGuiComponent<TModel, TChildComponentTemplate extends GuiC
         int itemIndex = 0;
         for (int i = 0; i < itemRenderers.length; ++i)
         {
-            final GuiComponent itemRenderer = itemRenderers[i];
+            final Control itemRenderer = itemRenderers[i];
             TModel model = null;
             if (itemIndex + i < items.size()) {
                 model = items.get(itemIndex + i);
@@ -87,7 +87,7 @@ public class ScrollPaneGuiComponent<TModel, TChildComponentTemplate extends GuiC
             itemRenderer.setLocation(0, templateBounds.getHeight() * i);
         }
 
-        super.drawComponent();
+        super.draw();
 
         guiRenderer.endViewport();
     }

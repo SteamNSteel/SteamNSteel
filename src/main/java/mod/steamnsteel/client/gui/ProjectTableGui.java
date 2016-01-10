@@ -1,10 +1,10 @@
 package mod.steamnsteel.client.gui;
 
 import com.google.common.collect.Lists;
-import mod.steamnsteel.client.gui.controls.ProjectTableRecipeGuiComponent;
-import mod.steamnsteel.client.gui.controls.ScrollPaneGuiComponent;
-import mod.steamnsteel.client.gui.controls.ScrollbarGuiComponent;
-import mod.steamnsteel.client.gui.controls.TexturedPaneGuiComponent;
+import mod.steamnsteel.client.gui.controls.ProjectTableRecipeControl;
+import mod.steamnsteel.client.gui.controls.ScrollPaneControl;
+import mod.steamnsteel.client.gui.controls.ScrollbarControl;
+import mod.steamnsteel.client.gui.controls.TexturedPaneControl;
 import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
 import mod.steamnsteel.inventory.ProjectTableContainer;
 import mod.steamnsteel.library.ModBlock;
@@ -14,7 +14,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.Rectangle;
 import java.io.IOException;
@@ -25,10 +24,9 @@ public class ProjectTableGui extends SteamNSteelGui {
     private static final GuiTexture TEXTURE = new GuiTexture(getResourceLocation("SSCraftingTableGUI"), 273, 273);
     private GuiTextField searchField = null;
     private List<ProjectTableRecipe> recipeList = null;
-    private ScrollPaneGuiComponent recipeListGuiComponent = null;
     private ArrayList<ProjectTableRecipe> filteredList = null;
-    private ScrollbarGuiComponent scrollbarGuiComponent = null;
-    private TexturedPaneGuiComponent rootElement;
+    private ScrollPaneControl recipeListGuiComponent = null;
+    private ScrollbarControl scrollbarGuiComponent = null;
 
     public ProjectTableGui(InventoryPlayer playerInventory) {
         super(new ProjectTableContainer(playerInventory));
@@ -80,19 +78,19 @@ public class ProjectTableGui extends SteamNSteelGui {
         final GuiTexture craftableSubtexture = new GuiSubTexture(TEXTURE, new Rectangle(0, 227, 142, 23));
         final GuiTexture uncraftableSubtexture = new GuiSubTexture(TEXTURE, new Rectangle(0, 227 + 23, 142, 23));
 
-        rootElement = new TexturedPaneGuiComponent(guiRenderer, 176, 227, guiBackground);
-        scrollbarGuiComponent = new ScrollbarGuiComponent(guiRenderer, activeHandle, inactiveHandle);
+        setRootControl(new TexturedPaneControl(guiRenderer, 176, 227, guiBackground));
+        scrollbarGuiComponent = new ScrollbarControl(guiRenderer, activeHandle, inactiveHandle);
         scrollbarGuiComponent.setLocation(156, 24);
 
-        recipeListGuiComponent = new ScrollPaneGuiComponent<ProjectTableRecipe, ProjectTableRecipeGuiComponent>(guiRenderer, 176, 66)
+        recipeListGuiComponent = new ScrollPaneControl<ProjectTableRecipe, ProjectTableRecipeControl>(guiRenderer, 176, 66)
                 .setScrollbar(scrollbarGuiComponent)
-                .setItemRendererTemplate(new ProjectTableRecipeGuiComponent(guiRenderer, craftableSubtexture, uncraftableSubtexture))
+                .setItemRendererTemplate(new ProjectTableRecipeControl(guiRenderer, craftableSubtexture, uncraftableSubtexture))
                 .setVisibleItemCount(5)
                 .setItems(filteredList);
         recipeListGuiComponent.setLocation(8, 24);
 
-        rootElement.addChild(recipeListGuiComponent);
-        rootElement.addChild(scrollbarGuiComponent);
+        addChild(recipeListGuiComponent);
+        addChild(scrollbarGuiComponent);
     }
 
     protected void setRecipeRenderText()
@@ -116,14 +114,8 @@ public class ProjectTableGui extends SteamNSteelGui {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        final int xStart = (width - xSize) / 2;
-        final int yStart = (height - ySize) / 2;
-
-        rootElement.setLocation(xStart, yStart);
-        rootElement.drawComponent();
-
+        super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
         searchField.drawTextBox();
-
     }
 
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
@@ -139,30 +131,6 @@ public class ProjectTableGui extends SteamNSteelGui {
             }
         }
     }
-
-    @Override
-    public void handleMouseInput() throws IOException {
-        super.handleMouseInput();
-
-        int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        int buttons = Mouse.getEventButton();
-
-
-    }
-
-    @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    {
-        rootElement.mouseClicked(new Point(mouseX, mouseY), mouseButton);
-    }
-
-    @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state) {
-        rootElement.mouseReleased(new Point(mouseX, mouseY), state);
-    }
-
-
 
     private void updateSearch()
     {

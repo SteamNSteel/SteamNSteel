@@ -8,19 +8,19 @@ import org.lwjgl.util.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiComponent
+public class Control
 {
     private final Rectangle componentBounds = new Rectangle();
     protected final GuiRenderer guiRenderer;
-    private GuiComponent parent = null;
-    private final List<GuiComponent> children = new ArrayList<>(10);
+    private Control parent = null;
+    private final List<Control> children = new ArrayList<>(10);
 
-    public GuiComponent(GuiRenderer guiRenderer, Rectangle componentBounds)
+    public Control(GuiRenderer guiRenderer, Rectangle componentBounds)
     {
         this.guiRenderer = guiRenderer;
         this.componentBounds.setBounds(componentBounds);
     }
-    public GuiComponent(GuiRenderer guiRenderer, int width, int height) {
+    public Control(GuiRenderer guiRenderer, int width, int height) {
         this(guiRenderer, new Rectangle(0, 0, width, height));
     }
 
@@ -29,10 +29,10 @@ public class GuiComponent
         componentBounds.setLocation(x, y);
     }
 
-    public void drawComponent() {
-        for (final GuiComponent child : children)
+    public void draw() {
+        for (final Control child : children)
         {
-            child.drawComponent();
+            child.draw();
         }
     }
 
@@ -40,21 +40,21 @@ public class GuiComponent
         return componentBounds;
     }
 
-    public void addChild(GuiComponent child) {
+    public void addChild(Control child) {
         children.add(child);
         child.setParent(this);
     }
 
-    public void removeChild(GuiComponent child) {
+    public void removeChild(Control child) {
         children.remove(child);
         child.setParent(null);
     }
 
-    public GuiComponent getParent() {
+    public Control getParent() {
         return parent;
     }
 
-    public void setParent(GuiComponent parent)
+    public void setParent(Control parent)
     {
         this.parent = parent;
     }
@@ -63,7 +63,7 @@ public class GuiComponent
     {
         IMouseCallback mouseCallback = new IMouseCallback() {
             @Override
-            public boolean checkChild(GuiComponent child, ReadablePoint localPoint) {
+            public boolean checkChild(Control child, ReadablePoint localPoint) {
                 return child.mouseClicked(localPoint, mouseButton);
             }
 
@@ -79,7 +79,7 @@ public class GuiComponent
     {
         IMouseCallback mouseCallback = new IMouseCallback() {
             @Override
-            public boolean checkChild(GuiComponent child, ReadablePoint localPoint) {
+            public boolean checkChild(Control child, ReadablePoint localPoint) {
                 return child.mouseReleased(localPoint, mouseButton);
             }
 
@@ -101,7 +101,7 @@ public class GuiComponent
             localPoint.untranslate(realControlBounds);
 
             boolean handled = false;
-            for (final GuiComponent child : children)
+            for (final Control child : children)
             {
                 if (callback.checkChild(child, localPoint)) {
                     handled = true;
@@ -118,7 +118,7 @@ public class GuiComponent
     }
 
     private interface IMouseCallback {
-        boolean checkChild(GuiComponent child, ReadablePoint localPoint);
+        boolean checkChild(Control child, ReadablePoint localPoint);
 
         boolean checkCurrent(Point point);
     }

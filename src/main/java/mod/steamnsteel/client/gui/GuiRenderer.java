@@ -1,6 +1,6 @@
 package mod.steamnsteel.client.gui;
 
-import mod.steamnsteel.client.gui.controls.GuiComponent;
+import mod.steamnsteel.client.gui.controls.Control;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -69,12 +69,12 @@ public class GuiRenderer
     /////////////////////////////////////////////////////////////////////////////
     // Image rendering
     /////////////////////////////////////////////////////////////////////////////
-    public void drawModelRectWithCustomSizedTexture(GuiComponent control, GuiTexture texture)
+    public void drawModelRectWithCustomSizedTexture(Control control, GuiTexture texture)
     {
         drawModelRectWithCustomSizedTexture(control, texture, 0, 0);
     }
 
-    public void drawModelRectWithCustomSizedTexture(GuiComponent control, GuiTexture texture, int offsetX, int offsetY)
+    public void drawModelRectWithCustomSizedTexture(Control control, GuiTexture texture, int offsetX, int offsetY)
     {
         final ReadablePoint controlLocation = getControlLocation(control);
         verifyTexture(texture);
@@ -86,13 +86,13 @@ public class GuiRenderer
                 texture.getWidth(), texture.getHeight());
     }
 
-    public void drawComponentTexture(GuiComponent control, GuiTexture texture)
+    public void drawComponentTexture(Control control, GuiTexture texture)
     {
         verifyTexture(texture);
         drawModelRectWithCustomSizedTexture(control, texture, 0, 0);
     }
 
-    public void drawComponentTextureWithOffset(GuiComponent control, GuiTexture texture, int offsetX, int offsetY)
+    public void drawComponentTextureWithOffset(Control control, GuiTexture texture, int offsetX, int offsetY)
     {
         drawModelRectWithCustomSizedTexture(control, texture, offsetX, offsetY);
     }
@@ -100,7 +100,7 @@ public class GuiRenderer
     /////////////////////////////////////////////////////////////////////////////
     // Item Rendering
     /////////////////////////////////////////////////////////////////////////////
-    public void renderItem(GuiComponent control, ItemStack itemStack, int x, int y)
+    public void renderItem(Control control, ItemStack itemStack, int x, int y)
     {
         final ReadablePoint controlLocation = getControlLocation(control);
         RenderHelper.enableGUIStandardItemLighting();
@@ -112,7 +112,7 @@ public class GuiRenderer
     /////////////////////////////////////////////////////////////////////////////
     // Text Rendering
     /////////////////////////////////////////////////////////////////////////////
-    public void drawStringWithShadow(GuiComponent control, String text, int x, int y, int colour)
+    public void drawStringWithShadow(Control control, String text, int x, int y, int colour)
     {
         final ReadablePoint controlLocation = getControlLocation(control);
         fontRenderer.drawStringWithShadow(text, controlLocation.getX() + x, controlLocation.getY() + y, colour);
@@ -129,7 +129,7 @@ public class GuiRenderer
     /////////////////////////////////////////////////////////////////////////////
     public Stack<Rectangle> viewportStack = new Stack<>();
 
-    public void startViewport(GuiComponent control, Rectangle bounds) {
+    public void startViewport(Control control, Rectangle bounds) {
         final ReadablePoint controlLocation = getControlLocation(control);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         final ScaledResolution res = new ScaledResolution(client);
@@ -152,8 +152,8 @@ public class GuiRenderer
     /////////////////////////////////////////////////////////////////////////////
     // Utilities
     /////////////////////////////////////////////////////////////////////////////
-    public static ReadablePoint getControlLocation(GuiComponent control) {
-        GuiComponent parent = control;
+    public static ReadablePoint getControlLocation(Control control) {
+        Control parent = control;
         int offsetX = 0;
         int offsetY = 0;
         while (parent != null) {

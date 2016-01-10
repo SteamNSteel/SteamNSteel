@@ -7,26 +7,26 @@ import org.lwjgl.util.Rectangle;
 /**
  * Created by codew on 7/01/2016.
  */
-public class TexturedPaneGuiComponent extends GuiComponent
+public class TexturedPaneControl extends Control
 {
     private final GuiTexture texture;
 
-    public TexturedPaneGuiComponent(GuiRenderer guiRenderer, Rectangle componentBounds, GuiTexture texture)
+    public TexturedPaneControl(GuiRenderer guiRenderer, Rectangle componentBounds, GuiTexture texture)
     {
         super(guiRenderer, componentBounds);
         this.texture = texture;
     }
 
-    public TexturedPaneGuiComponent(GuiRenderer guiRenderer, int width, int height, GuiTexture texture)
+    public TexturedPaneControl(GuiRenderer guiRenderer, int width, int height, GuiTexture texture)
     {
         super(guiRenderer, width, height);
         this.texture = texture;
     }
 
     @Override
-    public void drawComponent()
+    public void draw()
     {
         guiRenderer.drawComponentTexture(this, texture);
-        super.drawComponent();
+        super.draw();
     }
 }

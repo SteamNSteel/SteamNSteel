@@ -17,10 +17,14 @@
 package mod.steamnsteel.client.gui;
 
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.client.gui.controls.Control;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Mouse;
+
+import java.io.IOException;
 
 abstract class SteamNSteelGui extends GuiContainer
 {
@@ -28,6 +32,7 @@ abstract class SteamNSteelGui extends GuiContainer
     private static final String LOCATION = "textures/gui/";
     private static final String FILE_EXTENSION = ".png";
     private static final String INVENTORY = "container.inventory";
+    private Control rootControl = null;
 
     SteamNSteelGui(Container container)
     {
@@ -36,7 +41,6 @@ abstract class SteamNSteelGui extends GuiContainer
 
     static ResourceLocation getResourceLocation(String path)
     {
-        //noinspection StringConcatenationMissingWhitespace
         return getResourceLocation(TheMod.MOD_ID.toLowerCase(), LOCATION + path + FILE_EXTENSION);
     }
 
@@ -46,6 +50,34 @@ abstract class SteamNSteelGui extends GuiContainer
     }
 
     protected abstract String getInventoryName();
+
+    public final void setRootControl(Control rootControl) {
+        this.rootControl = rootControl;
+    }
+
+    protected final void addChild(Control childControl) {
+        this.rootControl.addChild(childControl);
+    }
+
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        final int xStart = (width - xSize) / 2;
+        final int yStart = (height - ySize) / 2;
+
+        rootControl.setLocation(xStart, yStart);
+        rootControl.draw();
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+
+        int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        int buttons = Mouse.getEventButton();
+
+
+    }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseZ)
