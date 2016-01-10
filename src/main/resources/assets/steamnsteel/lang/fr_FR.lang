@@ -1,0 +1,80 @@
+##############################
+# Steam and Steel
+#
+# French - FRANCE (FR) (fr_FR) localization
+# Author: Yves Mathieu
+#
+
+#Blocks
+tile.steamnsteel:blockBrass.name=Bloc de laiton
+tile.steamnsteel:blockBronze.name=Bloc de bronze
+tile.steamnsteel:blockCopper.name=Bloc de cuivre
+tile.steamnsteel:blockPlotonium.name=Bloc de plotonium
+tile.steamnsteel:blockSteel.name=Bloc d'acier
+tile.steamnsteel:blockTin.name=Bloc d'étain
+tile.steamnsteel:blockZinc.name=Bloc de zinc
+tile.steamnsteel:remnantRuinChest.name=Coffre des ruines du vestige
+tile.steamnsteel:cupola.name=Coupole
+tile.steamnsteel:pipe.name=Tuyau
+tile.steamnsteel:pipeValve.name=Valve
+tile.steamnsteel:pipeRedstoneValve.name=Valve redstone
+tile.steamnsteel:pipeJunction.name=Tuyau de jonction
+tile.steamnsteel:oreCopper.name=Minerai de cuivre
+tile.steamnsteel:oreNiter.name=Minerai de salpêtre
+tile.steamnsteel:oreSulfur.name=Minerai de souffre
+tile.steamnsteel:oreTin.name=Minerai d'étain
+tile.steamnsteel:oreZinc.name=Minerai de zinc
+tile.steamnsteel:remnantRuinFloor.name=Sol des ruines du vestige
+tile.steamnsteel:remnantRuinPillar.name=Pillier des ruines du vestige
+tile.steamnsteel:remnantRuinWall.name=Mur des ruines du vestige
+tile.steamnsteel:remnantRuinIronBars_Rusted.name=Barres de fer rouillées
+tile.steamnsteel:remnantRuinIronBars_Mossy.name=Barres de fer moussues
+tile.steamnsteel:remnantRuinIronBars_RustedMossy.name=Barres de fer rouillées et moussues
+
+# Config file comments
+config.steamnsteel:genCopper=Le minerai de cuivre doit-il être généré dans les nouveaux morceaux ?
+config.steamnsteel:genNiter=Le minerai de salpêtre doit-il être généré dans les nouveaux morceaux ?
+config.steamnsteel:genSulfur=Le minerai de souffre doit-il être généré dans les nouveaux morceaux ?
+config.steamnsteel:genTin=Le minerai d'étain doit-il être généré dans les nouveaux morceaux ?
+config.steamnsteel:genZinc=Le minerai de zinc doit-il être généré dans les nouveaux morceaux ?
+config.steamnsteel:retroOreGen=Les autres minerais doivent-ils être générés ? (les minerais spécifiques généraux doivent-être à vrai)
+# Containers
+container.steamnsteel:cupola=Coupole
+container.steamnsteel:remnantRuinChest=Coffre des ruines du vestige
+
+# Creative Tabs
+itemGroup.steamnsteel=Steam and Steel
+
+# Items
+item.steamnsteel:anachDoodad.name=Bidule anachronique
+item.steamnsteel:axeBronze.name=Hache en bronze
+item.steamnsteel:axeSteel.name=Hache en acier
+item.steamnsteel:bootsBronze.name=Bottes en bronze
+item.steamnsteel:bootsSteel.name=Bootes en acier
+item.steamnsteel:chestplateBronze.name=Plastron en bronze
+item.steamnsteel:chestplateSteel.name=Plastron en acier
+item.steamnsteel:dustNiter.name=Salpêtre
+item.steamnsteel:dustSulfur.name=Souffre
+item.steamnsteel:helmetBronze.name=Casque en bronze
+item.steamnsteel:helmetSteel.name=Casque en acier
+item.steamnsteel:hoeBronze.name=Houe en bronze
+item.steamnsteel:hoeSteel.name=Houe en acier
+item.steamnsteel:ingotBrass.name=Lingot de laiton
+item.steamnsteel:ingotBronze.name=Lingot de bronze
+item.steamnsteel:ingotCopper.name=Lingot de cuivre
+item.steamnsteel:ingotPlotonium.name=Lingot de plotonium
+item.steamnsteel:ingotSteel.name=Lingot d'acier
+item.steamnsteel:ingotTin.name=Lingot d'étain
+item.steamnsteel:ingotZinc.name=Lingot de zinc
+item.steamnsteel:leggingsBronze.name=Jambières en bronze
+item.steamnsteel:leggingsSteel.name=Jambières en acier
+item.steamnsteel:mustyJournal.name=Journal moisi
+item.steamnsteel:perGuiVox.name=Voix-guide personnelle
+item.steamnsteel:pickBronze.name=Pioche en bronze
+item.steamnsteel:pickSteel.name=Pioche en acier
+item.steamnsteel:plotoniumScrap.name=Plotonium Scrap
+item.steamnsteel:shovelBronze.name=Pelle en bronze
+item.steamnsteel:shovelSteel.name=Pelle en acier
+item.steamnsteel:swordBronze.name=Épée en bronze
+item.steamnsteel:swordSteel.name=Épée en acier
+item.steamnsteel:voxBox.name=Boite à voix
