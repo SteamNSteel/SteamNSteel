@@ -1,4 +1,4 @@
-package mod.steamnsteel.client.gui.components;
+package mod.steamnsteel.client.gui.controls;
 
 import mod.steamnsteel.client.gui.GuiRenderer;
 import mod.steamnsteel.client.gui.GuiTexture;

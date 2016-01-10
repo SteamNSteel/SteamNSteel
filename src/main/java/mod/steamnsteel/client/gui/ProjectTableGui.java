@@ -1,10 +1,10 @@
 package mod.steamnsteel.client.gui;
 
 import com.google.common.collect.Lists;
-import mod.steamnsteel.client.gui.components.ProjectTableRecipeGuiComponent;
-import mod.steamnsteel.client.gui.components.ScrollPaneGuiComponent;
-import mod.steamnsteel.client.gui.components.ScrollbarGuiComponent;
-import mod.steamnsteel.client.gui.components.TexturedPaneGuiComponent;
+import mod.steamnsteel.client.gui.controls.ProjectTableRecipeGuiComponent;
+import mod.steamnsteel.client.gui.controls.ScrollPaneGuiComponent;
+import mod.steamnsteel.client.gui.controls.ScrollbarGuiComponent;
+import mod.steamnsteel.client.gui.controls.TexturedPaneGuiComponent;
 import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
 import mod.steamnsteel.inventory.ProjectTableContainer;
 import mod.steamnsteel.library.ModBlock;

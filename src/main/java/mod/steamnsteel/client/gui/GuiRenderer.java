@@ -1,6 +1,6 @@
 package mod.steamnsteel.client.gui;
 
-import mod.steamnsteel.client.gui.components.GuiComponent;
+import mod.steamnsteel.client.gui.controls.GuiComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.ReadablePoint;
 import org.lwjgl.util.Rectangle;
-import org.w3c.dom.css.Rect;
+
 import javax.annotation.Nullable;
 import java.util.Stack;
 
