@@ -14,6 +14,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.util.Point;
 import org.lwjgl.util.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -139,10 +141,28 @@ public class ProjectTableGui extends SteamNSteelGui {
     }
 
     @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+
+        int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        int buttons = Mouse.getEventButton();
+
+
+    }
+
+    @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
-        rootElement.mouseClicked(mouseX, mouseY, mouseButton);
+        rootElement.mouseClicked(new Point(mouseX, mouseY), mouseButton);
     }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        rootElement.mouseReleased(new Point(mouseX, mouseY), state);
+    }
+
+
 
     private void updateSearch()
     {

@@ -1,8 +1,10 @@
 package mod.steamnsteel.client.gui.components;
 
 import mod.steamnsteel.client.gui.GuiRenderer;
+import org.lwjgl.util.Point;
 import org.lwjgl.util.ReadablePoint;
 import org.lwjgl.util.Rectangle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,41 +59,94 @@ public class GuiComponent
         this.parent = parent;
     }
 
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(ReadablePoint point, final int mouseButton)
     {
+        IMouseCallback mouseCallback = new IMouseCallback() {
+            @Override
+            public boolean checkChild(GuiComponent child, ReadablePoint localPoint) {
+                return child.mouseClicked(localPoint, mouseButton);
+            }
+
+            @Override
+            public boolean checkCurrent(Point point) {
+                return onMouseClickInternal(point, mouseButton);
+            }
+        };
+        return checkMouseBoundsAndPropagate(point, mouseCallback);
+    }
+
+    public boolean mouseReleased(ReadablePoint point, final int mouseButton)
+    {
+        IMouseCallback mouseCallback = new IMouseCallback() {
+            @Override
+            public boolean checkChild(GuiComponent child, ReadablePoint localPoint) {
+                return child.mouseReleased(localPoint, mouseButton);
+            }
+
+            @Override
+            public boolean checkCurrent(Point point) {
+                return onMouseReleasedInternal(point, mouseButton);
+            }
+        };
+        return checkMouseBoundsAndPropagate(point, mouseCallback);
+    }
+
+    private boolean checkMouseBoundsAndPropagate(ReadablePoint point, IMouseCallback callback) {
         final Rectangle realControlBounds = new Rectangle(componentBounds);
         realControlBounds.translate(GuiRenderer.getControlLocation(this));
 
-        if (realControlBounds.contains(mouseX, mouseY)) {
-            final int localX = mouseX - realControlBounds.getX();
-            final int localY = mouseY - realControlBounds.getY();
+        Point localPoint = new Point();
+        if (realControlBounds.contains(point)) {
+            localPoint.setLocation(point);
+            localPoint.untranslate(realControlBounds);
 
             boolean handled = false;
             for (final GuiComponent child : children)
             {
-                if (child.mouseClicked(localX, localY, mouseButton)) {
+                if (callback.checkChild(child, localPoint)) {
                     handled = true;
                     break;
                 }
             }
 
             if (!handled) {
-                handled = onMouseClickInternal(localX, localY, mouseButton);
+                handled = callback.checkCurrent(localPoint);
             }
             return handled;
         }
         return false;
     }
 
-    private boolean onMouseClickInternal(int localX, int localY, int mouseButton)
-    {
-        //TODO: Handle dragging
+    private interface IMouseCallback {
+        boolean checkChild(GuiComponent child, ReadablePoint localPoint);
 
-        return onMouseClick(localX, localY, mouseButton);
+        boolean checkCurrent(Point point);
     }
 
-    protected boolean onMouseClick(int localX, int localY, int mouseButton)
+    /////////////////////////////////////////////////////////////////////////////
+    // Internal event handling
+    /////////////////////////////////////////////////////////////////////////////
+    private boolean onMouseClickInternal(ReadablePoint point, int mouseButton)
     {
+        //TODO: Handle dragging
+        return onMouseClick(point, mouseButton);
+    }
+
+    private boolean onMouseReleasedInternal(ReadablePoint point, int mouseButton) {
+        //TODO: Handle Dragging
+        return onMouseRelease(point, mouseButton);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    // Events for subclasses
+    /////////////////////////////////////////////////////////////////////////////
+    @SuppressWarnings("UnusedParameters")
+    protected boolean onMouseClick(ReadablePoint point, int mouseButton)
+    {
+        return false;
+    }
+
+    protected boolean onMouseRelease(ReadablePoint point, int mouseButton) {
         return false;
     }
 }
