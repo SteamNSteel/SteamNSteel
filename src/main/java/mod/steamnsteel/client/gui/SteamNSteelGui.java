@@ -18,11 +18,13 @@ package mod.steamnsteel.client.gui;
 
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.client.gui.controls.Control;
+import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.util.Point;
 
 import java.io.IOException;
 
@@ -68,15 +70,66 @@ abstract class SteamNSteelGui extends GuiContainer
         rootControl.draw();
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////
+    // Control Event handling
+    /////////////////////////////////////////////////////////////////////////////
+    int lastButtonCheck;
+    Point lastMouseLocation = new Point();
+    Point currentMouseLocation = new Point();
+    boolean isDragging;
+    int dragButton;
+    boolean[] buttonStates;
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
 
+        if (rootControl == null) {
+            return;
+        }
+        if (buttonStates == null) {
+            buttonStates = new boolean[Mouse.getButtonCount()];
+        }
+
         int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        x = x - rootControl.getBounds().getX();
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        int buttons = Mouse.getEventButton();
+        y = y - rootControl.getBounds().getY();
+        currentMouseLocation.setLocation(x, y);
+        int button = Mouse.getEventButton();
 
+        if (button != -1) {
+            boolean buttonState = Mouse.getEventButtonState();
+            if (buttonStates[button] == true && buttonState != true) {
+                Logger.info("Mouse Clicked %s", currentMouseLocation);
+                rootControl.mouseClicked(currentMouseLocation, button);
+            } else if (buttonStates[button] != true && buttonState == true) {
+                Logger.info("Mouse Unclicked %s", currentMouseLocation);
+                rootControl.mouseReleased(currentMouseLocation, button);
+                if (isDragging) {
+                    Logger.info("Mouse Drag Ended %s", currentMouseLocation);
+                    rootControl.mouseDragEnded(currentMouseLocation, button);
+                }
+            }
+            buttonStates[button] = buttonState;
+        }
 
+        if (!currentMouseLocation.equals(lastMouseLocation)){
+            Logger.info("Mouse Moved %s", currentMouseLocation);
+            rootControl.mouseMoved(currentMouseLocation);
+            if (button > 0) {
+                if (!isDragging) {
+                    Logger.info("Mouse Drag started %s", currentMouseLocation);
+                    rootControl.mouseDragStarted(currentMouseLocation, button);
+                    isDragging = true;
+                    dragButton = button;
+                } else {
+                    Logger.info("Mouse Dragged %s", currentMouseLocation);
+                    rootControl.mouseDragged(currentMouseLocation, button);
+                }
+            }
+            lastMouseLocation.setLocation(currentMouseLocation);
+        }
     }
 
     @Override

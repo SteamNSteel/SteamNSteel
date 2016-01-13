@@ -3,11 +3,9 @@ package mod.steamnsteel.client.gui.controls;
 import mod.steamnsteel.client.gui.GuiRenderer;
 import mod.steamnsteel.client.gui.GuiTexture;
 import mod.steamnsteel.utility.SteamNSteelException;
+import org.lwjgl.util.ReadablePoint;
 import org.lwjgl.util.Rectangle;
 
-/**
- * Created by codew on 7/01/2016.
- */
 public class ScrollbarControl extends Control
 {
     private final GuiTexture activeHandle;
@@ -16,18 +14,22 @@ public class ScrollbarControl extends Control
     private int minimumValue = 0;
     private int maximumValue = 100;
     private int currentValue = 0;
+    private int mouseOffset = 0;
+
+    private GuiTexture currentTexture;
 
     public ScrollbarControl(GuiRenderer guiRenderer, GuiTexture activeHandle, GuiTexture inactiveHandle)
     {
         super(guiRenderer, new Rectangle(0, 0, inactiveHandle.getWidth(), inactiveHandle.getHeight()));
         this.activeHandle = activeHandle;
         this.inactiveHandle = inactiveHandle;
+        this.currentTexture = inactiveHandle;
     }
 
     @Override
     public void draw()
     {
-        guiRenderer.drawComponentTextureWithOffset(this, inactiveHandle, 0, 0);
+        guiRenderer.drawComponentTextureWithOffset(this, currentTexture, 0, 0);
     }
 
     public int getMinimumValue()
@@ -45,6 +47,32 @@ public class ScrollbarControl extends Control
         if (currentValue < minimumValue) {
             currentValue = minimumValue;
         }
+    }
+
+    @Override
+    protected boolean onMouseClick(ReadablePoint point, int mouseButton) {
+        if (mouseButton == 1) {
+            currentTexture = activeHandle;
+            mouseOffset = getHandleTop() - point.getY();
+            captureMouse();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected boolean onMouseRelease(ReadablePoint point, int mouseButton) {
+        if (mouseButton == 1) {
+            currentTexture = inactiveHandle;
+            releaseMouse();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected boolean onMouseDragged(ReadablePoint point, int mouseButton) {
+        return super.onMouseDragged(point, mouseButton);
     }
 
     public int getMaximumValue()
@@ -80,5 +108,11 @@ public class ScrollbarControl extends Control
 
         this.currentValue = currentValue;
 
+    }
+
+    private int getHandleTop() {
+        int scrollAreaHeight = this.getBounds().getHeight() - this.inactiveHandle.getBounds().getHeight();
+        int percentageLocation = (maximumValue - currentValue) / (maximumValue - minimumValue);
+        return percentageLocation * scrollAreaHeight + getBounds().getY();
     }
 }

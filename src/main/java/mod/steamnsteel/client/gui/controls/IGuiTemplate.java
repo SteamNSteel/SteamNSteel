@@ -3,8 +3,8 @@ package mod.steamnsteel.client.gui.controls;
 /**
  * Created by codew on 7/01/2016.
  */
-public interface IGuiTemplate<TGuiComponent extends Control>
+public interface IGuiTemplate<TControl extends Control>
 {
-    TGuiComponent construct();
+    TControl construct();
 
 }
