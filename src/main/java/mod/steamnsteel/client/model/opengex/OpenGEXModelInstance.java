@@ -1,5 +1,6 @@
 package mod.steamnsteel.client.model.opengex;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableMap;
@@ -59,6 +60,9 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
             {
                 animationTime = ((OpenGEXState) state).getTime();
             }
+
+            final Optional<TRSRTransformation> globalTransform = state.apply(Optional.<IModelPart>absent());
+
             float[][] nodeMatrices = this.nodeMatrices;
             if (nodeMatrices == null)
             {
@@ -148,8 +152,11 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
                                 normal.y = normalArray[1];
                                 normal.z = normalArray[2];
 
-                                // pos
                                 nodeTransformation.transform(vertex);
+                                // pos
+                                if (globalTransform.isPresent()) {
+                                    globalTransform.get().getMatrix().transform(vertex);
+                                }
                                 vertex.x /= vertex.w;
                                 vertex.y /= vertex.w;
                                 vertex.z /= vertex.w;
@@ -159,6 +166,7 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
                                 nodeTransformation.getRotationScale(tm);
                                 tm.invert();
                                 tm.transpose();
+                                //FIXME: apply global transformation to normal calculations
                                 tm.transform(normal);
                                 normal.normalize();
 
