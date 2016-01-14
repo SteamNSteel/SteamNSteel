@@ -92,9 +92,9 @@ abstract class SteamNSteelGui extends GuiContainer
         }
 
         int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        x = x - rootControl.getBounds().getX();
+        //x = x - rootControl.getBounds().getX();
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        y = y - rootControl.getBounds().getY();
+        //y = y - rootControl.getBounds().getY();
         currentMouseLocation.setLocation(x, y);
         int button = Mouse.getEventButton();
 

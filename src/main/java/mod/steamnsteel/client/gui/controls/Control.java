@@ -1,6 +1,7 @@
 package mod.steamnsteel.client.gui.controls;
 
 import mod.steamnsteel.client.gui.GuiRenderer;
+import mod.steamnsteel.utility.log.Logger;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.ReadablePoint;
 import org.lwjgl.util.Rectangle;
@@ -157,6 +158,7 @@ public class Control
 
         Point localPoint = new Point();
         if (realControlBounds.contains(point)) {
+            Logger.info("event triggered in %s @ %s", this.getClass().getSimpleName(), this.getBounds());
             localPoint.setLocation(point);
             localPoint.untranslate(realControlBounds);
 
