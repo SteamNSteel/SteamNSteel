@@ -116,16 +116,16 @@ public class Control
         return checkMouseBoundsAndPropagate(point, mouseCallback);
     }
 
-    public boolean mouseDragged(final ReadablePoint point, final int buttons) {
+    public boolean mouseDragged(final ReadablePoint point, final ReadablePoint delta, final int buttons) {
         IMouseCallback mouseCallback = new IMouseCallback() {
             @Override
             public boolean checkChild(Control child, ReadablePoint localPoint) {
-                return child.mouseDragged(localPoint, buttons);
+                return child.mouseDragged(localPoint, delta, buttons);
             }
 
             @Override
             public boolean checkCurrent(ReadablePoint point) {
-                return onMouseDraggedInternal(point, buttons);
+                return onMouseDraggedInternal(point, delta, buttons);
             }
         };
         return checkMouseBoundsAndPropagate(point, mouseCallback);
@@ -218,8 +218,8 @@ public class Control
         return onMouseMoved(point);
     }
 
-    private boolean onMouseDraggedInternal(ReadablePoint point, int mouseButton) {
-        return onMouseDragged(point, mouseButton);
+    private boolean onMouseDraggedInternal(ReadablePoint point, ReadablePoint delta, int mouseButton) {
+        return onMouseDragged(point, delta, mouseButton);
     }
 
     private boolean onMouseDragStartedInternal(ReadablePoint point, int mouseButton) {
@@ -255,7 +255,7 @@ public class Control
         return false;
     }
     @SuppressWarnings("UnusedParameters")
-    protected boolean onMouseDragged(ReadablePoint point, int mouseButton) {
+    protected boolean onMouseDragged(ReadablePoint point, ReadablePoint delta, int mouseButton) {
         return false;
     }
     @SuppressWarnings("UnusedParameters")

@@ -4,7 +4,6 @@ import mod.steamnsteel.client.gui.GuiRenderer;
 import mod.steamnsteel.client.gui.GuiTexture;
 import mod.steamnsteel.utility.SteamNSteelException;
 import org.lwjgl.util.ReadablePoint;
-import org.lwjgl.util.Rectangle;
 
 public class ScrollbarControl extends Control
 {
@@ -51,7 +50,7 @@ public class ScrollbarControl extends Control
 
     @Override
     protected boolean onMouseClick(ReadablePoint point, int mouseButton) {
-        if (mouseButton == 1) {
+        if (mouseButton == 0) {
             currentTexture = activeHandle;
             mouseOffset = getHandleTop() - point.getY();
             captureMouse();
@@ -62,7 +61,7 @@ public class ScrollbarControl extends Control
 
     @Override
     protected boolean onMouseRelease(ReadablePoint point, int mouseButton) {
-        if (mouseButton == 1) {
+        if (mouseButton == 0) {
             currentTexture = inactiveHandle;
             releaseMouse();
             return true;
@@ -71,8 +70,8 @@ public class ScrollbarControl extends Control
     }
 
     @Override
-    protected boolean onMouseDragged(ReadablePoint point, int mouseButton) {
-        return super.onMouseDragged(point, mouseButton);
+    protected boolean onMouseDragged(ReadablePoint point, ReadablePoint delta, int mouseButton) {
+        return super.onMouseDragged(point, delta, mouseButton);
     }
 
     public int getMaximumValue()
@@ -110,8 +109,12 @@ public class ScrollbarControl extends Control
 
     }
 
+    private int getScrollableAreaHeight() {
+        return this.getBounds().getHeight() - this.inactiveHandle.getBounds().getHeight();
+    }
+
     private int getHandleTop() {
-        int scrollAreaHeight = this.getBounds().getHeight() - this.inactiveHandle.getBounds().getHeight();
+        int scrollAreaHeight = getScrollableAreaHeight();
         int percentageLocation = (maximumValue - currentValue) / (maximumValue - minimumValue);
         return percentageLocation * scrollAreaHeight + getBounds().getY();
     }
