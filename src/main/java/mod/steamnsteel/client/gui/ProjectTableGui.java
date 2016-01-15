@@ -81,8 +81,9 @@ public class ProjectTableGui extends SteamNSteelGui {
         setRootControl(new TexturedPaneControl(guiRenderer, 176, 227, guiBackground));
         scrollbarGuiComponent = new ScrollbarControl(guiRenderer, activeHandle, inactiveHandle);
         scrollbarGuiComponent.setLocation(156, 24);
+        scrollbarGuiComponent.setSize(20, 114);
 
-        recipeListGuiComponent = new ScrollPaneControl<ProjectTableRecipe, ProjectTableRecipeControl>(guiRenderer, 176, 66)
+        recipeListGuiComponent = new ScrollPaneControl<ProjectTableRecipe, ProjectTableRecipeControl>(guiRenderer, 141, 23*5)
                 .setScrollbar(scrollbarGuiComponent)
                 .setItemRendererTemplate(new ProjectTableRecipeControl(guiRenderer, craftableSubtexture, uncraftableSubtexture))
                 .setVisibleItemCount(5)

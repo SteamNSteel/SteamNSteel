@@ -2,9 +2,7 @@ package mod.steamnsteel.client.gui.controls;
 
 import mod.steamnsteel.client.gui.GuiRenderer;
 import mod.steamnsteel.utility.log.Logger;
-import org.lwjgl.util.Point;
-import org.lwjgl.util.ReadablePoint;
-import org.lwjgl.util.Rectangle;
+import org.lwjgl.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +13,10 @@ public class Control
     protected final GuiRenderer guiRenderer;
     private Control parent = null;
     private final List<Control> children = new ArrayList<>(10);
+
+    public Control(GuiRenderer guiRenderer) {
+        this(guiRenderer, new Rectangle());
+    }
 
     public Control(GuiRenderer guiRenderer, Rectangle componentBounds)
     {
@@ -29,6 +31,13 @@ public class Control
     public void setLocation(int x, int y) {
         componentBounds.setLocation(x, y);
     }
+    public void setLocation(ReadablePoint point) { componentBounds.setLocation(point);}
+    public void setSize(int width, int height) {
+        componentBounds.setSize(width, height);
+    }
+    public void setSize(ReadableDimension dimensions) {
+        componentBounds.setSize(dimensions);
+    }
 
     public void draw() {
         for (final Control child : children)
@@ -37,7 +46,7 @@ public class Control
         }
     }
 
-    public Rectangle getBounds() {
+    public ReadableRectangle getBounds() {
         return componentBounds;
     }
 
@@ -69,7 +78,7 @@ public class Control
             }
 
             @Override
-            public boolean checkCurrent(final Point point) {
+            public boolean checkCurrent(final ReadablePoint point) {
                 return onMouseClickInternal(point, mouseButton);
             }
         };
@@ -85,7 +94,7 @@ public class Control
             }
 
             @Override
-            public boolean checkCurrent(Point point) {
+            public boolean checkCurrent(ReadablePoint point) {
                 return onMouseReleasedInternal(point, mouseButton);
             }
         };
@@ -100,7 +109,7 @@ public class Control
             }
 
             @Override
-            public boolean checkCurrent(Point point) {
+            public boolean checkCurrent(ReadablePoint point) {
                 return onMouseMovedInternal(point);
             }
         };
@@ -115,7 +124,7 @@ public class Control
             }
 
             @Override
-            public boolean checkCurrent(Point point) {
+            public boolean checkCurrent(ReadablePoint point) {
                 return onMouseDraggedInternal(point, buttons);
             }
         };
@@ -130,7 +139,7 @@ public class Control
             }
 
             @Override
-            public boolean checkCurrent(Point point) {
+            public boolean checkCurrent(ReadablePoint point) {
                 return onMouseDragStartedInternal(point, buttons);
             }
         };
@@ -145,7 +154,7 @@ public class Control
             }
 
             @Override
-            public boolean checkCurrent(Point point) {
+            public boolean checkCurrent(ReadablePoint point) {
                 return onMouseDragEndedInternal(point, buttons);
             }
         };
@@ -153,36 +162,43 @@ public class Control
     }
 
     private boolean checkMouseBoundsAndPropagate(final ReadablePoint point, final IMouseCallback callback) {
-        final Rectangle realControlBounds = new Rectangle(componentBounds);
-        realControlBounds.translate(GuiRenderer.getControlLocation(this));
+        final Rectangle realControlBounds = new Rectangle();
+        //realControlBounds.setSize(componentBounds);
 
         Point localPoint = new Point();
-        if (realControlBounds.contains(point)) {
-            Logger.info("event triggered in %s @ %s", this.getClass().getSimpleName(), this.getBounds());
-            localPoint.setLocation(point);
-            localPoint.untranslate(realControlBounds);
+        //if (realControlBounds.contains(point)) {
+            Logger.info("event triggered in %s @ %s - %s", this.getClass().getSimpleName(), this.getBounds(), point);
 
             boolean handled = false;
             for (final Control child : children)
             {
-                if (callback.checkChild(child, localPoint)) {
-                    handled = true;
-                    break;
+
+                realControlBounds.setSize(child.getBounds());
+
+                localPoint.setLocation(point);
+                localPoint.untranslate(child.getBounds());
+                if (realControlBounds.contains(localPoint)) {
+                    if (callback.checkChild(child, localPoint)) {
+                        handled = true;
+                        break;
+                    }
                 }
             }
 
+            //localPoint.setLocation(point);
+            //localPoint.untranslate(this.getBounds());
             if (!handled) {
-                handled = callback.checkCurrent(localPoint);
+                handled = callback.checkCurrent(point);
             }
             return handled;
-        }
-        return false;
+        //}
+        //return false;
     }
 
     private interface IMouseCallback {
         boolean checkChild(Control child, ReadablePoint localPoint);
 
-        boolean checkCurrent(Point point);
+        boolean checkCurrent(ReadablePoint point);
     }
 
     /////////////////////////////////////////////////////////////////////////////

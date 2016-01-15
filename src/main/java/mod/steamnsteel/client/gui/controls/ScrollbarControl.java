@@ -20,7 +20,7 @@ public class ScrollbarControl extends Control
 
     public ScrollbarControl(GuiRenderer guiRenderer, GuiTexture activeHandle, GuiTexture inactiveHandle)
     {
-        super(guiRenderer, new Rectangle(0, 0, inactiveHandle.getWidth(), inactiveHandle.getHeight()));
+        super(guiRenderer);
         this.activeHandle = activeHandle;
         this.inactiveHandle = inactiveHandle;
         this.currentTexture = inactiveHandle;

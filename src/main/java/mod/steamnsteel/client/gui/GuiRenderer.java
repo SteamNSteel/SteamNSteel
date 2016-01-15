@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.ReadablePoint;
+import org.lwjgl.util.ReadableRectangle;
 import org.lwjgl.util.Rectangle;
 
 import javax.annotation.Nullable;
@@ -157,7 +158,7 @@ public class GuiRenderer
         int offsetX = 0;
         int offsetY = 0;
         while (parent != null) {
-            final Rectangle bounds = parent.getBounds();
+            final ReadableRectangle bounds = parent.getBounds();
             offsetX += bounds.getX();
             offsetY += bounds.getY();
             parent = parent.getParent();

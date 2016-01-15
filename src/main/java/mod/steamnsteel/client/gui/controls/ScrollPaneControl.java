@@ -3,6 +3,7 @@ package mod.steamnsteel.client.gui.controls;
 import com.google.common.collect.Lists;
 import mod.steamnsteel.client.gui.GuiRenderer;
 import mod.steamnsteel.utility.SteamNSteelException;
+import org.lwjgl.util.ReadableRectangle;
 import org.lwjgl.util.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class ScrollPaneControl<TModel, TChildComponentTemplate extends Control &
             return;
         }
 
-        final Rectangle templateBounds = template.getBounds();
+        final ReadableRectangle templateBounds = template.getBounds();
 
         final Rectangle viewport = new Rectangle(
                 0, 0,

@@ -25,6 +25,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
+import org.lwjgl.util.Rectangle;
 
 import java.io.IOException;
 
@@ -80,6 +81,7 @@ abstract class SteamNSteelGui extends GuiContainer
     boolean isDragging;
     int dragButton;
     boolean[] buttonStates;
+    private Rectangle bounds = new Rectangle();
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
@@ -90,11 +92,16 @@ abstract class SteamNSteelGui extends GuiContainer
         if (buttonStates == null) {
             buttonStates = new boolean[Mouse.getButtonCount()];
         }
-
+        bounds.setBounds(rootControl.getBounds());
         int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        //x = x - rootControl.getBounds().getX();
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        //y = y - rootControl.getBounds().getY();
+
+        if (!bounds.contains(x, y)) {
+            return;
+        }
+
+        x = x - bounds.getX();
+        y = y - bounds.getY();
         currentMouseLocation.setLocation(x, y);
         int button = Mouse.getEventButton();
 
