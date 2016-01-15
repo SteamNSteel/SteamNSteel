@@ -23,8 +23,7 @@ public class OpenGEXState implements IModelState {
 
     @Override
     public Optional<TRSRTransformation> apply(Optional<? extends IModelPart> part) {
-
-        return Optional.absent();
+        return state.apply(part);
     }
 
     public OgexAnimation getAnimation()
