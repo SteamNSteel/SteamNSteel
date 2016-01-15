@@ -79,7 +79,7 @@ public class GuiRenderer
     {
         final ReadablePoint controlLocation = getControlLocation(control);
         verifyTexture(texture);
-        final Rectangle componentSubtexture = texture.getBounds();
+        final ReadableRectangle componentSubtexture = texture.getBounds();
         Gui.drawModalRectWithCustomSizedTexture(
                 controlLocation.getX() + offsetX, controlLocation.getY() + offsetY,
                 componentSubtexture.getX(), componentSubtexture.getY(),

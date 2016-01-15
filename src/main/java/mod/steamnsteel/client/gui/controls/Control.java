@@ -22,21 +22,29 @@ public class Control
     {
         this.guiRenderer = guiRenderer;
         this.componentBounds.setBounds(componentBounds);
+        onResizeInternal();
     }
     public Control(GuiRenderer guiRenderer, int width, int height) {
         this(guiRenderer, new Rectangle(0, 0, width, height));
     }
 
 
-    public void setLocation(int x, int y) {
+    public void setLocation(int x, int y)
+    {
         componentBounds.setLocation(x, y);
+        onResizeInternal();
     }
-    public void setLocation(ReadablePoint point) { componentBounds.setLocation(point);}
+    public void setLocation(ReadablePoint point) {
+        componentBounds.setLocation(point);
+        onResizeInternal();
+    }
     public void setSize(int width, int height) {
         componentBounds.setSize(width, height);
+        onResizeInternal();
     }
     public void setSize(ReadableDimension dimensions) {
         componentBounds.setSize(dimensions);
+        onResizeInternal();
     }
 
     public void draw() {
@@ -163,36 +171,29 @@ public class Control
 
     private boolean checkMouseBoundsAndPropagate(final ReadablePoint point, final IMouseCallback callback) {
         final Rectangle realControlBounds = new Rectangle();
-        //realControlBounds.setSize(componentBounds);
 
         Point localPoint = new Point();
-        //if (realControlBounds.contains(point)) {
-            Logger.info("event triggered in %s @ %s - %s", this.getClass().getSimpleName(), this.getBounds(), point);
+        Logger.info("event triggered in %s @ %s - %s", this.getClass().getSimpleName(), this.getBounds(), point);
 
-            boolean handled = false;
-            for (final Control child : children)
-            {
+        boolean handled = false;
+        for (final Control child : children)
+        {
+            realControlBounds.setSize(child.getBounds());
 
-                realControlBounds.setSize(child.getBounds());
-
-                localPoint.setLocation(point);
-                localPoint.untranslate(child.getBounds());
-                if (realControlBounds.contains(localPoint)) {
-                    if (callback.checkChild(child, localPoint)) {
-                        handled = true;
-                        break;
-                    }
+            localPoint.setLocation(point);
+            localPoint.untranslate(child.getBounds());
+            if (realControlBounds.contains(localPoint)) {
+                if (callback.checkChild(child, localPoint)) {
+                    handled = true;
+                    break;
                 }
             }
+        }
 
-            //localPoint.setLocation(point);
-            //localPoint.untranslate(this.getBounds());
-            if (!handled) {
-                handled = callback.checkCurrent(point);
-            }
-            return handled;
-        //}
-        //return false;
+        if (!handled) {
+            handled = callback.checkCurrent(point);
+        }
+        return handled;
     }
 
     private interface IMouseCallback {
@@ -201,12 +202,19 @@ public class Control
         boolean checkCurrent(ReadablePoint point);
     }
 
+    protected void captureMouse() {
+        MouseCapture.register(this);
+    }
+
+    protected void releaseMouse() {
+        MouseCapture.unregister(this);
+    }
+
     /////////////////////////////////////////////////////////////////////////////
     // Internal event handling
     /////////////////////////////////////////////////////////////////////////////
     private boolean onMouseClickInternal(ReadablePoint point, int mouseButton)
     {
-        //Fire Event
         return onMouseClick(point, mouseButton);
     }
 
@@ -230,13 +238,11 @@ public class Control
         return onMouseDragEnded(point, mouseButton);
     }
 
-    protected void captureMouse() {
-        MouseCapture.register(this);
+    private void onResizeInternal() {
+        onResized(componentBounds);
     }
 
-    protected void releaseMouse() {
-        MouseCapture.unregister(this);
-    }
+
 
     /////////////////////////////////////////////////////////////////////////////
     // Events for subclasses
@@ -267,6 +273,8 @@ public class Control
         return false;
     }
 
-
+    @SuppressWarnings("UnusedParameters")
+    protected void onResized(ReadableRectangle componentBounds) {
+    }
 
 }

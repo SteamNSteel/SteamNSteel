@@ -1,6 +1,7 @@
 package mod.steamnsteel.client.gui;
 
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.util.ReadableRectangle;
 import org.lwjgl.util.Rectangle;
 
 public class GuiTexture
@@ -8,7 +9,7 @@ public class GuiTexture
     private final ResourceLocation textureLocation;
     private final int width;
     private final int height;
-    private final Rectangle bounds;
+    private final ReadableRectangle bounds;
 
     public GuiTexture(ResourceLocation textureLocation, int width, int height)
     {
@@ -23,7 +24,7 @@ public class GuiTexture
         return textureLocation;
     }
 
-    public Rectangle getBounds() {
+    public ReadableRectangle getBounds() {
         return bounds;
     }
 
