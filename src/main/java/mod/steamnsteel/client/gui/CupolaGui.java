@@ -24,7 +24,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class CupolaGui extends SteamNSteelGui
+public class CupolaGui extends EasyGui
 {
     private static final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
 

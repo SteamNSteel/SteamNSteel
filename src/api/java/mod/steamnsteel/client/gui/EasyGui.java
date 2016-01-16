@@ -24,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
+import org.lwjgl.util.ReadablePoint;
 import org.lwjgl.util.Rectangle;
 
 import java.io.IOException;
@@ -155,9 +156,14 @@ abstract class EasyGui extends GuiContainer
                     delta.untranslate(lastMouseLocation);
 
                     rootControl.mouseDragged(currentMouseLocation, delta, this.eventButton);
+                    Point p = new Point();
                     for (final Control control : MouseCapture.getCapturedControls())
                     {
-                        control.mouseDragged(currentMouseLocation, delta, this.eventButton);
+                        final ReadablePoint controlLocation = GuiRenderer.getControlLocation(control);
+                        p.setLocation(currentMouseLocation);
+                        p.untranslate(controlLocation);
+                        p.translate(rootControl.getBounds());
+                        control.mouseDragged(p, delta, this.eventButton);
                     }
                 }
             }

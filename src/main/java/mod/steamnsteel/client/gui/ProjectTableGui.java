@@ -5,6 +5,7 @@ import mod.steamnsteel.client.gui.controls.ProjectTableRecipeControl;
 import mod.steamnsteel.client.gui.controls.ScrollPaneControl;
 import mod.steamnsteel.client.gui.controls.ScrollbarControl;
 import mod.steamnsteel.client.gui.controls.TexturedPaneControl;
+import mod.steamnsteel.client.gui.events.IRecipeCraftingEventListener;
 import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
 import mod.steamnsteel.inventory.ProjectTableContainer;
 import mod.steamnsteel.library.ModBlock;
@@ -14,14 +15,15 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.util.Point;
 import org.lwjgl.util.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectTableGui extends SteamNSteelGui {
+public class ProjectTableGui extends EasyGui
+{
     private static final GuiTexture TEXTURE = new GuiTexture(getResourceLocation("SSCraftingTableGUI"), 273, 273);
+    private final InventoryPlayer playerInventory;
     private GuiTextField searchField = null;
     private List<ProjectTableRecipe> recipeList = null;
     private ArrayList<ProjectTableRecipe> filteredList = null;
@@ -30,6 +32,7 @@ public class ProjectTableGui extends SteamNSteelGui {
 
     public ProjectTableGui(InventoryPlayer playerInventory) {
         super(new ProjectTableContainer(playerInventory));
+        this.playerInventory = playerInventory;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class ProjectTableGui extends SteamNSteelGui {
         //Temporary Item List:
         recipeList = Lists.newArrayList(
                 new ProjectTableRecipe(new ItemStack(ModBlock.blockSteel, 1), new ItemStack(ModItem.ingotSteel, 15)),
-                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
+                new ProjectTableRecipe(new ItemStack(Items.diamond, 10), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
                 new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
                 new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
                 new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
@@ -63,12 +66,14 @@ public class ProjectTableGui extends SteamNSteelGui {
         searchField.setTextColor(16777215);
         searchField.setFocused(true);
 
-        CreateComponents();
+        createComponents();
+
+        processPlayerInventory();
 
         setRecipeRenderText();
     }
 
-    protected void CreateComponents()
+    protected void createComponents()
     {
         final GuiRenderer guiRenderer = new GuiRenderer(mc, mc.getTextureManager(), fontRendererObj, itemRender);
 
@@ -81,17 +86,26 @@ public class ProjectTableGui extends SteamNSteelGui {
         setRootControl(new TexturedPaneControl(guiRenderer, 176, 227, guiBackground));
         scrollbarGuiComponent = new ScrollbarControl(guiRenderer, activeHandle, inactiveHandle);
         scrollbarGuiComponent.setLocation(156, 24);
-        scrollbarGuiComponent.setSize(20, 114);
+        scrollbarGuiComponent.setSize(20, 115);
 
+        final ProjectTableRecipeControl templateRecipeControl = new ProjectTableRecipeControl(guiRenderer, craftableSubtexture, uncraftableSubtexture);
         recipeListGuiComponent = new ScrollPaneControl<ProjectTableRecipe, ProjectTableRecipeControl>(guiRenderer, 141, 23*5)
                 .setScrollbar(scrollbarGuiComponent)
-                .setItemRendererTemplate(new ProjectTableRecipeControl(guiRenderer, craftableSubtexture, uncraftableSubtexture))
+                .setItemRendererTemplate(templateRecipeControl)
                 .setVisibleItemCount(5)
                 .setItems(filteredList);
         recipeListGuiComponent.setLocation(8, 24);
 
         addChild(recipeListGuiComponent);
         addChild(scrollbarGuiComponent);
+
+        templateRecipeControl.addOnRecipeCraftingEventListener(new RecipeCraftingEventListener());
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseZ)
+    {
+
     }
 
     protected void setRecipeRenderText()
@@ -147,6 +161,82 @@ public class ProjectTableGui extends SteamNSteelGui {
             if (projectTableRecipe.getDisplayName().toLowerCase().contains(text)) {
                 filteredList.add(projectTableRecipe);
             }
+        }
+    }
+
+    List<ItemStack> usableItems;
+
+    private void processPlayerInventory() {
+        List<ItemStack> usableItems = Lists.newArrayList();
+        for (final ItemStack itemStack : inventorySlots.getInventory())
+        {
+            if (itemStack == null || itemStack.getItem() == null)
+            {
+                continue;
+            }
+
+            boolean itemMatched = false;
+            for (final ItemStack existingItemStack : usableItems) {
+                if (existingItemStack.getIsItemStackEqual(itemStack))
+                {
+                    itemMatched = true;
+                    existingItemStack.stackSize += itemStack.stackSize;
+                }
+            }
+            if (!itemMatched) {
+                final ItemStack copy = itemStack.copy();
+                usableItems.add(copy);
+            }
+        }
+        this.usableItems = usableItems;
+    }
+
+    private void craftRecipe(ProjectTableRecipe recipe) {
+        boolean canCraft = true;
+        for (final ItemStack recipeInput : recipe.getInput())
+        {
+            boolean itemMatched = false;
+            for (final ItemStack playerItem : usableItems) {
+                if (recipeInput.isItemEqual(playerItem)) {
+                    itemMatched = true;
+                    if (recipeInput.stackSize > playerItem.stackSize) {
+                        canCraft = false;
+                    }
+                }
+            }
+            if (!itemMatched) {
+                canCraft = false;
+            }
+        }
+
+        if (canCraft) {
+            for (final ItemStack itemStack : recipe.getInput())
+            {
+                playerInventory.clearMatchingItems(itemStack.getItem(), itemStack.getMetadata(), itemStack.stackSize, itemStack.getTagCompound());
+            }
+
+            for (final ItemStack itemStack : recipe.getOutput())
+            {
+                ItemStack copy = itemStack.copy();
+
+                if (!playerInventory.addItemStackToInventory(copy)) {
+                    //FIXME: Throw item on the ground.
+                }
+            }
+
+            inventorySlots.detectAndSendChanges();
+
+            processPlayerInventory();
+        }
+    }
+
+
+    private class RecipeCraftingEventListener implements IRecipeCraftingEventListener
+    {
+        @Override
+        public void onRecipeCrafting(ProjectTableRecipe recipe)
+        {
+            craftRecipe(recipe);
         }
     }
 }

@@ -1,16 +1,19 @@
 package mod.steamnsteel.client.gui.controls;
 
 import com.google.common.collect.ImmutableList;
-import mod.steamnsteel.client.gui.GuiRenderer;
-import mod.steamnsteel.client.gui.GuiTexture;
+import mod.steamnsteel.client.gui.*;
+import mod.steamnsteel.client.gui.events.IRecipeCraftingEventListener;
 import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
+import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ProjectTableRecipeControl extends Control implements IGuiTemplate<ProjectTableRecipeControl>, IModelView<ProjectTableRecipe>
+public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemplate<ProjectTableRecipeControl>, IModelView<ProjectTableRecipe>
 {
     private final GuiTexture craftableTexture;
     private final GuiTexture uncraftableTexture;
@@ -77,12 +80,57 @@ public class ProjectTableRecipeControl extends Control implements IGuiTemplate<P
     @Override
     public ProjectTableRecipeControl construct()
     {
-        return new ProjectTableRecipeControl(guiRenderer, craftableTexture, uncraftableTexture);
+        final ProjectTableRecipeControl concreteControl = new ProjectTableRecipeControl(guiRenderer, craftableTexture, uncraftableTexture);
+
+        concreteControl.recipeCraftingEventListeners = recipeCraftingEventListeners;
+
+        return concreteControl;
     }
 
     @Override
     public void setModel(ProjectTableRecipe recipe)
     {
         this.recipe = recipe;
+    }
+
+    @Override
+    protected void onButtonPressed() {
+        onRecipeCraftingInternal();
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    // On Recipe Crafting Event Handling
+    /////////////////////////////////////////////////////////////////////////////
+
+    private void onRecipeCraftingInternal() {
+        onRecipeCrafting();
+
+        fireRecipeCraftingEvent();
+    }
+
+    protected void onRecipeCrafting() {
+    }
+
+    private void fireRecipeCraftingEvent()
+    {
+        for (final IRecipeCraftingEventListener eventListener : recipeCraftingEventListeners)
+        {
+            try {
+                eventListener.onRecipeCrafting(recipe);
+            } catch (final RuntimeException e) {
+                Logger.warning("Exception in an IRecipeCraftingEventListener %s", e);
+            }
+        }
+    }
+
+    private List<IRecipeCraftingEventListener> recipeCraftingEventListeners = new ArrayList<>(1);
+
+    @SuppressWarnings("unused")
+    public void addOnRecipeCraftingEventListener(IRecipeCraftingEventListener listener) {
+        recipeCraftingEventListeners.add(listener);
+    }
+    @SuppressWarnings("unused")
+    public void removeOnRecipeCraftingEventListener(IRecipeCraftingEventListener listener) {
+        recipeCraftingEventListeners.remove(listener);
     }
 }

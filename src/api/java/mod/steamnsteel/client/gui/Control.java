@@ -1,6 +1,5 @@
 package mod.steamnsteel.client.gui;
 
-import mod.steamnsteel.client.gui.controls.MouseCapture;
 import org.lwjgl.util.*;
 
 import java.util.ArrayList;

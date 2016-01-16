@@ -1,6 +1,5 @@
 package mod.steamnsteel.client.gui;
 
-import mod.steamnsteel.client.gui.controls.Control;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
