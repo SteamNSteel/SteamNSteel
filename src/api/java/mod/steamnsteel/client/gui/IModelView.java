@@ -1,4 +1,4 @@
-package mod.steamnsteel.client.gui.controls;
+package mod.steamnsteel.client.gui;
 
 /**
  * Created by codew on 7/01/2016.

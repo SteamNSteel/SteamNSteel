@@ -17,8 +17,6 @@
 package mod.steamnsteel.client.gui;
 
 import mod.steamnsteel.TheMod;
-import mod.steamnsteel.client.gui.controls.Control;
-import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
@@ -30,7 +28,7 @@ import org.lwjgl.util.Rectangle;
 
 import java.io.IOException;
 
-abstract class SteamNSteelGui extends GuiContainer
+abstract class EasyGui extends GuiContainer
 {
     private static final int TEXT_COLOR = 4210752;
     private static final String LOCATION = "textures/gui/";
@@ -38,7 +36,7 @@ abstract class SteamNSteelGui extends GuiContainer
     private static final String INVENTORY = "container.inventory";
     private Control rootControl = null;
 
-    SteamNSteelGui(Container container)
+    EasyGui(Container container)
     {
         super(container);
     }
@@ -125,30 +123,42 @@ abstract class SteamNSteelGui extends GuiContainer
 
             this.eventButton = -1;
             rootControl.mouseReleased(currentMouseLocation, eventButton);
+            for (final Control control : MouseCapture.getCapturedControls())
+            {
+                control.mouseReleased(currentMouseLocation, eventButton);
+            }
             if (isDragging && eventButton == dragButton) {
-                Logger.info("Mouse Drag Ended %s", currentMouseLocation);
+                //Logger.info("Mouse Drag Ended %s", currentMouseLocation);
                 rootControl.mouseDragEnded(currentMouseLocation, eventButton);
+                for (final Control control : MouseCapture.getCapturedControls())
+                {
+                    control.mouseDragEnded(currentMouseLocation, eventButton);
+                }
                 isDragging = false;
             }
         }
 
         if (!currentMouseLocation.equals(lastMouseLocation)) {
 
-            Logger.info("Mouse Moved %s", currentMouseLocation);
+            //Logger.info("Mouse Moved %s", currentMouseLocation);
             rootControl.mouseMoved(currentMouseLocation);
 
             if (this.eventButton != -1 && this.lastMouseEvent > 0L) {
                 if (!isDragging) {
-                    Logger.info("Mouse Drag started %s", currentMouseLocation);
+                    //Logger.info("Mouse Drag started %s", currentMouseLocation);
                     rootControl.mouseDragStarted(currentMouseLocation, this.eventButton);
                     isDragging = true;
                     dragButton = this.eventButton;
                 } else {
-                    Logger.info("Mouse Dragged %s", currentMouseLocation);
+                    //Logger.info("Mouse Dragged %s", currentMouseLocation);
                     Point delta = new Point(currentMouseLocation);
                     delta.untranslate(lastMouseLocation);
 
                     rootControl.mouseDragged(currentMouseLocation, delta, this.eventButton);
+                    for (final Control control : MouseCapture.getCapturedControls())
+                    {
+                        control.mouseDragged(currentMouseLocation, delta, this.eventButton);
+                    }
                 }
             }
             lastMouseLocation.setLocation(currentMouseLocation);

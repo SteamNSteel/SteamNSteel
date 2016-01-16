@@ -1,11 +1,12 @@
-package mod.steamnsteel.client.gui.controls;
+package mod.steamnsteel.client.gui;
 
+import mod.steamnsteel.client.gui.Control;
 import java.util.HashSet;
 
 /**
  * Created by codew on 12/01/2016.
  */
-class MouseCapture {
+public class MouseCapture {
     private static HashSet<Control> capturingControls = new HashSet<>();
     public static void register(Control control) {
         capturingControls.add(control);

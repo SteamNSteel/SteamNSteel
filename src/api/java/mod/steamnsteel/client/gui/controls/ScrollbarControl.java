@@ -1,10 +1,15 @@
 package mod.steamnsteel.client.gui.controls;
 
+import mod.steamnsteel.client.gui.Control;
 import mod.steamnsteel.client.gui.GuiRenderer;
 import mod.steamnsteel.client.gui.GuiTexture;
+import mod.steamnsteel.client.gui.events.ICurrentValueChangedEventListener;
 import mod.steamnsteel.utility.SteamNSteelException;
+import mod.steamnsteel.utility.log.Logger;
 import org.lwjgl.util.ReadablePoint;
 import org.lwjgl.util.ReadableRectangle;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScrollbarControl extends Control
 {
@@ -17,6 +22,7 @@ public class ScrollbarControl extends Control
     private int mouseOffset = 0;
 
     private GuiTexture currentTexture;
+    private boolean enabled;
 
     public ScrollbarControl(GuiRenderer guiRenderer, GuiTexture activeHandle, GuiTexture inactiveHandle)
     {
@@ -24,12 +30,17 @@ public class ScrollbarControl extends Control
         this.activeHandle = activeHandle;
         this.inactiveHandle = inactiveHandle;
         this.currentTexture = inactiveHandle;
+
+        onResized(getBounds());
     }
 
     @Override
     public void draw()
     {
-        guiRenderer.drawComponentTextureWithOffset(this, currentTexture, 0, 0);
+        if (!enabled) {
+            return;
+        }
+        guiRenderer.drawComponentTextureWithOffset(this, currentTexture, 0, getHandleTop());
     }
 
     public int getMinimumValue()
@@ -53,14 +64,20 @@ public class ScrollbarControl extends Control
 
     @Override
     protected void onResized(ReadableRectangle componentBounds) {
-        usableScrollHeight = componentBounds.getHeight() - inactiveHandle.getBounds().getHeight();
+        if (inactiveHandle != null)
+        {
+            usableScrollHeight = componentBounds.getHeight() - inactiveHandle.getBounds().getHeight();
+        }
     }
 
     @Override
     protected boolean onMouseClick(ReadablePoint point, int mouseButton) {
+        if (!enabled) {
+            return false;
+        }
         if (mouseButton == 0) {
             currentTexture = activeHandle;
-            mouseOffset = getHandleTop() - point.getY();
+            mouseOffset = point.getY() - getHandleTop();
             captureMouse();
             return true;
         }
@@ -69,6 +86,9 @@ public class ScrollbarControl extends Control
 
     @Override
     protected boolean onMouseRelease(ReadablePoint point, int mouseButton) {
+        if (!enabled) {
+            return false;
+        }
         if (mouseButton == 0) {
             currentTexture = inactiveHandle;
             releaseMouse();
@@ -79,11 +99,19 @@ public class ScrollbarControl extends Control
 
     @Override
     protected boolean onMouseDragged(ReadablePoint point, ReadablePoint delta, int mouseButton) {
+        if (!enabled) {
+            return false;
+        }
         int newY = point.getY() - mouseOffset;
         if (newY < 0) newY = 0;
         if (newY > usableScrollHeight) newY = usableScrollHeight;
 
-        currentValue = minimumValue + (newY * usableScrollHeight
+        double percentage=(newY / (double)usableScrollHeight);
+
+        int discreteValues = maximumValue - minimumValue;
+
+
+        setCurrentValue(minimumValue + (int)(percentage * discreteValues));
         
         return true;
     }
@@ -110,20 +138,64 @@ public class ScrollbarControl extends Control
         return currentValue;
     }
 
-    public void setCurrentValue(int currentValue)
+    public void setCurrentValue(int newValue)
     {
-        if (currentValue < minimumValue){
-            currentValue = minimumValue;
+        int previousValue = this.currentValue;
+
+        if (newValue < minimumValue){
+            newValue = minimumValue;
         }
-        if (currentValue > maximumValue) {
-            currentValue = maximumValue;
+        if (newValue > maximumValue) {
+            newValue = maximumValue;
         }
 
-        this.currentValue = currentValue;
+
+        if (previousValue != newValue) {
+            this.currentValue = newValue;
+            fireOnCurrentValueChangedEvent(previousValue, newValue);
+        }
+
+        //Logger.info("Scrollbar current value changed to %d", newValue);
+    }
+
+    public void setEnabled(boolean enabled)
+    {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    // Current Value Changed Event Handling
+    /////////////////////////////////////////////////////////////////////////////
+
+    private void fireOnCurrentValueChangedEvent(int previousValue, int newValue)
+    {
+        for (final ICurrentValueChangedEventListener currentValueChangedEventListener : currentValueChangedEventListeners)
+        {
+            try {
+                currentValueChangedEventListener.invoke(this, previousValue, newValue);
+            } catch (Exception e) {
+                Logger.warning("Exception in an ICurrentValueChangedEventListener %s", e);
+            }
+        }
+    }
+
+    List<ICurrentValueChangedEventListener> currentValueChangedEventListeners = new ArrayList<>();
+
+    public void addOnCurrentValueChangedEventListener(ICurrentValueChangedEventListener listener) {
+        currentValueChangedEventListeners.add(listener);
+    }
+    public void removeOnCurrentValueChangedEventListener(ICurrentValueChangedEventListener listener) {
+        currentValueChangedEventListeners.remove(listener);
     }
 
     private int getHandleTop() {
-        int percentageLocation = (maximumValue - currentValue) / (maximumValue - minimumValue);
-        return percentageLocation * usableScrollHeight + getBounds().getY();
+        double percentageLocation = (currentValue - minimumValue) / (double)(maximumValue - minimumValue);
+        final int i = (int) (percentageLocation * usableScrollHeight);
+        return i;
     }
 }

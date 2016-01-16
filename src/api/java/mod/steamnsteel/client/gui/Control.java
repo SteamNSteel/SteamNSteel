@@ -1,7 +1,6 @@
-package mod.steamnsteel.client.gui.controls;
+package mod.steamnsteel.client.gui;
 
-import mod.steamnsteel.client.gui.GuiRenderer;
-import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.client.gui.controls.MouseCapture;
 import org.lwjgl.util.*;
 
 import java.util.ArrayList;
@@ -173,7 +172,7 @@ public class Control
         final Rectangle realControlBounds = new Rectangle();
 
         Point localPoint = new Point();
-        Logger.info("event triggered in %s @ %s - %s", this.getClass().getSimpleName(), this.getBounds(), point);
+        //Logger.info("event triggered in %s @ %s - %s", this.getClass().getSimpleName(), this.getBounds(), point);
 
         boolean handled = false;
         for (final Control child : children)
