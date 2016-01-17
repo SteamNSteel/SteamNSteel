@@ -1,6 +1,7 @@
 package mod.steamnsteel.client.gui;
 
 import com.google.common.collect.Lists;
+import mod.steamnsteel.TheMod;
 import mod.steamnsteel.client.gui.controls.ProjectTableRecipeControl;
 import mod.steamnsteel.client.gui.controls.ScrollPaneControl;
 import mod.steamnsteel.client.gui.controls.ScrollbarControl;
@@ -10,11 +11,15 @@ import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
 import mod.steamnsteel.inventory.ProjectTableContainer;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
+import mod.steamnsteel.networking.ProjectTableCraftPacket;
+import mod.steamnsteel.proxy.Proxies;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C0EPacketClickWindow;
 import org.lwjgl.util.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -210,21 +215,7 @@ public class ProjectTableGui extends EasyGui
         }
 
         if (canCraft) {
-            for (final ItemStack itemStack : recipe.getInput())
-            {
-                playerInventory.clearMatchingItems(itemStack.getItem(), itemStack.getMetadata(), itemStack.stackSize, itemStack.getTagCompound());
-            }
-
-            for (final ItemStack itemStack : recipe.getOutput())
-            {
-                ItemStack copy = itemStack.copy();
-
-                if (!playerInventory.addItemStackToInventory(copy)) {
-                    //FIXME: Throw item on the ground.
-                }
-            }
-
-            inventorySlots.detectAndSendChanges();
+            Proxies.network.getNetwork().sendToServer(new ProjectTableCraftPacket(recipe));
 
             processPlayerInventory();
         }

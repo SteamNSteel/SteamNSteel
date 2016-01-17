@@ -41,6 +41,16 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
             guiRenderer.renderItem(this, outputItemStack, 2, 3);
             RenderHelper.disableStandardItemLighting();
 
+            if (outputItemStack.stackSize > 1)
+            {
+                final String craftedItemCount = String.format("%d", outputItemStack.stackSize);
+                final int textWidth = guiRenderer.getStringWidth(craftedItemCount);
+
+                GlStateManager.depthFunc(GL11.GL_ALWAYS);
+                guiRenderer.drawStringWithShadow(this, craftedItemCount, 16 - textWidth + 2, 12, 16777215);
+                GlStateManager.depthFunc(GL11.GL_LEQUAL);
+
+            }
             guiRenderer.drawStringWithShadow(this, recipe.getDisplayName(), 2 + 20, 8, 16777215);
         }
 

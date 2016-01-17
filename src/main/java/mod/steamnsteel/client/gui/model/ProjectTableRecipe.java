@@ -1,8 +1,14 @@
 package mod.steamnsteel.client.gui.model;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.Lists;
+import mod.steamnsteel.utility.SteamNSteelException;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by codew on 6/01/2016.
@@ -68,5 +74,51 @@ public class ProjectTableRecipe
     public void setRenderText(String renderText)
     {
         this.renderText = renderText;
+    }
+
+    public static ProjectTableRecipe readFromBuffer(PacketBuffer buf)
+    {
+        try
+        {
+            byte inputItemStackCount = buf.readByte();
+            List<ItemStack> input = Lists.newArrayList();
+            for (int i = 0; i < inputItemStackCount; ++i)
+            {
+                input.add(buf.readItemStackFromBuffer());
+            }
+
+            byte outputItemStackCount = buf.readByte();
+            List<ItemStack> output = Lists.newArrayList();
+            for (int i = 0; i < outputItemStackCount; ++i)
+            {
+                output.add(buf.readItemStackFromBuffer());
+            }
+
+            final String displayName = buf.readStringFromBuffer(255);
+
+
+            return new ProjectTableRecipe(input, displayName, output);
+        } catch (IOException e)
+        {
+            throw new SteamNSteelException("Unable to deserialize ProjectTableRecipe", e);
+        }
+    }
+
+    public void writeToBuffer(PacketBuffer buf)
+    {
+        buf.writeByte(input.size());
+        for (final ItemStack itemStack : input)
+        {
+            buf.writeItemStackToBuffer(itemStack);
+        }
+        buf.writeByte(output.size());
+        for (final ItemStack itemStack : output)
+        {
+            buf.writeItemStackToBuffer(itemStack);
+        }
+        if (displayName.length() > 255) {
+            displayName = displayName.substring(0, 255);
+        }
+        buf.writeString(displayName);
     }
 }
