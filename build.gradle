@@ -110,6 +110,16 @@ idea {
   }
 }
 
+dependencies {
+    repositories {
+        maven {
+            url 'http://repository.steamnsteel.info/artifactory/steamnsteel-libs-unstable'
+        }
+
+    }
+    compile(group: 'mod.steamnsteel', name: 'mcgui', version: '1.0', classifier: 'API')
+}
+
 if (config.include_codechicken == "true") {
     repositories {
         maven {
