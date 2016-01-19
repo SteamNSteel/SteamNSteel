@@ -1,7 +1,8 @@
 package mod.steamnsteel.client.gui.controls;
 
 import com.google.common.collect.ImmutableList;
-import mod.steamnsteel.client.gui.*;
+import mod.steamnsteel.mcgui.client.gui.*;
+import mod.steamnsteel.mcgui.client.gui.controls.ButtonControl;
 import mod.steamnsteel.client.gui.events.IRecipeCraftingEventListener;
 import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
 import mod.steamnsteel.utility.log.Logger;

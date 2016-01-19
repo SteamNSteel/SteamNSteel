@@ -1,33 +1,33 @@
 package mod.steamnsteel.client.gui;
 
 import com.google.common.collect.Lists;
-import mod.steamnsteel.TheMod;
 import mod.steamnsteel.client.gui.controls.ProjectTableRecipeControl;
-import mod.steamnsteel.client.gui.controls.ScrollPaneControl;
-import mod.steamnsteel.client.gui.controls.ScrollbarControl;
-import mod.steamnsteel.client.gui.controls.TexturedPaneControl;
 import mod.steamnsteel.client.gui.events.IRecipeCraftingEventListener;
 import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
-import mod.steamnsteel.inventory.ProjectTableContainer;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
+import mod.steamnsteel.mcgui.client.gui.GuiRenderer;
+import mod.steamnsteel.mcgui.client.gui.GuiSubTexture;
+import mod.steamnsteel.mcgui.client.gui.GuiTexture;
+import mod.steamnsteel.mcgui.client.gui.controls.ScrollPaneControl;
+import mod.steamnsteel.mcgui.client.gui.controls.ScrollbarControl;
+import mod.steamnsteel.mcgui.client.gui.controls.TexturedPaneControl;
 import mod.steamnsteel.networking.ProjectTableCraftPacket;
 import mod.steamnsteel.proxy.Proxies;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C0EPacketClickWindow;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectTableGui extends EasyGui
+public class ProjectTableGui extends SteamNSteelGui
 {
-    private static final GuiTexture TEXTURE = new GuiTexture(getResourceLocation("SSCraftingTableGUI"), 273, 273);
+    private final GuiTexture TEXTURE = new GuiTexture(getResourceLocation("SSCraftingTableGUI"), 273, 273);
     private final InventoryPlayer playerInventory;
     private GuiTextField searchField = null;
     private List<ProjectTableRecipe> recipeList = null;
@@ -38,6 +38,11 @@ public class ProjectTableGui extends EasyGui
     public ProjectTableGui(InventoryPlayer playerInventory) {
         super(new ProjectTableContainer(playerInventory));
         this.playerInventory = playerInventory;
+    }
+
+    @Override
+    protected ResourceLocation getResourceLocation(String path) {
+        return null;
     }
 
     @Override
