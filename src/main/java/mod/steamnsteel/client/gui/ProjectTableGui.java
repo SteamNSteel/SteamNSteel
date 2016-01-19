@@ -34,6 +34,7 @@ public class ProjectTableGui extends SteamNSteelGui
     private ArrayList<ProjectTableRecipe> filteredList = null;
     private ScrollPaneControl recipeListGuiComponent = null;
     private ScrollbarControl scrollbarGuiComponent = null;
+    private GuiRenderer guiRenderer;
 
     public ProjectTableGui(InventoryPlayer playerInventory) {
         super(new ProjectTableContainer(playerInventory));
@@ -61,7 +62,7 @@ public class ProjectTableGui extends SteamNSteelGui
         recipeList = Lists.newArrayList(
                 new ProjectTableRecipe(new ItemStack(ModBlock.blockSteel, 1), new ItemStack(ModItem.ingotSteel, 15)),
                 new ProjectTableRecipe(new ItemStack(Items.diamond, 10), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
-                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
+                new ProjectTableRecipe(new ItemStack(Items.gold_nugget, 1), new ItemStack(Blocks.gold_block, 64), new ItemStack(Blocks.gold_ore, 64), new ItemStack(Blocks.beacon, 64), new ItemStack(Blocks.brown_mushroom_block, 64)),
                 new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
                 new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
                 new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
@@ -85,7 +86,7 @@ public class ProjectTableGui extends SteamNSteelGui
 
     protected void createComponents()
     {
-        final GuiRenderer guiRenderer = new GuiRenderer(mc, mc.getTextureManager(), fontRendererObj, itemRender);
+        guiRenderer = new GuiRenderer(mc, mc.getTextureManager(), fontRendererObj, itemRender);
 
         final GuiSubTexture guiBackground = new GuiSubTexture(TEXTURE, new Rectangle(0, 0, 176, 227));
         final GuiTexture inactiveHandle = new GuiSubTexture(TEXTURE, new Rectangle(176, 0, 12, 15));
@@ -141,6 +142,7 @@ public class ProjectTableGui extends SteamNSteelGui
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
         searchField.drawTextBox();
+        guiRenderer.notifyTextureChanged();
     }
 
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
@@ -202,28 +204,7 @@ public class ProjectTableGui extends SteamNSteelGui
     }
 
     private void craftRecipe(ProjectTableRecipe recipe) {
-        boolean canCraft = true;
-        for (final ItemStack recipeInput : recipe.getInput())
-        {
-            boolean itemMatched = false;
-            for (final ItemStack playerItem : usableItems) {
-                if (recipeInput.isItemEqual(playerItem)) {
-                    itemMatched = true;
-                    if (recipeInput.stackSize > playerItem.stackSize) {
-                        canCraft = false;
-                    }
-                }
-            }
-            if (!itemMatched) {
-                canCraft = false;
-            }
-        }
-
-        if (canCraft) {
-            Proxies.network.getNetwork().sendToServer(new ProjectTableCraftPacket(recipe));
-
-            processPlayerInventory();
-        }
+        Proxies.network.getNetwork().sendToServer(new ProjectTableCraftPacket(recipe));
     }
 
 

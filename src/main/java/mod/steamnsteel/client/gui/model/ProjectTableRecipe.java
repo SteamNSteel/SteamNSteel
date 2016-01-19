@@ -17,6 +17,7 @@ public class ProjectTableRecipe
 {
     private ImmutableList<ItemStack> output;
     private ImmutableList<ItemStack> input;
+    private ImmutableList<ItemStack> consolidatedInput;
     private String displayName;
     private String renderText;
 
@@ -120,5 +121,36 @@ public class ProjectTableRecipe
             displayName = displayName.substring(0, 255);
         }
         buf.writeString(displayName);
+    }
+
+    public ImmutableList<ItemStack> getConsolidatedInput()
+    {
+        if (consolidatedInput != null) {
+            return consolidatedInput;
+        }
+
+        List<ItemStack> usableItems = Lists.newArrayList();
+        for (final ItemStack itemStack : input)
+        {
+            if (itemStack == null || itemStack.getItem() == null)
+            {
+                continue;
+            }
+
+            boolean itemMatched = false;
+            for (final ItemStack existingItemStack : usableItems) {
+                if (itemStack.getItem() == existingItemStack.getItem() && itemStack.getMetadata() == existingItemStack.getMetadata() && ItemStack.areItemStackTagsEqual(itemStack, existingItemStack))
+                {
+                    itemMatched = true;
+                    existingItemStack.stackSize += itemStack.stackSize;
+                }
+            }
+            if (!itemMatched) {
+                final ItemStack copy = itemStack.copy();
+                usableItems.add(copy);
+            }
+        }
+        consolidatedInput = ImmutableList.copyOf(usableItems);
+        return consolidatedInput;
     }
 }

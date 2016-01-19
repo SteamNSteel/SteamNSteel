@@ -25,13 +25,17 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
         super(guiRenderer, new Rectangle(0, 0, craftableTexture.getBounds().getWidth(), craftableTexture.getBounds().getHeight()));
         this.craftableTexture = craftableTexture;
         this.uncraftableTexture = uncraftableTexture;
+
+        setDefaultTexture(craftableTexture);
+        setDisabledTexture(uncraftableTexture);
+        setHoverTexture(craftableTexture);
+        setPressedTexture(uncraftableTexture);
     }
 
     @Override
     public void draw() {
         if (recipe == null) { return; }
-
-        guiRenderer.drawComponentTexture(this, craftableTexture);
+        super.draw();
 
         GlStateManager.enableRescaleNormal();
         final ImmutableList<ItemStack> output = recipe.getOutput();
@@ -55,10 +59,10 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
             guiRenderer.drawStringWithShadow(this, recipe.getDisplayName(), 2 + 20, 8, 16777215);
         }
 
-        final int inputItemCount = recipe.getInput().size();
+        final int inputItemCount = recipe.getConsolidatedInput().size();
 
         for (int j = 0; j < inputItemCount; ++j) {
-            final ItemStack inputItemStack = recipe.getInput().get(j);
+            final ItemStack inputItemStack = recipe.getConsolidatedInput().get(j);
 
             final String requiredItemCount = String.format("%d", inputItemStack.stackSize);
             final int textWidth = guiRenderer.getStringWidth(requiredItemCount);
