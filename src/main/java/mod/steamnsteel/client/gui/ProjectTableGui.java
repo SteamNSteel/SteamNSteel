@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import mod.steamnsteel.client.gui.controls.ProjectTableRecipeControl;
 import mod.steamnsteel.client.gui.events.IRecipeCraftingEventListener;
 import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
+import mod.steamnsteel.inventory.ProjectTableContainer;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.mcgui.client.gui.GuiRenderer;
@@ -39,11 +40,6 @@ public class ProjectTableGui extends SteamNSteelGui
     public ProjectTableGui(InventoryPlayer playerInventory) {
         super(new ProjectTableContainer(playerInventory));
         this.playerInventory = playerInventory;
-    }
-
-    @Override
-    protected ResourceLocation getResourceLocation(String path) {
-        return null;
     }
 
     @Override
