@@ -37,6 +37,8 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
         if (recipe == null) { return; }
         super.draw();
 
+        final GuiRenderer guiRenderer = getGuiRenderer();
+
         GlStateManager.enableRescaleNormal();
         final ImmutableList<ItemStack> output = recipe.getOutput();
         final ItemStack outputItemStack = output.get(0);
@@ -95,7 +97,7 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
     @Override
     public ProjectTableRecipeControl construct()
     {
-        final ProjectTableRecipeControl concreteControl = new ProjectTableRecipeControl(guiRenderer, craftableTexture, uncraftableTexture);
+        final ProjectTableRecipeControl concreteControl = new ProjectTableRecipeControl(getGuiRenderer(), craftableTexture, uncraftableTexture);
 
         concreteControl.recipeCraftingEventListeners = recipeCraftingEventListeners;
 
