@@ -3,7 +3,7 @@ package mod.steamnsteel.client.gui;
 import com.google.common.collect.Lists;
 import mod.steamnsteel.client.gui.controls.ProjectTableRecipeControl;
 import mod.steamnsteel.client.gui.events.IRecipeCraftingEventListener;
-import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
+import mod.steamnsteel.crafting.projecttable.ProjectTableRecipe;
 import mod.steamnsteel.inventory.ProjectTableContainer;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
@@ -20,7 +20,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,13 +55,7 @@ public class ProjectTableGui extends SteamNSteelGui
 
         //Temporary Item List:
         recipeList = Lists.newArrayList(
-                new ProjectTableRecipe(new ItemStack(ModBlock.blockSteel, 1), new ItemStack(ModItem.ingotSteel, 15)),
-                new ProjectTableRecipe(new ItemStack(Items.diamond, 10), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
-                new ProjectTableRecipe(new ItemStack(Items.gold_nugget, 1), new ItemStack(Blocks.gold_block, 64), new ItemStack(Blocks.gold_ore, 64), new ItemStack(Blocks.beacon, 64), new ItemStack(Blocks.brown_mushroom_block, 64)),
-                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
-                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
-                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64)),
-                new ProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64))
+
         );
         filteredList = Lists.newArrayList(recipeList);
 
@@ -191,6 +184,7 @@ public class ProjectTableGui extends SteamNSteelGui
                     existingItemStack.stackSize += itemStack.stackSize;
                 }
             }
+
             if (!itemMatched) {
                 final ItemStack copy = itemStack.copy();
                 usableItems.add(copy);
@@ -202,7 +196,6 @@ public class ProjectTableGui extends SteamNSteelGui
     private void craftRecipe(ProjectTableRecipe recipe) {
         Proxies.network.getNetwork().sendToServer(new ProjectTableCraftPacket(recipe));
     }
-
 
     private class RecipeCraftingEventListener implements IRecipeCraftingEventListener
     {

@@ -1,8 +1,10 @@
-package mod.steamnsteel.client.gui.model;
+package mod.steamnsteel.crafting.projecttable;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
+import mod.steamnsteel.api.crafting.ingredient.IIngredient;
+import mod.steamnsteel.api.crafting.ingredient.IIngredientSerializer;
+import mod.steamnsteel.networking.SerializationRegistry;
 import mod.steamnsteel.utility.SteamNSteelException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -16,26 +18,26 @@ import java.util.List;
 public class ProjectTableRecipe
 {
     private ImmutableList<ItemStack> output;
-    private ImmutableList<ItemStack> input;
+    private ImmutableList<IIngredient> input;
     private ImmutableList<ItemStack> consolidatedInput;
     private String displayName;
     private String renderText;
 
-    public ProjectTableRecipe(Collection<ItemStack> input, String displayName, Collection<ItemStack> output)
+    public ProjectTableRecipe(Collection<ItemStack> output, Collection<IIngredient> input, String displayName)
     {
         this.input = ImmutableList.copyOf(input);
         this.setDisplayName(displayName);
         this.output = ImmutableList.copyOf(output);
     }
 
-    public ProjectTableRecipe(Collection<ItemStack> input, ItemStack output)
+    public ProjectTableRecipe(ItemStack output, Collection<IIngredient> input)
     {
         this.input = ImmutableList.copyOf(input);
         this.setDisplayName(output.getDisplayName());
         this.output = ImmutableList.of(output);
     }
 
-    public ProjectTableRecipe(ItemStack output, ItemStack... input)
+    public ProjectTableRecipe(ItemStack output, IIngredient... input)
     {
         this.input = ImmutableList.copyOf(input);
         this.displayName = output.getDisplayName();
@@ -47,12 +49,12 @@ public class ProjectTableRecipe
         return output;
     }
 
-    public ImmutableList<ItemStack> getInput()
+    public ImmutableList<IIngredient> getInput()
     {
         return input;
     }
 
-    public void setInput(ImmutableList<ItemStack> input)
+    public void setInput(ImmutableList<IIngredient> input)
     {
         this.input = input;
     }
@@ -82,10 +84,10 @@ public class ProjectTableRecipe
         try
         {
             byte inputItemStackCount = buf.readByte();
-            List<ItemStack> input = Lists.newArrayList();
+            List<IIngredient> input = Lists.newArrayList();
             for (int i = 0; i < inputItemStackCount; ++i)
             {
-                input.add(buf.readItemStackFromBuffer());
+                input.add(readIngredient(buf));
             }
 
             byte outputItemStackCount = buf.readByte();
@@ -97,20 +99,28 @@ public class ProjectTableRecipe
 
             final String displayName = buf.readStringFromBuffer(255);
 
-
-            return new ProjectTableRecipe(input, displayName, output);
+            return new ProjectTableRecipe(output, input, displayName);
         } catch (IOException e)
         {
             throw new SteamNSteelException("Unable to deserialize ProjectTableRecipe", e);
         }
     }
 
+    private static IIngredient readIngredient(PacketBuffer buf) {
+        final String ingredientType = buf.readStringFromBuffer(Integer.MAX_VALUE);
+        final IIngredientSerializer serializer = SerializationRegistry.INSTANCE.getSerializer(ingredientType);
+        if (serializer == null) {
+            throw new SteamNSteelException("Unknown Ingredient serializer: " + ingredientType);
+        }
+        return serializer.deserialize(buf);
+    }
+
     public void writeToBuffer(PacketBuffer buf)
     {
         buf.writeByte(input.size());
-        for (final ItemStack itemStack : input)
+        for (final IIngredient itemStack : input)
         {
-            buf.writeItemStackToBuffer(itemStack);
+            writeIngredient(itemStack, buf);
         }
         buf.writeByte(output.size());
         for (final ItemStack itemStack : output)
@@ -123,6 +133,17 @@ public class ProjectTableRecipe
         buf.writeString(displayName);
     }
 
+    private void writeIngredient(IIngredient ingredient, PacketBuffer buf)
+    {
+        final String name = ingredient.getClass().getName();
+        buf.writeString(name);
+        final IIngredientSerializer serializer = SerializationRegistry.INSTANCE.getSerializer(ingredient.getClass().getName());
+        if (serializer == null) {
+            throw new SteamNSteelException("Unknown Ingredient serializer: " + serializer);
+        }
+        serializer.serialize(ingredient, buf);
+    }
+
     public ImmutableList<ItemStack> getConsolidatedInput()
     {
         if (consolidatedInput != null) {
@@ -130,7 +151,7 @@ public class ProjectTableRecipe
         }
 
         List<ItemStack> usableItems = Lists.newArrayList();
-        for (final ItemStack itemStack : input)
+        for (final IIngredient itemStack : input)
         {
             if (itemStack == null || itemStack.getItem() == null)
             {

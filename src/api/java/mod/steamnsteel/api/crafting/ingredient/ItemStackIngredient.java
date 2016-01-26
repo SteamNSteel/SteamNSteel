@@ -33,7 +33,6 @@ import static com.google.common.base.Preconditions.*;
 public class ItemStackIngredient implements IIngredient
 {
     private final ItemStack itemStack;
-    private final int quantityConsumed;
 
     /**
      * Class constructor specifying an ItemStack. The quantity consumed is deduced from the stackSize of the ItemStack.
@@ -46,9 +45,7 @@ public class ItemStackIngredient implements IIngredient
         checkArgument(checkNotNull(itemStack).stackSize > 0);
         checkNotNull(itemStack.getItem());
         this.itemStack = itemStack.copy();
-        quantityConsumed = itemStack.stackSize;
     }
-
 
     /**
      * Returns a list of ItemStack aliases for this ingredient.
@@ -69,7 +66,7 @@ public class ItemStackIngredient implements IIngredient
     @Override
     public int getQuantityConsumed()
     {
-        return quantityConsumed;
+        return itemStack.stackSize;
     }
 
     @Override
@@ -77,7 +74,12 @@ public class ItemStackIngredient implements IIngredient
     {
         return Objects.toStringHelper(this)
                 .add("itemStack", itemStack)
-                .add("quantityConsumed", quantityConsumed)
+                .add("quantityConsumed", itemStack.stackSize)
                 .toString();
+    }
+
+    public ItemStack getItemStack()
+    {
+        return itemStack.copy();
     }
 }

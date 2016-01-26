@@ -14,9 +14,15 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.api.crafting;
+package mod.steamnsteel.api;
 
 import com.google.common.base.Optional;
+import mod.steamnsteel.api.crafting.IAlloyManager;
+import mod.steamnsteel.api.crafting.ICraftingManager;
+import mod.steamnsteel.api.crafting.IProjectTableManager;
+import mod.steamnsteel.api.crafting.ingredient.IIngredient;
+import mod.steamnsteel.api.crafting.ingredient.IIngredientSerializer;
+import mod.steamnsteel.networking.SerializationRegistry;
 
 /**
  * The class that accesses the singleton crafting managers..
@@ -26,7 +32,7 @@ import com.google.common.base.Optional;
  * @since 0.1
  */
 @SuppressWarnings({"StaticNonFinalField", "PublicField", "NonConstantFieldWithUpperCaseName"})
-public enum CraftingManager
+public enum CraftingManager implements ICraftingManager
 {
     INSTANCE;
 
@@ -35,4 +41,11 @@ public enum CraftingManager
      * returns <code>false</code>.
      */
     public static Optional<IAlloyManager> alloyManager = Optional.absent();
+
+    public static Optional<IProjectTableManager> projectTableManager = Optional.absent();
+
+    public ICraftingManager registerInventorySerializer(Class<? extends IIngredient> ingredientClass, IIngredientSerializer serializer) {
+        SerializationRegistry.INSTANCE.addSerializer(ingredientClass, serializer);
+        return this;
+    }
 }

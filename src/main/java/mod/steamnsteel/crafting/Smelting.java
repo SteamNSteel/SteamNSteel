@@ -18,7 +18,7 @@ package mod.steamnsteel.crafting;
 
 import mod.steamnsteel.block.SteamNSteelStorageBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import mod.steamnsteel.api.crafting.CraftingManager;
+import mod.steamnsteel.api.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.api.crafting.ingredient.ItemStackIngredient;
 import mod.steamnsteel.api.crafting.ingredient.OreDictionaryIngredient;

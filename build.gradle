@@ -93,33 +93,38 @@ processResources
     }
 }
 
-jar {
-    classifier = 'universal'
-}
-
-shadowJar {
-    dependencies {
-        include(dependency('mod.steamnsteel:mcgui:1.0:deobf'))
-    }
-    relocate 'mod.steamnsteel.mcgui', 'mod.steamnsteel.shaded.mod.steamnsteel.mcgui'
-    classifier = 'universal'
-}
-
-reobf.jar.task.dependsOn shadowJar
-
-// because the normal output has been made to be obfuscated
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    appendix = 'deobf'
-}
-
 dependencies {
     repositories {
         maven {
             url 'http://repository.steamnsteel.info/artifactory/steamnsteel-libs-unstable'
         }
     }
-    compile(group: 'mod.steamnsteel', name: 'mcgui', version: '1.0', classifier: 'deobf')
+    deobfCompile(group: 'mod.steamnsteel', name: 'mcgui', version: '1.0', classifier: 'api')
+}
+
+jar {
+    classifier = 'universal'
+}
+
+shadowJar {
+    dependencies {
+        include(dependency('mod.steamnsteel:mcgui:1.0'))
+    }
+    relocate 'mod.steamnsteel.mcgui', 'mod.steamnsteel.shaded.mod.steamnsteel.mcgui'
+    classifier = 'shaded'
+}
+
+//reobf.jar.task.dependsOn shadowJar
+reobf {
+    shadowJar {
+        classpath = sourceSets.main.compileClasspath
+    }
+}
+
+// because the normal output has been made to be obfuscated
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    appendix = 'deobf'
 }
 
 if (config.include_codechicken == "true") {
@@ -131,39 +136,15 @@ if (config.include_codechicken == "true") {
     }
 
     dependencies {
-        // you may put jars on which you depend on in ./libs
-        // or you may define them like so..
-        //compile "some.group:artifact:version:classifier"
-        //compile "some.group:artifact:version"
-
-        // real examples
-        //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-        //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-        // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-        //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-        // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-        // except that these dependencies get remapped to your current MCP mappings
-        //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-        //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-        // for more info...
-        // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-        // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
         provided "codechicken:CodeChickenCore:${config.codechicken_core_version}:dev"
         provided "codechicken:NotEnoughItems:${config.codechicken_nei_version}:dev"
     }
 
     task copyChicken(type: Copy, dependsOn: "extractUserdev") {
-
         from { configurations.compile }
         include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
         exclude "**/CodeChickenLib*" // because CCC downloads it anyways.. -_-
         into file("./run/mods") // parallel to the assets dir
-        //mustRunAfter "deobfBinJar"
-        //mustRunAfter "repackMinecraft"
 
         onlyIf {
             return config.include_codechicken == "true"

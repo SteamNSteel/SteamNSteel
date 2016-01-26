@@ -17,7 +17,8 @@
 package mod.steamnsteel;
 
 import com.google.common.base.Optional;
-import mod.steamnsteel.api.crafting.CraftingManager;
+import mod.steamnsteel.api.CraftingManager;
+import mod.steamnsteel.api.SteamNSteelInitializedEvent;
 import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
@@ -26,8 +27,6 @@ import mod.steamnsteel.gui.GuiHandler;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModBlockParts;
 import mod.steamnsteel.library.ModItem;
-import mod.steamnsteel.networking.ProjectTableCraftPacket;
-import mod.steamnsteel.networking.ProjectTableCraftPacketMessageHandler;
 import mod.steamnsteel.proxy.Proxies;
 import mod.steamnsteel.world.LoadSchematicFromFileCommand;
 import mod.steamnsteel.world.LoadSchematicFromResourceCommand;
@@ -35,12 +34,9 @@ import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
 
 @SuppressWarnings({"WeakerAccess", "MethodMayBeStatic"})
 @Mod(modid = TheMod.MOD_ID, name = TheMod.MOD_NAME, version = TheMod.MOD_VERSION, useMetadata = true, guiFactory = TheMod.MOD_GUI_FACTORY)
@@ -91,7 +87,9 @@ public class TheMod
     public void onFMLInitialization(FMLInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, GuiHandler.INSTANCE);
+
         MinecraftForge.EVENT_BUS.register(ConfigurationHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(CraftingManager.INSTANCE);
 
         Recipes.init();
         WorldGen.init();
@@ -104,7 +102,8 @@ public class TheMod
     @Mod.EventHandler
     public void onFMLPostInitialization(FMLPostInitializationEvent event)
     {
-        // TODO: Handle interaction with other mods, complete your setup based on this.
+        SteamNSteelInitializedEvent initializedEvent = new SteamNSteelInitializedEvent(CraftingManager.INSTANCE);
+        MinecraftForge.EVENT_BUS.post(initializedEvent);
     }
 
     @Mod.EventHandler

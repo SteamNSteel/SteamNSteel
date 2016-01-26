@@ -1,7 +1,8 @@
 package mod.steamnsteel.networking;
 
 import com.google.common.collect.Lists;
-import mod.steamnsteel.client.gui.model.ProjectTableRecipe;
+import mod.steamnsteel.api.crafting.ingredient.IIngredient;
+import mod.steamnsteel.crafting.projecttable.ProjectTableRecipe;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IThreadListener;
@@ -16,7 +17,6 @@ public class ProjectTableCraftPacketMessageHandler implements IMessageHandler<Pr
     @Override
     public IMessage onMessage(final ProjectTableCraftPacket message, final MessageContext ctx)
     {
-
         final InventoryPlayer playerInventory = ctx.getServerHandler().playerEntity.inventory;
         final ProjectTableRecipe recipe = message.getRecipe();
         final List<ItemStack> compactedInventoryItems = getCompactedInventoryItems(playerInventory);
@@ -34,6 +34,7 @@ public class ProjectTableCraftPacketMessageHandler implements IMessageHandler<Pr
                     }
                 }
             }
+
             if (!itemMatched) {
                 canCraft = false;
             }
@@ -46,9 +47,7 @@ public class ProjectTableCraftPacketMessageHandler implements IMessageHandler<Pr
         mainThread.addScheduledTask(new Runnable() {
             @Override
             public void run() {
-
-
-                for (final ItemStack itemStack : recipe.getInput())
+                for (final IIngredient itemStack : recipe.getInput())
                 {
                     playerInventory.clearMatchingItems(itemStack.getItem(), itemStack.getMetadata(), itemStack.stackSize, itemStack.getTagCompound());
                     playerInventory.markDirty();
