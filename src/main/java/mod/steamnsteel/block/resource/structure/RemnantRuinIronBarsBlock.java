@@ -46,7 +46,7 @@ public class RemnantRuinIronBarsBlock extends BlockPane
     }
 
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item item, CreativeTabs creativeTab, List list)
+    public void getSubBlocks(Item item, CreativeTabs creativeTab, List<ItemStack> list)
     {
         for (int i = 0; i < IronBarsTextures.VALUES.length; ++i)
         {
