@@ -20,26 +20,31 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'com.github.johnrengelman.shadow'
 
+// for people who want unstable ForgeGradle
+apply plugin: 'net.minecraftforge.gradle.forge'
+// for people who want stable ForgeGradle
+/*plugins {
+    id "net.minecraftforge.gradle.forge" version "2.0.1"
+}*/
+
+///////////////////////////////////////////////////
+// IDE Settings
+///////////////////////////////////////////////////
 idea {
     project {
         languageLevel = '1.7'
     }
 }
 
-// for people who want stable
-/*plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.1"
-}*/
-
+///////////////////////////////////////////////////
+// ForgeGradle
+///////////////////////////////////////////////////
 version = config.mod_version
 group = config.group_name
 archivesBaseName = "[${config.minecraft_version}]${config.mod_id}"
@@ -53,19 +58,42 @@ targetCompatibility = JavaVersion.VERSION_1_7
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version // grab latest forge
     runDir = "run"
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
+
     mappings = config.mcp_mappings
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
+    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
     replace '@MOD_VERSION@', version
     replace '@API_VERSION@', config.api_version
 }
 
+///////////////////////////////////////////////////
+// SHADING
+///////////////////////////////////////////////////
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+shadowJar {
+    def deobfPrefix = "deobf." + minecraft.mappingsChannel + '.' + minecraft.mappingsVersion + '.'
+    dependencies {
+        include(dependency(deobfPrefix + 'mod.steamnsteel:mcgui:1.0'))
+    }
+    relocate 'mod.steamnsteel.mcgui', 'mod.steamnsteel.shaded.mod.steamnsteel.mcgui'
+    classifier = 'universal'
+}
+
+reobf.jar.task.dependsOn shadowJar
+
+///////////////////////////////////////////////////
+// Resources
+///////////////////////////////////////////////////
 processResources
 {
     // this will ensure that this task is redone when the versions change.
@@ -76,49 +104,25 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         include '**/*.info'
         include '**/*.properties'
-                
+
         // replace version and mcversion
         expand ([
-            'version':project.version, 
+            'version':project.version,
             'mcversion':project.minecraft.version,
             'forge_version': config.forge_version,
             'mod_version': config.mod_version,
             'minecraft_version': config.minecraft_version
            ])
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
 
-dependencies {
-    repositories {
-        maven {
-            url 'http://repository.steamnsteel.info/artifactory/steamnsteel-libs-unstable'
-        }
-    }
-    deobfCompile(group: 'mod.steamnsteel', name: 'mcgui', version: '1.0', classifier: 'api')
-}
-
 jar {
     classifier = 'universal'
-}
-
-shadowJar {
-    dependencies {
-        include(dependency('mod.steamnsteel:mcgui:1.0'))
-    }
-    relocate 'mod.steamnsteel.mcgui', 'mod.steamnsteel.shaded.mod.steamnsteel.mcgui'
-    classifier = 'shaded'
-}
-
-//reobf.jar.task.dependsOn shadowJar
-reobf {
-    shadowJar {
-        classpath = sourceSets.main.compileClasspath
-    }
 }
 
 // because the normal output has been made to be obfuscated
@@ -127,6 +131,21 @@ task deobfJar(type: Jar) {
     appendix = 'deobf'
 }
 
+///////////////////////////////////////////////////
+// Dependencies
+///////////////////////////////////////////////////
+dependencies {
+    repositories {
+        maven {
+            url 'http://repository.steamnsteel.info/artifactory/steamnsteel-libs-unstable'
+        }
+    }
+    deobfCompile(group: 'mod.steamnsteel', name: 'mcgui', version: '1.0', classifier: 'API')
+}
+
+///////////////////////////////////////////////////
+// CodeChicken
+///////////////////////////////////////////////////
 if (config.include_codechicken == "true") {
     repositories {
         maven {
@@ -141,6 +160,7 @@ if (config.include_codechicken == "true") {
     }
 
     task copyChicken(type: Copy, dependsOn: "extractUserdev") {
+
         from { configurations.compile }
         include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
         exclude "**/CodeChickenLib*" // because CCC downloads it anyways.. -_-
