@@ -7,13 +7,17 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -53,7 +57,7 @@ public class ConcreteBlock extends SteamNSteelBlock {
 
         if(currentMeta == 5) return;
         //Higher is worse
-        int chanceToDry = 25 + rand.nextInt(6 + (int)(temp * 5)); //25 to 35
+        int chanceToDry = 25 + rand.nextInt(10 - (int)(temp * 5)); //25 to 35
 
         if(worldIn.isRaining()){
             chanceToDry *= 1.25; //31 to 43

@@ -19,6 +19,7 @@ package mod.steamnsteel.library;
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.block.machine.*;
 import mod.steamnsteel.block.resource.structure.*;
+import mod.steamnsteel.item.resource.structure.ConcreteBlockItem;
 import mod.steamnsteel.item.resource.structure.RemnantRuinIronBarsBlockItem;
 import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -109,8 +110,6 @@ public final class ModBlock
         GameRegistry.registerBlock(pipeValveRedstone, PipeRedstoneValveBlock.NAME);
         GameRegistry.registerBlock(pipeJunction, PipeJunctionBlock.NAME);
 
-        GameRegistry.registerBlock(blockConcrete, ConcreteBlock.NAME);
-
         registerBlockAndOre(oreNiter, NiterOre.NAME);
         registerBlockAndOre(oreCopper, CopperOre.NAME);
         registerBlockAndOre(oreSulfur, SulfurOre.NAME);
@@ -130,6 +129,7 @@ public final class ModBlock
         GameRegistry.registerBlock(remnantRuinFloor, RemnantRuinFloorBlock.NAME);
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
         GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlockItem.class, RemnantRuinIronBarsBlock.NAME);
+        GameRegistry.registerBlock(blockConcrete, ConcreteBlockItem.class, ConcreteBlock.NAME);
 
         //Compat
         TileEntity.addMapping(RemnantRuinChestTE.class, "tile.chestPlotonium");
