@@ -31,6 +31,7 @@ tile.steamnsteel:remnantRuinWall.name=Remnant Ruin Wall
 tile.steamnsteel:remnantRuinIronBars_Rusted.name=Rusted Iron Bars
 tile.steamnsteel:remnantRuinIronBars_Mossy.name=Mossy Iron Bars
 tile.steamnsteel:remnantRuinIronBars_RustedMossy.name=Rusty and Mossy Iron Bars
+tile.steamnsteel:blockConcrete.name=Concrete Block
 
 # Config file comments
 config.steamnsteel:genCopper=Should copper ore be generated in new chunks?
