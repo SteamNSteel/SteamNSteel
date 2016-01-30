@@ -8,6 +8,7 @@ import mod.steamnsteel.networking.SerializationRegistry;
 import mod.steamnsteel.utility.SteamNSteelException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -19,11 +20,10 @@ public class ProjectTableRecipe
 {
     private ImmutableList<ItemStack> output;
     private ImmutableList<IIngredient> input;
-    private ImmutableList<ItemStack> consolidatedInput;
     private String displayName;
     private String renderText;
 
-    public ProjectTableRecipe(Collection<ItemStack> output, Collection<IIngredient> input, String displayName)
+    public ProjectTableRecipe(Collection<ItemStack> output, String displayName, Collection<IIngredient> input)
     {
         this.input = ImmutableList.copyOf(input);
         this.setDisplayName(displayName);
@@ -97,9 +97,9 @@ public class ProjectTableRecipe
                 output.add(buf.readItemStackFromBuffer());
             }
 
-            final String displayName = buf.readStringFromBuffer(255);
+            final String displayName = ByteBufUtils.readUTF8String(buf);
 
-            return new ProjectTableRecipe(output, input, displayName);
+            return new ProjectTableRecipe(output, displayName, input);
         } catch (IOException e)
         {
             throw new SteamNSteelException("Unable to deserialize ProjectTableRecipe", e);
@@ -107,7 +107,7 @@ public class ProjectTableRecipe
     }
 
     private static IIngredient readIngredient(PacketBuffer buf) {
-        final String ingredientType = buf.readStringFromBuffer(Integer.MAX_VALUE);
+        final String ingredientType = ByteBufUtils.readUTF8String(buf);
         final IIngredientSerializer serializer = SerializationRegistry.INSTANCE.getSerializer(ingredientType);
         if (serializer == null) {
             throw new SteamNSteelException("Unknown Ingredient serializer: " + ingredientType);
@@ -127,9 +127,6 @@ public class ProjectTableRecipe
         {
             buf.writeItemStackToBuffer(itemStack);
         }
-        if (displayName.length() > 255) {
-            displayName = displayName.substring(0, 255);
-        }
         buf.writeString(displayName);
     }
 
@@ -142,36 +139,5 @@ public class ProjectTableRecipe
             throw new SteamNSteelException("Unknown Ingredient serializer: " + serializer);
         }
         serializer.serialize(ingredient, buf);
-    }
-
-    public ImmutableList<ItemStack> getConsolidatedInput()
-    {
-        if (consolidatedInput != null) {
-            return consolidatedInput;
-        }
-
-        List<ItemStack> usableItems = Lists.newArrayList();
-        for (final IIngredient itemStack : input)
-        {
-            if (itemStack == null || itemStack.getItem() == null)
-            {
-                continue;
-            }
-
-            boolean itemMatched = false;
-            for (final ItemStack existingItemStack : usableItems) {
-                if (itemStack.getItem() == existingItemStack.getItem() && itemStack.getMetadata() == existingItemStack.getMetadata() && ItemStack.areItemStackTagsEqual(itemStack, existingItemStack))
-                {
-                    itemMatched = true;
-                    existingItemStack.stackSize += itemStack.stackSize;
-                }
-            }
-            if (!itemMatched) {
-                final ItemStack copy = itemStack.copy();
-                usableItems.add(copy);
-            }
-        }
-        consolidatedInput = ImmutableList.copyOf(usableItems);
-        return consolidatedInput;
     }
 }

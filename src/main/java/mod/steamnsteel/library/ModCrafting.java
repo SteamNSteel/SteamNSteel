@@ -11,9 +11,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-/**
- * Created by codew on 26/01/2016.
- */
+
 public enum ModCrafting
 {
     INSTANCE;
@@ -21,14 +19,14 @@ public enum ModCrafting
     @SubscribeEvent
     public void onSteamNSteelInitialized(SteamNSteelInitializedEvent event) {
         final ICraftingManager craftingManager = event.getCraftingManager();
-        craftingManager.registerInventorySerializer(OreDictionaryIngredient.class, new OreDictionaryIngredientSerializer());
-        craftingManager.registerInventorySerializer(ItemStackIngredient.class, new ItemStackIngredientSerializer());
-
         craftingManager
-                .addProjectTableRecipe(new ItemStack(ModBlock.blockSteel, 1), new ItemStackIngredient(new ItemStack(ModItem.ingotSteel, 15)))
-                .addProjectTableRecipe(new ItemStack(Items.diamond, 10), new ItemStackIngredient(new ItemStack(Blocks.dirt, 64)), new ItemStackIngredient(new ItemStack(Blocks.dirt, 64)), new ItemStackIngredient(new ItemStack(Blocks.dirt, 64)))
-                .addProjectTableRecipe(new ItemStack(Items.gold_nugget, 1), new ItemStackIngredient(new ItemStack(Blocks.gold_block, 64)), new ItemStackIngredient(new ItemStack(Blocks.gold_ore, 64)), new ItemStackIngredient(new ItemStack(Blocks.beacon, 64)), new ItemStackIngredient(new ItemStack(Blocks.brown_mushroom_block, 64)))
-                .addProjectTableRecipe(new ItemStack(Items.diamond, 1), new ItemStackIngredient(new ItemStack(Blocks.dirt, 64)), new ItemStackIngredient(new ItemStack(Blocks.dirt, 64)));
-
+                .registerInventorySerializer(OreDictionaryIngredient.class, new OreDictionaryIngredientSerializer())
+                .registerInventorySerializer(ItemStackIngredient.class, new ItemStackIngredientSerializer())
+                .addProjectTableVanillaRecipe(new ItemStack(ModBlock.blockSteel, 1), new ItemStack(ModItem.ingotSteel, 15))
+                .addProjectTableVanillaRecipe(new ItemStack(Items.diamond, 10), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64))
+                .addProjectTableVanillaRecipe(new ItemStack(Items.gold_nugget, 1), new ItemStack(Blocks.gold_block, 64), new ItemStack(Blocks.gold_ore, 64), new ItemStack(Blocks.beacon, 64), new ItemStack(Blocks.brown_mushroom_block, 64))
+                .addProjectTableVanillaRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64))
+                .addProjectTableRecipe(new ItemStack(Blocks.anvil, 1), new OreDictionaryIngredient("plankWood", 64))
+        ;
     }
 }

@@ -26,6 +26,7 @@ import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.gui.GuiHandler;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModBlockParts;
+import mod.steamnsteel.library.ModCrafting;
 import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.proxy.Proxies;
 import mod.steamnsteel.world.LoadSchematicFromFileCommand;
@@ -68,18 +69,10 @@ public class TheMod
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
-        initAPI();
-
         ModItem.init();
         ModBlock.init();
         ModBlockParts.init();
         Proxies.render.preInit();
-    }
-
-    @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
-    private void initAPI()
-    {
-        CraftingManager.alloyManager = Optional.of((IAlloyManager) AlloyManager.INSTANCE);
     }
 
     @SuppressWarnings("UnusedParameters")
@@ -89,7 +82,7 @@ public class TheMod
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, GuiHandler.INSTANCE);
 
         MinecraftForge.EVENT_BUS.register(ConfigurationHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(CraftingManager.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(ModCrafting.INSTANCE);
 
         Recipes.init();
         WorldGen.init();

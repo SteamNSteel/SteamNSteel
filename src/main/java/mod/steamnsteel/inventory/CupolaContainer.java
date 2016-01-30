@@ -114,9 +114,9 @@ public class CupolaContainer extends SteamNSteelContainer
                 return null;
         } else if (slotIndex > CupolaTE.INPUT_FUEL)
         {
-            final Optional<ItemStack> result1 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
+            final Optional<ItemStack> result1 = CraftingManager.INSTANCE.alloyManager.getCupolaResult(slotItemStack,
                     te.getStackInSlot(CupolaTE.INPUT_RIGHT)).getItemStack();
-            final Optional<ItemStack> result2 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
+            final Optional<ItemStack> result2 = CraftingManager.INSTANCE.alloyManager.getCupolaResult(slotItemStack,
                     te.getStackInSlot(CupolaTE.INPUT_LEFT)).getItemStack();
             if (result1.isPresent() || result2.isPresent())
             {

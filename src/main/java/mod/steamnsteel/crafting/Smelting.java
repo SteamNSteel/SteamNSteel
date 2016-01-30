@@ -39,7 +39,7 @@ enum Smelting
         GameRegistry.addSmelting(ModBlock.oreTin, new ItemStack(ModItem.ingotTin), xp);
         GameRegistry.addSmelting(ModBlock.oreZinc, new ItemStack(ModItem.ingotZinc), xp);
 
-        final IAlloyManager alloyManager = CraftingManager.alloyManager.get();
+        final IAlloyManager alloyManager = CraftingManager.INSTANCE.alloyManager;
 
         final OreDictionaryIngredient cuIngotIngredient = new OreDictionaryIngredient(ModItem.Names.COPPER_INGOT);
         final OreDictionaryIngredient cuBlockIngredient = new OreDictionaryIngredient(SteamNSteelStorageBlock.COPPER_BLOCK);

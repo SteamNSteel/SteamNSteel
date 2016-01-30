@@ -5,6 +5,7 @@ import mod.steamnsteel.api.crafting.ingredient.IIngredientSerializer;
 import mod.steamnsteel.api.crafting.ingredient.OreDictionaryIngredient;
 import mod.steamnsteel.utility.SteamNSteelException;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 /**
  * Created by codew on 26/01/2016.
@@ -14,7 +15,7 @@ public class OreDictionaryIngredientSerializer implements IIngredientSerializer
     @Override
     public IIngredient deserialize(PacketBuffer buffer)
     {
-        final String oreDictionaryName = buffer.readStringFromBuffer(Integer.MAX_VALUE);
+        final String oreDictionaryName = ByteBufUtils.readUTF8String(buffer);
         final int quantity = buffer.readInt();
         return new OreDictionaryIngredient(oreDictionaryName, quantity);
     }

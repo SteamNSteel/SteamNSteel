@@ -14,5 +14,8 @@ public interface ICraftingManager
 
     ICraftingManager addProjectTableRecipe(ItemStack output, IIngredient... input);
     ICraftingManager addProjectTableRecipe(ItemStack output, Collection<IIngredient> input);
-    ICraftingManager addProjectTableRecipe(Collection<ItemStack> output, Collection<IIngredient> input, String displayName);
+    ICraftingManager addProjectTableRecipe(Collection<ItemStack> output, String displayName, Collection<IIngredient> input);
+    ICraftingManager addProjectTableVanillaRecipe(ItemStack output, ItemStack... input);
+    ICraftingManager addProjectTableVanillaRecipe(ItemStack output, Collection<ItemStack> input);
+    ICraftingManager addProjectTableVanillaRecipe(Collection<ItemStack> output, String displayName, Collection<ItemStack> input);
 }

@@ -1,24 +1,33 @@
 package mod.steamnsteel.client.gui.controls;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import mod.steamnsteel.api.crafting.ingredient.IIngredient;
+import mod.steamnsteel.client.gui.model.ProjectTableRecipeInstance;
 import mod.steamnsteel.mcgui.client.gui.*;
 import mod.steamnsteel.mcgui.client.gui.controls.ButtonControl;
 import mod.steamnsteel.client.gui.events.IRecipeCraftingEventListener;
 import mod.steamnsteel.crafting.projecttable.ProjectTableRecipe;
+import mod.steamnsteel.utility.ItemStackUtils;
 import mod.steamnsteel.utility.log.Logger;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemplate<ProjectTableRecipeControl>, IModelView<ProjectTableRecipe>
+public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemplate<ProjectTableRecipeControl>, IModelView<ProjectTableRecipeInstance>
 {
     private final GuiTexture craftableTexture;
     private final GuiTexture uncraftableTexture;
-    private ProjectTableRecipe recipe = null;
+    private ProjectTableRecipeInstance recipeInstance = null;
 
     public ProjectTableRecipeControl(GuiRenderer guiRenderer, GuiTexture craftableTexture, GuiTexture uncraftableTexture)
     {
@@ -34,8 +43,11 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
 
     @Override
     public void draw() {
-        if (recipe == null) { return; }
+        if (recipeInstance == null) { return; }
         super.draw();
+
+        setDisabled(!recipeInstance.canCraft());
+        final ProjectTableRecipe recipe = recipeInstance.getRecipe();
 
         final GuiRenderer guiRenderer = getGuiRenderer();
 
@@ -61,19 +73,24 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
             guiRenderer.drawStringWithShadow(this, recipe.getDisplayName(), 2 + 20, 8, 16777215);
         }
 
-        final int inputItemCount = recipe.getConsolidatedInput().size();
+        final int inputItemCount = recipe.getInput().size();
 
         for (int j = 0; j < inputItemCount; ++j) {
-            final ItemStack inputItemStack = recipe.getConsolidatedInput().get(j);
+            final IIngredient inputIngredient = recipe.getInput().get(j);
 
-            final String requiredItemCount = String.format("%d", inputItemStack.stackSize);
+            final List<ItemStack> possibleItems = ItemStackUtils.getAllSubtypes(inputIngredient.getItemStacks());
+
+            final long totalWorldTime = Minecraft.getMinecraft().theWorld.getTotalWorldTime();
+            final int renderedItem = (int)((totalWorldTime / 20) % possibleItems.size());
+
+            final String requiredItemCount = String.format("%d", inputIngredient.getQuantityConsumed());
             final int textWidth = guiRenderer.getStringWidth(requiredItemCount);
 
             final int border = 1;
             final int padding = 2;
             final int itemSize = 16;
 
-            guiRenderer.renderItem(this, inputItemStack, getBounds().getWidth() - border - (itemSize + padding) * (j + border), padding + border);
+            guiRenderer.renderItem(this, possibleItems.get(renderedItem), getBounds().getWidth() - border - (itemSize + padding) * (j + border), padding + border);
 
             GlStateManager.depthFunc(GL11.GL_ALWAYS);
             guiRenderer.drawStringWithShadow(this, requiredItemCount, getBounds().getWidth() - border - (itemSize + padding) * j - textWidth - border , 12, 16777215);
@@ -81,17 +98,16 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
         }
 
         GlStateManager.disableRescaleNormal();
-
     }
 
-    public ProjectTableRecipe getRecipe()
+    public ProjectTableRecipeInstance getRecipe()
     {
-        return recipe;
+        return recipeInstance;
     }
 
-    public void setRecipe(ProjectTableRecipe recipe)
+    public void setRecipe(ProjectTableRecipeInstance recipeInstance)
     {
-        this.recipe = recipe;
+        this.recipeInstance = recipeInstance;
     }
 
     @Override
@@ -105,9 +121,9 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
     }
 
     @Override
-    public void setModel(ProjectTableRecipe recipe)
+    public void setModel(ProjectTableRecipeInstance recipeInstance)
     {
-        this.recipe = recipe;
+        this.recipeInstance = recipeInstance;
     }
 
     @Override
@@ -133,7 +149,7 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
         for (final IRecipeCraftingEventListener eventListener : recipeCraftingEventListeners)
         {
             try {
-                eventListener.onRecipeCrafting(recipe);
+                eventListener.onRecipeCrafting(recipeInstance.getRecipe());
             } catch (final RuntimeException e) {
                 Logger.warning("Exception in an IRecipeCraftingEventListener %s", e);
             }
@@ -146,6 +162,7 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
     public void addOnRecipeCraftingEventListener(IRecipeCraftingEventListener listener) {
         recipeCraftingEventListeners.add(listener);
     }
+
     @SuppressWarnings("unused")
     public void removeOnRecipeCraftingEventListener(IRecipeCraftingEventListener listener) {
         recipeCraftingEventListeners.remove(listener);

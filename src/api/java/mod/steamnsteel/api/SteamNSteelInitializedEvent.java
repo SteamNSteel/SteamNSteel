@@ -16,7 +16,6 @@ public class SteamNSteelInitializedEvent extends Event {
         this.craftingManager = craftingManager;
     }
 
-
     public ICraftingManager getCraftingManager()
     {
         return craftingManager;
