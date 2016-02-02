@@ -89,4 +89,9 @@ public class OreDictionaryIngredient implements IIngredient
                 .add("quantityConsumed", quantityConsumed)
                 .toString();
     }
+
+    public String getName()
+    {
+        return name;
+    }
 }

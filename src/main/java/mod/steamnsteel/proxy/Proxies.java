@@ -27,8 +27,17 @@ public enum Proxies
     public static final String CLIENT_RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.ClientRenderProxy";
 
     @SuppressWarnings("WeakerAccess")
-    public static final String RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.RenderProxy";
+    public static final String COMMON_RENDER_PROXY_CLASS = "mod.steamnsteel.proxy.CommonRenderProxy";
 
-    @SidedProxy(clientSide = CLIENT_RENDER_PROXY_CLASS, serverSide = RENDER_PROXY_CLASS)
-    public static RenderProxy render;
+    @SidedProxy(clientSide = CLIENT_RENDER_PROXY_CLASS, serverSide = COMMON_RENDER_PROXY_CLASS)
+    public static CommonRenderProxy render;
+
+    @SuppressWarnings("WeakerAccess")
+    public static final String CLIENT_NETWORK_PROXY_CLASS = "mod.steamnsteel.proxy.ClientNetworkProxy";
+
+    @SuppressWarnings("WeakerAccess")
+    public static final String COMMON_NETWORK_PROXY_CLASS = "mod.steamnsteel.proxy.CommonNetworkProxy";
+
+    @SidedProxy(clientSide = CLIENT_NETWORK_PROXY_CLASS, serverSide = COMMON_NETWORK_PROXY_CLASS)
+    public static CommonNetworkProxy network;
 }
