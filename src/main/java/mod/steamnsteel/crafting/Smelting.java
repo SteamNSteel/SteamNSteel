@@ -18,7 +18,7 @@ package mod.steamnsteel.crafting;
 
 import mod.steamnsteel.block.SteamNSteelStorageBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import mod.steamnsteel.api.crafting.CraftingManager;
+import mod.steamnsteel.api.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.api.crafting.ingredient.ItemStackIngredient;
 import mod.steamnsteel.api.crafting.ingredient.OreDictionaryIngredient;
@@ -39,7 +39,7 @@ enum Smelting
         GameRegistry.addSmelting(ModBlock.oreTin, new ItemStack(ModItem.ingotTin), xp);
         GameRegistry.addSmelting(ModBlock.oreZinc, new ItemStack(ModItem.ingotZinc), xp);
 
-        final IAlloyManager alloyManager = CraftingManager.alloyManager.get();
+        final IAlloyManager alloyManager = CraftingManager.INSTANCE.alloyManager;
 
         final OreDictionaryIngredient cuIngotIngredient = new OreDictionaryIngredient(ModItem.Names.COPPER_INGOT);
         final OreDictionaryIngredient cuBlockIngredient = new OreDictionaryIngredient(SteamNSteelStorageBlock.COPPER_BLOCK);

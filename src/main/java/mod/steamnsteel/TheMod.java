@@ -17,7 +17,8 @@
 package mod.steamnsteel;
 
 import com.google.common.base.Optional;
-import mod.steamnsteel.api.crafting.CraftingManager;
+import mod.steamnsteel.api.CraftingManager;
+import mod.steamnsteel.api.SteamNSteelInitializedEvent;
 import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
@@ -25,6 +26,7 @@ import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.gui.GuiHandler;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModBlockParts;
+import mod.steamnsteel.library.ModCrafting;
 import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.proxy.Proxies;
 import mod.steamnsteel.world.LoadSchematicFromFileCommand;
@@ -33,7 +35,6 @@ import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -68,18 +69,10 @@ public class TheMod
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
-        initAPI();
-
         ModItem.init();
         ModBlock.init();
         ModBlockParts.init();
         Proxies.render.preInit();
-    }
-
-    @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
-    private void initAPI()
-    {
-        CraftingManager.alloyManager = Optional.of((IAlloyManager) AlloyManager.INSTANCE);
     }
 
     @SuppressWarnings("UnusedParameters")
@@ -87,19 +80,23 @@ public class TheMod
     public void onFMLInitialization(FMLInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, GuiHandler.INSTANCE);
+
         MinecraftForge.EVENT_BUS.register(ConfigurationHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(ModCrafting.INSTANCE);
 
         Recipes.init();
         WorldGen.init();
         ModBlock.registerTileEntities();
         Proxies.render.init();
+        Proxies.network.init();
     }
 
     @SuppressWarnings("UnusedParameters")
     @Mod.EventHandler
     public void onFMLPostInitialization(FMLPostInitializationEvent event)
     {
-        // TODO: Handle interaction with other mods, complete your setup based on this.
+        SteamNSteelInitializedEvent initializedEvent = new SteamNSteelInitializedEvent(CraftingManager.INSTANCE);
+        MinecraftForge.EVENT_BUS.post(initializedEvent);
     }
 
     @Mod.EventHandler

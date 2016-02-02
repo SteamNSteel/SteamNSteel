@@ -37,16 +37,16 @@ public class RemnantRuinIronBarsBlock extends BlockPane
 
         setDefaultState(
                 blockState.getBaseState()
-                        .withProperty(NORTH, Boolean.valueOf(false))
-                        .withProperty(EAST, Boolean.valueOf(false))
-                        .withProperty(SOUTH, Boolean.valueOf(false))
-                        .withProperty(WEST, Boolean.valueOf(false))
+                        .withProperty(NORTH, false)
+                        .withProperty(EAST, false)
+                        .withProperty(SOUTH, false)
+                        .withProperty(WEST, false)
                         .withProperty(IronBarsType, IronBarsTextures.RUSTED)
         );
     }
 
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item item, CreativeTabs creativeTab, List list)
+    public void getSubBlocks(Item item, CreativeTabs creativeTab, List<ItemStack> list)
     {
         for (int i = 0; i < IronBarsTextures.VALUES.length; ++i)
         {

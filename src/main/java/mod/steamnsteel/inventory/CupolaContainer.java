@@ -20,7 +20,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import mod.steamnsteel.api.crafting.CraftingManager;
+import mod.steamnsteel.api.CraftingManager;
 import mod.steamnsteel.inventory.slot.CupolaSlot;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.entity.player.EntityPlayer;
@@ -114,9 +114,9 @@ public class CupolaContainer extends SteamNSteelContainer
                 return null;
         } else if (slotIndex > CupolaTE.INPUT_FUEL)
         {
-            final Optional<ItemStack> result1 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
+            final Optional<ItemStack> result1 = CraftingManager.INSTANCE.alloyManager.getCupolaResult(slotItemStack,
                     te.getStackInSlot(CupolaTE.INPUT_RIGHT)).getItemStack();
-            final Optional<ItemStack> result2 = CraftingManager.alloyManager.get().getCupolaResult(slotItemStack,
+            final Optional<ItemStack> result2 = CraftingManager.INSTANCE.alloyManager.getCupolaResult(slotItemStack,
                     te.getStackInSlot(CupolaTE.INPUT_LEFT)).getItemStack();
             if (result1.isPresent() || result2.isPresent())
             {
