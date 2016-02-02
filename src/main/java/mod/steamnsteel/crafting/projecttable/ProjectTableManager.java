@@ -3,6 +3,7 @@ package mod.steamnsteel.crafting.projecttable;
 import com.google.common.collect.Lists;
 import mod.steamnsteel.api.crafting.IProjectTableManager;
 import mod.steamnsteel.api.crafting.ingredient.IIngredient;
+import mod.steamnsteel.utility.ItemStackUtils;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import scala.collection.generic.CanBuildFrom;
@@ -37,7 +38,6 @@ public enum ProjectTableManager implements IProjectTableManager
         recipes.add(new ProjectTableRecipe(Lists.newArrayList(output), output.getDisplayName(), Arrays.asList(ingredients)));
     }
 
-    @Override
     public boolean canCraftRecipe(ProjectTableRecipe recipe, InventoryPlayer playerInventory)
     {
         final List<ItemStack> compactedInventoryItems = getCompactedInventoryItems(playerInventory);
@@ -47,7 +47,8 @@ public enum ProjectTableManager implements IProjectTableManager
         {
             boolean itemMatched = false;
             int itemsAvailable = 0;
-            for (final ItemStack recipeInput : recipeIngredient.getItemStacks())
+            final List<ItemStack> itemStacks = ItemStackUtils.getAllSubtypes(recipeIngredient.getItemStacks());
+            for (final ItemStack recipeInput : itemStacks)
             {
                 for (final ItemStack playerItem : compactedInventoryItems) {
                     if (recipeInput.getItem() == playerItem.getItem() && recipeInput.getMetadata() == playerItem.getMetadata() && ItemStack.areItemStackTagsEqual(recipeInput, playerItem)) {

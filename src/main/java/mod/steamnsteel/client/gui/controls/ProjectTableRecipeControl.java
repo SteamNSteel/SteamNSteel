@@ -1,26 +1,24 @@
 package mod.steamnsteel.client.gui.controls;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import mod.steamnsteel.api.crafting.ingredient.IIngredient;
-import mod.steamnsteel.client.gui.model.ProjectTableRecipeInstance;
-import mod.steamnsteel.mcgui.client.gui.*;
-import mod.steamnsteel.mcgui.client.gui.controls.ButtonControl;
 import mod.steamnsteel.client.gui.events.IRecipeCraftingEventListener;
+import mod.steamnsteel.client.gui.model.ProjectTableRecipeInstance;
 import mod.steamnsteel.crafting.projecttable.ProjectTableRecipe;
+import mod.steamnsteel.mcgui.client.gui.GuiRenderer;
+import mod.steamnsteel.mcgui.client.gui.GuiTexture;
+import mod.steamnsteel.mcgui.client.gui.IGuiTemplate;
+import mod.steamnsteel.mcgui.client.gui.IModelView;
+import mod.steamnsteel.mcgui.client.gui.controls.ButtonControl;
 import mod.steamnsteel.utility.ItemStackUtils;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemplate<ProjectTableRecipeControl>, IModelView<ProjectTableRecipeInstance>

@@ -35,6 +35,4 @@ public interface IProjectTableManager
      * @param ingredients An instance of IIngredient
      */
     void addProjectTableRecipe(ItemStack output, IIngredient... ingredients);
-
-    boolean canCraftRecipe(ProjectTableRecipe recipe, InventoryPlayer playerInventory);
 }
