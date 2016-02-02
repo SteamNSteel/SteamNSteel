@@ -22,7 +22,7 @@ public class ProjectTableCraftPacketMessageHandler implements IMessageHandler<Pr
 
         final boolean canCraft = ProjectTableManager.INSTANCE.canCraftRecipe(recipe, playerInventory);
         if (!canCraft) {
-            return new ProjectTableCraftResultPacket(recipe, false);
+            return null;
         }
 
 

@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,23 +27,20 @@ public class ProjectTableRecipe
     public ProjectTableRecipe(Collection<ItemStack> output, String displayName, Collection<IIngredient> input)
     {
         this.input = ImmutableList.copyOf(input);
-        this.setDisplayName(displayName);
+        this.displayName = displayName;
         this.output = ImmutableList.copyOf(output);
     }
 
     public ProjectTableRecipe(ItemStack output, Collection<IIngredient> input)
     {
-        this.input = ImmutableList.copyOf(input);
-        this.setDisplayName(output.getDisplayName());
-        this.output = ImmutableList.of(output);
+        this(Lists.newArrayList(output), output.getDisplayName(), input);
     }
 
     public ProjectTableRecipe(ItemStack output, IIngredient... input)
     {
-        this.input = ImmutableList.copyOf(input);
-        this.displayName = output.getDisplayName();
-        this.output = ImmutableList.of(output);
+        this(Lists.newArrayList(output), output.getDisplayName(), Arrays.asList(input));
     }
+
 
     public ImmutableList<ItemStack> getOutput()
     {

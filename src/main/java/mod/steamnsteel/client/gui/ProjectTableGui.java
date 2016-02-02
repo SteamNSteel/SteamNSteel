@@ -8,9 +8,6 @@ import mod.steamnsteel.client.gui.model.ProjectTableRecipeInstance;
 import mod.steamnsteel.crafting.projecttable.ProjectTableManager;
 import mod.steamnsteel.crafting.projecttable.ProjectTableRecipe;
 import mod.steamnsteel.inventory.ProjectTableContainer;
-import mod.steamnsteel.library.ModBlock;
-import mod.steamnsteel.library.ModItem;
-import mod.steamnsteel.mcgui.client.gui.ControlBase;
 import mod.steamnsteel.mcgui.client.gui.GuiRenderer;
 import mod.steamnsteel.mcgui.client.gui.GuiSubTexture;
 import mod.steamnsteel.mcgui.client.gui.GuiTexture;
@@ -22,10 +19,7 @@ import mod.steamnsteel.networking.ProjectTableCraftPacket;
 import mod.steamnsteel.proxy.Proxies;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import org.lwjgl.util.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -111,6 +105,7 @@ public class ProjectTableGui extends SteamNSteelGui
 
         templateRecipeControl.addOnRecipeCraftingEventListener(new RecipeCraftingEventListener());
         recipeListGuiComponent.addOnFireItemMadeEventListener(new RecipeMadeVisibleEventListener());
+        playerInventory.inventoryChanged = false;
     }
 
     @Override
@@ -141,6 +136,16 @@ public class ProjectTableGui extends SteamNSteelGui
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        if (playerInventory.inventoryChanged) {
+            for (final ProjectTableRecipeInstance recipeInstance : filteredList)
+            {
+                boolean canCraft = ProjectTableManager.INSTANCE.canCraftRecipe(recipeInstance.getRecipe(), playerInventory);
+                recipeInstance.setCanCraft(canCraft);
+            }
+
+        }
+        playerInventory.inventoryChanged = false;
+
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
         searchField.drawTextBox();
         guiRenderer.notifyTextureChanged();
@@ -206,6 +211,7 @@ public class ProjectTableGui extends SteamNSteelGui
     }
 
     private void craftRecipe(ProjectTableRecipe recipe) {
+        playerInventory.inventoryChanged = false;
         Proxies.network.getNetwork().sendToServer(new ProjectTableCraftPacket(recipe));
     }
 

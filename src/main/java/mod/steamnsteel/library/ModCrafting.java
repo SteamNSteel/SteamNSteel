@@ -27,6 +27,7 @@ public enum ModCrafting
                 .addProjectTableVanillaRecipe(new ItemStack(Items.gold_nugget, 1), new ItemStack(Blocks.gold_block, 64), new ItemStack(Blocks.gold_ore, 64), new ItemStack(Blocks.beacon, 64), new ItemStack(Blocks.brown_mushroom_block, 64))
                 .addProjectTableVanillaRecipe(new ItemStack(Items.diamond, 1), new ItemStack(Blocks.dirt, 64), new ItemStack(Blocks.dirt, 64))
                 .addProjectTableRecipe(new ItemStack(Blocks.anvil, 1), new OreDictionaryIngredient("plankWood", 64))
+                .addProjectTableVanillaRecipe(new ItemStack(Blocks.anvil, 1), new ItemStack(ModBlock.blockSteel, 2) )
         ;
     }
 }
