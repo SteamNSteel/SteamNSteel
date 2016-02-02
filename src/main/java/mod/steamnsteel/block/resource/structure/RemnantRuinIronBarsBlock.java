@@ -85,6 +85,12 @@ public class RemnantRuinIronBarsBlock extends BlockPane
                 .withProperty(IronBarsType, IronBarsTextures.VALUES[meta & 15]);
     }
 
+    @Override
+    public int damageDropped(IBlockState state)
+    {
+        return getMetaFromState(state);
+    }
+
     public enum IronBarsTextures implements IStringSerializable
     {
         RUSTED("Rusted"),
