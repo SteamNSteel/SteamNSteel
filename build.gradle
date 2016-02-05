@@ -38,7 +38,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 ///////////////////////////////////////////////////
 idea {
     project {
-        languageLevel = '1.7'
+        languageLevel = '1.8'
     }
 }
 
@@ -48,8 +48,8 @@ idea {
 version = config.mod_version
 group = config.group_name
 archivesBaseName = "[${config.minecraft_version}]${config.mod_id}"
-sourceCompatibility = JavaVersion.VERSION_1_7
-targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 /*def commonManifest = {
     attributes 'FMLAT': 'steamnsteel_at.cfg'
