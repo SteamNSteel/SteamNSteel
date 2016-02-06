@@ -26,7 +26,7 @@ import org.lwjgl.opengl.GL11;
 
 public class CupolaGui extends SteamNSteelGui
 {
-    private static final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
+    private final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
 
     private final CupolaTE te;
 

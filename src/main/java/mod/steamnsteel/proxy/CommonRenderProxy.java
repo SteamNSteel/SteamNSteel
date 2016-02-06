@@ -14,25 +14,10 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.api.crafting;
+package mod.steamnsteel.proxy;
 
-import com.google.common.base.Optional;
-
-/**
- * The class that accesses the singleton crafting managers..
- *
- * @author Scott Killen
- * @version 1.0
- * @since 0.1
- */
-@SuppressWarnings({"StaticNonFinalField", "PublicField", "NonConstantFieldWithUpperCaseName"})
-public enum CraftingManager
+public class CommonRenderProxy
 {
-    INSTANCE;
-
-    /**
-     * The singleton IAlloyManager implementation. If the API is present without the mod, alloyManager.isPresent()
-     * returns <code>false</code>.
-     */
-    public static Optional<IAlloyManager> alloyManager = Optional.absent();
+    public void preInit() { }
+    public void init() { }
 }

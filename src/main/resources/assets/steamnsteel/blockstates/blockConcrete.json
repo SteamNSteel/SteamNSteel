@@ -1,42 +1,55 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "textures": { "all": "steamnsteel:blocks/blockConcrete_dry" },
+    "textures": { "all": "steamnsteel:blocks/ConcreteDry" },
     "model": "cube_all",
     "transform": "forge:default-block"
   },
   "variants": {
     "wetness": {
       0: {
-
+        "textures": {
+          "all": "steamnsteel:blocks/ConcretePoured"
+        }
       },
       1: {
         "textures": {
-          "texture": "steamnsteel:blocks/blockConcrete_wet_1"
+          "all": "steamnsteel:blocks/ConcreteWet"
         }
       },
       2: {
         "textures": {
-          "texture": "steamnsteel:blocks/blockConcrete_wet_2"
+          "all": "steamnsteel:blocks/ConcreteWet"
         }
       },
       3: {
         "textures": {
-          "texture": "steamnsteel:blocks/blockConcrete_wet_3"
+          "all": "steamnsteel:blocks/ConcreteDamp"
         }
       },
       4: {
         "textures": {
-          "texture": "steamnsteel:blocks/blockConcrete_wet_4"
+          "all": "steamnsteel:blocks/ConcreteDamp"
         }
       },
       5: {
         "textures": {
-          "texture": "steamnsteel:blocks/blockConcrete_wet_5"
+          "all": "steamnsteel:blocks/ConcreteDry"
         }
       }
     },
     "normal": [{}],
-    "inventory": [{}]
+    "inventory": [{
+      "model": "builtin/generated",
+      "textures": {"layer0": "steamnsteel:blocks/ConcretePoured"}
+    }],
+    "inventory,wetness=0": [{
+      "model": "builtin/generated",
+      "textures": {"layer0": "steamnsteel:blocks/ConcretePoured"}
+    }],
+    "inventory,wetness=5": [{
+      "model": "builtin/generated",
+      "textures": {"layer0": "steamnsteel:blocks/ConcreteDry"}
+    }]
   }
 }

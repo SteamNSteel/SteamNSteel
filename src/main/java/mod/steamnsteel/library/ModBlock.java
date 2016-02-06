@@ -20,6 +20,11 @@ import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.block.machine.*;
 import mod.steamnsteel.block.resource.structure.*;
 import mod.steamnsteel.item.resource.structure.ConcreteBlockItem;
+import mod.steamnsteel.block.resource.structure.RemnantRuinFloorBlock;
+import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock;
+import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
+import mod.steamnsteel.block.resource.structure.RemnantRuinWallBlock;
+import mod.steamnsteel.block.utility.CraftingStationBlock;
 import mod.steamnsteel.item.resource.structure.RemnantRuinIronBarsBlockItem;
 import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -61,6 +66,7 @@ public final class ModBlock
     public static final SteamNSteelBlock pipeJunction = new PipeJunctionBlock();
 
     public static final SteamNSteelBlock remnantRuinChest = new RemnantRuinChestBlock();
+    public static final SteamNSteelBlock craftingStation = new CraftingStationBlock();
     public static final SteamNSteelBlock remnantRuinPillar = new RemnantRuinPillarBlock();
 
     public static final SteamNSteelOreBlock oreNiter = new NiterOre();
@@ -101,6 +107,7 @@ public final class ModBlock
     public static void init()
     {
         GameRegistry.registerBlock(remnantRuinChest, RemnantRuinChestBlock.NAME);
+        GameRegistry.registerBlock(craftingStation, CraftingStationBlock.NAME);
 
         GameRegistry.registerBlock(cupola, CupolaBlock.NAME);
         GameRegistry.registerBlock(fanLarge, FanLargeBlock.NAME);

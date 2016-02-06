@@ -17,7 +17,6 @@
 package mod.steamnsteel.proxy;
 
 import mod.steamnsteel.TheMod;
-import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock;
 import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock.IronBarsTextures;
 import mod.steamnsteel.client.model.opengex.OpenGEXModelLoader;
 import mod.steamnsteel.client.model.pct.PCTModelLoader;
@@ -38,7 +37,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
-public class ClientRenderProxy extends RenderProxy
+public class ClientRenderProxy extends CommonRenderProxy
 {
     @Override
     public void preInit()

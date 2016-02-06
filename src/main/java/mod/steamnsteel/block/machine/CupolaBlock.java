@@ -262,7 +262,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     {
         TileEntity te = world.getTileEntity(pos);
 
-        if (((CupolaTE) te).isSlave())
+        if (te != null && ((CupolaTE) te).isSlave())
         {
             te = world.getTileEntity(pos.down());
         }

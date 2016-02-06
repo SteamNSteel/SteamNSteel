@@ -18,6 +18,7 @@ package mod.steamnsteel.gui;
 
 public enum ModGuis
 {
+    PROJECT_TABLE,
     CUPOLA;
 
     private static final ModGuis[] cache = values();
