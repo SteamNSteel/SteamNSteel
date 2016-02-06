@@ -38,37 +38,32 @@ public class SchematicLoader
 
     public SchematicLoader()
     {
-        tileEntityLoadedEventListeners.add(new ITileEntityLoadedEvent()
-        {
-            @Override
-            public boolean onTileEntityAdded(TileEntity tileEntity)
+        tileEntityLoadedEventListeners.add(tileEntity -> {
+            if (tileEntity instanceof TileEntityCommandBlock)
             {
-                if (tileEntity instanceof TileEntityCommandBlock)
+                _logger.info("Activating command Block");
+
+                final GameRules gameRules = MinecraftServer.getServer().worldServers[0].getGameRules();
+                Boolean commandBlockOutputSetting = gameRules.getBoolean("commandBlockOutput");
+                gameRules.setOrCreateGameRule("commandBlockOutput", "false");
+
+                final World world = tileEntity.getWorld();
+
+                TileEntityCommandBlock commandBlock = (TileEntityCommandBlock) tileEntity;
+                final BlockPos pos = tileEntity.getPos();
+                IBlockState block = world.getBlockState(pos);
+                CommandBlockLogic commandblocklogic = commandBlock.getCommandBlockLogic();
+                commandblocklogic.trigger(world);
+                world.updateComparatorOutputLevel(pos, block.getBlock());
+
+                if (world.getTileEntity(pos) instanceof TileEntityCommandBlock)
                 {
-                    _logger.info("Activating command Block");
-
-                    final GameRules gameRules = MinecraftServer.getServer().worldServers[0].getGameRules();
-                    Boolean commandBlockOutputSetting = gameRules.getBoolean("commandBlockOutput");
-                    gameRules.setOrCreateGameRule("commandBlockOutput", "false");
-
-                    final World world = tileEntity.getWorld();
-
-                    TileEntityCommandBlock commandBlock = (TileEntityCommandBlock) tileEntity;
-                    final BlockPos pos = tileEntity.getPos();
-                    IBlockState block = world.getBlockState(pos);
-                    CommandBlockLogic commandblocklogic = commandBlock.getCommandBlockLogic();
-                    commandblocklogic.trigger(world);
-                    world.updateComparatorOutputLevel(pos, block.getBlock());
-
-                    if (world.getTileEntity(pos) instanceof TileEntityCommandBlock)
-                    {
-                        world.setBlockState(pos, Blocks.air.getDefaultState(), 3);
-                    }
-                    gameRules.setOrCreateGameRule("commandBlockOutput", commandBlockOutputSetting.toString());
-                    return true;
+                    world.setBlockState(pos, Blocks.air.getDefaultState(), 3);
                 }
-                return false;
+                gameRules.setOrCreateGameRule("commandBlockOutput", commandBlockOutputSetting.toString());
+                return true;
             }
+            return false;
         });
     }
 
