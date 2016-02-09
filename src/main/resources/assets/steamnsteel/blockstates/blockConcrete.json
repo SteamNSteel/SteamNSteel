@@ -39,17 +39,11 @@
       }
     },
     "normal": [{}],
-    "inventory": [{
-      "model": "builtin/generated",
-      "textures": {"layer0": "steamnsteel:blocks/ConcretePoured"}
-    }],
     "inventory,wetness=0": [{
-      "model": "builtin/generated",
-      "textures": {"layer0": "steamnsteel:blocks/ConcretePoured"}
+      "textures": {"all": "steamnsteel:blocks/ConcretePoured"}
     }],
     "inventory,wetness=5": [{
-      "model": "builtin/generated",
-      "textures": {"layer0": "steamnsteel:blocks/ConcreteDry"}
+      "textures": {"all": "steamnsteel:blocks/ConcreteDry"}
     }]
   }
 }

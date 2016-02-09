@@ -98,18 +98,25 @@ public class ClientRenderProxy extends CommonRenderProxy
         registerBlockItemModel(ModBlock.remnantRuinFloor);
 
         registerIronBarsModel(ModBlock.remnantRuinIronBars);
+        registerMetadataBlockModel(ModBlock.blockConcrete, 0, "wetness", "0");
+        registerMetadataBlockModel(ModBlock.blockConcrete, 5, "wetness", "5");
     }
 
     private void registerIronBarsModel(Block block) {
-        final String resourceName = block.getUnlocalizedName().substring(5);
         for (int i = 0; i < IronBarsTextures.VALUES.length; ++i)
         {
-            ModelLoader.setCustomModelResourceLocation(
-                    Item.getItemFromBlock(block),
-                    i,
-                    new ModelResourceLocation(resourceName, "inventory,type=" + IronBarsTextures.VALUES[i].getName())
-            );
+            registerMetadataBlockModel(block, i, "type", IronBarsTextures.VALUES[i].getName());
         }
+    }
+
+    private void registerMetadataBlockModel(Block block, int meta, String discriminator, String discriminatorValue) {
+        final String resourceName = block.getUnlocalizedName().substring(5);
+
+        ModelLoader.setCustomModelResourceLocation(
+                Item.getItemFromBlock(block),
+                meta,
+                new ModelResourceLocation(resourceName, "inventory," + discriminator + "=" + discriminatorValue)
+        );
     }
 
     private void registerBlockItemModel(Block block) {
