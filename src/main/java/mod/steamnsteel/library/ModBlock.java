@@ -18,6 +18,8 @@ package mod.steamnsteel.library;
 
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.block.machine.*;
+import mod.steamnsteel.block.resource.structure.*;
+import mod.steamnsteel.item.resource.structure.ConcreteBlockItem;
 import mod.steamnsteel.block.resource.structure.RemnantRuinFloorBlock;
 import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock;
 import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
@@ -72,6 +74,8 @@ public final class ModBlock
     public static final SteamNSteelOreBlock oreSulfur = new SulfurOre();
     public static final SteamNSteelOreBlock oreTin = new TinOre();
     public static final SteamNSteelOreBlock oreZinc = new ZincOre();
+
+    public static final SteamNSteelBlock blockConcrete = new ConcreteBlock();
 
 
     public static final SteamNSteelBlock remnantRuinFloor = new RemnantRuinFloorBlock();
@@ -132,6 +136,7 @@ public final class ModBlock
         GameRegistry.registerBlock(remnantRuinFloor, RemnantRuinFloorBlock.NAME);
         GameRegistry.registerBlock(remnantRuinWall, RemnantRuinWallBlock.NAME);
         GameRegistry.registerBlock(remnantRuinIronBars, RemnantRuinIronBarsBlockItem.class, RemnantRuinIronBarsBlock.NAME);
+        GameRegistry.registerBlock(blockConcrete, ConcreteBlockItem.class, ConcreteBlock.NAME);
 
         //Compat
         TileEntity.addMapping(RemnantRuinChestTE.class, "tile.chestPlotonium");
