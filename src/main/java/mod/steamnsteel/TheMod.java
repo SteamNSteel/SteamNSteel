@@ -16,13 +16,11 @@
 
 package mod.steamnsteel;
 
-import com.google.common.base.Optional;
+import com.foudroyantfactotum.tool.structure.StructureRegistry;
 import mod.steamnsteel.api.CraftingManager;
 import mod.steamnsteel.api.SteamNSteelInitializedEvent;
-import mod.steamnsteel.api.crafting.IAlloyManager;
 import mod.steamnsteel.configuration.ConfigurationHandler;
 import mod.steamnsteel.crafting.Recipes;
-import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.gui.GuiHandler;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModBlockParts;
@@ -69,6 +67,8 @@ public class TheMod
     {
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
+        StructureRegistry.setMOD_ID(TheMod.MOD_ID);
+
         ModItem.init();
         ModBlock.init();
         ModBlockParts.init();
@@ -83,6 +83,8 @@ public class TheMod
 
         MinecraftForge.EVENT_BUS.register(ConfigurationHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(ModCrafting.INSTANCE);
+
+        StructureRegistry.loadRegisteredPatterns();
 
         Recipes.init();
         WorldGen.init();
@@ -103,6 +105,7 @@ public class TheMod
     public void onServerStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new LoadSchematicFromResourceCommand());
         event.registerServerCommand(new LoadSchematicFromFileCommand());
+        event.registerServerCommand(new StructureRegistry.CommandReloadStructures());
     }
 
     @Mod.EventHandler

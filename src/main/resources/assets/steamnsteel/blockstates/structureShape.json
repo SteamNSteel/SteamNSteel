@@ -1,0 +1,73 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "model": "minecraft:cube_all",
+    "textures": {
+        "all": "blocks/glass_black"
+      }
+  },
+  "variants": {
+    "normal": [
+      {
+      }
+    ],
+    "inventory": [
+      {
+        "transform": {
+          "thirdperson": {},
+          "firstperson": {},
+          "gui": {}
+        }
+      }
+    ],
+    "facing=north,mirror=false": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "blocks/glass_red"
+      }
+    },
+    "facing=east,mirror=false": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "blocks/glass_orange"
+      }
+    },
+    "facing=south,mirror=false": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "blocks/glass_yellow"
+      }
+    },
+    "facing=west,mirror=false": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "blocks/glass_black"
+      }
+    },
+    "facing=north,mirror=true": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "blocks/glass_green"
+      }
+    },
+    "facing=east,mirror=true": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "blocks/glass_blue"
+      }
+    },
+    "facing=south,mirror=true": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "blocks/glass_purple"
+      }
+    },
+    "facing=west,mirror=true": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "blocks/glass_white"
+      }
+    }
+  }
+}

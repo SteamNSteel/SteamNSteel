@@ -1,0 +1,82 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "model": "steamnsteel:SSBlastFurnace.obj",
+    "textures": {
+      "SSBlastFurnace": "steamnsteel:models/SSBlastFurnace"
+    },
+    "custom": {
+      "flip-v": true
+    }
+  },
+  "variants": {
+    "normal": [{
+    }],
+    "inventory": [{
+      "transform": {
+        "thirdperson": {
+          "translation": [0, 0, 0.01],
+          "rotation": [{"y": 90}, {"z": -75}],
+          "scale": 0.2
+        },
+        "firstperson": {
+          "rotation": {"y": -90 },
+          "translation": [0, 0, 0.2],
+          "scale": 0.45
+        },
+        "gui": {
+          "translation": [-0.02, -0.3, 0],
+          "rotation": {"y": 90 },
+          "scale": 0.45
+        }
+      }
+    }],
+    "facing=north,mirror=false": {
+      "model": "steamnsteel:SSBlastFurnace.obj", "transform": {
+        "translation": [1.5, 0, 1.5]
+    }},
+    "facing=east,mirror=false": {
+      "model": "steamnsteel:SSBlastFurnace.obj", "transform": {
+        "rotation": {"y": 270 },
+        "translation": [-1.5, 0, 1.5]
+    }},
+    "facing=south,mirror=false": {
+      "model": "steamnsteel:SSBlastFurnace.obj", "transform": {
+          "rotation": {"y": 180 },
+        "translation": [-1.5, 0, -1.5]
+    }},
+    "facing=west,mirror=false": {
+      "model": "steamnsteel:SSBlastFurnace.obj", "transform": {
+        "rotation": {"y": 90 },
+        "translation": [1.5, 0, -1.5]
+    }},
+    "facing=north,mirror=true": {
+      "model": "steamnsteel:SSBlastFurnace.obj", "transform": {
+        "scale": [-1,1,1],
+        "translation": [-1.5, 0, 1.5]
+      }
+    },
+    "facing=east,mirror=true": {
+      "model": "steamnsteel:SSBlastFurnace.obj", "transform": {
+        "scale": [-1,1,1],
+        "rotation": {"y": 270 },
+        "translation": [-1.5, 0, -1.5]
+      }
+    },
+    "facing=south,mirror=true": {
+      "model": "steamnsteel:SSBlastFurnace.obj", "transform": {
+        "scale": [-1,1,1],
+        "rotation": {"y": 180 },
+        "translation": [1.5, 0, -1.5]
+      }
+    },
+    "facing=west,mirror=true": {
+      "model": "steamnsteel:SSBlastFurnace.obj", "transform": {
+        "scale": [-1,1,1],
+        "rotation": {"y": 90 },
+        "translation": [1.5, 0, 1.5]
+      }
+    }
+  }
+}

@@ -17,21 +17,34 @@
           "scale": 0.50
         },
         "firstperson": {"rotation": {"y": 180 }, "scale": 0.66},
-        "gui": {"rotation": {"y": 180 }}
+        "gui": {
+          "translation": [-0.18, 0.01, 0],
+          "rotation": {"y": 180 },
+          "scale": 0.39
+        }
       }
     }],
     "facing": {
       "north": { "transform": {
-        "rotation": {"y": 90 }
+        "rotation": {"y": 90 },
+        "translation": [0.5,0.5,-0.5]
       }},
-      "east": { },
+      "east": { "transform": {
+        "translation": [0.5,0.5,0.5]
+      }},
       "south": { "transform": {
-        "rotation": {"y": 270 }
+        "rotation": {"y": 270 },
+        "translation": [-0.5,0.5,0.5]
       }},
       "west": { "transform": {
-        "rotation": {"y": 180 }
+        "rotation": {"y": 180 },
+        "translation": [-0.5,0.5,-0.5]
       }}
-      },
+    },
+    "mirror": {
+      "false": { },
+      "true": { }
+    },
     "render-dynamic": {
       "false": {
         "custom": {

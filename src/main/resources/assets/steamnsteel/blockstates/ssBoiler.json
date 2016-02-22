@@ -1,0 +1,82 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "model": "steamnsteel:SSBoiler.obj",
+    "textures": {
+      "SSBoiler": "steamnsteel:models/SSBoiler"
+    },
+    "custom": {
+      "flip-v": true
+    }
+  },
+  "variants": {
+    "normal": [{
+    }],
+    "inventory": [{
+      "transform": {
+        "thirdperson": {
+          "translation": [0, 0, -0.2],
+          "rotation": [{"y": 90}, {"z": -10}],
+          "scale": 0.2
+        },
+        "firstperson": {
+          "rotation": {"y": -90 },
+          "translation": [0, -0.1, 0.1],
+          "scale": 0.45
+        },
+        "gui": {
+          "translation": [-0.02, -0.36, 0],
+          "rotation": {"y": 90 },
+          "scale": 0.36
+        }
+      }
+    }],
+    "facing=north,mirror=false": {
+      "model": "steamnsteel:SSBoiler.obj", "transform": {
+        "translation": [1.5, 0, 1.5]
+    }},
+    "facing=east,mirror=false": {
+      "model": "steamnsteel:SSBoiler.obj", "transform": {
+        "rotation": {"y": 270 },
+        "translation": [-1.5, 0, 1.5]
+    }},
+    "facing=south,mirror=false": {
+      "model": "steamnsteel:SSBoiler.obj", "transform": {
+          "rotation": {"y": 180 },
+        "translation": [-1.5, 0, -1.5]
+    }},
+    "facing=west,mirror=false": {
+      "model": "steamnsteel:SSBoiler.obj", "transform": {
+        "rotation": {"y": 90 },
+        "translation": [1.5, 0, -1.5]
+    }},
+    "facing=north,mirror=true": {
+      "model": "steamnsteel:SSBoiler.obj", "transform": {
+        "scale": [-1,1,1],
+        "translation": [-1.5, 0, 1.5]
+      }
+    },
+    "facing=east,mirror=true": {
+      "model": "steamnsteel:SSBoiler.obj", "transform": {
+        "scale": [-1,1,1],
+        "rotation": {"y": 270 },
+        "translation": [-1.5, 0, -1.5]
+      }
+    },
+    "facing=south,mirror=true": {
+      "model": "steamnsteel:SSBoiler.obj", "transform": {
+        "scale": [-1,1,1],
+        "rotation": {"y": 180 },
+        "translation": [1.5, 0, -1.5]
+      }
+    },
+    "facing=west,mirror=true": {
+      "model": "steamnsteel:SSBoiler.obj", "transform": {
+        "scale": [-1,1,1],
+        "rotation": {"y": 90 },
+        "translation": [1.5, 0, 1.5]
+      }
+    }
+  }
+}
