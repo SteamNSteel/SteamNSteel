@@ -143,7 +143,7 @@ public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
             final String key = e.getKey();
             if(e.getValue().getResourcePath().startsWith("#"))
             {
-                FMLLog.severe("unresolved texture '%s' for b3d model '%s'", e.getValue().getResourcePath(), location);
+                FMLLog.severe("unresolved texture '%s' for OGEX model '%s'", e.getValue().getResourcePath(), location);
                 builder.put(key, missing);
             }
             else

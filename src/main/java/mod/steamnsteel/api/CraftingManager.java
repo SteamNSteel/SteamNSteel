@@ -30,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The class that accesses the singleton crafting managers..
@@ -95,10 +96,7 @@ public enum CraftingManager implements ICraftingManager
     protected List<IIngredient> wrapItemStacks(Collection<ItemStack> input)
     {
         List<IIngredient> transformedIngredients = Lists.newArrayList();
-        for (final ItemStack itemStack : input)
-        {
-            transformedIngredients.add(new ItemStackIngredient(itemStack));
-        }
+        transformedIngredients.addAll(input.stream().map(ItemStackIngredient::new).collect(Collectors.toList()));
         return transformedIngredients;
     }
 }

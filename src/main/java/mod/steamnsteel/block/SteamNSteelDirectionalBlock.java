@@ -33,10 +33,14 @@ import static net.minecraft.block.BlockDirectional.*;
 
 public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
+    protected SteamNSteelDirectionalBlock(Material material, boolean addToCreativeTab) {
+        super(material, addToCreativeTab);
+        setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));
+    }
+
     protected SteamNSteelDirectionalBlock(Material material)
     {
-        super(material);
-        setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));
+        this(material, true);
     }
 
     @Override
@@ -60,7 +64,7 @@ public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
     @Override
     public int getMetaFromState(IBlockState state) {
         int meta = 0;
-        meta |= ((EnumFacing)state.getValue(FACING)).ordinal() - 2;
+        meta |= state.getValue(FACING).ordinal() - 2;
         return meta;
     }
 

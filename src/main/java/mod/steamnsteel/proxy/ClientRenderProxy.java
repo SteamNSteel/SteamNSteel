@@ -97,6 +97,8 @@ public class ClientRenderProxy extends CommonRenderProxy
         registerBlockItemModel(ModBlock.remnantRuinWall);
         registerBlockItemModel(ModBlock.remnantRuinFloor);
 
+        registerBlockItemModel(ModBlock.projectTable);
+
         registerIronBarsModel(ModBlock.remnantRuinIronBars);
         registerMetadataBlockModel(ModBlock.blockConcrete, 0, "wetness", "0");
         registerMetadataBlockModel(ModBlock.blockConcrete, 5, "wetness", "5");
