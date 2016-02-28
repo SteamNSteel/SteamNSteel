@@ -84,8 +84,10 @@ shadowJar {
     def deobfPrefix = "deobf." + minecraft.mappingsChannel + '.' + minecraft.mappingsVersion + '.'
     dependencies {
         include(dependency(deobfPrefix + 'mod.steamnsteel:mcgui:1.0'))
+        include(dependency(deobfPrefix + 'com.foudroyantfactotum:Structure:1.8.9-0.1'))
     }
     relocate 'mod.steamnsteel.mcgui', 'mod.steamnsteel.shaded.mod.steamnsteel.mcgui'
+    relocate 'com.foudroyantfactotum.tool.structure', 'mod.steamnsteel.shaded.com.foudroyantfactotum.tool.structure'
     classifier = 'universal'
 }
 
@@ -182,6 +184,41 @@ if (config.mcgui_local_enabled == "true") {
             }
         }
         deobfCompile(group: 'mod.steamnsteel', name: 'mcgui', version: '1.0', classifier: 'api')
+    }
+}
+
+if (config.structure_local_enabled == "true") {
+    println("Using Structure from local path - You cannot produce a build with this configuration")
+    def newModuleLocation = file(config.structure_local_path)
+    def existingModule = idea.project.modules[0]
+    def newIml = new IdeaModuleIml(existingModule.iml.xmlTransformer, newModuleLocation)
+    def newModule = new IdeaModule(existingModule.project, newIml)
+    newModule.name = "Structure"
+    newModule.contentRoot = newModuleLocation
+    newModule.sourceDirs = [newModuleLocation]
+
+    idea {
+        project {
+            modules += newModule
+        }
+        module {
+            iml {
+                //Not a lot of documentation how to add a module dependency without using Multi-projects.
+                withXml {
+                    def node = it.asNode()
+                    node.children()[0].appendNode('orderEntry', ["type": "module", "module-name": newModule.name])
+                }
+            }
+        }
+    }
+} else {
+    dependencies {
+        repositories {
+            maven {
+                url 'http://repository.steamnsteel.info/artifactory/foudroyantfactotum-libs-stable'
+            }
+        }
+        deobfCompile(group: 'com.foudroyantfactotum', name: 'Structure', version: '1.8.9-0.1', classifier: 'universal')
     }
 }
 

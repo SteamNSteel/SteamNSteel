@@ -18,7 +18,6 @@ package mod.steamnsteel.client.renderer.tileentity;
 import mod.steamnsteel.block.machine.structure.FanLargeStructure;
 import mod.steamnsteel.client.model.opengex.OpenGEXAnimationFrameProperty;
 import mod.steamnsteel.client.model.opengex.OpenGEXState;
-import mod.steamnsteel.tileentity.structure.LargeFanTE;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
@@ -26,21 +25,16 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.model.ISmartBlockModel;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import org.lwjgl.opengl.GL11;
 
-/**
- * Created by codew on 5/11/2015.
- */
-public class LargeFanTESR extends TileEntitySpecialRenderer<LargeFanTE>
+public class OgexStructureTESR extends TileEntitySpecialRenderer
 {
-
-
-
     @Override
-    public void renderTileEntityAt(LargeFanTE te, double x, double y, double z, float partialTicks, int destroyStage)
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)
     {
         final BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
         IBlockState blockState = te.getWorld().getBlockState(te.getPos());

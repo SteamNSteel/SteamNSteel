@@ -13,23 +13,26 @@
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
-package mod.steamnsteel.proxy;
+package mod.steamnsteel.block;
 
-import com.foudroyantfactotum.tool.structure.net.StructurePacket;
-import mod.steamnsteel.networking.ProjectTableCraftPacket;
-import mod.steamnsteel.networking.ProjectTableCraftPacketMessageHandler;
-import net.minecraftforge.fml.relauncher.Side;
+import mod.steamnsteel.tileentity.structure.ShapeLITE;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
-/**
- * Created by codew on 17/01/2016.
- */
-public class ClientNetworkProxy extends CommonNetworkProxy
+public class ShapeLIBlock extends SteamNSteelStructureShapeBlock
 {
-    @Override
-    public void init() {
-        super.init();
-        getNetwork().registerMessage(ProjectTableCraftPacketMessageHandler.class, ProjectTableCraftPacket.class, 0, Side.CLIENT);
-        getNetwork().registerMessage(StructurePacket.Handler.class, StructurePacket.class, 1, Side.CLIENT);
+    public static final String NAME = "shapeLIBlock";
+
+    public ShapeLIBlock()
+    {
+        super();
+        setUnlocalizedName(NAME);
     }
 
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state)
+    {
+        return new ShapeLITE();
+    }
 }

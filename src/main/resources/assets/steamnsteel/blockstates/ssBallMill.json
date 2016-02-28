@@ -1,0 +1,72 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "model": "steamnsteel:SSBallMill.OGEX",
+    "textures": {
+      "#//D/The Forge/Minecraft/SteamNSteel/Models/SSBallMill": "steamnsteel:models/SSBallMill"
+    },
+    "custom": {
+      "flip-v": true
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{
+      "transform": {
+        "thirdperson": {
+          "translation": [0.0, 0.08, -0.1],
+          "rotation": [{"y": 180}, {"z": 160}],
+          "scale": 0.2
+        },
+        "firstperson": {
+          "rotation": {"y": -90 },
+          "translation": [0, 0.18, 0],
+          "scale": 0.55
+        },
+        "gui": {
+          "translation": [0.01, 0.02, -0.03],
+          "rotation": {"y": 90 },
+          "scale": 0.31
+        }
+      }
+    }],
+    "facing": {
+      "north": { "transform": {
+        "rotation": {"y": 90 },
+        "translation": [1.5,1,0]
+      }},
+      "east": { "transform": {
+        "translation": [0,1,1.5]
+      }},
+      "south": { "transform": {
+        "rotation": {"y": 270 },
+        "translation": [-1.5,1,0]
+      }},
+      "west": { "transform": {
+        "rotation": {"y": 180 },
+        "translation": [0,1,-1.5]
+      }}
+    },
+    "mirror": {
+      "false": { },
+      "true": { "transform": {"scale": [-1,1,1]}}
+    },
+    "render-dynamic": {
+      "false": {
+        "custom": {
+          "enabled-nodes": [
+            "SSBallMill_Machine"
+          ]
+        }
+      },
+      "true": {
+        "custom": {
+          "enabled-nodes": [
+            "SSBallMill_Barrel"
+          ]
+        }
+      }
+    }
+  }
+}

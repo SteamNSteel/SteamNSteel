@@ -16,16 +16,21 @@
 
 package mod.steamnsteel.proxy;
 
+import com.foudroyantfactotum.tool.structure.renderer.StructureTESR;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock.IronBarsTextures;
 import mod.steamnsteel.client.model.opengex.OpenGEXModelLoader;
 import mod.steamnsteel.client.model.pct.PCTModelLoader;
 import mod.steamnsteel.client.renderer.tileentity.LargeFanTESR;
+import mod.steamnsteel.client.renderer.tileentity.OgexStructureTESR;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
 import mod.steamnsteel.texturing.wall.RemnantRuinFloorSideTexture;
 import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
-import mod.steamnsteel.tileentity.LargeFanTE;
+import mod.steamnsteel.tileentity.structure.BallMillTE;
+import mod.steamnsteel.tileentity.structure.BlastFurnaceTE;
+import mod.steamnsteel.tileentity.structure.BoilerTE;
+import mod.steamnsteel.tileentity.structure.LargeFanTE;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -85,11 +90,16 @@ public class ClientRenderProxy extends CommonRenderProxy
         registerBlockItemModel(ModBlock.blockZinc);
 
         registerBlockItemModel(ModBlock.cupola);
-        registerBlockItemModel(ModBlock.fanLarge);
         registerBlockItemModel(ModBlock.pipe);
         registerBlockItemModel(ModBlock.pipeValve);
         registerBlockItemModel(ModBlock.pipeValveRedstone);
         registerBlockItemModel(ModBlock.pipeJunction);
+
+        //Structure
+        registerBlockItemModel(ModBlock.fanLarge);
+        registerBlockItemModel(ModBlock.ssBoiler);
+        registerBlockItemModel(ModBlock.ssBallMill);
+        registerBlockItemModel(ModBlock.ssBlastFurnace);
 
         registerBlockItemModel(ModBlock.remnantRuinPillar);
         registerBlockItemModel(ModBlock.remnantRuinChest);
@@ -179,7 +189,12 @@ public class ClientRenderProxy extends CommonRenderProxy
 
     private void registerTESRs()
     {
+        final StructureTESR STESR = new StructureTESR();
+
         ClientRegistry.bindTileEntitySpecialRenderer(LargeFanTE.class, new LargeFanTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(BoilerTE.class, STESR);
+        ClientRegistry.bindTileEntitySpecialRenderer(BallMillTE.class, new OgexStructureTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(BlastFurnaceTE.class, STESR);
     }
 
     private void registerEventHandlers() {
