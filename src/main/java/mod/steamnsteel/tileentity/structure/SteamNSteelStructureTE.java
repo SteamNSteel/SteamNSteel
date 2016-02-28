@@ -13,23 +13,21 @@
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
-package mod.steamnsteel.proxy;
+package mod.steamnsteel.tileentity.structure;
 
-import com.foudroyantfactotum.tool.structure.net.StructurePacket;
-import mod.steamnsteel.networking.ProjectTableCraftPacket;
-import mod.steamnsteel.networking.ProjectTableCraftPacketMessageHandler;
-import net.minecraftforge.fml.relauncher.Side;
+import com.foudroyantfactotum.tool.structure.registry.StructureDefinition;
+import com.foudroyantfactotum.tool.structure.tileentity.StructureTE;
+import net.minecraft.util.EnumFacing;
 
-/**
- * Created by codew on 17/01/2016.
- */
-public class ClientNetworkProxy extends CommonNetworkProxy
+public abstract class SteamNSteelStructureTE extends StructureTE
 {
-    @Override
-    public void init() {
-        super.init();
-        getNetwork().registerMessage(ProjectTableCraftPacketMessageHandler.class, ProjectTableCraftPacket.class, 0, Side.CLIENT);
-        getNetwork().registerMessage(StructurePacket.Handler.class, StructurePacket.class, 1, Side.CLIENT);
+    public SteamNSteelStructureTE()
+    {
+        //noop
     }
 
+    public SteamNSteelStructureTE(StructureDefinition sd, EnumFacing orientation, boolean mirror)
+    {
+        super(sd, orientation, mirror);
+    }
 }

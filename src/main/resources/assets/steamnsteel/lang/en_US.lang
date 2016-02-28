@@ -16,7 +16,6 @@ tile.steamnsteel:blockZinc.name=Zinc Block
 tile.steamnsteel:remnantRuinChest.name=Remnant Ruin Chest
 tile.steamnsteel:projectTable.name=Project Table
 tile.steamnsteel:cupola.name=Cupola
-tile.steamnsteel:fanLarge.name=Your Largest Fan
 tile.steamnsteel:pipe.name=Pipe
 tile.steamnsteel:pipeValve.name=Valve
 tile.steamnsteel:pipeValveRedstone.name=Redstone Valve
@@ -35,6 +34,12 @@ tile.steamnsteel:remnantRuinIronBars_RustedMossy.name=Rusty and Mossy Iron Bars
 tile.steamnsteel:blockConcrete.name=Concrete Block
 tile.steamnsteel:blockConcrete_item_wet.name=Wet Concrete Block
 tile.steamnsteel:blockConcrete_item_dry.name=Dried Concrete Block
+
+#Structures
+tile.steamnsteel:ssBallMill.name=Ball Mill
+tile.steamnsteel:ssBlastFurnace.name=Blast Furnace
+tile.steamnsteel:ssBoiler.name=Boiler
+tile.steamnsteel:fanLarge.name=Your Largest Fan
 
 # Config file comments
 config.steamnsteel:genCopper=Should copper ore be generated in new chunks?

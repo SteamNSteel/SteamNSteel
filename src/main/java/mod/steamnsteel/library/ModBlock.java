@@ -16,8 +16,17 @@
 
 package mod.steamnsteel.library;
 
+import com.foudroyantfactotum.tool.structure.StructureRegistry;
+import com.foudroyantfactotum.tool.structure.item.StructureBlockItem;
+import mod.steamnsteel.TheMod;
+import mod.steamnsteel.block.*;
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.block.machine.*;
+import mod.steamnsteel.block.machine.structure.FanLargeStructure;
+import mod.steamnsteel.block.machine.structure.SSBallMillStructure;
+import mod.steamnsteel.block.machine.structure.SSBlastFurnaceStructure;
+import mod.steamnsteel.block.machine.structure.SSBoilerStructure;
+import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.block.resource.structure.*;
 import mod.steamnsteel.item.resource.structure.ConcreteBlockItem;
 import mod.steamnsteel.block.resource.structure.RemnantRuinFloorBlock;
@@ -26,15 +35,13 @@ import mod.steamnsteel.block.resource.structure.RemnantRuinPillarBlock;
 import mod.steamnsteel.block.resource.structure.RemnantRuinWallBlock;
 import mod.steamnsteel.block.utility.ProjectTableBlock;
 import mod.steamnsteel.item.resource.structure.RemnantRuinIronBarsBlockItem;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import mod.steamnsteel.TheMod;
-import mod.steamnsteel.block.*;
-import mod.steamnsteel.block.resource.ore.*;
 import mod.steamnsteel.tileentity.*;
+import mod.steamnsteel.tileentity.structure.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
@@ -58,7 +65,13 @@ public final class ModBlock
     public static final SteamNSteelBlock blockZinc = new SteamNSteelStorageBlock(SteamNSteelStorageBlock.ZINC_BLOCK);
 
     public static final SteamNSteelBlock cupola = new CupolaBlock();
-    public static final SteamNSteelBlock fanLarge = new FanLargeBlock();
+
+    public static final SteamNSteelStructureShapeBlock structureShape = new SteamNSteelStructureShapeBlock();
+    public static final SteamNSteelStructureShapeBlock shapeLI = new ShapeLIBlock();
+    public static final SteamNSteelStructureBlock ssBallMill = new SSBallMillStructure();
+    public static final SteamNSteelStructureBlock ssBlastFurnace = new SSBlastFurnaceStructure();
+    public static final SteamNSteelStructureBlock ssBoiler = new SSBoilerStructure();
+    public static final SteamNSteelStructureBlock fanLarge = new FanLargeStructure();
 
     public static final SteamNSteelBlock pipe = new PipeBlock();
     public static final SteamNSteelBlock pipeValve = new PipeValveBlock();
@@ -94,7 +107,12 @@ public final class ModBlock
     {
         GameRegistry.registerTileEntity(RemnantRuinChestTE.class, getTEName(RemnantRuinChestBlock.NAME));
         GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
-        GameRegistry.registerTileEntity(LargeFanTE.class, getTEName(FanLargeBlock.NAME));
+        GameRegistry.registerTileEntity(SteamNSteelStructureShapeTE.class, getTEName(SteamNSteelStructureShapeBlock.NAME));
+        GameRegistry.registerTileEntity(ShapeLITE.class, getTEName(ShapeLIBlock.NAME));
+        GameRegistry.registerTileEntity(BallMillTE.class, getTEName(SSBallMillStructure.NAME));
+        GameRegistry.registerTileEntity(LargeFanTE.class, getTEName(FanLargeStructure.NAME));
+        GameRegistry.registerTileEntity(BlastFurnaceTE.class, getTEName(SSBlastFurnaceStructure.NAME));
+        GameRegistry.registerTileEntity(BoilerTE.class, getTEName(SSBoilerStructure.NAME));
         GameRegistry.registerTileEntity(PipeTE.class, getTEName(PipeBlock.NAME));
         GameRegistry.registerTileEntity(PipeValveTE.class, getTEName(PipeValveBlock.NAME));
         GameRegistry.registerTileEntity(PipeRedstoneValveTE.class, getTEName(PipeRedstoneValveBlock.NAME));
@@ -110,7 +128,13 @@ public final class ModBlock
         GameRegistry.registerBlock(projectTable, ProjectTableBlock.NAME);
 
         GameRegistry.registerBlock(cupola, CupolaBlock.NAME);
-        GameRegistry.registerBlock(fanLarge, FanLargeBlock.NAME);
+
+        GameRegistry.registerBlock(structureShape, SteamNSteelStructureShapeBlock.NAME);
+        GameRegistry.registerBlock(shapeLI, ShapeLIBlock.NAME);
+        registerStructure(ssBallMill, shapeLI, SSBallMillStructure.NAME);
+        registerStructure(ssBlastFurnace, shapeLI, SSBlastFurnaceStructure.NAME);
+        registerStructure(ssBoiler, shapeLI, SSBoilerStructure.NAME);
+        registerStructure(fanLarge, structureShape, FanLargeStructure.NAME);
 
         GameRegistry.registerBlock(pipe, PipeBlock.NAME);
         GameRegistry.registerBlock(pipeValve, PipeValveBlock.NAME);
@@ -146,6 +170,12 @@ public final class ModBlock
     {
         GameRegistry.registerBlock(block, name);
         OreDictionary.registerOre(name, block);
+    }
+
+    private static void registerStructure(SteamNSteelStructureBlock structure, SteamNSteelStructureShapeBlock shape, String name)
+    {
+        GameRegistry.registerBlock(structure, StructureBlockItem.class,  name);
+        StructureRegistry.registerStructureForLoad(structure, shape);
     }
 
     public static void remapMissingMappings(List<FMLMissingMappingsEvent.MissingMapping> missingMappings)
