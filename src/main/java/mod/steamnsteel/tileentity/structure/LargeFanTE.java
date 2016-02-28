@@ -18,7 +18,7 @@ package mod.steamnsteel.tileentity.structure;
 import com.foudroyantfactotum.tool.structure.registry.StructureDefinition;
 import net.minecraft.util.EnumFacing;
 
-public class LargeFanTE extends StructureTemplate
+public class LargeFanTE extends SteamNSteelStructureTE
 {
     public LargeFanTE()
     {

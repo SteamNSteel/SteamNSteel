@@ -13,10 +13,26 @@
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
-package mod.steamnsteel.tileentity.structure;
+package mod.steamnsteel.block;
 
-import com.foudroyantfactotum.tool.structure.tileentity.StructureShapeTE;
+import mod.steamnsteel.tileentity.structure.ShapeLITE;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
-public class SteamNSteelStructureShapeTE extends StructureShapeTE
+public class ShapeLIBlock extends SteamNSteelStructureShapeBlock
 {
+    public static final String NAME = "shapeLIBlock";
+
+    public ShapeLIBlock()
+    {
+        super();
+        setUnlocalizedName(NAME);
+    }
+
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state)
+    {
+        return new ShapeLITE();
+    }
 }

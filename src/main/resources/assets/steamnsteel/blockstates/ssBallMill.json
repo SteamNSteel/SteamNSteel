@@ -15,8 +15,8 @@
     "inventory": [{
       "transform": {
         "thirdperson": {
-          "translation": [0, 0, 0.0],
-          "rotation": [{"y": 0}, {"z": 180}],
+          "translation": [0.0, 0.08, -0.1],
+          "rotation": [{"y": 180}, {"z": 160}],
           "scale": 0.2
         },
         "firstperson": {

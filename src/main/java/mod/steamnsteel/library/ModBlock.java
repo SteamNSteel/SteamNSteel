@@ -63,6 +63,7 @@ public final class ModBlock
     public static final SteamNSteelBlock cupola = new CupolaBlock();
 
     public static final SteamNSteelStructureShapeBlock structureShape = new SteamNSteelStructureShapeBlock();
+    public static final SteamNSteelStructureShapeBlock shapeLI = new ShapeLIBlock();
     public static final SteamNSteelStructureBlock ssBallMill = new SSBallMillStructure();
     public static final SteamNSteelStructureBlock ssBlastFurnace = new SSBlastFurnaceStructure();
     public static final SteamNSteelStructureBlock ssBoiler = new SSBoilerStructure();
@@ -103,6 +104,7 @@ public final class ModBlock
         GameRegistry.registerTileEntity(RemnantRuinChestTE.class, getTEName(RemnantRuinChestBlock.NAME));
         GameRegistry.registerTileEntity(CupolaTE.class, getTEName(CupolaBlock.NAME));
         GameRegistry.registerTileEntity(SteamNSteelStructureShapeTE.class, getTEName(SteamNSteelStructureShapeBlock.NAME));
+        GameRegistry.registerTileEntity(ShapeLITE.class, getTEName(ShapeLIBlock.NAME));
         GameRegistry.registerTileEntity(BallMillTE.class, getTEName(SSBallMillStructure.NAME));
         GameRegistry.registerTileEntity(LargeFanTE.class, getTEName(FanLargeStructure.NAME));
         GameRegistry.registerTileEntity(BlastFurnaceTE.class, getTEName(SSBlastFurnaceStructure.NAME));
@@ -124,9 +126,10 @@ public final class ModBlock
         GameRegistry.registerBlock(cupola, CupolaBlock.NAME);
 
         GameRegistry.registerBlock(structureShape, SteamNSteelStructureShapeBlock.NAME);
-        registerStructure(ssBallMill, structureShape, SSBallMillStructure.NAME);
-        registerStructure(ssBlastFurnace, structureShape, SSBlastFurnaceStructure.NAME);
-        registerStructure(ssBoiler, structureShape, SSBoilerStructure.NAME);
+        GameRegistry.registerBlock(shapeLI, ShapeLIBlock.NAME);
+        registerStructure(ssBallMill, shapeLI, SSBallMillStructure.NAME);
+        registerStructure(ssBlastFurnace, shapeLI, SSBlastFurnaceStructure.NAME);
+        registerStructure(ssBoiler, shapeLI, SSBoilerStructure.NAME);
         registerStructure(fanLarge, structureShape, FanLargeStructure.NAME);
 
         GameRegistry.registerBlock(pipe, PipeBlock.NAME);

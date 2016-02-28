@@ -36,9 +36,9 @@ tile.steamnsteel:blockConcrete_item_wet.name=Wet Concrete Block
 tile.steamnsteel:blockConcrete_item_dry.name=Dried Concrete Block
 
 #Structures
-tile.steamnsteel:SSBallMill.name=Ball Mill
-tile.steamnsteel:SSBlastFurnace.name=Blast Furnace
-tile.steamnsteel:SSBoiler.name=Boiler
+tile.steamnsteel:ssBallMill.name=Ball Mill
+tile.steamnsteel:ssBlastFurnace.name=Blast Furnace
+tile.steamnsteel:ssBoiler.name=Boiler
 tile.steamnsteel:fanLarge.name=Your Largest Fan
 
 # Config file comments

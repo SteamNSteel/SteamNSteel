@@ -12,9 +12,9 @@
     "inventory": [{
       "transform": {
         "thirdperson": {
-          "translation": [0, 0.0, -0.15],
-          "rotation": [{"y": 180}, {"x": 125 }],
-          "scale": 0.50
+          "translation": [-0.11, 0.09, -0.10],
+          "rotation": [{"y": 90}, {"x": 20}, {"z":270}],
+          "scale": 0.25
         },
         "firstperson": {"rotation": {"y": 180 }, "scale": 0.66},
         "gui": {

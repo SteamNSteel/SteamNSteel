@@ -15,7 +15,8 @@
  */
 package mod.steamnsteel.tileentity.structure;
 
-
+import com.foudroyantfactotum.tool.structure.IStructure.structure.IStructureFluidHandler;
+import com.foudroyantfactotum.tool.structure.IStructure.structure.IStructureSidedInventory;
 import com.foudroyantfactotum.tool.structure.coordinates.BlockPosUtil;
 import com.foudroyantfactotum.tool.structure.registry.StructureDefinition;
 import mod.steamnsteel.inventory.Inventory;
@@ -31,7 +32,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import static com.foudroyantfactotum.tool.structure.coordinates.TransformLAG.*;
 
-public class BlastFurnaceTE extends SteamNSteelStructureTE
+public class BlastFurnaceTE extends SteamNSteelStructureTE implements IStructureFluidHandler, IStructureSidedInventory
 {
     private static final BlockPos LOCATION_STEAM_INPUT = BlockPosUtil.of(1,1,0);
     private static final int DIRECTIONS_STEAM_INPUT = flagEnumFacing(EnumFacing.NORTH);
@@ -154,10 +155,34 @@ public class BlastFurnaceTE extends SteamNSteelStructureTE
     }
 
     @Override
+    public int getField(int id)
+    {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value)
+    {
+
+    }
+
+    @Override
+    public int getFieldCount()
+    {
+        return 0;
+    }
+
+    @Override
+    public void clear()
+    {
+
+    }
+
+    @Override
     public boolean canStructureInsertItem(int slot, ItemStack item, EnumFacing side, BlockPos local)
     {
         return isSide(globalDirectionsMaterialInput, side) &&
-                local.equals(LOCATION_MATERIAL_INPUT) &&
+                local.equals(globalLocationMaterialInput) &&
                 isItemValidForSlot(slot, item);
     }
 
@@ -170,7 +195,7 @@ public class BlastFurnaceTE extends SteamNSteelStructureTE
     @Override
     public int[] getSlotsForStructureFace(EnumFacing side, BlockPos local)
     {
-        return LOCATION_MATERIAL_INPUT.equals(local)?
+        return globalLocationMaterialInput.equals(local)?
                 slotsMaterialInput :
                 slotsDefault;
     }
@@ -246,6 +271,7 @@ public class BlastFurnaceTE extends SteamNSteelStructureTE
     //================================================================
     //                            N B T
     //================================================================
+
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {

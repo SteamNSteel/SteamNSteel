@@ -18,7 +18,7 @@ package mod.steamnsteel.block.machine.structure;
 
 import com.foudroyantfactotum.tool.structure.coordinates.BlockPosUtil;
 import com.foudroyantfactotum.tool.structure.tileentity.StructureTE;
-import com.foudroyantfactotum.tool.structure.utillity.StructureDefinitionBuilder;
+import com.foudroyantfactotum.tool.structure.utility.StructureDefinitionBuilder;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import mod.steamnsteel.block.SteamNSteelStructureBlock;
@@ -36,7 +36,7 @@ import static net.minecraft.block.BlockDirectional.FACING;
 
 public class SSBlastFurnaceStructure extends SteamNSteelStructureBlock
 {
-    public static final String NAME = "SSBlastFurnace";
+    public static final String NAME = "ssBlastFurnace";
 
     @SideOnly(Side.CLIENT)
     private static float rndRC()

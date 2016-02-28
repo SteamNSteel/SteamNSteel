@@ -17,7 +17,7 @@ package mod.steamnsteel.block.machine.structure;
 
 import com.foudroyantfactotum.tool.structure.coordinates.BlockPosUtil;
 import com.foudroyantfactotum.tool.structure.tileentity.StructureTE;
-import com.foudroyantfactotum.tool.structure.utillity.StructureDefinitionBuilder;
+import com.foudroyantfactotum.tool.structure.utility.StructureDefinitionBuilder;
 import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.block.SteamNSteelStructureBlock;
 import mod.steamnsteel.tileentity.structure.BoilerTE;
@@ -34,7 +34,7 @@ import static net.minecraft.block.BlockDirectional.FACING;
 
 public class SSBoilerStructure extends SteamNSteelStructureBlock
 {
-    public static final String NAME = "SSBoiler";
+    public static final String NAME = "ssBoiler";
 
     public SSBoilerStructure()
     {

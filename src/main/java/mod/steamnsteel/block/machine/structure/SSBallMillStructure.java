@@ -17,7 +17,7 @@ package mod.steamnsteel.block.machine.structure;
 
 import com.foudroyantfactotum.tool.structure.coordinates.BlockPosUtil;
 import com.foudroyantfactotum.tool.structure.tileentity.StructureTE;
-import com.foudroyantfactotum.tool.structure.utillity.StructureDefinitionBuilder;
+import com.foudroyantfactotum.tool.structure.utility.StructureDefinitionBuilder;
 import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.block.SteamNSteelStructureBlock;
 import mod.steamnsteel.client.model.opengex.OpenGEXAnimationFrameProperty;
@@ -39,7 +39,7 @@ import static net.minecraft.block.BlockDirectional.FACING;
 
 public class SSBallMillStructure extends SteamNSteelStructureBlock
 {
-    public static final String NAME = "SSBallMill";
+    public static final String NAME = "ssBallMill";
 
     public SSBallMillStructure()
     {

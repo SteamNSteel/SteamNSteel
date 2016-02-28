@@ -15,8 +15,9 @@
  */
 package mod.steamnsteel.tileentity.structure;
 
-import com.foudroyantfactotum.tool.structure.tileentity.StructureShapeTE;
+import com.foudroyantfactotum.tool.structure.IStructure.shape.IStructureShapeSidedInventory;
+import com.foudroyantfactotum.tool.structure.IStructure.shape.IStructureShapeFluidHandler;
 
-public class SteamNSteelStructureShapeTE extends StructureShapeTE
+public class ShapeLITE extends SteamNSteelStructureShapeTE implements IStructureShapeFluidHandler, IStructureShapeSidedInventory
 {
 }

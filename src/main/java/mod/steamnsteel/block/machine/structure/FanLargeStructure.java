@@ -18,7 +18,7 @@ package mod.steamnsteel.block.machine.structure;
 
 import com.foudroyantfactotum.tool.structure.coordinates.BlockPosUtil;
 import com.foudroyantfactotum.tool.structure.tileentity.StructureTE;
-import com.foudroyantfactotum.tool.structure.utillity.StructureDefinitionBuilder;
+import com.foudroyantfactotum.tool.structure.utility.StructureDefinitionBuilder;
 import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.block.SteamNSteelStructureBlock;
 import mod.steamnsteel.client.model.opengex.OpenGEXAnimationFrameProperty;
@@ -28,8 +28,10 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -37,6 +39,8 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 import static net.minecraft.block.BlockDirectional.FACING;
 
@@ -132,6 +136,24 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
     }
 
     @Override
+    public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity)
+    {
+        super.addCollisionBoxesToList(world, pos, state, mask, list, collidingEntity);
+
+        /*final List<AxisAlignedBB> collisionList = new ArrayList<>(1);
+
+        localToGlobalCollisionBoxes(
+            pos.getX(), pos.getY(), pos.getZ(),
+            mask, collisionList, new float[][]{{0.1f,0.1f,0.3f, 2.9f,2.9f,0.7f}},
+            state.getValue(FACING), getMirror(state), getPattern().getBlockBounds());
+
+        if (!collisionList.isEmpty())
+        {
+            collidingEntity.attackEntityFrom(DamageSource.generic, 5.0f);
+        }*/
+    }
+
+    @Override
     public StructureDefinitionBuilder getStructureBuild()
     {
         final StructureDefinitionBuilder builder = new StructureDefinitionBuilder();
@@ -167,7 +189,15 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
         );
 
         builder.setCollisionBoxes(
-                new float[]{0.0f,0.0f,0.0f, 3.0f,3.0f,1.0f}
+                new float[]{0.0f,0.0f,0.0f, 3.0f,0.19f,1.0f}, //bottom centre
+                new float[]{0.0f,2.81f,0.0f, 3.0f,3.0f,1.0f}, //top centre
+                new float[]{0.0f,0.0f,0.0f, 0.19f,3.0f,1.0f}, //left centre
+                new float[]{2.81f,0.0f,0.0f, 3.0f,3.0f,1.0f}, //right centre
+                new float[]{0.0f,0.0f,0.0f, 0.5f,0.5f,1.0f},  //lower left corner
+                new float[]{2.5f,0.0f,0.0f, 3.0f,0.5f,1.0f},  //lower right corner
+                new float[]{0.0f,2.5f,0.0f, 0.5f,3.0f,1.0f},  //top left corner
+                new float[]{2.5f,2.5f,0.0f, 3.0f,3.0f,1.0f},  //top right corner
+                new float[]{0.0f,0.0f,0.21f, 3.0f,3.0f,0.29f} //back centre
         );
 
         return builder;

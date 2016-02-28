@@ -15,7 +15,8 @@
  */
 package mod.steamnsteel.tileentity.structure;
 
-
+import com.foudroyantfactotum.tool.structure.IStructure.structure.IStructureFluidHandler;
+import com.foudroyantfactotum.tool.structure.IStructure.structure.IStructureSidedInventory;
 import com.foudroyantfactotum.tool.structure.coordinates.BlockPosUtil;
 import com.foudroyantfactotum.tool.structure.registry.StructureDefinition;
 import mod.steamnsteel.block.machine.structure.SSBallMillStructure;
@@ -35,8 +36,7 @@ import static com.foudroyantfactotum.tool.structure.coordinates.TransformLAG.fla
 import static com.foudroyantfactotum.tool.structure.coordinates.TransformLAG.localToGlobalDirection;
 import static com.foudroyantfactotum.tool.structure.coordinates.TransformLAG.transformFromDefinitionToMaster;
 
-
-public class BallMillTE extends SteamNSteelStructureTE
+public class BallMillTE extends SteamNSteelStructureTE implements IStructureSidedInventory, IStructureFluidHandler
 {
     private static final BlockPos LOCATION_STEAM_INPUT = BlockPosUtil.of(0,0,1);
     private static final int DIRECTIONS_STEAM_INPUT = flagEnumFacing(EnumFacing.SOUTH);
@@ -163,6 +163,30 @@ public class BallMillTE extends SteamNSteelStructureTE
     }
 
     @Override
+    public int getField(int id)
+    {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value)
+    {
+
+    }
+
+    @Override
+    public int getFieldCount()
+    {
+        return 0;
+    }
+
+    @Override
+    public void clear()
+    {
+
+    }
+
+    @Override
     public boolean canStructureInsertItem(int slot, ItemStack item, EnumFacing side, BlockPos local)
     {
         return isSide(globalDirectionsMaterialInput, side) &&
@@ -187,6 +211,7 @@ public class BallMillTE extends SteamNSteelStructureTE
     //================================================================
     //                  F L U I D   H A N D L E R
     //================================================================
+
     @Override
     public boolean canStructureFill(EnumFacing from, Fluid fluid, BlockPos local)
     {

@@ -15,7 +15,8 @@
  */
 package mod.steamnsteel.tileentity.structure;
 
-
+import com.foudroyantfactotum.tool.structure.IStructure.structure.IStructureFluidHandler;
+import com.foudroyantfactotum.tool.structure.IStructure.structure.IStructureSidedInventory;
 import com.foudroyantfactotum.tool.structure.coordinates.BlockPosUtil;
 import com.foudroyantfactotum.tool.structure.registry.StructureDefinition;
 import mod.steamnsteel.inventory.Inventory;
@@ -29,12 +30,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-import static com.foudroyantfactotum.tool.structure.coordinates.TransformLAG.flagEnumFacing;
-import static com.foudroyantfactotum.tool.structure.coordinates.TransformLAG.localToGlobalDirection;
-import static com.foudroyantfactotum.tool.structure.coordinates.TransformLAG.transformFromDefinitionToMaster;
+import static com.foudroyantfactotum.tool.structure.coordinates.TransformLAG.*;
 
-
-public class BoilerTE extends SteamNSteelStructureTE
+public class BoilerTE extends SteamNSteelStructureTE implements IStructureFluidHandler, IStructureSidedInventory
 {
     private static final BlockPos LOCATION_WATER_INPUT = BlockPosUtil.of(1,0,1);
     private static final int DIRECTIONS_WATER_INPUT = flagEnumFacing(EnumFacing.DOWN);
@@ -152,10 +150,34 @@ public class BoilerTE extends SteamNSteelStructureTE
     }
 
     @Override
+    public int getField(int id)
+    {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value)
+    {
+
+    }
+
+    @Override
+    public int getFieldCount()
+    {
+        return 0;
+    }
+
+    @Override
+    public void clear()
+    {
+
+    }
+
+    @Override
     public boolean canStructureInsertItem(int slot, ItemStack item, EnumFacing side, BlockPos local)
     {
         return isSide(globalDirectionsMaterialInput, side) &&
-                local.equals(LOCATION_MATERIAL_INPUT) &&
+                local.equals(globalLocationMaterialInput) &&
                 isItemValidForSlot(slot, item);
     }
 
@@ -168,7 +190,7 @@ public class BoilerTE extends SteamNSteelStructureTE
     @Override
     public int[] getSlotsForStructureFace(EnumFacing side, BlockPos local)
     {
-        return LOCATION_MATERIAL_INPUT.equals(local) ?
+        return globalLocationMaterialInput.equals(local) ?
                 slotsMaterialInput :
                 slotsDefault;
     }
@@ -212,6 +234,7 @@ public class BoilerTE extends SteamNSteelStructureTE
     {
         return emptyFluidTankInfo;
     }
+
     //================================================================
     //                 P I P E   C O N E C T I O N
     //================================================================

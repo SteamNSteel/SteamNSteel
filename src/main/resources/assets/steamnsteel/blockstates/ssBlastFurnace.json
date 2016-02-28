@@ -16,9 +16,9 @@
     "inventory": [{
       "transform": {
         "thirdperson": {
-          "translation": [0, 0, 0.01],
-          "rotation": [{"y": 90}, {"z": -75}],
-          "scale": 0.2
+          "translation": [0.13, 0, 0.02],
+          "rotation": [{"y": 90}, {"z": -45}],
+          "scale": 0.5
         },
         "firstperson": {
           "rotation": {"y": -90 },
