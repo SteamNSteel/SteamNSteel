@@ -1,0 +1,28 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "t": "steamnsteel:blocks/storage/BlockPlotoniumStorageTop",
+      "lr": "steamnsteel:blocks/storage/BlockPlotoniumStorageLeftRight",
+      "fb": "steamnsteel:blocks/storage/BlockPlotoniumStorageFrontBack"
+    },
+    "model": "steamnsteel:storageCube",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": { },
+      "south": { "transform": {
+        "rotation": {"y": 180 }
+      }},
+        "east": { "transform": {
+          "rotation": {"y": 270 }
+      }},
+      "west": { "transform": {
+        "rotation": {"y": 90 }
+      }}
+    }
+  }
+}

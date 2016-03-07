@@ -88,6 +88,13 @@ public class ClientRenderProxy extends CommonRenderProxy
         registerBlockItemModel(ModBlock.blockSteel);
         registerBlockItemModel(ModBlock.blockTin);
         registerBlockItemModel(ModBlock.blockZinc);
+        registerBlockItemModel(ModBlock.blockBrassStorage);
+        registerBlockItemModel(ModBlock.blockBronzeStorage);
+        registerBlockItemModel(ModBlock.blockCopperStorage);
+        registerBlockItemModel(ModBlock.blockPlotoniumStorage);
+        registerBlockItemModel(ModBlock.blockSteelStorage);
+        registerBlockItemModel(ModBlock.blockTinStorage);
+        registerBlockItemModel(ModBlock.blockZincStorage);
 
         registerBlockItemModel(ModBlock.cupola);
         registerBlockItemModel(ModBlock.pipe);
