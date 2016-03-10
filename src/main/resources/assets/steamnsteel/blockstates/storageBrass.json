@@ -1,0 +1,28 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "t": "steamnsteel:blocks/storage/BlockBrassStorageTop",
+      "lr": "steamnsteel:blocks/storage/BlockBrassStorageLeftRight",
+      "fb": "steamnsteel:blocks/storage/BlockBrassStorageFrontBack"
+    },
+    "model": "steamnsteel:storageCube",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": { },
+      "south": { "transform": {
+        "rotation": {"y": 180 }
+      }},
+        "east": { "transform": {
+          "rotation": {"y": 270 }
+      }},
+      "west": { "transform": {
+        "rotation": {"y": 90 }
+      }}
+    }
+  }
+}

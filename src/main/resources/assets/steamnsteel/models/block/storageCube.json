@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "#t",
+        "down": "steamnsteel:blocks/storage/BlockMetalStorageBottom",
+        "up": "#t",
+        "north": "#fb",
+        "east": "#lr",
+        "south": "#fb",
+        "west": "#lr"
+    }
+}
