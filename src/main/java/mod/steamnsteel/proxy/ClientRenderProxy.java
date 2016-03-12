@@ -19,6 +19,7 @@ package mod.steamnsteel.proxy;
 import com.foudroyantfactotum.tool.structure.renderer.StructureTESR;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.resource.structure.RemnantRuinIronBarsBlock.IronBarsTextures;
+import mod.steamnsteel.client.codemodel.PipeModel;
 import mod.steamnsteel.client.model.opengex.OpenGEXModelLoader;
 import mod.steamnsteel.client.model.pct.PCTModelLoader;
 import mod.steamnsteel.client.renderer.tileentity.LargeFanTESR;
@@ -34,12 +35,14 @@ import mod.steamnsteel.tileentity.structure.LargeFanTE;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.b3d.B3DLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @SuppressWarnings({"MethodMayBeStatic", "WeakerAccess"})
 public class ClientRenderProxy extends CommonRenderProxy
@@ -207,7 +210,13 @@ public class ClientRenderProxy extends CommonRenderProxy
     private void registerEventHandlers() {
         //FIXME: The Block Parts are not currently working.
         //MinecraftForge.EVENT_BUS.register(BlockHighlightEventListener.getInstance());
+        MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(PCTModelLoader.instance);
+    }
 
+    @SubscribeEvent
+    public void onModelLoad(ModelBakeEvent event)
+    {
+        new PipeModel().loadModel(event);
     }
 }

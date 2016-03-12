@@ -2,8 +2,10 @@
   "forge_marker": 1,
   "defaults": {
     "transform": "forge:default-block",
-    "model": "steamnsteel:SSPipes.obj"
-    /*"flip-v": "true"*/
+    "model": "steamnsteel:pipes/SSPipes.obj",
+    "custom": {
+      "flip-v": true
+    }
   },
   "variants": {
     "normal": [{
@@ -11,13 +13,46 @@
     "inventory": [{
       "transform": {
         "thirdperson": {
-          "translation": [0, 0.0, -0.15],
+          "translation": [-0.1, 0, 0],
           "rotation": [{"y": 180}, {"x": 125 }],
           "scale": 0.50
         },
-        "firstperson": {"rotation": {"y": 180 }, "scale": 0.66},
-        "gui": {"rotation": {"y": 180 }}
+        "firstperson": {
+          "translation": [-0.2, 0.02, -0.2],
+          "rotation": {"y": 180 },
+          "scale": 0.9
+        },
+        "gui": {
+          "translation": [-0.55, -0.24, 0.0],
+          "rotation": {"y": 180 },
+          "scale": 1.1
+        }
       }
-    }]
+    }],
+    "pipe": {
+      "nu": {"model": "steamnsteel:pipes/SSPipesBendNE.obj","transform": {"rotation": {"y":180}, "translation": [-0.5, 0, -0.5]}},
+      "eu": {"model": "steamnsteel:pipes/SSPipesBendNE.obj","transform": {"rotation": {"y":90}, "translation": [0.5, 0, -0.5]}},
+      "su": {"model": "steamnsteel:pipes/SSPipesBendNE.obj","transform": {"translation": [0.5, 0, 0.5]}},
+      "uw": {"model": "steamnsteel:pipes/SSPipesBendNE.obj","transform": {"rotation": {"y":270}, "translation": [-0.5, 0, 0.5]}},
+      "dn": {"model": "steamnsteel:pipes/SSPipesBendNE.obj","transform": {"rotation": {"x":180}, "translation": [0.5, 0, -0.5]}},
+      "de": {"model": "steamnsteel:pipes/SSPipesBendNW.obj","transform": {"rotation": [{"x":90},{"z":270}], "translation": [0, -0.5, -0.5]}},
+      "ds": {"model": "steamnsteel:pipes/SSPipesBendNE.obj","transform": {"rotation": {"x":90}, "translation": [0.5, -0.5, 0]}},
+      "dw": {"model": "steamnsteel:pipes/SSPipesBendNE.obj","transform": {"rotation": [{"y":90}, {"x":180}], "translation": [-0.5, 0, -0.5]}},
+      "en": {"model": "steamnsteel:pipes/SSPipesBendNW.obj","transform": {"rotation": [{"z":90}, {"x":180}], "translation": [0, 0.5, -0.5]}},
+      "es": {"model": "steamnsteel:pipes/SSPipesBendNW.obj","transform": {"rotation": [{"z":90}, {"x":90}], "translation": [0.5, 0.5, 0.0]}},
+      "sw": {"model": "steamnsteel:pipes/SSPipesBendNW.obj","transform": {"rotation": {"z":90}, "translation": [0.0, 0.5, 0.5]}},
+      "nw": {"model": "steamnsteel:pipes/SSPipesBendNW.obj","transform": {"rotation": [{"z":90},{"x":270}], "translation": [-0.5, 0.5, 0.0]}},
+      "du": {"model": "steamnsteel:pipes/SSPipesStraight.obj","transform": {"translation": [0.5, 0.0, -0.5], "rotation": {"y":90}}},
+      "ns": {"model": "steamnsteel:pipes/SSPipesStraight.obj","transform": {"rotation": [{"x": 90 },{"y":90}], "translation": [0.5, 0.5, 0.0]}},
+      "ew": {"model": "steamnsteel:pipes/SSPipesStraight.obj","transform": {"rotation": {"z": 90}, "translation": [0.0, 0.5, 0.5]}}
+    },
+    "endacap": {
+      "true": {},
+      "false": {}
+    },
+    "endbcap": {
+      "true": {},
+      "false": {}
+    }
   }
 }
