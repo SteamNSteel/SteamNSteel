@@ -18,8 +18,10 @@ package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.tileentity.PipeValveTE;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -32,12 +34,34 @@ import net.minecraft.world.World;
 public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvider
 {
     public static final String NAME = "pipeValve";
-    private static int RenderId;
 
     public PipeValveBlock()
     {
         super(Material.circuits, true);
         setUnlocalizedName(NAME);
+        setDefaultState(
+                this.blockState
+                        .getBaseState()
+                        .withProperty(BlockDirectional.FACING, EnumFacing.NORTH)
+        );
+    }
+
+    @Override
+    protected BlockState createBlockState()
+    {
+        return new BlockState(this, BlockDirectional.FACING);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return state.getValue(BlockDirectional.FACING).getHorizontalIndex();
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta)
+    {
+        return getDefaultState().withProperty(BlockDirectional.FACING, EnumFacing.getHorizontal(meta));
     }
 
     @Override
@@ -106,11 +130,11 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
 
             if (facing == 0)
             {
-                direction = EnumFacing.NORTH;
+                direction = EnumFacing.SOUTH;
             }
             else if (facing == 1)
             {
-                direction = EnumFacing.EAST;
+                direction = EnumFacing.WEST;
             }
             else if (facing == 2)
             {
@@ -120,6 +144,8 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
             {
                 direction = EnumFacing.EAST;
             }
+
+            worldIn.setBlockState(pos, state.withProperty(BlockDirectional.FACING, direction));
 
             te.setOrientation(direction);
             //te.setOrientation(direction);

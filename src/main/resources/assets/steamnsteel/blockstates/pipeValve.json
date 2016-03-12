@@ -2,8 +2,10 @@
   "forge_marker": 1,
   "defaults": {
     "transform": "forge:default-block",
-    "model": "steamnsteel:SSPipeValve.obj"
-    /*"flip-v": "true"*/
+    "model": "steamnsteel:SSPipeValve.obj",
+    "custom": {
+      "flip-v": true
+    }
   },
   "variants": {
     "normal": [{
@@ -11,13 +13,32 @@
     "inventory": [{
       "transform": {
         "thirdperson": {
-          "translation": [0, 0.0, -0.15],
+          "translation": [-0.12, 0.05, -0.15],
           "rotation": [{"y": 180}, {"x": 125 }],
           "scale": 0.50
         },
-        "firstperson": {"rotation": {"y": 180 }, "scale": 0.66},
-        "gui": {"rotation": {"y": 180 }}
+        "firstperson": {
+          "translation": [-0.2, 0.24, -0.2],
+          "rotation": {"y": 180 },
+          "scale": 0.9
+        },
+        "gui": {"translation":[-0.55,0.04,0], "rotation": {"y": 180 }, "scale": 1.1}
       }
-    }]
+    }],
+    "facing": {
+      "north": { "transform": {"translation": [0.5,0.5,0.5]}},
+      "south": { "transform": {
+        "rotation":{"y":180},
+        "translation": [-0.5,0.5,-0.5]
+      }},
+      "east": { "transform": {
+        "rotation": {"y": 270 },
+        "translation": [-0.5,0.5,0.5]
+      }},
+      "west": { "transform": {
+        "rotation": {"y": 90 },
+        "translation": [0.5,0.5,-0.5]
+      }}
+    }
   }
 }

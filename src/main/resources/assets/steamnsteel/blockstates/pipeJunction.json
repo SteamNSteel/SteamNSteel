@@ -16,7 +16,7 @@
           "scale": 0.50
         },
         "firstperson": {"rotation": {"y": 180 }, "scale": 0.66},
-        "gui": {"rotation": {"y": 180 }}
+        "gui": {"translation":[-0.55,-0.2,0], "rotation": {"y": 180 }, "scale": 1.1}
       }
     }]
   }

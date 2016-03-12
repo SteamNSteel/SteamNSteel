@@ -21,9 +21,12 @@
           "scale": 0.50
         },
         "firstperson": {"rotation": {"y": 180 }, "scale": 0.66},
-        "gui": {"rotation": {"y": 180 }}
-      }
-    }],
+        "gui": {
+          "translation": [0,-0.15,0],
+          "rotation": {"y": 180 },
+          "scale": 0.62
+        }
+    }}],
     "facing": {
         "north": { },
         "south": { "transform": {
