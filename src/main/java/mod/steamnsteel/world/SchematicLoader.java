@@ -21,9 +21,9 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.util.*;
 
@@ -568,7 +568,7 @@ public class SchematicLoader
             int metadata = this.metadata[index];
             final short blockId = this.blocks[index];
 
-            Block block = BLOCK_REGISTRY.getObjectById(blockId);
+            Block block = BLOCK_REGISTRY.getRaw(blockId);
             if (block == null)
             {
                 return null;
