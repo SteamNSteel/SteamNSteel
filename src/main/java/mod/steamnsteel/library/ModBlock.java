@@ -63,6 +63,13 @@ public final class ModBlock
     public static final SteamNSteelBlock blockSteel = new SteamNSteelStorageBlock(SteamNSteelStorageBlock.STEEL_BLOCK);
     public static final SteamNSteelBlock blockTin = new SteamNSteelStorageBlock(SteamNSteelStorageBlock.TIN_BLOCK);
     public static final SteamNSteelBlock blockZinc = new SteamNSteelStorageBlock(SteamNSteelStorageBlock.ZINC_BLOCK);
+    public static final SteamNSteelBlock blockBrassStorage = new SteamNSteelDirectionalStorageBlock(SteamNSteelDirectionalStorageBlock.STORAGE_BRASS_BLOCK);
+    public static final SteamNSteelBlock blockBronzeStorage = new SteamNSteelDirectionalStorageBlock(SteamNSteelDirectionalStorageBlock.STORAGE_BRONZE_BLOCK);
+    public static final SteamNSteelBlock blockCopperStorage = new SteamNSteelDirectionalStorageBlock(SteamNSteelDirectionalStorageBlock.STORAGE_COPPER_BLOCK);
+    public static final SteamNSteelBlock blockPlotoniumStorage = new SteamNSteelDirectionalStorageBlock(SteamNSteelDirectionalStorageBlock.STORAGE_PLOTONIUM_BLOCK);
+    public static final SteamNSteelBlock blockSteelStorage = new SteamNSteelDirectionalStorageBlock(SteamNSteelDirectionalStorageBlock.STORAGE_STEEL_BLOCK);
+    public static final SteamNSteelBlock blockTinStorage = new SteamNSteelDirectionalStorageBlock(SteamNSteelDirectionalStorageBlock.STORAGE_TIN_BLOCK);
+    public static final SteamNSteelBlock blockZincStorage = new SteamNSteelDirectionalStorageBlock(SteamNSteelDirectionalStorageBlock.STORAGE_ZINC_BLOCK);
 
     public static final SteamNSteelBlock cupola = new CupolaBlock();
 
@@ -154,6 +161,13 @@ public final class ModBlock
         registerBlockAndOre(blockSteel, SteamNSteelStorageBlock.STEEL_BLOCK);
         registerBlockAndOre(blockTin, SteamNSteelStorageBlock.TIN_BLOCK);
         registerBlockAndOre(blockZinc, SteamNSteelStorageBlock.ZINC_BLOCK);
+        registerBlockAndOre(blockBrassStorage, SteamNSteelDirectionalStorageBlock.STORAGE_BRASS_BLOCK);
+        registerBlockAndOre(blockBronzeStorage, SteamNSteelDirectionalStorageBlock.STORAGE_BRONZE_BLOCK);
+        registerBlockAndOre(blockCopperStorage, SteamNSteelDirectionalStorageBlock.STORAGE_COPPER_BLOCK);
+        registerBlockAndOre(blockPlotoniumStorage, SteamNSteelDirectionalStorageBlock.STORAGE_PLOTONIUM_BLOCK);
+        registerBlockAndOre(blockSteelStorage, SteamNSteelDirectionalStorageBlock.STORAGE_STEEL_BLOCK);
+        registerBlockAndOre(blockTinStorage, SteamNSteelDirectionalStorageBlock.STORAGE_TIN_BLOCK);
+        registerBlockAndOre(blockZincStorage, SteamNSteelDirectionalStorageBlock.STORAGE_ZINC_BLOCK);
 
         GameRegistry.registerBlock(remnantRuinPillar, RemnantRuinPillarBlock.NAME);
 

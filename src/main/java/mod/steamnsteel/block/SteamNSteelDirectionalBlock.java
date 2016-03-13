@@ -16,10 +16,7 @@
 
 package mod.steamnsteel.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -29,7 +26,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import static net.minecraft.block.BlockDirectional.*;
+import static net.minecraft.block.BlockDirectional.FACING;
 
 public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
@@ -44,7 +41,8 @@ public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
     }
 
     @Override
-    protected BlockState createBlockState() {
+    protected BlockState createBlockState()
+    {
         return new BlockState(this, FACING);
     }
 
@@ -62,14 +60,16 @@ public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(IBlockState state)
+    {
         int meta = 0;
         meta |= state.getValue(FACING).ordinal() - 2;
         return meta;
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public IBlockState getStateFromMeta(int meta)
+    {
         return super.getStateFromMeta(meta)
                 .withProperty(FACING, EnumFacing.getHorizontal(meta & 3));
     }

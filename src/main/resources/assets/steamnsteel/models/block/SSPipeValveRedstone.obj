@@ -133,6 +133,7 @@ vt 0.4815 1.0000 0.1725
 vt 0.2593 1.0000 0.1725
 # 24 texture coords
 
+usemtl PipeValve
 g VPBody
 s off
 f 17/25/12 18/26/12 19/27/12 
@@ -239,6 +240,7 @@ vt 0.3750 0.1667 0.9995
 vt 0.6250 0.1667 0.9995
 # 45 texture coords
 
+usemtl Pipes
 g VPOpening1
 s off
 f 25/49/18 26/50/18 27/51/18 
@@ -453,6 +455,7 @@ vt 0.7500 0.0000 0.9995
 vt 1.0000 -0.0000 0.0005
 # 13 texture coords
 
+usemtl VPRedstone
 g VPRedstone
 s off
 f 75/139/38 76/140/38 77/141/38 
