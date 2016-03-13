@@ -93,6 +93,7 @@ item.steamnsteel:pickSteel.name=Steel Pickaxe
 item.steamnsteel:plotoniumScrap.name=Plotonium Scrap
 item.steamnsteel:shovelBronze.name=Bronze Shovel
 item.steamnsteel:shovelSteel.name=Steel Shovel
+item.steamnsteel:structureBuildSteel.name=Steel Builder
 item.steamnsteel:swordBronze.name=Bronze Sword
 item.steamnsteel:swordSteel.name=Steel Sword
 item.steamnsteel:voxBox.name=Vox Box

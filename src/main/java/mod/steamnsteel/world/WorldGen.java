@@ -44,7 +44,7 @@ public enum WorldGen
     private static final List<OreGenerator> oreGens = Lists.newArrayList();
     private static final List<StructureGenerator> structureGens = Lists.newArrayList();
 
-    public static final SchematicLoader schematicLoader = new SchematicLoader();
+    public static SchematicLoader schematicLoader = new SchematicLoader();
 
     public static void init()
     {
@@ -54,8 +54,8 @@ public enum WorldGen
     }
 
     private static void register() {
-        //MinecraftForge.ORE_GEN_BUS.register(INSTANCE);
-        //MinecraftForge.EVENT_BUS.register(INSTANCE);
+        MinecraftForge.ORE_GEN_BUS.register(INSTANCE);
+        MinecraftForge.EVENT_BUS.register(INSTANCE);
     }
 
     private static void createOreGenerators()
@@ -89,6 +89,8 @@ public enum WorldGen
 
     @SubscribeEvent
     public void OnWorldStarted(WorldEvent.Load worldLoadEvent) {
+        //required as different Worlds (from consecutive loads) may have different IDs
+        schematicLoader = new SchematicLoader();
         structureGens.clear();
         final RemnantRuinsGenerator ruinsGenerator = new RemnantRuinsGenerator();
         structureGens.add(ruinsGenerator);

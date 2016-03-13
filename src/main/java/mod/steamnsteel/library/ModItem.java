@@ -59,6 +59,7 @@ public final class ModItem
     public static final SSToolShovel shovelSteel = new SSToolShovel(STEEL);
     public static final SSToolSword swordBronze = new SSToolSword(BRONZE);
     public static final SSToolSword swordSteel = new SSToolSword(STEEL);
+    public static final StructureBuild structureBuildSteel = new StructureBuild(STEEL);
 
     public static final SteamNSteelItem anachDoodad = new AnachDoodad();
     public static final SteamNSteelItem dustNiter = new Niter();
@@ -140,6 +141,8 @@ public final class ModItem
         GameRegistry.registerItem(pickSteel, pickSteel.getUndecoratedName());
         GameRegistry.registerItem(axeSteel, axeSteel.getUndecoratedName());
         GameRegistry.registerItem(hoeSteel, hoeSteel.getUndecoratedName());
+
+        GameRegistry.registerItem(structureBuildSteel, structureBuildSteel.getUndecoratedName());
     }
 
     private static void registerWeapons()
