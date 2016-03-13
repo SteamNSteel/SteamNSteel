@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.FMLLog;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class OpenGEXModel implements IModelCustomData, IRetexturableModel {
+public class OpenGEXModel implements IModelCustomData<OpenGEXModel>, IRetexturableModel<OpenGEXModel> {
     //FIXME: Is there somewhere more appropriate for this?
     public static OgexTexture white;
 

@@ -14,7 +14,7 @@ import java.util.Collection;
 /**
  * Created by codew on 9/11/2015.
  */
-public class PCTModel implements IModel, IRetexturableModel
+public class PCTModel implements IModel, IRetexturableModel<PCTModel>
 {
     private final ProceduralConnectedTexture proceduralConnectedTexture;
     private final ImmutableMap<String, String> defaultTextures;
