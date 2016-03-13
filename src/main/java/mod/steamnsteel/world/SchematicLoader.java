@@ -197,7 +197,7 @@ public class SchematicLoader
                         BlockPos schematicCoord = new BlockPos(schematicX, schematicY, schematicZ);
                         PreSetBlockEvent event = new PreSetBlockEvent(schematic, world, worldCoord, schematicCoord);
 
-                        if (setBlockEventListeners != null)
+                        if (event.blockState != null && setBlockEventListeners != null)
                         {
                             for (final IPreSetBlockEventListener listener : setBlockEventListeners)
                             {
@@ -205,7 +205,7 @@ public class SchematicLoader
                             }
                         }
 
-                        if (event.blockState != null && c.setBlockState(worldCoord, event.blockState) != null)
+                        if (event.shouldSetBlock() && event.blockState != null && c.setBlockState(worldCoord, event.blockState) != null)
                         {
                             world.markBlockForUpdate(new BlockPos(x, y, z));
                             final NBTTagCompound tileEntityData = schematic.getTileEntity(schematicCoord);
@@ -679,6 +679,7 @@ public class SchematicLoader
         public final BlockPos worldCoord;
         public final BlockPos schematicCoord;
         private IBlockState blockState;
+        private boolean shouldSetBlock = true;
 
         public PreSetBlockEvent(SchematicWorld schematic, World world, BlockPos worldCoord, BlockPos schematicCoord)
         {
@@ -689,14 +690,21 @@ public class SchematicLoader
             this.schematicCoord = schematicCoord;
         }
 
-        public IBlockState getBlock()
+        public IBlockState getBlockState()
         {
             return blockState;
         }
 
-        public void replaceBlock(IBlockState blockState)
+        public void replaceBlockState(IBlockState blockState)
         {
             this.blockState = blockState;
+        }
+        public void cancelSetBlock() {
+            shouldSetBlock = false;
+        }
+
+        public boolean shouldSetBlock() {
+            return shouldSetBlock;
         }
     }
 

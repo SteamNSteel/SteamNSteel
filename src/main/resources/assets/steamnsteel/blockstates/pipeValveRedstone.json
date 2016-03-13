@@ -3,6 +3,10 @@
   "defaults": {
     "transform": "forge:default-block",
     "model": "steamnsteel:SSPipeValveRedstone.obj",
+    "textures": {
+      "#Pipes": "steamnsteel:models/SSPipes",
+      "#VPRedstone": "steamnsteel:models/pipeRedstoneValve_Off"
+    },
     "custom": {
       "flip-v": true
     }

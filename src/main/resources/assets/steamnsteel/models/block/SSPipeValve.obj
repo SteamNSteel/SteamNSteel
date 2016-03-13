@@ -152,6 +152,7 @@ vt 0.7037 0.5417 0.4119
 vt 0.6667 0.5417 0.4119
 # 32 texture coords
 
+usemtl PipeValve
 g VPBody
 s off
 f 17/25/12 18/26/12 19/27/12 
@@ -354,6 +355,7 @@ vt 0.4815 -0.0000 0.8358
 vt 0.4815 -0.0000 0.4600
 # 90 texture coords
 
+usemtl PipeValve
 g VPValve
 s off
 f 33/57/21 34/58/21 35/59/21 
@@ -548,6 +550,7 @@ vt 0.3750 0.1667 0.9995
 vt 0.6250 0.1667 0.9995
 # 45 texture coords
 
+usemtl Pipes
 g VPOpening1
 s off
 f 89/147/41 90/148/41 91/149/41 
@@ -758,6 +761,7 @@ vt 0.8889 0.0833 0.9995
 vt 0.5926 0.0833 0.9995
 # 8 texture coords
 
+usemtl PipeValve
 g VPPin
 s 2
 f 139/237/61 140/238/61 141/239/61 

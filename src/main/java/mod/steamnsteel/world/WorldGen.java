@@ -26,11 +26,13 @@ import mod.steamnsteel.world.ore.SulfurOreGenerator;
 import mod.steamnsteel.world.structure.RemnantRuinsGenerator;
 import mod.steamnsteel.world.structure.StructureChunkGenerator;
 import mod.steamnsteel.world.structure.StructureGenerator;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
@@ -88,9 +90,18 @@ public enum WorldGen
     }
 
     @SubscribeEvent
-    public void OnWorldStarted(WorldEvent.Load worldLoadEvent) {
+    public void OnWorldStarted(Load worldLoadEvent) {
         //required as different Worlds (from consecutive loads) may have different IDs
         schematicLoader = new SchematicLoader();
+        schematicLoader.addSetBlockEventListener(event -> {
+            final IBlockState schematicBlock = event.getBlockState();
+            if (schematicBlock.getBlock() == Blocks.vine) {
+                final IBlockState worldBlock = event.world.getBlockState(event.worldCoord);
+                if (!worldBlock.getBlock().isAir(event.world, event.schematicCoord)) {
+                    event.cancelSetBlock();
+                }
+            }
+        });
         structureGens.clear();
         final RemnantRuinsGenerator ruinsGenerator = new RemnantRuinsGenerator();
         structureGens.add(ruinsGenerator);
