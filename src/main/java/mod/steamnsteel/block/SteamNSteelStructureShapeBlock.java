@@ -19,14 +19,13 @@ import com.foudroyantfactotum.tool.structure.block.StructureShapeBlock;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.tileentity.structure.SteamNSteelStructureShapeTE;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import static mod.steamnsteel.block.SteamNSteelStructureBlock.MIRROR;
-import static net.minecraft.block.BlockDirectional.FACING;
 
 public class SteamNSteelStructureShapeBlock extends StructureShapeBlock implements ITileEntityProvider
 {
@@ -34,21 +33,21 @@ public class SteamNSteelStructureShapeBlock extends StructureShapeBlock implemen
 
     public SteamNSteelStructureShapeBlock()
     {
-        super(true);
+        super();
         _DEBUG = false;
         setUnlocalizedName(NAME);
-        setDefaultState(this.blockState
+        /*setDefaultState(this.blockState
                 .getBaseState()
-                .withProperty(FACING, EnumFacing.NORTH)
+                .withProperty(DIRECTION, EnumFacing.NORTH)
                 .withProperty(MIRROR, false)
-        );
+        );*/
     }
 
-    @Override
-    protected BlockState createBlockState()
+    /*@Override
+    protected BlockStateContainer createBlockState()
     {
-        return new BlockState(this, FACING, MIRROR);
-    }
+        return new BlockStateContainer(this, DIRECTION, MIRROR);
+    }*/
 
     protected static String getUnwrappedUnlocalizedName(String unlocalizedName)
     {

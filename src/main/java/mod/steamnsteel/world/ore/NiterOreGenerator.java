@@ -21,7 +21,7 @@ import com.google.common.collect.Sets;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.world.ore.niter.NiterVeinGeneratorStateMachine;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;

@@ -2,14 +2,12 @@ package mod.steamnsteel.texturing.feature;
 
 import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.texturing.api.traitspriteregistry.ISpriteDefinitionStart;
-import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 
 public class RepeatingTextureFeature extends ProceduralWallFeatureBase implements IMultiTraitFeature
 {

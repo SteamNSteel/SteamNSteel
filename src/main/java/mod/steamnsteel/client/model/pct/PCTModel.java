@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +15,7 @@ import java.util.Collection;
 /**
  * Created by codew on 9/11/2015.
  */
-public class PCTModel implements IModel, IRetexturableModel<PCTModel>
+public class PCTModel implements IModel, IRetexturableModel
 {
     private final ProceduralConnectedTexture proceduralConnectedTexture;
     private final ImmutableMap<String, String> defaultTextures;
@@ -44,7 +45,7 @@ public class PCTModel implements IModel, IRetexturableModel<PCTModel>
     }
 
     @Override
-    public IFlexibleBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter)
+    public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter)
     {
         return new PCTModelInstance(state, format, bakedTextureGetter, proceduralConnectedTexture);
     }

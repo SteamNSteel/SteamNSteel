@@ -3,7 +3,7 @@ package mod.steamnsteel.texturing.feature;
 import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.utility.position.ChunkCoord;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
 

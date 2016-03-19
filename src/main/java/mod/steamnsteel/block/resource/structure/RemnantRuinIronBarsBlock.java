@@ -6,9 +6,10 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import mod.steamnsteel.TheMod;
 import net.minecraft.block.BlockPane;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -31,7 +32,7 @@ public class RemnantRuinIronBarsBlock extends BlockPane
         super(Material.iron, true);
         setHardness(5.0F);
         setResistance(10.0F);
-        setStepSound(soundTypeMetal);
+        setSoundType(SoundType.METAL);
         setUnlocalizedName(NAME);
         setCreativeTab(TheMod.CREATIVE_TAB);
 
@@ -55,9 +56,9 @@ public class RemnantRuinIronBarsBlock extends BlockPane
     }
 
     @Override
-    protected BlockState createBlockState()
+    protected BlockStateContainer createBlockState()
     {
-        return new BlockState(this, NORTH, EAST, WEST, SOUTH, IronBarsType);
+        return new BlockStateContainer(this, NORTH, EAST, WEST, SOUTH, IronBarsType);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -93,9 +94,9 @@ public class RemnantRuinIronBarsBlock extends BlockPane
 
     public enum IronBarsTextures implements IStringSerializable
     {
-        RUSTED("Rusted"),
-        MOSSY("Mossy"),
-        RUSTED_MOSSY("RustedMossy");
+        RUSTED("rusted"),
+        MOSSY("mossy"),
+        RUSTED_MOSSY("rustedmossy");
 
         public static final IronBarsTextures[] VALUES = {
                 RUSTED,

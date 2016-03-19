@@ -7,16 +7,19 @@ import com.google.common.collect.ImmutableMap.Builder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import mod.steamnsteel.client.model.opengex.ogex.*;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.*;
+import net.minecraftforge.client.model.animation.IAnimatedModel;
 import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.*;
 import java.util.Map.Entry;
 
-public class OpenGEXModel implements IModelCustomData<OpenGEXModel>, IRetexturableModel<OpenGEXModel> {
+public class OpenGEXModel implements IRetexturableModel, IModelCustomData, IModelSimpleProperties
+{
     //FIXME: Is there somewhere more appropriate for this?
     public static OgexTexture white;
 
@@ -36,19 +39,23 @@ public class OpenGEXModel implements IModelCustomData<OpenGEXModel>, IRetexturab
     private final OpenGEXNode node;
     private Integer[] nodeParents;
     private OgexNode[] allNodes;
+    private boolean gui3d;
+    private boolean smoothLighting;
 
     public OpenGEXModel(ResourceLocation location, OgexScene scene) {
-        this(location, scene, scene, buildTextures(scene.getMaterials()), null);
+        this(location, scene, scene, buildTextures(scene.getMaterials()), null, true, true);
         defaultTexture.setTexture("missingno");
 
     }
 
-    public OpenGEXModel(ResourceLocation location, OpenGEXNode node, OgexScene scene, ImmutableMap<String, ResourceLocation> textures, List<String> enabledNodes) {
+    public OpenGEXModel(ResourceLocation location, OpenGEXNode node, OgexScene scene, ImmutableMap<String, ResourceLocation> textures, List<String> enabledNodes, boolean gui3d, boolean smoothLighting) {
         this.location = location;
         this.node = node;
         this.scene = scene;
         this.textureMap = textures;
         this.enabledNodes = enabledNodes;
+        this.gui3d = gui3d;
+        this.smoothLighting = smoothLighting;
         arrangeForRendering();
     }
 
@@ -135,7 +142,7 @@ public class OpenGEXModel implements IModelCustomData<OpenGEXModel>, IRetexturab
     }
 
     @Override
-    public IFlexibleBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+    public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         Builder<String, TextureAtlasSprite> builder = ImmutableMap.builder();
         TextureAtlasSprite missing = bakedTextureGetter.apply(new ResourceLocation("missingno"));
 
@@ -153,7 +160,7 @@ public class OpenGEXModel implements IModelCustomData<OpenGEXModel>, IRetexturab
             }
         }
         builder.put("missingno", missing);
-        return new OpenGEXModelInstance(this, state, format, builder.build(), null);
+        return new OpenGEXModelInstance(this, state, format, builder.build(), null, gui3d, smoothLighting);
 
     }
 
@@ -176,7 +183,7 @@ public class OpenGEXModel implements IModelCustomData<OpenGEXModel>, IRetexturab
                 }
             }
         }
-        return new OpenGEXModel(location, node, scene, textureMap, enabledNodes);
+        return new OpenGEXModel(location, node, scene, textureMap, enabledNodes, gui3d, smoothLighting);
     }
 
     @Override
@@ -197,7 +204,7 @@ public class OpenGEXModel implements IModelCustomData<OpenGEXModel>, IRetexturab
                 builder.put(e);
             }
         }
-        return new OpenGEXModel(location, this.getNode(), scene, builder.build(), getEnabledNodes());
+        return new OpenGEXModel(location, this.getNode(), scene, builder.build(), getEnabledNodes(), gui3d, smoothLighting);
     }
 
     public OpenGEXNode getNode() {
@@ -230,5 +237,25 @@ public class OpenGEXModel implements IModelCustomData<OpenGEXModel>, IRetexturab
     public List<String> getEnabledNodes()
     {
         return enabledNodes;
+    }
+
+    @Override
+    public IModel smoothLighting(boolean value)
+    {
+        if(value == smoothLighting)
+        {
+            return this;
+        }
+        return new OpenGEXModel(location, node, scene, textureMap, enabledNodes, gui3d, smoothLighting);
+    }
+
+    @Override
+    public IModel gui3d(boolean value)
+    {
+        if(value == gui3d)
+        {
+            return this;
+        }
+        return new OpenGEXModel(location, node, scene, textureMap, enabledNodes, gui3d, smoothLighting);
     }
 }

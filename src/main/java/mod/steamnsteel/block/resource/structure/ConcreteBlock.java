@@ -2,22 +2,16 @@ package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -35,10 +29,10 @@ public class ConcreteBlock extends SteamNSteelBlock {
 
     public ConcreteBlock() {
         super(Material.rock);
-        this.setUnlocalizedName(NAME);
-        this.setTickRandomly(true);
-        this.setStepSound(Block.soundTypeStone);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(WETNESS, 0));
+        setUnlocalizedName(NAME);
+        setTickRandomly(true);
+        setSoundType(SoundType.STONE);
+        setDefaultState(blockState.getBaseState().withProperty(WETNESS, 0));
     }
 
     @Override
@@ -52,7 +46,7 @@ public class ConcreteBlock extends SteamNSteelBlock {
 
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        float temp = worldIn.getBiomeGenForCoords(pos).temperature;
+        float temp = worldIn.getBiomeGenForCoords(pos).getTemperature();
         int currentMeta = worldIn.getBlockState(pos).getBlock().getMetaFromState(state);
 
         if(currentMeta == 5) return;
@@ -142,8 +136,8 @@ public class ConcreteBlock extends SteamNSteelBlock {
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, WETNESS);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, WETNESS);
     }
 
     @Override

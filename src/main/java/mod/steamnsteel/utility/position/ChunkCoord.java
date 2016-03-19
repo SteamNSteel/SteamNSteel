@@ -17,8 +17,11 @@
 package mod.steamnsteel.utility.position;
 
 import com.google.common.base.Objects;
-import net.minecraft.util.BlockPos;
+import mod.steamnsteel.utility.SteamNSteelException;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.event.world.ChunkEvent;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -43,7 +46,11 @@ public class ChunkCoord implements Comparable<ChunkCoord>
     public static ChunkCoord of(ChunkEvent event) { return new ChunkCoord(event); }
 
     public boolean exists(World world) {
-        return world.getChunkProvider().chunkExists(data.getLeft(), data.getRight());
+        final IChunkProvider chunkProvider = world.getChunkProvider();
+        if (!(chunkProvider instanceof ChunkProviderServer)) {
+            throw new SteamNSteelException("attempt to use exists on the client chunk provider");
+        }
+        return ((ChunkProviderServer)chunkProvider).chunkExists(data.getLeft(), data.getRight());
     }
 
     public boolean containsWorldCoord(BlockPos coord)

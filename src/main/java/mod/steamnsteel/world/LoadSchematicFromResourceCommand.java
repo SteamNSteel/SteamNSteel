@@ -1,12 +1,11 @@
 package mod.steamnsteel.world;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.EnumFacing;
 
@@ -26,7 +25,8 @@ public class LoadSchematicFromResourceCommand extends CommandBase
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
+    {
         if (sender instanceof EntityPlayerMP) {
 
             if (args.length < 1) {
@@ -40,7 +40,7 @@ public class LoadSchematicFromResourceCommand extends CommandBase
 
             loader.loadSchematic(schematicLocation);
             loader.renderSchematicInOneShot(schematicLocation, player.getEntityWorld(), sender.getPosition(), EnumFacing.NORTH, false);
-            sender.addChatMessage(new ChatComponentText("Potato Spawned."));
+            sender.addChatMessage(new TextComponentString("Potato Spawned."));
         }
     }
 }

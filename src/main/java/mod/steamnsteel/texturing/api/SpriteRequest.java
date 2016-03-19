@@ -1,8 +1,6 @@
 package mod.steamnsteel.texturing.api;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RegionRenderCache;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.EnumFacing;

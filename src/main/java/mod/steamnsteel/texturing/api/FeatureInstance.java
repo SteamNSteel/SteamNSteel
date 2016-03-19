@@ -1,6 +1,6 @@
 package mod.steamnsteel.texturing.api;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Describes a 3D space of a feature within a chunk.

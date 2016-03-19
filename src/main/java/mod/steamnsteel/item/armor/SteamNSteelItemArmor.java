@@ -17,6 +17,7 @@
 package mod.steamnsteel.item.armor;
 
 import com.google.common.base.Objects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
@@ -37,7 +38,7 @@ public abstract class SteamNSteelItemArmor extends ItemArmor
     private final String materialName;
     final static int renderTypeIsNotUsedAnymore = -1;
 
-    SteamNSteelItemArmor(Material material, int armourType, String name)
+    SteamNSteelItemArmor(Material material, EntityEquipmentSlot armourType, String name)
     {
 
         super(material.getArmorMaterial(), renderTypeIsNotUsedAnymore, armourType);
@@ -53,7 +54,7 @@ public abstract class SteamNSteelItemArmor extends ItemArmor
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
     {
         return TheMod.MOD_ID + ':' + TEXTURE_LOCATION + materialName + "_layer_" + getArmorLayer() + ".png";
     }

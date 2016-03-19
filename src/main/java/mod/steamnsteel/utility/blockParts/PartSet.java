@@ -1,4 +1,4 @@
-package mod.steamnsteel.utility.blockParts;
+package mod.steamnsteel.utility.blockparts;
 
 import com.google.common.base.Objects;
 import java.util.HashMap;

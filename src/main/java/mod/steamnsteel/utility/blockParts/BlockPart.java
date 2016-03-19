@@ -1,12 +1,12 @@
-package mod.steamnsteel.utility.blockParts;
+package mod.steamnsteel.utility.blockparts;
 
 import com.google.common.base.Objects;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -55,7 +55,7 @@ public class BlockPart
     {
         float e = 0.01f;
         final BlockPos pos = location.getPos();
-        AxisAlignedBB drawBoundingBox = AxisAlignedBB.fromBounds(
+        AxisAlignedBB drawBoundingBox = new AxisAlignedBB(
                 pos.getX() + boundingBox.minX, pos.getY() + boundingBox.minY, pos.getZ() + boundingBox.minZ,
                 pos.getX() + boundingBox.maxX, pos.getY()+ boundingBox.maxY, pos.getZ() + boundingBox.maxZ
         );
@@ -87,7 +87,7 @@ public class BlockPart
 
     public BlockPart setBoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
     {
-        this.boundingBox = AxisAlignedBB.fromBounds(minX, minY, minZ, maxX, maxY, maxZ);
+        this.boundingBox = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
         return this;
     }
 

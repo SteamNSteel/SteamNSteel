@@ -18,7 +18,7 @@ package mod.steamnsteel.utility.world;
 
 import com.google.common.base.Objects;
 import net.minecraft.block.Block;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import static com.google.common.base.Preconditions.*;
 

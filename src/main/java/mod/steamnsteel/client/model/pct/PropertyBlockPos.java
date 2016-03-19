@@ -2,7 +2,7 @@ package mod.steamnsteel.client.model.pct;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class PropertyBlockPos implements IUnlistedProperty<BlockPos>

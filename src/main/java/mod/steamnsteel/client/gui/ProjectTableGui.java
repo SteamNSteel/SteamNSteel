@@ -195,7 +195,7 @@ public class ProjectTableGui extends SteamNSteelGui
 
             boolean itemMatched = false;
             for (final ItemStack existingItemStack : usableItems) {
-                if (existingItemStack.getIsItemStackEqual(itemStack))
+                if (ItemStack.areItemStacksEqual(existingItemStack, itemStack))
                 {
                     itemMatched = true;
                     existingItemStack.stackSize += itemStack.stackSize;

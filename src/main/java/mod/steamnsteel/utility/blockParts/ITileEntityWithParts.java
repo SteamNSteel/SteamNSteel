@@ -1,4 +1,4 @@
-package mod.steamnsteel.utility.blockParts;
+package mod.steamnsteel.utility.blockparts;
 
 /**
  * Created by steblo on 31/10/2014.

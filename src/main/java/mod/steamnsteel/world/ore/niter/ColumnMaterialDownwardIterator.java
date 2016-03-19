@@ -17,7 +17,8 @@
 package mod.steamnsteel.world.ore.niter;
 
 import com.google.common.base.Objects;
-import net.minecraft.util.BlockPos;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -49,7 +50,8 @@ public class ColumnMaterialDownwardIterator implements Iterator<MaterialWorldCoo
         if (!hasNext())
             throw new NoSuchElementException();
 
-        final MaterialWorldCoordPair result = MaterialWorldCoordPair.of(world.getBlockState(nextPos).getBlock().getMaterial(), nextPos);
+        final IBlockState blockState = world.getBlockState(nextPos);
+        final MaterialWorldCoordPair result = MaterialWorldCoordPair.of(blockState.getMaterial(), nextPos);
         currentCoord = nextPos;
         nextPos = nextPos.down();
         return result;

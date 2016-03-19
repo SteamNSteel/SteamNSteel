@@ -12,27 +12,31 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.resources.model.IBakedModel;
-import net.minecraft.util.BlockPos;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import org.apache.commons.lang3.tuple.Pair;
+import javax.vecmath.Matrix4f;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
+public class PCTModelInstance implements IPerspectiveAwareModel
 {
     private final IModelState state;
     private final VertexFormat format;
     private final Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter;
     private final ProceduralConnectedTexture proceduralConnectedTexture;
-    private final Map<Integer, IFlexibleBakedModel> cache = Maps.newHashMap();
-    private IFlexibleBakedModel bakedModel = null;
+    private final Map<Integer, IBakedModel> cache = Maps.newHashMap();
+    private IBakedModel bakedModel = null;
     private IModel baseModel = null;
 
     public PCTModelInstance(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, ProceduralConnectedTexture pct)
@@ -46,7 +50,7 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
         try
         {
             return ModelLoaderRegistry.getModel(new ResourceLocation(TheMod.MOD_ID, "block/cube_mirrored_bottom"));
-        } catch (IOException e)
+        } catch (Exception e)
         {
             e.printStackTrace();
             return null;
@@ -82,9 +86,9 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
             TextureAtlasSprite sprite = proceduralConnectedTexture.getDefaultTextureForSide(side);
             if (blockAccess != null)
             {
-                final Block block = blockAccess.getBlockState(blockPos).getBlock();
+                final IBlockState blockState = blockAccess.getBlockState(blockPos);
 
-                if (block.shouldSideBeRendered(blockAccess, blockPos.offset(side), side))
+                if (blockState.shouldSideBeRendered(blockAccess, blockPos.offset(side), side))
                 {
                     try
                     {
@@ -125,15 +129,9 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
     }
 
     @Override
-    public List<BakedQuad> getFaceQuads(EnumFacing side)
+    public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand)
     {
-        return bakedModel.getFaceQuads(side);
-    }
-
-    @Override
-    public List<BakedQuad> getGeneralQuads()
-    {
-        return bakedModel.getGeneralQuads();
+        return bakedModel.getQuads(state, side, rand);
     }
 
     @Override
@@ -166,12 +164,7 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
         return bakedModel.getItemCameraTransforms();
     }
 
-    @Override
-    public VertexFormat getFormat()
-    {
-        return bakedModel.getFormat();
-    }
-
+    /*
     @Override
     public IBakedModel handleBlockState(IBlockState blockState)
     {
@@ -189,8 +182,21 @@ public class PCTModelInstance implements IFlexibleBakedModel, ISmartBlockModel
 
         return this;
     }
+    */
+
+    @Override
+    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType)
+    {
+        return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, state, cameraTransformType);
+    }
 
     public ProceduralConnectedTexture getProceduralConnectedTexture() {
         return proceduralConnectedTexture;
+    }
+
+    public ItemOverrideList getOverrides()
+    {
+        // TODO handle items
+        return ItemOverrideList.NONE;
     }
 }

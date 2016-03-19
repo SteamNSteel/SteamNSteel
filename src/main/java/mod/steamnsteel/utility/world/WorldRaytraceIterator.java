@@ -3,14 +3,18 @@ package mod.steamnsteel.utility.world;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import java.util.Iterator;
-
-public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
+/*
+public class WorldRaytraceIterator implements Iterator<RayTraceResult>
 {
     private final World _world;
     //private final Vec3 _startLocation;
-    private final Vec3 _direction;
+    private final Vec3d _direction;
     //private MovingObjectPosition _currentBlock;
     private int _currentLocationX;
     private int _currentLocationY;
@@ -25,7 +29,7 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
     private double _startLocationYCoord;
     private double _startLocationZCoord;
 
-    public WorldRaytraceIterator(World world, Vec3 location, Vec3 direction)
+    public WorldRaytraceIterator(World world, Vec3d location, Vec3d direction)
     {
         this._world = world;
         this._startLocationXCoord = location.xCoord;
@@ -72,7 +76,7 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
         int locationY = _locationY;
         int locationZ = _locationZ;
 
-        MovingObjectPosition nextBlock = findNextBlock();
+        RayTraceResult nextBlock = findNextBlock();
 
         _currentLocationX = currentLocationX;
         _currentLocationY = currentLocationY;
@@ -85,10 +89,10 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
     }
 
     @Override
-    public MovingObjectPosition next()
+    public RayTraceResult next()
     {
         _blockLimit--;
-        MovingObjectPosition currentBlock;
+        RayTraceResult currentBlock;
         if (_isFirstBlock) {
             currentBlock = getInitialBlock();
             _isFirstBlock = false;
@@ -101,7 +105,7 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
         return currentBlock;
     }
 
-    private MovingObjectPosition getInitialBlock()
+    private RayTraceResult getInitialBlock()
     {
 
         boolean p_147447_3_ = false;
@@ -111,13 +115,13 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
         IBlockState blockState = _world.getBlockState(pos);
         final Block block = blockState.getBlock();
 
-        MovingObjectPosition movingobjectposition = null;
-        if ((!p_147447_4_ || block.getCollisionBoundingBox(_world, pos, blockState) != null) && block.canCollideCheck(blockState, p_147447_3_))
+        RayTraceResult movingobjectposition = null;
+        if ((!p_147447_4_ || blockState.getCollisionBoundingBox(_world, pos) != null) && block.canCollideCheck(blockState, p_147447_3_))
         {
             movingobjectposition = block.collisionRayTrace(
                     _world,
                     pos,
-                    new Vec3(_startLocationXCoord, _startLocationYCoord, _startLocationZCoord),
+                    new Vec3d(_startLocationXCoord, _startLocationYCoord, _startLocationZCoord),
                     _direction);
 
             if (movingobjectposition != null)
@@ -130,13 +134,13 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
         return movingobjectposition;
     }
 
-    public MovingObjectPosition findNextBlock()
+    public RayTraceResult findNextBlock()
     {
         boolean p_147447_3_ = false;
         boolean p_147447_4_ = false;
         boolean p_147447_5_ = true;
 
-        MovingObjectPosition movingObjectPosition = null;
+        RayTraceResult movingObjectPosition = null;
 
         if (_blockLimit < 0) return null;
         if (Double.isNaN(_startLocationXCoord) || Double.isNaN(_startLocationYCoord) || Double.isNaN(_startLocationZCoord))
@@ -257,7 +261,8 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
         IBlockState blockState = _world.getBlockState(pos);
 
         final Block block = blockState.getBlock();
-        if (!p_147447_4_ || block.getCollisionBoundingBox(_world, pos, blockState) != null)
+
+        if (!p_147447_4_ || blockState.getCollisionBoundingBox(_world, pos) != null)
         {
             if (block.canCollideCheck(blockState, p_147447_3_))
             {
@@ -267,7 +272,7 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
                                 _locationY,
                                 _locationZ)
                         ,
-                        new Vec3(_startLocationXCoord, _startLocationYCoord, _startLocationZCoord),
+                        new Vec3d(_startLocationXCoord, _startLocationYCoord, _startLocationZCoord),
                         _direction);
 
                 if (movingObjectPosition != null)
@@ -276,8 +281,8 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
                 }
             } else
             {
-                movingObjectPosition = new MovingObjectPosition(
-                        new Vec3(_startLocationXCoord, _startLocationYCoord, _startLocationZCoord),
+                movingObjectPosition = new RayTraceResult(
+                        new Vec3d(_startLocationXCoord, _startLocationYCoord, _startLocationZCoord),
                         EnumFacing.values()[hitSide],
                         new BlockPos(_locationX,
                         _locationY,
@@ -294,3 +299,4 @@ public class WorldRaytraceIterator implements Iterator<MovingObjectPosition>
 
     }
 }
+*/

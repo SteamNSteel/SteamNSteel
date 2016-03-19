@@ -17,7 +17,8 @@
 package mod.steamnsteel.block;
 
 import com.google.common.base.Objects;
-import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -25,14 +26,14 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import java.util.Random;
 
 public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBlock
 {
     private static final Material MATERIAL = Material.piston;
-    private static final SoundType SOUND = Block.soundTypePiston;
+    private static final SoundType SOUND = SoundType.STONE;
     private static final float HARDNESS = 0.5f;
 
     @SuppressWarnings("UnsecureRandomNumberGeneration")
@@ -41,12 +42,13 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
     protected SteamNSteelMachineBlock()
     {
         super(MATERIAL);
-        setStepSound(SOUND);
+        setSoundType(SOUND);
         setHardness(HARDNESS);
     }
 
+    //TODO: This may have a sane default implementation. but we should check and make sure the material is appropriate
     @Override
-    public boolean isOpaqueCube()
+    public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
@@ -60,10 +62,10 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
     }
 
     @Override
-    public int getMobilityFlag()
+    public EnumPushReaction getMobilityFlag(IBlockState state)
     {
         // total immobility and stop pistons
-        return 2;
+        return EnumPushReaction.BLOCK;
     }
 
     protected void dropInventory(World world, BlockPos pos, IInventory inventory)

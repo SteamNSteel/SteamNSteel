@@ -9,9 +9,9 @@ import mod.steamnsteel.block.machine.PipeBlock.PipeStates;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.client.resources.model.ModelRotation;
+import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -36,7 +36,7 @@ import static mod.steamnsteel.block.machine.PipeBlock.PipeStates.*;
 @SideOnly(Side.CLIENT)
 public class PipeModel extends BaseCodeModel
 {
-    private final ImmutableSet<PipeStates> capFlip = ImmutableSet.copyOf(new PipeStates[]{DS, DE, SW, DW, UW});
+    private final ImmutableSet<PipeStates> capFlip = ImmutableSet.copyOf(new PipeStates[]{ds, de, sw, dw, uw});
     private static final ImmutableMap<String, String> flipData = ImmutableMap.of("flip-v", String.valueOf(true));
 
     private static final ResourceLocation capLocation = new ResourceLocation(TheMod.MOD_ID, "block/pipes/SSPipesCap.obj");
@@ -105,8 +105,8 @@ public class PipeModel extends BaseCodeModel
                 final ModelResourceLocation mrl = sdm.getModelResourceLocation(si);
                 final PipeStates pipeState = si.getValue(PipeBlock.PIPE_STATE);
 
-                final IModel modelCap = procsessModel(loadModel(event.modelLoader, capLocation), flipData);
-                final OBJBakedModel bakedModel = (OBJBakedModel) event.modelRegistry.getObject(mrl);
+                final IModel modelCap = procsessModel(loadModel(capLocation), flipData);
+                final OBJBakedModel bakedModel = (OBJBakedModel) event.getModelRegistry().getObject(mrl);
 
                 IModel model = null;
                 try
@@ -118,7 +118,7 @@ public class PipeModel extends BaseCodeModel
                 if (capB) builder.put("capb", Pair.of(modelCap, getTransformForCap(getCorrectCapB(pipeState))));
 
 
-                event.modelRegistry.putObject(mrl,
+                event.getModelRegistry().putObject(mrl,
                         new MultiModel(mrl, model, bakedModel.getState(), builder.build())
                                 .bake(bakedModel.getState(), DefaultVertexFormats.ITEM, textureGetter)
                 );

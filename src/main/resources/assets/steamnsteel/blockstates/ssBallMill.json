@@ -52,7 +52,7 @@
       "false": { },
       "true": { "transform": {"scale": [-1,1,1]}}
     },
-    "render-dynamic": {
+    "render_dynamic": {
       "false": {
         "custom": {
           "enabled-nodes": [

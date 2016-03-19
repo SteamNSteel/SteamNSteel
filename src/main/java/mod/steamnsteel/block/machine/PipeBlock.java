@@ -22,17 +22,18 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -54,16 +55,16 @@ public class PipeBlock extends SteamNSteelBlock
         setDefaultState(
                 this.blockState
                         .getBaseState()
-                        .withProperty(PIPE_STATE, PipeStates.NS)
+                        .withProperty(PIPE_STATE, PipeStates.ns)
                         .withProperty(END_A_CAP, true)
                         .withProperty(END_B_CAP, true)
         );
     }
 
     @Override
-    protected BlockState createBlockState()
+    protected BlockStateContainer createBlockState()
     {
-        return new BlockState(this, PIPE_STATE, END_A_CAP, END_B_CAP);
+        return new BlockStateContainer(this, PIPE_STATE, END_A_CAP, END_B_CAP);
     }
 
     @Override
@@ -102,13 +103,14 @@ public class PipeBlock extends SteamNSteelBlock
         return new PipeTE();
     }
 
-    public boolean isFullCube()
+    @Override
+    public boolean isFullCube(IBlockState state)
     {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube()
+    public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
@@ -121,7 +123,7 @@ public class PipeBlock extends SteamNSteelBlock
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         if (playerIn != null)
         {
@@ -191,10 +193,10 @@ public class PipeBlock extends SteamNSteelBlock
 
     public enum PipeStates implements IStringSerializable
     {
-        NU(UP, NORTH), EU(UP, EAST), SU(UP, SOUTH), UW(WEST, UP), //up->horizontal
-        DN(NORTH, DOWN), DE(EAST, DOWN), DS(SOUTH, DOWN), DW(WEST, DOWN), //down->horizontal
-        EN(NORTH, EAST), ES(SOUTH, EAST), SW(WEST, SOUTH), NW(WEST, NORTH), //horizontal->horizontal
-        DU(DOWN, UP), NS(NORTH, SOUTH), EW(WEST, EAST);     //straight
+        nu(UP, NORTH), eu(UP, EAST), su(UP, SOUTH), uw(WEST, UP), //up->horizontal
+        dn(NORTH, DOWN), de(EAST, DOWN), ds(SOUTH, DOWN), dw(WEST, DOWN), //down->horizontal
+        en(NORTH, EAST), es(SOUTH, EAST), sw(WEST, SOUTH), nw(WEST, NORTH), //horizontal->horizontal
+        du(DOWN, UP), ns(NORTH, SOUTH), ew(WEST, EAST);     //straight
 
         private EnumFacing enda;
         private EnumFacing endb;
@@ -207,8 +209,8 @@ public class PipeBlock extends SteamNSteelBlock
 
         public static PipeStates getMatchingState(EnumFacing a, EnumFacing b)
         {
-            final char ca = Character.toUpperCase(a.getName().charAt(0));
-            final char cb = Character.toUpperCase(b.getName().charAt(0));
+            final char ca = Character.toLowerCase(a.getName().charAt(0));
+            final char cb = Character.toLowerCase(b.getName().charAt(0));
 
             return valueOf(ca < cb ? "" + ca + cb : "" + cb + ca);
         }

@@ -1,15 +1,12 @@
-package mod.steamnsteel.utility.blockParts;
+package mod.steamnsteel.utility.blockparts;
 
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.EnumFacing;
-import java.util.Arrays;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import java.util.Comparator;
 import java.util.HashMap;
 
@@ -51,7 +48,7 @@ public class BlockPartConfiguration
         enabledFlags = partSet.getEnabledFlags();
     }
 
-    public Iterable<BlockPart> getBlockPartsIntersecting(TileEntity tileEntity, final Vec3 posVec, final Vec3 lookVec)
+    public Iterable<BlockPart> getBlockPartsIntersecting(TileEntity tileEntity, final Vec3d posVec, final Vec3d lookVec)
     {
         return FluentIterable.from(
                 FluentIterable.from(
@@ -61,7 +58,7 @@ public class BlockPartConfiguration
                             public PartSelectionHelper apply(BlockPart blockPart)
                             {
                                 final AxisAlignedBB boundingBox = blockPart.getBoundingBox();
-                                MovingObjectPosition intercept = boundingBox.calculateIntercept(posVec, lookVec);
+                                RayTraceResult intercept = boundingBox.calculateIntercept(posVec, lookVec);
 
                                 boolean highlighted = intercept != null && enabledFlags[blockPart.index];
                                 double distance = highlighted ? intercept.hitVec.squareDistanceTo(posVec) : Double.MAX_VALUE;

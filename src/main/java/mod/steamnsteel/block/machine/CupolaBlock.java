@@ -24,14 +24,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.IBlockAccess;
@@ -41,7 +43,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-import static net.minecraft.block.BlockDirectional.FACING;
+import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 
 public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
@@ -50,7 +52,9 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     public static final PropertyBool IS_SLAVE = PropertyBool.create("is_slave");
     public static final PropertyBool IS_ACTIVE = PropertyBool.create("is_active");
 
-    private static final int flagSlave = 1 << 2;
+    private final AxisAlignedBB MasterBoundingBox = new AxisAlignedBB(0, 0, 0, 1, 2, 1);
+    private final AxisAlignedBB SlaveBoundingBox = new AxisAlignedBB(0, -1, 0, 1, 1, 1);
+
 
     public CupolaBlock()
     {
@@ -58,7 +62,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         setDefaultState(
                 this.blockState
                         .getBaseState()
-                        .withProperty(BlockDirectional.FACING, EnumFacing.NORTH)
+                        .withProperty(DIRECTION, EnumFacing.NORTH)
                         .withProperty(IS_SLAVE, false)
                         .withProperty(IS_ACTIVE, false)
         );
@@ -82,8 +86,8 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, FACING, IS_SLAVE, IS_ACTIVE);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, DIRECTION, IS_SLAVE, IS_ACTIVE);
     }
 
     @Override
@@ -116,9 +120,8 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         return new CupolaTE();
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rng)
+    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand)
     {
         final TileEntity te = world.getTileEntity(pos);
         if (te instanceof CupolaTE)
@@ -127,10 +130,10 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
             if (cupola.isActive())
             {
                 final float effectX = pos.getX() + 0.5f;
-                final float effectY = pos.getY() + 0.5f + rng.nextFloat() * 5.0f / 16.0f;
+                final float effectY = pos.getY() + 0.5f + rand.nextFloat() * 5.0f / 16.0f;
                 final float effectZ = pos.getZ() + 0.5f;
                 final float edgeOffset = 0.52f;
-                final float widthOffset = rng.nextFloat() * 0.6f - 0.3f;
+                final float widthOffset = rand.nextFloat() * 0.6f - 0.3f;
 
                 final IBlockState metadata = world.getBlockState(pos);
 
@@ -158,7 +161,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
                         world.spawnParticle(EnumParticleTypes.FLAME, effectX - edgeOffset, effectY, effectZ + widthOffset, 0.0d, 0.0d, 0.0d);
                 }
 
-                renderSmokeOnTop(world, pos, rng);
+                renderSmokeOnTop(world, pos, rand);
             }
         }
     }
@@ -218,29 +221,25 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         BlockPos actualBlockPos = pos;
-        final TileEntity te = world.getTileEntity(actualBlockPos);
+        final TileEntity te = worldIn.getTileEntity(actualBlockPos);
         if (((CupolaTE) te).isSlave()) actualBlockPos.down();
 
-        player.openGui(TheMod.instance, ModGuis.CUPOLA.getID(), world, actualBlockPos.getX(), actualBlockPos.getY(), actualBlockPos.getZ());
+        playerIn.openGui(TheMod.instance, ModGuis.CUPOLA.getID(), worldIn, actualBlockPos.getX(), actualBlockPos.getY(), actualBlockPos.getZ());
         return true;
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess block, BlockPos pos)
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        final IBlockState meta = block.getBlockState(pos);
-
-        if (!((Boolean)meta.getValue(IS_SLAVE)))
+        if (!state.getValue(IS_SLAVE))
         {
-            maxY = 2;   //is Master
-            minY = 0;
+            return MasterBoundingBox;
         } else
         {
-            maxY = 1;   //is Slave
-            minY = -1;
+            return SlaveBoundingBox;
         }
     }
 
@@ -258,7 +257,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public int getLightValue(IBlockAccess world, BlockPos pos)
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
     {
         TileEntity te = world.getTileEntity(pos);
 
@@ -269,12 +268,13 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 
         if (te != null && ((CupolaTE) te).isActive()) return 15;
 
-        return super.getLightValue(world, pos);
+        return super.getLightValue(state, world, pos);
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
     {
+
         if (player.capabilities.isCreativeMode)
         {
             final TileEntity te = world.getTileEntity(pos);
@@ -285,7 +285,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
             }
         }
 
-        return super.removedByPlayer(world, pos, player, willHarvest);
+        return super.removedByPlayer(state, world, pos, player, willHarvest);
     }
 }
 

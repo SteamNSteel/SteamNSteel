@@ -18,7 +18,7 @@ package mod.steamnsteel.utility.position;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
 /**

@@ -6,11 +6,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,14 +26,14 @@ public abstract class BaseCodeModel
 
     public abstract void loadModel(ModelBakeEvent event);
 
-    protected static IModel loadModel(ModelLoader ml, ResourceLocation rl)
+    protected static IModel loadModel(ResourceLocation rl)
     {
         try
         {
-            return ml.getModel(rl);
-        } catch (IOException e)
+            return ModelLoaderRegistry.getModel(rl);
+        } catch (Exception e)
         {
-            return ml.getMissingModel();
+            return ModelLoaderRegistry.getMissingModel();
         }
     }
 

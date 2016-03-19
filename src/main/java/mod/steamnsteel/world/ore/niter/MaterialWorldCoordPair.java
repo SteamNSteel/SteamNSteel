@@ -18,7 +18,7 @@ package mod.steamnsteel.world.ore.niter;
 
 import com.google.common.base.Objects;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import static com.google.common.base.Preconditions.*;
 

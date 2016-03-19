@@ -2,13 +2,12 @@ package mod.steamnsteel.tileentity;
 
 import mod.steamnsteel.api.plumbing.IPipeTileEntity;
 import mod.steamnsteel.utility.PartSets;
-import mod.steamnsteel.utility.blockParts.BlockPartConfiguration;
-import mod.steamnsteel.utility.blockParts.ITileEntityWithParts;
-import mod.steamnsteel.utility.log.Logger;
+import mod.steamnsteel.utility.blockparts.BlockPartConfiguration;
+import mod.steamnsteel.utility.blockparts.ITileEntityWithParts;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 
 public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntityWithParts
@@ -69,7 +68,8 @@ public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntit
     {
         markDirty();
         worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
-        worldObj.markBlockForUpdate(getPos());
+        //FIXME: Do I still need to do this?
+        //worldObj.markBlockForUpdate(getPos());
     }
 
     @Override
@@ -77,12 +77,12 @@ public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntit
     {
         final NBTTagCompound nbt = new NBTTagCompound();
         writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(getPos(), 1, nbt);
+        return new SPacketUpdateTileEntity(getPos(), 1, nbt);
     }
 
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet)
     {
         readFromNBT(packet.getNbtCompound());
     }

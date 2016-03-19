@@ -5,7 +5,7 @@ import mod.steamnsteel.texturing.api.*;
 import mod.steamnsteel.texturing.feature.IMultiTraitFeature;
 import mod.steamnsteel.utility.position.ChunkBlockCoord;
 import mod.steamnsteel.utility.position.ChunkCoord;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import java.util.*;

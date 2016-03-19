@@ -17,13 +17,14 @@
 package mod.steamnsteel.item.armor;
 
 import mod.steamnsteel.library.Material;
+import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class SSArmorHelmet extends SteamNSteelItemArmor
 {
 
     public SSArmorHelmet(Material material)
     {
-        super(material, 0, "helmet");
+        super(material, EntityEquipmentSlot.HEAD, "helmet");
     }
 
     @Override

@@ -2,9 +2,9 @@ package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
 import mod.steamnsteel.api.plumbing.IPipeTileEntity;
-import mod.steamnsteel.utility.blockParts.BlockPart;
-import mod.steamnsteel.utility.blockParts.BlockPartConfiguration;
-import mod.steamnsteel.utility.blockParts.ITileEntityWithParts;
+import mod.steamnsteel.utility.blockparts.BlockPart;
+import mod.steamnsteel.utility.blockparts.BlockPartConfiguration;
+import mod.steamnsteel.utility.blockparts.ITileEntityWithParts;
 import mod.steamnsteel.utility.PartSets;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

@@ -17,29 +17,29 @@
 package mod.steamnsteel.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import static net.minecraft.block.BlockDirectional.FACING;
+import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 
 public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
     protected SteamNSteelDirectionalBlock(Material material)
     {
         super(material);
-        setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));
+        setDefaultState(getDefaultState().withProperty(DIRECTION, EnumFacing.NORTH));
     }
 
     @Override
-    protected BlockState createBlockState()
+    protected BlockStateContainer createBlockState()
     {
-        return new BlockState(this, FACING);
+        return new BlockStateContainer(this, DIRECTION);
     }
 
     @Override
@@ -50,7 +50,7 @@ public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
         final int orientation = (MathHelper.floor_double(placer.rotationYaw * 4.0f / 360.0f + 0.5)) & 3;
         final EnumFacing horizontal = EnumFacing.getHorizontal(orientation);
         final IBlockState newState = worldIn.getBlockState(pos)
-                .withProperty(FACING, horizontal);
+                .withProperty(DIRECTION, horizontal);
 
         worldIn.setBlockState(pos, newState, 0);
     }
@@ -59,7 +59,11 @@ public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
     public int getMetaFromState(IBlockState state)
     {
         int meta = 0;
-        meta |= state.getValue(FACING).ordinal() - 2;
+        EnumFacing value = state.getValue(DIRECTION);
+        if (value == EnumFacing.UP || value == EnumFacing.DOWN) {
+            value = EnumFacing.NORTH;
+        }
+        meta |= value.ordinal() - 2;
         return meta;
     }
 
@@ -67,6 +71,6 @@ public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
     public IBlockState getStateFromMeta(int meta)
     {
         return super.getStateFromMeta(meta)
-                .withProperty(FACING, EnumFacing.getHorizontal(meta & 3));
+                .withProperty(DIRECTION, EnumFacing.getHorizontal(meta & 3));
     }
 }

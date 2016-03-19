@@ -33,7 +33,7 @@ import mod.steamnsteel.tileentity.structure.BlastFurnaceTE;
 import mod.steamnsteel.tileentity.structure.BoilerTE;
 import mod.steamnsteel.tileentity.structure.LargeFanTE;
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -185,12 +185,12 @@ public class ClientRenderProxy extends CommonRenderProxy
         registerItemModel(ModItem.leggingsSteel);
         registerItemModel(ModItem.bootsSteel);
 
-        registerItemModel(ModItem.axeBronze);
+        //registerItemModel(ModItem.axeBronze);
         registerItemModel(ModItem.pickBronze);
         registerItemModel(ModItem.shovelBronze);
         registerItemModel(ModItem.swordBronze);
         registerItemModel(ModItem.hoeBronze);
-        registerItemModel(ModItem.axeSteel);
+        //registerItemModel(ModItem.axeSteel);
         registerItemModel(ModItem.pickSteel);
         registerItemModel(ModItem.shovelSteel);
         registerItemModel(ModItem.swordSteel);

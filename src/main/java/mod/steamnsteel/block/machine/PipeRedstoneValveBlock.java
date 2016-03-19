@@ -21,15 +21,17 @@ import mod.steamnsteel.tileentity.PipeRedstoneValveTE;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 
 public class PipeRedstoneValveBlock extends SteamNSteelBlock implements ITileEntityProvider
 {
@@ -42,26 +44,26 @@ public class PipeRedstoneValveBlock extends SteamNSteelBlock implements ITileEnt
         setDefaultState(
                 this.blockState
                         .getBaseState()
-                        .withProperty(BlockDirectional.FACING, EnumFacing.NORTH)
+                        .withProperty(DIRECTION, EnumFacing.NORTH)
         );
     }
 
     @Override
-    protected BlockState createBlockState()
+    protected BlockStateContainer createBlockState()
     {
-        return new BlockState(this, BlockDirectional.FACING);
+        return new BlockStateContainer(this, DIRECTION);
     }
 
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        return state.getValue(BlockDirectional.FACING).getHorizontalIndex();
+        return state.getValue(DIRECTION).getHorizontalIndex();
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta)
     {
-        return getDefaultState().withProperty(BlockDirectional.FACING, EnumFacing.getHorizontal(meta));
+        return getDefaultState().withProperty(DIRECTION, EnumFacing.getHorizontal(meta));
     }
 
     @Override
@@ -71,7 +73,7 @@ public class PipeRedstoneValveBlock extends SteamNSteelBlock implements ITileEnt
     }
 
     @Override
-    public boolean isOpaqueCube()
+    public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
@@ -145,7 +147,7 @@ public class PipeRedstoneValveBlock extends SteamNSteelBlock implements ITileEnt
                 direction = EnumFacing.EAST;
             }
 
-            worldIn.setBlockState(pos, state.withProperty(BlockDirectional.FACING, direction));
+            worldIn.setBlockState(pos, state.withProperty(DIRECTION, direction));
 
             //te.setOrientation(direction);
             //te.checkEnds();

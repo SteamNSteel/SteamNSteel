@@ -45,7 +45,7 @@
       "false": { },
       "true": { }
     },
-    "render-dynamic": {
+    "render_dynamic": {
       "false": {
         "custom": {
           "enabled-nodes": [

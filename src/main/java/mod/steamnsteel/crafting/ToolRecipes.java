@@ -42,13 +42,13 @@ enum ToolRecipes
 
         recipes.add(assembleRecipe(ModItem.pickBronze, pick, ModItem.Names.BRONZE_INGOT));
         recipes.add(assembleRecipe(ModItem.shovelBronze, shovel, ModItem.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItem.axeBronze, axe, ModItem.Names.BRONZE_INGOT));
+        //recipes.add(assembleRecipe(ModItem.axeBronze, axe, ModItem.Names.BRONZE_INGOT));
         recipes.add(assembleRecipe(ModItem.hoeBronze, hoe, ModItem.Names.BRONZE_INGOT));
         recipes.add(assembleRecipe(ModItem.swordBronze, sword, ModItem.Names.BRONZE_INGOT));
 
         recipes.add(assembleRecipe(ModItem.pickSteel, pick, ModItem.Names.STEEL_INGOT));
         recipes.add(assembleRecipe(ModItem.shovelSteel, shovel, ModItem.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItem.axeSteel, axe, ModItem.Names.STEEL_INGOT));
+        //recipes.add(assembleRecipe(ModItem.axeSteel, axe, ModItem.Names.STEEL_INGOT));
         recipes.add(assembleRecipe(ModItem.hoeSteel, hoe, ModItem.Names.STEEL_INGOT));
         recipes.add(assembleRecipe(ModItem.swordSteel, sword, ModItem.Names.STEEL_INGOT));
 

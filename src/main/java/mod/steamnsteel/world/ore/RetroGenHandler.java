@@ -19,8 +19,10 @@ package mod.steamnsteel.world.ore;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import net.minecraft.util.BlockPos;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import mod.steamnsteel.utility.SteamNSteelException;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,7 +47,7 @@ public enum RetroGenHandler
     private static boolean isChunkEligibleForRetroGen(ChunkDataEvent.Load event)
     {
         return Settings.World.doRetroOreGen()
-                && event.world.provider.getDimensionId() == 0
+                && event.world.provider.getDimension() == 0
                 && event.getData().getString(RETROGEN_TAG).isEmpty();
     }
 
@@ -85,7 +87,11 @@ public enum RetroGenHandler
 
                 final World world = event.world;
 
-                if (world.getChunkProvider().chunkExists(coord.getX(), coord.getZ()))
+                final IChunkProvider chunkProvider = world.getChunkProvider();
+                if (!(chunkProvider instanceof ChunkProviderServer)) {
+                    throw new SteamNSteelException("Attempt to use chunkExists on a non-server chunk provider");
+                }
+                if (((ChunkProviderServer) chunkProvider).chunkExists(coord.getX(), coord.getZ()))
                 {
                     final long seed = world.getSeed();
                     final Random rng = new Random(seed);

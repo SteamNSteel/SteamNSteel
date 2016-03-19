@@ -49,8 +49,8 @@ public final class ModItem
     public static final SteamNSteelItemArmor helmetSteel = new SSArmorHelmet(STEEL);
     public static final SteamNSteelItemArmor leggingsSteel = new SSArmorLegs(STEEL);
 
-    public static final SSToolAxe axeBronze = new SSToolAxe(BRONZE);
-    public static final SSToolAxe axeSteel = new SSToolAxe(STEEL);
+    //public static final SSToolAxe axeBronze = new SSToolAxe(BRONZE);
+    //public static final SSToolAxe axeSteel = new SSToolAxe(STEEL);
     public static final SSToolHoe hoeBronze = new SSToolHoe(BRONZE);
     public static final SSToolHoe hoeSteel = new SSToolHoe(STEEL);
     public static final SSToolPickaxe pickBronze = new SSToolPickaxe(BRONZE);
@@ -134,12 +134,12 @@ public final class ModItem
     {
         GameRegistry.registerItem(shovelBronze, shovelBronze.getUndecoratedName());
         GameRegistry.registerItem(pickBronze, pickBronze.getUndecoratedName());
-        GameRegistry.registerItem(axeBronze, axeBronze.getUndecoratedName());
+        //GameRegistry.registerItem(axeBronze, axeBronze.getUndecoratedName());
         GameRegistry.registerItem(hoeBronze, hoeBronze.getUndecoratedName());
 
         GameRegistry.registerItem(shovelSteel, shovelSteel.getUndecoratedName());
         GameRegistry.registerItem(pickSteel, pickSteel.getUndecoratedName());
-        GameRegistry.registerItem(axeSteel, axeSteel.getUndecoratedName());
+        //GameRegistry.registerItem(axeSteel, axeSteel.getUndecoratedName());
         GameRegistry.registerItem(hoeSteel, hoeSteel.getUndecoratedName());
 
         GameRegistry.registerItem(structureBuildSteel, structureBuildSteel.getUndecoratedName());

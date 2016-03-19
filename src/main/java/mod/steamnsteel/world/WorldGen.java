@@ -97,7 +97,7 @@ public enum WorldGen
             final IBlockState schematicBlock = event.getBlockState();
             if (schematicBlock.getBlock() == Blocks.vine) {
                 final IBlockState worldBlock = event.world.getBlockState(event.worldCoord);
-                if (!worldBlock.getBlock().isAir(event.world, event.schematicCoord)) {
+                if (!worldBlock.getBlock().isAir(worldBlock, event.world, event.schematicCoord)) {
                     event.cancelSetBlock();
                 }
             }

@@ -26,13 +26,14 @@ import mod.steamnsteel.tileentity.structure.LargeFanTE;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -42,11 +43,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-import static net.minecraft.block.BlockDirectional.FACING;
+import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 
 public class FanLargeStructure extends SteamNSteelStructureBlock
 {
-    public static final PropertyBool RENDER_DYNAMIC = PropertyBool.create("render-dynamic");
+    public static final PropertyBool RENDER_DYNAMIC = PropertyBool.create("render_dynamic");
 
     public static final String NAME = "fanLarge";
 
@@ -59,16 +60,16 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
         setDefaultState(
                 blockState
                         .getBaseState()
-                        .withProperty(FACING, EnumFacing.NORTH)
+                        .withProperty(DIRECTION, EnumFacing.NORTH)
                         .withProperty(MIRROR, false)
                         .withProperty(RENDER_DYNAMIC, false)
         );
     }
 
     @Override
-    protected BlockState createBlockState()
+    protected BlockStateContainer createBlockState()
     {
-        return new ExtendedBlockState(this, new IProperty[]{FACING, MIRROR, RENDER_DYNAMIC}, new IUnlistedProperty[]{OpenGEXAnimationFrameProperty.instance});
+        return new ExtendedBlockState(this, new IProperty[]{DIRECTION, MIRROR, RENDER_DYNAMIC}, new IUnlistedProperty[]{OpenGEXAnimationFrameProperty.instance});
     }
 
     @Override
@@ -103,15 +104,21 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
     }
 
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state)
+    public boolean canMirror()
     {
-        return new LargeFanTE(getPattern(), state.getValue(FACING), state.getValue(MIRROR));
+        return false;
     }
 
     @Override
-    public int getRenderType()
+    public TileEntity createTileEntity(World world, IBlockState state)
     {
-        return 3;
+        return new LargeFanTE(getPattern(), state.getValue(DIRECTION), state.getValue(MIRROR));
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state)
+    {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
@@ -136,9 +143,9 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
     }
 
     @Override
-    public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity)
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn)
     {
-        super.addCollisionBoxesToList(world, pos, state, mask, list, collidingEntity);
+        super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn);
 
         /*final List<AxisAlignedBB> collisionList = new ArrayList<>(1);
 

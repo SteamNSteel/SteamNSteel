@@ -18,33 +18,44 @@ package mod.steamnsteel.block.container;
 
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.RemnantRuinChestTE;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 
 public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
     public static final String NAME = "remnantRuinChest";
 
+    private final AxisAlignedBB defaultBoundingBox = new AxisAlignedBB(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+
     public RemnantRuinChestBlock() {
-        super();
         setUnlocalizedName(NAME);
-        setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
         setDefaultState(getDefaultState());
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, new IProperty[] {BlockDirectional.FACING});
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, DIRECTION);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        return defaultBoundingBox;
     }
 
     @Override
@@ -63,7 +74,7 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         final TileEntity te = world.getTileEntity(pos);
 

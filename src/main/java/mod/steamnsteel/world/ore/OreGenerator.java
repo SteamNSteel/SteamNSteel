@@ -21,8 +21,8 @@ import mod.steamnsteel.block.SteamNSteelOreBlock;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.state.pattern.BlockHelper;
-import net.minecraft.util.BlockPos;
+import net.minecraft.block.state.pattern.BlockMatcher;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import java.util.Random;
@@ -54,7 +54,7 @@ public class OreGenerator extends WorldGenMinable
 
         for (final IBlockState target : targetBlockStates)
         {
-            if (block.isReplaceableOreGen(world, pos, BlockHelper.forBlock(target.getBlock()))) return true;
+            if (block.isReplaceableOreGen(target, world, pos, BlockMatcher.forBlock(target.getBlock()))) return true;
         }
 
         return false;

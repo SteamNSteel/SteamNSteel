@@ -17,12 +17,13 @@
 package mod.steamnsteel.item.armor;
 
 import mod.steamnsteel.library.Material;
+import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class SSArmorBoots extends SteamNSteelItemArmor
 {
     public SSArmorBoots(Material material)
     {
-        super(material, 3, "boots");
+        super(material, EntityEquipmentSlot.FEET, "boots");
     }
 
     @Override

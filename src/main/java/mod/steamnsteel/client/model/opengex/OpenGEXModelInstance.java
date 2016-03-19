@@ -7,11 +7,16 @@ import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.client.model.opengex.ogex.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.*;
+import net.minecraftforge.client.model.animation.IAnimatedModel;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -26,32 +31,30 @@ import java.util.Collections;
 import java.util.List;
 
 //@SuppressWarnings("deprecation") //Seriously, screw deprecated methods on interfaces. I *HATE* having to do this.
-public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockModel, ISmartItemModel, IPerspectiveAwareModel
+public class OpenGEXModelInstance implements IPerspectiveAwareModel
 {
     private final OpenGEXModel model;
     private final IModelState state;
     private final VertexFormat format;
     private final ImmutableMap<String, TextureAtlasSprite> textures;
     private final float[][] nodeMatrices;
+    private final boolean gui3d;
+    private final boolean smoothLighting;
     private ImmutableList<BakedQuad> quads;
 
-    public OpenGEXModelInstance(OpenGEXModel openGEXModel, IModelState state, VertexFormat format, ImmutableMap<String, TextureAtlasSprite> textureSpriteMap, float[][] nodeMatrices)
+    public OpenGEXModelInstance(OpenGEXModel openGEXModel, IModelState state, VertexFormat format, ImmutableMap<String, TextureAtlasSprite> textureSpriteMap, float[][] nodeMatrices, boolean gui3d, boolean smoothLighting)
     {
         this.model = openGEXModel;
         this.state = state;
         this.format = format;
         this.textures = textureSpriteMap;
         this.nodeMatrices = nodeMatrices;
+        this.gui3d = gui3d;
+        this.smoothLighting = smoothLighting;
     }
 
     @Override
-    public List<BakedQuad> getFaceQuads(EnumFacing side)
-    {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<BakedQuad> getGeneralQuads()
+    public List<BakedQuad> getQuads(IBlockState blockState, EnumFacing side, long rand)
     {
         if (quads == null)
         {
@@ -73,7 +76,8 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
             final Builder<BakedQuad> builder = ImmutableList.builder();
             for (final OgexNode ogexNode : node)
             {
-                builder.addAll(new OpenGEXModelInstance(new OpenGEXModel(model.getLocation(), ogexNode, model.getScene(), model.getTextureMap(), model.getEnabledNodes()), state, format, textures, nodeMatrices).getGeneralQuads());
+                //FIXME: Why the hell am I creating a new model as opposed to using my current one?
+                builder.addAll(new OpenGEXModelInstance(new OpenGEXModel(model.getLocation(), ogexNode, model.getScene(), model.getTextureMap(), model.getEnabledNodes(), gui3d, smoothLighting), state, format, textures, nodeMatrices, gui3d, smoothLighting).getQuads(blockState, side, rand));
             }
 
             final List<String> enabledNodes = model.getEnabledNodes();
@@ -113,7 +117,6 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
                         for (long[] polyGroup : (long[][]) indexArray.getArray())
                         {
                             UnpackedBakedQuad.Builder quadBuilder = new UnpackedBakedQuad.Builder(format);
-                            quadBuilder.setQuadColored();
 
                             for (int i = 0; i < polyGroup.length; i++)
                             {
@@ -283,18 +286,12 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
     }
 
     @Override
-    public VertexFormat getFormat()
-    {
-        return format;
-    }
-
-    @Override
-    public Pair<? extends IFlexibleBakedModel, Matrix4f> handlePerspective(net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType cameraTransformType)
+    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType)
     {
         return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, state, cameraTransformType);
     }
 
-    @Override
+    /*@Override
     public OpenGEXModelInstance handleBlockState(IBlockState state)
     {
         if (state instanceof IExtendedBlockState)
@@ -312,12 +309,11 @@ public class OpenGEXModelInstance implements IFlexibleBakedModel, ISmartBlockMod
             }
         }
         return this;
-    }
+    }*/
 
-    @Override
-    public OpenGEXModelInstance handleItemState(ItemStack stack)
+    public ItemOverrideList getOverrides()
     {
-        // TODO: Copy whatever the hell Fry ends up doing here :P
-        return this;
+        // TODO handle items
+        return ItemOverrideList.NONE;
     }
 }

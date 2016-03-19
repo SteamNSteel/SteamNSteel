@@ -16,6 +16,7 @@
 
 package mod.steamnsteel.block;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
 public abstract class SteamNSteelOreBlock extends SteamNSteelBlock
@@ -30,9 +31,7 @@ public abstract class SteamNSteelOreBlock extends SteamNSteelBlock
         super(Material.rock);
         setHardness(3.0f);
         setResistance(5.0f);
-
-        // vanilla ores use this (I don't know why)
-        setStepSound(soundTypePiston);
+        setSoundType(SoundType.STONE);
     }
 
     public abstract boolean isGenEnabled();

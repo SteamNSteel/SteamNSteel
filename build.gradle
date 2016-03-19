@@ -56,7 +56,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 }*/
 
 minecraft {
-    version = config.minecraft_version + "-" + config.forge_version // grab latest forge
+    version = config.minecraft_version + "-" + config.forge_version + "-1.9" // grab latest forge
     runDir = "run"
 
     mappings = config.mcp_mappings

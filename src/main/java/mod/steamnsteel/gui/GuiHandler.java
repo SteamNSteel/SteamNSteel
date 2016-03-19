@@ -22,7 +22,7 @@ import mod.steamnsteel.inventory.CupolaContainer;
 import mod.steamnsteel.inventory.ProjectTableContainer;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 

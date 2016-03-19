@@ -17,7 +17,7 @@
 package mod.steamnsteel.configuration;
 
 import mod.steamnsteel.TheMod;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.config.Configuration;
 
 @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
@@ -78,6 +78,6 @@ public enum Settings
 
     private static String getLocalizedComment(String settingName)
     {
-        return StatCollector.translateToLocal("config." + TheMod.MOD_ID + ':' + settingName);
+        return I18n.translateToLocal("config." + TheMod.MOD_ID + ':' + settingName);
     }
 }

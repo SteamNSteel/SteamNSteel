@@ -15,6 +15,7 @@
  */
 package mod.steamnsteel.block;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
 public class SteamNSteelDirectionalStorageBlock extends SteamNSteelDirectionalBlock
@@ -33,6 +34,6 @@ public class SteamNSteelDirectionalStorageBlock extends SteamNSteelDirectionalBl
         setUnlocalizedName(name);
         setHardness(5.0f);
         setResistance(10.0f);
-        setStepSound(soundTypeMetal);
+        setSoundType(SoundType.METAL);
     }
 }
