@@ -1,6 +1,7 @@
 package mod.steamnsteel.client.gui;
 
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.mcgui.client.gui.McGUI;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
@@ -15,7 +16,7 @@ public abstract class SteamNSteelGui extends McGUI {
 
     protected ResourceLocation getResourceLocation(String path)
     {
-        return getResourceLocation(TheMod.MOD_ID.toLowerCase(), LOCATION + path + FILE_EXTENSION);
+        return getResourceLocation(Reference.MOD_ID.toLowerCase(), LOCATION + path + FILE_EXTENSION);
     }
 
     @Override

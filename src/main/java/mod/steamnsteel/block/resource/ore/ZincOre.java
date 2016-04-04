@@ -21,11 +21,8 @@ import mod.steamnsteel.configuration.Settings;
 
 public class ZincOre extends SteamNSteelOreBlock
 {
-    public static final String NAME = "oreZinc";
-
     public ZincOre()
     {
-        setUnlocalizedName(NAME);
         setHarvestLevel("pickaxe", 1); // stone pick
     }
 

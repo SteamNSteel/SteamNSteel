@@ -22,12 +22,9 @@ import net.minecraft.world.World;
 
 public class ShapeLIBlock extends SteamNSteelStructureShapeBlock
 {
-    public static final String NAME = "shapeLIBlock";
-
     public ShapeLIBlock()
     {
         super();
-        setUnlocalizedName(NAME);
     }
 
     @Override

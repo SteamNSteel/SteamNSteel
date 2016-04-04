@@ -17,38 +17,23 @@
 package mod.steamnsteel.item.tool;
 
 import com.google.common.base.Objects;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.library.Material;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 
-import static mod.steamnsteel.item.SteamNSteelItem.getFormattedName;
-import static mod.steamnsteel.item.SteamNSteelItem.getUnwrappedUnlocalizedName;
-
 public class SSToolAxe extends ItemAxe
 {
-    private final String undecoratedName;
-
     public SSToolAxe(Material material)
     {
         super(material.getToolMaterial());
-        //noinspection StringConcatenationMissingWhitespace
-        undecoratedName = "axe" + getFormattedName(material);
-        setUnlocalizedName(undecoratedName);
         setCreativeTab(TheMod.CREATIVE_TAB);
-    }
-
-    public String getUndecoratedName()
-    {
-        return undecoratedName;
     }
 
     @Override
     public String getUnlocalizedName()
     {
-        return String.format("item.%s%s", TheMod.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return "item." + getRegistryName();
     }
 
     @Override
@@ -61,7 +46,6 @@ public class SSToolAxe extends ItemAxe
     public String toString()
     {
         return Objects.toStringHelper(this)
-                .add("undecoratedName", undecoratedName)
                 .toString();
     }
 }

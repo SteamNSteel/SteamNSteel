@@ -23,7 +23,7 @@ public class SSArmorBoots extends SteamNSteelItemArmor
 {
     public SSArmorBoots(Material material)
     {
-        super(material, EntityEquipmentSlot.FEET, "boots");
+        super(material, EntityEquipmentSlot.FEET);
     }
 
     @Override

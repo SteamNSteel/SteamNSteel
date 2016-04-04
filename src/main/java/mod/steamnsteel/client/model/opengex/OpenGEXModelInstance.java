@@ -8,26 +8,24 @@ import mod.steamnsteel.client.model.opengex.ogex.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.client.model.*;
-import net.minecraftforge.client.model.animation.IAnimatedModel;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
-import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.model.IModelPart;
+import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.common.model.TRSRTransformation;
 import org.apache.commons.lang3.tuple.Pair;
-
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 //@SuppressWarnings("deprecation") //Seriously, screw deprecated methods on interfaces. I *HATE* having to do this.
@@ -180,7 +178,7 @@ public class OpenGEXModelInstance implements IPerspectiveAwareModel
                                 if (this.textures.isEmpty()){
                                     sprite = this.textures.get("missingno");
                                 }
-                                else if (textures.get(0) == OpenGEXModel.white) sprite = ModelLoader.White.instance;
+                                else if (textures.get(0) == OpenGEXModel.white) sprite = ModelLoader.White.INSTANCE;
                                 else sprite = this.textures.get(textures.get(0).getTexture());
 
                                 //FIXME: calculate the face normal.

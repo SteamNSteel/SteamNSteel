@@ -16,65 +16,66 @@
 
 package mod.steamnsteel.library;
 
-import mod.steamnsteel.TheMod;
 import mod.steamnsteel.item.SteamNSteelItem;
-import mod.steamnsteel.item.armor.*;
-import mod.steamnsteel.item.artifact.*;
-import mod.steamnsteel.item.resource.Niter;
-import mod.steamnsteel.item.resource.Sulfur;
-import mod.steamnsteel.item.resource.ingot.*;
+import mod.steamnsteel.item.armor.SSArmorBoots;
+import mod.steamnsteel.item.armor.SSArmorChest;
+import mod.steamnsteel.item.armor.SSArmorHelmet;
+import mod.steamnsteel.item.armor.SSArmorLegs;
 import mod.steamnsteel.item.tool.*;
+import mod.steamnsteel.library.Reference.ItemNames;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.oredict.OreDictionary;
 
 import static mod.steamnsteel.library.Material.BRONZE;
 import static mod.steamnsteel.library.Material.STEEL;
 
-@SuppressWarnings({"UtilityClass", "WeakerAccess"})
-@GameRegistry.ObjectHolder(TheMod.MOD_ID)
+@SuppressWarnings({"UtilityClass", "WeakerAccess", "StaticNonFinalField", "StaticVariableMayNotBeInitialized", "PublicField"})
+@ObjectHolder(Reference.MOD_ID)
 public final class ModItem
 {
     // *******
     // * NOTE: @GameRegistry.ObjectHolder requires these fields to have the same name as the unlocalized name of the
     // *       object.
     // *
-    public static final SteamNSteelItemArmor bootsBronze = new SSArmorBoots(BRONZE);
-    public static final SteamNSteelItemArmor chestplateBronze = new SSArmorChest(BRONZE);
-    public static final SteamNSteelItemArmor helmetBronze = new SSArmorHelmet(BRONZE);
-    public static final SteamNSteelItemArmor leggingsBronze = new SSArmorLegs(BRONZE);
+    public static Item bootsBronze;
+    public static Item bootsSteel;
+    public static Item chestplateBronze;
+    public static Item chestplateSteel;
+    public static Item helmetBronze;
+    public static Item helmetSteel;
+    public static Item leggingsBronze;
+    public static Item leggingsSteel;
 
-    public static final SteamNSteelItemArmor bootsSteel = new SSArmorBoots(STEEL);
-    public static final SteamNSteelItemArmor chestplateSteel = new SSArmorChest(STEEL);
-    public static final SteamNSteelItemArmor helmetSteel = new SSArmorHelmet(STEEL);
-    public static final SteamNSteelItemArmor leggingsSteel = new SSArmorLegs(STEEL);
+    //public static Item axeBronze;
+    //public static Item axeSteel;
+    public static Item hoeBronze;
+    public static Item hoeSteel;
+    public static Item pickBronze;
+    public static Item pickSteel;
+    public static Item shovelBronze;
+    public static Item shovelSteel;
+    public static Item swordBronze;
+    public static Item swordSteel;
+    public static Item structureBuildSteel;
 
-    //public static final SSToolAxe axeBronze = new SSToolAxe(BRONZE);
-    //public static final SSToolAxe axeSteel = new SSToolAxe(STEEL);
-    public static final SSToolHoe hoeBronze = new SSToolHoe(BRONZE);
-    public static final SSToolHoe hoeSteel = new SSToolHoe(STEEL);
-    public static final SSToolPickaxe pickBronze = new SSToolPickaxe(BRONZE);
-    public static final SSToolPickaxe pickSteel = new SSToolPickaxe(STEEL);
-    public static final SSToolShovel shovelBronze = new SSToolShovel(BRONZE);
-    public static final SSToolShovel shovelSteel = new SSToolShovel(STEEL);
-    public static final SSToolSword swordBronze = new SSToolSword(BRONZE);
-    public static final SSToolSword swordSteel = new SSToolSword(STEEL);
-    public static final StructureBuild structureBuildSteel = new StructureBuild(STEEL);
+    public static Item dustNiter;
+    public static Item dustSulfur;
 
-    public static final SteamNSteelItem anachDoodad = new AnachDoodad();
-    public static final SteamNSteelItem dustNiter = new Niter();
-    public static final SteamNSteelItem dustSulfur = new Sulfur();
-    public static final SteamNSteelItem ingotBrass = new BrassIngot();
-    public static final SteamNSteelItem ingotBronze = new BronzeIngot();
-    public static final SteamNSteelItem ingotCopper = new CopperIngot();
-    public static final SteamNSteelItem ingotPlotonium = new PlotoniumIngot();
-    public static final SteamNSteelItem ingotSteel = new SteelIngot();
-    public static final SteamNSteelItem ingotTin = new TinIngot();
-    public static final SteamNSteelItem ingotZinc = new ZincIngot();
-    public static final SteamNSteelItem mustyJournal = new MustyJournal();
-    public static final SteamNSteelItem perGuiVox = new PerGuiVox();
-    public static final SteamNSteelItem plotoniumScrap = new PlotoniumScrap();
-    public static final SteamNSteelItem voxBox = new VoxBox();
+    public static Item ingotBrass;
+    public static Item ingotBronze;
+    public static Item ingotCopper;
+    public static Item ingotPlotonium;
+    public static Item ingotSteel;
+    public static Item ingotTin;
+    public static Item ingotZinc;
+
+    public static Item anachDoodad;
+    public static Item mustyJournal;
+    public static Item perGuiVox;
+    public static Item plotoniumScrap;
+    public static Item voxBox;
 
     private ModItem()
     {
@@ -93,90 +94,106 @@ public final class ModItem
 
     private static void registerArmor()
     {
-        GameRegistry.registerItem(helmetBronze, helmetBronze.getUndecoratedName());
-        GameRegistry.registerItem(chestplateBronze, chestplateBronze.getUndecoratedName());
-        GameRegistry.registerItem(leggingsBronze, leggingsBronze.getUndecoratedName());
-        GameRegistry.registerItem(bootsBronze, bootsBronze.getUndecoratedName());
+        bootsBronze = new SSArmorBoots(BRONZE).setRegistryName(ItemNames.ARMOR_BOOTS_BRONZE);
+        bootsSteel = new SSArmorBoots(STEEL).setRegistryName(ItemNames.ARMOR_BOOTS_STEEL);
+        chestplateBronze = new SSArmorChest(BRONZE).setRegistryName(ItemNames.ARMOR_CHESTPLATE_BRONZE);
+        chestplateSteel = new SSArmorChest(STEEL).setRegistryName(ItemNames.ARMOR_CHESTPLATE_STEEL);
+        helmetBronze = new SSArmorHelmet(BRONZE).setRegistryName(ItemNames.ARMOR_HELMET_BRONZE);
+        helmetSteel = new SSArmorHelmet(STEEL).setRegistryName(ItemNames.ARMOR_HELMET_STEEL);
+        leggingsBronze = new SSArmorLegs(BRONZE).setRegistryName(ItemNames.ARMOR_LEGGINGS_BRONZE);
+        leggingsSteel = new SSArmorLegs(STEEL).setRegistryName(ItemNames.ARMOR_LEGGINGS_STEEL);
 
-        GameRegistry.registerItem(helmetSteel, helmetSteel.getUndecoratedName());
-        GameRegistry.registerItem(chestplateSteel, chestplateSteel.getUndecoratedName());
-        GameRegistry.registerItem(leggingsSteel, leggingsSteel.getUndecoratedName());
-        GameRegistry.registerItem(bootsSteel, bootsSteel.getUndecoratedName());
+        GameRegistry.register(helmetBronze);
+        GameRegistry.register(chestplateBronze);
+        GameRegistry.register(leggingsBronze);
+        GameRegistry.register(bootsBronze);
+
+        GameRegistry.register(helmetSteel);
+        GameRegistry.register(chestplateSteel);
+        GameRegistry.register(leggingsSteel);
+        GameRegistry.register(bootsSteel);
     }
 
     private static void registerArtifacts()
     {
-        GameRegistry.registerItem(anachDoodad, Names.ANACH_DOODAD);
-        GameRegistry.registerItem(mustyJournal, Names.MUSTY_JOURNAL);
-        GameRegistry.registerItem(perGuiVox, Names.PER_GUI_VOX);
-        GameRegistry.registerItem(plotoniumScrap, Names.PLOTONIUM_SCRAP);
-        GameRegistry.registerItem(voxBox, Names.VOX_BOX);
+        anachDoodad = new SteamNSteelItem().setRegistryName(ItemNames.ANACH_DOODAD);
+        mustyJournal = new SteamNSteelItem().setRegistryName(ItemNames.MUSTY_JOURNAL);
+        perGuiVox = new SteamNSteelItem().setRegistryName(ItemNames.PER_GUI_VOX);
+        plotoniumScrap = new SteamNSteelItem().setRegistryName(ItemNames.PLOTONIUM_SCRAP);
+        voxBox = new SteamNSteelItem().setRegistryName(ItemNames.VOX_BOX);
+
+        GameRegistry.register(anachDoodad);
+        GameRegistry.register(mustyJournal);
+        GameRegistry.register(perGuiVox);
+        GameRegistry.register(plotoniumScrap);
+        GameRegistry.register(voxBox);
     }
 
     private static void registerDusts()
     {
-        registerItemAndOre(dustNiter, Names.NITER);
-        registerItemAndOre(dustSulfur, Names.SULFUR);
+        dustNiter = new SteamNSteelItem().setRegistryName(ItemNames.NITER);
+        dustSulfur = new SteamNSteelItem().setRegistryName(ItemNames.SULFUR);
+
+        registerItemAndOre(dustNiter);
+        registerItemAndOre(dustSulfur);
     }
 
     private static void registerIngots()
     {
-        registerItemAndOre(ingotBrass, Names.BRASS_INGOT);
-        registerItemAndOre(ingotBronze, Names.BRONZE_INGOT);
-        registerItemAndOre(ingotCopper, Names.COPPER_INGOT);
-        registerItemAndOre(ingotPlotonium, Names.PLOTONIUM_INGOT);
-        registerItemAndOre(ingotSteel, Names.STEEL_INGOT);
-        registerItemAndOre(ingotTin, Names.TIN_INGOT);
-        registerItemAndOre(ingotZinc, Names.ZINC_INGOT);
+        ingotBrass = new SteamNSteelItem().setRegistryName(ItemNames.BRASS_INGOT);
+        ingotBronze = new SteamNSteelItem().setRegistryName(ItemNames.BRONZE_INGOT);
+        ingotCopper = new SteamNSteelItem().setRegistryName(ItemNames.COPPER_INGOT);
+        ingotPlotonium = new SteamNSteelItem().setRegistryName(ItemNames.PLOTONIUM_INGOT);
+        ingotSteel = new SteamNSteelItem().setRegistryName(ItemNames.STEEL_INGOT);
+        ingotTin = new SteamNSteelItem().setRegistryName(ItemNames.TIN_INGOT);
+        ingotZinc = new SteamNSteelItem().setRegistryName(ItemNames.ZINC_INGOT);
+
+        registerItemAndOre(ingotBrass);
+        registerItemAndOre(ingotBronze);
+        registerItemAndOre(ingotCopper);
+        registerItemAndOre(ingotPlotonium);
+        registerItemAndOre(ingotSteel);
+        registerItemAndOre(ingotTin);
+        registerItemAndOre(ingotZinc);
     }
 
     private static void registerTools()
     {
-        GameRegistry.registerItem(shovelBronze, shovelBronze.getUndecoratedName());
-        GameRegistry.registerItem(pickBronze, pickBronze.getUndecoratedName());
-        //GameRegistry.registerItem(axeBronze, axeBronze.getUndecoratedName());
-        GameRegistry.registerItem(hoeBronze, hoeBronze.getUndecoratedName());
+        //axeBronze = new SSToolAxe(BRONZE).setRegistryName(ItemNames.TOOL_AXE_BRONZE);
+        //axeSteel = new SSToolAxe(STEEL).setRegistryName(ItemNames.TOOL_AXE_STEEL);
+        hoeBronze = new SSToolHoe(BRONZE).setRegistryName(ItemNames.TOOL_HOE_BRONZE);
+        hoeSteel = new SSToolHoe(STEEL).setRegistryName(ItemNames.TOOL_HOE_STEEL);
+        pickBronze = new SSToolPickaxe(BRONZE).setRegistryName(ItemNames.TOOL_PICKAXE_BRONZE);
+        pickSteel = new SSToolPickaxe(STEEL).setRegistryName(ItemNames.TOOL_PICKAXE_STEEL);
+        shovelBronze = new SSToolShovel(BRONZE).setRegistryName(ItemNames.TOOL_SHOVEL_BRONZE);
+        shovelSteel = new SSToolShovel(STEEL).setRegistryName(ItemNames.TOOL_SHOVEL_STEEL);
+        structureBuildSteel = new StructureBuild(STEEL).setRegistryName(ItemNames.TOOL_STRUCTURE_BUILD_STEEL);
 
-        GameRegistry.registerItem(shovelSteel, shovelSteel.getUndecoratedName());
-        GameRegistry.registerItem(pickSteel, pickSteel.getUndecoratedName());
-        //GameRegistry.registerItem(axeSteel, axeSteel.getUndecoratedName());
-        GameRegistry.registerItem(hoeSteel, hoeSteel.getUndecoratedName());
+        GameRegistry.register(shovelBronze);
+        GameRegistry.register(pickBronze);
+        //GameRegistry.register(axeBronze);
+        GameRegistry.register(hoeBronze);
 
-        GameRegistry.registerItem(structureBuildSteel, structureBuildSteel.getUndecoratedName());
+        GameRegistry.register(shovelSteel);
+        GameRegistry.register(pickSteel);
+        //GameRegistry.register(axeSteel);
+        GameRegistry.register(hoeSteel);
+
+        GameRegistry.register(structureBuildSteel);
     }
 
     private static void registerWeapons()
     {
-        GameRegistry.registerItem(swordBronze, swordBronze.getUndecoratedName());
-        GameRegistry.registerItem(swordSteel, swordSteel.getUndecoratedName());
+        swordBronze = new SSToolSword(BRONZE).setRegistryName(ItemNames.TOOL_SWORD_BRONZE);
+        swordSteel = new SSToolSword(STEEL).setRegistryName(ItemNames.TOOL_SWORD_STEEL);
+
+        GameRegistry.register(swordBronze);
+        GameRegistry.register(swordSteel);
     }
 
-    private static void registerItemAndOre(Item item, String name)
+    private static void registerItemAndOre(Item item)
     {
-        GameRegistry.registerItem(item, name);
-        OreDictionary.registerOre(name, item);
-    }
-
-    public enum Names
-    {
-        INSTANCE;
-
-        // Artifacts
-        public static final String ANACH_DOODAD = "anachDoodad";
-        public static final String MUSTY_JOURNAL = "mustyJournal";
-        public static final String PER_GUI_VOX = "perGuiVox";
-        public static final String PLOTONIUM_SCRAP = "plotoniumScrap";
-        public static final String VOX_BOX = "voxBox";
-        // Ingots
-        public static final String BRASS_INGOT = "ingotBrass";
-        public static final String BRONZE_INGOT = "ingotBronze";
-        public static final String COPPER_INGOT = "ingotCopper";
-        public static final String PLOTONIUM_INGOT = "ingotPlotonium";
-        public static final String STEEL_INGOT = "ingotSteel";
-        public static final String TIN_INGOT = "ingotTin";
-        public static final String ZINC_INGOT = "ingotZinc";
-        // Items
-        public static final String NITER = "dustNiter";
-        public static final String SULFUR = "dustSulfur";
+        GameRegistry.register(item);
+        OreDictionary.registerOre(item.getRegistryName().getResourceDomain(), item);
     }
 }

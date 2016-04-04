@@ -21,6 +21,8 @@ import com.foudroyantfactotum.tool.structure.coordinates.BlockPosUtil;
 import com.foudroyantfactotum.tool.structure.registry.StructureDefinition;
 import mod.steamnsteel.block.machine.structure.SSBallMillStructure;
 import mod.steamnsteel.inventory.Inventory;
+import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Reference.BlockNames;
 import mod.steamnsteel.tileentity.SteamNSteelTE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -109,15 +111,10 @@ public class BallMillTE extends SteamNSteelStructureTE implements IStructureSide
         inventory.setSlot(slotIndex, itemStack);
     }
 
-    public String getInventoryName()
-    {
-        return SteamNSteelTE.containerName(SSBallMillStructure.NAME);
-    }
-
     @Override
     public String getName()
     {
-        return null;
+        return Reference.containerName(BlockNames.BALL_MILL);
     }
 
     @Override

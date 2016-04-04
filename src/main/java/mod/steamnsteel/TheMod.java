@@ -41,6 +41,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 @Mod(modid = TheMod.MOD_ID, name = TheMod.MOD_NAME, version = TheMod.MOD_VERSION, useMetadata = true, guiFactory = TheMod.MOD_GUI_FACTORY)
 public class TheMod
 {
+    @Deprecated
     public static final String MOD_ID = "steamnsteel";
     public static final String MOD_NAME = "Steam and Steel";
     public static final String MOD_VERSION = "@MOD_VERSION@";

@@ -21,8 +21,5 @@ import net.minecraft.tileentity.TileEntity;
 
 public abstract class SteamNSteelTE extends TileEntity
 {
-    public static String containerName(String name)
-    {
-        return "container." + TheMod.MOD_ID + ':' + name;
-    }
+
 }

@@ -18,19 +18,17 @@ package mod.steamnsteel.block.container;
 
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.RemnantRuinChestTE;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -38,12 +36,11 @@ import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DI
 
 public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
-    public static final String NAME = "remnantRuinChest";
+
 
     private final AxisAlignedBB defaultBoundingBox = new AxisAlignedBB(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 
     public RemnantRuinChestBlock() {
-        setUnlocalizedName(NAME);
         setDefaultState(getDefaultState());
     }
 

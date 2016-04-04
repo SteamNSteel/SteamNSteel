@@ -26,6 +26,7 @@ import mod.steamnsteel.client.renderer.tileentity.LargeFanTESR;
 import mod.steamnsteel.client.renderer.tileentity.OgexStructureTESR;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.texturing.wall.RemnantRuinFloorSideTexture;
 import mod.steamnsteel.texturing.wall.RemnantRuinWallTexture;
 import mod.steamnsteel.tileentity.structure.BallMillTE;
@@ -57,9 +58,9 @@ public class ClientRenderProxy extends CommonRenderProxy
 
         registerEventHandlers();
 
-        OpenGEXModelLoader.instance.addDomain(TheMod.MOD_ID);
-        OBJLoader.instance.addDomain(TheMod.MOD_ID);
-        B3DLoader.instance.addDomain(TheMod.MOD_ID);
+        OpenGEXModelLoader.instance.addDomain(Reference.MOD_ID);
+        OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
+        B3DLoader.INSTANCE.addDomain(Reference.MOD_ID);
         ModelLoaderRegistry.registerLoader(OpenGEXModelLoader.instance);
         ModelLoaderRegistry.registerLoader(PCTModelLoader.instance);
     }

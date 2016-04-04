@@ -24,7 +24,7 @@ public class SSArmorHelmet extends SteamNSteelItemArmor
 
     public SSArmorHelmet(Material material)
     {
-        super(material, EntityEquipmentSlot.HEAD, "helmet");
+        super(material, EntityEquipmentSlot.HEAD);
     }
 
     @Override

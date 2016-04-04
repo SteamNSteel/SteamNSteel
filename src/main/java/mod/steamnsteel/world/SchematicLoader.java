@@ -21,6 +21,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

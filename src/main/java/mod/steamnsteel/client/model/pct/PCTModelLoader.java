@@ -2,6 +2,7 @@ package mod.steamnsteel.client.model.pct;
 
 import com.google.common.collect.Maps;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -37,7 +38,7 @@ public enum PCTModelLoader implements ICustomModelLoader
         final boolean isValidPath = resourcePath.startsWith(modelIndicator) ||
                 resourcePath.startsWith("models/block/advancedConnectedTexture/") ||
                 resourcePath.startsWith("models/item/advancedConnectedTexture/");
-        if (!resourceDomain.equals(TheMod.MOD_ID)) {
+        if (!resourceDomain.equals(Reference.MOD_ID)) {
             return false;
         }
         return isValidPath;
@@ -59,7 +60,7 @@ public enum PCTModelLoader implements ICustomModelLoader
     public void onPreTextureStitch(TextureStitchEvent.Pre event) {
         for (final ProceduralConnectedTexture proceduralConnectedTexture : textures.values())
         {
-            proceduralConnectedTexture.registerSprites(event.map);
+            proceduralConnectedTexture.registerSprites(event.getMap());
         }
     }
 

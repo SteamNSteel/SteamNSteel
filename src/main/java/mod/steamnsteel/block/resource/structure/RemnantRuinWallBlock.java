@@ -36,12 +36,9 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class RemnantRuinWallBlock extends SteamNSteelBlock
 {
-    public static final String NAME = "remnantRuinWall";
-
     public RemnantRuinWallBlock()
     {
         super(Material.rock);
-        setUnlocalizedName(NAME);
     }
 
     @Override

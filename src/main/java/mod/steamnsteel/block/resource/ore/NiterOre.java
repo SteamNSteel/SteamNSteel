@@ -23,12 +23,9 @@ import net.minecraft.block.material.Material;
 
 public class NiterOre extends SteamNSteelOreBlock
 {
-    public static final String NAME = "oreNiter";
-
     public NiterOre()
     {
         super(Material.rock);
-        setUnlocalizedName(NAME);
         setHardness(0.8F);
         setHarvestLevel("pickaxe", 0); // wooden pick
     }

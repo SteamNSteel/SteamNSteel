@@ -19,6 +19,8 @@ package mod.steamnsteel.client.gui;
 import com.google.common.base.Objects;
 import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.inventory.CupolaContainer;
+import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Reference.Textures;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +28,7 @@ import org.lwjgl.opengl.GL11;
 
 public class CupolaGui extends SteamNSteelGui
 {
-    private final ResourceLocation TEXTURE = getResourceLocation(CupolaBlock.NAME);
+    private final ResourceLocation TEXTURE = getResourceLocation(Textures.CUPOLA_GUI_TEXTURE);
 
     private final CupolaTE te;
 

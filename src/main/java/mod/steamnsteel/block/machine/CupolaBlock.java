@@ -47,8 +47,6 @@ import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DI
 
 public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
-    public static final String NAME = "cupola";
-
     public static final PropertyBool IS_SLAVE = PropertyBool.create("is_slave");
     public static final PropertyBool IS_ACTIVE = PropertyBool.create("is_active");
 
@@ -58,7 +56,6 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 
     public CupolaBlock()
     {
-        setUnlocalizedName(NAME);
         setDefaultState(
                 this.blockState
                         .getBaseState()

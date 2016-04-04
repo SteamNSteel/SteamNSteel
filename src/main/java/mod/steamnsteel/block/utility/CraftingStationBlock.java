@@ -18,13 +18,9 @@ import net.minecraft.world.World;
  */
 public class CraftingStationBlock extends SteamNSteelBlock {
 
-    public static final String NAME = "craftingStation";
-
     public CraftingStationBlock() {
 
         super(Material.wood, true);
-        setUnlocalizedName(NAME);
-        //FIXME: Axe?
         setHarvestLevel("pickaxe", 1); // stone pick
     }
 

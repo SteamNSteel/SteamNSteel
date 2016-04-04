@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Maps;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.library.ModProperties;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.Block;
@@ -22,6 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.*;
+import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import org.apache.commons.lang3.tuple.Pair;
 import javax.vecmath.Matrix4f;
@@ -49,7 +51,7 @@ public class PCTModelInstance implements IPerspectiveAwareModel
     {
         try
         {
-            return ModelLoaderRegistry.getModel(new ResourceLocation(TheMod.MOD_ID, "block/cube_mirrored_bottom"));
+            return ModelLoaderRegistry.getModel(new ResourceLocation(Reference.MOD_ID, "block/cube_mirrored_bottom"));
         } catch (Exception e)
         {
             e.printStackTrace();

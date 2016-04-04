@@ -2,6 +2,7 @@ package mod.steamnsteel.texturing.wall;
 
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.resource.structure.RemnantRuinFloorBlock;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.texturing.api.Layer;
 import mod.steamnsteel.texturing.api.SpriteRequest;
 import mod.steamnsteel.texturing.api.ProceduralConnectedTexture;
@@ -72,7 +73,7 @@ public class RemnantRuinFloorSideTexture extends ProceduralConnectedTexture
 
     private ResourceLocation makeResourceLocation(String spriteResourceLocation)
     {
-        return new ResourceLocation(TheMod.MOD_ID, "blocks/" + spriteResourceLocation);
+        return new ResourceLocation(Reference.MOD_ID, "blocks/" + spriteResourceLocation);
     }
 
     @Override

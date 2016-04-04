@@ -21,11 +21,8 @@ import mod.steamnsteel.configuration.Settings;
 
 public class CopperOre extends SteamNSteelOreBlock
 {
-    public static final String NAME = "oreCopper";
-
     public CopperOre()
     {
-        setUnlocalizedName(NAME);
         setHarvestLevel("pickaxe", 1); // stone pick
     }
 

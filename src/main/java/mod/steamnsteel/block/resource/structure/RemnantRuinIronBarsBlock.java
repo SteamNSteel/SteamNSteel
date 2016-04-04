@@ -24,7 +24,6 @@ import java.util.List;
 
 public class RemnantRuinIronBarsBlock extends BlockPane
 {
-    public static final String NAME = "remnantRuinIronBars";
     public static final PropertyIronBarTextures IronBarsType = PropertyIronBarTextures.create("type", Arrays.asList(IronBarsTextures.VALUES));
 
     public RemnantRuinIronBarsBlock()
@@ -33,7 +32,6 @@ public class RemnantRuinIronBarsBlock extends BlockPane
         setHardness(5.0F);
         setResistance(10.0F);
         setSoundType(SoundType.METAL);
-        setUnlocalizedName(NAME);
         setCreativeTab(TheMod.CREATIVE_TAB);
 
         setDefaultState(
@@ -61,16 +59,10 @@ public class RemnantRuinIronBarsBlock extends BlockPane
         return new BlockStateContainer(this, NORTH, EAST, WEST, SOUTH, IronBarsType);
     }
 
-    @SuppressWarnings("WeakerAccess")
-    protected static String getUnwrappedUnlocalizedName(String unlocalizedName)
-    {
-        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
-    }
-
     @Override
     public String getUnlocalizedName()
     {
-        return "tile." + TheMod.RESOURCE_PREFIX + getUnwrappedUnlocalizedName(super.getUnlocalizedName());
+        return "tile." + getRegistryName();
     }
 
     @Override

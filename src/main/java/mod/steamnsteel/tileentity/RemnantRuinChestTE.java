@@ -20,6 +20,8 @@ import com.google.common.base.Objects;
 import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.inventory.Inventory;
 import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Reference.BlockNames;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
@@ -84,7 +86,7 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, ITi
     @Override
     public String getName()
     {
-        return containerName(RemnantRuinChestBlock.NAME);
+        return Reference.containerName(BlockNames.REMNANT_RUIN_CHEST);
     }
 
     @Override

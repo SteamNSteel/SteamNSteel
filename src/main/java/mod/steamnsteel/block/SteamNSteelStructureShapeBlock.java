@@ -29,13 +29,10 @@ import static mod.steamnsteel.block.SteamNSteelStructureBlock.MIRROR;
 
 public class SteamNSteelStructureShapeBlock extends StructureShapeBlock implements ITileEntityProvider
 {
-    public static final String NAME = "structureShape";
-
     public SteamNSteelStructureShapeBlock()
     {
         super();
         _DEBUG = false;
-        setUnlocalizedName(NAME);
         /*setDefaultState(this.blockState
                 .getBaseState()
                 .withProperty(DIRECTION, EnumFacing.NORTH)
@@ -49,11 +46,6 @@ public class SteamNSteelStructureShapeBlock extends StructureShapeBlock implemen
         return new BlockStateContainer(this, DIRECTION, MIRROR);
     }*/
 
-    protected static String getUnwrappedUnlocalizedName(String unlocalizedName)
-    {
-        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
-    }
-
     @Override
     public TileEntity createTileEntity(World world, IBlockState state)
     {
@@ -63,7 +55,6 @@ public class SteamNSteelStructureShapeBlock extends StructureShapeBlock implemen
     @Override
     public String getUnlocalizedName()
     {
-        //noinspection StringConcatenationMissingWhitespace
-        return "tile." + TheMod.RESOURCE_PREFIX + getUnwrappedUnlocalizedName(super.getUnlocalizedName());
+        return "tile." + getRegistryName();
     }
 }

@@ -18,6 +18,8 @@ package mod.steamnsteel.crafting;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Reference.ItemNames;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.ModItem;
@@ -35,13 +37,13 @@ enum IngotRecipes
     {
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(ModBlock.blockBrass, ModItem.Names.BRASS_INGOT));
-        recipes.add(assembleRecipe(ModBlock.blockBronze, ModItem.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModBlock.blockCopper, ModItem.Names.COPPER_INGOT));
-        recipes.add(assembleRecipe(ModBlock.blockPlotonium, ModItem.Names.PLOTONIUM_INGOT));
-        recipes.add(assembleRecipe(ModBlock.blockSteel, ModItem.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModBlock.blockTin, ModItem.Names.TIN_INGOT));
-        recipes.add(assembleRecipe(ModBlock.blockZinc, ModItem.Names.ZINC_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockBrass, ItemNames.BRASS_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockBronze, ItemNames.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockCopper, ItemNames.COPPER_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockPlotonium, ItemNames.PLOTONIUM_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockSteel, ItemNames.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockTin, ItemNames.TIN_INGOT));
+        recipes.add(assembleRecipe(ModBlock.blockZinc, ItemNames.ZINC_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }

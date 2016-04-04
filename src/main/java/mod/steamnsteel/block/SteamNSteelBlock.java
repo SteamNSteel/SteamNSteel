@@ -32,16 +32,11 @@ public abstract class SteamNSteelBlock extends Block
 
     protected SteamNSteelBlock(Material material) { this(material, true); }
 
-    @SuppressWarnings("WeakerAccess")
-    protected static String getUnwrappedUnlocalizedName(String unlocalizedName)
-    {
-        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
-    }
-
     @Override
     public String getUnlocalizedName()
     {
-        //noinspection StringConcatenationMissingWhitespace
-        return "tile." + TheMod.RESOURCE_PREFIX + getUnwrappedUnlocalizedName(super.getUnlocalizedName());
+        return "tile." + getRegistryName();
     }
+
+
 }

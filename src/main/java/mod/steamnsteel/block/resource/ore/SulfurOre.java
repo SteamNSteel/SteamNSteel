@@ -22,12 +22,9 @@ import net.minecraft.block.material.Material;
 
 public class SulfurOre extends SteamNSteelOreBlock
 {
-    public static final String NAME = "oreSulfur";
-
     public SulfurOre()
     {
         super(Material.rock);
-        setUnlocalizedName(NAME);
         setHarvestLevel("pickaxe", 1); // stone pick
     }
 

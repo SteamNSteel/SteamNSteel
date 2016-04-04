@@ -19,6 +19,7 @@ package mod.steamnsteel.world.ore;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.utility.SteamNSteelException;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -39,7 +40,7 @@ import java.util.*;
 public enum RetroGenHandler
 {
     INSTANCE;
-    private static final String RETROGEN_TAG = TheMod.MOD_ID + ':' + "retroGenMarker";
+    private static final String RETROGEN_TAG = Reference.MOD_ID + ':' + "retroGenMarker";
     private static final Set<ChunkCoord> completedChunks = Sets.newHashSet();
     private final List<OreGenerator> retroGens = Lists.newArrayList();
     private final Deque<ChunkCoord> chunksToRetroGen = new ArrayDeque<ChunkCoord>(64);
@@ -47,7 +48,7 @@ public enum RetroGenHandler
     private static boolean isChunkEligibleForRetroGen(ChunkDataEvent.Load event)
     {
         return Settings.World.doRetroOreGen()
-                && event.world.provider.getDimension() == 0
+                && event.getWorld().provider.getDimension() == 0
                 && event.getData().getString(RETROGEN_TAG).isEmpty();
     }
 

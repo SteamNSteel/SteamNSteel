@@ -29,25 +29,15 @@ public class SteamNSteelItem extends Item
         setCreativeTab(TheMod.CREATIVE_TAB);
     }
 
-    public static String getFormattedName(Material material)
-    {
-        return WordUtils.capitalizeFully(material.name().toLowerCase());
-    }
-
     @Override
     public String getUnlocalizedName()
     {
-        return String.format("item.%s%s", TheMod.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return "item." + getRegistryName();
     }
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack)
     {
         return getUnlocalizedName();
-    }
-
-    public static String getUnwrappedUnlocalizedName(String unlocalizedName)
-    {
-        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
     }
 }

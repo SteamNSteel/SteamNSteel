@@ -34,12 +34,9 @@ import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DI
 
 public class SSBoilerStructure extends SteamNSteelStructureBlock
 {
-    public static final String NAME = "ssBoiler";
-
     public SSBoilerStructure()
     {
         super(true, true);
-        setUnlocalizedName(NAME);
         setDefaultState(
                 this.blockState
                         .getBaseState()

@@ -18,6 +18,8 @@ package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
+import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Reference.BlockNames;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -238,7 +240,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
 
     @Override
     public String getName() {
-        return containerName(CupolaBlock.NAME);
+        return Reference.containerName(BlockNames.CUPOLA);
     }
 
     @Override

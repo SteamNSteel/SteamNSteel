@@ -4,6 +4,7 @@ import com.google.common.primitives.Doubles;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.utility.SteamNSteelException;
 import mod.steamnsteel.utility.json.DimensionJsonTypeAdapter;
 import mod.steamnsteel.utility.json.RuinTypeJsonTypeAdapter;
@@ -87,7 +88,7 @@ public class RemnantRuinsGenerator extends StructureGenerator
                     .registerTypeAdapter(Dimension.class, new DimensionJsonTypeAdapter())
                     .registerTypeAdapter(RuinType.class, new RuinTypeJsonTypeAdapter())
                     .create();
-            final ResourceLocation resourceLocation = new ResourceLocation(TheMod.MOD_ID + ":schematics/RemnantRuins.json");
+            final ResourceLocation resourceLocation = new ResourceLocation(Reference.MOD_ID + ":schematics/RemnantRuins.json");
 
             final IResource resource;
 

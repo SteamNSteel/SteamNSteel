@@ -26,15 +26,9 @@ public abstract class SteamNSteelStructureBlock extends StructureBlock
         if (addToTab) setCreativeTab(TheMod.CREATIVE_TAB);
     }
 
-    protected static String getUnwrappedUnlocalizedName(String unlocalizedName)
-    {
-        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
-    }
-
     @Override
     public String getUnlocalizedName()
     {
-        //noinspection StringConcatenationMissingWhitespace
-        return "tile." + TheMod.RESOURCE_PREFIX + getUnwrappedUnlocalizedName(super.getUnlocalizedName());
+        return "tile." + getRegistryName();
     }
 }

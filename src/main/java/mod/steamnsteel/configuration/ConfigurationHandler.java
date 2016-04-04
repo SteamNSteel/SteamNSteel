@@ -19,6 +19,7 @@ package mod.steamnsteel.configuration;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -130,7 +131,7 @@ public enum ConfigurationHandler
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.modID.equalsIgnoreCase(TheMod.MOD_ID))
+        if (event.getModID().equalsIgnoreCase(Reference.MOD_ID))
         {
             saveConfig();
             syncConfig();

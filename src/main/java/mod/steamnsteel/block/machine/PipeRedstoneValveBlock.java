@@ -35,12 +35,9 @@ import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DI
 
 public class PipeRedstoneValveBlock extends SteamNSteelBlock implements ITileEntityProvider
 {
-    public static final String NAME = "pipeValveRedstone";
-
     public PipeRedstoneValveBlock()
     {
         super(Material.circuits, true);
-        setUnlocalizedName(NAME);
         setDefaultState(
                 this.blockState
                         .getBaseState()

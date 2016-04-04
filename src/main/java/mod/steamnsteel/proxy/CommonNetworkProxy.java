@@ -1,6 +1,7 @@
 package mod.steamnsteel.proxy;
 
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.networking.ProjectTableCraftPacket;
 import mod.steamnsteel.networking.ProjectTableCraftPacketMessageHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -20,7 +21,7 @@ public class CommonNetworkProxy
     }
 
     public void init() {
-        network = NetworkRegistry.INSTANCE.newSimpleChannel(TheMod.MOD_ID);
+        network = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         network.registerMessage(ProjectTableCraftPacketMessageHandler.class, ProjectTableCraftPacket.class, 0, Side.SERVER);
     }
 }

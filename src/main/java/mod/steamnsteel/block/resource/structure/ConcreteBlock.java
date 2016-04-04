@@ -25,11 +25,10 @@ import java.util.Random;
 public class ConcreteBlock extends SteamNSteelBlock {
     private static final PropertyInteger WETNESS = PropertyInteger.create("wetness", 0, 5);
 
-    public static final String NAME = "blockConcrete";
+
 
     public ConcreteBlock() {
         super(Material.rock);
-        setUnlocalizedName(NAME);
         setTickRandomly(true);
         setSoundType(SoundType.STONE);
         setDefaultState(blockState.getBaseState().withProperty(WETNESS, 0));

@@ -19,6 +19,8 @@ package mod.steamnsteel.crafting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import mod.steamnsteel.library.ModItem;
+import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Reference.ItemNames;
 import mod.steamnsteel.utility.crafting.RecipePattern;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
@@ -39,15 +41,15 @@ enum ArmorRecipes
 
         final List<IRecipe> recipes = Lists.newArrayList();
 
-        recipes.add(assembleRecipe(ModItem.helmetBronze, helmet, ModItem.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItem.chestplateBronze, chestplate, ModItem.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItem.leggingsBronze, leggings, ModItem.Names.BRONZE_INGOT));
-        recipes.add(assembleRecipe(ModItem.bootsBronze, boots, ModItem.Names.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItem.helmetBronze, helmet, ItemNames.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItem.chestplateBronze, chestplate, ItemNames.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItem.leggingsBronze, leggings, ItemNames.BRONZE_INGOT));
+        recipes.add(assembleRecipe(ModItem.bootsBronze, boots, ItemNames.BRONZE_INGOT));
 
-        recipes.add(assembleRecipe(ModItem.helmetSteel, helmet, ModItem.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItem.chestplateSteel, chestplate, ModItem.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItem.leggingsSteel, leggings, ModItem.Names.STEEL_INGOT));
-        recipes.add(assembleRecipe(ModItem.bootsSteel, boots, ModItem.Names.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItem.helmetSteel, helmet, ItemNames.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItem.chestplateSteel, chestplate, ItemNames.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItem.leggingsSteel, leggings, ItemNames.STEEL_INGOT));
+        recipes.add(assembleRecipe(ModItem.bootsSteel, boots, ItemNames.STEEL_INGOT));
 
         return ImmutableList.copyOf(recipes);
     }

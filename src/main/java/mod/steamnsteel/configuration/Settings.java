@@ -17,6 +17,7 @@
 package mod.steamnsteel.configuration;
 
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Reference;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.config.Configuration;
 
@@ -78,6 +79,6 @@ public enum Settings
 
     private static String getLocalizedComment(String settingName)
     {
-        return I18n.translateToLocal("config." + TheMod.MOD_ID + ':' + settingName);
+        return I18n.translateToLocal("config." + Reference.MOD_ID + ':' + settingName);
     }
 }

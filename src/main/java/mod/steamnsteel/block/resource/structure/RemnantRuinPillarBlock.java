@@ -25,13 +25,9 @@ import net.minecraft.world.World;
 
 public class RemnantRuinPillarBlock extends SteamNSteelDirectionalBlock
 {
-    public static final String NAME = "remnantRuinPillar";
-    private static int renderId;
-
     public RemnantRuinPillarBlock()
     {
         super(Material.rock);
-        setUnlocalizedName(NAME);
     }
 
     @Override

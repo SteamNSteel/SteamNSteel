@@ -13,13 +13,9 @@ import net.minecraft.world.World;
 
 public class PipeJunctionBlock extends SteamNSteelBlock implements ITileEntityProvider
 {
-    public static final String NAME = "pipeJunction";
-    private static int RenderId;
-
     public PipeJunctionBlock()
     {
         super(Material.circuits, true);
-        setUnlocalizedName(NAME);
     }
 
 

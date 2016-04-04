@@ -2,6 +2,7 @@ package mod.steamnsteel.world.structure.remnantruins;
 
 import com.google.gson.annotations.SerializedName;
 import mod.steamnsteel.TheMod;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.world.SchematicLoader;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.Dimension;
@@ -68,7 +69,7 @@ public class RuinLevel
             schematics = new ArrayList<RuinSchematic>();
             for (final String name : schematicResourcesNames)
             {
-                ResourceLocation location = new ResourceLocation(String.format("%s:schematics/%s.schematic", TheMod.MOD_ID, name));
+                ResourceLocation location = new ResourceLocation(String.format("%s:schematics/%s.schematic", Reference.MOD_ID, name));
                 schematicLoader.loadSchematic(location);
                 SchematicLoader.ISchematicMetadata schematic = schematicLoader.getSchematicMetadata(location);
                 schematics.add(new RuinSchematic(location, schematic));

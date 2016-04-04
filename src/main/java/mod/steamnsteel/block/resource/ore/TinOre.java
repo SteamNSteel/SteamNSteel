@@ -21,11 +21,8 @@ import mod.steamnsteel.configuration.Settings;
 
 public class TinOre extends SteamNSteelOreBlock
 {
-    public static final String NAME = "oreTin";
-
     public TinOre()
     {
-        setUnlocalizedName(NAME);
         setHarvestLevel("pickaxe", 1); // stone pick
     }
 

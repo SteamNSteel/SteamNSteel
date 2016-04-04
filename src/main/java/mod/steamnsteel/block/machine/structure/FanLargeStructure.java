@@ -49,14 +49,11 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
 {
     public static final PropertyBool RENDER_DYNAMIC = PropertyBool.create("render_dynamic");
 
-    public static final String NAME = "fanLarge";
-
     public static int counter;
 
     public FanLargeStructure()
     {
         super(true, true);
-        setUnlocalizedName(NAME);
         setDefaultState(
                 blockState
                         .getBaseState()

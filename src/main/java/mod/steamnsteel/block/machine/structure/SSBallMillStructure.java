@@ -40,12 +40,9 @@ import static mod.steamnsteel.block.machine.structure.FanLargeStructure.RENDER_D
 
 public class SSBallMillStructure extends SteamNSteelStructureBlock
 {
-    public static final String NAME = "ssBallMill";
-
     public SSBallMillStructure()
     {
         super(true, true);
-        setUnlocalizedName(NAME);
         setDefaultState(
                 this.blockState
                         .getBaseState()

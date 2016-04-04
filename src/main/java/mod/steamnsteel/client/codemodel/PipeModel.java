@@ -7,6 +7,7 @@ import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.machine.PipeBlock;
 import mod.steamnsteel.block.machine.PipeBlock.PipeStates;
 import mod.steamnsteel.library.ModBlock;
+import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -16,11 +17,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelState;
 import net.minecraftforge.client.model.MultiModel;
-import net.minecraftforge.client.model.TRSRTransformation;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.client.model.obj.OBJModel.OBJBakedModel;
+import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
@@ -39,7 +40,7 @@ public class PipeModel extends BaseCodeModel
     private final ImmutableSet<PipeStates> capFlip = ImmutableSet.copyOf(new PipeStates[]{ds, de, sw, dw, uw});
     private static final ImmutableMap<String, String> flipData = ImmutableMap.of("flip-v", String.valueOf(true));
 
-    private static final ResourceLocation capLocation = new ResourceLocation(TheMod.MOD_ID, "block/pipes/SSPipesCap.obj");
+    private static final ResourceLocation capLocation = new ResourceLocation(Reference.MOD_ID, "block/pipes/SSPipesCap.obj");
 
     private static final String nObjModel = "model";
     private Field fObjModel = null;

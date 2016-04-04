@@ -17,6 +17,9 @@
 package mod.steamnsteel.crafting;
 
 import mod.steamnsteel.block.SteamNSteelStorageBlock;
+import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Reference.BlockNames;
+import mod.steamnsteel.library.Reference.ItemNames;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import mod.steamnsteel.api.CraftingManager;
 import mod.steamnsteel.api.crafting.IAlloyManager;
@@ -41,21 +44,21 @@ enum Smelting
 
         final IAlloyManager alloyManager = CraftingManager.INSTANCE.alloyManager;
 
-        final OreDictionaryIngredient cuIngotIngredient = new OreDictionaryIngredient(ModItem.Names.COPPER_INGOT);
-        final OreDictionaryIngredient cuBlockIngredient = new OreDictionaryIngredient(SteamNSteelStorageBlock.COPPER_BLOCK);
+        final OreDictionaryIngredient cuIngotIngredient = new OreDictionaryIngredient(ItemNames.COPPER_INGOT);
+        final OreDictionaryIngredient cuBlockIngredient = new OreDictionaryIngredient(BlockNames.COPPER_BLOCK);
 
         alloyManager.addAlloy(cuIngotIngredient,
-                new OreDictionaryIngredient(ModItem.Names.TIN_INGOT),
+                new OreDictionaryIngredient(ItemNames.TIN_INGOT),
                 new ItemStack(ModItem.ingotBronze, 2));
         alloyManager.addAlloy(cuBlockIngredient,
-                new OreDictionaryIngredient(SteamNSteelStorageBlock.TIN_BLOCK),
+                new OreDictionaryIngredient(BlockNames.TIN_BLOCK),
                 new ItemStack(ModBlock.blockBronze, 2));
 
         alloyManager.addAlloy(cuIngotIngredient,
-                new OreDictionaryIngredient(ModItem.Names.ZINC_INGOT),
+                new OreDictionaryIngredient(ItemNames.ZINC_INGOT),
                 new ItemStack(ModItem.ingotBrass, 2));
         alloyManager.addAlloy(cuBlockIngredient,
-                new OreDictionaryIngredient(SteamNSteelStorageBlock.ZINC_BLOCK),
+                new OreDictionaryIngredient(BlockNames.ZINC_BLOCK),
                 new ItemStack(ModBlock.blockBrass, 2));
 
         alloyManager.addAlloy(new OreDictionaryIngredient("ingotIron"),
@@ -65,11 +68,11 @@ enum Smelting
                 new ItemStackIngredient(new ItemStack(Blocks.coal_block, 2)),
                 new ItemStack(ModBlock.blockSteel));
 
-        alloyManager.addAlloy(new OreDictionaryIngredient(ModItem.Names.BRASS_INGOT),
-                new OreDictionaryIngredient(ModItem.Names.STEEL_INGOT),
+        alloyManager.addAlloy(new OreDictionaryIngredient(ItemNames.BRASS_INGOT),
+                new OreDictionaryIngredient(ItemNames.STEEL_INGOT),
                 new ItemStack(ModItem.ingotPlotonium, 2));
-        alloyManager.addAlloy(new OreDictionaryIngredient(SteamNSteelStorageBlock.BRASS_BLOCK),
-                new OreDictionaryIngredient(SteamNSteelStorageBlock.STEEL_BLOCK),
+        alloyManager.addAlloy(new OreDictionaryIngredient(BlockNames.BRASS_BLOCK),
+                new OreDictionaryIngredient(BlockNames.STEEL_BLOCK),
                 new ItemStack(ModBlock.blockPlotonium, 2));
     }
 }

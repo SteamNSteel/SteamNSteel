@@ -1,6 +1,6 @@
 package mod.steamnsteel.client.model.opengex;
 
-import net.minecraftforge.client.model.IModelPart;
+import net.minecraftforge.common.model.IModelPart;
 
 /**
  * Created by codew on 4/11/2015.

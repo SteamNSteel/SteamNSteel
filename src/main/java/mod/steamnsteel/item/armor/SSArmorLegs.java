@@ -23,7 +23,7 @@ public class SSArmorLegs extends SteamNSteelItemArmor
 {
     public SSArmorLegs(Material material)
     {
-        super(material, EntityEquipmentSlot.LEGS, "leggings");
+        super(material, EntityEquipmentSlot.LEGS);
     }
 
     @Override

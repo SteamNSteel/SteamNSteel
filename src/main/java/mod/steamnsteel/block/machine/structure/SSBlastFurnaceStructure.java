@@ -36,8 +36,6 @@ import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DI
 
 public class SSBlastFurnaceStructure extends SteamNSteelStructureBlock
 {
-    public static final String NAME = "ssBlastFurnace";
-
     @SideOnly(Side.CLIENT)
     private static float rndRC()
     {
@@ -47,7 +45,6 @@ public class SSBlastFurnaceStructure extends SteamNSteelStructureBlock
     public SSBlastFurnaceStructure()
     {
         super(true, true);
-        setUnlocalizedName(NAME);
         setDefaultState(
                 this.blockState
                         .getBaseState()

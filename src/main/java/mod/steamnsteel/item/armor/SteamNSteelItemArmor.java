@@ -17,59 +17,41 @@
 package mod.steamnsteel.item.armor;
 
 import com.google.common.base.Objects;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.TheMod;
 import mod.steamnsteel.library.Material;
-import mod.steamnsteel.proxy.Proxies;
+import mod.steamnsteel.library.Reference;
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-import static mod.steamnsteel.item.SteamNSteelItem.getFormattedName;
-import static mod.steamnsteel.item.SteamNSteelItem.getUnwrappedUnlocalizedName;
+import static mod.steamnsteel.library.Reference.ArmourTextures.TEXTURE_LOCATION;
 
-@SuppressWarnings("StringConcatenationMissingWhitespace")
 public abstract class SteamNSteelItemArmor extends ItemArmor
 {
-    private static final String TEXTURE_LOCATION = "textures/armor/";
-    private final String undecoratedName;
+
     private final String materialName;
     final static int renderTypeIsNotUsedAnymore = -1;
 
-    SteamNSteelItemArmor(Material material, EntityEquipmentSlot armourType, String name)
+    SteamNSteelItemArmor(Material material, EntityEquipmentSlot armourType)
     {
-
         super(material.getArmorMaterial(), renderTypeIsNotUsedAnymore, armourType);
         setCreativeTab(TheMod.CREATIVE_TAB);
-        undecoratedName = name + getFormattedName(material);
-        setUnlocalizedName(undecoratedName);
         materialName = material.name().toLowerCase();
-    }
-
-    private static String getRendererName(Material material)
-    {
-        return TheMod.MOD_ID + ':' + material.toString() + "Armor";
     }
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
     {
-        return TheMod.MOD_ID + ':' + TEXTURE_LOCATION + materialName + "_layer_" + getArmorLayer() + ".png";
+        return Reference.MOD_ID + ':' + TEXTURE_LOCATION + materialName + "_layer_" + getArmorLayer() + ".png";
     }
 
     protected abstract int getArmorLayer();
 
-    public String getUndecoratedName()
-    {
-        return undecoratedName;
-    }
-
     @Override
     public String getUnlocalizedName()
     {
-        return String.format("item.%s%s", TheMod.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return "item." + getRegistryName();
     }
 
     @Override
@@ -82,7 +64,6 @@ public abstract class SteamNSteelItemArmor extends ItemArmor
     public String toString()
     {
         return Objects.toStringHelper(this)
-                .add("undecoratedName", undecoratedName)
                 .add("materialName", materialName)
                 .toString();
     }

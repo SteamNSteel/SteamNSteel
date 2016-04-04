@@ -41,7 +41,7 @@ import static net.minecraft.util.EnumFacing.*;
 
 public class PipeBlock extends SteamNSteelBlock
 {
-    public static final String NAME = "pipe";
+
 
     public static final PropertyEnum<PipeStates> PIPE_STATE = PropertyEnum.create("pipe", PipeStates.class);
     public static final PropertyBool END_A_CAP = PropertyBool.create("endacap");
@@ -50,7 +50,6 @@ public class PipeBlock extends SteamNSteelBlock
     public PipeBlock()
     {
         super(Material.circuits, true);
-        setUnlocalizedName(NAME);
 
         setDefaultState(
                 this.blockState

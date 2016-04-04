@@ -23,40 +23,21 @@ import org.apache.commons.lang3.text.WordUtils;
 
 public class StructureBuild extends BuildFormTool
 {
-    private final String undecoratedName;
 
     public StructureBuild(Material material)
     {
-        undecoratedName = "structureBuild" + getFormattedName(material);
-
-        setUnlocalizedName(undecoratedName);
         setCreativeTab(TheMod.CREATIVE_TAB);
-    }
-
-    public String getUndecoratedName()
-    {
-        return undecoratedName;
     }
 
     @Override
     public String getUnlocalizedName()
     {
-        return String.format("item.%s%s", TheMod.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return "item." + getRegistryName();
     }
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack)
     {
         return getUnlocalizedName();
-    }
-
-    public static String getFormattedName(Material material)
-    {
-        return WordUtils.capitalizeFully(material.name().toLowerCase());
-    }
-
-    public static String getUnwrappedUnlocalizedName(String unlocalizedName)
-    {
-        return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
     }
 }
