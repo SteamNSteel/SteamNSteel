@@ -41,38 +41,5 @@ enum Smelting
         GameRegistry.addSmelting(ModBlock.oreCopper, new ItemStack(ModItem.ingotCopper), xp);
         GameRegistry.addSmelting(ModBlock.oreTin, new ItemStack(ModItem.ingotTin), xp);
         GameRegistry.addSmelting(ModBlock.oreZinc, new ItemStack(ModItem.ingotZinc), xp);
-
-        final IAlloyManager alloyManager = CraftingManager.INSTANCE.alloyManager;
-
-        final OreDictionaryIngredient cuIngotIngredient = new OreDictionaryIngredient(ItemNames.COPPER_INGOT);
-        final OreDictionaryIngredient cuBlockIngredient = new OreDictionaryIngredient(BlockNames.COPPER_BLOCK);
-
-        alloyManager.addAlloy(cuIngotIngredient,
-                new OreDictionaryIngredient(ItemNames.TIN_INGOT),
-                new ItemStack(ModItem.ingotBronze, 2));
-        alloyManager.addAlloy(cuBlockIngredient,
-                new OreDictionaryIngredient(BlockNames.TIN_BLOCK),
-                new ItemStack(ModBlock.blockBronze, 2));
-
-        alloyManager.addAlloy(cuIngotIngredient,
-                new OreDictionaryIngredient(ItemNames.ZINC_INGOT),
-                new ItemStack(ModItem.ingotBrass, 2));
-        alloyManager.addAlloy(cuBlockIngredient,
-                new OreDictionaryIngredient(BlockNames.ZINC_BLOCK),
-                new ItemStack(ModBlock.blockBrass, 2));
-
-        alloyManager.addAlloy(new OreDictionaryIngredient("ingotIron"),
-                new ItemStackIngredient(new ItemStack(Items.coal, 2)),
-                new ItemStack(ModItem.ingotSteel));
-        alloyManager.addAlloy(new OreDictionaryIngredient("blockIron"),
-                new ItemStackIngredient(new ItemStack(Blocks.coal_block, 2)),
-                new ItemStack(ModBlock.blockSteel));
-
-        alloyManager.addAlloy(new OreDictionaryIngredient(ItemNames.BRASS_INGOT),
-                new OreDictionaryIngredient(ItemNames.STEEL_INGOT),
-                new ItemStack(ModItem.ingotPlotonium, 2));
-        alloyManager.addAlloy(new OreDictionaryIngredient(BlockNames.BRASS_BLOCK),
-                new OreDictionaryIngredient(BlockNames.STEEL_BLOCK),
-                new ItemStack(ModBlock.blockPlotonium, 2));
     }
 }

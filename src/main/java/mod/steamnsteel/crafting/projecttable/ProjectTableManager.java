@@ -26,23 +26,10 @@ public enum ProjectTableManager implements IProjectTableManager
         recipes.add(new ProjectTableRecipe(output, displayName, ingredients));
     }
 
-    @Override
-    public void addProjectTableRecipe(ItemStack output, Collection<IIngredient> ingredients)
-    {
-        recipes.add(new ProjectTableRecipe(Lists.newArrayList(output), output.getDisplayName(), ingredients));
-    }
-
-    @Override
-    public void addProjectTableRecipe(ItemStack output, IIngredient... ingredients)
-    {
-        recipes.add(new ProjectTableRecipe(Lists.newArrayList(output), output.getDisplayName(), Arrays.asList(ingredients)));
-    }
-
     public boolean canCraftRecipe(ProjectTableRecipe recipe, InventoryPlayer playerInventory)
     {
         final List<ItemStack> compactedInventoryItems = getCompactedInventoryItems(playerInventory);
 
-        boolean canCraft = true;
         for (final IIngredient recipeIngredient : recipe.getInput())
         {
             boolean itemMatched = false;

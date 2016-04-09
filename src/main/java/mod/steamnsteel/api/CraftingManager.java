@@ -16,20 +16,12 @@
 
 package mod.steamnsteel.api;
 
-import com.google.common.collect.Lists;
-import mod.steamnsteel.api.crafting.IAlloyManager;
-import mod.steamnsteel.api.crafting.ICraftingManager;
-import mod.steamnsteel.api.crafting.IProjectTableManager;
+import mod.steamnsteel.api.crafting.*;
 import mod.steamnsteel.api.crafting.ingredient.IIngredient;
 import mod.steamnsteel.api.crafting.ingredient.IIngredientSerializer;
-import mod.steamnsteel.api.crafting.ingredient.ItemStackIngredient;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.crafting.projecttable.ProjectTableManager;
 import mod.steamnsteel.networking.SerializationRegistry;
-import net.minecraft.item.ItemStack;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * The class that accesses the singleton crafting managers..
@@ -38,7 +30,6 @@ import java.util.List;
  * @version 1.0
  * @since 0.1
  */
-@SuppressWarnings({"StaticNonFinalField", "PublicField", "NonConstantFieldWithUpperCaseName", "NonSerializableFieldInSerializableClass"})
 public enum CraftingManager implements ICraftingManager
 {
     INSTANCE;
@@ -50,55 +41,23 @@ public enum CraftingManager implements ICraftingManager
     public final IAlloyManager alloyManager = AlloyManager.INSTANCE;
 
     public final IProjectTableManager projectTableManager = ProjectTableManager.INSTANCE;
+    public final SerializationRegistry serializationRegistry = SerializationRegistry.INSTANCE;
 
+    @Override
     public ICraftingManager registerInventorySerializer(Class<? extends IIngredient> ingredientClass, IIngredientSerializer serializer) {
-        SerializationRegistry.INSTANCE.addSerializer(ingredientClass, serializer);
-        return this;
-    }
-
-    public ICraftingManager addProjectTableRecipe(ItemStack output, IIngredient... input) {
-        projectTableManager.addProjectTableRecipe(output, input);
-        return this;
-    }
-
-    public ICraftingManager addProjectTableRecipe(ItemStack output, Collection<IIngredient> input) {
-        projectTableManager.addProjectTableRecipe(output, input);
-        return this;
-    }
-
-    public ICraftingManager addProjectTableRecipe(Collection<ItemStack> output, String displayName, Collection<IIngredient> input) {
-        projectTableManager.addProjectTableRecipe(output, displayName, input);
+        serializationRegistry.addSerializer(ingredientClass, serializer);
         return this;
     }
 
     @Override
-    public ICraftingManager addProjectTableVanillaRecipe(ItemStack output, ItemStack... input)
-    {
-        addProjectTableRecipe(output, wrapItemStacks(Arrays.asList(input)));
-        return this;
+    public ICraftingManagerIngredientsOrLabel addProjectTableRecipe() {
+        return new ProjectTableRecipeContext(this, projectTableManager);
     }
 
     @Override
-    public ICraftingManager addProjectTableVanillaRecipe(ItemStack output, Collection<ItemStack> input)
+    public ICraftingAlloyFirstIngredient addAlloy()
     {
-        addProjectTableRecipe(output, wrapItemStacks(input));
-        return this;
+        return new AlloyContext(this, alloyManager);
     }
 
-    @Override
-    public ICraftingManager addProjectTableVanillaRecipe(Collection<ItemStack> output, String displayName, Collection<ItemStack> input)
-    {
-        addProjectTableRecipe(output, displayName, wrapItemStacks(input));
-        return this;
-    }
-
-    protected List<IIngredient> wrapItemStacks(Collection<ItemStack> input)
-    {
-        List<IIngredient> transformedIngredients = Lists.newArrayList();
-        for (final ItemStack itemStack : input)
-        {
-            transformedIngredients.add(new ItemStackIngredient(itemStack));
-        }
-        return transformedIngredients;
-    }
 }
