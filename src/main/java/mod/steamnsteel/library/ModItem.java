@@ -194,6 +194,6 @@ public final class ModItem
     private static void registerItemAndOre(Item item)
     {
         GameRegistry.register(item);
-        OreDictionary.registerOre(item.getRegistryName().getResourceDomain(), item);
+        OreDictionary.registerOre(item.getRegistryName().getResourcePath(), item);
     }
 }

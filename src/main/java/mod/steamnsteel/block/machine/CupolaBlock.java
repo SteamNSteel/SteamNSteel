@@ -134,9 +134,9 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 
                 final IBlockState metadata = world.getBlockState(pos);
 
-                final EnumFacing orientation = (EnumFacing)metadata.getValue(BlockDirectional.FACING);
+                final EnumFacing orientation = (EnumFacing)metadata.getValue(DIRECTION);
 
-                switch (orientation)
+                 switch (orientation)
                 {
                     case SOUTH:
                         world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, effectX + widthOffset, effectY, effectZ - edgeOffset, 0.0d, 0.0d, 0.0d);

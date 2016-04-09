@@ -18,6 +18,7 @@ package mod.steamnsteel.inventory;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
+import mod.steamnsteel.api.crafting.IAlloyManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.api.CraftingManager;
@@ -97,52 +98,70 @@ public class CupolaContainer extends SteamNSteelContainer
 
     @SuppressWarnings({"ReturnOfNull", "MethodWithMoreThanThreeNegations", "OverlyComplexMethod"})
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex)
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
-        final Slot slot = (Slot) inventorySlots.get(slotIndex);
-        if (slot == null || !slot.getHasStack())
-            return null;
+        ItemStack itemstack = null;
+        final Slot slot = inventorySlots.get(index);
 
-        final ItemStack slotItemStack = slot.getStack();
-        final ItemStack itemStack = slotItemStack.copy();
-
-        if (slotIndex == CupolaTE.OUTPUT)
+        if (slot != null && slot.getHasStack())
         {
-            if (mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), true))
+            final ItemStack slotItemStack = slot.getStack();
+            final ItemStack itemStack = slotItemStack.copy();
+
+            if (index == CupolaTE.OUTPUT)
+            {
+                if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), true))
+                {
+                    return null;
+                }
+
                 slot.onSlotChange(slotItemStack, itemStack);
-            else
+            } else if (index > CupolaTE.INPUT_FUEL)
+            {
+                final IAlloyManager alloyManager = CraftingManager.INSTANCE.alloyManager;
+                final Optional<ItemStack> result1 = alloyManager.getCupolaResult(slotItemStack, te.getStackInSlot(CupolaTE.INPUT_RIGHT)).getItemStack();
+                final Optional<ItemStack> result2 = alloyManager.getCupolaResult(slotItemStack, te.getStackInSlot(CupolaTE.INPUT_LEFT)).getItemStack();
+                if (result1.isPresent() || result2.isPresent())
+                {
+                    if (!mergeItemStack(slotItemStack, CupolaTE.INPUT_LEFT, CupolaTE.INPUT_FUEL, false))
+                    {
+                        return null;
+                    }
+                } else if (TileEntityFurnace.isItemFuel(slotItemStack))
+                {
+                    if (!mergeItemStack(slotItemStack, CupolaTE.INPUT_FUEL, CupolaTE.OUTPUT, false))
+                    {
+                        return null;
+                    }
+                } else if (didTransferStackInStandardSlot(index, slotItemStack, CupolaTE.INVENTORY_SIZE))
+                {
+                    return null;
+                }
+            } else if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), false))
+            {
                 return null;
-        } else if (slotIndex > CupolaTE.INPUT_FUEL)
-        {
-            final Optional<ItemStack> result1 = CraftingManager.INSTANCE.alloyManager.getCupolaResult(slotItemStack,
-                    te.getStackInSlot(CupolaTE.INPUT_RIGHT)).getItemStack();
-            final Optional<ItemStack> result2 = CraftingManager.INSTANCE.alloyManager.getCupolaResult(slotItemStack,
-                    te.getStackInSlot(CupolaTE.INPUT_LEFT)).getItemStack();
-            if (result1.isPresent() || result2.isPresent())
+            }
+
+            if (slotItemStack.stackSize == 0)
             {
-                if (!mergeItemStack(slotItemStack, CupolaTE.INPUT_LEFT, CupolaTE.INPUT_FUEL, false))
-                    return null;
-            } else if (TileEntityFurnace.isItemFuel(slotItemStack))
+                slot.putStack(null);
+            }
+            else
             {
-                if (!mergeItemStack(slotItemStack, CupolaTE.INPUT_FUEL, CupolaTE.OUTPUT, false))
-                    return null;
-            } else if (didTransferStackInStandardSlot(slotIndex, slotItemStack, CupolaTE.INVENTORY_SIZE)) return null;
-        } else if (!mergeItemStack(slotItemStack, CupolaTE.INVENTORY_SIZE, inventorySlots.size(), false))
-        {
-            return null;
+                slot.onSlotChanged();
+            }
+
+            if (slotItemStack.stackSize == itemStack.stackSize)
+            {
+                return null;
+            }
+
+            slot.onPickupFromSlot(playerIn, slotItemStack);
+
+            return itemStack;
         }
 
-        if (slotItemStack.stackSize == 0)
-            slot.putStack(null);
-        else
-            slot.onSlotChanged();
-
-        if (slotItemStack.stackSize == itemStack.stackSize)
-            return null;
-
-        slot.onPickupFromSlot(player, slotItemStack);
-
-        return itemStack;
+        return itemstack;
     }
 
     @Override
