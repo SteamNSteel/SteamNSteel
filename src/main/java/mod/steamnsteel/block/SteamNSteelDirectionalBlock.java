@@ -30,6 +30,11 @@ import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DI
 
 public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
+    protected SteamNSteelDirectionalBlock(Material material, boolean addToCreativeTab) {
+        super(material, addToCreativeTab);
+        setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));
+    }
+
     protected SteamNSteelDirectionalBlock(Material material)
     {
         super(material);
