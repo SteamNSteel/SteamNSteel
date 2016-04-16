@@ -133,30 +133,26 @@ public class ClientRenderProxy extends CommonRenderProxy
     }
 
     private void registerMetadataBlockModel(Block block, int meta, String discriminator, String discriminatorValue) {
-        final String resourceName = block.getUnlocalizedName().substring(5);
-
         ModelLoader.setCustomModelResourceLocation(
                 Item.getItemFromBlock(block),
                 meta,
-                new ModelResourceLocation(resourceName, "inventory," + discriminator + "=" + discriminatorValue)
+                new ModelResourceLocation(block.getRegistryName(), "inventory," + discriminator + "=" + discriminatorValue)
         );
     }
 
     private void registerBlockItemModel(Block block) {
-        final String resourceName = block.getUnlocalizedName().substring(5);
         ModelLoader.setCustomModelResourceLocation(
                 Item.getItemFromBlock(block),
                 0,
-                new ModelResourceLocation(resourceName, "inventory")
+                new ModelResourceLocation(block.getRegistryName(), "inventory")
         );
     }
 
     private void registerItemModel(Item item) {
-        final String resourceName = item.getUnlocalizedName().substring(5);
         ModelLoader.setCustomModelResourceLocation(
                 item,
                 0,
-                new ModelResourceLocation(resourceName, "inventory")
+                new ModelResourceLocation(item.getRegistryName(), "inventory")
         );
     }
 

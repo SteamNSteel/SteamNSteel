@@ -23,8 +23,9 @@
 
         },
         "gui": {
-          "translation": [-0.5, 0, 0.5],
-          "rotation": {"y": -90 }
+          "translation": [0.5, 0, 0.5],
+          "rotation": [{"x": 30}, {"y": 45} ],
+          "scale": 0.7
         }
       }
     }],
