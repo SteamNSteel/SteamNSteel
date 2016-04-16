@@ -69,8 +69,8 @@ public class SulfurOreGenerator extends OreGenerator
     private static final int NUM_BLOCKS_IN_VEIN_VARIATION = NUM_BLOCKS_IN_VEIN / 2;
 
     private static final ImmutableSet<IBlockState> TARGET_BLOCKS = ImmutableSet.of(
-            Blocks.stone.getDefaultState(),
-            Blocks.dirt.getDefaultState());
+            Blocks.STONE.getDefaultState(),
+            Blocks.DIRT.getDefaultState());
 
     private static final ImmutableSet<EnumFacing> BRANCH_DIRECTIONS = ImmutableSet.copyOf(EnumSet.of(
             EnumFacing.UP,
@@ -105,7 +105,7 @@ public class SulfurOreGenerator extends OreGenerator
             if (target.getY() >= 0)
             {
                 final IBlockState blockState = world.getBlockState(coord);
-                if (blockState.getMaterial().equals(Material.lava))
+                if (blockState.getMaterial().equals(Material.LAVA))
                     return true;
 
                 if (!world.isAirBlock(coord))
@@ -128,7 +128,7 @@ public class SulfurOreGenerator extends OreGenerator
 
             if (ChunkCoord.of(target).exists(world))
 
-                if (world.getBlockState(target).getMaterial().equals(Material.lava))
+                if (world.getBlockState(target).getMaterial().equals(Material.LAVA))
                     return true;
         }
         return false;

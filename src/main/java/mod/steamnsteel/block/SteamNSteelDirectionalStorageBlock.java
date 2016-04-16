@@ -22,7 +22,7 @@ public class SteamNSteelDirectionalStorageBlock extends SteamNSteelDirectionalBl
 {
     public SteamNSteelDirectionalStorageBlock()
     {
-        super(Material.iron);
+        super(Material.IRON);
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);

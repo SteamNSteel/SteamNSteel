@@ -28,7 +28,7 @@ public abstract class SteamNSteelOreBlock extends SteamNSteelBlock
 
     protected SteamNSteelOreBlock()
     {
-        super(Material.rock);
+        super(Material.ROCK);
         setHardness(3.0f);
         setResistance(5.0f);
         setSoundType(SoundType.STONE);

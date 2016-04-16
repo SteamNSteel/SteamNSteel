@@ -38,7 +38,7 @@ public class RemnantRuinWallBlock extends SteamNSteelBlock
 {
     public RemnantRuinWallBlock()
     {
-        super(Material.rock);
+        super(Material.ROCK);
     }
 
     @Override

@@ -15,7 +15,7 @@ public class PipeJunctionBlock extends SteamNSteelBlock implements ITileEntityPr
 {
     public PipeJunctionBlock()
     {
-        super(Material.circuits, true);
+        super(Material.CIRCUITS, true);
     }
 
 

@@ -28,7 +28,7 @@ public class RemnantRuinIronBarsBlock extends BlockPane
 
     public RemnantRuinIronBarsBlock()
     {
-        super(Material.iron, true);
+        super(Material.IRON, true);
         setHardness(5.0F);
         setResistance(10.0F);
         setSoundType(SoundType.METAL);

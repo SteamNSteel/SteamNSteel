@@ -32,7 +32,7 @@ import java.util.Random;
 
 public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBlock
 {
-    private static final Material MATERIAL = Material.piston;
+    private static final Material MATERIAL = Material.PISTON;
     private static final SoundType SOUND = SoundType.STONE;
     private static final float HARDNESS = 0.5f;
 

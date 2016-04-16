@@ -32,7 +32,7 @@ public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
 {
     protected SteamNSteelDirectionalBlock(Material material, boolean addToCreativeTab) {
         super(material, addToCreativeTab);
-        setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH));
+        setDefaultState(getDefaultState().withProperty(DIRECTION, EnumFacing.NORTH));
     }
 
     protected SteamNSteelDirectionalBlock(Material material)

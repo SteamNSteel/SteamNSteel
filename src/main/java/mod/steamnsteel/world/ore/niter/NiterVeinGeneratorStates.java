@@ -35,7 +35,7 @@ public enum NiterVeinGeneratorStates
                     final MaterialWorldCoordPair data = context.stream().next();
 
                     final Material material = data.getMaterial();
-                    if (material.equals(Material.sand) || material.equals(Material.ground))
+                    if (material.equals(Material.SAND) || material.equals(Material.GROUND))
                         context.state(SEEKING_ROCK);
                     return true;
                 }
@@ -53,7 +53,7 @@ public enum NiterVeinGeneratorStates
 
                     final MaterialWorldCoordPair data = context.stream().next();
 
-                    if (data.getMaterial().equals(Material.rock))
+                    if (data.getMaterial().equals(Material.ROCK))
                         context.state(GROW_VEIN);
                     return true;
                 }

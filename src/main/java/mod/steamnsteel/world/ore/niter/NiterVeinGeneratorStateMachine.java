@@ -44,10 +44,10 @@ public class NiterVeinGeneratorStateMachine
 
     private static final ImmutableSet<IBlockState> TARGET_BLOCKS =
             ImmutableSet.of(
-                    Blocks.stone.getDefaultState(),
-                    Blocks.dirt.getDefaultState(),
-                    Blocks.sand.getDefaultState(),
-                    Blocks.sandstone.getDefaultState()
+                    Blocks.STONE.getDefaultState(),
+                    Blocks.DIRT.getDefaultState(),
+                    Blocks.SAND.getDefaultState(),
+                    Blocks.SANDSTONE.getDefaultState()
             );
 
     private static final ImmutableSet<BiomeDictionary.Type> PREFERRED_BIOME_TYPES = ImmutableSet.copyOf(EnumSet.of(DRY, HOT));
@@ -126,7 +126,7 @@ public class NiterVeinGeneratorStateMachine
                 final BlockPos crustTarget = target.offset(offset);
 
                 if (ChunkCoord.of(crustTarget).exists(world) && OreGenerator.isBlockReplaceable(world, crustTarget, TARGET_BLOCKS)) {
-                    world.setBlockState(crustTarget, Blocks.sandstone.getDefaultState(), 2);
+                    world.setBlockState(crustTarget, Blocks.SANDSTONE.getDefaultState(), 2);
                 }
             }
             paddingChancePercent *= 0.75f;

@@ -49,7 +49,7 @@ public class PipeBlock extends SteamNSteelBlock
 
     public PipeBlock()
     {
-        super(Material.circuits, true);
+        super(Material.CIRCUITS, true);
 
         setDefaultState(
                 this.blockState
@@ -127,7 +127,7 @@ public class PipeBlock extends SteamNSteelBlock
         if (playerIn != null)
         {
             ItemStack itemInUse = playerIn.inventory.mainInventory[playerIn.inventory.currentItem];
-            if (itemInUse != null && itemInUse.getItem() == Items.bone)
+            if (itemInUse != null && itemInUse.getItem() == Items.BONE)
             {
                 if (!worldIn.isRemote)
                 {

@@ -59,7 +59,7 @@ public final class Reference {
         public static final String PIPE_JUNCTION = "pipeJunction";
 
         public static final String REMNANT_RUIN_CHEST = "remnantRuinChest";
-        public static final String CRAFTING_STATION = "craftingStation";
+        public static final String PROJECT_TABLE = "projectTable";
 
         public static final String REMNANT_RUIN_PILLAR = "remnantRuinPillar";
 

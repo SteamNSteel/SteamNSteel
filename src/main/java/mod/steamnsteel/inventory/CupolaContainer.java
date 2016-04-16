@@ -71,10 +71,8 @@ public class CupolaContainer extends SteamNSteelContainer
     {
         super.detectAndSendChanges();
 
-        for (final Object crafter : crafters)
+        for (final ICrafting icrafting: listeners)
         {
-            final ICrafting icrafting = (ICrafting) crafter;
-
             if (lastCookTime != te.getDeviceCookTime())
             {
                 icrafting.sendProgressBarUpdate(this, 0, te.getDeviceCookTime());

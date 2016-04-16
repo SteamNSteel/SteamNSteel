@@ -49,7 +49,7 @@ public class ProjectTableCraftPacketMessageHandler implements IMessageHandler<Pr
 
                     if (!playerInventory.addItemStackToInventory(copy))
                     {
-                        ctx.getServerHandler().playerEntity.dropPlayerItemWithRandomChoice(copy, true);
+                        ctx.getServerHandler().playerEntity.dropItem(copy, true);
                     }
                     else
                     {

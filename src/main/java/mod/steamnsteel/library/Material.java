@@ -26,9 +26,9 @@ import static net.minecraftforge.common.util.EnumHelper.addToolMaterial;
 
 public enum Material
 {
-    BRONZE(addArmorMaterial("bronze", Reference.ArmourTextures.BRONZE, 11, new int[]{2, 6, 4, 2}, 9, SoundEvents.item_armor_equip_generic),
+    BRONZE(addArmorMaterial("bronze", Reference.ArmourTextures.BRONZE, 11, new int[]{2, 6, 4, 2}, 9, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC),
             addToolMaterial("bronze", 2, 250, 5.0F, 1.5F, 14)),
-    STEEL(addArmorMaterial("steel", Reference.ArmourTextures.STEEL, 24, new int[]{3, 7, 6, 3}, 10, SoundEvents.item_armor_equip_generic),
+    STEEL(addArmorMaterial("steel", Reference.ArmourTextures.STEEL, 24, new int[]{3, 7, 6, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC),
             addToolMaterial("steel", 3, 905, 7.0F, 2.5F, 10));
 
 

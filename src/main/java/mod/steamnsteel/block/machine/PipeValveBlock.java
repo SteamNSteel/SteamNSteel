@@ -37,7 +37,7 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
 {
     public PipeValveBlock()
     {
-        super(Material.circuits, true);
+        super(Material.CIRCUITS, true);
         setDefaultState(
                 this.blockState
                         .getBaseState()

@@ -89,7 +89,7 @@ public final class ModBlock
     public static Block pipeJunction;
 
     public static Block remnantRuinChest;
-    public static Block craftingStation;
+    public static Block projectTable;
     public static Block remnantRuinPillar;
 
     public static SteamNSteelOreBlock oreNiter;
@@ -141,7 +141,7 @@ public final class ModBlock
         pipeJunction = new PipeJunctionBlock().setRegistryName(Reference.MOD_ID, BlockNames.PIPE_JUNCTION);
 
         remnantRuinChest = new RemnantRuinChestBlock().setRegistryName(Reference.MOD_ID, BlockNames.REMNANT_RUIN_CHEST);
-        craftingStation = new CraftingStationBlock().setRegistryName(Reference.MOD_ID, BlockNames.CRAFTING_STATION);
+        projectTable = new ProjectTableBlock().setRegistryName(Reference.MOD_ID, BlockNames.PROJECT_TABLE);
         remnantRuinPillar = new RemnantRuinPillarBlock().setRegistryName(Reference.MOD_ID, BlockNames.REMNANT_RUIN_PILLAR);
 
         oreNiter = (SteamNSteelOreBlock)new NiterOre().setRegistryName(Reference.MOD_ID, BlockNames.ORE_NITER);
@@ -182,7 +182,7 @@ public final class ModBlock
         createBlocks();
 
         registerBlockAndItem(remnantRuinChest);
-        registerBlockAndItem(craftingStation);
+        registerBlockAndItem(projectTable);
 
         registerBlockAndItem(cupola);
 

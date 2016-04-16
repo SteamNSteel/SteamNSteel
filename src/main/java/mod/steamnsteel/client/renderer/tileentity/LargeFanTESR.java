@@ -55,7 +55,7 @@ public class LargeFanTESR extends TileEntitySpecialRenderer<LargeFanTE>
 
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexBuffer = tessellator.getBuffer();
-        bindTexture(TextureMap.locationBlocksTexture);
+        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.blendFunc(770, 771);
         GlStateManager.enableBlend();

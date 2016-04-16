@@ -41,7 +41,8 @@ public abstract class BaseCodeModel
     {
         public ModelResourceLocation getModelResourceLocation(IBlockState state)
         {
-            return new ModelResourceLocation(Block.blockRegistry.getNameForObject(state.getBlock()), getPropertyString(state.getProperties()));
+            return new ModelResourceLocation(state.getBlock().getRegistryName(), getPropertyString(state.getProperties()));
+            //return new ModelResourceLocation(Block.blockRegistry.getNameForObject(state.getBlock()), getPropertyString(state.getProperties()));
         }
     }
 }

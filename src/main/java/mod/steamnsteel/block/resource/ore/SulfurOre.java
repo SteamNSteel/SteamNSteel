@@ -24,7 +24,7 @@ public class SulfurOre extends SteamNSteelOreBlock
 {
     public SulfurOre()
     {
-        super(Material.rock);
+        super(Material.ROCK);
         setHarvestLevel("pickaxe", 1); // stone pick
     }
 

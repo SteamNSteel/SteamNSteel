@@ -45,7 +45,7 @@ public final class Recipes
     {
         final RecipePattern pattern = RecipePattern.of("#X#", "X X", "#X#");
 
-        final IRecipe recipe = new ShapedOreRecipe(ModBlock.cupola, pattern.get(), '#', "ingotIron", 'X', Blocks.brick_block);
+        final IRecipe recipe = new ShapedOreRecipe(ModBlock.cupola, pattern.get(), '#', "ingotIron", 'X', Blocks.BRICK_BLOCK);
         GameRegistry.addRecipe(recipe);
 
 

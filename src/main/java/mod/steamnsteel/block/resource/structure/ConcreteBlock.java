@@ -28,7 +28,7 @@ public class ConcreteBlock extends SteamNSteelBlock {
 
 
     public ConcreteBlock() {
-        super(Material.rock);
+        super(Material.ROCK);
         setTickRandomly(true);
         setSoundType(SoundType.STONE);
         setDefaultState(blockState.getBaseState().withProperty(WETNESS, 0));

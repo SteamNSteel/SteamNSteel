@@ -33,27 +33,27 @@ public enum ModCrafting
                     .crafts(ModBlock.blockSteel, 1)
 
                 .addProjectTableRecipe()
-                    .withIngredient(Blocks.dirt, 64 * 3)
-                    .crafts(Items.diamond, 10)
+                    .withIngredient(Blocks.DIRT, 64 * 3)
+                    .crafts(Items.DIAMOND, 10)
 
                 .addProjectTableRecipe()
-                    .withIngredient(Blocks.gold_block, 64)
-                    .andIngredient(Blocks.gold_ore, 64)
-                    .andIngredient(Blocks.beacon, 64)
-                    .andIngredient(Blocks.brown_mushroom_block, 64)
-                    .crafts(Items.gold_nugget)
+                    .withIngredient(Blocks.GOLD_BLOCK, 64)
+                    .andIngredient(Blocks.GOLD_ORE, 64)
+                    .andIngredient(Blocks.BEACON, 64)
+                    .andIngredient(Blocks.BROWN_MUSHROOM_BLOCK, 64)
+                    .crafts(Items.GOLD_NUGGET)
 
                 .addProjectTableRecipe()
-                    .withIngredient(Blocks.dirt, 2 * 64)
-                    .crafts(Items.diamond)
+                    .withIngredient(Blocks.DIRT, 2 * 64)
+                    .crafts(Items.DIAMOND)
 
                 .addProjectTableRecipe()
                     .withIngredient(new OreDictionaryIngredient("plankWood", 64))
-                    .crafts(Blocks.anvil)
+                    .crafts(Blocks.ANVIL)
 
                 .addProjectTableRecipe()
                     .withIngredient(ModBlock.blockSteel, 2)
-                    .crafts(Blocks.anvil)
+                    .crafts(Blocks.ANVIL)
 
                 .addAlloy()
                     .withIngredient(cuIngotIngredient)
@@ -77,12 +77,12 @@ public enum ModCrafting
 
                 .addAlloy()
                     .withIngredient(new OreDictionaryIngredient("ingotIron"))
-                    .andIngredient(Items.coal, 2)
+                    .andIngredient(Items.COAL, 2)
                     .produces(ModItem.ingotSteel)
 
                 .addAlloy()
                     .withIngredient(new OreDictionaryIngredient("blockIron"))
-                    .andIngredient(Blocks.coal_block, 2)
+                    .andIngredient(Blocks.COAL_BLOCK, 2)
                     .produces(ModBlock.blockSteel)
 
                 .addAlloy()

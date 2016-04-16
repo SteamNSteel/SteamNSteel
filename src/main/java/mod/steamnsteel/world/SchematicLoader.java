@@ -63,7 +63,7 @@ public class SchematicLoader
 
                 if (world.getTileEntity(pos) instanceof TileEntityCommandBlock)
                 {
-                    world.setBlockState(pos, Blocks.air.getDefaultState(), 3);
+                    world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
                 }
                 gameRules.setOrCreateGameRule("commandBlockOutput", commandBlockOutputSetting.toString());
                 return true;
@@ -178,7 +178,7 @@ public class SchematicLoader
         Chunk c = world.getChunkFromChunkCoords(chunkX, chunkZ);
 
         int blockCount = 0;
-        Block ignore = Blocks.air;
+        Block ignore = Blocks.AIR;
 
         LinkedList<TileEntity> createdTileEntities = new LinkedList<TileEntity>();
 
@@ -305,7 +305,7 @@ public class SchematicLoader
                         final BlockPos worldCoord = pos.add(schematicX, schematicY, schematicZ);
 
                         IBlockState blockState = schematic.getBlockState(worldCoord);
-                        if (blockState.getBlock() != Blocks.air)
+                        if (blockState.getBlock() != Blocks.AIR)
                         {
                             BlockPos schematicCoord = new BlockPos(schematicX, schematicY, schematicZ);
                             PreSetBlockEvent event = new PreSetBlockEvent(schematic, world, worldCoord, schematicCoord);

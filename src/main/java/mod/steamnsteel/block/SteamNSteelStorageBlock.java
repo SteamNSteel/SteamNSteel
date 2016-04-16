@@ -24,7 +24,7 @@ public class SteamNSteelStorageBlock extends SteamNSteelBlock
 {
     public SteamNSteelStorageBlock()
     {
-        super(Material.iron);
+        super(Material.IRON);
         setHardness(5.0f);
         setResistance(10.0f);
         setSoundType(SoundType.METAL);

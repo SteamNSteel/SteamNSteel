@@ -46,7 +46,7 @@ public class OgexStructureTESR extends TileEntitySpecialRenderer
 
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer worldRenderer = tessellator.getBuffer();
-        bindTexture(TextureMap.locationBlocksTexture);
+        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.blendFunc(770, 771);
         GlStateManager.enableBlend();

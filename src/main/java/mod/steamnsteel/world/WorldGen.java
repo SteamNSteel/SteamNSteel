@@ -95,7 +95,7 @@ public enum WorldGen
         schematicLoader = new SchematicLoader();
         schematicLoader.addSetBlockEventListener(event -> {
             final IBlockState schematicBlock = event.getBlockState();
-            if (schematicBlock.getBlock() == Blocks.vine) {
+            if (schematicBlock.getBlock() == Blocks.VINE) {
                 final IBlockState worldBlock = event.world.getBlockState(event.worldCoord);
                 if (!worldBlock.getBlock().isAir(worldBlock, event.world, event.schematicCoord)) {
                     event.cancelSetBlock();

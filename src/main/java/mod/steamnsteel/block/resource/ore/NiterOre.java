@@ -25,7 +25,7 @@ public class NiterOre extends SteamNSteelOreBlock
 {
     public NiterOre()
     {
-        super(Material.rock);
+        super(Material.ROCK);
         setHardness(0.8F);
         setHarvestLevel("pickaxe", 0); // wooden pick
     }

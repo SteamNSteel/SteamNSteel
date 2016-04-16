@@ -4,6 +4,8 @@ import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.block.SteamNSteelDirectionalBlock;
 import mod.steamnsteel.gui.ModGuis;
+import mod.steamnsteel.library.Reference;
+import mod.steamnsteel.library.Reference.BlockNames;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,9 +24,9 @@ public class ProjectTableBlock extends SteamNSteelDirectionalBlock
 
     public ProjectTableBlock() {
 
-        super(Material.wood, true);
-        setUnlocalizedName(NAME);
-        setHarvestLevel("axe", 1); // stone pick
+        super(Material.WOOD, true);
+        setUnlocalizedName(BlockNames.PROJECT_TABLE);
+        setHarvestLevel("axe", 1);
     }
 
     @Override
@@ -35,13 +37,13 @@ public class ProjectTableBlock extends SteamNSteelDirectionalBlock
     }
 
     @Override
-    public boolean isFullCube()
+    public boolean isFullCube(IBlockState state)
     {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube()
+    public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }

@@ -37,7 +37,7 @@ public class PipeRedstoneValveBlock extends SteamNSteelBlock implements ITileEnt
 {
     public PipeRedstoneValveBlock()
     {
-        super(Material.circuits, true);
+        super(Material.CIRCUITS, true);
         setDefaultState(
                 this.blockState
                         .getBaseState()

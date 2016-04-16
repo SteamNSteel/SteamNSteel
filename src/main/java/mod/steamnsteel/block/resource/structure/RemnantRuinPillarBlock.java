@@ -27,7 +27,7 @@ public class RemnantRuinPillarBlock extends SteamNSteelDirectionalBlock
 {
     public RemnantRuinPillarBlock()
     {
-        super(Material.rock);
+        super(Material.ROCK);
     }
 
     @Override
