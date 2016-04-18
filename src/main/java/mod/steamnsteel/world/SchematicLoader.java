@@ -15,13 +15,13 @@ import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.RegistryNamespacedDefaultedByKey;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +30,7 @@ import java.util.*;
 
 public class SchematicLoader
 {
-    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
+    private static final RegistryNamespacedDefaultedByKey<ResourceLocation, Block> BLOCK_REGISTRY = Block.REGISTRY;
     private static Logger _logger = LogManager.getLogger("SchematicLoader");
     private Map<ResourceLocation, SchematicWorld> loadedSchematics = new HashMap<ResourceLocation, SchematicWorld>();
     private List<ITileEntityLoadedEvent> tileEntityLoadedEventListeners = new LinkedList<ITileEntityLoadedEvent>();
@@ -43,10 +43,6 @@ public class SchematicLoader
             if (tileEntity instanceof TileEntityCommandBlock)
             {
                 _logger.info("Activating command Block");
-
-
-
-
                 final World world = tileEntity.getWorld();
 
                 TileEntityCommandBlock commandBlock = (TileEntityCommandBlock) tileEntity;
@@ -419,9 +415,10 @@ public class SchematicLoader
             {
                 ResourceLocation resourceLocation = new ResourceLocation(name);
 
-                if (GameData.getBlockRegistry().containsKey(resourceLocation))
+                final Block block = Block.REGISTRY.getObjectBypass(resourceLocation);
+                if (block != null)
                 {
-                    final short id1 = (short) GameData.getBlockRegistry().getId(resourceLocation);
+                    final short id1 = (short) Block.REGISTRY.getIDForObjectBypass(block);
                     oldToNew.put(mapping.getShort(name), id1);
                 } else
                 {
@@ -576,7 +573,7 @@ public class SchematicLoader
             int metadata = this.metadata[index];
             final short blockId = this.blocks[index];
 
-            Block block = BLOCK_REGISTRY.getRaw(blockId);
+            Block block = BLOCK_REGISTRY.getObjectByIdBypass(blockId);
             if (block == null)
             {
                 return null;

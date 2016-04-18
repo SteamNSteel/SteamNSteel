@@ -17,6 +17,7 @@
 package mod.steamnsteel.block.resource.structure;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.client.model.pct.PCTModelLoader;
 import mod.steamnsteel.library.ModProperties;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -28,6 +29,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -53,10 +55,10 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        /*if (worldIn.isRemote) {
+        if (worldIn.isRemote) {
             String description = PCTModelLoader.describeTextureAt(worldIn, pos, side);
-            playerIn.addChatComponentMessage(new ChatComponentText(description));
-        }*/
+            playerIn.addChatComponentMessage(new TextComponentString(description));
+        }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
