@@ -83,8 +83,8 @@ apply plugin: 'com.github.johnrengelman.shadow'
 shadowJar {
     def deobfPrefix = "deobf." + minecraft.mappingsChannel + '.' + minecraft.mappingsVersion + '.'
     dependencies {
-        include(dependency(deobfPrefix + 'mod.steamnsteel:mcgui:1.0'))
-        include(dependency(deobfPrefix + 'com.foudroyantfactotum:Structure:1.8.9-0.1'))
+        include(dependency(deobfPrefix + 'mod.steamnsteel:mcgui-' + config.minecraft_version + ':' + config.mcgui_version))
+        include(dependency(deobfPrefix + 'com.foudroyantfactotum:Structure-' + config.minecraft_version + ':' + config.structure_version))
     }
     relocate 'mod.steamnsteel.mcgui', 'mod.steamnsteel.shaded.mod.steamnsteel.mcgui'
     relocate 'com.foudroyantfactotum.tool.structure', 'mod.steamnsteel.shaded.com.foudroyantfactotum.tool.structure'
@@ -183,7 +183,7 @@ if (config.mcgui_local_enabled == "true") {
                 url 'http://repository.steamnsteel.info/artifactory/steamnsteel-libs-unstable'
             }
         }
-        deobfCompile(group: 'mod.steamnsteel', name: 'mcgui', version: '1.0', classifier: 'api')
+        deobfCompile(group: 'mod.steamnsteel', name: 'mcgui-' + config.minecraft_version, version: config.mcgui_version, classifier: 'api')
     }
 }
 
@@ -218,7 +218,7 @@ if (config.structure_local_enabled == "true") {
                 url 'http://repository.steamnsteel.info/artifactory/foudroyantfactotum-libs-stable'
             }
         }
-        deobfCompile(group: 'com.foudroyantfactotum', name: 'Structure', version: '1.8.9-0.1', classifier: 'universal')
+        deobfCompile(group: 'com.foudroyantfactotum', name: 'Structure-' + config.minecraft_version, version: config.structure_version, classifier: 'universal')
     }
 }
 
