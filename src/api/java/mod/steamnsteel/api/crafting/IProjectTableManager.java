@@ -1,7 +1,6 @@
 package mod.steamnsteel.api.crafting;
 
 import mod.steamnsteel.api.crafting.ingredient.IIngredient;
-import mod.steamnsteel.crafting.projecttable.ProjectTableRecipe;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import java.util.Collection;
