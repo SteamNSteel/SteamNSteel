@@ -31,7 +31,7 @@ public class SchematicLoader
 {
     private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
     private static Logger _logger = LogManager.getLogger("SchematicLoader");
-    private Map<ResourceLocation, SchematicWorld> loadedSchematics = new HashMap<ResourceLocation, SchematicWorld>();
+    private Map<ResourceLocation, ISchematic> loadedSchematics = new HashMap<ResourceLocation, ISchematic>();
     private List<ITileEntityLoadedEvent> tileEntityLoadedEventListeners = new LinkedList<ITileEntityLoadedEvent>();
     private List<IPreSetBlockEventListener> setBlockEventListeners;
     private List<IUnknownBlockEventListener> unknownBlockEventListener;
@@ -150,7 +150,7 @@ public class SchematicLoader
             return;
         }
 
-        SchematicWorld schematic = loadedSchematics.get(resource);
+        ISchematic schematic = loadedSchematics.get(resource);
         if (schematic == null)
         {
             _logger.error("schematic %s was not loaded", resource);
@@ -260,7 +260,7 @@ public class SchematicLoader
             return;
         }
 
-        SchematicWorld schematic = loadedSchematics.get(resource);
+        ISchematic schematic = loadedSchematics.get(resource);
         if (schematic == null)
         {
             _logger.error("schematic %s was not loaded", resource);
@@ -515,7 +515,7 @@ public class SchematicLoader
         void unknownBlock(UnknownBlockEvent event);
     }
 
-    public static class SchematicWorld implements ISchematicMetadata
+    public static class SchematicWorld implements ISchematic
     {
         private final Map<BlockPos, NBTTagCompound> tileEntities = new HashMap<BlockPos, NBTTagCompound>();
         private NBTTagCompound extendedMetadata;
@@ -553,6 +553,7 @@ public class SchematicLoader
             }
         }
 
+        @Override
         public IBlockState getBlockState(BlockPos pos)
         {
             int x = pos.getX();
@@ -576,6 +577,7 @@ public class SchematicLoader
             return block.getStateFromMeta(metadata);
         }
 
+        @Override
         public boolean isAirBlock(BlockPos pos)
         {
             IBlockState block = getBlockState(pos);
@@ -607,11 +609,13 @@ public class SchematicLoader
             return extendedMetadata != null ? (NBTTagCompound) extendedMetadata.copy() : null;
         }
 
+        @Override
         public Collection<NBTTagCompound> getTileEntityData()
         {
             return this.tileEntities.values();
         }
 
+        @Override
         public NBTTagCompound getTileEntity(BlockPos pos)
         {
             return tileEntities.get(pos);
@@ -646,6 +650,16 @@ public class SchematicLoader
         NBTTagCompound getExtendedMetadata();
     }
 
+    public interface ISchematic extends ISchematicMetadata
+    {
+        IBlockState getBlockState(BlockPos pos);
+
+        boolean isAirBlock(BlockPos pos);
+
+        Collection<NBTTagCompound> getTileEntityData();
+
+        NBTTagCompound getTileEntity(BlockPos pos);
+    }
 
     public class UnknownBlockEvent
     {
@@ -674,14 +688,14 @@ public class SchematicLoader
 
     public class PreSetBlockEvent
     {
-        public final SchematicWorld schematic;
+        public final ISchematic schematic;
         public final World world;
         public final BlockPos worldCoord;
         public final BlockPos schematicCoord;
         private IBlockState blockState;
         private boolean shouldSetBlock = true;
 
-        public PreSetBlockEvent(SchematicWorld schematic, World world, BlockPos worldCoord, BlockPos schematicCoord)
+        public PreSetBlockEvent(ISchematic schematic, World world, BlockPos worldCoord, BlockPos schematicCoord)
         {
             this.blockState = schematic.getBlockState(schematicCoord);
             this.schematic = schematic;
