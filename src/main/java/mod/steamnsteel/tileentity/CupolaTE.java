@@ -29,7 +29,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.api.crafting.IAlloyResult;
-import mod.steamnsteel.block.machine.CupolaBlock;
 import mod.steamnsteel.crafting.alloy.AlloyManager;
 import mod.steamnsteel.inventory.Inventory;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,8 +36,8 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntityFurnace;
+import javax.annotation.Nullable;
 
 @SuppressWarnings("ClassWithTooManyMethods")
 public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickable
@@ -133,8 +132,10 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
         isSlave = true;
     }
 
+
+    @Nullable
     @Override
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
         final NBTTagCompound nbt = new NBTTagCompound();
         writeToNBT(nbt);
@@ -165,12 +166,12 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt)
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
 
         nbt.setBoolean(IS_SLAVE, isSlave);
-        if (isSlave) return;
+        if (isSlave) return nbt;
 
         nbt.setBoolean(IS_ACTIVE, isActive);
 
@@ -179,6 +180,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
         nbt.setInteger(DEVICE_COOK_TIME, deviceCookTime);
         nbt.setInteger(FUEL_BURN_TIME, fuelBurnTime);
         nbt.setInteger(ITEM_COOK_TIME, itemCookTime);
+        return nbt;
     }
 
     @SuppressWarnings("ReturnOfCollectionOrArrayField")

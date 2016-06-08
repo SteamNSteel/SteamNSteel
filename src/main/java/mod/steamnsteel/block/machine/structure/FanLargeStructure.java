@@ -89,12 +89,6 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta)
-    {
-        return super.getStateFromMeta(meta);
-    }
-
-    @Override
     public boolean hasTileEntity(IBlockState state)
     {
         return true;
@@ -113,6 +107,7 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
     }
 
     @Override
+    @Deprecated
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
@@ -140,6 +135,7 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
     }
 
     @Override
+    @Deprecated
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn)
     {
         super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn);

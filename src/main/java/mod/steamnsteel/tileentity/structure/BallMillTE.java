@@ -19,11 +19,9 @@ import com.foudroyantfactotum.tool.structure.IStructure.structure.IStructureFlui
 import com.foudroyantfactotum.tool.structure.IStructure.structure.IStructureSidedInventory;
 import com.foudroyantfactotum.tool.structure.coordinates.BlockPosUtil;
 import com.foudroyantfactotum.tool.structure.registry.StructureDefinition;
-import mod.steamnsteel.block.machine.structure.SSBallMillStructure;
 import mod.steamnsteel.inventory.Inventory;
 import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.library.Reference.BlockNames;
-import mod.steamnsteel.tileentity.SteamNSteelTE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -287,11 +285,12 @@ public class BallMillTE extends SteamNSteelStructureTE implements IStructureSide
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt)
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
 
         inventory.writeToNBT(nbt);
+        return nbt;
     }
 
     @Override

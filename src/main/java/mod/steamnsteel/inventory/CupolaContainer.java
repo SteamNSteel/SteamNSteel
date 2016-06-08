@@ -19,6 +19,7 @@ package mod.steamnsteel.inventory;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import mod.steamnsteel.api.crafting.IAlloyManager;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import mod.steamnsteel.api.CraftingManager;
@@ -26,7 +27,6 @@ import mod.steamnsteel.inventory.slot.CupolaSlot;
 import mod.steamnsteel.tileentity.CupolaTE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -52,13 +52,13 @@ public class CupolaContainer extends SteamNSteelContainer
         addPlayerInventory(inventoryPlayer, 8, 84);
     }
 
-    @Override
-    public void onCraftGuiOpened(ICrafting listener) {
+    /*@Override
+    public void onCraftGuiOpened(IContainerListener listener) {
         super.onCraftGuiOpened(listener);
         listener.sendProgressBarUpdate(this, 0, te.getDeviceCookTime());
         listener.sendProgressBarUpdate(this, 1, te.getFuelBurnTime());
         listener.sendProgressBarUpdate(this, 2, te.getItemCookTime());
-    }
+    }*/
 
     @Override
     public boolean canInteractWith(EntityPlayer player)
@@ -71,7 +71,7 @@ public class CupolaContainer extends SteamNSteelContainer
     {
         super.detectAndSendChanges();
 
-        for (final ICrafting icrafting: listeners)
+        for (final IContainerListener icrafting: listeners)
         {
             if (lastCookTime != te.getDeviceCookTime())
             {

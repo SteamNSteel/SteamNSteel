@@ -73,6 +73,7 @@ public class PipeBlock extends SteamNSteelBlock
     }
 
     @Override
+    @Deprecated
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
     {
         final TileEntity ute = worldIn.getTileEntity(pos);
@@ -103,19 +104,21 @@ public class PipeBlock extends SteamNSteelBlock
     }
 
     @Override
+    @Deprecated
     public boolean isFullCube(IBlockState state)
     {
         return false;
     }
 
     @Override
+    @Deprecated
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
 
     @Override
-    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock)
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor)
     {
         PipeTE entity = (PipeTE) world.getTileEntity(pos);
         entity.checkEnds();

@@ -17,7 +17,6 @@
 package mod.steamnsteel.tileentity;
 
 import com.google.common.base.Objects;
-import mod.steamnsteel.block.container.RemnantRuinChestBlock;
 import mod.steamnsteel.inventory.Inventory;
 import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.Reference;
@@ -161,10 +160,11 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, ITi
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt)
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
         inventory.writeToNBT(nbt);
+        return nbt;
     }
 
     @Override

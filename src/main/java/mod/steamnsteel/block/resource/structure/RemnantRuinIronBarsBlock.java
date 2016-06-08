@@ -72,6 +72,7 @@ public class RemnantRuinIronBarsBlock extends BlockPane
     }
 
     @Override
+    @Deprecated
     public IBlockState getStateFromMeta(int meta)
     {
         return super.getStateFromMeta(meta)

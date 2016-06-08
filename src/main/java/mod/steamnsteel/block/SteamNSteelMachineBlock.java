@@ -48,20 +48,23 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
 
     //TODO: This may have a sane default implementation. but we should check and make sure the material is appropriate
     @Override
+    @Deprecated
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
 
     @Override
-    public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState blockState, int eventId, int eventParameter)
+    @Deprecated
+    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param)
     {
-        super.onBlockEventReceived(world, pos, blockState, eventId, eventParameter);
-        final TileEntity te = world.getTileEntity(pos);
-        return te != null && te.receiveClientEvent(eventId, eventParameter);
+        super.eventReceived(state, worldIn, pos, id, param);
+        final TileEntity te = worldIn.getTileEntity(pos);
+        return te != null && te.receiveClientEvent(id, param);
     }
 
     @Override
+    @Deprecated
     public EnumPushReaction getMobilityFlag(IBlockState state)
     {
         // total immobility and stop pistons

@@ -31,6 +31,7 @@ public class RemnantRuinPillarBlock extends SteamNSteelDirectionalBlock
     }
 
     @Override
+    @Deprecated
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;

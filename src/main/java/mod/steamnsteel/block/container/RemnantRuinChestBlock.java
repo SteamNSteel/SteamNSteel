@@ -50,6 +50,7 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
     }
 
     @Override
+    @Deprecated
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         return defaultBoundingBox;

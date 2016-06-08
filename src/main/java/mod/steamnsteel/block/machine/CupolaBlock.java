@@ -88,6 +88,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
+    @Deprecated
     public IBlockState getStateFromMeta(int meta) {
         boolean isSlave = (meta & 4) == 4;
         return super.getStateFromMeta(meta)
@@ -102,6 +103,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
+    @Deprecated
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         final TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof CupolaTE) {
@@ -163,9 +165,14 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         }
     }
 
+
+
     @Override
-    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock)
+    public void onNeighborChange(IBlockAccess blockAccess, BlockPos pos, BlockPos neighbor)
     {
+        //FIXME: HELLA DANGEROUS
+        World world = (World)blockAccess;
+
         final TileEntity te = world.getTileEntity(pos);
         if (((CupolaTE) te).isSlave())
         {
@@ -183,7 +190,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
             if (!world.isRemote)
             {
                 //QUESTION: This used to pass "8" as it's metadata? What for?
-                dropBlockAsItem(world, pos, state, 0);
+                dropBlockAsItem(world, pos, blockAccess.getBlockState(pos), 0);
             }
         }
     }
@@ -229,6 +236,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
+    @Deprecated
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         if (!state.getValue(IS_SLAVE))

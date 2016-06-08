@@ -23,7 +23,7 @@ import mod.steamnsteel.utility.position.ChunkCoord;
 import mod.steamnsteel.world.ore.niter.NiterVeinGeneratorStateMachine;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -56,7 +56,7 @@ public class NiterOreGenerator extends OreGenerator
     private static final int CLUSTER_COUNT = 2;
     private static final int MAX_HEIGHT = 70;
 
-    private static boolean isQualifiedBiome(BiomeGenBase biome)
+    private static boolean isQualifiedBiome(Biome biome)
     {
         return Sets.intersection(EnumSet.copyOf(Arrays.asList(BiomeDictionary.getTypesForBiome(biome))),
                 BLACKLISTED_BIOME_TYPES).isEmpty();
@@ -77,7 +77,7 @@ public class NiterOreGenerator extends OreGenerator
             // world getBiome method is safer than chunk version (does not throw exceptions for unloaded chunks)
             // also, block columns are assigned biomes
 
-            final BiomeGenBase biome = world.getBiomeGenForCoords(coord);
+            final Biome biome = world.getBiomeGenForCoords(coord);
 
             if (isQualifiedBiome(biome))
             {

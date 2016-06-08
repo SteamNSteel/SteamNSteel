@@ -58,6 +58,7 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
     }
 
     @Override
+    @Deprecated
     public IBlockState getStateFromMeta(int meta)
     {
         return getDefaultState().withProperty(DIRECTION, EnumFacing.getHorizontal(meta));
@@ -70,6 +71,7 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
     }
 
     @Override
+    @Deprecated
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;

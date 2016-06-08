@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class PipeJunctionBlock extends SteamNSteelBlock implements ITileEntityProvider
@@ -26,15 +27,16 @@ public class PipeJunctionBlock extends SteamNSteelBlock implements ITileEntityPr
     }
 
     @Override
+    @Deprecated
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
 
     @Override
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor)
     {
-        TileEntity entity = worldIn.getTileEntity(pos);
+        TileEntity entity = world.getTileEntity(pos);
         if (entity instanceof ITickable) {
             ((ITickable) entity).update();
         }

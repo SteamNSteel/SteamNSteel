@@ -9,6 +9,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
+import javax.annotation.Nullable;
 
 public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntity, ITileEntityWithParts
 {
@@ -72,8 +73,9 @@ public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntit
         //worldObj.markBlockForUpdate(getPos());
     }
 
+    @Nullable
     @Override
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
         final NBTTagCompound nbt = new NBTTagCompound();
         writeToNBT(nbt);
@@ -88,9 +90,10 @@ public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntit
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt)
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
+        return nbt;
     }
 
     @Override

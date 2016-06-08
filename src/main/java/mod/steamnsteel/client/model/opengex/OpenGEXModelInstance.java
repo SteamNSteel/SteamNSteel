@@ -278,6 +278,7 @@ public class OpenGEXModelInstance implements IPerspectiveAwareModel
     }
 
     @Override
+    @Deprecated
     public net.minecraft.client.renderer.block.model.ItemCameraTransforms getItemCameraTransforms()
     {
         return net.minecraft.client.renderer.block.model.ItemCameraTransforms.DEFAULT;

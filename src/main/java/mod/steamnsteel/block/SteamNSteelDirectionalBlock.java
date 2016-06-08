@@ -73,6 +73,7 @@ public abstract class SteamNSteelDirectionalBlock extends SteamNSteelBlock
     }
 
     @Override
+    @Deprecated
     public IBlockState getStateFromMeta(int meta)
     {
         return super.getStateFromMeta(meta)

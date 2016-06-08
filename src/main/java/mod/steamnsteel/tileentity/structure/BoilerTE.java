@@ -277,11 +277,12 @@ public class BoilerTE extends SteamNSteelStructureTE implements IStructureFluidH
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt)
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
 
         inventory.writeToNBT(nbt);
+        return nbt;
     }
 
     @Override

@@ -59,6 +59,7 @@ public class SSBallMillStructure extends SteamNSteelStructureBlock
     }
 
     @Override
+    @Deprecated
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;

@@ -177,6 +177,7 @@ public class PCTModelInstance implements IPerspectiveAwareModel
     }
 
     @Override
+    @Deprecated
     public ItemCameraTransforms getItemCameraTransforms()
     {
         return bakedModel.getItemCameraTransforms();

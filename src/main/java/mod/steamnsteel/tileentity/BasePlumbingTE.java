@@ -11,6 +11,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import javax.annotation.Nullable;
 
 public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileEntity
 {
@@ -58,8 +59,9 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
     protected abstract void writePlumbingToNBT(NBTTagCompound nbt);
     protected abstract void readPlumbingFromNBT(NBTTagCompound nbt);
 
+    @Nullable
     @Override
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
         final NBTTagCompound nbt = new NBTTagCompound();
         writeToNBT(nbt);
@@ -73,13 +75,14 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
     }
 
     @Override
-    public final void writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         writePlumbingToNBT(nbt);
+        return nbt;
     }
 
     @Override
-    public final void readFromNBT(NBTTagCompound nbt) {
+    public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
         readPlumbingFromNBT(nbt);
     }

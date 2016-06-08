@@ -140,6 +140,7 @@ public class ConcreteBlock extends SteamNSteelBlock {
     }
 
     @Override
+    @Deprecated
     public IBlockState getStateFromMeta(int meta) {
         return super.getStateFromMeta(meta).withProperty(WETNESS, meta <= 5 ? meta : 0);
     }
