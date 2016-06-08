@@ -20,8 +20,7 @@ import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.gui.ModGuis;
 import mod.steamnsteel.tileentity.CupolaTE;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -31,19 +30,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
-
-import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 
 public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
@@ -59,7 +54,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         setDefaultState(
                 this.blockState
                         .getBaseState()
-                        .withProperty(DIRECTION, EnumFacing.NORTH)
+                        .withProperty(BlockHorizontal.FACING, EnumFacing.NORTH)
                         .withProperty(IS_SLAVE, false)
                         .withProperty(IS_ACTIVE, false)
         );
@@ -84,7 +79,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, DIRECTION, IS_SLAVE, IS_ACTIVE);
+        return new BlockStateContainer(this, BlockHorizontal.FACING, IS_SLAVE, IS_ACTIVE);
     }
 
     @Override
@@ -136,7 +131,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
 
                 final IBlockState metadata = world.getBlockState(pos);
 
-                final EnumFacing orientation = (EnumFacing)metadata.getValue(DIRECTION);
+                final EnumFacing orientation = metadata.getValue(BlockHorizontal.FACING);
 
                  switch (orientation)
                 {

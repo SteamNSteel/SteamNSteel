@@ -1,6 +1,6 @@
 package mod.steamnsteel.proxy;
 
-import mod.steamnsteel.TheMod;
+import com.foudroyantfactotum.tool.structure.net.StructureNetwork;
 import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.networking.ProjectTableCraftPacket;
 import mod.steamnsteel.networking.ProjectTableCraftPacketMessageHandler;
@@ -23,5 +23,6 @@ public class CommonNetworkProxy
     public void init() {
         network = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         network.registerMessage(ProjectTableCraftPacketMessageHandler.class, ProjectTableCraftPacket.class, 0, Side.SERVER);
+        StructureNetwork.init();
     }
 }

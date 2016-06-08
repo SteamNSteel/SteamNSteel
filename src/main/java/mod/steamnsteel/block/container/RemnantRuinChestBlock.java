@@ -18,6 +18,7 @@ package mod.steamnsteel.block.container;
 
 import mod.steamnsteel.block.SteamNSteelMachineBlock;
 import mod.steamnsteel.tileentity.RemnantRuinChestTE;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -32,12 +33,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
-
 public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements ITileEntityProvider
 {
-
-
     private final AxisAlignedBB defaultBoundingBox = new AxisAlignedBB(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 
     public RemnantRuinChestBlock() {
@@ -45,8 +42,9 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, DIRECTION);
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, BlockHorizontal.FACING);
     }
 
     @Override

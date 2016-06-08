@@ -24,6 +24,7 @@ import mod.steamnsteel.block.SteamNSteelStructureBlock;
 import mod.steamnsteel.client.model.opengex.OpenGEXAnimationFrameProperty;
 import mod.steamnsteel.tileentity.structure.LargeFanTE;
 import mod.steamnsteel.utility.log.Logger;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -32,9 +33,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -42,8 +44,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
-
-import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 
 public class FanLargeStructure extends SteamNSteelStructureBlock
 {
@@ -57,7 +57,7 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
         setDefaultState(
                 blockState
                         .getBaseState()
-                        .withProperty(DIRECTION, EnumFacing.NORTH)
+                        .withProperty(BlockHorizontal.FACING, EnumFacing.NORTH)
                         .withProperty(MIRROR, false)
                         .withProperty(RENDER_DYNAMIC, false)
         );
@@ -66,11 +66,11 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new ExtendedBlockState(this, new IProperty[]{DIRECTION, MIRROR, RENDER_DYNAMIC}, new IUnlistedProperty[]{OpenGEXAnimationFrameProperty.instance});
+        return new ExtendedBlockState(this, new IProperty[]{BlockHorizontal.FACING, MIRROR, RENDER_DYNAMIC}, new IUnlistedProperty[]{OpenGEXAnimationFrameProperty.instance});
     }
 
     @Override
-    public boolean onStructureBlockActivated(World world, BlockPos pos, EntityPlayer player, BlockPos callPos, EnumFacing side, BlockPos local, float sx, float sy, float sz)
+    public boolean onStructureBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumHand hand, BlockPos callPos, EnumFacing side, BlockPos local, float sx, float sy, float sz)
     {
         if (world.isRemote)
         {
@@ -103,7 +103,7 @@ public class FanLargeStructure extends SteamNSteelStructureBlock
     @Override
     public TileEntity createTileEntity(World world, IBlockState state)
     {
-        return new LargeFanTE(getPattern(), state.getValue(DIRECTION), state.getValue(MIRROR));
+        return new LargeFanTE(getPattern(), state.getValue(BlockHorizontal.FACING), state.getValue(MIRROR));
     }
 
     @Override

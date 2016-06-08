@@ -23,16 +23,15 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import mod.steamnsteel.block.SteamNSteelStructureBlock;
 import mod.steamnsteel.tileentity.structure.BlastFurnaceTE;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 
 public class SSBlastFurnaceStructure extends SteamNSteelStructureBlock
 {
@@ -48,7 +47,7 @@ public class SSBlastFurnaceStructure extends SteamNSteelStructureBlock
         setDefaultState(
                 this.blockState
                         .getBaseState()
-                        .withProperty(DIRECTION, EnumFacing.NORTH)
+                        .withProperty(BlockHorizontal.FACING, EnumFacing.NORTH)
                         .withProperty(MIRROR, false)
         );
     }
@@ -56,7 +55,7 @@ public class SSBlastFurnaceStructure extends SteamNSteelStructureBlock
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, DIRECTION, MIRROR);
+        return new BlockStateContainer(this, BlockHorizontal.FACING, MIRROR);
     }
 
     @Override
@@ -81,7 +80,7 @@ public class SSBlastFurnaceStructure extends SteamNSteelStructureBlock
     @Override
     public TileEntity createTileEntity(World world, IBlockState state)
     {
-        return new BlastFurnaceTE(getPattern(), state.getValue(DIRECTION), state.getValue(MIRROR));
+        return new BlastFurnaceTE(getPattern(), state.getValue(BlockHorizontal.FACING), state.getValue(MIRROR));
     }
 
     @Override

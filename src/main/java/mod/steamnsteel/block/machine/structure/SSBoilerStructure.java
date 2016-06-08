@@ -22,15 +22,15 @@ import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.block.SteamNSteelStructureBlock;
 import mod.steamnsteel.tileentity.structure.BoilerTE;
 import mod.steamnsteel.utility.log.Logger;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 
 public class SSBoilerStructure extends SteamNSteelStructureBlock
 {
@@ -40,7 +40,7 @@ public class SSBoilerStructure extends SteamNSteelStructureBlock
         setDefaultState(
                 this.blockState
                         .getBaseState()
-                        .withProperty(DIRECTION, EnumFacing.NORTH)
+                        .withProperty(BlockHorizontal.FACING, EnumFacing.NORTH)
                         .withProperty(MIRROR, false)
         );
     }
@@ -48,7 +48,7 @@ public class SSBoilerStructure extends SteamNSteelStructureBlock
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, DIRECTION, MIRROR);
+        return new BlockStateContainer(this, BlockHorizontal.FACING, MIRROR);
     }
 
     @Override
@@ -66,14 +66,14 @@ public class SSBoilerStructure extends SteamNSteelStructureBlock
     @Override
     public TileEntity createTileEntity(World world, IBlockState state)
     {
-        return new BoilerTE(getPattern(), state.getValue(DIRECTION), state.getValue(MIRROR));
+        return new BoilerTE(getPattern(), state.getValue(BlockHorizontal.FACING), state.getValue(MIRROR));
     }
 
     @Override
-    public boolean onStructureBlockActivated(World world, BlockPos pos, EntityPlayer player, BlockPos callPos, EnumFacing side, BlockPos local, float sx, float sy, float sz)
+    public boolean onStructureBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumHand hand, BlockPos callPos, EnumFacing side, BlockPos local, float sx, float sy, float sz)
     {
         Logger.info("Active: " + world.getTileEntity(pos));
-        return super.onStructureBlockActivated(world, pos, player, callPos, side, local, sx, sy, sz);
+        return super.onStructureBlockActivated(world, pos, player, hand, callPos, side, local, sx, sy, sz);
     }
 
     @Override

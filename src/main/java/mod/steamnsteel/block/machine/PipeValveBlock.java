@@ -18,7 +18,7 @@ package mod.steamnsteel.block.machine;
 
 import mod.steamnsteel.block.SteamNSteelBlock;
 import mod.steamnsteel.tileentity.PipeValveTE;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -26,12 +26,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-
-import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 
 public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvider
 {
@@ -41,27 +39,27 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
         setDefaultState(
                 this.blockState
                         .getBaseState()
-                        .withProperty(DIRECTION, EnumFacing.NORTH)
+                        .withProperty(BlockHorizontal.FACING, EnumFacing.NORTH)
         );
     }
 
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, DIRECTION);
+        return new BlockStateContainer(this, BlockHorizontal.FACING);
     }
 
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        return state.getValue(DIRECTION).getHorizontalIndex();
+        return state.getValue(BlockHorizontal.FACING).getHorizontalIndex();
     }
 
     @Override
     @Deprecated
     public IBlockState getStateFromMeta(int meta)
     {
-        return getDefaultState().withProperty(DIRECTION, EnumFacing.getHorizontal(meta));
+        return getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.getHorizontal(meta));
     }
 
     @Override
@@ -146,7 +144,7 @@ public class PipeValveBlock extends SteamNSteelBlock implements ITileEntityProvi
                 direction = EnumFacing.EAST;
             }
 
-            worldIn.setBlockState(pos, state.withProperty(DIRECTION, direction));
+            worldIn.setBlockState(pos, state.withProperty(BlockHorizontal.FACING, direction));
 
             te.setOrientation(direction);
             //te.setOrientation(direction);

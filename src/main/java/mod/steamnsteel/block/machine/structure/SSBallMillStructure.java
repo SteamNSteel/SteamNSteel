@@ -22,20 +22,20 @@ import com.google.common.collect.ImmutableMap;
 import mod.steamnsteel.block.SteamNSteelStructureBlock;
 import mod.steamnsteel.client.model.opengex.OpenGEXAnimationFrameProperty;
 import mod.steamnsteel.tileentity.structure.BallMillTE;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static com.foudroyantfactotum.tool.structure.block.StructureShapeBlock.DIRECTION;
 import static mod.steamnsteel.block.machine.structure.FanLargeStructure.RENDER_DYNAMIC;
 
 public class SSBallMillStructure extends SteamNSteelStructureBlock
@@ -46,7 +46,7 @@ public class SSBallMillStructure extends SteamNSteelStructureBlock
         setDefaultState(
                 this.blockState
                         .getBaseState()
-                        .withProperty(DIRECTION, EnumFacing.NORTH)
+                        .withProperty(BlockHorizontal.FACING, EnumFacing.NORTH)
                         .withProperty(MIRROR, false)
                         .withProperty(RENDER_DYNAMIC, false)
         );
@@ -55,7 +55,7 @@ public class SSBallMillStructure extends SteamNSteelStructureBlock
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new ExtendedBlockState(this, new IProperty[]{DIRECTION, MIRROR, RENDER_DYNAMIC}, new IUnlistedProperty[]{OpenGEXAnimationFrameProperty.instance});
+        return new ExtendedBlockState(this, new IProperty[]{BlockHorizontal.FACING, MIRROR, RENDER_DYNAMIC}, new IUnlistedProperty[]{OpenGEXAnimationFrameProperty.instance});
     }
 
     @Override
@@ -90,7 +90,7 @@ public class SSBallMillStructure extends SteamNSteelStructureBlock
     @Override
     public TileEntity createTileEntity(World world, IBlockState state)
     {
-        return new BallMillTE(getPattern(), state.getValue(DIRECTION), getMirror(state));
+        return new BallMillTE(getPattern(), state.getValue(BlockHorizontal.FACING), getMirror(state));
     }
 
     @Override
