@@ -35,6 +35,13 @@
         "rotation": {"y": 90 },
         "translation": [0.5,0.5,-0.5]
       }}
+    },
+    "caps": {
+      "none": {},
+      "top": {},
+      "bottom": {},
+      "both": {}
+
     }
   }
 }
