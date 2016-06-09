@@ -3,6 +3,7 @@ package mod.steamnsteel.client.model.pct;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import mod.steamnsteel.library.ModProperties;
 import mod.steamnsteel.library.Reference;
@@ -34,7 +35,7 @@ public class PCTModelInstance implements IPerspectiveAwareModel
     private final VertexFormat format;
     private final Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter;
     private final ProceduralConnectedTexture proceduralConnectedTexture;
-    private final Map<Integer, IBakedModel> cache = Maps.newHashMap();
+    private static final Map<Integer, IBakedModel> cache = Maps.newConcurrentMap();
     private IBakedModel bakedModel = null;
     private IModel baseModel = null;
 
@@ -69,53 +70,18 @@ public class PCTModelInstance implements IPerspectiveAwareModel
     public PCTModelInstance(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter, ProceduralConnectedTexture pct, BlockPos blockPos, IBlockAccess blockAccess, IModel baseModel)
     {
         this(state, format, bakedTextureGetter, pct, baseModel);
-        //CalculateSides(blockPos, blockAccess);
     }
 
-    private IBakedModel calculateSides(BlockPos blockPos, IBlockAccess blockAccess)
-    {
+    private IBakedModel getModelForSide(BlockPos blockPos, IBlockAccess blockAccess, EnumFacing side) {
         final Builder<String, String> textures = ImmutableMap.builder();
 
+        final String key = side.toString().toLowerCase();
+        final String texture = getTextureForSide(blockPos, blockAccess, side);
         int identifier = 31;
+        identifier ^= side.hashCode() * 31;
+        identifier ^= texture.hashCode() * 31;
 
-        for (final EnumFacing side : EnumFacing.VALUES)
-        {
-
-            /*if (side != EnumFacing.UP) {
-                continue;
-            }*/
-
-            final String key = side.toString().toLowerCase();
-            TextureAtlasSprite sprite = proceduralConnectedTexture.getDefaultTextureForSide(side);
-            if (blockAccess != null)
-            {
-                final BlockPos immutableBlockPos = blockPos.toImmutable();
-                final IBlockState blockState = blockAccess.getBlockState(immutableBlockPos);
-
-                if (blockState.shouldSideBeRendered(blockAccess, immutableBlockPos, side))
-                {
-                    try
-                    {
-                        sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, immutableBlockPos, side);
-                    } catch (final Exception e)
-                    {
-                        Logger.info("blockPos: %s, side: %s", blockPos, side);
-                        sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, immutableBlockPos, side);
-                    }
-                }
-            }
-            String texture = "missingno";
-            if (sprite != null)
-            {
-                texture = sprite.getIconName();
-            } else
-            {
-                System.out.print("woof");
-            }
-
-            identifier ^= texture.hashCode() * 31;
-            textures.put(key, texture);
-        }
+        textures.put(key, texture);
 
         bakedModel = cache.get(identifier);
         if (bakedModel == null) {
@@ -133,9 +99,42 @@ public class PCTModelInstance implements IPerspectiveAwareModel
         return bakedModel;
     }
 
+    private String getTextureForSide(BlockPos blockPos, IBlockAccess blockAccess, EnumFacing side)
+    {
+        TextureAtlasSprite sprite = proceduralConnectedTexture.getDefaultTextureForSide(side);
+        if (blockAccess != null)
+        {
+            final BlockPos immutableBlockPos = blockPos.toImmutable();
+            final IBlockState blockState = blockAccess.getBlockState(immutableBlockPos);
+
+            if (blockState.shouldSideBeRendered(blockAccess, immutableBlockPos, side))
+            {
+                try
+                {
+                    sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, immutableBlockPos, side);
+                } catch (final Exception e)
+                {
+                    Logger.info("blockPos: %s, side: %s", blockPos, side);
+                    sprite = proceduralConnectedTexture.getSpriteForSide(blockAccess, immutableBlockPos, side);
+                }
+            }
+        }
+        String texture = "missingno";
+        if (sprite != null)
+        {
+            texture = sprite.getIconName();
+        } else
+        {
+            System.out.print("woof");
+        }
+        return texture;
+    }
+
     @Override
     public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand)
     {
+        if (side == null) return Lists.newArrayList();
+
         if (state instanceof IExtendedBlockState) {
             final IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
             if (extendedBlockState.getUnlistedProperties().containsKey(ModProperties.PROPERTY_BLOCK_POS) &&
@@ -144,8 +143,7 @@ public class PCTModelInstance implements IPerspectiveAwareModel
                 final BlockPos blockPos = extendedBlockState.getValue(ModProperties.PROPERTY_BLOCK_POS);
                 final IBlockAccess blockAccess = extendedBlockState.getValue(ModProperties.PROPERTY_BLOCK_ACCESS);
 
-                //return new PCTModelInstance(state, format, bakedTextureGetter, proceduralConnectedTexture, blockPos, blockAccess, baseModel);
-                return calculateSides(blockPos, blockAccess).getQuads(state, side, rand);
+                return getModelForSide(blockPos, blockAccess, side).getQuads(state, side, rand);
             }
         }
 
@@ -155,7 +153,7 @@ public class PCTModelInstance implements IPerspectiveAwareModel
     @Override
     public boolean isAmbientOcclusion()
     {
-        return bakedModel.isAmbientOcclusion();
+        return true;
     }
 
     @Override
@@ -182,27 +180,6 @@ public class PCTModelInstance implements IPerspectiveAwareModel
     {
         return bakedModel.getItemCameraTransforms();
     }
-
-    /*
-    @Override
-    public IBakedModel handleBlockState(IBlockState blockState)
-    {
-        if (blockState instanceof IExtendedBlockState) {
-            final IExtendedBlockState extendedBlockState = (IExtendedBlockState) blockState;
-            if (extendedBlockState.getUnlistedProperties().containsKey(ModProperties.PROPERTY_BLOCK_POS) &&
-                    extendedBlockState.getUnlistedProperties().containsKey(ModProperties.PROPERTY_BLOCK_ACCESS)) {
-
-                final BlockPos blockPos = extendedBlockState.getValue(ModProperties.PROPERTY_BLOCK_POS);
-                final IBlockAccess blockAccess = extendedBlockState.getValue(ModProperties.PROPERTY_BLOCK_ACCESS);
-
-                return new PCTModelInstance(state, format, bakedTextureGetter, proceduralConnectedTexture, blockPos, blockAccess, baseModel);
-            }
-        }
-
-        return this;
-    }
-    */
-
     @Override
     public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType)
     {

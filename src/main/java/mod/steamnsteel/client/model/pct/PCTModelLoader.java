@@ -78,7 +78,7 @@ public enum PCTModelLoader implements ICustomModelLoader
         final IBakedModel model = rendererDispatcher.getModelForState(state);
         if (model instanceof PCTModelInstance) {
             final ProceduralConnectedTexture proceduralConnectedTexture = ((PCTModelInstance) model).getProceduralConnectedTexture();
-            return proceduralConnectedTexture.describeTextureAt(worldIn, pos, side);
+            return side.getName() + ": " + proceduralConnectedTexture.describeTextureAt(worldIn, pos, side);
         }
         return "Not a Procedural Connected Texture";
     }

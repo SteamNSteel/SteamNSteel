@@ -6,6 +6,16 @@
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{}]
+    "inventory": [{
+      "model": "minecraft:cube",
+      "textures": {
+        "north": "steamnsteel:blocks/remnantRuinFloorSide/RemnantRuinFloorSideSingle",
+        "south": "steamnsteel:blocks/remnantRuinFloorSide/RemnantRuinFloorSideSingle",
+        "east": "steamnsteel:blocks/remnantRuinFloorSide/RemnantRuinFloorSideSingle",
+        "west": "steamnsteel:blocks/remnantRuinFloorSide/RemnantRuinFloorSideSingle",
+        "up": "steamnsteel:blocks/steelfloor/steelfloor_2x5",
+        "down": "steamnsteel:blocks/steelfloor/steelfloor_2x5"
+      }
+    }]
   }
 }
