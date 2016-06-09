@@ -221,38 +221,3 @@ if (config.structure_local_enabled == "true") {
         deobfCompile(group: 'com.foudroyantfactotum', name: 'Structure-' + config.minecraft_version, version: config.structure_version, classifier: 'universal')
     }
 }
-
-///////////////////////////////////////////////////
-// CodeChicken
-///////////////////////////////////////////////////
-if (config.include_codechicken == "true") {
-    repositories {
-        maven {
-            name = "ChickenBones"
-            url = "http://chickenbones.net/maven/"
-        }
-    }
-
-    dependencies {
-        provided "codechicken:CodeChickenCore:${config.codechicken_core_version}:dev"
-        provided "codechicken:NotEnoughItems:${config.codechicken_nei_version}:dev"
-    }
-
-    task copyChicken(type: Copy, dependsOn: "extractUserdev") {
-
-        from { configurations.compile }
-        include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
-        exclude "**/CodeChickenLib*" // because CCC downloads it anyways.. -_-
-        into file("./run/mods") // parallel to the assets dir
-
-        onlyIf {
-            return config.include_codechicken == "true"
-        }
-    }
-
-    tasks.setupDevWorkspace.dependsOn copyChicken
-    tasks.setupDecompWorkspace.dependsOn copyChicken
-} else {
-    sourceSets.main.java.exclude "mod/steamnsteel/nei/*.java"
-    idea.module.excludeDirs += file("src/main/java/mod/steamnsteel/nei/")
-}
