@@ -45,7 +45,7 @@ public class ConcreteBlock extends SteamNSteelBlock {
 
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        float temp = worldIn.getBiomeGenForCoords(pos).getTemperature();
+        float temp = worldIn.getBiomeForCoordsBody(pos).getTemperature();
         int currentMeta = worldIn.getBlockState(pos).getBlock().getMetaFromState(state);
 
         if(currentMeta == 5) return;

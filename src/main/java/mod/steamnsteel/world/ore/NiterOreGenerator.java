@@ -77,7 +77,7 @@ public class NiterOreGenerator extends OreGenerator
             // world getBiome method is safer than chunk version (does not throw exceptions for unloaded chunks)
             // also, block columns are assigned biomes
 
-            final Biome biome = world.getBiomeGenForCoords(coord);
+            final Biome biome = world.getBiomeForCoordsBody(coord);
 
             if (isQualifiedBiome(biome))
             {

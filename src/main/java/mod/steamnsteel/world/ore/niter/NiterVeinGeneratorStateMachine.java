@@ -110,7 +110,7 @@ public class NiterVeinGeneratorStateMachine
         }
 
 
-        float paddingChancePercent = isPreferredBiome(world.getBiomeGenForCoords(target)) ?
+        float paddingChancePercent = isPreferredBiome(world.getBiomeForCoordsBody(target)) ?
                 PREF_BIOME_PADDING_CHANCE_PERCENT :
                 OTHER_BIOME_PADDING_CHANCE_PERCENT;
 
