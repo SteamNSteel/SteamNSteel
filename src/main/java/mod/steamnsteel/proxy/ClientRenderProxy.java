@@ -184,12 +184,12 @@ public class ClientRenderProxy extends CommonRenderProxy
         registerItemModel(ModItem.leggingsSteel);
         registerItemModel(ModItem.bootsSteel);
 
-        //registerItemModel(ModItem.axeBronze);
+        registerItemModel(ModItem.axeBronze);
         registerItemModel(ModItem.pickBronze);
         registerItemModel(ModItem.shovelBronze);
         registerItemModel(ModItem.swordBronze);
         registerItemModel(ModItem.hoeBronze);
-        //registerItemModel(ModItem.axeSteel);
+        registerItemModel(ModItem.axeSteel);
         registerItemModel(ModItem.pickSteel);
         registerItemModel(ModItem.shovelSteel);
         registerItemModel(ModItem.swordSteel);

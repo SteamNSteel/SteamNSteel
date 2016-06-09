@@ -26,7 +26,7 @@ public class SSToolAxe extends ItemAxe
 {
     public SSToolAxe(Material material)
     {
-        super(material.getToolMaterial());
+        super(material.getToolMaterial(), 8f, -3.1f);
         setCreativeTab(TheMod.CREATIVE_TAB);
     }
 

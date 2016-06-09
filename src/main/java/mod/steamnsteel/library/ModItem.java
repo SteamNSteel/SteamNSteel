@@ -48,8 +48,8 @@ public final class ModItem
     public static Item leggingsBronze;
     public static Item leggingsSteel;
 
-    //public static Item axeBronze;
-    //public static Item axeSteel;
+    public static Item axeBronze;
+    public static Item axeSteel;
     public static Item hoeBronze;
     public static Item hoeSteel;
     public static Item pickBronze;
@@ -159,8 +159,8 @@ public final class ModItem
 
     private static void registerTools()
     {
-        //axeBronze = new SSToolAxe(BRONZE).setRegistryName(ItemNames.TOOL_AXE_BRONZE);
-        //axeSteel = new SSToolAxe(STEEL).setRegistryName(ItemNames.TOOL_AXE_STEEL);
+        axeBronze = new SSToolAxe(BRONZE).setRegistryName(ItemNames.TOOL_AXE_BRONZE);
+        axeSteel = new SSToolAxe(STEEL).setRegistryName(ItemNames.TOOL_AXE_STEEL);
         hoeBronze = new SSToolHoe(BRONZE).setRegistryName(ItemNames.TOOL_HOE_BRONZE);
         hoeSteel = new SSToolHoe(STEEL).setRegistryName(ItemNames.TOOL_HOE_STEEL);
         pickBronze = new SSToolPickaxe(BRONZE).setRegistryName(ItemNames.TOOL_PICKAXE_BRONZE);
@@ -171,12 +171,12 @@ public final class ModItem
 
         GameRegistry.register(shovelBronze);
         GameRegistry.register(pickBronze);
-        //GameRegistry.register(axeBronze);
+        GameRegistry.register(axeBronze);
         GameRegistry.register(hoeBronze);
 
         GameRegistry.register(shovelSteel);
         GameRegistry.register(pickSteel);
-        //GameRegistry.register(axeSteel);
+        GameRegistry.register(axeSteel);
         GameRegistry.register(hoeSteel);
 
         GameRegistry.register(structureBuildSteel);
