@@ -1,7 +1,6 @@
 package mod.steamnsteel.client.gui;
 
 import com.google.common.collect.Lists;
-import jline.internal.Log;
 import mod.steamnsteel.client.gui.controls.ProjectTableRecipeControl;
 import mod.steamnsteel.client.gui.events.IRecipeCraftingEventListener;
 import mod.steamnsteel.client.gui.model.ProjectTableRecipeInstance;
@@ -22,17 +21,16 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.util.Rectangle;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class ProjectTableGui extends SteamNSteelGui
 {
-    private final GuiTexture TEXTURE = new GuiTexture(getResourceLocation("SSCraftingTableGUI"), 273, 273);
+    private final GuiTexture guiTexture = new GuiTexture(getResourceLocation("SSCraftingTableGUI"), 273, 273);
     private final InventoryPlayer playerInventory;
     private GuiTextField searchField = null;
     private Collection<ProjectTableRecipeInstance> recipeList = null;
-    private ArrayList<ProjectTableRecipeInstance> filteredList = null;
+    private List<ProjectTableRecipeInstance> filteredList = null;
     private ScrollPaneControl recipeListGuiComponent = null;
     private ScrollbarControl scrollbarGuiComponent = null;
     private GuiRenderer guiRenderer;
@@ -72,8 +70,6 @@ public class ProjectTableGui extends SteamNSteelGui
 
         createComponents();
 
-        processPlayerInventory();
-
         setRecipeRenderText();
     }
 
@@ -81,11 +77,11 @@ public class ProjectTableGui extends SteamNSteelGui
     {
         guiRenderer = new GuiRenderer(mc, mc.getTextureManager(), fontRendererObj, itemRender);
 
-        final GuiSubTexture guiBackground = new GuiSubTexture(TEXTURE, new Rectangle(0, 0, 176, 227));
-        final GuiTexture inactiveHandle = new GuiSubTexture(TEXTURE, new Rectangle(176, 0, 12, 15));
-        final GuiTexture activeHandle = new GuiSubTexture(TEXTURE, new Rectangle(176 + 12, 0, 12, 15));
-        final GuiTexture craftableSubtexture = new GuiSubTexture(TEXTURE, new Rectangle(0, 227, 142, 23));
-        final GuiTexture uncraftableSubtexture = new GuiSubTexture(TEXTURE, new Rectangle(0, 227 + 23, 142, 23));
+        final GuiSubTexture guiBackground = new GuiSubTexture(guiTexture, new Rectangle(0, 0, 176, 227));
+        final GuiTexture inactiveHandle = new GuiSubTexture(guiTexture, new Rectangle(176, 0, 12, 15));
+        final GuiTexture activeHandle = new GuiSubTexture(guiTexture, new Rectangle(176 + 12, 0, 12, 15));
+        final GuiTexture craftableSubtexture = new GuiSubTexture(guiTexture, new Rectangle(0, 227, 142, 23));
+        final GuiTexture uncraftableSubtexture = new GuiSubTexture(guiTexture, new Rectangle(0, 227 + 23, 142, 23));
 
         setRootControl(new TexturedPaneControl(guiRenderer, 176, 227, guiBackground));
         scrollbarGuiComponent = new ScrollbarControl(guiRenderer, activeHandle, inactiveHandle);
@@ -139,7 +135,7 @@ public class ProjectTableGui extends SteamNSteelGui
         if (playerInventory.inventoryChanged) {
             for (final ProjectTableRecipeInstance recipeInstance : filteredList)
             {
-                boolean canCraft = ProjectTableManager.INSTANCE.canCraftRecipe(recipeInstance.getRecipe(), playerInventory);
+                final boolean canCraft = ProjectTableManager.INSTANCE.canCraftRecipe(recipeInstance.getRecipe(), playerInventory);
                 recipeInstance.setCanCraft(canCraft);
             }
 
@@ -151,6 +147,7 @@ public class ProjectTableGui extends SteamNSteelGui
         guiRenderer.notifyTextureChanged();
     }
 
+    @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (!checkHotbarKeys(keyCode))
         {
@@ -231,7 +228,7 @@ public class ProjectTableGui extends SteamNSteelGui
         public void onItemMadeVisible(ScrollPaneControl scrollPaneControl, ProjectTableRecipeControl projectTableRecipeControl, ProjectTableRecipeInstance projectTableRecipe)
         {
 
-            boolean canCraft = ProjectTableManager.INSTANCE.canCraftRecipe(projectTableRecipe.getRecipe(), playerInventory);
+            final boolean canCraft = ProjectTableManager.INSTANCE.canCraftRecipe(projectTableRecipe.getRecipe(), playerInventory);
             projectTableRecipe.setCanCraft(canCraft);
         }
     }

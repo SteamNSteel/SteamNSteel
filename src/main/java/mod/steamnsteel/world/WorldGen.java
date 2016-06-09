@@ -34,8 +34,8 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import java.util.List;
+import java.util.Optional;
 
 import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.CUSTOM;
 
@@ -108,8 +108,9 @@ public enum WorldGen
     }
 
 
-    @SuppressWarnings("MethodMayBeStatic")
+
     @SubscribeEvent
+    @SuppressWarnings({"MethodMayBeStatic", "UnnecessarilyQualifiedInnerClassAccess"})
     public void OnPostOreGenerated(OreGenEvent.Post event)
     {
         for (final OreGenerator oreGen : oreGens)
@@ -118,15 +119,14 @@ public enum WorldGen
     }
 
     @SubscribeEvent
+    @SuppressWarnings({"MethodMayBeStatic", "UnnecessarilyQualifiedInnerClassAccess"})
     public void OnPostPopulateChunkEvent(PopulateChunkEvent.Post event) {
         if (event.isHasVillageGenerated()) {
             return;
         }
         for (final StructureGenerator structureGen : structureGens) {
-            StructureChunkGenerator structureToGenerate = structureGen.getStructureChunkToGenerate(event.getWorld(), event.getChunkX(), event.getChunkZ());
-            if (structureToGenerate != null) {
-                structureToGenerate.generate();
-            }
+            final Optional<StructureChunkGenerator> structureToGenerate = structureGen.getStructureChunkToGenerate(event.getWorld(), event.getChunkX(), event.getChunkZ());
+            structureToGenerate.ifPresent(StructureChunkGenerator::generate);
         }
     }
 }

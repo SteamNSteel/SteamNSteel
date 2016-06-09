@@ -1,7 +1,9 @@
 package mod.steamnsteel.world.structure.remnantruins;
 
+import com.google.common.collect.Lists;
 import org.lwjgl.util.ReadableRectangle;
-import java.util.LinkedList;
+import java.util.Deque;
+import java.util.Optional;
 
 public class RuinRing
 {
@@ -9,7 +11,7 @@ public class RuinRing
     public final double ringSize;
     public final double minRuinRing;
     public final double maxRuinRing;
-    private final LinkedList<Ruin> ruins = new LinkedList<Ruin>();;
+    private final Deque<Ruin> ruins = Lists.newLinkedList();
 
     public RuinRing(double ringSize, double minRuinRing, double maxRuinRing)
     {
@@ -23,15 +25,14 @@ public class RuinRing
         ruins.add(new Ruin(ruinLevel, ruinLeft, ruinTop, ruinSchematic));
     }
 
-    public Ruin GetIntersectingRuin(ReadableRectangle chunkRect)
+    public Optional<Ruin> GetIntersectingRuin(ReadableRectangle chunkRect)
     {
         for (final Ruin ruin : ruins)
         {
             if (ruin.IntersectsChunk(chunkRect)) {
-                return ruin;
+                return Optional.of(ruin);
             }
         }
-        return null;
+        return Optional.empty();
     }
-
 }

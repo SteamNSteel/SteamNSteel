@@ -39,7 +39,7 @@ public class RemnantRuinsGenerator extends StructureGenerator
     private RuinLevel[] ruinLevels;
 
     @Override
-    public StructureChunkGenerator getStructureChunkToGenerate(World world, int chunkX, int chunkZ)
+    public Optional<StructureChunkGenerator> getStructureChunkToGenerate(World world, int chunkX, int chunkZ)
     {
         //Check which of the four corners of the chunk are closest/furtherst from spawn.
         double[] distancesToCheck = {
@@ -50,8 +50,8 @@ public class RemnantRuinsGenerator extends StructureGenerator
         };
 
         //
-        double minDistance = Doubles.min(distancesToCheck);
-        double maxDistance = Doubles.max(distancesToCheck);
+        final double minDistance = Doubles.min(distancesToCheck);
+        final double maxDistance = Doubles.max(distancesToCheck);
 
         final Iterator<RuinRing> ruinRingIterator = ruinRings.iterate(world.getSeed());
         RuinRing ruinRing;
@@ -64,27 +64,28 @@ public class RemnantRuinsGenerator extends StructureGenerator
             if (((minDistance >= ruinRing.minRuinRing && minDistance <= ruinRing.maxRuinRing)) || ((maxDistance >= ruinRing.minRuinRing && maxDistance <= ruinRing.maxRuinRing)))
             {
 
-                Rectangle chunkRect = new Rectangle(new Point(chunkX << 4, chunkZ << 4), chunkSize);
+                final Rectangle chunkRect = new Rectangle(new Point(chunkX << 4, chunkZ << 4), chunkSize);
                 //Check if this chunk occurs in any ruins
-                Ruin ruin = ruinRing.GetIntersectingRuin(chunkRect);
+                final Optional<Ruin> ruin = ruinRing.GetIntersectingRuin(chunkRect);
 
-                if (ruin != null)
+                if (ruin.isPresent())
                 {
+                    final Ruin r = ruin.get();
                     //If we've found a ruin, return a StructureChunkGenerator for it.
-                    Rectangle ruinLocation = new Rectangle(ruin.location, chunkSize);
-                    return new StructureChunkGenerator(world, chunkX, chunkZ, ruin, ruinLocation);
+                    final Rectangle ruinLocation = new Rectangle(r.location, chunkSize);
+                    return Optional.of(new StructureChunkGenerator(world, chunkX, chunkZ, r, ruinLocation));
                 }
             }
         } while (ruinRing.minRuinRing < maxDistance);
 
-        return null;
+        return Optional.empty();
     }
 
     private void LoadRuinLevels()
     {
         try
         {
-            Gson gson = new GsonBuilder()
+            final Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Dimension.class, new DimensionJsonTypeAdapter())
                     .registerTypeAdapter(RuinType.class, new RuinTypeJsonTypeAdapter())
                     .create();
@@ -96,15 +97,14 @@ public class RemnantRuinsGenerator extends StructureGenerator
 
             ruinLevels = gson.fromJson(new InputStreamReader(resource.getInputStream()), RuinLevel[].class);
 
-            for (RuinLevel ruinLevel : ruinLevels)
+            for (final RuinLevel ruinLevel : ruinLevels)
             {
                 ruinLevel.resolveSchematicNames(WorldGen.schematicLoader);
             }
 
             ruinRings = new RuinRings(ruinLevels, MinimumRing, RingDistance, DistanceBetweenRuins);
-        } catch (IOException e)
+        } catch (final IOException e)
         {
-            e.printStackTrace();
             throw new SteamNSteelException("Unable to load Schematics for ruin generation", e);
         }
 

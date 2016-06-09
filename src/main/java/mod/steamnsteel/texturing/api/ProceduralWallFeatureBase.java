@@ -1,8 +1,9 @@
 package mod.steamnsteel.texturing.api;
 
+import com.google.common.collect.Maps;
 import mod.steamnsteel.utility.position.ChunkCoord;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
 
 public abstract class ProceduralWallFeatureBase implements IProceduralWallFeature
 {
@@ -11,7 +12,7 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     private long featureId;
 
     //TODO: Find a proper caching object to do this.
-    HashMap<ChunkCoord, Collection<FeatureInstance>> cachedFeatures = new HashMap<ChunkCoord, Collection<FeatureInstance>>();
+    final Map<ChunkCoord, Collection<FeatureInstance>> cachedFeatures = Maps.newHashMap();
 
     protected ProceduralWallFeatureBase(String name, Layer layer)
     {
@@ -23,7 +24,7 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
      * @return the traitId of this feature
      */
     @Override
-    public final long getFeatureTraitId()
+    public long getFeatureTraitId()
     {
         return featureId;
     }
@@ -32,15 +33,16 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
      * @param featureTraitId The Id of this feature.
      */
     @Override
-    public final void setFeatureTraitId(long featureTraitId)
+    public void setFeatureTraitId(long featureTraitId)
     {
-        this.featureId = featureTraitId;
+        featureId = featureTraitId;
     }
 
     /**
      * @return the layer the feature is defined on
      */
-    public final Layer getLayer()
+    @Override
+    public Layer getLayer()
     {
         return layer;
     }
@@ -48,7 +50,8 @@ public abstract class ProceduralWallFeatureBase implements IProceduralWallFeatur
     /**
      * @return the name of the feature
      */
-    public final String getName()
+    @Override
+    public String getName()
     {
         return name;
     }
