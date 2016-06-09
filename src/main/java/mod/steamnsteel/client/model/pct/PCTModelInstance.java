@@ -35,7 +35,7 @@ public class PCTModelInstance implements IPerspectiveAwareModel
     private final VertexFormat format;
     private final Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter;
     private final ProceduralConnectedTexture proceduralConnectedTexture;
-    private static final Map<Integer, IBakedModel> cache = Maps.newConcurrentMap();
+    static final Map<Integer, IBakedModel> cache = Maps.newConcurrentMap();
     private IBakedModel bakedModel = null;
     private IModel baseModel = null;
 

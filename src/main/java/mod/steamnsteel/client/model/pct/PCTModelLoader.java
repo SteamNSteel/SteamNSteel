@@ -54,7 +54,9 @@ public enum PCTModelLoader implements ICustomModelLoader
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) { }
+    public void onResourceManagerReload(IResourceManager resourceManager) {
+        PCTModelInstance.cache.clear();
+    }
 
     @SubscribeEvent
     public void onPreTextureStitch(TextureStitchEvent.Pre event) {
