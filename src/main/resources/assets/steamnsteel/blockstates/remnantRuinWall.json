@@ -6,6 +6,16 @@
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{}]
+    "inventory": [{
+      "model": "minecraft:cube_mirrored",
+      "textures": {
+        "north": "steamnsteel:blocks/remnantRuinWall/Wall_DD1_PipeA",
+        "south": "steamnsteel:blocks/remnantRuinWall/Wall_DD2_PEdgeRDC",
+        "east": "steamnsteel:blocks/remnantRuinWall/Wall_DD2_PEdgeLDC",//Wall_DD1_PipeA
+        "west": "steamnsteel:blocks/remnantRuinWall/Wall_Default",
+        "up": "steamnsteel:blocks/remnantRuinWall/Wall_DD2_PEdgeRUC",
+        "down": "steamnsteel:blocks/remnantRuinWall/Wall_DD1_PipeB"
+      }
+    }]
   }
 }
