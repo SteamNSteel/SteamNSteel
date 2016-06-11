@@ -25,8 +25,6 @@ import java.util.Random;
 public class ConcreteBlock extends SteamNSteelBlock {
     private static final PropertyInteger WETNESS = PropertyInteger.create("wetness", 0, 5);
 
-
-
     public ConcreteBlock() {
         super(Material.ROCK);
         setTickRandomly(true);
