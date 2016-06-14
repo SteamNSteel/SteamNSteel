@@ -460,7 +460,15 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
             tileEntity.disconnect(endB.getOpposite());
         }
     }
-    
+
+    @Override
+    public NBTTagCompound getUpdateTag()
+    {
+        final NBTTagCompound updateTag = super.getUpdateTag();
+        writePlumbingToNBT(updateTag);
+        return updateTag;
+    }
+
     @Override
     public void writePlumbingToNBT(NBTTagCompound nbt)
     {
