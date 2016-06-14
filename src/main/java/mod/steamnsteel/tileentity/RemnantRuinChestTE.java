@@ -31,6 +31,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, ITickable
 {
@@ -91,12 +92,14 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, ITi
     @Override
     public boolean hasCustomName()
     {
-        return getName().length() > 0;
+        return false;
     }
 
     @Override
     public ITextComponent getDisplayName() {
-        return new TextComponentString(getName());
+
+        return new TextComponentTranslation(this.getName(), new Object[0]);
+        //return new TextComponentString(getName());
     }
 
     @Override
