@@ -3,7 +3,6 @@ package mod.steamnsteel.client.codemodel;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.ImmutableSet;
-import mod.steamnsteel.TheMod;
 import mod.steamnsteel.block.machine.PipeBlock;
 import mod.steamnsteel.block.machine.PipeBlock.PipeStates;
 import mod.steamnsteel.library.ModBlock;
@@ -11,8 +10,8 @@ import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -64,27 +63,27 @@ public class PipeModel extends BaseCodeModel
 
         builder.put(EnumFacing.DOWN, TRSRTransformation
                 .blockCornerToCenter(new TRSRTransformation(ModelRotation.X180_Y0))
-                .compose(new TRSRTransformation(new Vector3f(0.5f, -sz, -0.5f), null, null, null))
+                .compose(new TRSRTransformation(new Vector3f(0.0f, -sz, 0.0f), null, null, null))
         );
         builder.put(EnumFacing.UP, TRSRTransformation
                 .blockCornerToCenter(new TRSRTransformation(ModelRotation.X0_Y0))
-                .compose(new TRSRTransformation(new Vector3f(0.5f, 1.0f - sz, 0.5f), null, null, null))
+                .compose(new TRSRTransformation(new Vector3f(0.0f, 1.0f - sz, 0.0f), null, null, null))
         );
         builder.put(EnumFacing.NORTH, TRSRTransformation
-                .blockCornerToCenter(new TRSRTransformation(ModelRotation.X270_Y180))
-                .compose(new TRSRTransformation(new Vector3f(-0.5f, -sz, -0.5f), null, null, null))
+                .blockCornerToCenter(new TRSRTransformation(ModelRotation.X180_Y0))
+                .compose(new TRSRTransformation(new Vector3f(0.0f, -sz, 0.0f), null, null, null))
         );
         builder.put(EnumFacing.SOUTH, TRSRTransformation
-                .blockCornerToCenter(new TRSRTransformation(ModelRotation.X90_Y180))
-                .compose(new TRSRTransformation(new Vector3f(-0.5f, 1.0f - sz, 0.5f), null, null, null))
+                .blockCornerToCenter(new TRSRTransformation(ModelRotation.X0_Y0))
+                .compose(new TRSRTransformation(new Vector3f(0.0f, 1.0f - sz, 0.0f), null, null, null))
         );
         builder.put(EnumFacing.EAST, TRSRTransformation
-                .blockCornerToCenter(new TRSRTransformation(ModelRotation.X90_Y90))
-                .compose(new TRSRTransformation(new Vector3f(0.5f, 1.0f - sz, 0.5f), null, null, null))
+                .blockCornerToCenter(new TRSRTransformation(ModelRotation.X180_Y0))
+                .compose(new TRSRTransformation(new Vector3f(0.0f, -sz, 0.0f), null, null, null))
         );
         builder.put(EnumFacing.WEST, TRSRTransformation
-                .blockCornerToCenter(new TRSRTransformation(ModelRotation.X270_Y90))
-                .compose(new TRSRTransformation(new Vector3f(0.5f, -sz, -0.5f), null, null, null))
+                .blockCornerToCenter(new TRSRTransformation(ModelRotation.X0_Y0))
+                .compose(new TRSRTransformation(new Vector3f(0.0f, 1.0f - sz, 0.0f), null, null, null))
         );
 
         transformations = builder.build();
