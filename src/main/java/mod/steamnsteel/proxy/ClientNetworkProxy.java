@@ -15,7 +15,6 @@
  */
 package mod.steamnsteel.proxy;
 
-import com.foudroyantfactotum.tool.structure.net.StructurePacket;
 import mod.steamnsteel.networking.ProjectTableCraftPacket;
 import mod.steamnsteel.networking.ProjectTableCraftPacketMessageHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,7 +28,6 @@ public class ClientNetworkProxy extends CommonNetworkProxy
     public void init() {
         super.init();
         getNetwork().registerMessage(ProjectTableCraftPacketMessageHandler.class, ProjectTableCraftPacket.class, 0, Side.CLIENT);
-        getNetwork().registerMessage(StructurePacket.Handler.class, StructurePacket.class, 1, Side.CLIENT);
     }
 
 }

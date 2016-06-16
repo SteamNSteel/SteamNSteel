@@ -23,6 +23,6 @@ public class CommonNetworkProxy
     public void init() {
         network = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         network.registerMessage(ProjectTableCraftPacketMessageHandler.class, ProjectTableCraftPacket.class, 0, Side.SERVER);
-        StructureNetwork.init();
+        StructureNetwork.init(network);
     }
 }
