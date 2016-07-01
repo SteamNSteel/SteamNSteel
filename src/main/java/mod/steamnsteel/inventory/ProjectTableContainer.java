@@ -22,12 +22,20 @@ public class ProjectTableContainer extends SteamNSteelContainer{
     public ProjectTableContainer(InventoryPlayer playerInventory) {
 
         addPlayerInventory(playerInventory, 8, 145);
-        addSlotToContainer(new ProjectTableCraftingSlot(playerInventory.player, craftMatrix, craftResult, 0));
+        //addSlotToContainer(new ProjectTableCraftingSlot(playerInventory.player, craftMatrix, craftResult, 0));
     }
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
         return true;
+    }
+
+    @Override
+    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player) {
+        if (clickTypeIn == ClickType.QUICK_MOVE) {
+            return null;
+        }
+        return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
 
     class ProjectTableCraftingSlot extends SlotCrafting

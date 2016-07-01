@@ -3,6 +3,7 @@ package mod.steamnsteel.networking.serialization;
 import mod.steamnsteel.api.crafting.ingredient.IIngredient;
 import mod.steamnsteel.api.crafting.ingredient.IIngredientSerializer;
 import mod.steamnsteel.api.crafting.ingredient.ItemStackIngredient;
+import mod.steamnsteel.networking.PacketBufferExtensions;
 import mod.steamnsteel.utility.SteamNSteelException;
 import net.minecraft.network.PacketBuffer;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class ItemStackIngredientSerializer implements IIngredientSerializer
     {
         try
         {
-            return new ItemStackIngredient(buffer.readItemStackFromBuffer());
+            return new ItemStackIngredient(PacketBufferExtensions.readLargeItemStackFromBuffer(buffer));
         } catch (IOException e)
         {
             throw new SteamNSteelException(e);
@@ -29,6 +30,6 @@ public class ItemStackIngredientSerializer implements IIngredientSerializer
     {
         if (!(ingredient instanceof ItemStackIngredient)) throw new SteamNSteelException("Attempt to deserialize an ingredient that is not an ItemStackIngredient");
         final ItemStackIngredient itemStackIngredient = (ItemStackIngredient) ingredient;
-        buffer.writeItemStackToBuffer(itemStackIngredient.getItemStack());
+        PacketBufferExtensions.writeLargeItemStackToBuffer(buffer, itemStackIngredient.getItemStack());
     }
 }

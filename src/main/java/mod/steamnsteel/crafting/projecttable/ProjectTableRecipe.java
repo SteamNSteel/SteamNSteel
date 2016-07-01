@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import mod.steamnsteel.api.crafting.ingredient.IIngredient;
 import mod.steamnsteel.api.crafting.ingredient.IIngredientSerializer;
+import mod.steamnsteel.networking.PacketBufferExtensions;
 import mod.steamnsteel.networking.SerializationRegistry;
 import mod.steamnsteel.utility.SteamNSteelException;
 import net.minecraft.item.ItemStack;
@@ -92,7 +93,7 @@ public class ProjectTableRecipe
             List<ItemStack> output = Lists.newArrayList();
             for (int i = 0; i < outputItemStackCount; ++i)
             {
-                output.add(buf.readItemStackFromBuffer());
+                output.add(PacketBufferExtensions.readLargeItemStackFromBuffer(buf));
             }
 
             final String displayName = ByteBufUtils.readUTF8String(buf);
@@ -123,7 +124,7 @@ public class ProjectTableRecipe
         buf.writeByte(output.size());
         for (final ItemStack itemStack : output)
         {
-            buf.writeItemStackToBuffer(itemStack);
+            PacketBufferExtensions.writeLargeItemStackToBuffer(buf, itemStack);
         }
         buf.writeString(displayName);
     }

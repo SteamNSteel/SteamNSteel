@@ -26,7 +26,7 @@ import java.util.List;
 
 public class ProjectTableGui extends SteamNSteelGui
 {
-    private final GuiTexture guiTexture = new GuiTexture(getResourceLocation("SSCraftingTableGUI"), 273, 273);
+    private final GuiTexture guiTexture = new GuiTexture(getResourceLocation("SSCraftingTableGUI"), 384, 384);
     private final InventoryPlayer playerInventory;
     private GuiTextField searchField = null;
     private Collection<ProjectTableRecipeInstance> recipeList = null;
@@ -48,10 +48,11 @@ public class ProjectTableGui extends SteamNSteelGui
     @Override
     public void initGui()
     {
-        xSize = 176;
+        xSize = 175;
         ySize = 227;
         super.initGui();
-
+        xSize = 317;
+        ySize = 227;
         recipeList = Lists.newArrayList();
 
         //Temporary Item List:
@@ -61,7 +62,7 @@ public class ProjectTableGui extends SteamNSteelGui
         }
         filteredList = Lists.newArrayList(recipeList);
 
-        searchField = new GuiTextField(0, fontRendererObj, guiLeft + 9, guiTop + 9, 151, fontRendererObj.FONT_HEIGHT);
+        searchField = new GuiTextField(0, fontRendererObj, guiLeft + 9 - (317 - 175) / 2, guiTop + 9, 149, fontRendererObj.FONT_HEIGHT);
         searchField.setMaxStringLength(60);
         searchField.setEnableBackgroundDrawing(false);
         searchField.setVisible(true);
@@ -77,19 +78,19 @@ public class ProjectTableGui extends SteamNSteelGui
     {
         guiRenderer = new GuiRenderer(mc, mc.getTextureManager(), fontRendererObj, itemRender);
 
-        final GuiSubTexture guiBackground = new GuiSubTexture(guiTexture, new Rectangle(0, 0, 176, 227));
-        final GuiTexture inactiveHandle = new GuiSubTexture(guiTexture, new Rectangle(176, 0, 12, 15));
-        final GuiTexture activeHandle = new GuiSubTexture(guiTexture, new Rectangle(176 + 12, 0, 12, 15));
-        final GuiTexture craftableSubtexture = new GuiSubTexture(guiTexture, new Rectangle(0, 227, 142, 23));
-        final GuiTexture uncraftableSubtexture = new GuiSubTexture(guiTexture, new Rectangle(0, 227 + 23, 142, 23));
+        final GuiSubTexture guiBackground = new GuiSubTexture(guiTexture, new Rectangle(0, 0, 317, 227));
+        final GuiTexture inactiveHandle = new GuiSubTexture(guiTexture, new Rectangle(318, 0, 12, 15));
+        final GuiTexture activeHandle = new GuiSubTexture(guiTexture, new Rectangle(318 + 12, 0, 12, 15));
+        final GuiTexture craftableSubtexture = new GuiSubTexture(guiTexture, new Rectangle(0, 227, 284, 23));
+        final GuiTexture uncraftableSubtexture = new GuiSubTexture(guiTexture, new Rectangle(0, 227 + 23, 284, 23));
 
-        setRootControl(new TexturedPaneControl(guiRenderer, 176, 227, guiBackground));
+        setRootControl(new TexturedPaneControl(guiRenderer, 317, 227, guiBackground));
         scrollbarGuiComponent = new ScrollbarControl(guiRenderer, activeHandle, inactiveHandle);
-        scrollbarGuiComponent.setLocation(156, 24);
-        scrollbarGuiComponent.setSize(20, 115);
+        scrollbarGuiComponent.setLocation(298, 24);
+        scrollbarGuiComponent.setSize(14, 115);
 
         final ProjectTableRecipeControl templateRecipeControl = new ProjectTableRecipeControl(guiRenderer, craftableSubtexture, uncraftableSubtexture);
-        recipeListGuiComponent = new ScrollPaneControl<ProjectTableRecipeInstance, ProjectTableRecipeControl>(guiRenderer, 141, 23*5)
+        recipeListGuiComponent = new ScrollPaneControl<ProjectTableRecipeInstance, ProjectTableRecipeControl>(guiRenderer, 330, 23*5)
                 .setScrollbar(scrollbarGuiComponent)
                 .setItemRendererTemplate(templateRecipeControl)
                 .setVisibleItemCount(5)
@@ -138,7 +139,6 @@ public class ProjectTableGui extends SteamNSteelGui
                 final boolean canCraft = ProjectTableManager.INSTANCE.canCraftRecipe(recipeInstance.getRecipe(), playerInventory);
                 recipeInstance.setCanCraft(canCraft);
             }
-
         }
         playerInventory.inventoryChanged = false;
 
