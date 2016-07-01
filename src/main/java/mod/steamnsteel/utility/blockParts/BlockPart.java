@@ -60,7 +60,7 @@ public class BlockPart
                 pos.getX() + boundingBox.maxX, pos.getY()+ boundingBox.maxY, pos.getZ() + boundingBox.maxZ
         );
 
-        RenderGlobal.drawSelectionBoundingBox(drawBoundingBox.expand(e, e, e).offset(-playerX, -playerY, -playerZ));
+        RenderGlobal.func_189696_b(drawBoundingBox.expand(e, e, e).offset(-playerX, -playerY, -playerZ), 0.5f, 0.5f, 0.5f, 0.5f);
     }
 
     public boolean isEnabledByDefault()
