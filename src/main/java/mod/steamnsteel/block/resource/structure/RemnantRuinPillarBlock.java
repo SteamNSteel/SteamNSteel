@@ -49,6 +49,7 @@ public class RemnantRuinPillarBlock extends SteamNSteelDirectionalBlock
 
 
     @Override
+    @Deprecated
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
     {
         boolean hasPillarAbove = worldIn.getBlockState(pos.offset(EnumFacing.UP)).getBlock() == this;
