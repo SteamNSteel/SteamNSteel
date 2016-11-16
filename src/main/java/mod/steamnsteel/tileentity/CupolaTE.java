@@ -217,6 +217,17 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
     }
 
     @Override
+    public boolean func_191420_l()
+    {
+        for (int i = 0; i < inventory.getSize(); ++i) {
+            if (!inventory.getStack(i).func_190926_b()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public ItemStack getStackInSlot(int slotIndex)
     {
         return getTargetInventory().getStack(slotIndex);
@@ -271,7 +282,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
         // Lazy initialization of masterInventory
         if (!masterInventory.isPresent())
         {
-            final CupolaTE te = (CupolaTE) worldObj.getTileEntity(getPos().down());
+            final CupolaTE te = (CupolaTE) world.getTileEntity(getPos().down());
             masterInventory = Optional.of(te.inventory);
         }
         return masterInventory.get();
@@ -332,7 +343,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
         updateDeviceCookTime();
 
         boolean sendUpdate = false;
-        if (!worldObj.isRemote)
+        if (!world.isRemote)
         {
             if (deviceCookTime == 0 && canAlloy())
                 sendUpdate = didConsumeNextFuel();
@@ -356,8 +367,8 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
     {
         markDirty();
         isActive = deviceCookTime > 0;
-        worldObj.addBlockEvent(getPos(), getBlockType(), 1, isActive ? 1 : 0);
-        worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
+        world.addBlockEvent(getPos(), getBlockType(), 1, isActive ? 1 : 0);
+        world.notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
     }
 
     private boolean didCookItem()
@@ -384,9 +395,9 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
         if (deviceCookTime > 0)
         {
             sendUpdate = true;
-            fuelStack.stackSize--;
+            fuelStack.func_190918_g(1);
 
-            if (fuelStack.stackSize == 0)
+            if (fuelStack.func_190916_E() == 0)
             {
                 inventory.setSlot(INPUT_FUEL, fuelStack.getItem().getContainerItem(fuelStack));
             }
@@ -409,7 +420,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
         {
 
             isActive = eventData != 0;
-            worldObj.checkLight(getPos());
+            world.checkLight(getPos());
             return true;
         }
         return super.receiveClientEvent(eventId, eventData);
@@ -425,7 +436,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
 
         final IAlloyResult output = AlloyManager.INSTANCE.getCupolaResult(leftStack, rightStack);
         if (!output.getItemStack().isPresent() ||
-                output.getConsumedA() > leftStack.stackSize || output.getConsumedB() > rightStack.stackSize)
+                output.getConsumedA() > leftStack.func_190916_E() || output.getConsumedB() > rightStack.func_190916_E())
         {
             return false;
         }
@@ -437,7 +448,7 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
         if (!outputStack.isItemEqual(output.getItemStack().get()))
             return false;
 
-        final int result = outputStack.stackSize + output.getItemStack().get().stackSize;
+        final int result = outputStack.func_190916_E() + output.getItemStack().get().func_190916_E();
         return result <= getInventoryStackLimit() && result <= output.getItemStack().get().getMaxStackSize();
     }
 
@@ -453,15 +464,15 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
             {
                 addItemStackToOutput(output.getItemStack().get().copy());
 
-                leftStack.stackSize -= output.getConsumedA();
-                rightStack.stackSize -= output.getConsumedB();
+                leftStack.func_190918_g(output.getConsumedA());
+                rightStack.func_190918_g(output.getConsumedB());
 
-                if (rightStack.stackSize <= 0)
+                if (rightStack.func_190916_E() <= 0)
                 {
                     inventory.clearSlot(INPUT_RIGHT);
                 }
 
-                if (leftStack.stackSize <= 0)
+                if (leftStack.func_190916_E() <= 0)
                 {
                     inventory.clearSlot(INPUT_LEFT);
                 }
@@ -480,11 +491,11 @@ public class CupolaTE extends SteamNSteelTE implements ISidedInventory, ITickabl
         }
         final ItemStack outputStack = inventory.getStack(OUTPUT);
         if (outputStack.isItemEqual(itemStack)
-                && outputStack.stackSize < maxStackSize)
+                && outputStack.func_190916_E() < maxStackSize)
         {
-            final int addedSize = Math.min(itemStack.stackSize, maxStackSize - outputStack.stackSize);
-            itemStack.stackSize -= addedSize;
-            outputStack.stackSize += addedSize;
+            final int addedSize = Math.min(itemStack.func_190916_E(), maxStackSize - outputStack.func_190916_E());
+            itemStack.func_190918_g(addedSize);
+            outputStack.func_190917_f(addedSize);
         }
     }
 

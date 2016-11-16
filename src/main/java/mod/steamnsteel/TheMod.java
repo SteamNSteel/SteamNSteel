@@ -32,6 +32,7 @@ import mod.steamnsteel.world.LoadSchematicFromResourceCommand;
 import mod.steamnsteel.world.WorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
@@ -53,9 +54,9 @@ public class TheMod
     public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID.toLowerCase())
     {
         @Override
-        public Item getTabIconItem()
+        public ItemStack getTabIconItem()
         {
-            return ModItem.mustyJournal;
+            return new ItemStack(ModItem.mustyJournal);
         }
     };
 

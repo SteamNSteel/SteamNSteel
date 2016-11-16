@@ -4,6 +4,7 @@ import jline.internal.Log;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class ItemStackUtils
             return Collections.singletonList(itemStack);
         }
 
-        return getSubtypes(item, itemStack.stackSize);
+        return getSubtypes(item, itemStack.func_190916_E());
     }
 
     @Nonnull
@@ -38,12 +39,12 @@ public class ItemStackUtils
         List<ItemStack> itemStacks = new ArrayList<>();
 
         for (CreativeTabs itemTab : item.getCreativeTabs()) {
-            List<ItemStack> subItems = new ArrayList<>();
+            NonNullList<ItemStack> subItems = NonNullList.func_191196_a();
             item.getSubItems(item, itemTab, subItems);
             for (ItemStack subItem : subItems) {
-                if (subItem.stackSize != stackSize) {
+                if (subItem.func_190916_E() != stackSize) {
                     ItemStack subItemCopy = subItem.copy();
-                    subItemCopy.stackSize = stackSize;
+                    subItemCopy.func_190920_e(stackSize);
                     itemStacks.add(subItemCopy);
                 } else {
                     itemStacks.add(subItem);

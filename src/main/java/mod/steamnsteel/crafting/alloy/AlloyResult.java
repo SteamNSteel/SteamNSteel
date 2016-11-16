@@ -37,7 +37,7 @@ public class AlloyResult implements IAlloyResult
         //noinspection AssignmentToNull
         item = itemStack == null ? null : itemStack.getItem();
         meta = itemStack == null ? 0 : itemStack.getItemDamage();
-        quantity = itemStack == null ? 0 : itemStack.stackSize;
+        quantity = itemStack == null ? 0 : itemStack.func_190916_E();
         this.consumedA = consumedA;
         this.consumedB = consumedB;
     }

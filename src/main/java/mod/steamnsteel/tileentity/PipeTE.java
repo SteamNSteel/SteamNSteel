@@ -153,7 +153,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         }
 
         //Finally, if we're on the client, we should recalculate any visuals.
-        if (worldObj.isRemote) {
+        if (world.isRemote) {
             recalculateVisuals();
         }
     }
@@ -223,7 +223,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
      */
     public void recalculateVisuals()
     {
-        if (worldObj == null || !worldObj.isRemote) return;
+        if (world == null || !world.isRemote) return;
         //Render as a corner if endB is not the opposite of endA
         this.shouldRenderAsCorner = endB != endA.getOpposite();
 
@@ -362,7 +362,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
                 .add("endB", endB)
                 .add("endBConnected", endBIsConnected);
 
-        if (worldObj != null && worldObj.isRemote) {
+        if (world != null && world.isRemote) {
             stringHelper = stringHelper
                     .add("shouldRenderAsCorner", shouldRenderAsCorner);
         }
@@ -486,7 +486,7 @@ public class PipeTE extends BasePlumbingTE implements ITileEntityWithParts
         endB = EnumFacing.VALUES[nbt.getByte(NBT_END_B)];
         endBIsConnected = nbt.getBoolean(NBT_END_B_CONNECTED);
 
-        if (worldObj != null && worldObj.isRemote)
+        if (world != null && world.isRemote)
         {
             recalculateVisuals();
         }

@@ -32,6 +32,7 @@ public class ConcreteBlock extends SteamNSteelBlock {
         setDefaultState(blockState.getBaseState().withProperty(WETNESS, 0));
     }
 
+    @Deprecated
     @Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         worldIn.getBlockState(pos).getBlock().setResistance(meta * 3.0F);

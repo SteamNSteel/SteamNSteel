@@ -17,9 +17,9 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
 {
     protected void sendUpdate()
     {
-        Logger.info("%s - Notifying Block Change - %s", worldObj.isRemote ? "client" : "server", toString());
+        Logger.info("%s - Notifying Block Change - %s", world.isRemote ? "client" : "server", toString());
         markDirty();
-        worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
+        world.notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
         //FIXME: Do I still need to do this?
         //worldObj.markBlockForUpdate(getPos());
     }
@@ -30,12 +30,12 @@ public abstract class BasePlumbingTE extends SteamNSteelTE implements IPipeTileE
         }
         final BlockPos blockCoord = getPos().offset(offset);
 
-        TileEntity te = worldObj.getTileEntity(blockCoord);
+        TileEntity te = world.getTileEntity(blockCoord);
         if (!(te instanceof IPipeTileEntity))
         {
-            Block b = worldObj.getBlockState(blockCoord).getBlock();
+            Block b = world.getBlockState(blockCoord).getBlock();
             if (b instanceof IDelegatedTileEntityBlock) {
-                te = ((IDelegatedTileEntityBlock) b).getDelegatedTileEntity(worldObj, blockCoord);
+                te = ((IDelegatedTileEntityBlock) b).getDelegatedTileEntity(world, blockCoord);
             }
         }
 

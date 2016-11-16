@@ -30,7 +30,7 @@ public class ProjectTableBlock extends SteamNSteelDirectionalBlock
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         playerIn.openGui(TheMod.instance, ModGuis.PROJECT_TABLE.getID(), worldIn, pos.getX(), pos.getY(), pos.getZ());
         return true;

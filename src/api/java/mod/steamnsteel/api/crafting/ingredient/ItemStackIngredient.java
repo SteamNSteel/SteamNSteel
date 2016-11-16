@@ -42,7 +42,7 @@ public class ItemStackIngredient implements IIngredient
      */
     public ItemStackIngredient(ItemStack itemStack)
     {
-        checkArgument(checkNotNull(itemStack).stackSize > 0);
+        checkArgument(checkNotNull(itemStack).func_190916_E() > 0);
         checkNotNull(itemStack.getItem());
         this.itemStack = itemStack.copy();
     }
@@ -66,7 +66,7 @@ public class ItemStackIngredient implements IIngredient
     @Override
     public int getQuantityConsumed()
     {
-        return itemStack.stackSize;
+        return itemStack.func_190916_E();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ItemStackIngredient implements IIngredient
     {
         return Objects.toStringHelper(this)
                 .add("itemStack", itemStack)
-                .add("quantityConsumed", itemStack.stackSize)
+                .add("quantityConsumed", itemStack.func_190916_E())
                 .toString();
     }
 

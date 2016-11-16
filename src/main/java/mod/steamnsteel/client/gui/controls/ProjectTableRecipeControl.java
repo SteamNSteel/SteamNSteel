@@ -58,9 +58,9 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
             guiRenderer.renderItem(this, outputItemStack, 2, 3);
             RenderHelper.disableStandardItemLighting();
 
-            if (outputItemStack.stackSize > 1)
+            if (outputItemStack.func_190916_E() > 1)
             {
-                final String craftedItemCount = String.format("%d", outputItemStack.stackSize);
+                final String craftedItemCount = String.format("%d", outputItemStack.func_190916_E());
                 final int textWidth = guiRenderer.getStringWidth(craftedItemCount);
 
                 GlStateManager.depthFunc(GL11.GL_ALWAYS);
@@ -78,7 +78,7 @@ public class ProjectTableRecipeControl extends ButtonControl implements IGuiTemp
 
             final List<ItemStack> possibleItems = ItemStackUtils.getAllSubtypes(inputIngredient.getItemStacks());
 
-            final long totalWorldTime = Minecraft.getMinecraft().theWorld.getTotalWorldTime();
+            final long totalWorldTime = Minecraft.getMinecraft().world.getTotalWorldTime();
             final int renderedItem = (int)((totalWorldTime / 20) % possibleItems.size());
 
             final String requiredItemCount = String.format("%d", inputIngredient.getQuantityConsumed());

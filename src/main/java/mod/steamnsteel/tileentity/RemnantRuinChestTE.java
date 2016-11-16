@@ -61,6 +61,17 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, ITi
     }
 
     @Override
+    public boolean func_191420_l()
+    {
+        for (int i = 0; i < INVENTORY_SIZE; ++i) {
+            if (!inventory.getStack(i).func_190926_b()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public ItemStack getStackInSlot(int slot)
     {
         return inventory.getStack(slot);
@@ -118,14 +129,14 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, ITi
     public void openInventory(EntityPlayer player)
     {
         ++numUsingPlayers;
-        worldObj.addBlockEvent(getPos(), ModBlock.remnantRuinChest, 1, numUsingPlayers);
+        world.addBlockEvent(getPos(), ModBlock.remnantRuinChest, 1, numUsingPlayers);
     }
 
     @Override
     public void closeInventory(EntityPlayer player)
     {
         --numUsingPlayers;
-        worldObj.addBlockEvent(getPos(), ModBlock.remnantRuinChest, 1, numUsingPlayers);
+        world.addBlockEvent(getPos(), ModBlock.remnantRuinChest, 1, numUsingPlayers);
     }
 
     @Override
@@ -177,14 +188,14 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, ITi
         final BlockPos pos = getPos();
         if (ticksSinceSync % 20 * 4 == 0)
         {
-            worldObj.addBlockEvent(pos, ModBlock.remnantRuinChest, 1, numUsingPlayers);
+            world.addBlockEvent(pos, ModBlock.remnantRuinChest, 1, numUsingPlayers);
         }
 
         prevLidAngle = lidAngle;
 
         if (numUsingPlayers != 0 && lidAngle == 0.0F)
         {
-            worldObj.playSound(null, pos.getX(), pos.getY() + 0.5D, pos.getZ(), SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            world.playSound(null, pos.getX(), pos.getY() + 0.5D, pos.getZ(), SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
         }
 
         if (isChestOpen())
@@ -204,7 +215,7 @@ public class RemnantRuinChestTE extends SteamNSteelTE implements IInventory, ITi
 
             if (lidAngle < 0.5 && prevLidAngle > 0.5)
             {
-                worldObj.playSound(null, pos.getX(), pos.getY() + 0.5D, pos.getZ(), SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                world.playSound(null, pos.getX(), pos.getY() + 0.5D, pos.getZ(), SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
             }
         }
     }

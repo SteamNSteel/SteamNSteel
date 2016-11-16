@@ -198,7 +198,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
         if (te != null && !te.isSlave())
         {
             dropInventory(world, pos, te);
-            world.notifyNeighborsOfStateChange(pos, state.getBlock()); // notify neighbors
+            world.notifyNeighborsOfStateChange(pos, state.getBlock(), true); // notify neighbors
         }
 
         super.breakBlock(world, pos, state);
@@ -220,7 +220,7 @@ public class CupolaBlock extends SteamNSteelMachineBlock implements ITileEntityP
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         BlockPos actualBlockPos = pos;
         final TileEntity te = worldIn.getTileEntity(actualBlockPos);

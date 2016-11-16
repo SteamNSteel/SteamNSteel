@@ -68,7 +68,7 @@ public class PipeRedstoneValveTE extends SteamNSteelTE implements IPipeTileEntit
     private void sendUpdate()
     {
         markDirty();
-        worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
+        world.notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
         //FIXME: Do I still need to do this?
         //worldObj.markBlockForUpdate(getPos());
     }

@@ -72,6 +72,17 @@ public class BoilerTE extends SteamNSteelStructureTE implements IStructureFluidH
     //================================================================
 
     @Override
+    public boolean func_191420_l()
+    {
+        for (int i = 0; i < inventory.getSize(); ++i) {
+            if (!inventory.getStack(i).func_190926_b()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public int getSizeInventory()
     {
         return inventory.getSize();

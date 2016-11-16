@@ -53,13 +53,13 @@ public class RemnantRuinFloorBlock extends SteamNSteelBlock
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         if (worldIn.isRemote) {
             String description = PCTModelLoader.describeTextureAt(worldIn, pos, side);
-            playerIn.addChatComponentMessage(new TextComponentString(description));
+            playerIn.addChatComponentMessage(new TextComponentString(description), false);
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
     }
 
     @Override

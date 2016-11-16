@@ -140,7 +140,7 @@ public class CupolaContainer extends SteamNSteelContainer
                 return null;
             }
 
-            if (slotItemStack.stackSize == 0)
+            if (slotItemStack.func_190916_E() == 0)
             {
                 slot.putStack(null);
             }
@@ -149,12 +149,12 @@ public class CupolaContainer extends SteamNSteelContainer
                 slot.onSlotChanged();
             }
 
-            if (slotItemStack.stackSize == itemStack.stackSize)
+            if (slotItemStack.func_190916_E() == itemStack.func_190916_E())
             {
                 return null;
             }
 
-            slot.onPickupFromSlot(playerIn, slotItemStack);
+            slot.func_190901_a(playerIn, slotItemStack);
 
             return itemStack;
         }

@@ -215,7 +215,7 @@ public class SchematicLoader
                             if (block.hasTileEntity(event.blockState) && tileEntityData != null)
                             {
                                 MinecraftServer unused = null;
-                                TileEntity tileEntity = TileEntity.func_190200_a(world, tileEntityData);
+                                TileEntity tileEntity = TileEntity.create(world, tileEntityData);
 
                                 c.addTileEntity(new BlockPos(chunkLocalX, y, chunkLocalZ), tileEntity);
                                 tileEntity.getBlockType();
@@ -324,7 +324,7 @@ public class SchematicLoader
             for (NBTTagCompound entity : schematic.getTileEntityData())
             {
                 MinecraftServer unused = null;
-                TileEntity tileEntity = TileEntity.func_190200_a(world, entity);
+                TileEntity tileEntity = TileEntity.create(world, entity);
                 world.setTileEntity(tileEntity.getPos().add(pos), tileEntity);
                 tileEntity.getBlockType();
                 try

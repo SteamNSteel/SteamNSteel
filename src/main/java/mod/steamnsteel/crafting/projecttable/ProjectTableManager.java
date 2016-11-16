@@ -40,7 +40,7 @@ public enum ProjectTableManager implements IProjectTableManager
                 for (final ItemStack playerItem : compactedInventoryItems) {
                     if (recipeInput.getItem() == playerItem.getItem() && recipeInput.getMetadata() == playerItem.getMetadata() && ItemStack.areItemStackTagsEqual(recipeInput, playerItem)) {
                         itemMatched = true;
-                        itemsAvailable += playerItem.stackSize;
+                        itemsAvailable += playerItem.func_190916_E();
                     }
                 }
             }
@@ -67,7 +67,7 @@ public enum ProjectTableManager implements IProjectTableManager
                 if (existingItemStack.getItem() == itemStack.getItem() && existingItemStack.getMetadata() == itemStack.getMetadata() && ItemStack.areItemStackTagsEqual(existingItemStack, itemStack))
                 {
                     itemMatched = true;
-                    existingItemStack.stackSize += itemStack.stackSize;
+                    existingItemStack.func_190917_f(itemStack.func_190916_E());
                 }
             }
             if (!itemMatched) {

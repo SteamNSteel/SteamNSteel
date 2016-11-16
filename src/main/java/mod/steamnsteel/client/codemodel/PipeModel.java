@@ -9,6 +9,7 @@ import mod.steamnsteel.library.ModBlock;
 import mod.steamnsteel.library.Reference;
 import mod.steamnsteel.utility.log.Logger;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -105,8 +106,12 @@ public class PipeModel extends BaseCodeModel
                 final ModelResourceLocation mrl = sdm.getModelResourceLocation(si);
                 final PipeStates pipeState = si.getValue(PipeBlock.PIPE_STATE);
 
-                final IModel modelCap = procsessModel(loadModel(capLocation), flipData);
-                final OBJBakedModel bakedModel = (OBJBakedModel) event.getModelRegistry().getObject(mrl);
+                final IModel modelCap = processModel(loadModel(capLocation), flipData);
+                final IBakedModel object = event.getModelRegistry().getObject(mrl);
+                if (!(object instanceof OBJBakedModel)) {
+                    return;
+                }
+                final OBJBakedModel bakedModel = (OBJBakedModel) object;
 
                 IModel model = null;
                 try
@@ -126,7 +131,7 @@ public class PipeModel extends BaseCodeModel
         }
     }
 
-    private static IModel procsessModel(IModel model, ImmutableMap<String, String> data)
+    private static IModel processModel(IModel model, ImmutableMap<String, String> data)
     {
         if (model instanceof OBJModel)
         {

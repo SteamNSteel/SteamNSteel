@@ -36,9 +36,10 @@ public class CupolaSlot extends Slot
     }
 
     @Override
-    public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack)
+    public ItemStack func_190901_a(EntityPlayer player, ItemStack itemStack)
     {
-        super.onPickupFromSlot(player, itemStack);
+        super.func_190901_a(player, itemStack);
         FMLCommonHandler.instance().firePlayerCraftingEvent(player, itemStack, inventory);
+        return itemStack;
     }
 }

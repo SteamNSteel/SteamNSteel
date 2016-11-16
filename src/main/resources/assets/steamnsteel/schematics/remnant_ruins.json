@@ -32,9 +32,9 @@
     "MaxRuinSize": "24,42",
 	"RuinType": "Single",
     "Schematics": [
-      "BunkerSmall00",
-      "BunkerSmall01",
-      "BunkerSmall02"
+      "bunker_small_00",
+      "bunker_small_01",
+      "bunker_small_02"
     ]
   },
   {
@@ -80,9 +80,9 @@
     "MaxRuinSize": "48,72",
 	"RuinType": "Single",
     "Schematics": [
-      "BunkerMed00",
-      "BunkerMed01",
-      "BunkerMed02"
+      "bunker_med_00",
+      "bunker_med_01",
+      "bunker_med_02"
     ]
   },
   {

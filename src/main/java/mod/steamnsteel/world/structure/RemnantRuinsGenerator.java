@@ -89,7 +89,7 @@ public class RemnantRuinsGenerator extends StructureGenerator
                     .registerTypeAdapter(Dimension.class, new DimensionJsonTypeAdapter())
                     .registerTypeAdapter(RuinType.class, new RuinTypeJsonTypeAdapter())
                     .create();
-            final ResourceLocation resourceLocation = new ResourceLocation(Reference.MOD_ID + ":schematics/RemnantRuins.json");
+            final ResourceLocation resourceLocation = new ResourceLocation(Reference.MOD_ID + ":schematics/remnant_ruins.json");
 
             final IResource resource;
 

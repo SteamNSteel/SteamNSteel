@@ -2,12 +2,12 @@
   "forge_marker": 1,
   "defaults": {
     "transform": "forge:default-block",
-    "model": "steamnsteel:SSCupola.obj",
+    "model": "steamnsteel:ss_cupola.obj",
     "custom": {
       "flip-v": true
     },
     "textures": {
-      "#steamnsteel:models/SSCupola": "steamnsteel:models/SSCupolaOff"
+      "#steamnsteel:models/SSCupola": "steamnsteel:models/ss_cupola_off"
     }
   },
   "variants": {
@@ -41,17 +41,17 @@
       },
     "is_slave": {
       "false": {  },
-      "true": { "model": "steamnsteel:SSMultiblockPlaceholder.obj" }
+      "true": { "model": "steamnsteel:ss_multiblock_placeholder.obj" }
     },
     "is_active": {
       "false": {
         "textures": {
-          "#steamnsteel:models/SSCupola": "steamnsteel:models/SSCupolaOff"
+          "#steamnsteel:models/SSCupola": "steamnsteel:models/ss_cupola_off"
         }
       },
       "true": {
         "textures": {
-          "#steamnsteel:models/SSCupola": "steamnsteel:models/SSCupolaOn"
+          "#steamnsteel:models/SSCupola": "steamnsteel:models/ss_cupola_on"
         }
       }
     }

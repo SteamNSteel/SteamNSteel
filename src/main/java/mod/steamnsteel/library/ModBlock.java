@@ -228,7 +228,7 @@ public final class ModBlock
         registerBlock(blockConcrete);
         registerItem(new ConcreteBlockItem(blockConcrete).setRegistryName(BlockNames.CONCRETE));
 
-        TileEntity.addMapping(RemnantRuinChestTE.class, "tile.chestPlotonium");
+        GameRegistry.registerTileEntity(RemnantRuinChestTE.class, "tile.chestPlotonium");
     }
 
     private static void registerBlock(Block block)

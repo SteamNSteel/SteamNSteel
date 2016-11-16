@@ -63,14 +63,14 @@ public class RemnantRuinChestBlock extends SteamNSteelMachineBlock implements IT
         {
             dropInventory(world, pos, te);
 
-            world.notifyNeighborsOfStateChange(pos, blockState.getBlock());
+            world.notifyNeighborsOfStateChange(pos, blockState.getBlock(), true);
         }
 
         super.breakBlock(world, pos, blockState);
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         final TileEntity te = world.getTileEntity(pos);
 

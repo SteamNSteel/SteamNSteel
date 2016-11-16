@@ -20,7 +20,7 @@ public class PacketBufferExtensions
     public static PacketBuffer writeLargeItemStackToBuffer(PacketBuffer packetBuffer, @NotNull ItemStack stack)
     {
         packetBuffer.writeShort(Item.getIdFromItem(stack.getItem()));
-        packetBuffer.writeInt(stack.stackSize);
+        packetBuffer.writeInt(stack.func_190916_E());
         packetBuffer.writeShort(stack.getMetadata());
         NBTTagCompound nbttagcompound = null;
 

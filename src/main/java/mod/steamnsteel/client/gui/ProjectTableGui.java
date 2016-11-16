@@ -195,7 +195,7 @@ public class ProjectTableGui extends SteamNSteelGui
                 if (ItemStack.areItemStacksEqual(existingItemStack, itemStack))
                 {
                     itemMatched = true;
-                    existingItemStack.stackSize += itemStack.stackSize;
+                    existingItemStack.func_190917_f(itemStack.func_190916_E());
                 }
             }
 

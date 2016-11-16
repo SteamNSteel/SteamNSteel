@@ -125,11 +125,11 @@ public class PipeBlock extends SteamNSteelBlock
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         if (playerIn != null)
         {
-            ItemStack itemInUse = playerIn.inventory.mainInventory[playerIn.inventory.currentItem];
+            ItemStack itemInUse = playerIn.inventory.mainInventory.get(playerIn.inventory.currentItem);
             if (itemInUse != null && itemInUse.getItem() == Items.BONE)
             {
                 if (!worldIn.isRemote)

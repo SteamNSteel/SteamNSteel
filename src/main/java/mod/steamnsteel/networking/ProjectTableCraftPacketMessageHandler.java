@@ -27,7 +27,7 @@ public class ProjectTableCraftPacketMessageHandler implements IMessageHandler<Pr
             return null;
         }
 
-        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj;
+        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world;
         mainThread.addScheduledTask(() -> {
             for (final IIngredient ingredient : recipe.getInput())
             {

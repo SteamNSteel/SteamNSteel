@@ -89,16 +89,16 @@ public abstract class SteamNSteelMachineBlock extends SteamNSteelDirectionalBloc
             final float yOffset = rng.nextFloat() * 0.8F + 0.1F;
             final float zOffset = rng.nextFloat() * 0.8F + 0.1F;
 
-            while (itemstack.stackSize > 0)
+            while (itemstack.func_190916_E() > 0)
             {
                 int j1 = rng.nextInt(21) + 10;
 
-                if (j1 > itemstack.stackSize)
+                if (j1 > itemstack.func_190916_E())
                 {
-                    j1 = itemstack.stackSize;
+                    j1 = itemstack.func_190916_E();
                 }
 
-                itemstack.stackSize -= j1;
+                itemstack.func_190918_g(j1);
                 //noinspection ObjectAllocationInLoop
                 final EntityItem entityitem = new EntityItem(world,
                         pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset,

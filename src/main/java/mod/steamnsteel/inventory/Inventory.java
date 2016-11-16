@@ -42,7 +42,7 @@ public class Inventory
         if (inventory.containsKey(slotIndex))
         {
             final ItemStack slotStack = inventory.get(slotIndex);
-            if (slotStack.stackSize <= decrAmount)
+            if (slotStack.func_190916_E() <= decrAmount)
             {
                 inventory.remove(slotIndex);
                 return slotStack;
@@ -50,7 +50,7 @@ public class Inventory
             {
                 final ItemStack itemStack = slotStack.splitStack(decrAmount);
 
-                if (slotStack.stackSize == 0)
+                if (slotStack.func_190916_E() == 0)
                 {
                     inventory.remove(slotIndex);
                 }
@@ -101,7 +101,7 @@ public class Inventory
             final NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
             final int slotIndex = tagCompound.getByte(SLOT);
             if (slotIndex >= 0 && slotIndex < size)
-                inventory.put(slotIndex, ItemStack.loadItemStackFromNBT(tagCompound));
+                inventory.put(slotIndex, new ItemStack(tagCompound));
         }
     }
 
@@ -117,8 +117,8 @@ public class Inventory
         else
         {
             inventory.put(slotIndex, itemStack);
-            if (itemStack.stackSize > getStackSizeMax())
-                itemStack.stackSize = getStackSizeMax();
+            if (itemStack.func_190916_E() > getStackSizeMax())
+                itemStack.func_190920_e(getStackSizeMax());
         }
     }
 
