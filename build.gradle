@@ -1,223 +1,77 @@
-import org.gradle.plugins.ide.idea.model.*
-
-// define the properties file
-ext.configFile = file "build.properties"
-configFile.withReader {
-    // read config.  it shall from now on be referenced as simply config or as project.config
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
-}
-
-// For those who want the bleeding edge
 buildscript {
     repositories {
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+        maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
-
-apply plugin: 'java'
-apply plugin: 'idea'
-
-// for people who want unstable ForgeGradle
 apply plugin: 'net.minecraftforge.gradle.forge'
-// for people who want stable ForgeGradle
-/*plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.1"
-}*/
+//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
-///////////////////////////////////////////////////
-// IDE Settings
-///////////////////////////////////////////////////
-idea {
-    project {
-        languageLevel = '1.8'
-    }
+
+version = "1.0"
+group = "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "modid"
+
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
 }
-
-///////////////////////////////////////////////////
-// ForgeGradle
-///////////////////////////////////////////////////
-version = config.mod_version
-group = config.group_name
-archivesBaseName = "[${config.minecraft_version}]${config.mod_id}"
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-/*def commonManifest = {
-    attributes 'FMLAT': 'steamnsteel_at.cfg'
-}*/
 
 minecraft {
-    version = config.minecraft_version + "-" + config.forge_version // grab latest forge
+    version = "1.12.1-14.22.0.2463"
     runDir = "run"
-
-    mappings = config.mcp_mappings
-    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-
-    replace '@MOD_VERSION@', version
-    replace '@API_VERSION@', config.api_version
+    
+    // the mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   snapshot are built nightly.
+    // stable_#            stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not always work.
+    // simply re-run your setup task after changing the mappings to update your workspace.
+    mappings = "snapshot_20170624"
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
-///////////////////////////////////////////////////
-// SHADING
-///////////////////////////////////////////////////
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
-    }
+dependencies {
+    // you may put jars on which you depend on in ./libs
+    // or you may define them like so..
+    //compile "some.group:artifact:version:classifier"
+    //compile "some.group:artifact:version"
+      
+    // real examples
+    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
+    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+
+    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
+    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+
+    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
+    // except that these dependencies get remapped to your current MCP mappings
+    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+
+    // for more info...
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
 }
 
-apply plugin: 'com.github.johnrengelman.shadow'
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
-shadowJar {
-    def deobfPrefix = "deobf." + minecraft.mappingsChannel + '.' + minecraft.mappingsVersion + '.'
-    dependencies {
-        include(dependency(deobfPrefix + 'mod.steamnsteel:mcgui-' + config.minecraft_version + ':' + config.mcgui_version))
-        include(dependency(deobfPrefix + 'com.foudroyantfactotum:Structure-' + config.minecraft_version + ':' + config.structure_version))
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-    relocate 'mod.steamnsteel.mcgui', 'mod.steamnsteel.shaded.mod.steamnsteel.mcgui'
-    relocate 'com.foudroyantfactotum.tool.structure', 'mod.steamnsteel.shaded.com.foudroyantfactotum.tool.structure'
-    classifier = 'universal'
-}
-
-reobf.jar.task.dependsOn shadowJar
-
-///////////////////////////////////////////////////
-// Resources
-///////////////////////////////////////////////////
-processResources
-        {
-            // this will ensure that this task is redone when the versions change.
-            inputs.property "version", project.version
-            inputs.property "mcversion", project.minecraft.version
-
-            // replace stuff in mcmod.info, nothing else
-            from(sourceSets.main.resources.srcDirs) {
-                include '**/*.info'
-                include '**/*.properties'
-
-                // replace version and mcversion
-                expand ([
-                        'version':project.version,
-                        'mcversion':project.minecraft.version,
-                        'forge_version': config.forge_version,
-                        'mod_version': config.mod_version,
-                        'minecraft_version': config.minecraft_version
-                ])
-            }
-
-            // copy everything else, thats not the mcmod.info
-            from(sourceSets.main.resources.srcDirs) {
-                exclude 'mcmod.info'
-            }
-        }
-
-jar {
-    classifier = 'universal'
-}
-
-sourceSets {
-    api {
-        java {
-            srcDirs = [ 'src/api/java' ]
-        }
-    }
-}
-
-idea {
-    module {
-        sourceDirs += file('src/api/java')
-    }
-}
-
-task apiJar(type: Jar) {
-    from sourceSets.api.output
-    classifier = 'api'
-}
-tasks.build.dependsOn apiJar
-
-///////////////////////////////////////////////////
-// Dependencies
-///////////////////////////////////////////////////
-if (config.mcgui_local_enabled == "true") {
-    println("Using McGUI from local path - You cannot produce a build with this configuration")
-    def newModuleLocation = file(config.mcgui_local_path)
-    def existingModule = idea.project.modules[0]
-    def newIml = new IdeaModuleIml(existingModule.iml.xmlTransformer, newModuleLocation)
-    def newModule = new IdeaModule(existingModule.project, newIml)
-    newModule.name = "McGUI"
-    newModule.contentRoot = newModuleLocation
-    newModule.sourceDirs = [ newModuleLocation ]
-
-    idea {
-        project {
-            modules += newModule
-        }
-        module {
-            iml {
-                //Not a lot of documentation how to add a module dependency without using Multi-projects.
-                withXml {
-                    def node = it.asNode()
-                    node.children()[0].appendNode('orderEntry', ["type": "module", "module-name": newModule.name])
-                }
-            }
-        }
-    }
-
-} else {
-    println("Using McGUI from Maven")
-    dependencies {
-        repositories {
-            maven {
-                url 'http://repository.steamnsteel.info/artifactory/steamnsteel-libs-unstable'
-            }
-        }
-        deobfCompile(group: 'mod.steamnsteel', name: 'mcgui-' + config.minecraft_version, version: config.mcgui_version, classifier: 'api')
-    }
-}
-
-if (config.structure_local_enabled == "true") {
-    println("Using Structure from local path - You cannot produce a build with this configuration")
-    def newModuleLocation = file(config.structure_local_path)
-    def existingModule = idea.project.modules[0]
-    def newIml = new IdeaModuleIml(existingModule.iml.xmlTransformer, newModuleLocation)
-    def newModule = new IdeaModule(existingModule.project, newIml)
-    newModule.name = "Structure"
-    newModule.contentRoot = newModuleLocation
-    newModule.sourceDirs = [newModuleLocation]
-
-    idea {
-        project {
-            modules += newModule
-        }
-        module {
-            iml {
-                //Not a lot of documentation how to add a module dependency without using Multi-projects.
-                withXml {
-                    def node = it.asNode()
-                    node.children()[0].appendNode('orderEntry', ["type": "module", "module-name": newModule.name])
-                }
-            }
-        }
-    }
-} else {
-    dependencies {
-        repositories {
-            maven {
-                url 'http://repository.steamnsteel.info/artifactory/foudroyantfactotum-libs-stable'
-            }
-        }
-        deobfCompile(group: 'com.foudroyantfactotum', name: 'Structure-' + config.minecraft_version, version: config.structure_version, classifier: 'universal')
+        
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
     }
 }
