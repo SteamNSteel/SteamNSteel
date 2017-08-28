@@ -1,77 +1,206 @@
+import org.gradle.plugins.ide.idea.model.*
+
+
+// define the properties file
+ext.configFile = file "gradle.properties"
+configFile.withReader {
+    // read config.  it shall from now on be referenced as simply config or as project.config
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
+// For those who want the bleeding edge
 buildscript {
     repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
-//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
-
-version = "1.0"
-group = "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
-
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
+///////////////////////////////////////////////////
+// ForgeGradle
+///////////////////////////////////////////////////
+def isCIBuild = hasProperty("CIRevision")
+if (isCIBuild) {
+    println("Producing a Release build")
+} else {
+    println("This build will produce an unsactioned release")
 }
+version = (isCIBuild ? CIRevision : config.mod_version)
+group = config.group_name
+archivesBaseName = "${config.mod_id}-${config.minecraft_version}"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
-    version = "1.12.1-14.22.0.2463"
+    version = config.minecraft_version + "-" + config.forge_version // grab latest forge
     runDir = "run"
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20170624"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
+    mappings = config.mcp_mappings
+    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
+    replace '@MOD_VERSION@', version
+    replace '@MOD_ID@', config.mod_id
+    replace '@CI_BUILD@', isCIBuild
+}
+
+processResources
+        {
+            // this will ensure that this task is redone when the versions change.
+            inputs.property "version", project.version
+            inputs.property "mcversion", project.minecraft.version
+
+            // replace stuff in mcmod.info, nothing else
+            from(sourceSets.main.resources.srcDirs) {
+                include '**/*.info'
+                include '**/*.properties'
+
+                // replace version and mcversion
+                expand ([
+                        'version':project.version,
+                        'mcversion':project.minecraft.version,
+                        'forge_version': config.forge_version,
+                        'mod_version': config.mod_version,
+                        'minecraft_version': config.minecraft_version
+                ])
+            }
+
+            // copy everything else, thats not the mcmod.info
+            from(sourceSets.main.resources.srcDirs) {
+                exclude 'mcmod.info'
+            }
+        }
+
+jar {
+    classifier = 'universal'
+}
+
+///////////////////////////////////////////////////
+// SHADING
+///////////////////////////////////////////////////
+buildscript {
+    repositories {
+        jcenter()
+        //mavenLocal()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+shadowJar {
+    def deobfPrefix = "deobf."
+    dependencies {
+        include(dependency(deobfPrefix + 'com.foudroyantfactotum:Structure-' + config.minecraft_version + ':' + config.structure_version))
+    }
+    relocate 'com.foudroyantfactotum.tool.structure', 'com.github.atomicblom.hcmw.shaded.structure'
+    classifier = 'universal'
+}
+
+reobf.jar.task.dependsOn shadowJar
+
+///////////////////////////////////////////////////
+// Dependencies
+///////////////////////////////////////////////////
+
+repositories {
+    maven {
+        // location of the maven that hosts JEI files
+        url = "http://dvs1.progwml6.com/files/maven"
+    }
 }
 
 dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+    // compile against the JEI API
+    deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}:api"
+    // at runtime, use the full JEI jar
+    runtime "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}"
 }
 
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+if (!isCIBuild && (findProject(':Structure') != null)) {
+    println("Using Structure from gradle path - You cannot produce a build with this configuration")
+} else if (!isCIBuild && config.structure_local_enabled == "true") {
+    //TODO: This shouldn't be neccessary anymore once I move to a full gradle environment
+    println("Using Structure from local path - You cannot produce a build with this configuration")
+    def newModuleLocation = file(config.structure_local_path)
+    def existingModule = idea.project.modules[0]
+    def newIml = new IdeaModuleIml(existingModule.iml.xmlTransformer, newModuleLocation)
+    def newModule = new IdeaModule(existingModule.project, newIml)
+    newModule.name = "Structure-"+config.minecraft_version
+    newModule.contentRoot = newModuleLocation
+    newModule.sourceDirs = [newModuleLocation]
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+    idea {
+        project {
+            modules += newModule
+        }
+        module {
+            iml {
+                //Not a lot of documentation how to add a module dependency without using Multi-projects.
+                withXml {
+                    def node = it.asNode()
+                    node.children()[0].appendNode('orderEntry', ["type": "module", "module-name": newModule.name])
+                }
+            }
+        }
     }
-        
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+} else {
+    dependencies {
+        repositories {
+            maven {
+                url 'http://repository.steamnsteel.info/artifactory/atomicblom-libs-unstable'
+            }
+        }
+        deobfCompile(group: 'com.foudroyantfactotum', name: 'Structure-' + config.minecraft_version, version: config.structure_version, classifier: 'universal')
+    }
+}
+
+///////////////////////////////////////////////////
+// Structure
+///////////////////////////////////////////////////
+task workWithStructure() {
+    doLast {
+        def settings = new File("../settings.gradle")
+        settings.createNewFile()
+        settings.text =
+                """include '${project.name}' 
+include '${config.structure_project_name}' 
+"""
+
+        def buildFile = new File("../build.gradle")
+        buildFile.createNewFile()
+        buildFile.text =
+                """subprojects { 
+    apply plugin: 'java' 
+} 
+ 
+project(':${project.name}') { 
+    dependencies { 
+        compile project(':${config.structure_project_name}') 
+    } 
+} 
+"""
+        copy {
+            from ('.'){
+                include 'gradlew*'
+            }
+            into '../'
+        }
+        copy {
+            from ('gradle')
+            into '../gradle'
+        }
     }
 }
