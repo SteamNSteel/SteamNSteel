@@ -1,4 +1,4 @@
-package mod.steamnsteel.utility.blockparts;
+package mod.steamnsteel.utility.blockParts;
 
 import com.google.common.base.Objects;
 import net.minecraft.client.renderer.OpenGlHelper;
