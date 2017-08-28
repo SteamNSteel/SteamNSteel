@@ -157,6 +157,7 @@ if (!isCIBuild && (findProject(':Structure') != null)) {
         }
     }
 } else {
+    println("Using Structure from maven")
     dependencies {
         repositories {
             maven {
