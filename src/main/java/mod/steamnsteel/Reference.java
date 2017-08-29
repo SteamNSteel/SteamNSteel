@@ -5,34 +5,47 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+@SuppressWarnings("UtilityClass")
 public final class Reference
 {
 	public static final String MOD_ID = "steamnsteel";
-	public static final String MOD_NAME = "Steam and Steel";
-	public static final String MOD_VERSION = "@MOD_VERSION@";
+	static final String MOD_NAME = "Steam and Steel";
+	static final String MOD_VERSION = "@MOD_VERSION@";
 	//public static final String MOD_GUI_FACTORY = "mod.steamnsteel.configuration.client.ModGuiFactory";
 
 	@SuppressWarnings("AnonymousInnerClass")
 	public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(MOD_ID.toLowerCase())
 	{
-		public ItemStack cachedStack;
+		private ItemStack cachedStack = null;
 
 		@Override
 		public ItemStack getTabIconItem()
 		{
-
-			return (cachedStack != null ? cachedStack : (cachedStack = new ItemStack(ItemLibrary.mustyJournal)));
+			if (cachedStack == null)
+			{
+				cachedStack = new ItemStack(ItemLibrary.mustyJournal);
+			}
+			return cachedStack;
 		}
 	};
 
 	public static final class Items
 	{
-		public static ResourceLocation mustyJournal = resource("musty_journal");
+		public static final ResourceLocation mustyJournal = resource("musty_journal");
+
+		private Items() {}
+	}
+
+	public static final class Blocks
+	{
+		public static final ResourceLocation remnantRuinPillar = resource("remnant_ruin_pillar");
+
+		private Blocks() {}
 	}
 
 	private Reference() {}
 
-	private static ResourceLocation resource(String resourceName) {
+	private static ResourceLocation resource(final String resourceName) {
 		return new ResourceLocation(MOD_ID, resourceName);
 	}
 }

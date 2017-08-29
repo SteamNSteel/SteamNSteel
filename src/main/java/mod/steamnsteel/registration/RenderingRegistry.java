@@ -27,6 +27,7 @@ public final class RenderingRegistry
 		OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
 
 		setItemModel(ItemLibrary.mustyJournal);
+		setItemModel(ItemLibrary.remnantRuinPillar);
 	}
 
 	private static void setItemModel(Item item)

@@ -1,6 +1,7 @@
 package mod.steamnsteel.registration;
 
 import mod.steamnsteel.Reference;
+import mod.steamnsteel.library.BlockLibrary;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -18,6 +19,8 @@ public final class ItemRegistration
 	public static void onRegisterItems(Register<Item> event) {
 		final Items items = new Items(event.getRegistry());
 		items.add(new Item(), Reference.Items.mustyJournal);
+
+		items.add(BlockLibrary.remnantRuinPillar);
 	}
 
 	private static class Items

@@ -14,7 +14,7 @@
  * this program; if not, see <http://www.gnu.org/licenses>.
  */
 
-package mod.steamnsteel.block.resource.structure;
+package mod.steamnsteel.block;
 
 import mod.steamnsteel.block.*;
 import mod.steamnsteel.tileentity.RemnantRuinPillarTE;
