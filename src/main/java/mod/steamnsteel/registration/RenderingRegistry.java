@@ -2,6 +2,8 @@ package mod.steamnsteel.registration;
 
 import com.google.common.base.Preconditions;
 import mod.steamnsteel.Reference;
+import mod.steamnsteel.client.model.PillarMultiModel;
+import mod.steamnsteel.client.model.SNSMultiModel;
 import mod.steamnsteel.library.ItemLibrary;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -12,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
@@ -21,6 +24,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @EventBusSubscriber
 public final class RenderingRegistry
 {
+	private static final SNSMultiModel[] multiModels = {
+			new PillarMultiModel()
+	};
+
 	@SubscribeEvent
 	public static void onModelRegistryReady(ModelRegistryEvent event)
 	{
@@ -29,6 +36,16 @@ public final class RenderingRegistry
 		setItemModel(ItemLibrary.mustyJournal);
 		setItemModel(ItemLibrary.remnantRuinPillar);
 	}
+
+	@SubscribeEvent
+	public static void onModelBake(ModelBakeEvent event)
+	{
+		for (final SNSMultiModel multiModel : multiModels)
+		{
+			multiModel.loadModel(event);
+		}
+	}
+
 
 	private static void setItemModel(Item item)
 	{

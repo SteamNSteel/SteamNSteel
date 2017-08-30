@@ -1,0 +1,34 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "custom": {
+      "flip-v": true
+    },
+    "model": "steamnsteel:ss_remnant_pillar.obj",
+    "textures": {
+      "#steamnsteel:models/ss_remnant_pillar": "steamnsteel:models/ss_remnant_pillar",
+      "#particle": "steamnsteel:models/ss_remnant_pillar"
+    }
+  },
+  "variants": {
+    "normal": [
+      {
+      }
+    ],
+    "inventory": [
+      {
+      }
+    ],
+    "connect_bottom": {"true": {}, "false": {}},
+    "connect_top": {"true": {}, "false": {}},
+    "facing": {
+      "north": {},
+      "south": {},
+      "east": {},
+      "west": {},
+      "up": {},
+      "down": {}
+    }
+  }
+}

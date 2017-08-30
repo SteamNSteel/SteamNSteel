@@ -1,6 +1,10 @@
 package mod.steamnsteel;
 
 import mod.steamnsteel.library.ItemLibrary;
+import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -41,6 +45,16 @@ public final class Reference
 		public static final ResourceLocation remnantRuinPillar = resource("remnant_ruin_pillar");
 
 		private Blocks() {}
+	}
+
+	public static final class BlockProperties
+	{
+		public static final PropertyDirection HORIZONTAL_FACING = BlockHorizontal.FACING;
+
+		public static final PropertyDirection FACING = BlockDirectional.FACING;
+
+		public static final PropertyBool CONNECT_TOP = PropertyBool.create("connect_top");
+		public static final PropertyBool CONNECT_BOTTOM = PropertyBool.create("connect_bottom");
 	}
 
 	private Reference() {}

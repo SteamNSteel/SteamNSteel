@@ -16,6 +16,8 @@
 
 package mod.steamnsteel.block;
 
+import mod.steamnsteel.Reference;
+import mod.steamnsteel.Reference.BlockProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockHorizontal;
@@ -33,26 +35,26 @@ public abstract class SteamNSteelDirectionalBlock extends Block
 {
     protected SteamNSteelDirectionalBlock(Material material) {
         super(material);
-        setDefaultState(getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.NORTH));
+        setDefaultState(getDefaultState().withProperty(BlockProperties.HORIZONTAL_FACING, EnumFacing.NORTH));
     }
 
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, BlockHorizontal.FACING);
+        return new BlockStateContainer(this, BlockProperties.HORIZONTAL_FACING);
     }
 
     @Override
     @Deprecated
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
-        return getDefaultState().withProperty(BlockHorizontal.FACING, facing);
+        return getDefaultState().withProperty(BlockProperties.HORIZONTAL_FACING, placer.getHorizontalFacing());
     }
 
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        EnumFacing value = state.getValue(BlockHorizontal.FACING);
+        EnumFacing value = state.getValue(BlockProperties.HORIZONTAL_FACING);
         if (value == EnumFacing.UP || value == EnumFacing.DOWN) {
             value = EnumFacing.NORTH;
         }
@@ -65,6 +67,6 @@ public abstract class SteamNSteelDirectionalBlock extends Block
     public IBlockState getStateFromMeta(int meta)
     {
         return super.getStateFromMeta(meta)
-                .withProperty(BlockHorizontal.FACING, EnumFacing.getHorizontal(meta & 3));
+                .withProperty(BlockProperties.HORIZONTAL_FACING, EnumFacing.getHorizontal(meta & 3));
     }
 }
