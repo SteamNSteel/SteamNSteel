@@ -1,0 +1,39 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": { "all": "steamnsteel:blocks/concrete_poured" },
+    "model": "cube_all",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "wetness": {
+      "0": {
+        "textures": {
+          "all": "steamnsteel:blocks/concrete_poured"
+        }
+      },
+      "1": {
+        "textures": {
+          "all": "steamnsteel:blocks/concrete_wet"
+        }
+      },
+      "2": {
+        "textures": {
+          "all": "steamnsteel:blocks/concrete_wet"
+        }
+      },
+      "3": {
+        "textures": {
+          "all": "steamnsteel:blocks/concrete_damp"
+        }
+      },
+      "4": {
+        "textures": {
+          "all": "steamnsteel:blocks/concrete_damp"
+        }
+      }
+    },
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}

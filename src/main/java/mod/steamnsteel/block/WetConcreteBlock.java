@@ -1,45 +1,61 @@
-package mod.steamnsteel.block.resource.structure;
+package mod.steamnsteel.block;
 
-import mod.steamnsteel.block.SteamNSteelBlock;
+import mod.steamnsteel.Reference.BlockProperties;
+import mod.steamnsteel.api.ISlowConcreteDrying;
+import mod.steamnsteel.library.BlockLibrary;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * <p>
- * Info about this class goes HERE!
- * </p>
- *
  * @author Bret 'Horfius' Dusseault
  * @version ${VERSION}
  */
-public class ConcreteBlock extends SteamNSteelBlock {
-    private static final PropertyInteger WETNESS = PropertyInteger.create("wetness", 0, 5);
-
-    public ConcreteBlock() {
+public class WetConcreteBlock extends Block implements ISlowConcreteDrying
+{
+    public WetConcreteBlock() {
         super(Material.ROCK);
         setTickRandomly(true);
         setSoundType(SoundType.STONE);
-        setDefaultState(blockState.getBaseState().withProperty(WETNESS, 0));
+        setHarvestLevel("pickaxe", 0);
+        setDefaultState(blockState.getBaseState().withProperty(BlockProperties.WETNESS, 0));
+
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    @Deprecated
+    public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos)
+    {
+        return blockState.getValue(BlockProperties.WETNESS) * 0.8f + 0.5f;
+    }
+
+    @Override
+    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion)
+    {
+        final IBlockState state = world.getBlockState(pos);
+        if (state.getBlock() == this) {
+            return state.getValue(BlockProperties.WETNESS) * 3.0f;
+        }
+        return super.getExplosionResistance(world, pos, exploder, explosion);
+    }
+
+    /*@Override
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
+    {
         worldIn.getBlockState(pos).getBlock().setResistance(meta * 3.0F);
         worldIn.getBlockState(pos).getBlock().setHardness(meta * .8F + .5F);
         worldIn.getBlockState(pos).getBlock().setHarvestLevel("pickaxe", meta >= 5 ? 2 : 0);
 
-        return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);
-    }
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
+    }*/
 
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
@@ -66,12 +82,12 @@ public class ConcreteBlock extends SteamNSteelBlock {
         int num2 = rand.nextInt(5);//0-4
         if(num2 < 4){//80% chance of proceeding
             //The more blocks of concrete around, the longer it takes to dry
-            int num3 = (worldIn.getBlockState(pos.east()).getBlock() instanceof ConcreteBlock) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
-            int num4 = (worldIn.getBlockState(pos.west()).getBlock() instanceof ConcreteBlock) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
-            int num5 = (worldIn.getBlockState(pos.south()).getBlock() instanceof ConcreteBlock) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
-            int num6 = (worldIn.getBlockState(pos.north()).getBlock() instanceof ConcreteBlock) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
-            int num7 = (worldIn.getBlockState(pos.up()).getBlock() instanceof ConcreteBlock) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
-            int num8 = (worldIn.getBlockState(pos.down()).getBlock() instanceof ConcreteBlock) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
+            int num3 = (worldIn.getBlockState(pos.east()).getBlock() instanceof ISlowConcreteDrying) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
+            int num4 = (worldIn.getBlockState(pos.west()).getBlock() instanceof ISlowConcreteDrying) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
+            int num5 = (worldIn.getBlockState(pos.south()).getBlock() instanceof ISlowConcreteDrying) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
+            int num6 = (worldIn.getBlockState(pos.north()).getBlock() instanceof ISlowConcreteDrying) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
+            int num7 = (worldIn.getBlockState(pos.up()).getBlock() instanceof ISlowConcreteDrying) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
+            int num8 = (worldIn.getBlockState(pos.down()).getBlock() instanceof ISlowConcreteDrying) ? rand.nextInt(2) + 2 : 1;//2 to 3 or 1
             int xBlocks = num3 + num4;//2, 3 to 4, or 4 to 6
             int zBlocks = num5 + num6;//2, 3 to 4, or 4 to 6
             int yBlocks = num7 + num8;//2, 3 to 4, or 4 to 6
@@ -125,32 +141,32 @@ public class ConcreteBlock extends SteamNSteelBlock {
 
         if(chanceToDry <= 18){ //9 to 11
             currentMeta++;
-            worldIn.setBlockState(pos, getDefaultState().withProperty(WETNESS, currentMeta), 2);
-            worldIn.getBlockState(pos).getBlock().setResistance(currentMeta * 3.0F);
-            worldIn.getBlockState(pos).getBlock().setHardness(.8F * currentMeta + .5F);
-            worldIn.getBlockState(pos).getBlock().setHarvestLevel("pickaxe", currentMeta >= 5 ? 2 : 0);
+            if (currentMeta == 5) {
+                worldIn.setBlockState(pos, BlockLibrary.concrete.getDefaultState(), 2);
+            } else {
+                worldIn.setBlockState(pos, getDefaultState().withProperty(BlockProperties.WETNESS, currentMeta), 2);
+            }
         }
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, WETNESS);
+        return new BlockStateContainer(this, BlockProperties.WETNESS);
     }
 
     @Override
     @Deprecated
     public IBlockState getStateFromMeta(int meta) {
-        return super.getStateFromMeta(meta).withProperty(WETNESS, meta <= 5 ? meta : 0);
+        return super.getStateFromMeta(meta).withProperty(BlockProperties.WETNESS, meta <= 4 ? meta : 0);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(WETNESS);
+        return state.getValue(BlockProperties.WETNESS);
     }
 
     @Override
     public int damageDropped(IBlockState state) {
-        System.out.println(state.getValue(WETNESS));
-        return state.getValue(WETNESS) == 5 ? 5 : 0;
+        return 0;
     }
 }

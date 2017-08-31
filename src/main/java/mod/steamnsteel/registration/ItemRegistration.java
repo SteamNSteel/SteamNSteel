@@ -21,6 +21,8 @@ public final class ItemRegistration
 		items.add(new Item(), Reference.Items.mustyJournal);
 
 		items.add(BlockLibrary.remnantRuinPillar);
+		items.add(BlockLibrary.concrete);
+		items.add(BlockLibrary.concreteWet);
 	}
 
 	private static class Items

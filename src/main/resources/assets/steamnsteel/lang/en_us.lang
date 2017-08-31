@@ -38,9 +38,8 @@
 #tile.steamnsteel:remnantRuinIronBars_Rusted.name=Rusted Iron Bars
 #tile.steamnsteel:remnantRuinIronBars_Mossy.name=Mossy Iron Bars
 #tile.steamnsteel:remnantRuinIronBars_RustedMossy.name=Rusty and Mossy Iron Bars
-#tile.steamnsteel:blockConcrete.name=Concrete Block
-#tile.steamnsteel:blockConcrete_item_wet.name=Wet Concrete Block
-#tile.steamnsteel:blockConcrete_item_dry.name=Dried Concrete Block
+tile.steamnsteel:concrete.name=Concrete
+tile.steamnsteel:concrete_wet.name=Wet Concrete
 
 #Structures
 #tile.steamnsteel:ssBallMill.name=Ball Mill

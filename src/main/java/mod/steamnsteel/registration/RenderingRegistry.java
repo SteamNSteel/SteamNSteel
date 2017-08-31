@@ -35,6 +35,8 @@ public final class RenderingRegistry
 
 		setItemModel(ItemLibrary.mustyJournal);
 		setItemModel(ItemLibrary.remnantRuinPillar);
+		setItemModel(ItemLibrary.concrete);
+		setItemModel(ItemLibrary.concreteWet);
 	}
 
 	@SubscribeEvent

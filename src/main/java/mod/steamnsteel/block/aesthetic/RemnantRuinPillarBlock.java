@@ -15,6 +15,7 @@ public class RemnantRuinPillarBlock extends SteamNSteelDirectionalBlock
 
     public RemnantRuinPillarBlock()
     {
+    	//TODO: hardness/resistance/etc.
         super(Material.ROCK);
         setDefaultState(blockState.getBaseState()
                 .withProperty(BlockProperties.HORIZONTAL_FACING, EnumFacing.NORTH)
@@ -58,7 +59,7 @@ public class RemnantRuinPillarBlock extends SteamNSteelDirectionalBlock
                 .withProperty(BlockProperties.CONNECT_BOTTOM, useBottomCap);
     }
 
-    private EnumFacing normalizePillarFacing(EnumFacing value)
+    private static EnumFacing normalizePillarFacing(EnumFacing value)
     {
         return value == EnumFacing.SOUTH || value == EnumFacing.EAST
                 ? value.getOpposite()

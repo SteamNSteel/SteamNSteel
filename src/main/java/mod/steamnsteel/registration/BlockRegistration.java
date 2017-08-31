@@ -1,6 +1,8 @@
 package mod.steamnsteel.registration;
 
 import mod.steamnsteel.Reference;
+import mod.steamnsteel.block.ConcreteBlock;
+import mod.steamnsteel.block.WetConcreteBlock;
 import mod.steamnsteel.block.aesthetic.RemnantRuinPillarBlock;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
@@ -19,6 +21,8 @@ public final class BlockRegistration
 		Blocks blocks = new Blocks(event.getRegistry());
 
 		blocks.add(new RemnantRuinPillarBlock(), Reference.Blocks.remnantRuinPillar);
+		blocks.add(new ConcreteBlock(), Reference.Blocks.concrete);
+		blocks.add(new WetConcreteBlock(), Reference.Blocks.concreteWet);
 
 	}
 

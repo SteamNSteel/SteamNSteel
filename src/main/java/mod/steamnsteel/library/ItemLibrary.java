@@ -13,4 +13,9 @@ public class ItemLibrary
 
 	@ObjectHolder("remnant_ruin_pillar")
 	public static ItemBlock remnantRuinPillar;
+
+	@ObjectHolder("concrete")
+	public static ItemBlock concrete;
+	@ObjectHolder("concrete_wet")
+	public static ItemBlock concreteWet;
 }

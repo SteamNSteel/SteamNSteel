@@ -5,6 +5,7 @@ import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -43,6 +44,8 @@ public final class Reference
 	public static final class Blocks
 	{
 		public static final ResourceLocation remnantRuinPillar = resource("remnant_ruin_pillar");
+		public static final ResourceLocation concrete = resource("concrete");
+		public static final ResourceLocation concreteWet = resource("concrete_wet");
 
 		private Blocks() {}
 	}
@@ -55,6 +58,8 @@ public final class Reference
 
 		public static final PropertyBool CONNECT_TOP = PropertyBool.create("connect_top");
 		public static final PropertyBool CONNECT_BOTTOM = PropertyBool.create("connect_bottom");
+
+		public static final PropertyInteger WETNESS = PropertyInteger.create("wetness", 0, 4);
 	}
 
 	private Reference() {}
