@@ -47,16 +47,6 @@ public class WetConcreteBlock extends Block implements ISlowConcreteDrying
         return super.getExplosionResistance(world, pos, exploder, explosion);
     }
 
-    /*@Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
-    {
-        worldIn.getBlockState(pos).getBlock().setResistance(meta * 3.0F);
-        worldIn.getBlockState(pos).getBlock().setHardness(meta * .8F + .5F);
-        worldIn.getBlockState(pos).getBlock().setHarvestLevel("pickaxe", meta >= 5 ? 2 : 0);
-
-        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
-    }*/
-
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         float temp = worldIn.getBiomeForCoordsBody(pos).getTemperature();

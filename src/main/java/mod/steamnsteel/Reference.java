@@ -8,6 +8,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 @SuppressWarnings("UtilityClass")
@@ -48,6 +49,15 @@ public final class Reference
 		public static final ResourceLocation concreteWet = resource("concrete_wet");
 
 		private Blocks() {}
+	}
+
+	public static final class SetBlockState {
+		public static final int BlockUpdate = 1;
+		public static final int SendChange = 2;
+		public static final int PreventRender = 4;
+		public static final int RenderOnMainThread = 8;
+		public static final int NotSeenByObserver = 16;
+
 	}
 
 	public static final class BlockProperties

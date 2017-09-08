@@ -1,6 +1,7 @@
 package mod.steamnsteel.registration;
 
 import mod.steamnsteel.Reference;
+import mod.steamnsteel.item.ConcreteItemBlock;
 import mod.steamnsteel.library.BlockLibrary;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -22,7 +23,7 @@ public final class ItemRegistration
 
 		items.add(BlockLibrary.remnantRuinPillar);
 		items.add(BlockLibrary.concrete);
-		items.add(BlockLibrary.concreteWet);
+		items.add(new ConcreteItemBlock(BlockLibrary.concreteWet), BlockLibrary.concreteWet.getRegistryName() );
 	}
 
 	private static class Items
