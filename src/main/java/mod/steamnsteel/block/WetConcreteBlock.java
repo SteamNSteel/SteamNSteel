@@ -25,7 +25,7 @@ public class WetConcreteBlock extends Block implements ISlowConcreteDrying
         super(Material.ROCK);
         setTickRandomly(true);
         setSoundType(SoundType.STONE);
-        setHarvestLevel("pickaxe", 0);
+        setHarvestLevel("shovel", 0);
         setDefaultState(blockState.getBaseState().withProperty(BlockProperties.WETNESS, 0));
 
     }
